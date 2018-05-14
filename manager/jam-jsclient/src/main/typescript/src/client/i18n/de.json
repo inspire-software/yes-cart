@@ -377,7 +377,7 @@
   "PRODUCT_TAB_CATALOG_NEW": "Neue Produkte müssen mindestens einer Kategorie zugeordnet sein. Nur 'Superuser' kann Produkte ohne Kategorien erstellen",
   "PRODUCT_TAB_ASSOCIATIONS": "Assoziation",
 
-  "EMAILPREVIEW_ORDER": "Geben Sie eine aktuelle Bestellnummer für die Vorschau der E-Mail ein",
+  "EMAILPREVIEW_ORDER": "Geben Sie eine aktuelle Bestellnummer für die Vorschau der E-Mail ein: {{value}}",
 
   "CACHE_NODE": "Node",
   "CACHE_NAME": "Cache",

@@ -48,6 +48,12 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
         this.shopService = shopService;
     }
 
+
+    @Override
+    public String getName() {
+        return "ordersInShops";
+    }
+
     @Override
     public boolean applicable(final VoManager manager) {
         if (manager.getManagerShops().size() > 0) {

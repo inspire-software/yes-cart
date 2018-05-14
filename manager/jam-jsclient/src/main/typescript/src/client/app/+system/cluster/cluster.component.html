@@ -4,24 +4,39 @@
       <h1 class="page-header">{{ 'PANEL_SYSTEM_CLUSTER' | translate }}</h1>
     </div>
 
-    <div class="text-right data-control">
+    <div class="row data-control">
 
-      <form class="pull-left">
-        <input class="filter-input" type="text" name="clusterFilter" [(ngModel)]="clusterFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
-        <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
-      </form>
 
-      <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
-        <i class="fa fa-info"></i>
-      </button>
+      <div class="col-xs-12 col-md-5 padding-lr-0">
 
-      <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
-        <i class="fa fa-refresh"></i>
-      </button>
+        <form class="width-100">
+          <div class="input-group">
+            <input class="form-control filter-input" type="text" name="clusterFilter" [(ngModel)]="clusterFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+            <span class="input-group-btn">
+              <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                <i class="fa fa-times-circle-o"></i>
+              </button>
+            </span>
+          </div>
+        </form>
 
-      <button type="button" (click)="onSaveHandler()" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
-        <i class="fa fa-download"></i>
-      </button>
+      </div>
+
+      <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+        <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
+          <i class="fa fa-info"></i>
+        </button>
+
+        <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
+          <i class="fa fa-refresh"></i>
+        </button>
+
+        <button type="button" (click)="onSaveHandler()" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
+          <i class="fa fa-download"></i>
+        </button>
+
+      </div>
 
     </div>
 

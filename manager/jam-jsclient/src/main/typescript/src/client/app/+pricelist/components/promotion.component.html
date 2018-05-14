@@ -195,28 +195,47 @@
 
           <div class="panel-body">
             <div class="row">
-              <div class="text-right data-control">
+              <div class="row data-control">
 
-                <form class="pull-left">
-                  <input class="filter-input" type="text" name="couponFilter" [(ngModel)]="couponFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
-                  <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
-                </form>
+                <div class="col-xs-12 col-md-5 padding-lr-0">
 
-                <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
-                  <i class="fa fa-filter"></i>
-                </button>
+                  <form class="width-100">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+                          <i class="fa fa-filter"></i>
+                        </button>
+                      </span>
+                      <input class="form-control filter-input" type="text" name="couponFilter" [(ngModel)]="couponFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
 
-                <button type="button" (click)="onCouponGenerate()" [disabled]="!(promotion.promotionId > 0 && promotion.couponTriggered)" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
-                  <i class="fa fa-plus"></i>
-                </button>
+                </div>
 
-                <button type="button" (click)="onDownloadHandler()" [disabled]="cannotExport" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
-                  <i class="fa fa-download"></i>
-                </button>
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
 
-                <button type="button" (click)="onCouponDeleteSelected()" [disabled]="selectedCoupon == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
-                  <i class="fa fa-remove"></i>
-                </button>
+                  <button type="button" (click)="onCouponGenerate()" [disabled]="!(promotion.promotionId > 0 && promotion.couponTriggered)" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+
+                  <button type="button" (click)="onDownloadHandler()" [disabled]="cannotExport" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
+                    <i class="fa fa-download"></i>
+                  </button>
+
+                  <button type="button" (click)="onCouponDeleteSelected()" [disabled]="selectedCoupon == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                  <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
+                    <i class="fa fa-refresh"></i>
+                  </button>
+
+                </div>
 
               </div>
             </div>

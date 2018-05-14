@@ -1,14 +1,18 @@
 <ng-template [ngIf]="existingProduct">
 
-  <div class="text-right data-control">
+  <div class="row data-control">
 
-    <button type="button" (click)="assignToProductClick(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null || selectedNode.id == '100'">
-      <i class="fa fa-link"></i>
-    </button>
+    <div class="col-xs-12 padding-lr-0 button-panel">
 
-    <button type="button" (click)="createNew(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null">
-      <i class="fa fa-plus"></i>
-    </button>
+      <button type="button" (click)="assignToProductClick(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null || selectedNode.id == '100'">
+        <i class="fa fa-link"></i>
+      </button>
+
+      <button type="button" (click)="createNew(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null">
+        <i class="fa fa-plus"></i>
+      </button>
+
+    </div>
   </div>
 
   <yc-modal #editNewCategoryName
@@ -20,8 +24,8 @@
     <form role="form" [formGroup]="newCategoryForm">
       <fieldset>
         <div class="row">
-          <div class="col-lg-3">{{ 'NAME' | translate }}</div>
-          <div class="col-lg-9">
+          <div class="col-xs-3">{{ 'NAME' | translate }}</div>
+          <div class="col-xs-9">
             <input class="form-control" formControlName="name" name="newCategoryName" type="text" [(ngModel)]="newCategory.name">
             <div [hidden]="newCategoryForm.controls['name'].valid || newCategoryForm.controls['name'].pristine" class="alert alert-danger">
               {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
@@ -29,8 +33,8 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-3">{{ 'CODE' | translate }}</div>
-          <div class="col-lg-9">
+          <div class="col-xs-3">{{ 'CODE' | translate }}</div>
+          <div class="col-xs-9">
             <input class="form-control" formControlName="guid" name="newCategoryCode" type="text" [(ngModel)]="newCategory.guid">
             <div [hidden]="newCategoryForm.controls['guid'].valid || newCategoryForm.controls['guid'].pristine" class="alert alert-danger">
               <div [hidden]="!newCategoryForm.controls['guid'].hasError('checking')">
@@ -57,8 +61,8 @@
     <form role="form" [formGroup]="editCategoryForm">
       <fieldset>
         <div class="row">
-          <div class="col-lg-3">{{ 'AV_RANK' | translate }}</div>
-          <div class="col-lg-9">
+          <div class="col-xs-3">{{ 'AV_RANK' | translate }}</div>
+          <div class="col-xs-9">
             <input class="form-control" formControlName="rank" name="rank" type="text" [(ngModel)]="editCategory.rank">
             <div [hidden]="editCategoryForm.controls['rank'].valid || editCategoryForm.controls['rank'].pristine" class="alert alert-danger">
               {{ 'POS_INT_REQUIRED' | translate }}
@@ -71,7 +75,7 @@
 
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
-    <div class="col-md-6 col-lg-5">
+    <div class="col-md-6">
       <div class="panel panel-default">
         <div class="panel-heading">{{ 'ASSIGNED' | translate }}</div>
         <ul class="list-group">
@@ -88,7 +92,7 @@
         </ul>
       </div>
     </div>
-    <div class="col-md-6 col-lg-5">
+    <div class="col-md-6">
       <div class="panel panel-default">
         <div class="panel-heading">{{ 'SHOP_TAB_CATALOG' | translate }}</div>
         <div class="panel-body">

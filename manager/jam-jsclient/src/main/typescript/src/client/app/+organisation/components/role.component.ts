@@ -88,4 +88,8 @@ export class RoleComponent implements OnInit, OnDestroy {
     this.formUnbind();
   }
 
+  tabSelected(tab:any) {
+    LogUtil.debug('RoleComponent tabSelected', tab);
+  }
+
 }

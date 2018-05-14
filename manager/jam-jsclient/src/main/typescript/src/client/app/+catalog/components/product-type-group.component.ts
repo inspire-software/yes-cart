@@ -35,14 +35,16 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
   @Output() dataSelected: EventEmitter<ProductTypeViewGroupVO> = new EventEmitter<ProductTypeViewGroupVO>();
   @Output() dataChanged: EventEmitter<FormValidationEvent<ProductTypeVO>> = new EventEmitter<FormValidationEvent<ProductTypeVO>>();
 
-  private _groupFilter:string;
+  private groupFilter:string;
   private _objectAttributes:Array<ProductTypeAttrVO>;
   private _objectAttributesMap:any;
+  private attributeAssignedFilter:string;
   private attributeFilter:string;
   private filteredObjectGroups:Array<ProductTypeViewGroupVO>;
   private removedObjectGroups:Array<ProductTypeViewGroupVO>;
   private delayedGroupFiltering:Future;
   private delayedAttributeFiltering:Future;
+  private delayedAttributeAssignedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   private changed:boolean = false;
@@ -59,6 +61,7 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
   private selectedRowAvailable:ProductTypeAttrVO[];
   private selectedRowAvailableFiltered:ProductTypeAttrVO[];
   private selectedRowAssigned:ProductTypeAttrVO[];
+  private selectedRowAssignedFiltered:ProductTypeAttrVO[];
   private selectedRowAssignedExtra:string[];
 
   /**
@@ -75,6 +78,9 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
     this.delayedAttributeFiltering = Futures.perpetual(function() {
       that.filterAttributes();
     }, this.delayedFilteringMs);
+    this.delayedAttributeAssignedFiltering = Futures.perpetual(function() {
+      that.filterAssignedAttributes();
+    }, this.delayedFilteringMs);
 
   }
 
@@ -86,12 +92,6 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
 
   get objectAttributes():Array<ProductTypeAttrVO> {
     return this._objectAttributes;
-  }
-
-  @Input()
-  set groupFilter(groupFilter:string) {
-    this._groupFilter = groupFilter;
-    this.delayedGroupFiltering.delay();
   }
 
   /** {@inheritDoc} */
@@ -162,6 +162,7 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
 
       this.changed = true;
       this.filterAttributes();
+      this.filterAssignedAttributes();
       this.processDataChangesEvent();
     }
   }
@@ -196,6 +197,7 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
       });
       this.changed = true;
       this.filterAttributes();
+      this.filterAssignedAttributes();
       this.processDataChangesEvent();
     }
   }
@@ -203,6 +205,30 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
   protected onAttributeFilterChange() {
     this.delayedAttributeFiltering.delay();
   }
+
+  protected onClearFilter() {
+    this.attributeFilter = '';
+    this.delayedAttributeFiltering.delay();
+  }
+
+  protected onAttributeAssignedFilterChange() {
+    this.delayedAttributeAssignedFiltering.delay();
+  }
+
+  protected onClearAssignedFilter() {
+    this.attributeAssignedFilter = '';
+    this.delayedAttributeAssignedFiltering.delay();
+  }
+
+  protected onGroupFilterChange() {
+    this.delayedGroupFiltering.delay();
+  }
+
+  protected onClearGroupFilter() {
+    this.groupFilter = '';
+    this.delayedGroupFiltering.delay();
+  }
+
 
 
   public onRowAdd() {
@@ -335,10 +361,11 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
     if (this.masterObject) {
 
       let groups:ProductTypeViewGroupVO[] = [];
-      if (this._groupFilter) {
-        let _filter = this._groupFilter.toLowerCase();
+      if (this.groupFilter) {
+        let _filter = this.groupFilter.toLowerCase();
         groups = this.masterObject.viewGroups.filter(group =>
-          group.name && group.name.toLowerCase().indexOf(_filter) != -1
+          (group.name && group.name.toLowerCase().indexOf(_filter) != -1) ||
+          (group.attrCodeList && group.attrCodeList.indexOf(_filter) != -1)
         );
       } else {
         groups = this.masterObject.viewGroups;
@@ -396,6 +423,7 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
     });
 
     this.filterAttributes();
+    this.filterAssignedAttributes();
 
   }
 
@@ -414,6 +442,26 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
     } else {
 
       this.selectedRowAvailableFiltered = this.selectedRowAvailable;
+
+    }
+
+  }
+
+  private filterAssignedAttributes() {
+
+    if (this.attributeAssignedFilter) {
+
+      let _filter = this.attributeAssignedFilter.toLowerCase();
+
+      this.selectedRowAssignedFiltered = this.selectedRowAssigned.filter(attr =>
+        attr.attribute.code.toLowerCase().indexOf(_filter) != -1 ||
+        attr.attribute.name.toLowerCase().indexOf(_filter) != -1 ||
+        attr.attribute.description && attr.attribute.description.toLowerCase().indexOf(_filter) != -1
+      );
+
+    } else {
+
+      this.selectedRowAssignedFiltered = this.selectedRowAssigned;
 
     }
 

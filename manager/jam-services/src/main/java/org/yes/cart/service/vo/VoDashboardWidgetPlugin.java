@@ -38,4 +38,9 @@ public interface VoDashboardWidgetPlugin {
      */
     VoDashboardWidget getWidget(VoManager manager);
 
+    /**
+     * @return widget name
+     */
+    String getName();
+
 }

@@ -81,6 +81,11 @@ export class MailPreviewComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.customerorderFilter = '';
+    this.delayedFiltering.delay();
+  }
+
   public showDialog(shop:number, template:string) {
     this.selectedShop = shop;
     this.selectedTemplate = template;

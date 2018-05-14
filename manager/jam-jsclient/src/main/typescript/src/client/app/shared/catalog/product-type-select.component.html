@@ -8,7 +8,14 @@
     <ul class="nav nav-second-level item-list-control">
       <li>
         <form>
-          <input class="filter-input" type="text" name="productTypeFilter" [(ngModel)]="productTypeFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+          <div class="input-group">
+            <input class="form-control filter-input" type="text" name="productTypeFilter" [(ngModel)]="productTypeFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+            <span class="input-group-btn">
+              <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                <i class="fa fa-times-circle-o"></i>
+              </button>
+            </span>
+          </div>
         </form>
       </li>
       <li *ngIf="productTypeFilterRequired">
@@ -23,7 +30,7 @@
     <ul class="nav nav-second-level item-list">
 
       <li *ngFor="let productType of filteredProductTypes">
-        <a (click)="onSelectClick(productType)" class="{{ (selectedProductType != null && productType != null && selectedProductType.producttypeId == productType.producttypeId) ? 'bg-info js-click' : 'js-click' }}">{{productType.name}}</a>
+        <a (click)="onSelectClick(productType)" class="{{ (selectedProductType != null && productType != null && selectedProductType.producttypeId == productType.producttypeId) ? 'bg-info js-click' : 'js-click' }}"><span class="label label-info">{{productType.guid}}</span> {{productType.name}}</a>
       </li>
 
     </ul>

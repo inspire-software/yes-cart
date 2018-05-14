@@ -81,6 +81,12 @@ export class ProductTypeSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.productTypeFilter = '';
+    this.delayedFiltering.delay();
+  }
+
+
   public showDialog() {
     LogUtil.debug('ProductTypeSelectComponent showDialog');
     this.productTypeModalDialog.show();

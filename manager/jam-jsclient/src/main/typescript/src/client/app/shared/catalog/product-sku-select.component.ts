@@ -81,6 +81,11 @@ export class ProductSkuSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.productSkuFilter = '';
+    this.delayedFiltering.delay();
+  }
+
   public showDialog() {
     LogUtil.debug('ProductSkuSelectComponent showDialog');
     this.productSkuModalDialog.show();

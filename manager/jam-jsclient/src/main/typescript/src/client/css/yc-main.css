@@ -43,17 +43,29 @@ body {
 
 #page-wrapper {
   padding: 0 15px;
-  min-height: 100%;
+  height: 100%;
+  min-height: 1200px;
   background-color: #fff;
 }
 
-@media(min-width:992px) {
+/* @media(min-width:992px) { */
   #page-wrapper {
     position: inherit;
-    margin: 0 0 0 250px;
+    /* margin: 0 0 0 250px; */
+    margin: 0 0 0 0;
     padding: 0 30px;
-    border-left: 1px solid #e7e7e7;
+    /*border-left: 1px solid #e7e7e7;*/
   }
+
+  .show-nav #page-wrapper {
+     /*left: -253px;*/
+     margin-right: 253px;
+  }
+/* } */
+
+#page-topbar {
+  padding: 3px 0;
+  border-bottom: 1px solid #e7e7e7;
 }
 
 .navbar-top-links {
@@ -152,11 +164,46 @@ body {
   padding-left: 52px;
 }
 
-@media(min-width:992px) {
+.sidebar .nav>li>a {
+  padding: 10px 2px 10px 10px;
+}
+
+/*@media(min-width:992px) {*/
   .sidebar {
-    z-index: 1;
+    z-index: 10;
     position: absolute;
-    width: 250px;
+    width: 300px;
+
+    height: 100%;
+    top: 0;
+    padding-right: 3px;
+    left: -255px;
+
+    border-right: 1px solid #e7e7e7;
+
+  }
+
+  #site-wrapper {
+    position: relative;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  #site-canvas {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /*transform: translateX(0);*/
+    /*transform: translate3d(0, 0, 0);*/
+    /*transition: 300ms ease all;*/
+    backface-visibility: hidden;
+    padding: 0 0 0 43px;
+  }
+
+  .show-nav #site-canvas {
+    /*transform: translateX(260px);*/
+    /*transform: translate3d(260px, 0, 0);*/
+    left: 255px;
   }
 
   .navbar-top-links .dropdown-messages,
@@ -164,7 +211,7 @@ body {
   .navbar-top-links .dropdown-alerts {
     margin-left: auto;
   }
-}
+/*}*/
 
 /* Big powered by Logo 100x100
 #sidebar-logo {
@@ -181,6 +228,11 @@ body {
   height: 60px;
   padding: 12px 0 0 52px;
   font-size: 90%
+}
+
+#sidebar-toggle {
+  padding: 3px 0 0 0;
+  text-align: right;
 }
 
 #sidebar-env {
@@ -327,7 +379,8 @@ table.dataTable thead .sorting:after {
   line-height: 1.428571429;
 }
 
-.btn-circle.btn-lg {
+.btn-circle.btn-lg,
+.btn-circle.btn-xl {
   width: 50px;
   height: 50px;
   padding: 10px 16px;
@@ -336,12 +389,32 @@ table.dataTable thead .sorting:after {
   line-height: 1.33;
 }
 
-.btn-circle.btn-xl {
-  width: 70px;
-  height: 70px;
+/*.btn-circle.btn-xl {*/
+  /*width: 70px;*/
+  /*height: 70px;*/
+  /*padding: 10px 16px;*/
+  /*border-radius: 35px;*/
+  /*font-size: 24px;*/
+  /*line-height: 1.33;*/
+/*}*/
+
+.btn-square {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0;
+  border-radius: 0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.428571429;
+}
+
+.btn-square.btn-lg,
+.btn-square.btn-xl {
+  width: 50px;
+  height: 50px;
   padding: 10px 16px;
-  border-radius: 35px;
-  font-size: 24px;
+  border-radius: 0;
+  font-size: 18px;
   line-height: 1.33;
 }
 
@@ -482,11 +555,45 @@ table.dataTable thead .sorting:after {
     width: 100%;
   }
 
+  .text-right-xs {
+    text-align: right;
+  }
+
+}
+
+@media (max-width:992px) {
+
+  .data-control .button-panel {
+    margin-top: 3px;
+  }
+
 }
 
 .hidden-file {
   position: absolute;
   left: -3000px;
+}
+
+.width-100 {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.padding-lr-0 {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.page-header {
+  padding-bottom: 9px;
+  margin: 10px 0 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 20px;
+}
+
+.preformatted-address {
+  background: white;
+  border: none;
 }
 
 /* **************** LOADING SCREEN ********************************************** */
@@ -517,16 +624,28 @@ table.dataTable thead .sorting:after {
 /* **************** CONTROL BUTTONS ************************************************* */
 
 .data-control {
-  margin: 5px 5px;
-  min-height: 80px;
+  margin: 5px 0;
+  /*min-height: 80px;*/
 }
 
+.data-control .button-panel {
+  text-align: right;
+}
+
+/*.data-control .filter-input {*/
+  /*width: 200px;*/
+  /*height: 70px;*/
+  /*padding: 10px 16px;*/
+  /*border-radius: 35px;*/
+  /*font-size: 24px;*/
+  /*line-height: 1.33;*/
+/*}*/
+
 .data-control .filter-input {
-  width: 200px;
-  height: 70px;
-  padding: 10px 16px;
-  border-radius: 35px;
-  font-size: 24px;
+  /*width: 200px;*/
+  height: 50px;
+  padding: 7px 11px;
+  border-radius: 25px;
   line-height: 1.33;
 }
 
@@ -536,6 +655,15 @@ table.dataTable thead .sorting:after {
 
 .item-list-control .filter-input {
   width: 100%;
+  height: 36px;
+  padding: 5px 8px;
+  border-radius: 18px;
+  font-size: 12px;
+  line-height: 1.33;
+}
+
+.item-list-control .filter-btn {
+  width: 36px;
   height: 36px;
   padding: 5px 8px;
   border-radius: 18px;

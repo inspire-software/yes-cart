@@ -17,11 +17,13 @@ package org.yes.cart.service.endpoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.service.endpoint.DashboardEndpointController;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,6 +44,12 @@ public class DashboardEndpointControllerImpl implements DashboardEndpointControl
     @Override
     public @ResponseBody
     List<VoDashboardWidget> getDashboard() throws Exception {
-        return voDashboardWidgetService.getDashboard();
+        return voDashboardWidgetService.getDashboard(null);
+    }
+
+    @Override
+    public @ResponseBody
+    List<VoDashboardWidget> getDashboardWidget(@PathVariable("widget") String widget) throws Exception {
+        return voDashboardWidgetService.getDashboard(Collections.singleton(widget));
     }
 }

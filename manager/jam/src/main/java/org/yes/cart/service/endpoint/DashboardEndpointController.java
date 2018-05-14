@@ -18,6 +18,7 @@ package org.yes.cart.service.endpoint;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,6 +39,11 @@ public interface DashboardEndpointController {
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoDashboardWidget> getDashboard() throws Exception;
+
+    @PreAuthorize("isFullyAuthenticated()")
+    @RequestMapping(value = "/dashboard/{widget}/", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoDashboardWidget> getDashboardWidget(@PathVariable("widget") String widget) throws Exception;
 
 
 }

@@ -98,6 +98,11 @@ export class ShopSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.shopFilter = '';
+    this.delayedFiltering.delay();
+  }
+
   /**
    * Reload list of shops
    * @param shopVo shop that was changed or added

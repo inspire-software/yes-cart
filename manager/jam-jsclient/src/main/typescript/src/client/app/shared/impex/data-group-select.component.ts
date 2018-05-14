@@ -73,6 +73,11 @@ export class DataGroupSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.groupFilter = '';
+    this.delayedFiltering.delay();
+  }
+
   /**
    * Reload list of groups
    */

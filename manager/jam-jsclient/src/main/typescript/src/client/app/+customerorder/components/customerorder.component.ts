@@ -221,7 +221,7 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
       return delivery.deliveryNum == row.deliveryNum;
     });
 
-    if (this.selectedLine != row && delivery != null && this.isDeliveryHasNextOption(delivery)) {
+    if (this.selectedLine != row && delivery != null /* && this.isDeliveryHasNextOption(delivery) */) {
       this.selectedLine = row;
       this.selectedDelivery = delivery;
     } else {
@@ -233,7 +233,7 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
 
   protected onSelectDeliveryRow(row:CustomerOrderDeliveryInfoVO) {
     LogUtil.debug('CustomerOrdersComponent onSelectDeliveryRow handler', row);
-    if (this.selectedDelivery != row && this.isDeliveryHasNextOption(row)) {
+    if (this.selectedDelivery != row /* && this.isDeliveryHasNextOption(row) */) {
       this.selectedDelivery = row;
     } else {
       this.selectedDelivery = null;

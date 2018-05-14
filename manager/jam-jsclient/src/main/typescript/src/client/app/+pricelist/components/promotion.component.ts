@@ -372,6 +372,12 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onRefreshHandler() {
+
+    this.delayedFiltering.delay();
+
+  }
+
   protected onCouponGenerate() {
 
     if (this._promotion != null) {

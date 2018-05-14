@@ -24,6 +24,7 @@ import org.yes.cart.service.vo.VoManagementService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -41,7 +42,7 @@ public class VoDashboardWidgetServiceImpl implements VoDashboardWidgetService {
     }
 
     @Override
-    public List<VoDashboardWidget> getDashboard() throws Exception {
+    public List<VoDashboardWidget> getDashboard(final Set<String> filter) throws Exception {
 
         final List<VoDashboardWidget> widgets = new ArrayList<>();
 
@@ -50,7 +51,7 @@ public class VoDashboardWidgetServiceImpl implements VoDashboardWidgetService {
 
             for (final VoDashboardWidgetPlugin plugin : this.plugins) {
 
-                if (plugin.applicable(manager)) {
+                if (isApplicable(filter, plugin, manager)) {
 
                     widgets.add(plugin.getWidget(manager));
 
@@ -61,6 +62,10 @@ public class VoDashboardWidgetServiceImpl implements VoDashboardWidgetService {
         }
 
         return widgets;
+    }
+
+    private boolean isApplicable(final Set<String> filter, final VoDashboardWidgetPlugin plugin, final VoManager manager) {
+        return (filter == null || filter.contains(plugin.getName())) && plugin.applicable(manager);
     }
 
     public void setPlugins(final List<VoDashboardWidgetPlugin> plugins) {

@@ -91,4 +91,8 @@ export class StateComponent implements OnInit, OnDestroy {
     this.formUnbind();
   }
 
+  tabSelected(tab:any) {
+    LogUtil.debug('StateComponent tabSelected', tab);
+  }
+
 }

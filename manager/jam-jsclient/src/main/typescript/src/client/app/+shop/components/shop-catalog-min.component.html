@@ -38,8 +38,8 @@
     <form role="form" [formGroup]="newCategoryForm">
       <fieldset>
         <div class="row">
-          <div class="col-lg-3">{{ 'NAME' | translate }}</div>
-          <div class="col-lg-9">
+          <div class="col-xs-3">{{ 'NAME' | translate }}</div>
+          <div class="col-xs-9">
             <input class="form-control" formControlName="name" name="newCategoryName" type="text" [(ngModel)]="newCategory.name">
             <div [hidden]="newCategoryForm.controls['name'].valid || newCategoryForm.controls['name'].pristine" class="alert alert-danger">
               {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
@@ -47,8 +47,8 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-3">{{ 'CODE' | translate }}</div>
-          <div class="col-lg-9">
+          <div class="col-xs-3">{{ 'CODE' | translate }}</div>
+          <div class="col-xs-9">
             <input class="form-control" formControlName="guid" name="newCategoryCode" type="text" [(ngModel)]="newCategory.guid">
             <div [hidden]="newCategoryForm.controls['guid'].valid || newCategoryForm.controls['guid'].pristine" class="alert alert-danger">
               <div [hidden]="!newCategoryForm.controls['guid'].hasError('checking')">

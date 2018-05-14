@@ -48,6 +48,11 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
     }
 
     @Override
+    public String getName() {
+        return "customersInShops";
+    }
+
+    @Override
     public boolean applicable(final VoManager manager) {
         if (manager.getManagerShops().size() > 0) {
             for (final VoManagerRole role : manager.getManagerRoles()) {

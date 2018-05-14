@@ -73,6 +73,10 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.attributeFilter = '';
+    this.delayedFiltering.delay();
+  }
 
   protected getSearchFlags(row:AttributeVO) {
     let flags = '';

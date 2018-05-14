@@ -90,6 +90,11 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.currencyFilter = '';
+    this.delayedFiltering.delay();
+  }
+
   private getAllCurrencies() {
 
     if (this.shop != null) {

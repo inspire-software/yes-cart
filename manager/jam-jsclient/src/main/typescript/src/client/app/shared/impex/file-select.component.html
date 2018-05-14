@@ -3,7 +3,14 @@
   <li>
     <form class="row">
       <div class="col-xs-10">
-        <input class="filter-input" type="text" name="fileFilter" [(ngModel)]="fileFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+        <div class="input-group">
+          <input class="form-control filter-input" type="text" name="fileFilter" [(ngModel)]="fileFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+              <i class="fa fa-times-circle-o"></i>
+            </button>
+          </span>
+        </div>
       </div>
       <div class="col-xs-2">
         <button type="button" (click)="onRefresh()"  class="btn btn-info btn-circle" title="{{ 'MODAL_BUTTON_IMPEXFILES' | translate }}">

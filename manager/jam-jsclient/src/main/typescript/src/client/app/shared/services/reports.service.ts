@@ -52,6 +52,16 @@ export class ReportsService {
   }
 
   /**
+   * Get current user widgets,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getDashboardWidget(widget:string) {
+    return this.http.get(this._serviceBaseUrl + '/dashboard/' + widget + '/')
+      .map(res => <DashboardWidgetVO[]> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
    * Get current user reports,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */

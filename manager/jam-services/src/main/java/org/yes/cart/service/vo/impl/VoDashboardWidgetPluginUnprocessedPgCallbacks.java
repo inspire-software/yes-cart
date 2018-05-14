@@ -48,6 +48,11 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
     }
 
     @Override
+    public String getName() {
+        return "unprocessedPgCallbacks";
+    }
+
+    @Override
     public boolean applicable(final VoManager manager) {
         if (manager.getManagerShops().size() > 0) {
             for (final VoManagerRole role : manager.getManagerRoles()) {

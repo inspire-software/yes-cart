@@ -4,89 +4,105 @@
   </div>
 
 
-  <div class="text-right data-control">
+  <div class="row data-control">
 
-    <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'customerorders'" class="btn btn-info btn-circle btn-xl pull-left" style="margin-right: 2px" title="{{ 'MODAL_BUTTON_BACK' | translate }}">
-      <i class="fa fa-chevron-left"></i>
-    </button>
+    <div class="col-xs-12 col-md-5 padding-lr-0" [hidden]="viewMode !== 'customerorders'">
+      <form class="width-100">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
+              <i class="fa fa-question-circle-o"></i>
+            </button>
+          </span>
+          <span class="input-group-btn">
+            <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-square btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+              <i class="fa fa-filter"></i>
+            </button>
+          </span>
+          <input class="form-control filter-input" type="text" name="customerorderFilter" [(ngModel)]="customerorderFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+              <i class="fa fa-times-circle-o"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
 
-    <form class="pull-left" [hidden]="viewMode !== 'customerorders'">
-      <input class="filter-input" type="text" name="customerorderFilter" [(ngModel)]="customerorderFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
-      <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
-      <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
-    </form>
+    <div class="col-xs-12 {{ viewMode === 'customerorders' ? 'col-md-7' : '' }} padding-lr-0 button-panel">
 
-    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'customerorders'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
-      <i class="fa fa-filter"></i>
-    </button>
+      <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'customerorders'" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_BACK' | translate }}">
+        <i class="fa fa-chevron-left"></i>
+      </button>
 
-    <button type="button" (click)="onExportSelected()" [hidden]="selectedCustomerorder == null || !selectedCustomerorder.blockExport" class="btn btn-warning btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDEREXPORT' | translate }}">
-      <i class="fa fa-upload"></i>
-    </button>
+      <button type="button" (click)="onExportSelected()" [hidden]="selectedCustomerorder == null || !selectedCustomerorder.blockExport" class="btn btn-warning btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDEREXPORT' | translate }}">
+        <i class="fa fa-upload"></i>
+      </button>
 
-    <button type="button" (click)="onApproveSelected()" [hidden]="!selectedCustomerorderApprovable" class="btn btn-success btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERAPPROVE' | translate }}">
-      <i class="fa fa-check"></i>
-    </button>
+      <button type="button" (click)="onApproveSelected()" [hidden]="!selectedCustomerorderApprovable" class="btn btn-success btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERAPPROVE' | translate }}">
+        <i class="fa fa-check"></i>
+      </button>
 
-    <button type="button" (click)="onCancelSelected()" [hidden]="!selectedCustomerorderCancellable" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERCANCEL' | translate }}">
-      <i class="fa fa-ban"></i>
-    </button>
+      <button type="button" (click)="onCancelSelected()" [hidden]="!selectedCustomerorderCancellable" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERCANCEL' | translate }}">
+        <i class="fa fa-ban"></i>
+      </button>
 
-    <button type="button" (click)="onReturnSelected()" [hidden]="!selectedCustomerorderReturnable" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERRETURN' | translate }}">
-      <i class="fa fa-reply"></i>
-    </button>
+      <button type="button" (click)="onReturnSelected()" [hidden]="!selectedCustomerorderReturnable" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERRETURN' | translate }}">
+        <i class="fa fa-reply"></i>
+      </button>
 
-    <button type="button" (click)="onRefundSelected()" [hidden]="!selectedCustomerorderRefundable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERREFUND' | translate }}">
-      <i class="fa fa-dollar"></i>
-    </button>
+      <button type="button" (click)="onRefundSelected()" [hidden]="!selectedCustomerorderRefundable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERREFUND' | translate }}">
+        <i class="fa fa-dollar"></i>
+      </button>
 
-    <button type="button" (click)="onRefundManualSelected()" [hidden]="!selectedCustomerorderRefundableManual" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERREFUNDOFFLINE' | translate }}">
-      <i class="fa fa-dollar"></i>
-    </button>
-
-
-
-    <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYPACK' | translate }}">
-      <i class="fa fa-archive"></i>
-    </button>
-
-    <button type="button" (click)="onMarkReadyForShippingDeliverySelected()" [hidden]="!selectedCustomerdeliveryPacked" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIP' | translate }}">
-      <i class="fa fa-check"></i>
-    </button>
-
-    <button type="button" (click)="onStartDeliverySelected()" [hidden]="!selectedCustomerdeliveryShippable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPED' | translate }}">
-      <i class="fa fa-truck"></i>
-    </button>
-
-    <button type="button" (click)="onShipDeliveryManualSelected()" [hidden]="!selectedCustomerdeliveryShippableManual" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPEDOFFLINE' | translate }}">
-      <i class="fa fa-truck"></i>
-    </button>
-
-    <button type="button" (click)="onMarkShippedDeliverySelected()" [hidden]="!selectedCustomerdeliveryDelivered" class="btn btn-success btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPEDOFFLINE' | translate }}">
-      <i class="fa fa-check"></i>
-    </button>
-
-    <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="selectedCustomerdelivery == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYREF' | translate }}">
-      <i class="fa fa-external-link"></i>
-    </button>
+      <button type="button" (click)="onRefundManualSelected()" [hidden]="!selectedCustomerorderRefundableManual" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERREFUNDOFFLINE' | translate }}">
+        <i class="fa fa-dollar"></i>
+      </button>
 
 
 
+      <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYPACK' | translate }}">
+        <i class="fa fa-archive"></i>
+      </button>
+
+      <button type="button" (click)="onMarkReadyForShippingDeliverySelected()" [hidden]="!selectedCustomerdeliveryPacked" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIP' | translate }}">
+        <i class="fa fa-check"></i>
+      </button>
+
+      <button type="button" (click)="onStartDeliverySelected()" [hidden]="!selectedCustomerdeliveryShippable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPED' | translate }}">
+        <i class="fa fa-truck"></i>
+      </button>
+
+      <button type="button" (click)="onShipDeliveryManualSelected()" [hidden]="!selectedCustomerdeliveryShippableManual" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPEDOFFLINE' | translate }}">
+        <i class="fa fa-truck"></i>
+      </button>
+
+      <button type="button" (click)="onMarkShippedDeliverySelected()" [hidden]="!selectedCustomerdeliveryDelivered" class="btn btn-success btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPEDOFFLINE' | translate }}">
+        <i class="fa fa-check"></i>
+      </button>
+
+      <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="viewMode === 'customerorders'" [disabled]="selectedCustomerdelivery == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYREF' | translate }}">
+        <i class="fa fa-external-link"></i>
+      </button>
 
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCustomerorder == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
-      <i class="fa fa-edit"></i>
-    </button>
 
-    <button type="button" (click)="onShowGrossTotalClick()" class="btn btn-default btn-circle btn-xl">
-      <i class="fa {{showGrossTotal ? 'fa-toggle-on' : 'fa-toggle-off'}}" title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_NO_TAX' : 'CUSTOMERORDER_TOTAL_WITH_TAX') | translate }}"></i>
-    </button>
 
-    <yc-data-control [changed]="changed"
-                     [valid]="validForSave"
-                     (saveEvent)="onSaveHandler()"
-                     (discardEvent)="onDiscardEventHandler()"
-                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCustomerorder == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+        <i class="fa fa-edit"></i>
+      </button>
+
+      <button type="button" (click)="onShowGrossTotalClick()" class="btn btn-default btn-circle btn-xl">
+        <i class="fa {{showGrossTotal ? 'fa-toggle-on' : 'fa-toggle-off'}}" title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_NO_TAX' : 'CUSTOMERORDER_TOTAL_WITH_TAX') | translate }}"></i>
+      </button>
+
+      <yc-data-control [changed]="changed"
+                       [valid]="validForSave"
+                       (saveEvent)="onSaveHandler()"
+                       (discardEvent)="onDiscardEventHandler()"
+                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+    </div>
 
   </div>
 
@@ -144,7 +160,7 @@
         <div class="row" [hidden]="!orderTransitionRequiresMessage">
           <div class="col-lg-3">{{ 'CUSTOMERORDER_MANUAL_TRANSITION_MESSAGE' | translate }}</div>
           <div class="col-lg-9">
-            <input class="form-control" name="orderTransitionMessage" type="text" [(ngModel)]="orderTransitionMessage" (ngModelChange)="onTransitionMessageChange($event)">
+            <input class="form-control" name="orderTransitionMessage" type="text" [(ngModel)]="orderTransitionMessage" (ngModelChange)="onTransitionMessageChange($event)" autocomplete="off">
           </div>
         </div>
       </fieldset>

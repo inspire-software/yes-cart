@@ -72,8 +72,8 @@
     <form role="form" [formGroup]="newCarrierForm">
       <fieldset>
         <div class="row">
-          <div class="col-lg-3">{{ 'NAME' | translate }}</div>
-          <div class="col-lg-9">
+          <div class="col-xs-3">{{ 'NAME' | translate }}</div>
+          <div class="col-xs-9">
             <input class="form-control" formControlName="name" name="newCarrierName" type="text" [(ngModel)]="newCarrier.name">
             <div [hidden]="newCarrierForm.controls['name'].valid || newCarrierForm.controls['name'].pristine" class="alert alert-danger">
               {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
@@ -93,8 +93,8 @@
     <form role="form" [formGroup]="editCarrierSlaForm">
       <fieldset>
         <div class="row">
-          <div class="col-lg-3">{{ 'AV_RANK' | translate }}</div>
-          <div class="col-lg-9">
+          <div class="col-xs-3">{{ 'AV_RANK' | translate }}</div>
+          <div class="col-xs-9">
             <input class="form-control" formControlName="rank" name="rank" type="text" [(ngModel)]="editCarrierSla.rank">
             <div [hidden]="editCarrierSlaForm.controls['rank'].valid || editCarrierSlaForm.controls['rank'].pristine" class="alert alert-danger">
               {{ 'POS_INT_REQUIRED' | translate }}

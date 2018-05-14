@@ -90,4 +90,8 @@ export class CountryComponent implements OnInit, OnDestroy {
     this.formUnbind();
   }
 
+  tabSelected(tab:any) {
+    LogUtil.debug('CountryComponent tabSelected', tab);
+  }
+
 }

@@ -4,59 +4,76 @@
   </div>
 
 
-  <div class="text-right data-control">
+  <div class="row data-control">
 
-    <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'promotions'" class="btn btn-info btn-circle btn-xl pull-left" style="margin-right: 2px" title="{{ 'MODAL_BUTTON_BACK' | translate }}">
-      <i class="fa fa-chevron-left"></i>
-    </button>
+    <div class="col-xs-12 col-md-4 col-lg-5 padding-lr-0" [hidden]="viewMode !== 'promotions'">
+      <form class="width-100">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
+              <i class="fa fa-question-circle-o"></i>
+            </button>
+          </span>
+          <span class="input-group-btn">
+            <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-square btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
+              <i class="fa fa-filter"></i>
+            </button>
+          </span>
+          <input class="form-control filter-input" type="text" name="promotionFilter" [(ngModel)]="promotionFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+              <i class="fa fa-times-circle-o"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
 
-    <form class="pull-left" [hidden]="viewMode !== 'promotions'">
-      <input class="filter-input" type="text" name="promotionFilter" [(ngModel)]="promotionFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
-      <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
-      <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
-    </form>
+    <div class="col-xs-12 {{ viewMode === 'promotions' ? 'col-md-8 col-lg-7' : '' }} padding-lr-0 button-panel">
 
-    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'promotions'" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
-      <i class="fa fa-filter"></i>
-    </button>
+      <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'promotions'" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_BACK' | translate }}">
+        <i class="fa fa-chevron-left"></i>
+      </button>
 
-    <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'promotions'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
-      <i class="fa fa-sitemap"></i>
-    </button>
+      <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'promotions'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
+        <i class="fa fa-sitemap"></i>
+      </button>
 
-    <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'promotions'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
-      <i class="fa fa-dollar"></i>
-    </button>
+      <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'promotions'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
+        <i class="fa fa-dollar"></i>
+      </button>
 
-    <button type="button" (click)="onTestRules()" [disabled]="selectedShop == null" [hidden]="viewMode === 'promotion'" class="btn  {{ viewMode === 'promotionstest' ? 'btn-success' : 'btn-default' }} btn-circle btn-xl" title="{{ 'TEST' | translate }}">
-      <i class="fa fa-play"></i>
-    </button>
+      <button type="button" (click)="onTestRules()" [disabled]="selectedShop == null" [hidden]="viewMode === 'promotion'" class="btn  {{ viewMode === 'promotionstest' ? 'btn-success' : 'btn-default' }} btn-circle btn-xl" title="{{ 'TEST' | translate }}">
+        <i class="fa fa-play"></i>
+      </button>
 
-    <button type="button" (click)="onRowEnableSelected()" [disabled]="selectedPromotion == null"  class="btn {{selectedPromotion != null && selectedPromotion.enabled ? 'btn-success' : 'btn-danger' }} btn-circle btn-xl" title="{{ (selectedPromotion != null && selectedPromotion.enabled ? 'MODAL_BUTTON_DISABLE' : 'MODAL_BUTTON_ENABLE') | translate }}">
-      <i class="fa fa-power-off"></i>
-    </button>
+      <button type="button" (click)="onRowEnableSelected()" [disabled]="selectedPromotion == null"  class="btn {{selectedPromotion != null && selectedPromotion.enabled ? 'btn-success' : 'btn-danger' }} btn-circle btn-xl" title="{{ (selectedPromotion != null && selectedPromotion.enabled ? 'MODAL_BUTTON_DISABLE' : 'MODAL_BUTTON_ENABLE') | translate }}">
+        <i class="fa fa-power-off"></i>
+      </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
-      <i class="fa fa-plus"></i>
-    </button>
+      <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+        <i class="fa fa-plus"></i>
+      </button>
 
-    <button type="button" (click)="onRowCopySelected()" [disabled]="selectedPromotion == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
-      <i class="fa fa-copy"></i>
-    </button>
+      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedPromotion == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
+        <i class="fa fa-copy"></i>
+      </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedPromotion == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
-      <i class="fa fa-edit"></i>
-    </button>
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedPromotion == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+        <i class="fa fa-edit"></i>
+      </button>
 
-    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedPromotion == null || selectedPromotion.enabled" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
-      <i class="fa fa-remove"></i>
-    </button>
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedPromotion == null || selectedPromotion.enabled" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+        <i class="fa fa-remove"></i>
+      </button>
 
-    <yc-data-control [changed]="changed"
-                     [valid]="validForSave"
-                     (saveEvent)="onSaveHandler()"
-                     (discardEvent)="onDiscardEventHandler()"
-                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+      <yc-data-control [changed]="changed"
+                       [valid]="validForSave"
+                       (saveEvent)="onSaveHandler()"
+                       (discardEvent)="onDiscardEventHandler()"
+                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+    </div>
 
   </div>
 

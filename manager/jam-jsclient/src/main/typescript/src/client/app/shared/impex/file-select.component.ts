@@ -100,6 +100,11 @@ export class FileSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.fileFilter = '';
+    this.delayedFiltering.delay();
+  }
+
   protected onRefresh() {
     this.dataSelected.emit(null);
     this.getAllFiles();

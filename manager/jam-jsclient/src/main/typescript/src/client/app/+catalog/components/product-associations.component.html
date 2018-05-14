@@ -13,7 +13,7 @@
       <tbody>
       <tr *ngFor="let row of filteredObjectAssociations; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="js-click">{{getAssociationType(row)}}</a></td>
+          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="js-click"><span [innerHTML]="getAssociationType(row)"></span></a></td>
           <td title="{{ 'AV_RANK' | translate }}"><a (click)="onSelectRow(row)" class="js-click">{{row.rank}}</a></td>
           <td title="{{ 'CODE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="js-click">{{row.associatedCode}}</a></td>
           <td title="{{ 'NAME' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="js-click">{{row.associatedName}}</a></td>

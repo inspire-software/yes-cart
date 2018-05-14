@@ -25,7 +25,7 @@ import { FileSelectComponent, DataGroupSelectComponent } from './impex/index';
 
 import { AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttributeUsageComponent } from './attributes/index';
 
-import { SidebarComponent, DataControlComponent } from './sidebar/index';
+import { SidebarComponent, TopbarComponent, DataControlComponent } from './sidebar/index';
 import { ErrorModalComponent } from './error/index';
 import { LicenseComponent, LicenseModalComponent } from './license/index';
 
@@ -57,7 +57,7 @@ import { CurrencySelectComponent } from './price/index';
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
     AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttributeUsageComponent,
-    SidebarComponent, DataControlComponent,
+    SidebarComponent, TopbarComponent, DataControlComponent,
     ErrorModalComponent,
     LicenseComponent, LicenseModalComponent,
     CarrierSlaSelectComponent,
@@ -74,7 +74,7 @@ import { CurrencySelectComponent } from './price/index';
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
     AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttributeUsageComponent,
-    SidebarComponent, DataControlComponent,
+    SidebarComponent, TopbarComponent, DataControlComponent,
     ErrorModalComponent,
     LicenseComponent, LicenseModalComponent,
     CarrierSlaSelectComponent,

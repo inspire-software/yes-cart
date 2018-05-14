@@ -48,6 +48,11 @@ public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
 
 
     @Override
+    public String getName() {
+        return "reindex";
+    }
+
+    @Override
     public boolean applicable(final VoManager manager) {
         if (manager.getManagerShops().size() > 0) {
             for (final VoManagerRole role : manager.getManagerRoles()) {

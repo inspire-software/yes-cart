@@ -8,6 +8,7 @@ export interface EnvConfig {
   DEFAULT_LANG?:string;
 
   UI_INPUT_DELAY?: number;
+  UI_ALERTCHECK_DELAY?: number;
   UI_BULKSERVICE_DELAY?: number;
   UI_FILTER_CAP?: number;
   UI_FILTER_NO_CAP?: number;

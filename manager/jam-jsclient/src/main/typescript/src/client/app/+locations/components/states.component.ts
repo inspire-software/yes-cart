@@ -113,6 +113,7 @@ export class StatesComponent implements OnInit, OnDestroy {
     if (this._filter) {
       this.filteredStates = this._states.filter(state =>
         state.countryCode.toLowerCase().indexOf(this._filter) !== -1 ||
+        state.stateCode.toLowerCase().indexOf(this._filter) !== -1 ||
         state.name.toLowerCase().indexOf(this._filter) !== -1 ||
         state.displayName && state.displayName.toLowerCase().indexOf(this._filter) !== -1
       );

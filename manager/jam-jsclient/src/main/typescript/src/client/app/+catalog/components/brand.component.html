@@ -3,7 +3,7 @@
   <form role="form" [formGroup]="brandForm">
     <tabset>
 
-      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
 
         <div class="row">
           <div class="col-md-9 col-lg-6">
@@ -47,21 +47,39 @@
 
           <div class="panel-body">
             <div class="row">
-              <div class="text-right data-control">
+              <div class="row data-control">
 
-                <form class="pull-left">
-                  <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
-                  <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
-                  <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
-                </form>
+                <div class="col-xs-12 col-md-5 padding-lr-0">
 
-                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
-                  <i class="fa fa-edit"></i>
-                </button>
+                  <form class="width-100">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
+                          <i class="fa fa-question-circle-o"></i>
+                        </button>
+                      </span>
+                      <input class="form-control filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
 
-                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
-                  <i class="fa fa-remove"></i>
-                </button>
+                </div>
+
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
 
               </div>
             </div>
@@ -69,7 +87,7 @@
             <div class="row">
 
               <div *ngIf="searchHelpShow">
-                <div class="bg-info text-padding">
+                <div class="bg-info text-padding block-margin-spacer">
                   <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-default btn-circle"><i class="fa fa-circle"></i></button></span></p>
                   <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-default btn-circle"><i class="fa fa-edit"></i></button></span></p>
                   <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-default btn-circle"><i class="fa fa-plus"></i></button></span></p>

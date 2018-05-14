@@ -81,6 +81,11 @@ export class BrandSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.brandFilter = '';
+    this.delayedFiltering.delay();
+  }
+
   public showDialog() {
     LogUtil.debug('BrandSelectComponent showDialog');
     this.brandModalDialog.show();

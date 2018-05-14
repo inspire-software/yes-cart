@@ -133,24 +133,23 @@
         <ng-template [ngIf]="productType.producttypeId > 0">
           <div class="panel-body">
             <div class="row">
-              <div class="text-right data-control">
+              <div class="row data-control">
 
-                <form class="pull-left">
-                  <input class="filter-input" type="text" name="groupFilter" [(ngModel)]="groupFilter" autocomplete="off"/>
-                  <a class="js-click" (click)="onClearFilterGroup()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
-                </form>
+                <div class="col-xs-12 padding-lr-0 button-panel">
 
-                <button type="button" (click)="onGroupRowAdd()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
-                  <i class="fa fa-plus"></i>
-                </button>
+                  <button type="button" (click)="onGroupRowAdd()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
 
-                <button type="button" (click)="onGroupRowEditSelected()" [disabled]="groupSelectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
-                  <i class="fa fa-edit"></i>
-                </button>
+                  <button type="button" (click)="onGroupRowEditSelected()" [disabled]="groupSelectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
 
-                <button type="button" (click)="onGroupRowDeleteSelected()" [disabled]="groupSelectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
-                  <i class="fa fa-remove"></i>
-                </button>
+                  <button type="button" (click)="onGroupRowDeleteSelected()" [disabled]="groupSelectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
 
               </div>
             </div>
@@ -160,7 +159,6 @@
             <yc-product-type-group #groupsComponent
                                    [masterObject]="productType"
                                    [objectAttributes]="attributes"
-                                   [groupFilter]="groupFilter"
                                    (dataSelected)="onGroupSelectRow($event)"
                                    (dataChanged)="onGroupDataChanged($event)"></yc-product-type-group>
           </div>
@@ -186,25 +184,43 @@
 
           <div class="panel-body">
             <div class="row">
-              <div class="text-right data-control">
+              <div class="row data-control">
 
-                <form class="pull-left">
-                  <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
-                  <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
-                  <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
-                </form>
+                <div class="col-xs-12 col-md-5 padding-lr-0">
 
-                <button type="button" (click)="onAttributeRowAdd()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
-                  <i class="fa fa-plus"></i>
-                </button>
+                  <form class="width-100">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
+                          <i class="fa fa-question-circle-o"></i>
+                        </button>
+                      </span>
+                      <input class="form-control filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
 
-                <button type="button" (click)="onAttributeRowEditSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
-                  <i class="fa fa-edit"></i>
-                </button>
+                </div>
 
-                <button type="button" (click)="onAttributeRowDeleteSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
-                  <i class="fa fa-remove"></i>
-                </button>
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onAttributeRowAdd()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+
+                  <button type="button" (click)="onAttributeRowEditSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onAttributeRowDeleteSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
 
               </div>
             </div>

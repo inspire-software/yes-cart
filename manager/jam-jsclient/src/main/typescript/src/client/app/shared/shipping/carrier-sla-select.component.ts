@@ -81,6 +81,11 @@ export class CarrierSlaSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.carrierSlaFilter = '';
+    this.delayedFiltering.delay();
+  }
+
   public showDialog() {
     LogUtil.debug('CarrierSlaSelectComponent showDialog');
     this.carrierSlaModalDialog.show();

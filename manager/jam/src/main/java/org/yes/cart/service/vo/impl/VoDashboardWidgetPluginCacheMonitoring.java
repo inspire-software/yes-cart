@@ -45,6 +45,11 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
 
 
     @Override
+    public String getName() {
+        return "cacheMonitoring";
+    }
+
+    @Override
     public boolean applicable(final VoManager manager) {
         if (manager.getManagerShops().size() > 0) {
             for (final VoManagerRole role : manager.getManagerRoles()) {

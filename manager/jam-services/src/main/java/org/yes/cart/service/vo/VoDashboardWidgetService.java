@@ -19,6 +19,7 @@ package org.yes.cart.service.vo;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -28,9 +29,11 @@ import java.util.List;
 public interface VoDashboardWidgetService {
 
     /**
+     * @param filter filter
+     *
      * @return dashboard widgets for current user
      */
-    List<VoDashboardWidget> getDashboard() throws Exception;
+    List<VoDashboardWidget> getDashboard(Set<String> filter) throws Exception;
 
     /**
      * Hook to add new plugins.

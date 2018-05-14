@@ -17,43 +17,41 @@
 
         <div class="col-md-9 col-lg-6">
           <div class="panel-body">
-            <form role="form" [formGroup]="managerForm">
-              <fieldset>
-                <div class="form-group">
-                  <label>{{ 'CUSTOMER_EMAIL' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_EMAIL' | translate }}" formControlName="email" name="email" type="text" [(ngModel)]="manager.email" autocomplete="off" >
-                  <div [hidden]="managerForm.controls['email'].valid || managerForm.controls['email'].pristine" class="alert alert-danger">
-                    <div [hidden]="!managerForm.controls['email'].hasError('checking')">
-                      {{ 'REMOTE_CHECK' | translate }}
-                    </div>
-                    <div [hidden]="!managerForm.controls['email'].hasError('DUPLICATE')">
-                      {{ 'UNIQUE_REQUIRED' | translate }}
-                    </div>
-                    {{ 'EMAIL_REQUIRED' | translate }}
+            <fieldset>
+              <div class="form-group">
+                <label>{{ 'CUSTOMER_EMAIL' | translate }}</label>
+                <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_EMAIL' | translate }}" formControlName="email" name="email" type="text" [(ngModel)]="manager.email" autocomplete="off" >
+                <div [hidden]="managerForm.controls['email'].valid || managerForm.controls['email'].pristine" class="alert alert-danger">
+                  <div [hidden]="!managerForm.controls['email'].hasError('checking')">
+                    {{ 'REMOTE_CHECK' | translate }}
                   </div>
-                </div>
-                <div class="form-group">
-                  <label>{{ 'CUSTOMER_FIRSTNAME' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_FIRSTNAME' | translate }}" formControlName="firstName" name="firstName" type="text" [(ngModel)]="manager.firstName">
-                  <div [hidden]="managerForm.controls['firstName'].valid || managerForm.controls['firstName'].pristine" class="alert alert-danger">
-                    <div [hidden]="!managerForm.controls['firstName'].hasError('maxlength')">
-                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
-                    </div>
-                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+                  <div [hidden]="!managerForm.controls['email'].hasError('DUPLICATE')">
+                    {{ 'UNIQUE_REQUIRED' | translate }}
                   </div>
+                  {{ 'EMAIL_REQUIRED' | translate }}
                 </div>
-                <div class="form-group">
-                  <label>{{ 'CUSTOMER_LASTNAME' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_LASTNAME' | translate }}" formControlName="lastName" name="lastName" type="text" [(ngModel)]="manager.lastName">
-                  <div [hidden]="managerForm.controls['lastName'].valid || managerForm.controls['lastName'].pristine" class="alert alert-danger">
-                    <div [hidden]="!managerForm.controls['lastName'].hasError('maxlength')">
-                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
-                    </div>
-                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+              </div>
+              <div class="form-group">
+                <label>{{ 'CUSTOMER_FIRSTNAME' | translate }}</label>
+                <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_FIRSTNAME' | translate }}" formControlName="firstName" name="firstName" type="text" [(ngModel)]="manager.firstName">
+                <div [hidden]="managerForm.controls['firstName'].valid || managerForm.controls['firstName'].pristine" class="alert alert-danger">
+                  <div [hidden]="!managerForm.controls['firstName'].hasError('maxlength')">
+                    {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
                   </div>
+                  {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                 </div>
-              </fieldset>
-            </form>
+              </div>
+              <div class="form-group">
+                <label>{{ 'CUSTOMER_LASTNAME' | translate }}</label>
+                <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_LASTNAME' | translate }}" formControlName="lastName" name="lastName" type="text" [(ngModel)]="manager.lastName">
+                <div [hidden]="managerForm.controls['lastName'].valid || managerForm.controls['lastName'].pristine" class="alert alert-danger">
+                  <div [hidden]="!managerForm.controls['lastName'].hasError('maxlength')">
+                    {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
+                  </div>
+                  {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+                </div>
+              </div>
+            </fieldset>
           </div>
 
         </div>

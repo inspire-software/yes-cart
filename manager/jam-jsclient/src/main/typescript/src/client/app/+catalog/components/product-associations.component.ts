@@ -292,7 +292,10 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
         return assoc.associationId == row.associationId;
       });
       if (idx != -1) {
-        return ProductAssociationsComponent.associations[idx].name;
+        return '<span class="label label-info">' +
+          ProductAssociationsComponent.associations[idx].code +
+          '</span> &nbsp' +
+          ProductAssociationsComponent.associations[idx].name;
       }
     }
     return '-';

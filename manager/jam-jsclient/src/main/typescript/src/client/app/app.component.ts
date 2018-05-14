@@ -24,6 +24,8 @@ export class AppComponent implements OnDestroy {
 
   private langSub:any;
 
+  private showNav:boolean = false;
+
   constructor(@Inject(ShopEventBus)          _shopEventBus:ShopEventBus,
               @Inject(ErrorEventBus)         _errorEventBus:ErrorEventBus,
               @Inject(I18nEventBus)          _i18nEventBus:I18nEventBus,
@@ -134,6 +136,23 @@ export class AppComponent implements OnDestroy {
     if (this.langSub) {
       this.langSub.unsubscribe();
     }
+  }
+
+  changeNav() {
+    this.showNav = !this.showNav;
+  }
+
+  menuExpandRequired(event:boolean) {
+    let menuIsOpen = this.showNav;
+    let itemIsNowOpen = event;
+    if (!this.showNav) {
+      this.showNav = itemIsNowOpen;
+    } else {
+      if (!itemIsNowOpen) {
+        this.showNav = false;
+      }
+    }
+    LogUtil.debug('AppComponent menuExpandRequired', itemIsNowOpen, menuIsOpen, this.showNav);
   }
 
 

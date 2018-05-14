@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component,  OnInit, OnDestroy } from '@angular/core';
+import { Component,  OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserVO } from '../model/index';
 import { UserEventBus } from '../services/index';
@@ -28,6 +28,10 @@ import { Config } from '../index';
 })
 
 export class SidebarComponent implements OnInit, OnDestroy {
+
+  @Output() menuExpandRequired: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  private menuExpand: any = { };
 
   private currentUserName : string;
   private menuType : string;
@@ -101,6 +105,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
     LogUtil.debug('SidebarComponent ngOnDestroy');
     if (this.userSub) {
       this.userSub.unsubscribe();
+    }
+  }
+
+  onExpandFull(event:string, state:boolean) {
+    if (event == 'CMS' || event == 'SHO') {
+      let lastState: boolean = this.menuExpand.hasOwnProperty(event) ? this.menuExpand[event] : false;
+      LogUtil.debug('SidebarComponent onExpandFull', event, state);
+      if (lastState != state) {
+        this.menuExpandRequired.emit(state);
+      }
+      this.menuExpand[event] = state;
+    } else {
+      this.menuExpand = {};
     }
   }
 

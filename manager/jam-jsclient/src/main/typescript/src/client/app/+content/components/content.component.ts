@@ -90,7 +90,7 @@ export class ContentComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validSeoUri(control);
+      let basic = YcValidators.validSeoUri255(control);
       if (basic == null) {
         let req:ValidationRequestVO = { subject: 'content', subjectId: that._content.contentId, field: 'uri', value: uri };
         return YcValidators.validRemoteCheck(control, req);

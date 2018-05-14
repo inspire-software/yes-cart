@@ -15,8 +15,8 @@
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuCode}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuName}}</a>&nbsp;</td>
-          <td title="{{ 'INVENTORY_STOCK' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.quantity | ycquantity}}</a></td>
-          <td title="{{ 'INVENTORY_RESERVED' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.reserved | ycquantity}}</a></td>
+          <td title="{{ 'INVENTORY_STOCK' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.quantity | ycquantity}}</a>&nbsp;</td>
+          <td title="{{ 'INVENTORY_RESERVED' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.reserved | ycquantity}}</a>&nbsp;</td>
         </ng-template>
       </tr>
       </tbody>

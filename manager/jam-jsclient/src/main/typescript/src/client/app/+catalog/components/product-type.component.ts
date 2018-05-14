@@ -36,7 +36,6 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
 
   private _productType:ProductTypeVO;
   private _attributes:ProductTypeAttrVO[] = [];
-  private groupFilter:string;
   private attributeFilter:string;
 
   private _changes:Array<Pair<ProductTypeAttrVO, boolean>>;
@@ -190,12 +189,6 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
   protected onClearFilter() {
 
     this.attributeFilter = '';
-
-  }
-
-  protected onClearFilterGroup() {
-
-    this.groupFilter = '';
 
   }
 

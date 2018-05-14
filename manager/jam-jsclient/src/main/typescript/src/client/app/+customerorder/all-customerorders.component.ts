@@ -630,7 +630,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     if (this.selectedCustomerdelivery != null) {
       LogUtil.debug('AllCustomerOrdersComponent onUpdateDeliveryRefSelected handler', this.selectedCustomerdelivery);
 
-      this.orderTransitionMessage = null;
+      this.orderTransitionMessage = this.selectedCustomerdelivery.refNo;
       this.orderTransitionRequiresMessage = true;
       this.orderTransitionName = 'update.external.ref';
       this.orderTransitionNameOfflineNote = false;

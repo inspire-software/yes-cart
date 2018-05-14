@@ -71,6 +71,11 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  protected onClearFilter() {
+    this.centreFilter = '';
+    this.delayedFiltering.delay();
+  }
+
   private getAllCentres() {
 
     let _sub:any = this._centreService.getAllFulfilmentCentres().subscribe( allcentres => {
