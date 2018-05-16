@@ -183,7 +183,7 @@
           <div class="row">
             <div class="col-xs-3">{{ 'PRICELIST_PUR' | translate }} <i class="fa fa-question-circle" title="{{ 'PRICELIST_PUR_TIP' | translate }}" [hidden]="!pricelistEdit.priceUponRequest"></i></div>
             <div class="col-xs-9">
-              <input class="form-control" formControlName="priceUponRequest" name="priceUponRequest" type="checkbox" [(ngModel)]="pricelistEdit.priceUponRequest">
+              <input formControlName="priceUponRequest" name="priceUponRequest" type="checkbox" [(ngModel)]="pricelistEdit.priceUponRequest">
             </div>
           </div>
           <div class="row">

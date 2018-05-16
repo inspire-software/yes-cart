@@ -377,6 +377,9 @@
   "PRODUCT_TAB_CATALOG_NEW": "Нові товари повинні бути присвоєні щонайменше до однієї категорії. Тільки 'Супер користувач' може створювати товари без категорій",
   "PRODUCT_TAB_ASSOCIATIONS": "Зв'язки",
 
+  "PRODUCT_ASSOCIATION_BIDIRECTIONAL": "Взаємно",
+  "PRODUCT_ASSOCIATION_BIDIRECTIONAL_TIP": "Створити також асоціацію для пов'язаного товару",
+
   "EMAILPREVIEW_ORDER": "Виберіть замовлення для попереднього перегляду шаблону пошти: {{value}}",
 
   "CACHE_NODE": "Вузол",

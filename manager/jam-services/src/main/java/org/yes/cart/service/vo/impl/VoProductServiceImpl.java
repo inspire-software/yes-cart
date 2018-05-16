@@ -23,6 +23,7 @@ import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.*;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.dto.*;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
@@ -279,6 +280,37 @@ public class VoProductServiceImpl implements VoProductService {
             dtoProductAssociationService.create(
                     voAssemblySupport.assembleDto(ProductAssociationDTO.class, VoProductAssociation.class, assoc, assocToAdd)
             );
+
+            if (assocToAdd.isBidirectional()) {
+                final Long productId = ((ProductService) dtoProductService.getService()).findProductIdByCode(assocToAdd.getAssociatedCode());
+
+                if (productId != null) {
+
+                    final List<ProductAssociationDTO> existingAssoc2 = dtoProductAssociationService.getProductAssociations(productId);
+                    boolean duplicate = false;
+                    if (CollectionUtils.isNotEmpty(existingAssoc2)) {
+                        for (final ProductAssociationDTO existing : existingAssoc2) {
+                            if (existing.getAssociatedCode().equals(dto.getCode())) {
+                                duplicate = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!duplicate) {
+                        final VoProductAssociation reverse = new VoProductAssociation();
+                        reverse.setAssociationId(assocToAdd.getAssociationId());
+                        reverse.setAssociatedCode(dto.getCode());
+                        reverse.setAssociatedName(dto.getName());
+                        reverse.setProductId(productId);
+                        reverse.setRank(assocToAdd.getRank());
+                        final ProductAssociationDTO assoc2 = dtoProductAssociationService.getNew();
+                        dtoProductAssociationService.create(
+                                voAssemblySupport.assembleDto(ProductAssociationDTO.class, VoProductAssociation.class, assoc2, reverse)
+                        );
+                    }
+                }
+            }
         }
 
         return getProductById(dto.getProductId());

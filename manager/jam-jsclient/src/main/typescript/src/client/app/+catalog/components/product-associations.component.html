@@ -50,20 +50,20 @@
       <form role="form">
         <fieldset>
           <div class="row">
-            <div class="col-xs-12">{{ getAssociationType(associationToEdit) }} {{ 'CODE' | translate }}</div>
-            <div class="col-xs-12">
+            <div class="col-xs-3">{{ getAssociationType(associationToEdit) }} {{ 'CODE' | translate }}</div>
+            <div class="col-xs-9">
               <input name="associatedCodeEdit" class="form-control" type="text" [ngModel]="associationToEdit.associatedCode" [readonly]="true">
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12">{{ 'NAME' | translate }}</div>
-            <div class="col-xs-12">
+            <div class="col-xs-3">{{ 'NAME' | translate }}</div>
+            <div class="col-xs-9">
               <input name="associatedNameEdit" class="form-control" type="text" [ngModel]="associationToEdit.associatedName" [readonly]="true">
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12">{{ 'AV_RANK' | translate }}</div>
-            <div class="col-xs-12">
+            <div class="col-xs-3">{{ 'AV_RANK' | translate }}</div>
+            <div class="col-xs-9">
               <input name="rankEdit" class="form-control" type="text" [(ngModel)]="associationToEdit.rank" (ngModelChange)="onDataChange($event)" required>
             </div>
           </div>
@@ -84,16 +84,16 @@
       <form role="form">
         <fieldset>
           <div class="row">
-            <div class="col-xs-12">{{ 'AV_TYPE' | translate }}</div>
-            <div class="col-xs-12">
+            <div class="col-xs-3">{{ 'AV_TYPE' | translate }}</div>
+            <div class="col-xs-9">
               <select name="associationIdAdd" class="form-control" type="text" [(ngModel)]="associationToEdit.associationId" (ngModelChange)="onDataChange($event)">
                 <option *ngFor="let association of associations" [value]="association.associationId">{{association.name}}</option>
               </select>
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12">{{ 'CODE' | translate }}</div>
-            <div class="col-xs-12">
+            <div class="col-xs-3">{{ 'CODE' | translate }}</div>
+            <div class="col-xs-9">
               <div class="input-group">
                 <input name="associatedCodeAdd" class="form-control" type="text" [ngModel]="associationToEdit.associatedCode" [readonly]="true">
                 <span class="input-group-btn">
@@ -105,15 +105,21 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12">{{ 'NAME' | translate }}</div>
-            <div class="col-xs-12">
+            <div class="col-xs-3">{{ 'NAME' | translate }}</div>
+            <div class="col-xs-9">
               <input name="associatedNameAdd" class="form-control" type="text" [ngModel]="associationToEdit.associatedName" [readonly]="true">
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12">{{ 'AV_RANK' | translate }}</div>
-            <div class="col-xs-12">
+            <div class="col-xs-3">{{ 'AV_RANK' | translate }}</div>
+            <div class="col-xs-9">
               <input name="rankAdd" class="form-control" type="text" [(ngModel)]="associationToEdit.rank" (ngModelChange)="onDataChange($event)" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_ASSOCIATION_BIDIRECTIONAL' | translate }} <i class="fa fa-question-circle" title="{{ 'PRODUCT_ASSOCIATION_BIDIRECTIONAL_TIP' | translate }}"></i></div>
+            <div class="col-xs-9">
+              <input name="bidirectionalAdd" type="checkbox" [(ngModel)]="associationToEdit.bidirectional">
             </div>
           </div>
         </fieldset>

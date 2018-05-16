@@ -137,7 +137,7 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
     this.associationToEdit = {
       productassociationId: 0, rank: 0, associationId: assocId,
       productId: this.masterObject.productId,
-      associatedCode: null, associatedName: null
+      associatedCode: null, associatedName: null, bidirectional: false
     };
     LogUtil.debug('ProductAssociationsComponent onRowAdd', this.associationToEdit);
     this.addModalDialog.show();
@@ -295,7 +295,8 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
         return '<span class="label label-info">' +
           ProductAssociationsComponent.associations[idx].code +
           '</span> &nbsp' +
-          ProductAssociationsComponent.associations[idx].name;
+          ProductAssociationsComponent.associations[idx].name +
+          (row.bidirectional ? ' &nbsp;<i class="fa fa-exchange"></i>' : '');
       }
     }
     return '-';

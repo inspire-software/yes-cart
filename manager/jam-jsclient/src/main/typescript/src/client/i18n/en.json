@@ -377,6 +377,9 @@
   "PRODUCT_TAB_CATALOG_NEW": "New products must be assigned to at least one category. Only 'Super user' can create products without categories",
   "PRODUCT_TAB_ASSOCIATIONS": "Associations",
 
+  "PRODUCT_ASSOCIATION_BIDIRECTIONAL": "Bi-directional",
+  "PRODUCT_ASSOCIATION_BIDIRECTIONAL_TIP": "Create association for the associated product as well",
+
   "EMAILPREVIEW_ORDER": "Select order to preview email: {{value}}",
 
   "CACHE_NODE": "Node",

@@ -100,6 +100,8 @@ export interface ProductAssociationVO {
   associatedCode : string;
   associatedName : string;
 
+  bidirectional:boolean;
+
 }
 
 export interface ProductVO {

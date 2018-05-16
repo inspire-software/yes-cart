@@ -43,6 +43,8 @@ public class VoProductAssociation {
     @DtoField(value = "associatedName")
     private String associatedName;
 
+    private boolean bidirectional;
+
     public long getProductassociationId() {
         return productassociationId;
     }
@@ -89,5 +91,13 @@ public class VoProductAssociation {
 
     public void setAssociatedName(final String associatedName) {
         this.associatedName = associatedName;
+    }
+
+    public boolean isBidirectional() {
+        return bidirectional;
+    }
+
+    public void setBidirectional(final boolean bidirectional) {
+        this.bidirectional = bidirectional;
     }
 }
