@@ -44,7 +44,7 @@ their choice. The password is validated using same configurations as registratio
 JAM has password reset functionality in CallCenter section. Depending on the desired behaviour shop owner can set
 SHOP_CUSTOMER_PASSWORD_RESET_CC shop attribute. If it is filled in (with secure token of shop owner choice) the behaviour
 would be to auto generate the password. If it is not filled in the the customer will be sent password reset link via email.
-In case password reset is triggered from Admin email template will have $callCentrePasswordReset variable set to 'true',
+In case password reset is triggered from Admin email template will have $additionalData.callCentrePasswordReset variable set to 'true',
 otherwise this variable is 'false'.
 
 3. Auto generated passwords (old behaviour)
