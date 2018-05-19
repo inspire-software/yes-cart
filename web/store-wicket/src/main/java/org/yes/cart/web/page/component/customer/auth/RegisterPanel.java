@@ -275,15 +275,21 @@ public class RegisterPanel extends BaseComponent {
                             String passwordAttr = null;
                             String confirmPasswordAttr = null;
                             for (final AttrValueWithAttribute av : reg) {
-                                if ("password".equals(av.getAttribute().getVal())) {
-                                    passwordAttr = av.getAttributeCode();
-                                } else if ("confirmPassword".equals(av.getAttribute().getVal())) {
-                                    confirmPasswordAttr = av.getAttributeCode();
-                                } else if ("email".equals(av.getAttribute().getVal())) {
-                                    emailAttr = av.getAttributeCode();
-                                }
                                 if (StringUtils.isNotBlank(av.getVal())) {
                                     data.put(av.getAttributeCode(), av.getVal());
+                                }
+                                if ("password".equals(av.getAttribute().getVal())) {
+                                    passwordAttr = av.getAttributeCode();
+                                    data.put("password", av.getVal());
+                                    data.remove(av.getAttributeCode());
+                                } else if ("confirmPassword".equals(av.getAttribute().getVal())) {
+                                    confirmPasswordAttr = av.getAttributeCode();
+                                    data.put("confirmPassword", av.getVal());
+                                    data.remove(av.getAttributeCode());
+                                } else if ("email".equals(av.getAttribute().getVal())) {
+                                    emailAttr = av.getAttributeCode();
+                                    data.put("email", av.getVal());
+                                    data.remove(av.getAttributeCode());
                                 }
                             }
 
