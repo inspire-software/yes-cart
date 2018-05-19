@@ -271,31 +271,26 @@ public class RegisterPanel extends BaseComponent {
                             // data.put("phone", getPhone());
                             data.put("customerType", customerType); // Type is required for registration
 
-                            String emailAttr = null;
-                            String passwordAttr = null;
-                            String confirmPasswordAttr = null;
+                            String email = null;
+                            String userPass = null;
+                            String confirmPass = null;
                             for (final AttrValueWithAttribute av : reg) {
                                 if (StringUtils.isNotBlank(av.getVal())) {
                                     data.put(av.getAttributeCode(), av.getVal());
                                 }
                                 if ("password".equals(av.getAttribute().getVal())) {
-                                    passwordAttr = av.getAttributeCode();
-                                    data.put("password", av.getVal());
+                                    userPass = av.getVal();
                                     data.remove(av.getAttributeCode());
+                                    data.put("password", userPass);
                                 } else if ("confirmPassword".equals(av.getAttribute().getVal())) {
-                                    confirmPasswordAttr = av.getAttributeCode();
-                                    data.put("confirmPassword", av.getVal());
+                                    confirmPass = av.getVal();
                                     data.remove(av.getAttributeCode());
+                                    data.put("confirmPassword", confirmPass);
                                 } else if ("email".equals(av.getAttribute().getVal())) {
-                                    emailAttr = av.getAttributeCode();
-                                    data.put("email", av.getVal());
+                                    email = av.getVal();
                                     data.remove(av.getAttributeCode());
                                 }
                             }
-
-                            final String email = (String) data.get(emailAttr);
-                            final String userPass = (String) data.get(passwordAttr);
-                            final String confirmPass = (String) data.get(confirmPasswordAttr);
 
                             if (StringUtils.isNotBlank(userPass) && !userPass.equals(confirmPass)) {
 

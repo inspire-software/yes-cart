@@ -214,19 +214,16 @@ public class GuestPanel extends BaseComponent {
                             data.put("cartGuid", getCurrentCart().getGuid()); // Cart is required for registration
                             data.put("customerType", customerType); // Type is required for registration
 
-                            String emailAttr = null;
+                            String email = null;
                             for (final AttrValueWithAttribute av : reg) {
                                 if (StringUtils.isNotBlank(av.getVal())) {
                                     data.put(av.getAttribute().getCode(), av.getVal());
                                 }
                                 if ("email".equals(av.getAttribute().getVal())) {
-                                    emailAttr = av.getAttributeCode();
-                                    data.put("email", av.getVal());
+                                    email = av.getVal();
                                     data.remove(av.getAttributeCode());
                                 }
                             }
-
-                            final String email = (String) data.get(emailAttr);
 
                             final String guest = getCustomerServiceFacade().registerGuest(
                                     getCurrentShop(), email, data);
