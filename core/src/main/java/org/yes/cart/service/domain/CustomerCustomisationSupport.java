@@ -91,7 +91,7 @@ public interface CustomerCustomisationSupport {
 
     /**
      * List of custom attributes eligible for profile edit form.
-     * CPOINT - This will be available to the shoppers to edit as they please, so
+     * This will be available to the shoppers to edit as they please, so
      * need to restrict attributes that should be hidden from shoppers.
      *
      * @param shop shop
@@ -100,6 +100,19 @@ public interface CustomerCustomisationSupport {
      * @return list of eligible attributes
      */
     List<AttrValueWithAttribute> getRegistrationAttributes(Shop shop, String customerType);
+
+    /**
+     * List of custom attributes eligible for profile edit form.
+     * This will be available to the shoppers to edit as they please, so
+     * need to restrict attributes that should be hidden from shoppers.
+     *
+     * @param shop shop
+     * @param customerType customer type {@link Customer#getCustomerType()}
+     * @param force do not perform supports check if force is true
+     *
+     * @return list of eligible attributes
+     */
+    List<AttrValueWithAttribute> getRegistrationAttributes(Shop shop, String customerType, boolean force);
 
 
     /**

@@ -41,9 +41,27 @@
     <property name="suffix" value=".jsp" />
   </bean>
 
+  <bean id="securityExceptionTranslationHandler" class="org.yes.cart.security.impl.ExceptionMappingAuthenticationFailureHandler">
+    <property name="exceptionMappings">
+      <map>
+        <entry key="org.springframework.security.authentication.CredentialsExpiredException">
+          <bean class="org.yes.cart.security.impl.CredentialsExpiredExceptionHandler">
+            <property name="useForward" value="true"/>
+            <property name="defaultFailureUrl" value="/pages/changepassword.jsp"/>
+          </bean>
+        </entry>
+      </map>
+    </property>
+    <property name="useForward" value="false"/>
+    <property name="defaultFailureUrl" value="/login.jsp?error"/>
+  </bean>
+
   <security:http auto-config="true" use-expressions="true">
+
     <security:csrf disabled="true"/>
+
     <security:anonymous enabled="false"/>
+
     <security:intercept-url pattern="/pages/**" access="isFullyAuthenticated()" />
 
     <security:intercept-url pattern="/resources/index.html" access="isFullyAuthenticated()" />
@@ -56,6 +74,7 @@
       default-target-url="/pages/index.jsp"
       always-use-default-target="true"
       authentication-failure-url="/login.jsp?error"
+      authentication-failure-handler-ref="securityExceptionTranslationHandler"
       username-parameter="j_username"
       password-parameter="j_password"
       login-processing-url="/logincheck.jsp"/>
@@ -73,13 +92,8 @@
   <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
 
   <security:authentication-manager alias="authenticationManager">
-    <security:authentication-provider>
+    <security:authentication-provider user-service-ref="managerUserDetailsService">
       <security:password-encoder ref="passwordHashHelper"/>
-      <security:jdbc-user-service
-        data-source-ref="dataSourceSec"
-        group-authorities-by-username-query=""
-        users-by-username-query="SELECT m.email as username, m.password, m.enabled FROM TMANAGER m where m.email = ?"
-        authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
     </security:authentication-provider>
   </security:authentication-manager>
 

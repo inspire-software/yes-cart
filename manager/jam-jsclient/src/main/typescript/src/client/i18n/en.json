@@ -141,6 +141,7 @@
   "TEST": "Test",
 
   "LOGGED_IN": "Logged in as {{user}}",
+  "CHANGE_PASSWORD": "Change password",
   "PANEL_CUSTOMER_SERVICE": "Customer service",
   "PANEL_CUSTOMER_SERVICE_ORDERS": "Orders",
   "PANEL_CUSTOMER_SERVICE_PAYMENTS": "Payments",

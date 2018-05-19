@@ -34,6 +34,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.DateUtils;
+import org.yes.cart.util.RegExUtils;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
@@ -413,7 +414,7 @@ public class CustomerController {
                         problems.put(attr.getCode(), attr.getCode() + "_FAILED");
 
                     } else if (StringUtils.isNotBlank(attr.getRegexp())
-                            && !Pattern.compile(attr.getRegexp()).matcher(avRO.getVal()).matches()) {
+                            && !!RegExUtils.getInstance(attr.getRegexp()).matches(avRO.getVal())) {
 
                         final String regexError = new FailoverStringI18NModel(
                                 attr.getValidationFailedMessage(),

@@ -46,12 +46,20 @@ public interface ManagerService extends GenericService<Manager> {
     Manager create(final Manager manager, final Shop shop);
 
     /**
+     * Find manager by email exact
+     *
+     * @param email filter
+     * @return list of found managers
+     */
+    Manager findByEmail(String email);
+
+    /**
      * Find manager by email using like operation
      *
      * @param email filter
      * @return list of found managers
      */
-    List<Manager> findByEmail(String email);
+    List<Manager> findByEmailPartial(String email);
 
 
 }

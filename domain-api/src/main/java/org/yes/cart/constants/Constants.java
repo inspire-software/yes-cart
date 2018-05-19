@@ -149,6 +149,11 @@ public interface Constants {
     String PASSWORD_RESET_AUTH_TOKEN_INVALID = "PASSWORD_RESET_AUTH_TOKEN_INVALID";
 
     /**
+     * Constant to determine if password reset requires password form or password is invalid
+     */
+    String PASSWORD_RESET_PASSWORD_INVALID = "PASSWORD_RESET_PASSWORD_INVALID";
+
+    /**
      * Delimiter for range navigation value. Need to select this value carefully so that
      * parameter parser can distinguish between range and single values.
      */

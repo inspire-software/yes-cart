@@ -36,7 +36,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ADDRESS_ID)
-    ) comment='Locations have the same address struct in the same region' ;
+    );
 
     create table TASSOCIATION (
         ASSOCIATION_ID bigint not null auto_increment,
@@ -50,37 +50,37 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ASSOCIATION_ID)
-    ) comment='Cross/up/accessories/who buy also buy sell' ;
+    );
 
     create table TATTRIBUTE (
         ATTRIBUTE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         CODE varchar(255) not null  unique,
-        SECURE_ATTRIBUTE bit default 0 not null comment 'Attribute contains sensitive data if secure flag is true',
-        MANDATORY bit not null comment 'Attribute must have the default value if mandatory flag is true',
-        ALLOWDUPLICATE bit default 0 not null comment 'Allow to duplicate attr values. Example color - red and black',
-        ALLOWFAILOVER bit default 0 not null comment 'Allow search attribute value in parent object',
-        VAL longtext comment 'Default value , shall be force inserted for new attributes, if attribute is mandatoty',
-        REXP longtext comment 'Regular expression to validate user input on UI.',
-        V_FAILED_MSG longtext comment 'Message if type, mandatory or re validation failed',
-        RANK integer default 500 comment 'What order in dynamic form on UI',
-        CHOICES longtext comment 'Comma separated list of [key-]value. Or service url.',
+        SECURE_ATTRIBUTE bit default 0 not null,
+        MANDATORY bit not null,
+        ALLOWDUPLICATE bit default 0 not null,
+        ALLOWFAILOVER bit default 0 not null,
+        VAL longtext,
+        REXP longtext,
+        V_FAILED_MSG longtext,
+        RANK integer default 500,
+        CHOICES longtext,
         NAME varchar(255) not null,
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
         ETYPE_ID bigint not null,
         ATTRIBUTEGROUP_ID bigint not null,
-        STORE bit comment 'Will attribute be stored in FT index',
-        SEARCH bit comment 'Will attribute be used for searching',
-        SEARCHPRIMARY bit comment 'Will attribute be used for exact searching',
-        NAV bit comment 'Will be used in filtered navigation',
+        STORE bit,
+        SEARCH bit,
+        SEARCHPRIMARY bit,
+        NAV bit,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ATTRIBUTE_ID)
-    ) comment='Particular attribute' ;
+    );
 
     create table TATTRIBUTEGROUP (
         ATTRIBUTEGROUP_ID bigint not null auto_increment,
@@ -94,7 +94,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ATTRIBUTEGROUP_ID)
-    ) comment='Group attributes: prod,sku,cat,shop,customer,brand etc.' ;
+    );
 
     create table TBRAND (
         BRAND_ID bigint not null auto_increment,
@@ -107,7 +107,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (BRAND_ID)
-    ) comment='Product brand / manufacturer' ;
+    );
 
     create table TBRANDATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
@@ -142,7 +142,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (CARRIER_ID)
-    ) comment='Shipment' ;
+    );
 
     create table TCARRIERSLA (
         CARRIERSLA_ID bigint not null auto_increment,
@@ -172,7 +172,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (CARRIERSLA_ID)
-    ) comment='Shipment service layer agreement. Days, distances , etc.' ;
+    );
 
     create table TCARRIERSHOP (
         CARRIERSHOP_ID bigint not null auto_increment,
@@ -194,12 +194,12 @@
         VERSION bigint not null default 0,
         PARENT_ID bigint,
         LINKTO_ID bigint,
-        RANK integer comment 'What the default order of child category in parent ?',
-        PRODUCTTYPE_ID bigint comment 'Default product type in category, can be null if category contains different product types',
+        RANK integer,
+        PRODUCTTYPE_ID bigint,
         NAME varchar(255) not null,
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
-        UITEMPLATE varchar(255) comment 'point to a products in list template. Can be used parent template if it not set. In case of no templates at all, store product in list template will be used',
+        UITEMPLATE varchar(255),
         AVAILABLEFROM datetime,
         AVAILABLETO datetime,
         URI varchar(255) unique,
@@ -209,16 +209,16 @@
         DISPLAY_TITLE longtext,
         DISPLAY_METAKEYWORDS longtext,
         DISPLAY_METADESCRIPTION longtext,
-        NAV_BY_ATTR bit comment 'Filtered navigation by attribute values',
-        NAV_BY_PRICE bit comment 'Filtered navigation by price range',
-        NAV_BY_PRICE_TIERS longtext comment 'Optional price range configuration. Default shop price tiers configuration will used if empty',
+        NAV_BY_ATTR bit,
+        NAV_BY_PRICE bit,
+        NAV_BY_PRICE_TIERS longtext,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (CATEGORY_ID)
-    ) comment='Category , self related table.' ;
+    );
 
     create table TCATEGORYATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
@@ -249,7 +249,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (COUNTRY_ID)
-    ) comment='List of supported countries.' ;
+    );
 
     create table TCUSTOMER (
         CUSTOMER_ID bigint not null auto_increment,
@@ -262,12 +262,13 @@
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         PASSWORD varchar(255) not null,
+        PASSWORDEXPIRY datetime,
         PUBLICKEY varchar(255),
         CUSTOMERTYPE varchar(255),
         PRICINGPOLICY varchar(255),
         AUTHTOKEN varchar(255),
         AUTHTOKENEXPIRY datetime,
-        TAG varchar(255) comment 'Set of customer tags',
+        TAG varchar(255),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -295,8 +296,8 @@
     create table TCUSTOMERORDER (
         CUSTOMERORDER_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        PG_LABEL varchar(255) comment 'Payment gateway label',
-        ORDERNUM varchar(255) comment 'Depends from order num producer.',
+        PG_LABEL varchar(255),
+        ORDERNUM varchar(255),
         CART_GUID varchar(36) not null,
         EMAIL varchar(255) not null,
         SALUTATION varchar(24),
@@ -311,7 +312,7 @@
         GROSS_PRICE numeric(19,2) not null,
         IS_PROMO_APPLIED bit not null default 0,
         APPLIED_PROMO varchar(255),
-        MESSAGE varchar(255) comment 'Free text information per each order. Can be whatever',
+        MESSAGE varchar(255),
         ORDERSTATUS varchar(64) not null,
         ELIGIBLE_FOR_EXPORT varchar(20),
         EXPORT_BLOCK bit not null default 0,
@@ -329,9 +330,9 @@
         SHOP_ID bigint not null,
         BILL_ADDRESS_ID bigint,
         SHIP_ADDRESS_ID bigint,
-        BILLING_ADDRESS varchar(255) comment 'Address composed for billing',
-        SHIPPING_ADDRESS varchar(255) comment 'Shipping address',
-        MULTIPLE_SHIPMENT bit default 0 comment 'Wait for all skus in case of not all available.',
+        BILLING_ADDRESS varchar(255),
+        SHIPPING_ADDRESS varchar(255),
+        MULTIPLE_SHIPMENT bit default 0,
         REQUESTED_DELIVERY_DATE datetime,
         ORDER_TIMESTAMP datetime not null,
         ORDER_IP varchar(45),
@@ -347,8 +348,8 @@
     create table TCUSTOMERORDERDELIVERY (
         CUSTOMERORDERDELIVERY_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        DELIVERYNUM varchar(255) comment 'Order contract in case of split orders (XXX-1,XXX-2, etc). Delivery contract XXX-2-DDD1,XXX-2-DDD2, XXX-2-DDD3, where XXX order num, DDD delivery num.',
-        REF_NO varchar(255) comment 'External ref number',
+        DELIVERYNUM varchar(255),
+        REF_NO varchar(255),
         PRICE decimal(19,2) not null,
         LIST_PRICE decimal(19,2) not null,
         NET_PRICE decimal(19,2) not null,
@@ -384,7 +385,7 @@
     create table TCUSTOMERORDERDELIVERYDET (
         CUSTOMERORDERDELIVERYDET_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        QTY decimal(19,2) not null comment 'Quantity of SKU in this particular delivery',
+        QTY decimal(19,2) not null,
         PRICE decimal(19,2) not null,
         SALE_PRICE decimal(19,2) not null,
         LIST_PRICE decimal(19,2) not null,
@@ -417,13 +418,13 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (CUSTOMERORDERDELIVERYDET_ID)
-    ) comment='Delivery details' ;
+    );
 
     create table TCUSTOMERORDERDET (
         CUSTOMERORDERDET_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         QTY decimal(19,2) not null,
-        PRICE decimal(19,2) not null comment 'Price per one unit',
+        PRICE decimal(19,2) not null,
         SALE_PRICE decimal(19,2) not null,
         LIST_PRICE decimal(19,2) not null,
         NET_PRICE decimal(19,2) not null,
@@ -451,7 +452,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (CUSTOMERORDERDET_ID)
-    ) comment='Orders detail' ;
+    );
 
     create table TCUSTOMERSHOP (
         CUSTOMERSHOP_ID bigint not null auto_increment,
@@ -472,8 +473,8 @@
         VERSION bigint not null default 0,
         SKU_ID bigint not null,
         CUSTOMER_ID bigint not null,
-        WL_TYPE varchar(1) default 'W' comment 'W-single, A-Available reminder, P-Price reminder, R-In promo reminder',
-        VISIBILITY varchar(1) default 'P' comment 'P-private, S-shared',
+        WL_TYPE varchar(1) default 'W',
+        VISIBILITY varchar(1) default 'P',
         TAG varchar(255),
         QTY decimal(19,2) not null default 1,
         REGULAR_PRICE_WHEN_ADDED decimal(19,2) not null default 0,
@@ -498,26 +499,26 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ENSEMBLEOPT_ID)
-    ) comment='Ensemble options - how many particular sku in ensemble' ;
+    );
 
     create table TETYPE (
         ETYPE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        JAVATYPE varchar(255) not null comment 'Shows the java type',
-        BUSINESSTYPE varchar(255) comment 'Used mostly on UI. How to represent product, category, attributes, etc',
+        JAVATYPE varchar(255) not null,
+        BUSINESSTYPE varchar(255),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ETYPE_ID)
-    ) comment='Types, that will be used in system.' ;
+    );
 
     create table TMAILTEMPLATE (
         MAILTEMPLATE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         CODE varchar(255) not null,
-        FSPOINTER longtext not null comment 'Absolute path to folder with html template files and images.',
+        FSPOINTER longtext not null,
         NAME varchar(255) not null,
         DESCRIPTION varchar(255),
         MAILTEMPLATEGROUP_ID bigint not null,
@@ -551,6 +552,7 @@
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         PASSWORD varchar(255) not null,
+        PASSWORDEXPIRY datetime,
         AUTHTOKEN varchar(255),
         AUTHTOKENEXPIRY datetime,
         ENABLED bit not null,
@@ -560,7 +562,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (MANAGER_ID)
-    ) comment='Hold managers' ;
+    );
 
     create table TMANAGERROLE (
         MANAGERROLE_ID bigint not null auto_increment,
@@ -573,7 +575,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (MANAGERROLE_ID)
-    ) comment='Hold roles list' ;
+    );
 
 
     create table TMANAGERSHOP (
@@ -594,7 +596,7 @@
         VERSION bigint not null default 0,
         PRODUCTTYPE_ID bigint not null,
         ATTRCODELIST longtext,
-        RANK integer comment 'What the default order of attribute group for prod type ?',
+        RANK integer,
         NAME varchar(64) not null,
         DISPLAYNAME varchar(255),
         CREATED_TIMESTAMP datetime,
@@ -603,12 +605,12 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (PRODTYPEATTRIBUTEGROUP_ID)
-    ) comment='Attrib view group. Example: optic system, sizes, etc.' ;
+    );
 
     create table TPRODUCT (
         PRODUCT_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        CODE varchar(255) not null comment 'Product or product sku code' unique,
+        CODE varchar(255) not null unique,
         MANUFACTURER_CODE varchar(255),
         MANUFACTURER_PART_CODE varchar(255),
         SUPPLIER_CODE varchar(255),
@@ -617,16 +619,16 @@
         PIM_DISABLED bit not null default 0,
         PIM_OUTDATED bit not null default 0,
         PIM_UPDATED datetime,
-        AVAILABLEFROM datetime comment 'AVAILABLEFROM AVAILABLETO date range when product will be available, for pre and back orders',
+        AVAILABLEFROM datetime,
         AVAILABLETO datetime,
         NAME varchar(255) not null,
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
-        TAG varchar(255) comment 'Set of product tags',
+        TAG varchar(255),
         BRAND_ID bigint not null,
         PRODUCTTYPE_ID bigint not null,
         AVAILABILITY integer default 1 not null,
-        FEATURED bit comment 'Is product featured?',
+        FEATURED bit,
         URI varchar(255) unique,
         TITLE varchar(255),
         METAKEYWORDS varchar(255),
@@ -648,7 +650,7 @@
     create table TPRODUCTASSOCIATION (
         PRODUCTASSOCIATION_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        RANK integer comment 'RANK can have different meaning, depending from association type for example similarity always will be less, that 1000000 (MAX similarity) who buy , counter of who buy the one product also buy other product',
+        RANK integer,
         ASSOCIATION_ID bigint not null,
         PRODUCT_ID bigint not null,
         ASSOCIATED_SKU_CODE varchar(255) not null,
@@ -681,7 +683,7 @@
         VERSION bigint not null default 0,
         PRODUCT_ID bigint not null,
         CATEGORY_ID bigint not null,
-        RANK integer comment 'What the default order of particular product in particular category',
+        RANK integer,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -712,33 +714,33 @@
         NAME varchar(255),
         DISPLAYNAME longtext,
         DESCRIPTION varchar(255),
-        UITEMPLATE varchar(255) comment 'What UI template will be used for show particular type of product.',
-        UISEARCHTEMPLATE varchar(255) comment 'UI template label for search on category, if category has a default product type.',
-        SERVICE bit comment 'shall we treat this like service ? It mean no inventory will be check',
-        ENSEMBLE bit comment 'is this a bundle of products ?',
-        SHIPPABLE bit comment 'is this a physical product ? must have weight and sizes in attributes if yes',
-        DIGITAL bit default 0 comment 'is this the digital product ?',
-        DOWNLOADABLE bit default 0 comment 'is digital product can be downloaded?',
+        UITEMPLATE varchar(255),
+        UISEARCHTEMPLATE varchar(255),
+        SERVICE bit,
+        ENSEMBLE bit,
+        SHIPPABLE bit,
+        DIGITAL bit default 0,
+        DOWNLOADABLE bit default 0,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (PRODUCTTYPE_ID)
-    ) comment='Product type.' ;
+    );
 
     create table TPRODUCTTYPEATTR (
         PRODTYPEATTR_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         CODE varchar(255) not null,
         PRODUCTTYPE_ID bigint not null,
-        RANK integer default 500 comment 'What order for filtered navigation',
-        VISIBLE bit comment 'Is attribute visible on storefront',
-        SIMILARITY bit comment 'Will attribute be used for calculate products similarity',
-        NAV bit comment 'Will be used in filtered navigation',
+        RANK integer default 500,
+        VISIBLE bit,
+        SIMILARITY bit,
+        NAV bit,
         NAV_TEMPLATE varchar(64),
-        NAV_TYPE varchar(1) default 'S' comment 'S - single, R- range',
-        RANGE_NAV longtext comment 'In case of range navigation hold the ranges values',
+        NAV_TYPE varchar(1) default 'S',
+        RANGE_NAV longtext,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -758,7 +760,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (ROLE_ID)
-    ) comment='Hold roles list' ;
+    );
 
     create table TSEOIMAGE (
         SEOIMAGE_ID bigint not null auto_increment,
@@ -774,7 +776,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SEOIMAGE_ID)
-    ) comment='Search optimizations on images.' ;
+    );
 
     create table TSHOP (
         SHOP_ID bigint not null auto_increment,
@@ -783,7 +785,7 @@
         CODE varchar(255) not null unique,
         NAME varchar(64) not null,
         DESCRIPTION longtext,
-        FSPOINTER longtext not null comment 'Point to jsps',
+        FSPOINTER longtext not null,
         DISABLED bit not null default 0,
         URI varchar(255),
         TITLE varchar(255),
@@ -812,7 +814,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SHOPADVPLACE_ID)
-    ) comment='Adv places in particular shop' ;
+    );
 
     create table TSHOPADVRULES (
         SHOPADVRULES_ID bigint not null auto_increment,
@@ -830,7 +832,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SHOPADVRULES_ID)
-    ) comment='Adv rules for show some item in adv place' ;
+    );
 
     create table TSHOPATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
@@ -851,7 +853,7 @@
     create table TSHOPCATEGORY (
         SHOPCATEGORY_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        RANK integer comment 'What the default order of assignment ?',
+        RANK integer,
         SHOP_ID bigint not null,
         CATEGORY_ID bigint not null,
         CREATED_TIMESTAMP datetime,
@@ -874,7 +876,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SHOPTOPSELLER_ID)
-    ) comment='Hold top seller information' ;
+    );
 
     create table TSHOPURL (
         STOREURL_ID bigint not null auto_increment,
@@ -909,7 +911,7 @@
         VERSION bigint not null default 0,
         SHOP_ID bigint not null,
         WAREHOUSE_ID bigint not null,
-        RANK integer comment 'Warehouse priority usage',
+        RANK integer,
         DISABLED bit default 0,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
@@ -917,7 +919,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SHOPWAREHOUSE_ID)
-    ) comment='Relation between shop and warehouses' ;
+    );
 
     create table TSKU (
         SKU_ID bigint not null auto_increment,
@@ -931,7 +933,7 @@
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
         PRODUCT_ID bigint,
-        RANK integer comment 'Order of sku for product. First is default.',
+        RANK integer,
         BARCODE varchar(128),
         URI varchar(255) unique,
         TITLE varchar(255),
@@ -954,11 +956,11 @@
         SKU_CODE varchar(255) not null,
         SHOP_ID bigint not null,
         CURRENCY varchar(3) not null,
-        QTY decimal(19,2) not null comment 'Quantity of SKU. Price tier',
+        QTY decimal(19,2) not null,
         PRICE_UPON_REQUEST bit not null default 0,
-        REGULAR_PRICE decimal(19,2) not null comment 'Regular price',
-        SALE_PRICE decimal(19,2) comment 'Sale price. Must be less that regular',
-        MINIMAL_PRICE decimal(19,2) comment 'Minimal price used in name-your-price pricing strategy. Must be less that regular',
+        REGULAR_PRICE decimal(19,2) not null,
+        SALE_PRICE decimal(19,2),
+        MINIMAL_PRICE decimal(19,2),
         SALE_FROM datetime,
         SALE_TO datetime,
         TAG varchar(45),
@@ -971,7 +973,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SKUPRICE_ID)
-    ) comment='Prices. Some discriminators like condition can be added' ;
+    );
 
 
     create table TSKUPRICERULE (
@@ -1010,15 +1012,15 @@
         VERSION bigint not null default 0,
         WAREHOUSE_ID bigint not null,
         SKU_CODE varchar(255) not null,
-        QUANTITY decimal(19,2) not null comment 'Current quantity',
-        RESERVED decimal(19,2) default 0 comment 'Reserved by payment transaction quantity.',
+        QUANTITY decimal(19,2) not null,
+        RESERVED decimal(19,2) default 0,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (SKUWAREHOUSE_ID)
-    ) comment='Real quantity of sku at each warehouse' ;
+    );
 
     create table TSTATE (
         STATE_ID bigint not null auto_increment,
@@ -1033,7 +1035,7 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (STATE_ID)
-    ) comment='List of supported states.' ;
+    );
 
     create table TSYSTEM (
         SYSTEM_ID bigint not null auto_increment,

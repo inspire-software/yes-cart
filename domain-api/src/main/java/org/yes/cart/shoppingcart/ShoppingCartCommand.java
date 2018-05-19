@@ -97,6 +97,7 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_LOGOUT = "logoutCmd";
 
     String CMD_RESET_PASSWORD = "resetPasswordCmd";
+    String CMD_RESET_PASSWORD_PW = "resetPasswordCmd_pw";
 
 
     /**

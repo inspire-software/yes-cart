@@ -113,6 +113,20 @@ public interface RegisteredPerson {
     void setPassword(String password);
 
     /**
+     * Get password.
+     *
+     * @return password expiry.
+     */
+    Instant getPasswordExpiry();
+
+    /**
+     * Set password.
+     *
+     * @param passwordExpiry password expiry.
+     */
+    void setPasswordExpiry(Instant passwordExpiry);
+
+    /**
      * Authorisation token.
      *
      * @return auth token (for resetting passwords)

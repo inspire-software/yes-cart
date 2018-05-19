@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.wicketsupport.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -153,6 +154,10 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
     }
 
     private void decodeSegment(final PageParameters pageParameters, final String idName, final String idValueToDecode) {
+
+        if (StringUtils.isBlank(idName)) {
+            return; // This could be extra slashes in URL e.g. somedomain.com///path/to
+        }
 
         String seoId = idValueToDecode;
         if (seoEnabled) {

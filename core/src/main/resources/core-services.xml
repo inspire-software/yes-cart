@@ -1434,6 +1434,8 @@
 
     <import resource="classpath*:core-services-ext.xml"/>
 
+    <import resource="core-security.xml"/>
+
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">

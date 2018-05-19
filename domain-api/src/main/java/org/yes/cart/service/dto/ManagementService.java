@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.RoleDTO;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -139,6 +140,15 @@ public interface ManagementService {
      * @param userId user email
      */
     void resetPassword(String userId);
+
+    /**
+     * Reset password to user chosen one.
+     *
+     * @param userId user email
+     * @param password user chosen password
+     * @param lang language for errors
+     */
+    void updatePassword(String userId, String password, String lang) throws BadCredentialsException;
 
     /**
      * Delete user by given user id.

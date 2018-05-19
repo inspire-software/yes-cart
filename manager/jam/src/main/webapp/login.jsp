@@ -49,6 +49,11 @@
                         <p><spring:message code="login.logout.success"/></p>
                     </div>
                 </c:if>
+                <c:if test="${param.newpass != null}">
+                    <div class="alert alert-success">
+                        <p><spring:message code="login.newpass.success"/></p>
+                    </div>
+                </c:if>
                 <div class="input-group input-sm">
                     <label class="input-group-addon" for="j_username"><i class="fa fa-user"></i></label>
                     <input type="text" class="form-control" id="j_username" name="j_username"

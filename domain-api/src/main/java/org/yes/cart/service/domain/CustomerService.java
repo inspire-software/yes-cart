@@ -119,6 +119,15 @@ public interface CustomerService extends GenericService<Customer> {
      */
     void resetPassword(Customer customer, Shop shop, String authToken);
 
+    /**
+     * Update password to given user and send generated password via email.
+     *
+     * @param customer customer to create
+     * @param shop     shop to assign
+     * @param newPassword new password
+     */
+    void updatePassword(Customer customer, Shop shop, String newPassword);
+
 
     /**
      * Create customer and assign it to particular shop

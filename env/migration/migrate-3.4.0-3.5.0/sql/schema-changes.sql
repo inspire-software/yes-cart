@@ -170,3 +170,44 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 E.g. INITPAID=MANUALXML,BLOCK
 DELIVERY=EMAILNOTIFY,NOBLOCK',  1012, 1001, 0, 0, 0, 0);
 
+--
+-- YC-905 Improved registration and validation process
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10888,  'SHOP_CREGATTRS_EMAIL', 'SHOP_CREGATTRS_EMAIL',  0,  NULL,  'Customer (Email validation): login, contact, newsletter etc',
+    'Customer attribute used to validate the emails',  1000, 1001, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, REXP, DISPLAYNAME, V_FAILED_MSG)
+  VALUES (  11163,  'password', 'password',  1,  'password',  'Password',  'Password', 1017,  1006, 0, 0, 0, 0, 1,
+  '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$',
+  'en#~#Password#~#uk#~#Пароль#~#ru#~#Пароль#~#de#~#Passwort',
+  'en#~#Password must have at least 8 symbols: 1 upper case letter (A-Z), 1 lower case letter (a-z), 1 digit (0-9) and 1 special character (@#$%^&+=)#~#uk#~#Пароль має містити принаймні 8 символів: 1 велику літеру (A-Z), 1 маленьку літеру (a-z), 1 цифру (0-9) та 1 спеціальний символ (@#$%^&+=)#~#ru#~#Пароль должен содержать 8 символов: 1 большую букву (A-Z), 1 маленькую букву (a-z), 1 цифру (0-9) и 1 специальный символ (@#$%^&+=)#~#de#~#Das Passwort muss mindestens 8 Symbole enthalten: 1 Großbuchstabe (A-Z), 1 Kleinbuchstabe (a-z), 1 Ziffer (0-9) und 1 Sonderzeichen (@#$%^&+=)');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, DISPLAYNAME)
+  VALUES (  11164,  'confirmPassword', 'confirmPassword',  1,  'confirmPassword',  'Confirm Password',  'Confirm Password', 1017,  1006, 0, 0, 0, 0, 1,
+  'en#~#Confirm Password#~#uk#~#Підтвердження пароля#~#ru#~#Подтверждения пароля#~#de#~#Bestätigungspasswort');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
+  VALUES (  11165,  'email', 'email',  1,  'email',  'Customer Email',  'Email', 1010,  1006, 0, 0, 0, 0,
+  '^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*((\.[A-Za-z]{2,}){1}$)',
+  'en#~#E-mail#~#uk#~#E-mail#~#ru#~#E-mail#~#de#~#E-mail',
+  'en#~#''${input}'' is not a valid email address#~#uk#~#''${input}'' не є коректною електронною поштою#~#ru#~#''${input}'' не является корректной электронной почтой#~#de#~#''${input}'' ist keine gültige E-Mail Adresse');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, V_FAILED_MSG)
+  VALUES (  11166,  'MANAGER_PASSWORD_REGEX', 'MANAGER_PASSWORD_REGEX',  1,  NULL,  'Manager Password RegEx',  'Manager Password RegEx', 1017,  1000, 0, 0, 0, 0, 1,
+  'en#~#Password must have at least 8 symbols: 1 upper case letter (A-Z), 1 lower case letter (a-z), 1 digit (0-9) and 1 special character (@#$%^&+=)#~#uk#~#Пароль має містити принаймні 8 символів: 1 велику літеру (A-Z), 1 маленьку літеру (a-z), 1 цифру (0-9) та 1 спеціальний символ (@#$%^&+=)#~#ru#~#Пароль должен содержать 8 символов: 1 большую букву (A-Z), 1 маленькую букву (a-z), 1 цифру (0-9) и 1 специальный символ (@#$%^&+=)#~#de#~#Das Passwort muss mindestens 8 Symbole enthalten: 1 Großbuchstabe (A-Z), 1 Kleinbuchstabe (a-z), 1 Ziffer (0-9) und 1 Sonderzeichen (@#$%^&+=)');
+
+
+UPDATE TSHOPATTRVALUE SET VAL = 'email,salutation,firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN,password,confirmPassword' WHERE GUID = 'SHOP_CUSTOMER_REGISTRATION_10';
+UPDATE TSHOPATTRVALUE SET VAL = 'email,firstname,lastname' WHERE GUID = 'SHOP_CUSTOMER_REGGUEST_10';
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (26, 'email','SHOP_CREGATTRS_EMAIL', 10, 'SHOP_CUSTOMER_EMAIL_10');
+
+
+alter table TMANAGER add column PASSWORDEXPIRY datetime;
+-- alter table TMANAGER add column PASSWORDEXPIRY timestamp;
+alter table TCUSTOMER add column PASSWORDEXPIRY datetime;
+-- alter table TCUSTOMER add column PASSWORDEXPIRY timestamp;
+
+
+

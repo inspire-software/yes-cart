@@ -176,8 +176,19 @@ public interface CustomerServiceFacade {
     boolean isShopCustomerTypeSupported(Shop shop, String customerType);
 
     /**
+     * Special setting for shop specific email validation.
+     * This is a synonym for {@link #getShopRegistrationAttributes(Shop, String)}
+     * where customerType is "EMAIL".
+     *
+     * @param shop shop
+     *
+     * @return email attribute setting or null
+     */
+    AttrValueWithAttribute getShopEmailAttribute(Shop shop);
+
+    /**
      * List of custom attributes eligible for profile edit form.
-     * CPOINT - This will be available to the shoppers to edit as they please, so
+     * This will be available to the shoppers to edit as they please, so
      * need to restrict attributes that should be hidden from shoppers.
      *
      * @param shop shop
@@ -186,6 +197,19 @@ public interface CustomerServiceFacade {
      * @return list of eligible attributes
      */
     List<AttrValueWithAttribute> getShopRegistrationAttributes(Shop shop, String customerType);
+
+    /**
+     * List of custom attributes eligible for profile edit form.
+     * This will be available to the shoppers to edit as they please, so
+     * need to restrict attributes that should be hidden from shoppers.
+     *
+     * @param shop shop
+     * @param customerType customer type {@link Customer#getCustomerType()}
+     * @param force do not perform supports check if force is true
+     *
+     * @return list of eligible attributes
+     */
+    List<AttrValueWithAttribute> getShopRegistrationAttributes(Shop shop, String customerType, boolean force);
 
 
     /**
@@ -236,6 +260,15 @@ public interface CustomerServiceFacade {
      * @return customer object or null
      */
     Customer getCustomerByPublicKey(String publicKey);
+
+    /**
+     * Get customer by auth token.
+     *
+     * @param token auth token
+     *
+     * @return {@link Customer} or null if customer not found
+     */
+    Customer getCustomerByToken(String token);
 
 
 }

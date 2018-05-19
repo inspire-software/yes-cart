@@ -140,10 +140,20 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
     @Override
     public List<AttrValueWithAttribute> getRegistrationAttributes(final Shop shop, final String customerType) {
 
-        final Set<String> types = getCustomerTypes(shop, true);
-        if (!types.contains(customerType)) {
-            LOG.warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type", customerType);
-            return Collections.emptyList();
+        return getRegistrationAttributes(shop, customerType, false);
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<AttrValueWithAttribute> getRegistrationAttributes(final Shop shop, final String customerType, final boolean force) {
+
+        if (!force) {
+            final Set<String> types = getCustomerTypes(shop, true);
+            if (!types.contains(customerType)) {
+                LOG.warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type", customerType);
+                return Collections.emptyList();
+            }
         }
 
         final List<String> allowed = getSupportedRegistrationFormAttributesAsList(shop, customerType);

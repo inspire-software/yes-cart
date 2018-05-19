@@ -37,7 +37,7 @@ public class LoginPage extends AbstractWebPage {
 
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    private final static String CART_VIEW = "authView";
+    private final static String AUTH_VIEW = "authView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -53,7 +53,7 @@ public class LoginPage extends AbstractWebPage {
         add(
                 new FeedbackPanel(FEEDBACK)
         ).add(
-                new LoginPanel(CART_VIEW, false)
+                new LoginPanel(AUTH_VIEW, false)
         ).add(
                 new StandardFooter(FOOTER)
         ).add(

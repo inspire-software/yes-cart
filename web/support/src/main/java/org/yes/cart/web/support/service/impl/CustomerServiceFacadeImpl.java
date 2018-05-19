@@ -168,8 +168,10 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             return null;
         }
 
-        final String password = phraseGenerator.getNextPassPhrase();
+        final String userPassword = (String) registrationData.get("password");
+        final String password = StringUtils.isNotBlank(userPassword) ? userPassword : phraseGenerator.getNextPassPhrase();
         customer.setPassword(password); // aspect will create hash but we need to generate password to be able to auto-login
+        customer.setPasswordExpiry(null); // TODO: YC-906 Create password expiry flow for customers
 
         registerCustomerCustomAttributes(customer, customerType, configShop, registrationData);
 
@@ -180,11 +182,14 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     private void registerCustomerCustomAttributes(final Customer customer, final String customerType, final Shop configShop, final Map<String, Object> registrationData) {
         final Map<String, Object> attrData = new HashMap<>(registrationData);
+        attrData.remove("email");
         attrData.remove("salutation");
         attrData.remove("firstname");
         attrData.remove("lastname");
         attrData.remove("middlename");
         attrData.remove("customerType");
+        attrData.remove("password");
+        attrData.remove("confirmPassword");
         if (attrData.containsKey("phone") && !attrData.containsKey(AttributeNamesKeys.Customer.CUSTOMER_PHONE)) {
             attrData.put(AttributeNamesKeys.Customer.CUSTOMER_PHONE, attrData.remove("phone"));
         }
@@ -328,9 +333,32 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     /** {@inheritDoc} */
     @Override
+    public AttrValueWithAttribute getShopEmailAttribute(final Shop shop) {
+
+        final List<AttrValueWithAttribute> emailAttrs =
+                customerCustomisationSupport.getRegistrationAttributes(shop, AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL, true);
+
+        for (final AttrValueWithAttribute attr : emailAttrs) {
+            if ("email".equals(attr.getAttribute().getVal())) {
+                return attr;
+            }
+        }
+
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public List<AttrValueWithAttribute> getShopRegistrationAttributes(final Shop shop, final String customerType) {
 
         return customerCustomisationSupport.getRegistrationAttributes(shop, customerType);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<AttrValueWithAttribute> getShopRegistrationAttributes(final Shop shop, final String customerType, final boolean force) {
+
+        return customerCustomisationSupport.getRegistrationAttributes(shop, customerType, force);
     }
 
 
@@ -420,5 +448,11 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             return customerService.getCustomerByPublicKey(key, lastName);
         }
         return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Customer getCustomerByToken(final String token) {
+        return customerService.getCustomerByToken(token);
     }
 }

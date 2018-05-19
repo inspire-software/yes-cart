@@ -58,6 +58,7 @@
     <entry key="price">Цена</entry>
     <entry key="qty">Количество</entry>
     <entry key="login">Вход</entry>
+    <entry key="reset">Изменить пароль</entry>
     <entry key="registration">Регистрация</entry>
     <entry key="save">Сохранить</entry>
     <entry key="email">E-mail</entry>
@@ -273,6 +274,7 @@
     <entry key="customerExists">Такой покупатель уже зарегистрирован</entry>
     <entry key="canNotRegister">Невозможно зарегистрировать.</entry>
     <entry key="accountActivationPending">Регистрация завершена, но данная учетная запись требует активации. Оповещение отправлено в службу поддержки клиентов, чтобы рассмотреть и утвердить Вашу учетную запись.</entry>
+    <entry key="passwordDoesNotMatch">Значения пароля и подтверждения пароля не совпадают</entry>
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Выйти</entry>
@@ -315,7 +317,7 @@
     <entry key="orderNoTitle">Заказ ${ordernum}</entry>
 
     <!-- PasswordPanel -->
-    <entry key="changePassword">Политика безопасности магазина - только автоматически сгенерированный пароль. Запрос на новый пароль будет выслан по почте после нажатия кнопки "Сменить пароль"</entry>
+    <entry key="changePassword">Запрос на новый пароль будет выслан по почте после нажатия кнопки "Сменить пароль"</entry>
     <entry key="changePasswordBtn">Сменить пароль</entry>
     <entry key="newPasswordSent">Новый пароль выслан на почту</entry>
 

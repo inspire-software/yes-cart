@@ -58,6 +58,7 @@
     <entry key="price">Preis</entry>
     <entry key="qty">Anzahl</entry>
     <entry key="login">Login</entry>
+    <entry key="reset">Passwort ändern</entry>
     <entry key="registration">Registrieren</entry>
     <entry key="save">Speichern</entry>
     <entry key="email">E-Mail</entry>
@@ -273,6 +274,7 @@
     <entry key="customerExists">Der Kunde ist schon registriert.</entry>
     <entry key="canNotRegister">Beim Registrieren ist ein Problem aufgetreten, versuchen Sie es nochmals oder kontaktieren Sie uns.</entry>
     <entry key="accountActivationPending">Registrierung abgeschlossen, aber dieses Konto erfordert Aktivierung. E-Mail wird an das Kundensupport-Team gesendet, um Ihr Konto zu überprüfen und zu genehmigen.</entry>
+    <entry key="passwordDoesNotMatch">Passwort und Bestätigungspasswort stimmen nicht überein</entry>
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Abmelden</entry>

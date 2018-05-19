@@ -176,6 +176,11 @@ public interface AttributeNamesKeys {
          */
         String JOB_EMPTY_CARTS_BATCH_SIZE = "JOB_EMPTY_CARTS_BATCH_SIZE";
 
+        /**
+         * Regex for manager password
+         */
+        String MANAGER_PASSWORD_REGEX = "MANAGER_PASSWORD_REGEX";
+
     }
 
 
@@ -786,11 +791,20 @@ public interface AttributeNamesKeys {
 
     interface Cart {
 
+        // Constant to define Guest checkout customer
         String CUSTOMER_TYPE_GUEST = "B2G";
 
+        // Regular customer B2C
         String CUSTOMER_TYPE_REGULAR = "B2C";
 
+        // Regular B2B customer
+        String CUSTOMER_TYPE_B2B = "B2C";
+
+        // B2B customer in scope of sub shop (multi B2B)
         String CUSTOMER_TYPE_B2BSUB = "B2E";
+
+        // Constant to define special type reserved for login/contact/newsletter email validation
+        String CUSTOMER_TYPE_EMAIL = "EMAIL";
 
         String ORDER_INFO_CUSTOMER_TYPE = "customerType";
         String ORDER_INFO_CUSTOMER_SHOPPING_LIST_ON = "shoppingListsEnabled";

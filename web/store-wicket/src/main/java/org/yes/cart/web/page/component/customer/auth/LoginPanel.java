@@ -26,18 +26,23 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.wicket.validation.validator.StringValidator;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.page.component.customer.dynaform.editor.CustomPatternValidator;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.theme.WicketPagesMounter;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -70,6 +75,9 @@ public class LoginPanel extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
     private ContentServiceFacade contentServiceFacade;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
+
     @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
     private WicketPagesMounter wicketPagesMounter;
 
@@ -84,7 +92,18 @@ public class LoginPanel extends BaseComponent {
         this.isCheckout = isCheckout;
 
         final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
-        add(new LoginForm(LOGIN_FORM, target.getFirst(), target.getSecond()));
+        final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(getCurrentShop());
+        final IValidator<String> emailValidator;
+        if (emailConfig != null && StringUtils.isNotBlank(emailConfig.getAttribute().getRegexp())) {
+            final String regexError = new FailoverStringI18NModel(
+                    emailConfig.getAttribute().getValidationFailedMessage(),
+                    emailConfig.getAttribute().getCode()).getValue(getLocale().getLanguage());
+
+            emailValidator = new CustomPatternValidator(emailConfig.getAttribute().getRegexp(), new Model<>(regexError));
+        } else {
+            emailValidator = EmailAddressValidator.getInstance();
+        }
+        add(new LoginForm(LOGIN_FORM, target.getFirst(), target.getSecond(), emailValidator));
 
     }
 
@@ -166,7 +185,8 @@ public class LoginPanel extends BaseComponent {
          */
         public LoginForm(final String id,
                          final Class<? extends Page> successfulPage,
-                         final PageParameters parameters) {
+                         final PageParameters parameters,
+                         final IValidator<String> emailValidator) {
 
             super(id);
 
@@ -179,8 +199,7 @@ public class LoginPanel extends BaseComponent {
 
             final TextField<String> emailInput = (TextField<String>) new TextField<String>(EMAIL_INPUT)
                     .setRequired(true)
-                    .add(StringValidator.lengthBetween(MIN_LEN, MAX_LEN))
-                    .add(EmailAddressValidator.getInstance());
+                    .add(emailValidator);
 
             add(
                     emailInput

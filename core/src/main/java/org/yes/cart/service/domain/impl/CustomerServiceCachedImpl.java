@@ -139,6 +139,17 @@ public class CustomerServiceCachedImpl implements CustomerService {
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
+    public void updatePassword(final Customer customer, final Shop shop, final String newPassword) {
+       customerService.updatePassword(customer, shop, newPassword);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
     public Customer create(final Customer customer, final Shop shop) {
         return customerService.create(customer, shop);
     }

@@ -154,6 +154,22 @@
         </triggeringPolicy>
     </appender>
 
+    <appender name="MAILDUMP" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${catalina.base}/logs/yc-maildump.log</File>
+        <Append>true</Append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>10</maxIndex>
+            <FileNamePattern>${catalina.base}/logs/yc-maildump.log.%i.zip</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
     <appender name="MAIL" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
         <File>${catalina.base}/logs/yc-mail.log</File>
@@ -267,9 +283,30 @@
         <!-- AUDIT logs are at TRACE level -->
         <appender-ref ref="AUDIT"/>
     </logger>
-    <!-- Example of specific entity logging, e.g. ShopEntity audit
+    <!-- Example of specific entity logging, e.g. Basic audit for Shop/Customer changes
     <logger name="AUDIT.ShopEntity" level="TRACE">
-        <appender-ref ref="AUDIT"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.ShopAliasEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.ShopCategoryEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.AttrValueEntityShop" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.AddressEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.CustomerEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.CustomerShopEntity" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="AUDIT.AttrValueEntityCustomer" level="TRACE">
+        <appender-ref ref="CONSOLE"/>
     </logger>
     -->
 
@@ -285,6 +322,11 @@
     <logger name="WS.OUT" level="ERROR">
         <!-- Interceptors log at INFO level -->
         <appender-ref ref="WS"/>
+    </logger>
+
+    <logger name="MAILDUMP" level="DEBUG">
+        <!-- MAILDUMP logs at DEBUG level -->
+        <appender-ref ref="MAILDUMP"/>
     </logger>
 
     <logger name="org.yes.cart.service.mail.impl.MailComposerImpl" level="INFO">

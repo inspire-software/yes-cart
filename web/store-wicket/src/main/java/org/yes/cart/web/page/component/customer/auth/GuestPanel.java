@@ -22,14 +22,11 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
@@ -141,27 +138,6 @@ public class GuestPanel extends BaseComponent {
 
         private String customerType;
 
-        private String email;
-
-
-        /**
-         * Get email.
-         *
-         * @return email.
-         */
-        public String getEmail() {
-            return email;
-        }
-
-        /**
-         * Set email.
-         *
-         * @param email email
-         */
-        public void setEmail(final String email) {
-            this.email = email;
-        }
-
         /**
          * Customer type.
          *
@@ -198,13 +174,6 @@ public class GuestPanel extends BaseComponent {
 
 
             setCustomerType(customerType);
-
-            add(
-                    new TextField<String>(EMAIL_INPUT)
-                            .setRequired(true)
-                            .add(StringValidator.lengthBetween(MIN_LEN, MAX_LEN))
-                            .add(EmailAddressValidator.getInstance())
-            );
 
             RepeatingView fields = new RepeatingView(FIELDS);
 
@@ -245,12 +214,17 @@ public class GuestPanel extends BaseComponent {
                             data.put("cartGuid", getCurrentCart().getGuid()); // Cart is required for registration
                             data.put("customerType", customerType); // Type is required for registration
 
+                            String emailAttr = null;
                             for (final AttrValueWithAttribute av : reg) {
+                                if ("email".equals(av.getAttribute().getVal())) {
+                                    emailAttr = av.getAttributeCode();
+                                }
                                 if (StringUtils.isNotBlank(av.getVal())) {
                                     data.put(av.getAttribute().getCode(), av.getVal());
                                 }
                             }
 
+                            final String email = (String) data.get(emailAttr);
 
                             final String guest = getCustomerServiceFacade().registerGuest(
                                     getCurrentShop(), email, data);

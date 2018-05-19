@@ -124,6 +124,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         final String generatedPasswordHash;
         final String generatedToken;
         final Instant generatedTokenExpiry;
+        boolean callCentrePasswordReset = false;
         if (generatePassword) {
 
             if (StringUtils.isNotBlank(registeredPerson.getPassword())) {
@@ -141,7 +142,8 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         } else if (resetPassword) {
             if (StringUtils.isNotBlank(token)) {
                 // Token is present so need to actually reset
-                if (!isCallcenterToken(shop, token)) {
+                callCentrePasswordReset = isCallcenterToken(shop, token);
+                if (!callCentrePasswordReset) {
                     if (!token.equals(registeredPerson.getAuthToken())
                             || registeredPerson.getAuthTokenExpiry() == null
                             || now().isAfter(registeredPerson.getAuthTokenExpiry())) {
@@ -172,6 +174,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
 
         final RegistrationMessage registrationMessage = createRegistrationMessage(
                 generatePassword,
+                callCentrePasswordReset,
                 registeredPerson,
                 shop,
                 generatedPassword,
@@ -219,6 +222,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
     }
 
     private RegistrationMessage createRegistrationMessage(final boolean newPerson,
+                                                          final boolean callCentrePasswordReset,
                                                           final RegisteredPerson registeredPerson,
                                                           final Shop shop,
                                                           final String generatedPassword,
@@ -229,6 +233,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
 
 
         registeredPerson.setPassword(generatedPasswordHash);
+        registeredPerson.setPasswordExpiry(null); // TODO: YC-906 Create password expiry flow for customers
         registeredPerson.setAuthToken(generatedToken);
         registeredPerson.setAuthTokenExpiry(generatedTokenExpiry);
 
@@ -267,6 +272,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
             final boolean requireNotification = requireApproval || (newPerson && isRegisteredPersonRequireNotification(registeredPerson, shop));
             registrationData.put("requireNotification", requireNotification);
             registrationData.put("requireNotificationEmails", getAllRecipients(shop, determineFromEmail(shop), template));
+            registrationData.put("callCentrePasswordReset", callCentrePasswordReset);
             registrationMessage.setAdditionalData(registrationData);
         }
         return registrationMessage;

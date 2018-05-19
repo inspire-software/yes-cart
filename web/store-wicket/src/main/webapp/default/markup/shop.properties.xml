@@ -58,6 +58,7 @@
     <entry key="price">Price</entry>
     <entry key="qty">Quantity</entry>
     <entry key="login">Login</entry>
+    <entry key="reset">Change password</entry>
     <entry key="registration">Registration</entry>
     <entry key="save">Save</entry>
     <entry key="email">E-mail</entry>
@@ -273,6 +274,7 @@
     <entry key="customerExists">Customer already registered.</entry>
     <entry key="canNotRegister">Unable to register.</entry>
     <entry key="accountActivationPending">Registration completed but this account requires activation. Email is sent to customer support team to review and approve your account.</entry>
+    <entry key="passwordDoesNotMatch">Password and confirmation password values do not match</entry>
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Logoff</entry>
@@ -315,7 +317,7 @@
     <entry key="orderNoTitle">Order ${ordernum}</entry>
 
     <!-- PasswordPanel -->
-    <entry key="changePassword">New password request will be send to you email after "Change password" click</entry>
+    <entry key="changePassword">New password request will be send to you via email after clicking "Change password" button</entry>
     <entry key="changePasswordBtn">Change password</entry>
     <entry key="newPasswordSent">New password sent</entry>
 

@@ -141,6 +141,7 @@
   "TEST": "Тест",
 
   "LOGGED_IN": "Вы вошли как {{user}}",
+  "CHANGE_PASSWORD": "Сменить пароль",
   "PANEL_CUSTOMER_SERVICE": "Обслуживание клиентов",
   "PANEL_CUSTOMER_SERVICE_ORDERS": "Заказы",
   "PANEL_CUSTOMER_SERVICE_PAYMENTS": "Платежи",

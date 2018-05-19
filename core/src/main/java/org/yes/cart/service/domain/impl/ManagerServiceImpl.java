@@ -61,11 +61,21 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
 
     /** {@inheritDoc } */
     @Override
-    public List<Manager> findByEmail(final String email) {
+    public Manager findByEmail(final String email) {
+        if (StringUtils.isBlank(email)) {
+            return null;
+        }
+        return findSingleByCriteria(" where lower(e.email) = ?1 ", email.toLowerCase());
+
+    }
+
+    /** {@inheritDoc } */
+    @Override
+    public List<Manager> findByEmailPartial(final String email) {
         if (StringUtils.isBlank(email)) {
             return Collections.emptyList();
         }
-        return findByCriteria(" where lower(e.email) = ?1 ", email.toLowerCase());
+        return findByCriteria(" where lower(e.email) like ?1 ", '%' + email.toLowerCase() + '%');
 
     }
 

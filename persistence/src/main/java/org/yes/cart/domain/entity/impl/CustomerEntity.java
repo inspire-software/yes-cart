@@ -39,6 +39,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private String lastname;
     private String middlename;
     private String password;
+    private Instant passwordExpiry;
     private String authToken;
     private Instant authTokenExpiry;
     private String tag;
@@ -148,6 +149,16 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     @Override
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public Instant getPasswordExpiry() {
+        return passwordExpiry;
+    }
+
+    @Override
+    public void setPasswordExpiry(final Instant passwordExpiry) {
+        this.passwordExpiry = passwordExpiry;
     }
 
     @Override

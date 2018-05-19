@@ -19,8 +19,12 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.customer.CustomerNameFormatter;
@@ -39,6 +43,8 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implements CustomerService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     private static final AttributeRankComparator ATTRIBUTE_RANK_COMPARATOR = new AttributeRankComparator();
 
@@ -204,7 +210,8 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             }
             return false;
 
-        } catch (Exception e) {
+        } catch (Exception exp) {
+            LOG.error(exp.getMessage(), exp);
             return false;
         }
     }
@@ -250,6 +257,22 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         super.update(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updatePassword(final Customer customer, final Shop shop, final String newPassword) {
+        try {
+            customer.setPassword(passwordHashHelper.getHash(newPassword));
+            customer.setPasswordExpiry(null); // TODO: YC-906 Create password expiry flow for customers
+            customer.setAuthToken(null);
+            customer.setAuthTokenExpiry(null);
+            super.update(customer);
+        } catch (Exception exp) {
+            LOG.error(exp.getMessage(), exp);
+            throw new BadCredentialsException(Constants.PASSWORD_RESET_PASSWORD_INVALID);
+        }
+    }
 
     /**
      * {@inheritDoc}

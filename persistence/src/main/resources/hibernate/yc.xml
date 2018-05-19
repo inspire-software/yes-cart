@@ -37,6 +37,7 @@
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
+        <property name="passwordExpiry" type="java.time.Instant" column="PASSWORDEXPIRY" not-null="false"/>
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
         <property name="authTokenExpiry" type="java.time.Instant" column="AUTHTOKENEXPIRY" not-null="false"/>
 
@@ -1792,6 +1793,7 @@
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
+        <property name="passwordExpiry" type="java.time.Instant" column="PASSWORDEXPIRY" not-null="false"/>
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
         <property name="authTokenExpiry" type="java.time.Instant" column="AUTHTOKENEXPIRY" not-null="false"/>
         <property name="publicKey" length="255" type="java.lang.String" column="PUBLICKEY" not-null="false"/>

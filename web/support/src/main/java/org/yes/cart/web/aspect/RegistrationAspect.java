@@ -231,6 +231,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
 
         registeredPerson.setPassword(generatedPasswordHash);
+        registeredPerson.setPasswordExpiry(null); // TODO: YC-906 Create password expiry flow for customers
         registeredPerson.setAuthToken(generatedToken);
         registeredPerson.setAuthTokenExpiry(generatedTokenExpiry);
 

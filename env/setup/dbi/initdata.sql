@@ -109,6 +109,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
     'List of customer attributes separated by comma to be shown on registration form',  1004, 1001, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10888,  'SHOP_CREGATTRS_EMAIL', 'SHOP_CREGATTRS_EMAIL',  0,  NULL,  'Customer (Email validation): login, contact, newsletter etc',
+    'Customer attribute used to validate the emails',  1000, 1001, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10881,  'SHOP_CPROFATTRS_VISIBLE_B2C', 'SHOP_CPROFATTRS_VISIBLE_B2C',  0,  NULL,  'Customer (B2C): profile form attributes (CSV)',
     'List of customer attributes separated by comma to be shown on profile form',  1004, 1001, 0, 0, 0, 0);
 
@@ -559,6 +563,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11119,  'JOB_PRODINVUP_DELTA_S', 'JOB_PRODINVUP_DELTA_S',  0,  NULL,  'Job\\Inventory Change Detection: delta delay in seconds',
     'Delay for delta check. Default 15s.',  1006, 1000, 0, 0, 0, 0);
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, V_FAILED_MSG)
+  VALUES (  11166,  'MANAGER_PASSWORD_REGEX', 'MANAGER_PASSWORD_REGEX',  1,  NULL,  'Manager Password RegEx',  'Manager Password RegEx', 1017,  1000, 0, 0, 0, 0, 1,
+  'en#~#Password must have at least 8 symbols: 1 upper case letter (A-Z), 1 lower case letter (a-z), 1 digit (0-9) and 1 special character (@#$%^&+=)#~#uk#~#Пароль має містити принаймні 8 символів: 1 велику літеру (A-Z), 1 маленьку літеру (a-z), 1 цифру (0-9) та 1 спеціальний символ (@#$%^&+=)#~#ru#~#Пароль должен содержать 8 символов: 1 большую букву (A-Z), 1 маленькую букву (a-z), 1 цифру (0-9) и 1 специальный символ (@#$%^&+=)#~#de#~#Das Passwort muss mindestens 8 Symbole enthalten: 1 Großbuchstabe (A-Z), 1 Kleinbuchstabe (a-z), 1 Ziffer (0-9) und 1 Sonderzeichen (@#$%^&+=)');
+
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11301,  'SHOP_IMAGE0',  'SHOP_IMAGE0',  1,  NULL,  'Shop: Shop image default',  null,  1003, 1001, 0, 0, 0, 0);
@@ -848,6 +856,19 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11062,  'customertype', 'customertype',  1,  NULL,  'Customer Type',  'Customer Type', 1000,  1006, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11063,  'pricingpolicy', 'pricingpolicy',  1,  NULL,  'Customer Pricing Policy',  'Customer Pricing Policy', 1000,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, REXP, DISPLAYNAME, V_FAILED_MSG)
+  VALUES (  11163,  'password', 'password',  1,  'password',  'Password',  'Password', 1017,  1006, 0, 0, 0, 0, 1,
+  '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$',
+  'en#~#Password#~#uk#~#Пароль#~#ru#~#Пароль#~#de#~#Passwort',
+  'en#~#Password must have at least 8 symbols: 1 upper case letter (A-Z), 1 lower case letter (a-z), 1 digit (0-9) and 1 special character (@#$%^&+=)#~#uk#~#Пароль має містити принаймні 8 символів: 1 велику літеру (A-Z), 1 маленьку літеру (a-z), 1 цифру (0-9) та 1 спеціальний символ (@#$%^&+=)#~#ru#~#Пароль должен содержать 8 символов: 1 большую букву (A-Z), 1 маленькую букву (a-z), 1 цифру (0-9) и 1 специальный символ (@#$%^&+=)#~#de#~#Das Passwort muss mindestens 8 Symbole enthalten: 1 Großbuchstabe (A-Z), 1 Kleinbuchstabe (a-z), 1 Ziffer (0-9) und 1 Sonderzeichen (@#$%^&+=)');
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, DISPLAYNAME)
+  VALUES (  11164,  'confirmPassword', 'confirmPassword',  1,  'confirmPassword',  'Confirm Password',  'Confirm Password', 1017,  1006, 0, 0, 0, 0, 1,
+  'en#~#Confirm Password#~#uk#~#Підтвердження пароля#~#ru#~#Подтверждения пароля#~#de#~#Bestätigungspasswort');
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
+  VALUES (  11165,  'email', 'email',  1,  'email',  'Customer Email',  'Email', 1010,  1006, 0, 0, 0, 0,
+  '^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*((\.[A-Za-z]{2,}){1}$)',
+  'en#~#E-mail#~#uk#~#E-mail#~#ru#~#E-mail#~#de#~#E-mail',
+  'en#~#''${input}'' is not a valid email address#~#uk#~#''${input}'' не є коректною електронною поштою#~#ru#~#''${input}'' не является корректной электронной почтой#~#de#~#''${input}'' ist keine gültige E-Mail Adresse');
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11064,  'CUSTOMER_B2B_REF', 'CUSTOMER_B2B_REF',  1,  NULL,  'B2B Ref',  'Default customer reference on placed orders', 1000,  1006, 0, 0, 0, 0);
@@ -947,8 +968,9 @@ INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (18, 'tr
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (8, 'true','SHOP_CHECKOUT_ENABLE_GUEST', 10, 'SHOP_CHECKOUT_ENABLE_GUEST');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (19, 'r@nD()mTok3n4Pa$$Re$3+','SHOP_CUSTOMER_PASSWORD_RESET_CC', 10, 'SHOP_CUSTOMER_PASSWORD_RESET_CC');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (20, 'B2G,B2C,B2B,B2E','SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO', 10, 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO');
-INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (23, 'salutation,firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN','SHOP_CREGATTRS_B2C', 10, 'SHOP_CUSTOMER_REGISTRATION_10');
-INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (7, 'firstname,lastname','SHOP_CREGATTRS_B2G', 10, 'SHOP_CUSTOMER_REGGUEST_10');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (23, 'email,salutation,firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN,password,confirmPassword','SHOP_CREGATTRS_B2C', 10, 'SHOP_CUSTOMER_REGISTRATION_10');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (7, 'email,firstname,lastname','SHOP_CREGATTRS_B2G', 10, 'SHOP_CUSTOMER_REGGUEST_10');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (26, 'email','SHOP_CREGATTRS_EMAIL', 10, 'SHOP_CUSTOMER_EMAIL_10');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (24, 'salutation,firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN','SHOP_CPROFATTRS_VISIBLE_B2C', 10, 'SHOP_CUSTOMER_PROFILE_10');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,DISPLAYVAL,CODE,SHOP_ID, GUID)  VALUES (25, 'B2C', 'en#~#B2C#~#uk#~#B2C#~#ru#~#B2C#~#de#~#B2C', 'SHOP_CUSTOMER_TYPES', 10, 'SHOP_CUSTOMER_TYPES_10');
 
@@ -1582,7 +1604,7 @@ INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (900, 'ROLE_SMPIMUSE
 INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (999, 'ROLE_LICENSEAGREED',  'ROLE_LICENSEAGREED', 'User agreed to license');
 
 -- default admin password 1234567
-INSERT INTO TMANAGER (GUID, MANAGER_ID, EMAIL, FIRSTNAME, LASTNAME, PASSWORD, ENABLED) VALUES ('YCADMIN', 1, 'admin@yes-cart.com', 'Yes', 'Admin', 'd89c77010dedf89c10d1293bd02b53c7', 1);
+INSERT INTO TMANAGER (GUID, MANAGER_ID, EMAIL, FIRSTNAME, LASTNAME, PASSWORD, ENABLED, PASSWORDEXPIRY) VALUES ('YCADMIN', 1, 'admin@yes-cart.com', 'Yes', 'Admin', 'd89c77010dedf89c10d1293bd02b53c7', 1, '2009-01-01 00:00:00');
 
 INSERT INTO TMANAGERROLE (MANAGERROLE_ID, EMAIL, CODE, GUID) VALUES (1, 'admin@yes-cart.com', 'ROLE_SMADMIN', 'YCADMIN_ROLE');
 

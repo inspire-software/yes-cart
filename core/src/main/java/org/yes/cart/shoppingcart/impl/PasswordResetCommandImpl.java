@@ -16,16 +16,21 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.CustomerCustomisationSupport;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.util.RegExUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,20 +43,23 @@ public class PasswordResetCommandImpl extends AbstractCartCommandImpl implements
     private static final long serialVersionUID = 20101026L;
 
     private final CustomerService customerService;
+    private final CustomerCustomisationSupport customerCustomisationSupport;
     private final ShopService shopService;
 
     /**
      * Construct command.
-     *
-     * @param registry shopping cart command registry
+     *  @param registry shopping cart command registry
      * @param customerService customer service
+     * @param customerCustomisationSupport customisation support
      * @param shopService shop service
      */
     public PasswordResetCommandImpl(final ShoppingCartCommandRegistry registry,
                                     final CustomerService customerService,
+                                    final CustomerCustomisationSupport customerCustomisationSupport,
                                     final ShopService shopService) {
         super(registry);
         this.customerService = customerService;
+        this.customerCustomisationSupport = customerCustomisationSupport;
         this.shopService = shopService;
     }
 
@@ -78,8 +86,34 @@ public class PasswordResetCommandImpl extends AbstractCartCommandImpl implements
             }
 
             final Shop shop = shopService.findById(shoppingCart.getShoppingContext().getShopId());
+            final List<AttrValueWithAttribute> avs = customerCustomisationSupport.getRegistrationAttributes(shop, customer.getCustomerType());
+            boolean allowEnterPasswords = false;
+            AttrValueWithAttribute passwordAttr = null;
+            for (final AttrValueWithAttribute av : avs) {
+                if ("password".equals(av.getAttribute().getVal())) {
+                    allowEnterPasswords = true;
+                    passwordAttr = av;
+                    break;
+                }
+            }
 
-            customerService.resetPassword(customer, shop, token);
+            if (allowEnterPasswords) {
+
+                final String newPw = (String) parameters.get(CMD_RESET_PASSWORD_PW);
+                if (StringUtils.isBlank(newPw) || !RegExUtils.getInstance(passwordAttr.getAttribute().getRegexp()).matches(newPw)) {
+                    // No password provided
+                    throw new BadCredentialsException(Constants.PASSWORD_RESET_PASSWORD_INVALID);
+                } else {
+                    // New password is provided, so setting it
+                    customer.setPassword(newPw);
+                    customerService.updatePassword(customer, shop, newPw);
+                }
+
+            } else {
+                // Simple reset, customer will get password via email
+                customerService.resetPassword(customer, shop, token);
+
+            }
 
         }
     }

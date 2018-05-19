@@ -29,10 +29,7 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.utils.impl.ExtendedConversionService;
-import org.yes.cart.web.page.component.customer.dynaform.editor.BooleanEditor;
-import org.yes.cart.web.page.component.customer.dynaform.editor.MultipleChoicesEditor;
-import org.yes.cart.web.page.component.customer.dynaform.editor.SingleChoiceEditor;
-import org.yes.cart.web.page.component.customer.dynaform.editor.StringEditor;
+import org.yes.cart.web.page.component.customer.dynaform.editor.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -122,8 +119,19 @@ public class EditorFactory implements Serializable {
                 return new SingleChoiceEditor(id, markupContainer, model, labelModel, enumChoices, attrValue, notEditable);
             }
         } else if ("Boolean".equals(bType)) {
+
             final IModel model = new PropertyModel(attrValue, VALUE_FILED);
             return new BooleanEditor(id, markupContainer, model, labelModel, attrValue, notEditable);
+
+        } else if ("SecureString".equals(bType)) {
+
+            final String regexError = new FailoverStringI18NModel(
+                    attrValue.getAttribute().getValidationFailedMessage(),
+                    attrValue.getAttribute().getCode()).getValue(language);
+
+            final IModel model = new PropertyModel(attrValue, VALUE_FILED);
+            return new SecureStringEditor(id, markupContainer, model, labelModel, new Model<>(regexError), attrValue, notEditable);
+
         } else {
 
             final String regexError = new FailoverStringI18NModel(
@@ -132,6 +140,7 @@ public class EditorFactory implements Serializable {
 
             final IModel model = new PropertyModel(attrValue, VALUE_FILED);
             return new StringEditor(id, markupContainer, model, labelModel, new Model<>(regexError), attrValue, notEditable);
+            
         }
     }
 }

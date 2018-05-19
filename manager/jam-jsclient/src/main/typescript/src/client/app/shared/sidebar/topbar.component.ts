@@ -29,6 +29,7 @@ import { Config } from '../index';
 export class TopbarComponent implements OnInit, OnDestroy {
 
   private currentUserName : string;
+  private currentUserEmail : string;
   private menuType : string;
   private envLabel : string;
 
@@ -63,6 +64,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
   protected configureUser(user:any) {
     let currentUser:UserVO = user;
     this.currentUserName = currentUser != null ? currentUser.name : 'anonymous';
+    this.currentUserEmail = currentUser != null && currentUser.manager != null ? currentUser.manager.email : 'anonymous';
     this.menuType = currentUser != null ? currentUser.ui : {
       'CCC': false,
       'PIM': false,

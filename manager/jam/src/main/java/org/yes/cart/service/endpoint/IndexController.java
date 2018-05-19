@@ -17,6 +17,9 @@ package org.yes.cart.service.endpoint;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * User: denispavlov
@@ -31,5 +34,8 @@ public interface IndexController {
 
     @RequestMapping("/index.jsp")
     String index();
+
+    @RequestMapping(value = "/changepassword.jsp", method = { RequestMethod.GET, RequestMethod.POST })
+    String changePassword(HttpServletRequest request);
 
 }

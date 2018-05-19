@@ -37,6 +37,7 @@ import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.RegExUtils;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
@@ -656,15 +657,6 @@ public class AuthenticationController {
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
-        if (StringUtils.isBlank(registerRO.getEmail())
-                || registerRO.getEmail().length() < 6
-                || registerRO.getEmail().length() > 256
-                || !EMAIL.matcher(registerRO.getEmail()).matches()) {
-
-            return new AuthenticationResultRO("EMAIL_FAILED");
-
-        }
-
         // No existing users, non-typed customers or guests allowed
         if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())
                 || StringUtils.isBlank(registerRO.getCustomerType()) || AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST.equals(registerRO.getCustomerType())
@@ -689,35 +681,42 @@ public class AuthenticationController {
         final Map<String, Object> data = new HashMap<>();
         data.put("customerType", registerRO.getCustomerType());
 
+        String emailAttr = null;
+        String passwordAttr = null;
+        String confirmPasswordAttr = null;
+
         if (registerRO.getCustom() != null) {
 
             for (final AttrValueWithAttribute av : customerServiceFacade.getShopRegistrationAttributes(shop, registerRO.getCustomerType())) {
 
                 final Attribute attr = av.getAttribute();
-                final String value = registerRO.getCustom().get(attr.getCode());
 
-                if (attr.isMandatory() && StringUtils.isBlank(value)) {
-
-                    return new AuthenticationResultRO(attr.getCode() + ":FAILED");
-
-                } else if (StringUtils.isNotBlank(attr.getRegexp())
-                        && !Pattern.compile(attr.getRegexp()).matcher(value).matches()) {
-
-                    final String regexError = new FailoverStringI18NModel(
-                            attr.getValidationFailedMessage(),
-                            null).getValue(cart.getCurrentLocale());
-
-                    if (StringUtils.isBlank(regexError)) {
-                        return new AuthenticationResultRO(attr.getCode() + ":FAILED");
-                    }
-                    return new AuthenticationResultRO(attr.getCode() + ":FAILED:" + regexError);
-
-                } else {
-
-                    data.put(attr.getCode(), value);
-
+                if ("password".equals(av.getAttribute().getVal())) {
+                    passwordAttr = av.getAttributeCode();
+                } else if ("confirmPassword".equals(av.getAttribute().getVal())) {
+                    confirmPasswordAttr = av.getAttributeCode();
+                } else if ("email".equals(av.getAttribute().getVal())) {
+                    emailAttr = av.getAttributeCode();
                 }
+
+                final String value = av.getAttributeCode().equals(emailAttr) ? registerRO.getEmail() : registerRO.getCustom().get(attr.getCode());
+
+                final AuthenticationResultRO result = checkValid(attr, value, cart.getCurrentLocale());
+                if (result != null) {
+                    return result;
+                }
+
+                data.put(attr.getCode(), value);
+
             }
+        }
+
+        final String userPass = (String) data.get(passwordAttr);
+        final String confirmPass = (String) data.get(confirmPasswordAttr);
+        if (StringUtils.isNotBlank(userPass) && !userPass.equals(confirmPass)) {
+
+            return new AuthenticationResultRO("PASSWORD_MATCH_FAILED");
+
         }
 
         final String password = customerServiceFacade.registerCustomer(registrationShop, registerRO.getEmail(), data);
@@ -850,14 +849,6 @@ public class AuthenticationController {
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
-        if (StringUtils.isBlank(registerRO.getEmail())
-                || registerRO.getEmail().length() < 6
-                || registerRO.getEmail().length() > 256
-                || !EMAIL.matcher(registerRO.getEmail()).matches()) {
-
-            return new AuthenticationResultRO("EMAIL_FAILED");
-
-        }
 
         // Only guests allowed
         if (StringUtils.isBlank(registerRO.getCustomerType()) || !AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST.equals(registerRO.getCustomerType())) {
@@ -875,6 +866,25 @@ public class AuthenticationController {
 
         }
 
+
+        for (final AttrValueWithAttribute av : customerServiceFacade.getShopRegistrationAttributes(shop, registerRO.getCustomerType())) {
+
+            final Attribute attr = av.getAttribute();
+
+            if ("email".equals(av.getAttribute().getVal())) {
+                final String value = av.getAttributeCode();
+
+                final AuthenticationResultRO result = checkValid(attr, value, cart.getCurrentLocale());
+                if (result != null) {
+                    return result;
+                } else {
+                    break;
+                }
+
+            }
+            
+        }
+
         final Map<String, Object> data = new HashMap<>();
         data.put("customerType", registerRO.getCustomerType());
         data.put("cartGuid", cart.getGuid());
@@ -886,27 +896,13 @@ public class AuthenticationController {
                 final Attribute attr = av.getAttribute();
                 final String value = registerRO.getCustom().get(attr.getCode());
 
-                if (attr.isMandatory() && StringUtils.isBlank(value)) {
-
-                    return new AuthenticationResultRO(attr.getCode() + ":FAILED");
-
-                } else if (StringUtils.isNotBlank(attr.getRegexp())
-                        && !Pattern.compile(attr.getRegexp()).matcher(value).matches()) {
-
-                    final String regexError = new FailoverStringI18NModel(
-                            attr.getValidationFailedMessage(),
-                            null).getValue(cart.getCurrentLocale());
-
-                    if (StringUtils.isBlank(regexError)) {
-                        return new AuthenticationResultRO(attr.getCode() + ":FAILED");
-                    }
-                    return new AuthenticationResultRO(attr.getCode() + ":FAILED:" + regexError);
-
-                } else {
-
-                    data.put(attr.getCode(), value);
-
+                final AuthenticationResultRO result = checkValid(attr, value, cart.getCurrentLocale());
+                if (result != null) {
+                    return result;
                 }
+
+                data.put(attr.getCode(), value);
+
             }
         }
 
@@ -1111,6 +1107,11 @@ public class AuthenticationController {
         }
 
         final Shop shop = cartMixin.getCurrentShop();
+
+
+
+
+
         customerServiceFacade.registerNewsletter(shop, email, new HashMap<>());
 
         return new AuthenticationResultRO();
@@ -1270,6 +1271,29 @@ public class AuthenticationController {
         } catch (BadCredentialsException bce) {
             return false;
         }
+    }
+
+    protected AuthenticationResultRO checkValid(final Attribute attr, final String value, final String lang) {
+        if (attr.isMandatory() && StringUtils.isBlank(value)) {
+
+            return new AuthenticationResultRO(attr.getCode() + ":FAILED");
+
+        } else if (StringUtils.isNotBlank(attr.getRegexp())
+                && !RegExUtils.getInstance(attr.getRegexp()).matches(value)) {
+
+            final String regexError = new FailoverStringI18NModel(
+                    attr.getValidationFailedMessage(),
+                    null).getValue(lang);
+
+            if (StringUtils.isBlank(regexError)) {
+                return new AuthenticationResultRO(attr.getCode() + ":FAILED");
+            }
+            return new AuthenticationResultRO(attr.getCode() + ":FAILED:" + regexError);
+
+        }
+
+        return null;
+
     }
 
 

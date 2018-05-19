@@ -1,16 +1,20 @@
 package org.yes.cart.web.page.component.customer.newsletter;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.wicket.validation.validator.StringValidator;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.page.component.customer.auth.BaseAuthForm;
+import org.yes.cart.web.page.component.customer.dynaform.editor.CustomPatternValidator;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
@@ -39,7 +43,19 @@ public class NewsletterPanel extends BaseComponent {
 
     public NewsletterPanel(final String id) {
         super(id);
-        add(new SingUpForm(SIGNUP_FORM));
+
+        final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(getCurrentShop());
+        final IValidator<String> emailValidator;
+        if (emailConfig != null && StringUtils.isNotBlank(emailConfig.getAttribute().getRegexp())) {
+            final String regexError = new FailoverStringI18NModel(
+                    emailConfig.getAttribute().getValidationFailedMessage(),
+                    emailConfig.getAttribute().getCode()).getValue(getLocale().getLanguage());
+
+            emailValidator = new CustomPatternValidator(emailConfig.getAttribute().getRegexp(), new Model<>(regexError));
+        } else {
+            emailValidator = EmailAddressValidator.getInstance();
+        }
+        add(new SingUpForm(SIGNUP_FORM, emailValidator));
     }
 
     @Override
@@ -77,15 +93,15 @@ public class NewsletterPanel extends BaseComponent {
         }
 
 
-        public SingUpForm(final String id) {
+        public SingUpForm(final String id,
+                          final IValidator<String> emailValidator) {
             super(id);
 
             setModel(new CompoundPropertyModel<>(SingUpForm.this));
 
             final TextField<String> emailInput = (TextField<String>) new TextField<String>(EMAIL_INPUT)
                     .setRequired(true)
-                    .add(StringValidator.lengthBetween(BaseAuthForm.MIN_LEN, BaseAuthForm.MAX_LEN))
-                    .add(EmailAddressValidator.getInstance());
+                    .add(emailValidator);
 
             add(
                     emailInput

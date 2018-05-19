@@ -46,6 +46,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
+import org.yes.cart.web.theme.WicketPagesMounter;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.*;
@@ -83,6 +84,9 @@ public class AbstractWebPage extends WebPage {
 
     @SpringBean(name = WicketServiceSpringKeys.WICKET_SUPPORT_FACADE)
     private WicketSupportFacade wicketSupportFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
+    private WicketPagesMounter wicketPagesMounter;
 
 
     /**
@@ -200,10 +204,26 @@ public class AbstractWebPage extends WebPage {
      */
     public void executeHttpPostedCommands() {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-
         final PageParameters params = getPageParameters();
         final Map<String, String> paramsMap = wicketUtil.pageParametersAsMap(params);
+
+        this.executeCommands(paramsMap);
+
+    }
+
+    /**
+     * Executes Http commands that are posted via http and are available from
+     * this.getPageParameters() method. This method should be the first thing that
+     * is executed if a page is using shopping cart.
+     * <p/>
+     * This method DOES NOT persist the cart to cookies.
+     * <p/>
+     * This method should only be called once per page request.
+     */
+    public void executeCommands(Map paramsMap) {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
         try {
 
             getShoppingCartCommandFactory().execute(cart, (Map) paramsMap);
@@ -216,6 +236,10 @@ public class AbstractWebPage extends WebPage {
 
             if (Constants.PASSWORD_RESET_AUTH_TOKEN_INVALID.equals(bce.getMessage())) {
                 error(getLocalizer().getString("newPasswordInvalidToken", this));
+            } else if (Constants.PASSWORD_RESET_PASSWORD_INVALID.equals(bce.getMessage())) {
+                final PageParameters resetParams = new PageParameters();
+                resetParams.add("token", paramsMap.get(ShoppingCartCommand.CMD_RESET_PASSWORD));
+                setResponsePage(wicketPagesMounter.getPageProviderByUri("/reset").get(), resetParams);
             }
 
         } catch (Exception exp) {

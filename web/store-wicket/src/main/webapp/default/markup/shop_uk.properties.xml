@@ -58,6 +58,7 @@
     <entry key="price">Ціна</entry>
     <entry key="qty">Кількість</entry>
     <entry key="login">Вхід</entry>
+    <entry key="reset">Змінити пароль</entry>
     <entry key="registration">Реєстрація</entry>
     <entry key="save">Зберегти</entry>
     <entry key="email">E-mail</entry>
@@ -273,6 +274,7 @@
     <entry key="customerExists">Користувач з таким e-mail вже зареєстрований</entry>
     <entry key="canNotRegister">Неможливо зареєструвати</entry>
     <entry key="accountActivationPending">Реєстрація завершена, але даний обліковий запис потребує активації. Оповіщення відправлено в службу підтримки клієнтів, щоб розглянути і затвердити Ваш обліковий запис.</entry>
+    <entry key="passwordDoesNotMatch">Значення пароля і підтвердження пароля не збігаються</entry>
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Вийти</entry>
@@ -315,7 +317,7 @@
     <entry key="orderNoTitle">Замовлення ${ordernum}</entry>
 
     <!-- PasswordPanel -->
-    <entry key="changePassword">Політика безпеки магазину - тільки автоматично згенерований пароль. Запит на новий пароль буде висланий на Ваш email після натискання кнопки "Змінити пароль"</entry>
+    <entry key="changePassword">Запит на новий пароль буде висланий на Ваш email після натискання кнопки "Змінити пароль"</entry>
     <entry key="changePasswordBtn">Змінити пароль</entry>
     <entry key="newPasswordSent">Новий пароль відправленний на email</entry>
 

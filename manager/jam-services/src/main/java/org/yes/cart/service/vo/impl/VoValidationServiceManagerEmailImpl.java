@@ -39,7 +39,7 @@ public class VoValidationServiceManagerEmailImpl extends AbstractVoValidationSer
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final List<Manager> managers = this.managerService.findByEmail(valueToCheck);
-        return managers != null && managers.size() > 0 && managers.get(0).getManagerId() != currentId ? managers.get(0).getManagerId() : null;
+        final Manager manager = this.managerService.findByEmail(valueToCheck);
+        return manager != null && manager.getManagerId() != currentId ? manager.getManagerId() : null;
     }
 }

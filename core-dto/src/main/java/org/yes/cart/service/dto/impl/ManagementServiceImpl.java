@@ -21,6 +21,8 @@ import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.RoleDTO;
@@ -30,11 +32,12 @@ import org.yes.cart.domain.dto.impl.ManagerDTOImpl;
 import org.yes.cart.domain.dto.impl.RoleDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.ManagerService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.ManagementService;
+import org.yes.cart.util.RegExUtils;
 import org.yes.cart.utils.HQLUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -51,6 +54,10 @@ import java.util.*;
 public class ManagementServiceImpl implements ManagementService {
 
     private final ManagerService managerService;
+
+    private final SystemService systemService;
+
+    private final AttributeService attributeService;
 
     private final ShopService shopService;
 
@@ -70,29 +77,40 @@ public class ManagementServiceImpl implements ManagementService {
 
     private final AdaptersRepository adaptersRepository;
 
+    private final HashHelper hashHelper;
+
 
     /**
      * Construct user management service.
      * @param managerService      manager service to use
+     * @param systemService       system service
+     * @param attributeService    attribute service
      * @param shopService         shop service
      * @param managerRoleDao      manager roles dao
      * @param roleDao             role dao
      * @param dtoFactory          {@link DtoFactory}
+     * @param hashHelper
      */
     public ManagementServiceImpl(final ManagerService managerService,
+                                 final SystemService systemService,
+                                 final AttributeService attributeService,
                                  final ShopService shopService,
                                  final GenericDAO<ManagerRole, Long> managerRoleDao,
                                  final GenericDAO<Role, Long> roleDao,
                                  final GenericDAO<Shop, Long> shopDao,
                                  final DtoFactory dtoFactory,
-                                 final AdaptersRepository adaptersRepository) {
+                                 final AdaptersRepository adaptersRepository,
+                                 final HashHelper hashHelper) {
         this.managerService = managerService;
+        this.systemService = systemService;
+        this.attributeService = attributeService;
         this.shopService = shopService;
         this.managerRoleDao = managerRoleDao;
         this.roleDao = roleDao;
         this.shopDao = shopDao;
         this.dtoFactory = dtoFactory;
         this.adaptersRepository = adaptersRepository;
+        this.hashHelper = hashHelper;
 
         managerAssembler = DTOAssembler.newAssembler(ManagerDTOImpl.class, Manager.class);
         roleAssembler = DTOAssembler.newAssembler(RoleDTOImpl.class, Role.class);
@@ -224,6 +242,43 @@ public class ManagementServiceImpl implements ManagementService {
         if (manager != null) {
             managerService.resetPassword(manager);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updatePassword(final String userId, final String password, final String lang) throws BadCredentialsException {
+
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        if (manager != null) {
+
+            String regex = systemService.getAttributeValue(AttributeNamesKeys.System.MANAGER_PASSWORD_REGEX);
+            if (StringUtils.isBlank(regex)) {
+                regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+            }
+            if (!RegExUtils.getInstance(regex).matches(password)) {
+
+                String error = AttributeNamesKeys.System.MANAGER_PASSWORD_REGEX;
+                final Attribute attribute = attributeService.findByAttributeCode(AttributeNamesKeys.System.MANAGER_PASSWORD_REGEX);
+                if (attribute != null) {
+                    error = new FailoverStringI18NModel(attribute.getValidationFailedMessage(), error).getValue(lang);
+                }
+
+                throw new BadCredentialsException(error);
+
+            }
+
+            try {
+                manager.setPassword(hashHelper.getHash(password));
+                manager.setPasswordExpiry(null); // TODO: YC-906 Create password expiry flow for customers
+
+                managerService.update(manager);
+            } catch (Exception exp) {
+                throw new BadCredentialsException(exp.getMessage(), exp);
+            }
+        }
+
     }
 
     /**

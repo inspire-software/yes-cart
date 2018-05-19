@@ -1,0 +1,57 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html  xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+
+    <form wicket:id="resetForm" class="form-horizontal">
+
+        <div class="login-title">
+            <h2><wicket:message key="reset">[change password]</wicket:message></h2>
+        </div>
+
+        <div class="form-group">
+            <label  wicket:id="passwordLabel" class="control-label col-xs-12 col-sm-3"/>
+            <div class="col-xs-12 col-sm-8">
+                <wicket:container wicket:id="password">[change password form]</wicket:container>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  wicket:id="passwordLabel2" class="control-label col-xs-12 col-sm-3"/>
+            <div class="col-xs-12 col-sm-8">
+                <wicket:container wicket:id="password2">[change password form]</wicket:container>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-8 buttons">
+                <input type="submit" class="btn btn-primary2" wicket:id="resetBtn"  wicket:message="value:changePasswordBtn"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <wicket:container wicket:id="resetformContent">[reset form content include]</wicket:container>
+        </div>
+    </form>
+
+    <wicket:fragment wicket:id="secureStringEditor">
+        <input type="password"  wicket:id="edit" class="form-control"/>
+    </wicket:fragment>
+
+</wicket:panel>
+</body>
+</html>

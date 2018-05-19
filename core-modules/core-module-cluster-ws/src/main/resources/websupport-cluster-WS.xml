@@ -64,13 +64,7 @@
         <constructor-arg index="0">
             <bean class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
                 <!--<property name="passwordEncoder" ref="passwordHashHelper"/> Encoding is done on the client end to prevent plain text passwords -->
-                <property name="userDetailsService">
-                    <bean class="org.springframework.security.provisioning.JdbcUserDetailsManager">
-                        <property name="dataSource" ref="dataSourceSec"/>
-                        <property name="authoritiesByUsernameQuery" value="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
-                        <property name="usersByUsernameQuery" value="SELECT m.email as username, m.password, m.enabled FROM TMANAGER m where m.email = ?"/>
-                    </bean>
-                </property>
+                <property name="userDetailsService" ref="managerUserDetailsService"/>
             </bean>
         </constructor-arg>
     </bean>

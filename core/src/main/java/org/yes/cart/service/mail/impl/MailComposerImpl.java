@@ -53,6 +53,7 @@ import java.util.regex.Pattern;
  */
 public class MailComposerImpl implements MailComposer {
 
+    private static final Logger MAILDUMP_LOG = LoggerFactory.getLogger("MAILDUMP");
     private static final Logger LOG = LoggerFactory.getLogger(MailComposerImpl.class);
 
     private static final String ATTACHMENT_PREFIX = "attachment:";
@@ -495,6 +496,19 @@ public class MailComposerImpl implements MailComposer {
         final Map<String, byte[]> attachments = collectAttachments(model);
 
         composeMessage(mail, textContent, htmlContent, attachments, mailTemplateChain, shopCode, locale, templateName);
+
+        if (MAILDUMP_LOG.isDebugEnabled()) {
+            MAILDUMP_LOG.debug(
+                    "\n=============================================" +
+                    "\nSubject: {}" +
+                    "\nFrom: {}" +
+                    "\nTo: {}" +
+                    "\n" +
+                    "\n---------------------------------------------" +
+                    "\n{}" +
+                    "\n=============================================",
+                    mail.getSubject(), mail.getFrom(), mail.getRecipients(), convertMessageToHTML(mail));
+        }
 
     }
 

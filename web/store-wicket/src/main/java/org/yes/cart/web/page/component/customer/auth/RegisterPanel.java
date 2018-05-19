@@ -21,7 +21,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -32,8 +35,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -61,7 +62,6 @@ public class RegisterPanel extends BaseComponent {
     private final long serialVersionUid = 20111016L;
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    private static final String EMAIL_INPUT = "email";
     private static final String REGISTER_BUTTON = "registerBtn";
     private static final String REGISTER_FORM = "registerForm";
     private static final String CUSTOMER_TYPE_FORM = "customerTypesForm";
@@ -196,27 +196,6 @@ public class RegisterPanel extends BaseComponent {
 
         private String customerType;
 
-        private String email;
-
-
-        /**
-         * Get email.
-         *
-         * @return email.
-         */
-        public String getEmail() {
-            return email;
-        }
-
-        /**
-         * Set email.
-         *
-         * @param email email
-         */
-        public void setEmail(final String email) {
-            this.email = email;
-        }
-
         /**
          * Customer type.
          *
@@ -254,13 +233,6 @@ public class RegisterPanel extends BaseComponent {
 
             setCustomerType(customerType);
 
-            add(
-                    new TextField<String>(EMAIL_INPUT)
-                            .setRequired(true)
-                            .add(StringValidator.lengthBetween(MIN_LEN, MAX_LEN))
-                            .add(EmailAddressValidator.getInstance())
-            );
-
             RepeatingView fields = new RepeatingView(FIELDS);
 
             add(fields);
@@ -291,15 +263,45 @@ public class RegisterPanel extends BaseComponent {
                         @Override
                         public void onSubmit() {
 
-                            if (isCustomerExists(getEmail())) {
+                            final Map<String, Object> data = new HashMap<>();
+                            // Data is now relayed via custom attributes, so we can sort and arrange all attributes on
+                            // registration form.
+                            // data.put("firstname", getFirstname());
+                            // data.put("lastname", getLastname());
+                            // data.put("phone", getPhone());
+                            data.put("customerType", customerType); // Type is required for registration
+
+                            String emailAttr = null;
+                            String passwordAttr = null;
+                            String confirmPasswordAttr = null;
+                            for (final AttrValueWithAttribute av : reg) {
+                                if ("password".equals(av.getAttribute().getVal())) {
+                                    passwordAttr = av.getAttributeCode();
+                                } else if ("confirmPassword".equals(av.getAttribute().getVal())) {
+                                    confirmPasswordAttr = av.getAttributeCode();
+                                } else if ("email".equals(av.getAttribute().getVal())) {
+                                    emailAttr = av.getAttributeCode();
+                                }
+                                if (StringUtils.isNotBlank(av.getVal())) {
+                                    data.put(av.getAttributeCode(), av.getVal());
+                                }
+                            }
+
+                            final String email = (String) data.get(emailAttr);
+                            final String userPass = (String) data.get(passwordAttr);
+                            final String confirmPass = (String) data.get(confirmPasswordAttr);
+
+                            if (StringUtils.isNotBlank(userPass) && !userPass.equals(confirmPass)) {
+
+                                error(
+                                        getLocalizer().getString("passwordDoesNotMatch", this)
+                                );
+
+                            } else if (isCustomerExists(email)) {
 
                                 error(
                                         getLocalizer().getString("customerExists", this)
                                 );
-
-                                //and sent the new password to already existing user
-
-
 
                                 //CPOINT
                                 //this commented out, because of YC-168
@@ -309,31 +311,16 @@ public class RegisterPanel extends BaseComponent {
 
                             } else {
 
-                                final Map<String, Object> data = new HashMap<>();
-                                // Data is now relayed via custom attributes, so we can sort and arrange all attributes on
-                                // registration form.
-                                // data.put("firstname", getFirstname());
-                                // data.put("lastname", getLastname());
-                                // data.put("phone", getPhone());
-                                data.put("customerType", customerType); // Type is required for registration
-
-                                for (final AttrValueWithAttribute av : reg) {
-                                    if (StringUtils.isNotBlank(av.getVal())) {
-                                        data.put(av.getAttributeCode(), av.getVal());
-                                    }
-                                }
-
-
                                 final String password = getCustomerServiceFacade().registerCustomer(
                                         getCurrentShop(), email, data);
 
-                                if (signIn(getEmail(), password)) {
+                                if (signIn(email, password)) {
 
                                     ((AbstractWebPage) getPage()).executeHttpPostedCommands();
                                     ((AbstractWebPage) getPage()).persistCartIfNecessary();
                                     setResponsePage(successfulPage, parameters);
 
-                                } else if (isCustomerExists(getEmail())) {
+                                } else if (isCustomerExists(email)) {
 
                                     final Class<IRequestablePage> pendingPage = wicketPagesMounter.getPageProviderByUri("/login").get();
                                     final PageParameters parameters = new PageParameters();

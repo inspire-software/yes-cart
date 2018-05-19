@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -23,18 +24,24 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.yes.cart.domain.entity.AttrValueWithAttribute;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.web.page.component.customer.auth.BaseAuthForm;
+import org.yes.cart.web.page.component.customer.dynaform.editor.CustomPatternValidator;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +57,9 @@ public class ContactPage  extends AbstractWebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
     private ContentServiceFacade contentServiceFacade;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
+
     /**
      * Construct contact information page.
      * @param params page parameters.
@@ -60,7 +70,18 @@ public class ContactPage  extends AbstractWebPage {
         add(new StandardHeader(HEADER));
         add(new ServerSideJs("serverSideJs"));
         add(new HeaderMetaInclude("headerInclude"));
-        add(new ContactForm("contactForm"));
+        final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(getCurrentShop());
+        final IValidator<String> emailValidator;
+        if (emailConfig != null && StringUtils.isNotBlank(emailConfig.getAttribute().getRegexp())) {
+            final String regexError = new FailoverStringI18NModel(
+                    emailConfig.getAttribute().getValidationFailedMessage(),
+                    emailConfig.getAttribute().getCode()).getValue(getLocale().getLanguage());
+
+            emailValidator = new CustomPatternValidator(emailConfig.getAttribute().getRegexp(), new Model<>(regexError));
+        } else {
+            emailValidator = EmailAddressValidator.getInstance();
+        }
+        add(new ContactForm("contactForm",emailValidator));
         add(new FeedbackPanel("feedback"));
     }
 
@@ -209,7 +230,7 @@ public class ContactPage  extends AbstractWebPage {
          *
          * @param id             form id.
          */
-        public ContactForm(final String id) {
+        public ContactForm(final String id, final IValidator<String> emailValidator) {
 
             super(id);
 
@@ -219,8 +240,7 @@ public class ContactPage  extends AbstractWebPage {
             add(
                     new TextField<String>("email")
                             .setRequired(true)
-                            .add(StringValidator.lengthBetween(MIN_LEN, MAX_LEN))
-                            .add(EmailAddressValidator.getInstance())
+                            .add(emailValidator)
             );
 
             add(
