@@ -216,11 +216,13 @@ public class GuestPanel extends BaseComponent {
 
                             String emailAttr = null;
                             for (final AttrValueWithAttribute av : reg) {
-                                if ("email".equals(av.getAttribute().getVal())) {
-                                    emailAttr = av.getAttributeCode();
-                                }
                                 if (StringUtils.isNotBlank(av.getVal())) {
                                     data.put(av.getAttribute().getCode(), av.getVal());
+                                }
+                                if ("email".equals(av.getAttribute().getVal())) {
+                                    emailAttr = av.getAttributeCode();
+                                    data.put("email", av.getVal());
+                                    data.remove(av.getAttributeCode());
                                 }
                             }
 
