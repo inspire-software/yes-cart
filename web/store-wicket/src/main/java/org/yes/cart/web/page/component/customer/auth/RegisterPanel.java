@@ -292,7 +292,13 @@ public class RegisterPanel extends BaseComponent {
                                 }
                             }
 
-                            if (StringUtils.isNotBlank(userPass) && !userPass.equals(confirmPass)) {
+                            if (StringUtils.isBlank(email)) {
+
+                                error(
+                                        getLocalizer().getString("canNotRegister", this)
+                                );
+
+                            } else if (StringUtils.isNotBlank(userPass) && !userPass.equals(confirmPass)) {
 
                                 error(
                                         getLocalizer().getString("passwordDoesNotMatch", this)
