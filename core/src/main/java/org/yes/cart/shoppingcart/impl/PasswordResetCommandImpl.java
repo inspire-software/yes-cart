@@ -86,7 +86,7 @@ public class PasswordResetCommandImpl extends AbstractCartCommandImpl implements
             }
 
             final Shop shop = shopService.findById(shoppingCart.getShoppingContext().getShopId());
-            final List<AttrValueWithAttribute> avs = customerCustomisationSupport.getRegistrationAttributes(shop, customer.getCustomerType());
+            final List<AttrValueWithAttribute> avs = customerCustomisationSupport.getRegistrationAttributes(shop, customer.getCustomerType(), true);
             boolean allowEnterPasswords = false;
             AttrValueWithAttribute passwordAttr = null;
             for (final AttrValueWithAttribute av : avs) {
