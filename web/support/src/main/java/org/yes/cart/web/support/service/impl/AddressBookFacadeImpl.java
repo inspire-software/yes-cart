@@ -27,6 +27,7 @@ import org.yes.cart.web.support.service.AddressBookFacade;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -141,7 +142,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
      * @return addresses
      */
     protected Collection<Address> getAddressbook(final Shop customerShop, final Customer customer) {
-        return customer.getAddress();
+        return customer != null ? customer.getAddress() : Collections.emptyList();
     }
 
     /**
@@ -153,7 +154,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
      * @return addresses
      */
     protected Collection<Address> getAddressbook(final Shop customerShop, final Customer customer, final String type) {
-        return customer.getAddresses(type);
+        return customer != null ? customer.getAddresses(type) : Collections.emptyList();
     }
 
 

@@ -180,6 +180,9 @@
 
                 <!-- Google sitemap generation -->
                 <value>+*sitemap.xml</value>
+
+                <!-- Robots.txt -->
+                <value>+*robots.txt</value>
             </list>
         </constructor-arg>
     </bean>
@@ -188,6 +191,7 @@
         <constructor-arg>
             <map>
                 <entry key="sitemap.xml" value-ref="sitemapXmlResource"/>
+                <entry key="robots.txt" value-ref="robotsTxtResource"/>
                 <entry key="orderreceipt.pdf" value-ref="orderPdfResource"/>
             </map>
         </constructor-arg>
@@ -248,6 +252,10 @@
 
     <bean id="sitemapXmlResource" class="org.yes.cart.web.resource.SitemapXmlResource">
         <constructor-arg ref="sitemapXmlService"/>
+    </bean>
+
+    <bean id="robotsTxtResource" class="org.yes.cart.web.resource.RobotsTxtResource">
+        <constructor-arg ref="contentServiceFacade"/>
     </bean>
 
     <bean id="orderPdfResource" class="org.yes.cart.web.resource.OrderReceiptPdfResource">
