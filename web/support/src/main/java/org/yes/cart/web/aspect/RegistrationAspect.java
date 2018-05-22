@@ -271,6 +271,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
             final boolean requireNotification = requireApproval || (newPerson && isRegisteredPersonRequireNotification(registeredPerson, shop));
             registrationData.put("requireNotification", requireNotification);
             registrationData.put("requireNotificationEmails", getAllRecipients(shop, determineFromEmail(shop), template));
+            registrationData.put("callCentrePasswordReset", Boolean.FALSE);
             registrationMessage.setAdditionalData(registrationData);
         }
         return registrationMessage;
