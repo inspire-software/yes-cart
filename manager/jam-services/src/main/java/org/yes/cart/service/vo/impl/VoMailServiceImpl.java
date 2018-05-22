@@ -195,13 +195,30 @@ public class VoMailServiceImpl implements VoMailService {
             emailModel.put("middleName", "J.");
             emailModel.put("shopUrl", shop.getDefaultShopUrl());
             emailModel.put("shopName", shop.getName());
-            emailModel.put("additionalData", new HashMap<String, Object>() {{
-                put("name", "Bob J. Doe");
-                put("phone", "+00 0000 000 000");
-                put("email", "test@example.com");
-                put("subject", "Test Email");
-                put("body", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
-            }});
+
+
+            final Map<String, Object> additionalData = new HashMap<>();
+            additionalData.put("name", "Bob J. Doe");
+            additionalData.put("phone", "+00 0000 000 000");
+            additionalData.put("email", "test@example.com");
+            additionalData.put("subject", "Test Email");
+            additionalData.put("body", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+            if (customerAccount != null) {
+                additionalData.put("customerType", customerAccount.getCustomerType());
+                additionalData.put("pricingPolicy", customerAccount.getPricingPolicy());
+                additionalData.put("tag", customerAccount.getTag());
+            } else {
+                additionalData.put("customerType", "B2G");
+                additionalData.put("pricingPolicy", null);
+                additionalData.put("tag", null);
+            }
+            additionalData.put("newPerson", Boolean.TRUE);
+            additionalData.put("requireApproval", Boolean.TRUE);
+            additionalData.put("requireNotification", Boolean.TRUE);
+            additionalData.put("requireNotificationEmails", "test@example.com");
+            additionalData.put("callCentrePasswordReset", Boolean.TRUE);
+
+            emailModel.put("additionalData", additionalData);
 
             final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
 
