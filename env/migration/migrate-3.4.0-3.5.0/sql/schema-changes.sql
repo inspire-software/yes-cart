@@ -238,4 +238,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  6206,  'WIDGET_UiSettings', 'WIDGET_UiSettings',  0,  NULL,  'UI Settings',  'UI Settings: Admin UI preferences', 1000,  1010, 0, 0, 0, 0);
 
+--
+-- YC-865 Review clustered tasks API
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11167,  'JOB_CACHE_EVICT_PAUSE', 'JOB_CACHE_EVICT_PAUSE',  0,  NULL,  'Job\\Evict frontend cache: pause image vault scanning',
+    'Pause frontend cache eviction (if paused updates in admin will not take effect unless manual cache evict is triggered)',  1008, 1000, 0, 0, 0, 0);
 

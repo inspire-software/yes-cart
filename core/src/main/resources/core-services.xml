@@ -854,12 +854,16 @@
         <constructor-arg index="1" ref="attributeService"/>
     </bean>
 
-    <bean id="managerService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.domain.impl.ManagerServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="managerDao"/>
-            </bean>
-        </property>
+    <bean id="managerService" class="org.yes.cart.service.domain.impl.ManagerServiceCachedImpl">
+       <constructor-arg>
+           <bean parent="txProxyTemplate">
+               <property name="target">
+                   <bean class="org.yes.cart.service.domain.impl.ManagerServiceImpl">
+                       <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="managerDao"/>
+                   </bean>
+               </property>
+           </bean>
+       </constructor-arg>
     </bean>
 
     <bean id="skuWarehouseService" class="org.yes.cart.service.domain.impl.SkuWarehouseServiceCachedImpl">

@@ -18,6 +18,7 @@ package org.yes.cart.bulkjob.mail;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.service.async.JobStatusAware;
@@ -32,19 +33,22 @@ import org.yes.cart.util.log.Markers;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * User: denispavlov
  * Date: 10/11/2013
  * Time: 13:56
  */
-public class BulkMailProcessorImpl implements Runnable, JobStatusAware {
+public class BulkMailProcessorImpl implements Runnable, JobStatusAware, DisposableBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkMailProcessorImpl.class);
 
     private final MailService mailService;
     private final MailComposer mailComposer;
     private final JavaMailSenderFactory javaMailSenderFactory;
+
+    private final AtomicBoolean shutdown = new AtomicBoolean(false);
 
     private long delayBetweenEmailsMs;
     private int cycleExceptionsThreshold;
@@ -119,6 +123,9 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware {
                     }
 
                     if (sent && delayBetweenEmailsMs > 0) {
+                        if (this.shutdown.get()) {
+                            break; // we are shutting down
+                        }
                         try {
                             Thread.sleep(delayBetweenEmailsMs);
                         } catch (InterruptedException e) {
@@ -136,6 +143,14 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware {
 
         listener.notifyPing("Bulk send mail ... completed, send: " + success + ", failed: " + error);
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void destroy() throws Exception {
+        this.shutdown.set(true);
     }
 
     /**

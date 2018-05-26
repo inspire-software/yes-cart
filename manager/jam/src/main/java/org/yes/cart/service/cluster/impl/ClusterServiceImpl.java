@@ -25,10 +25,7 @@ import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.node.RspMessage;
 import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
-import org.yes.cart.cluster.service.AlertDirector;
-import org.yes.cart.cluster.service.BackdoorService;
-import org.yes.cart.cluster.service.CacheDirector;
-import org.yes.cart.cluster.service.ModuleDirector;
+import org.yes.cart.cluster.service.*;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.dto.impl.ConfigurationDTO;
 import org.yes.cart.domain.dto.impl.ModuleDTO;
@@ -49,17 +46,20 @@ public class ClusterServiceImpl implements ClusterService {
     private final NodeService nodeService;
     private final BackdoorService localBackdoorService;
     private final CacheDirector localCacheDirector;
+    private final CacheEvictionQueue cacheEvictionQueue;
     private final AlertDirector localAlertDirector;
     private final ModuleDirector localModuleDirector;
 
     public ClusterServiceImpl(final NodeService nodeService,
                               final BackdoorService localBackdoorService,
                               final CacheDirector localCacheDirector,
+                              final CacheEvictionQueue cacheEvictionQueue,
                               final AlertDirector localAlertDirector,
                               final ModuleDirector localModuleDirector) {
         this.nodeService = nodeService;
         this.localBackdoorService = localBackdoorService;
         this.localCacheDirector = localCacheDirector;
+        this.cacheEvictionQueue = cacheEvictionQueue;
         this.localAlertDirector = localAlertDirector;
         this.localModuleDirector = localModuleDirector;
     }
@@ -592,6 +592,9 @@ public class ClusterServiceImpl implements ClusterService {
             }
 
         }
+
+        // Clear any pending cache evictions because we already cleared all cache
+        cacheEvictionQueue.clear();
 
         localCacheDirector.evictAllCache(doForcefully);
         evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);

@@ -26,8 +26,9 @@
         <constructor-arg index="0" ref="nodeService"/>
         <constructor-arg index="1" ref="localBackdoorService"/>
         <constructor-arg index="2" ref="localCacheDirector"/>
-        <constructor-arg index="3" ref="localAlertDirector"/>
-        <constructor-arg index="4" ref="localModuleDirector"/>
+        <constructor-arg index="3" ref="cacheEvictionQueue"/>
+        <constructor-arg index="4" ref="localAlertDirector"/>
+        <constructor-arg index="5" ref="localModuleDirector"/>
     </bean>
 
     <bean id="productIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">

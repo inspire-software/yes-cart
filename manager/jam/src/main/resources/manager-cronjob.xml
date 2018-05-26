@@ -175,8 +175,8 @@
                 <constructor-arg index="0" ref="mailService"/>
                 <constructor-arg index="1" ref="mailComposer"/>
                 <constructor-arg index="2" ref="mailSenderFactory"/>
-                <property name="delayBetweenEmailsMs" value="1000"/>
-                <property name="cycleExceptionsThreshold" value="3"/>
+                <property name="delayBetweenEmailsMs" value="${admin.mail.delay-between-emails-ms}"/>
+                <property name="cycleExceptionsThreshold" value="${admin.mail.exceptions-threshold}3"/>
             </bean>
         </property>
         <property name="systemService" ref="systemService"/>
@@ -371,6 +371,55 @@
         <property name="cronExpression" value="${admin.cron.imageVaultProcessorJob}" />
     </bean>
 
+
+
+    <!-- ################################ Cache eviction propagation  ######################################## -->
+
+
+    <bean id="cacheEvictionQueueProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean class="org.yes.cart.bulkjob.cache.CacheEvictionQueueProcessorImpl">
+                <property name="nodeService" ref="nodeService"/>
+                <property name="asyncContextFactory" ref="webAppManagerAsyncContextFactory"/>
+                <property name="cacheEvictionQueue" ref="cacheEvictionQueue"/>
+            </bean>
+        </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_CACHE_EVICT_PAUSE"/>
+        <property name="pausePreferenceDefault" value="false"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="core"/>
+                <property name="name" value="cacheEvictionQueueProcessor"/>
+                <property name="cfgInterface" value="Runnable"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">Pausable cron job</prop>
+                        <prop key="description">Performs bulk cache evictions on frontend servers.</prop>
+                        <prop key="SYSTEM[JOB_CACHE_EVICT_PAUSE]">Pause</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean name="cacheEvictionQueueJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Evict frontend cache" />
+                <entry key="job" value-ref="cacheEvictionQueueProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="cacheEvictionQueueJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cacheEvictionQueueJob" />
+        <property name="cronExpression" value="${admin.cron.cacheEvictionQueueJob}" />
+    </bean>
+
     <!-- ################################ Scheduler  ####################################################### -->
 
 
@@ -399,6 +448,7 @@
     <bean id="managerCronScheduleTriggers" class="org.yes.cart.util.spring.ArrayListBean">
         <constructor-arg>
             <list>
+                <ref bean="cacheEvictionQueueJobCronTrigger" />
                 <ref bean="preOrderJobCronTrigger" />
                 <ref bean="deliveryInfoUpdateJobCronTrigger" />
                 <ref bean="orderAutoExportProcessorJobCronTrigger" />

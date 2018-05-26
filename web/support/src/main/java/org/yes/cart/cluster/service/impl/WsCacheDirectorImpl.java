@@ -85,6 +85,17 @@ public class WsCacheDirectorImpl extends CacheDirectorImpl implements CacheDirec
             );
 
         });
+        nodeService.subscribe("CacheDirector.onCacheableBulkChange", message -> {
+
+            final Map<String, Object> payload = (Map<String, Object>) message.getPayload();
+
+            return WsCacheDirectorImpl.this.onCacheableBulkChange(
+                    (String) payload.get("entityOperation"),
+                    (String) payload.get("entityName"),
+                    (Long[]) payload.get("pkValues")
+            );
+
+        });
     }
 
 }

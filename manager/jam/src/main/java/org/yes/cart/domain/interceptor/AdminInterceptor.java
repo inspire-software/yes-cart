@@ -17,31 +17,23 @@
 
 package org.yes.cart.domain.interceptor;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.yes.cart.cluster.node.Node;
-import org.yes.cart.cluster.node.NodeService;
-import org.yes.cart.cluster.node.RspMessage;
-import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
-import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.cluster.service.CacheDirector;
+import org.yes.cart.cluster.service.CacheEvictionQueue;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.model.AsyncContext;
-import org.yes.cart.service.async.utils.RunAsUserAuthentication;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
-import org.yes.cart.cluster.service.CacheDirector;
-import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -55,13 +47,10 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     private static final Logger LOG = LoggerFactory.getLogger(AdminInterceptor.class);
 
     private ApplicationContext applicationContext;
-    private NodeService nodeService;
-    private AsyncContextFactory asyncContextFactory;
+    private CacheEvictionQueue cacheEvictionQueue;
 
     private Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache;
     private Set<String> cachedEntities;
-
-    private TaskExecutor executor;
 
     @Override
     public boolean onSave(Object entity, Serializable serializable, Object[] objects, String[] propertyNames, Type[] types) {
@@ -105,89 +94,31 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
 
     void invalidateCache(final String op, final String entityName, final Long pk) {
 
-        if (executor != null) {
-            if (nodeService == null) {
-                synchronized (this) {
-                    if (nodeService == null) {
-                        nodeService = applicationContext.getBean("nodeService", NodeService.class);
-                    }
-                    if (asyncContextFactory == null) {
-                        asyncContextFactory = applicationContext.getBean("webAppManagerAsyncContextFactory", AsyncContextFactory.class);
-                    }
+        if (cacheEvictionQueue == null) {
+            synchronized (this) {
+                if (cacheEvictionQueue == null) {
+                    cacheEvictionQueue = applicationContext.getBean("cacheEvictionQueue", CacheEvictionQueue.class);
                 }
             }
+        }
 
-            final Runnable evictCache = this.createEvictCacheRunnable(op, entityName, pk);
-            if (evictCache != null) {
-                this.executor.execute(evictCache);
-            }
+        if (isBroadcastAllowed()) {
+            cacheEvictionQueue.enqueue(op, entityName, pk);
         }
 
     }
 
-    private Runnable createEvictCacheRunnable(final String op, final String entityName, final Long pk) {
+    private boolean isBroadcastAllowed() {
 
         final AsyncContext jobContext = ThreadLocalAsyncContextUtils.getContext();
 
         if (jobContext != null && AsyncContext.NO_BROADCAST.equals(jobContext.getAttribute(AsyncContext.NO_BROADCAST))) {
-            return null; // cache evict is off
+            return false; // cache evict is off
         }
 
-        final Authentication auth = SecurityContextHolder.getContext() != null ? SecurityContextHolder.getContext().getAuthentication() : null;
-        final String username = auth != null && auth.isAuthenticated() ? auth.getName() : null;
-
-        return () -> {
-
-            try {
-
-                final AsyncContext threadContext;
-                if (StringUtils.isBlank(username)) {
-                    threadContext = jobContext;
-                } else {
-                    SecurityContextHolder.getContext().setAuthentication(new RunAsUserAuthentication(username, "", Collections.EMPTY_LIST));
-                    final Map<String, Object> params = new HashMap<>();
-                    params.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
-                    threadContext = asyncContextFactory.getInstance(params);
-                }
-
-                if (threadContext == null) {
-                    LOG.debug("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
-                    return;
-                }
-
-
-                final List<Node> cluster = nodeService.getSfNodes();
-                final List<String> targets = new ArrayList<>();
-                for (final Node node : cluster) {
-                    targets.add(node.getId());
-                }
-
-                final HashMap<String, Object> payload = new HashMap<>();
-                payload.put("entityOperation", op);
-                payload.put("entityName", entityName);
-                payload.put("pkValue", pk);
-
-                final RspMessage message = new ContextRspMessageImpl(
-                        nodeService.getCurrentNodeId(),
-                        targets,
-                        "CacheDirector.onCacheableChange",
-                        payload,
-                        threadContext
-                );
-
-                nodeService.broadcast(message);
-
-
-            } catch (Exception exp) {
-                LOG.error("Unable to perform cache eviction: " + exp.getMessage(), exp);
-            } finally {
-                SecurityContextHolder.clearContext();
-            }
-
-        };
+        return true;
 
     }
-
 
     private Long getPk(final Object entity) {
         if (entity instanceof Identifiable) {
@@ -217,10 +148,5 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     public void setEntityOperationCache(final Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache) {
         this.entityOperationCache = entityOperationCache;
         this.cachedEntities = new HashSet<>(this.entityOperationCache.keySet());
-    }
-
-    /** IoC. Set configuration. */
-    public void setEntityOperationCacheExecutor(final TaskExecutor executor) {
-        this.executor = executor;
     }
 }

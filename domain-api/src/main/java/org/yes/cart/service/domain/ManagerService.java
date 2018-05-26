@@ -51,6 +51,14 @@ public interface ManagerService extends GenericService<Manager> {
      * @param email filter
      * @return list of found managers
      */
+    Manager getByEmail(String email);
+
+    /**
+     * Find manager by email exact
+     *
+     * @param email filter
+     * @return list of found managers
+     */
     Manager findByEmail(String email);
 
     /**

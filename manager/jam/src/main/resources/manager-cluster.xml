@@ -81,6 +81,10 @@
         <constructor-arg index="0" ref="managerService"/>
     </bean>
 
+    <bean id="cacheEvictionQueue" class="org.yes.cart.service.cluster.impl.CacheEvictionQueueImpl">
+        <property name="maxQueueSize" value="${admin.cache.eviction-queue.max}"/>
+    </bean>
+
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">

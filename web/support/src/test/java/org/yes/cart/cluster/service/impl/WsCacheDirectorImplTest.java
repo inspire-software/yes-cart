@@ -166,5 +166,14 @@ public class WsCacheDirectorImplTest {
         assertNotNull(cacheDirector.getCacheManager().getCache("categoryService-categoryHasSubcategory").get("hi"));
     }
 
+    @Test
+    public void testOnCacheableBulkChange() {
+        cacheDirector.getCacheManager().getCache("attributeService-availableAttributesByProductTypeId").put("hi", "there");
+        cacheDirector.getCacheManager().getCache("categoryService-categoryHasSubcategory").put("hi", "there");
+        cacheDirector.onCacheableBulkChange(CacheDirector.EntityOperation.UPDATE, "AttributeEntity", new Long[] { 123L });
+        assertNull(cacheDirector.getCacheManager().getCache("attributeService-availableAttributesByProductTypeId").get("hi"));
+        assertNotNull(cacheDirector.getCacheManager().getCache("categoryService-categoryHasSubcategory").get("hi"));
+    }
+
 
 }

@@ -79,4 +79,13 @@ public interface CacheDirector {
      */
     int onCacheableChange(String entityOperation, String entityName, Long pkValue);
 
+    /**
+     * Fire event entity change event
+     *
+     * @param entityOperation operation type
+     * @param entityName entity type
+     * @param pkValues primary keys
+     */
+    int onCacheableBulkChange(String entityOperation, String entityName, Long[] pkValues);
+
 }

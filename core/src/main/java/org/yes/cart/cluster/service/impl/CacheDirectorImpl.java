@@ -210,6 +210,57 @@ public class CacheDirectorImpl implements CacheDirector {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int onCacheableBulkChange(final String entityOperation, final String entityName, final Long[] pkValues) {
+
+        int cnt = 0;
+
+        final Set<Pair<String, String>> cacheNames = resolveCacheNames(entityOperation, entityName);
+
+        if (cacheNames != null) {
+
+            final CacheManager cm = getCacheManager();
+
+            for (Pair<String, String> cacheStrategy : cacheNames) {
+
+                final Cache cache = cm.getCache(cacheStrategy.getFirst());
+
+                if (cache != null) {
+
+                    if("all".equals(cacheStrategy.getSecond())) {
+
+                        cache.clear();
+
+                        cnt += pkValues.length;
+
+                    } else if("key".equals(cacheStrategy.getSecond())) {
+
+                        for (final Long pkValue : pkValues) {
+
+                            cache.evict(pkValue);
+
+                            cnt++;
+
+                        }
+
+                    } else {
+
+                        LOG.warn("The [{}] cache eviction strategy not supported", cacheStrategy.getSecond());
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return cnt;
+    }
+
+    /**
      * Resolve caches names for invalidation for given entity and operation.
      * @param entityOperation given operation
      * @param entityName given entity name

@@ -61,6 +61,13 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
 
     /** {@inheritDoc } */
     @Override
+    public Manager getByEmail(final String email) {
+        return findByEmail(email);
+
+    }
+
+    /** {@inheritDoc } */
+    @Override
     public Manager findByEmail(final String email) {
         if (StringUtils.isBlank(email)) {
             return null;

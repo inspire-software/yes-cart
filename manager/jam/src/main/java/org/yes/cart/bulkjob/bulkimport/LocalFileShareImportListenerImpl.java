@@ -184,7 +184,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
         if (shopDirs != null) {
 
-            SecurityContextHolder.getContext().setAuthentication(global);
+            SecurityContextHolder.getContext().setAuthentication(GLOBAL);
 
             final String importDirPath = importDirectorService.getImportDirectory();
             LOG.info("Detected import directory root {}", importDirPath);
@@ -347,7 +347,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                     } finally {
                         // Reinstate global context of AutoImport
-                        SecurityContextHolder.getContext().setAuthentication(global);
+                        SecurityContextHolder.getContext().setAuthentication(GLOBAL);
                     }
 
 
@@ -498,7 +498,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
     /**
      * This is a custom authentication to allow listener to send command to bulk import service
      */
-    private final Authentication global = new RunAsUserAuthentication(
+    private static final Authentication GLOBAL = new RunAsUserAuthentication(
             PRINCIPAL, null,
             Arrays.asList(new GrantedAuthority[]{
                     new SimpleGrantedAuthority("ROLE_SMADMIN"),

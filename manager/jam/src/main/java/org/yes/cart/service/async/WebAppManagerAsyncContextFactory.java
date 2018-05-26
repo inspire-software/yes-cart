@@ -58,7 +58,7 @@ public class WebAppManagerAsyncContextFactory implements AsyncContextFactory {
 
         Manager manager = null;
         if (auth != null && auth.isAuthenticated()) {
-            manager = managerService.findByEmail(auth.getName());
+            manager = managerService.getByEmail(auth.getName());
         }
 
         return new AsyncWebAppContextImpl(manager, attributes);
