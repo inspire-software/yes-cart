@@ -551,6 +551,7 @@
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
+        DASHBOARDWIDGETS varchar(4000),
         PASSWORD varchar(255) not null,
         PASSWORDEXPIRY datetime,
         AUTHTOKEN varchar(255),

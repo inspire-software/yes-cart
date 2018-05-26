@@ -13,22 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.yes.cart.domain.vo;
+import { Directive, ViewContainerRef } from '@angular/core';
 
-/**
- * User: denispavlov
- * Date: 23/09/2016
- * Time: 09:21
- */
-public class VoDashboardWidget extends VoDashboardWidgetInfo {
-
-    private Object data;
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(final Object data) {
-        this.data = data;
-    }
+@Directive({
+  selector: '[yc-widget]',
+})
+export class WidgetDirective {
+  constructor(public viewContainerRef: ViewContainerRef) {
+  }
 }

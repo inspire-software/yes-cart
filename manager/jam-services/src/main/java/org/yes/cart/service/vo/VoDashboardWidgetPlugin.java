@@ -17,6 +17,7 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.VoDashboardWidget;
+import org.yes.cart.domain.vo.VoDashboardWidgetInfo;
 import org.yes.cart.domain.vo.VoManager;
 
 /**
@@ -33,10 +34,24 @@ public interface VoDashboardWidgetPlugin {
     boolean applicable(VoManager manager);
 
     /**
+     * Get Widget information.
+     *
      * @param manager manager
+     * @param lang language
+     *
      * @return generate widget data for manager
      */
-    VoDashboardWidget getWidget(VoManager manager);
+    VoDashboardWidgetInfo getWidgetInfo(VoManager manager, String lang);
+
+    /**
+     * Get widget with data.
+     *
+     * @param manager manager
+     * @param lang language
+     *
+     * @return generate widget data for manager
+     */
+    VoDashboardWidget getWidget(VoManager manager, String lang);
 
     /**
      * @return widget name

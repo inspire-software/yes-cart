@@ -16,9 +16,16 @@
 
 import { Pair } from './common.model';
 
-export interface DashboardWidgetVO {
+export interface DashboardWidgetInfoVO {
 
   widgetId : string;
+  language : string;
+  widgetDescription : string;
+
+}
+
+export interface DashboardWidgetVO extends DashboardWidgetInfoVO {
+
   data  : any;
 
 }

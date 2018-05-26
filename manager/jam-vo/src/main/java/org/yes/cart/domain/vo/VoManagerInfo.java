@@ -19,6 +19,8 @@ package org.yes.cart.domain.vo;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -41,6 +43,10 @@ public class VoManagerInfo {
 
     @DtoField(value = "enabled", readOnly = true)
     private boolean enabled;
+
+    @DtoField(value = "dashboardWidgets", converter = "CSVToList", readOnly = true)
+    private List<String> dashboardWidgets;
+
 
     public long getManagerId() {
         return managerId;
@@ -82,4 +88,11 @@ public class VoManagerInfo {
         this.enabled = enabled;
     }
 
+    public List<String> getDashboardWidgets() {
+        return dashboardWidgets;
+    }
+
+    public void setDashboardWidgets(final List<String> dashboardWidgets) {
+        this.dashboardWidgets = dashboardWidgets;
+    }
 }

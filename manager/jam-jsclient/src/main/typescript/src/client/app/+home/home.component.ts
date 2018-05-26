@@ -13,11 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component, OnInit } from '@angular/core';
-import { DashboardWidgetVO } from '../shared/model/index';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DashboardWidgetVO, DashboardWidgetInfoVO } from '../shared/model/index';
 import { ReportsService, I18nEventBus } from '../shared/services/index';
-import { Config } from '../shared/config/env.config';
-import { CookieUtil } from '../shared/cookies/index';
+import { ModalComponent, ModalResult, ModalAction } from '../shared/modal/index';
 import { LogUtil } from './../shared/log/index';
 
 
@@ -32,12 +31,24 @@ import { LogUtil } from './../shared/log/index';
 export class HomeComponent implements OnInit {
 
   private static _widgets:any = {};
+  private static _userWidgets:DashboardWidgetInfoVO[] = [];
 
-  private uiLangReadOnly:boolean = true;
-  private uiSettingReadOnly:boolean = true;
-  private uiSettingProperty:string = '';
+  @ViewChild('widgetModalDialog')
+  private widgetModalDialog:ModalComponent;
+
+  @ViewChild('widgetEditModalDialog')
+  private widgetEditModalDialog:ModalComponent;
 
   private loading:boolean = false;
+
+  private validForSelect:boolean = false;
+  private availableWidgets:DashboardWidgetInfoVO[] = [];
+  private filteredAvailableWidgets:DashboardWidgetInfoVO[] = [];
+
+  private widgetFilter:string = null;
+  private selectedWidget:DashboardWidgetInfoVO = null;
+
+  private selectedWidgets:DashboardWidgetInfoVO[] = [];
 
   constructor(private _dashboardService:ReportsService) {
     LogUtil.debug('HomeComponent constructed');
@@ -51,22 +62,173 @@ export class HomeComponent implements OnInit {
     HomeComponent._widgets = value;
   }
 
+  public get userWidgets():DashboardWidgetInfoVO[] {
+    return HomeComponent._userWidgets;
+  }
+
+  public set userWidgets(value:DashboardWidgetInfoVO[]) {
+    HomeComponent._userWidgets = value;
+  }
+
+
+  protected onFilterChange() {
+
+    let _filter = this.widgetFilter ? this.widgetFilter.toLowerCase() : null;
+
+    let _filtered:Array<DashboardWidgetInfoVO> = [];
+    if (_filter) {
+      _filtered = this.availableWidgets.filter(val =>
+          val.widgetId.toLowerCase().indexOf(_filter) !== -1 ||
+          val.widgetDescription && val.widgetDescription.toLowerCase().indexOf(_filter) !== -1
+      );
+    } else {
+      _filtered = this.availableWidgets;
+    }
+
+    this.filteredAvailableWidgets = _filtered;
+
+  }
+
+  protected onClearFilter() {
+    this.widgetFilter = '';
+    this.onFilterChange();
+  }
+
+  onSelectClick(widget: DashboardWidgetInfoVO) {
+    LogUtil.debug('HomeComponent onSelectClick', widget);
+    this.selectedWidget = widget;
+    this.validForSelect = true;
+  }
+
+
   ngOnInit() {
     LogUtil.debug('HomeComponent ngOnInit');
-
     this.onRefreshHandler();
   }
+
+  onAddHandler() {
+
+    this.loading = true;
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let _sub:any = this._dashboardService.getAvailableWidgets(lang).subscribe((widgets:DashboardWidgetInfoVO[]) => {
+
+      LogUtil.debug('HomeComponent getAvailableWidgets', widgets);
+
+      this.availableWidgets = widgets;
+      this.onFilterChange();
+
+      this.widgetModalDialog.show();
+
+      this.loading = false;
+      _sub.unsubscribe();
+
+    });
+
+  }
+
+
+  onSelectConfirmationResult(modalresult: ModalResult) {
+    LogUtil.debug('HomeComponent onSelectConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action && this.selectedWidget != null) {
+
+      let update = this.userWidgets.slice(0, this.userWidgets.length);
+      update.push(this.selectedWidget);
+
+      LogUtil.debug('HomeComponent onSelectConfirmationResult', this.userWidgets, update);
+
+      this.updateDashboardSettings(update, true);
+
+    }
+  }
+
+  updateDashboardSettings(update:DashboardWidgetInfoVO[], refresh:boolean = false) {
+
+    this.loading = true;
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let _sub:any = this._dashboardService.updateDashboardWidgets(update, lang).subscribe((value:void) => {
+
+      LogUtil.debug('HomeComponent updateDashboardWidgets');
+
+      this.loading = false;
+      _sub.unsubscribe();
+
+      if (refresh) {
+        this.onRefreshHandler();
+      }
+
+    });
+  }
+
+  onConfigureSelected() {
+
+    this.selectedWidgets = this.userWidgets.slice(0, this.userWidgets.length);
+    this.widgetEditModalDialog.show();
+
+  }
+
+  onConfigureSelectedRemove(widget:DashboardWidgetInfoVO) {
+
+    let idx = this.selectedWidgets.findIndex(val => widget.widgetId == val.widgetId);
+    if (idx !== -1) {
+      this.selectedWidgets.splice(idx, 1);
+      this.selectedWidgets = this.selectedWidgets.slice(0, this.selectedWidgets.length);
+    }
+
+  }
+
+  onConfigureSelectedUp(widget:DashboardWidgetInfoVO) {
+
+    let idx = this.selectedWidgets.findIndex(val => widget.widgetId == val.widgetId);
+    if (idx !== -1 && idx > 0) {
+      let oneUp = this.selectedWidgets[idx - 1];
+      this.selectedWidgets[idx - 1] = this.selectedWidgets[idx];
+      this.selectedWidgets[idx] = oneUp;
+      this.selectedWidgets = this.selectedWidgets.slice(0, this.selectedWidgets.length);
+    }
+
+  }
+
+  onConfigureSelectedDown(widget:DashboardWidgetInfoVO) {
+
+    let idx = this.selectedWidgets.findIndex(val => widget.widgetId == val.widgetId);
+    if (idx !== -1 && idx < this.selectedWidgets.length - 1) {
+      let oneDown = this.selectedWidgets[idx + 1];
+      this.selectedWidgets[idx + 1] = this.selectedWidgets[idx];
+      this.selectedWidgets[idx] = oneDown;
+      this.selectedWidgets = this.selectedWidgets.slice(0, this.selectedWidgets.length);
+    }
+
+  }
+
+
+  onUpdateConfirmationResult(modalresult: ModalResult) {
+    LogUtil.debug('HomeComponent onUpdateConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      LogUtil.debug('HomeComponent onSelectConfirmationResult', this.userWidgets, this.selectedWidgets);
+
+      this.updateDashboardSettings(this.selectedWidgets, true);
+
+    }
+  }
+
 
   onRefreshHandler() {
 
     this.loading = true;
-    let _sub:any = this._dashboardService.getDashboard().subscribe((widgets:DashboardWidgetVO[]) => {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let _sub:any = this._dashboardService.getDashboard(lang).subscribe((widgets:DashboardWidgetVO[]) => {
 
       LogUtil.debug('HomeComponent getDashboard', widgets);
 
       this.widgets = {};
+      this.userWidgets = [];
       widgets.forEach(widget => {
         this.widgets[widget.widgetId] = widget;
+        this.userWidgets.push(widget);
       });
 
       LogUtil.debug('HomeComponent widgets', this.widgets);
@@ -77,68 +239,4 @@ export class HomeComponent implements OnInit {
     });
 
   }
-
-  onChangeSettingClick(setting:string) {
-    LogUtil.debug('HomeComponent modify', this.uiSettingProperty, setting);
-    this.uiSettingReadOnly = this.uiSettingProperty === setting;
-    this.uiSettingProperty = this.uiSettingReadOnly ? '' : setting;
-    if (!this.uiSettingReadOnly) {
-      this.uiLangReadOnly = true; // ensure lang is hidden
-    }
-  }
-
-  onChangeLanguageClick() {
-    LogUtil.debug('HomeComponent modify lang', this.uiLangReadOnly);
-    this.uiSettingReadOnly = true;   // ensure setting is hidden
-    this.uiSettingProperty = '';
-    this.uiLangReadOnly = !this.uiLangReadOnly;
-  }
-
-  get uiPagination():number {
-    return Config.UI_TABLE_PAGE_SIZE;
-  }
-
-  set uiPagination(pageSize:number) {
-    Config.UI_TABLE_PAGE_SIZE = pageSize;
-  }
-
-  get uiFilteMax():number {
-    return Config.UI_FILTER_CAP;
-  }
-
-  set uiFilteMax(maxResults:number) {
-    Config.UI_FILTER_CAP = maxResults;
-  }
-
-  get uiNoFilteMax():number {
-    return Config.UI_FILTER_NO_CAP;
-  }
-
-  set uiNoFilteMax(maxResults:number) {
-    Config.UI_FILTER_NO_CAP = maxResults;
-  }
-
-  get uiLang():string {
-      return I18nEventBus.getI18nEventBus().current();
-  }
-
-  set uiLang(lang:string) {
-    if (['uk','ru','en','de'].indexOf(lang) !== -1) {
-      I18nEventBus.getI18nEventBus().emit(lang);
-      CookieUtil.createCookie('YCJAM_UI_LANG', lang, 360);
-    }
-  }
-
-  get uiSetting():number {
-    let cfg:any = Config;
-    return cfg[this.uiSettingProperty];
-  }
-
-  set uiSetting(value:number) {
-    let cfg:any = Config;
-    cfg[this.uiSettingProperty] = value;
-    let cookieName = 'YCJAM_' + this.uiSettingProperty;
-    CookieUtil.createCookie(cookieName, ''+value, 360);
-  }
-
 }

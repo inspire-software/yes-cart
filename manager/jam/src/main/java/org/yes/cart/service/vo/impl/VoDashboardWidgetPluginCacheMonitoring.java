@@ -19,15 +19,17 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerRole;
+import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.cluster.ClusterService;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
-import org.yes.cart.service.async.AsyncContextFactory;
 
 import java.util.*;
 
@@ -36,17 +38,16 @@ import java.util.*;
  * Date: 24/10/2016
  * Time: 08:31
  */
-public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidgetPlugin {
+public class VoDashboardWidgetPluginCacheMonitoring extends AbstractVoDashboardWidgetPluginImpl implements VoDashboardWidgetPlugin {
 
     private List<String> roles = Collections.emptyList();
 
     private ClusterService clusterService;
     private AsyncContextFactory asyncContextFactory;
 
-
-    @Override
-    public String getName() {
-        return "cacheMonitoring";
+    public VoDashboardWidgetPluginCacheMonitoring(final AttributeService attributeService,
+                                                  final String widgetName) {
+        super(attributeService, widgetName);
     }
 
     @Override
@@ -62,10 +63,7 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
     }
 
     @Override
-    public VoDashboardWidget getWidget(final VoManager manager) {
-
-        final VoDashboardWidget widget = new VoDashboardWidget();
-        widget.setWidgetId("CacheOverview");
+    protected void processWidgetData(final VoManager manager, final VoDashboardWidget widget, final Attribute config) {
 
         boolean hasHotCaches = false;
         final List<MutablePair<String, Integer>> data = new ArrayList<>();
@@ -100,7 +98,6 @@ public class VoDashboardWidgetPluginCacheMonitoring implements VoDashboardWidget
         wData.put("caches", data);
         widget.setData(wData);
 
-        return widget;
     }
 
     /**

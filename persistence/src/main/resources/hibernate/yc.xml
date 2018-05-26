@@ -40,6 +40,7 @@
         <property name="passwordExpiry" type="java.time.Instant" column="PASSWORDEXPIRY" not-null="false"/>
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
         <property name="authTokenExpiry" type="java.time.Instant" column="AUTHTOKENEXPIRY" not-null="false"/>
+        <property name="dashboardWidgets" type="java.lang.String" column="DASHBOARDWIDGETS" not-null="false"/>
 
         <property name="enabled" length="1" type="boolean" not-null="true">
             <column name="ENABLED" length="1" not-null="true">

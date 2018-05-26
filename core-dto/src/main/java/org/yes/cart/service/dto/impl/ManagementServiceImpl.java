@@ -231,6 +231,19 @@ public class ManagementServiceImpl implements ManagementService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateDashboard(final String userId, final String dashboardWidgets) {
+
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        if (manager != null) {
+            manager.setDashboardWidgets(dashboardWidgets);
+            managerService.update(manager);
+        }
+
+    }
 
     /**
      * {@inheritDoc}

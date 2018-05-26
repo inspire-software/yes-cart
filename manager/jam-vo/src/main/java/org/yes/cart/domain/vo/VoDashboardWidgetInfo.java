@@ -20,15 +20,33 @@ package org.yes.cart.domain.vo;
  * Date: 23/09/2016
  * Time: 09:21
  */
-public class VoDashboardWidget extends VoDashboardWidgetInfo {
+public class VoDashboardWidgetInfo {
 
-    private Object data;
+    private String widgetId;
+    private String language;
+    private String widgetDescription;
 
-    public Object getData() {
-        return data;
+    public String getWidgetId() {
+        return widgetId;
     }
 
-    public void setData(final Object data) {
-        this.data = data;
+    public void setWidgetId(final String widgetId) {
+        this.widgetId = widgetId;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(final String language) {
+        this.language = language;
+    }
+
+    public String getWidgetDescription() {
+        return widgetDescription;
+    }
+
+    public void setWidgetDescription(final String widgetDescription) {
+        this.widgetDescription = widgetDescription;
     }
 }

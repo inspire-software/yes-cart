@@ -18,8 +18,10 @@ package org.yes.cart.service.endpoint.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoDashboardWidget;
+import org.yes.cart.domain.vo.VoDashboardWidgetInfo;
 import org.yes.cart.service.endpoint.DashboardEndpointController;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
 
@@ -43,13 +45,25 @@ public class DashboardEndpointControllerImpl implements DashboardEndpointControl
 
     @Override
     public @ResponseBody
-    List<VoDashboardWidget> getDashboard() throws Exception {
-        return voDashboardWidgetService.getDashboard(null);
+    List<VoDashboardWidgetInfo> getAvailableWidgets(final @PathVariable("lang") String lang) throws Exception {
+        return voDashboardWidgetService.getAvailableWidgets(lang);
     }
 
     @Override
     public @ResponseBody
-    List<VoDashboardWidget> getDashboardWidget(@PathVariable("widget") String widget) throws Exception {
-        return voDashboardWidgetService.getDashboard(Collections.singleton(widget));
+    void updateDashboardSelection(final @RequestBody String dashboard) throws Exception {
+        voDashboardWidgetService.updateDashboardSelection(dashboard);
+    }
+
+    @Override
+    public @ResponseBody
+    List<VoDashboardWidget> getDashboard(final @PathVariable("lang") String lang) throws Exception {
+        return voDashboardWidgetService.getDashboard(null, lang);
+    }
+
+    @Override
+    public @ResponseBody
+    List<VoDashboardWidget> getDashboardWidget(final @PathVariable("widget") String widget, final @PathVariable("lang") String lang) throws Exception {
+        return voDashboardWidgetService.getDashboard(Collections.singletonList(widget), lang);
     }
 }

@@ -32,6 +32,11 @@ public interface AttributeGroupNames {
     String SYSTEM = "SYSTEM";
 
     /**
+     * Widget.
+     */
+    String WIDGET = "WIDGET";
+
+    /**
      * Shop.
      */
     String SHOP = "SHOP";

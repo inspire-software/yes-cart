@@ -19,25 +19,30 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerRole;
+import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.cluster.ClusterService;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
-import org.yes.cart.service.async.AsyncContextFactory;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
  * Date: 24/10/2016
  * Time: 18:01
  */
-public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
+public class VoDashboardWidgetPluginReindex extends AbstractVoDashboardWidgetPluginImpl implements VoDashboardWidgetPlugin {
 
     private List<String> roles = Collections.emptyList();
 
@@ -46,10 +51,9 @@ public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
 
     private ProductService productService;
 
-
-    @Override
-    public String getName() {
-        return "reindex";
+    public VoDashboardWidgetPluginReindex(final AttributeService attributeService,
+                                          final String widgetName) {
+        super(attributeService, widgetName);
     }
 
     @Override
@@ -65,10 +69,7 @@ public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
     }
 
     @Override
-    public VoDashboardWidget getWidget(final VoManager manager) {
-
-        final VoDashboardWidget widget = new VoDashboardWidget();
-        widget.setWidgetId("ReindexOverview");
+    protected void processWidgetData(final VoManager manager, final VoDashboardWidget widget, final Attribute config) {
 
         final Map<String, Object> data = new HashMap<>();
         try {
@@ -108,7 +109,6 @@ public class VoDashboardWidgetPluginReindex implements VoDashboardWidgetPlugin {
 
         widget.setData(data);
 
-        return widget;
     }
 
     /**

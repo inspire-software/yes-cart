@@ -16,10 +16,12 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerRole;
 import org.yes.cart.domain.vo.VoManagerShop;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
@@ -34,7 +36,7 @@ import java.util.*;
  * Date: 25/09/2016
  * Time: 18:14
  */
-public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidgetPlugin {
+public class VoDashboardWidgetPluginCustomersInShops extends AbstractVoDashboardWidgetPluginImpl implements VoDashboardWidgetPlugin {
 
     private List<String> roles = Collections.emptyList();
 
@@ -42,14 +44,12 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
     private final ShopService shopService;
 
     public VoDashboardWidgetPluginCustomersInShops(final CustomerService customerService,
-                                                   final ShopService shopService) {
+                                                   final ShopService shopService,
+                                                   final AttributeService attributeService,
+                                                   final String widgetName) {
+        super(attributeService, widgetName);
         this.customerService = customerService;
         this.shopService = shopService;
-    }
-
-    @Override
-    public String getName() {
-        return "customersInShops";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
     }
 
     @Override
-    public VoDashboardWidget getWidget(final VoManager manager) {
+    protected void processWidgetData(final VoManager manager, final VoDashboardWidget widget, final Attribute config) {
 
         final Set<Long> shops = new HashSet<>();
         for (final VoManagerShop shop : manager.getManagerShops()) {
@@ -93,10 +93,6 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
         );
 
 
-        final VoDashboardWidget widget = new VoDashboardWidget();
-
-        widget.setWidgetId("CustomersInShop");
-
         final Map<String, Integer> data = new HashMap<>();
         data.put("customersToday", ordersToday);
         data.put("customersThisWeek", ordersWeek);
@@ -104,7 +100,6 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
 
         widget.setData(data);
 
-        return widget;
     }
 
     /**

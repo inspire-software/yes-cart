@@ -596,6 +596,10 @@ table.dataTable thead .sorting:after {
   border: none;
 }
 
+.widget-body {
+  min-height: 110px;
+}
+
 /* **************** LOADING SCREEN ********************************************** */
 
 

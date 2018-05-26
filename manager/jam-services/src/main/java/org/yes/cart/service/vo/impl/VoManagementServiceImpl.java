@@ -284,6 +284,23 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     /** {@inheritDoc} */
     @Override
+    public void updateDashboard(final String email, final String dashboardWidgets) throws Exception {
+        if (federationFacade.isManageable(email, ManagerDTO.class)) {
+            managementService.updateDashboard(email, dashboardWidgets);
+        } else {
+
+            final VoManager myself = getMyselfInternal();
+            if (myself != null && email != null && email.equals(myself.getEmail())) {
+                managementService.updateDashboard(email, dashboardWidgets);
+            } else {
+                throw new AccessDeniedException("Access is denied");
+            }
+
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public void resetPassword(String email) throws Exception {
         if (federationFacade.isManageable(email, ManagerDTO.class)) {
             managementService.resetPassword(email);

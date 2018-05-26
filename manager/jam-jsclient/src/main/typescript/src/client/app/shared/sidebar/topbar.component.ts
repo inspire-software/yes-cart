@@ -15,7 +15,7 @@
  */
 import { Component,  OnInit, OnDestroy } from '@angular/core';
 import { UserVO, DashboardWidgetVO } from '../model/index';
-import { UserEventBus, SystemService, ReportsService } from '../services/index';
+import { I18nEventBus, UserEventBus, SystemService, ReportsService } from '../services/index';
 import { Futures, Future } from '../event/index';
 import { LogUtil } from '../log/index';
 import { Config } from '../index';
@@ -98,7 +98,9 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
   checkAlerts() {
-    let _sub:any = this._dashboardService.getDashboardWidget('alerts').subscribe((widgets:DashboardWidgetVO[]) => {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let _sub:any = this._dashboardService.getDashboardWidget('Alerts', lang).subscribe((widgets:DashboardWidgetVO[]) => {
 
       LogUtil.debug('TopbarComponent getDashboard', widgets);
 

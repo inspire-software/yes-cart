@@ -45,6 +45,9 @@ public class ManagerDTOImpl implements ManagerDTO {
     @DtoField(value = "enabled", readOnly = true)
     private boolean enabled;
 
+    @DtoField(value = "dashboardWidgets", readOnly = true)
+    private String dashboardWidgets;
+
     /**
      * {@inheritDoc}
      */
@@ -131,6 +134,22 @@ public class ManagerDTOImpl implements ManagerDTO {
     @Override
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDashboardWidgets() {
+        return dashboardWidgets;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDashboardWidgets(final String dashboardWidgets) {
+        this.dashboardWidgets = dashboardWidgets;
     }
 
     /**

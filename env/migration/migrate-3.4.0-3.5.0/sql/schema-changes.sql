@@ -209,5 +209,33 @@ alter table TMANAGER add column PASSWORDEXPIRY datetime;
 alter table TCUSTOMER add column PASSWORDEXPIRY datetime;
 -- alter table TCUSTOMER add column PASSWORDEXPIRY timestamp;
 
+--
+-- YC-908 Improve plug ability of widgets
+--
+
+alter table TMANAGER add column DASHBOARDWIDGETS varchar(4000);
+
+INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1010, 'WIDGET',   'WIDGET', 'Dashboard widgets settings.', 'Dashboard widgets settings');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6200,  'WIDGET_Alerts', 'WIDGET_Alerts',  0,  NULL,  'Alerts',  'Alerts: displays system messages', 1000,  1010, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6201,  'WIDGET_OrdersInShop', 'WIDGET_OrdersInShop',  0,  NULL,  'Orders Overview',  'Orders Overview: count of orders for today, this week and this month', 1000,  1010, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6202,  'WIDGET_UnprocessedPgCallbacks', 'WIDGET_UnprocessedPgCallbacks',  0,  NULL,  'Unprocessed Callbacks (YCE)',  'Unprocessed Callbacks: count of failed payment callbacks', 1000,  1010, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6203,  'WIDGET_CustomersInShop', 'WIDGET_CustomersInShop',  0,  NULL,  'Customers Overview',  'Customers Overview: count of customers for today, this week and this month', 1000,  1010, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6204,  'WIDGET_CacheOverview', 'WIDGET_CacheOverview',  0,  NULL,  'Cache Alerts',  'Cache Alerts: count of full of nearly full caches', 1000,  1010, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6205,  'WIDGET_ReindexOverview', 'WIDGET_ReindexOverview',  0,  NULL,  'Search Index',  'Search Index: count of products in FT, DB and PIM managed', 1000,  1010, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6206,  'WIDGET_UiSettings', 'WIDGET_UiSettings',  0,  NULL,  'UI Settings',  'UI Settings: Admin UI preferences', 1000,  1010, 0, 0, 0, 0);
 
 

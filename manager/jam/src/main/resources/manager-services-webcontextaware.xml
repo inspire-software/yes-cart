@@ -49,6 +49,8 @@
     <!-- ############################# Cluster specific widgets ######################### -->
 
     <bean id="voDashboardWidgetPluginCacheMonitoring" class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginCacheMonitoring">
+        <constructor-arg index="0" ref="attributeService"/>
+        <constructor-arg index="1" value="CacheOverview"/>
         <property name="roles">
             <list>
                 <value>ROLE_SMADMIN</value>
@@ -61,6 +63,8 @@
     </bean>
 
     <bean id="voDashboardWidgetPluginReindex" class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginReindex">
+        <constructor-arg index="0" ref="attributeService"/>
+        <constructor-arg index="1" value="ReindexOverview"/>
         <property name="roles">
             <list>
                 <value>ROLE_SMADMIN</value>
@@ -76,6 +80,8 @@
     <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginAlerts">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="mailService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+        <constructor-arg index="3" value="Alerts"/>
         <property name="roles">
             <list>
                 <value>ROLE_SMADMIN</value>

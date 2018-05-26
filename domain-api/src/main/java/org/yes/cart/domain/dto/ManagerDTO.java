@@ -99,4 +99,20 @@ public interface ManagerDTO extends Identifiable {
      */
     void setEnabled(boolean enabled);
 
+
+    /**
+     * Get dashboard widgets.
+     *
+     * @return selected widgets
+     */
+    String getDashboardWidgets();
+
+    /**
+     * Set dashboard widgets.
+     *
+     * @param dashboardWidgets widgets
+     */
+    void setDashboardWidgets(String dashboardWidgets);
+
+
 }

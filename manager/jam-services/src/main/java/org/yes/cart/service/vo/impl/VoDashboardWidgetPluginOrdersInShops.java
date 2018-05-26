@@ -16,11 +16,13 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerRole;
 import org.yes.cart.domain.vo.VoManagerShop;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
@@ -35,7 +37,7 @@ import java.util.*;
  * Date: 23/09/2016
  * Time: 19:38
  */
-public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPlugin {
+public class VoDashboardWidgetPluginOrdersInShops extends AbstractVoDashboardWidgetPluginImpl implements VoDashboardWidgetPlugin {
 
     private List<String> roles = Collections.emptyList();
 
@@ -43,16 +45,14 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
     private final ShopService shopService;
 
     public VoDashboardWidgetPluginOrdersInShops(final CustomerOrderService customerOrderService,
-                                                final ShopService shopService) {
+                                                final ShopService shopService,
+                                                final AttributeService attributeService,
+                                                final String widgetName) {
+        super(attributeService, widgetName);
         this.customerOrderService = customerOrderService;
         this.shopService = shopService;
     }
 
-
-    @Override
-    public String getName() {
-        return "ordersInShops";
-    }
 
     @Override
     public boolean applicable(final VoManager manager) {
@@ -67,7 +67,7 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
     }
 
     @Override
-    public VoDashboardWidget getWidget(final VoManager manager) {
+    protected void processWidgetData(final VoManager manager, final VoDashboardWidget widget, final Attribute config) {
 
         final Set<Long> shops = new HashSet<>();
         for (final VoManagerShop shop : manager.getManagerShops()) {
@@ -101,10 +101,6 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
         );
 
 
-        final VoDashboardWidget widget = new VoDashboardWidget();
-
-        widget.setWidgetId("OrdersInShop");
-
         final Map<String, Integer> data = new HashMap<>();
         data.put("ordersToday", ordersToday);
         data.put("ordersThisWeek", ordersWeek);
@@ -113,7 +109,6 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
 
         widget.setData(data);
 
-        return widget;
     }
 
     /**

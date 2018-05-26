@@ -90,6 +90,14 @@ public interface VoManagementService {
     void deleteManager(String managerEmail) throws Exception;
 
     /**
+     * Update dashboard to given vo.
+     * @param email manager email
+     * @param dashboardWidgets dashboard
+     * @throws Exception errors
+     */
+    void updateDashboard(String email, String dashboardWidgets) throws Exception;
+
+    /**
      * Reset password to given vo.
      * @param email manager email
      * @throws Exception errors

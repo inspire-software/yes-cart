@@ -59,6 +59,20 @@ public interface Manager extends RegisteredPerson, Auditable {
     void setManagerId(long managerId);
 
     /**
+     * Get dashboard widgets.
+     *
+     * @return selected widgets
+     */
+    String getDashboardWidgets();
+
+    /**
+     * Set dashboard widgets.
+     *
+     * @param dashboardWidgets widgets
+     */
+    void setDashboardWidgets(String dashboardWidgets);
+
+    /**
      * Get enabled flag
      *
      * @return true if account is enabled

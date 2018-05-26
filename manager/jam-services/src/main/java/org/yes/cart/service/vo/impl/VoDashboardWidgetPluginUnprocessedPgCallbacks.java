@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
@@ -23,6 +24,7 @@ import org.yes.cart.domain.vo.VoManagerRole;
 import org.yes.cart.domain.vo.VoManagerShop;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
 import org.yes.cart.payment.service.PaymentModuleGenericService;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
@@ -34,7 +36,7 @@ import java.util.*;
  * Date: 13/02/2017
  * Time: 07:19
  */
-public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboardWidgetPlugin {
+public class VoDashboardWidgetPluginUnprocessedPgCallbacks extends AbstractVoDashboardWidgetPluginImpl implements VoDashboardWidgetPlugin {
 
     private List<String> roles = Collections.emptyList();
 
@@ -42,14 +44,12 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
     private final ShopService shopService;
 
     public VoDashboardWidgetPluginUnprocessedPgCallbacks(final PaymentModuleGenericService<PaymentGatewayCallback> paymentModuleGenericService,
-                                                         final ShopService shopService) {
+                                                         final ShopService shopService,
+                                                         final AttributeService attributeService,
+                                                         final String widgetName) {
+        super(attributeService, widgetName);
         this.paymentModuleGenericService = paymentModuleGenericService;
         this.shopService = shopService;
-    }
-
-    @Override
-    public String getName() {
-        return "unprocessedPgCallbacks";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
     }
 
     @Override
-    public VoDashboardWidget getWidget(final VoManager manager) {
+    protected void processWidgetData(final VoManager manager, final VoDashboardWidget widget, final Attribute config) {
 
         final Set<String> shops = new HashSet<>();
         for (final VoManagerShop shop : manager.getManagerShops()) {
@@ -75,9 +75,6 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
                 shops.add(this.shopService.getById(shop.getShopId()).getCode());
             }
         }
-
-        final VoDashboardWidget widget = new VoDashboardWidget();
-        widget.setWidgetId("UnprocessedPgCallbacks");
 
         final Map<String, Integer> counts = new HashMap<>();
         final List<PaymentGatewayCallback> callbacks = this.paymentModuleGenericService.findByCriteria(
@@ -105,7 +102,6 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
             put("unprocessed", data);
         }});
 
-        return widget;
     }
 
     /**

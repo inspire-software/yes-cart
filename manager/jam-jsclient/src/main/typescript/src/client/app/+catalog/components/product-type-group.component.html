@@ -22,7 +22,7 @@
             <li *ngFor="let row of filteredObjectGroups" class="list-group-item {{ (selectedRow != null && selectedRow.name == row.name) ? 'list-group-item-info' : '' }}">
               <h5>
                 <a (click)="onSelectRow(row)" class="js-click"><span>{{row.name}}</span></a>
-                <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onSelectRow(row)><i class="fa fa-list"></i></button>
+                <button class="pull-right btn btn-default btn-circle btn-sm" (click)="onSelectRow(row)"><i class="fa fa-list"></i></button>
                 <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}">{{row.rank}}</button>
               </h5>
               <p>

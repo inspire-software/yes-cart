@@ -135,6 +135,14 @@ public interface ManagementService {
     void updateUser(String userId, String firstName, String lastName);
 
     /**
+     * Update dashboard to given vo.
+     *
+     * @param email manager email
+     * @param dashboardWidgets dashboard
+     */
+    void updateDashboard(String email, String dashboardWidgets);
+
+    /**
      * Reset password to given user and send generated password via email.
      *
      * @param userId user email

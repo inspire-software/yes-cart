@@ -40,6 +40,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     private String firstname;
     private String lastname;
     private String middlename;
+    private String dashboardWidgets;
     private String password;
     private Instant passwordExpiry;
     private String authToken;
@@ -104,6 +105,15 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     @Override
     public void setSalutation(final String salutation) {
         this.salutation = salutation;
+    }
+
+    @Override
+    public String getDashboardWidgets() {
+        return dashboardWidgets;
+    }
+
+    public void setDashboardWidgets(final String dashboardWidgets) {
+        this.dashboardWidgets = dashboardWidgets;
     }
 
     @Override

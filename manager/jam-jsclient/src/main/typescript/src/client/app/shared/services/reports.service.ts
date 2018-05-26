@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { DashboardWidgetVO, ReportDescriptorVO, ReportRequestVO } from '../model/index';
+import { DashboardWidgetInfoVO, DashboardWidgetVO, ReportDescriptorVO, ReportRequestVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -45,8 +45,8 @@ export class ReportsService {
    * Get current user widgets,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getDashboard() {
-    return this.http.get(this._serviceBaseUrl + '/dashboard')
+  getDashboard(lang:string) {
+    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/')
       .map(res => <DashboardWidgetVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -55,10 +55,40 @@ export class ReportsService {
    * Get current user widgets,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getDashboardWidget(widget:string) {
-    return this.http.get(this._serviceBaseUrl + '/dashboard/' + widget + '/')
+  getDashboardWidget(widget:string, lang:string) {
+    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/' + widget + '/')
       .map(res => <DashboardWidgetVO[]> this.json(res))
       .catch(this.handleError);
+  }
+
+  /**
+   * Get current user widgets,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getAvailableWidgets(lang:string) {
+    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/available/')
+      .map(res => <DashboardWidgetInfoVO[]> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get current user widgets,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  updateDashboardWidgets(widgets:DashboardWidgetInfoVO[], lang:string) {
+
+    let widgetCsv = '';
+    widgets.forEach(function(widget) {
+       widgetCsv += (widgetCsv.length > 0 ? ',' : '') + widget.widgetId;
+    });
+
+    let body = widgetCsv;
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/dashboard/' + lang + '/', body, options)
+      .catch(this.handleError);
+
   }
 
   /**

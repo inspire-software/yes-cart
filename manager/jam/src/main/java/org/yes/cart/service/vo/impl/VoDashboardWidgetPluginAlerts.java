@@ -18,6 +18,7 @@ package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.cluster.node.Node;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
@@ -26,6 +27,7 @@ import org.yes.cart.domain.vo.VoManagerRole;
 import org.yes.cart.domain.vo.VoManagerShop;
 import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.cluster.ClusterService;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
@@ -38,7 +40,7 @@ import java.util.*;
  * Date: 15/02/2017
  * Time: 11:24
  */
-public class VoDashboardWidgetPluginAlerts implements VoDashboardWidgetPlugin {
+public class VoDashboardWidgetPluginAlerts extends AbstractVoDashboardWidgetPluginImpl implements VoDashboardWidgetPlugin {
 
     private List<String> roles = Collections.emptyList();
 
@@ -49,14 +51,12 @@ public class VoDashboardWidgetPluginAlerts implements VoDashboardWidgetPlugin {
     private AsyncContextFactory asyncContextFactory;
 
     public VoDashboardWidgetPluginAlerts(final ShopService shopService,
-                                         final MailService mailService) {
+                                         final MailService mailService,
+                                         final AttributeService attributeService,
+                                         final String widgetName) {
+        super(attributeService, widgetName);
         this.shopService = shopService;
         this.mailService = mailService;
-    }
-
-    @Override
-    public String getName() {
-        return "alerts";
     }
 
     @Override
@@ -71,8 +71,9 @@ public class VoDashboardWidgetPluginAlerts implements VoDashboardWidgetPlugin {
         return false;
     }
 
+
     @Override
-    public VoDashboardWidget getWidget(final VoManager manager) {
+    protected void processWidgetData(final VoManager manager, final VoDashboardWidget widget, final Attribute config) {
 
         final Set<String> shops = new HashSet<>();
         for (final VoManagerShop shop : manager.getManagerShops()) {
@@ -87,9 +88,6 @@ public class VoDashboardWidgetPluginAlerts implements VoDashboardWidgetPlugin {
                 }
             }
         }
-
-        final VoDashboardWidget widget = new VoDashboardWidget();
-        widget.setWidgetId("Alerts");
 
         final List<MutablePair<String, Integer>> data = new ArrayList<>();
 
@@ -131,7 +129,6 @@ public class VoDashboardWidgetPluginAlerts implements VoDashboardWidgetPlugin {
 
         widget.setData(data);
 
-        return widget;
     }
 
     /**

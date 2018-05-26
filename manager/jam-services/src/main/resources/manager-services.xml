@@ -145,6 +145,8 @@
                 <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginOrdersInShops">
                     <constructor-arg index="0" ref="customerOrderService"/>
                     <constructor-arg index="1" ref="shopService"/>
+                    <constructor-arg index="2" ref="attributeService"/>
+                    <constructor-arg index="3" value="OrdersInShop"/>
                     <property name="roles">
                         <list>
                             <value>ROLE_SMADMIN</value>
@@ -158,6 +160,8 @@
                 <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginCustomersInShops">
                     <constructor-arg index="0" ref="customerService"/>
                     <constructor-arg index="1" ref="shopService"/>
+                    <constructor-arg index="2" ref="attributeService"/>
+                    <constructor-arg index="3" value="CustomersInShop"/>
                     <property name="roles">
                         <list>
                             <value>ROLE_SMADMIN</value>
@@ -171,6 +175,8 @@
                 <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginUnprocessedPgCallbacks">
                     <constructor-arg index="0" ref="paymentGatewayCallbackService"/>
                     <constructor-arg index="1" ref="shopService"/>
+                    <constructor-arg index="2" ref="attributeService"/>
+                    <constructor-arg index="3" value="UnprocessedPgCallbacks"/>
                     <property name="roles">
                         <list>
                             <value>ROLE_SMADMIN</value>
@@ -179,6 +185,21 @@
                         </list>
                     </property>
                 </bean>
+                <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginUiSettings">
+                    <constructor-arg index="0" ref="attributeService"/>
+                    <constructor-arg index="1" value="UiSettings"/>
+                </bean>
+            </list>
+        </property>
+        <property name="defaultWidgets">
+            <list>
+                <value>Alerts</value>
+                <value>OrdersInShop</value>
+                <value>CustomersInShop</value>
+                <value>UnprocessedPgCallbacks</value>
+                <!--<value>CacheOverview</value>-->
+                <!--<value>ReindexOverview</value>-->
+                <value>UiSettings</value>
             </list>
         </property>
     </bean>

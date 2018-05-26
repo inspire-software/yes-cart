@@ -3,4 +3,6 @@
  */
 export * from './home.component';
 export * from './reports.component';
+export * from './widget.directive';
+export * from './widget-container.component';
 
