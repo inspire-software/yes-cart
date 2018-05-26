@@ -923,7 +923,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  6204,  'WIDGET_CacheOverview', 'WIDGET_CacheOverview',  0,  NULL,  'Cache Alerts',  'Cache Alerts: count of full of nearly full caches', 1000,  1010, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  6205,  'WIDGET_ReindexOverview', 'WIDGET_ReindexOverview',  0,  NULL,  'Search Index',  'Search Index: count of products in FT, DB and PIM managed', 1000,  1010, 0, 0, 0, 0);
+  VALUES (  6205,  'WIDGET_ReindexOverview', 'WIDGET_ReindexOverview',  0,  NULL,  'Search Index',  'Search Index: count of products in FT, DB', 1000,  1010, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  6206,  'WIDGET_UiSettings', 'WIDGET_UiSettings',  0,  NULL,  'UI Settings',  'UI Settings: Admin UI preferences', 1000,  1010, 0, 0, 0, 0);
