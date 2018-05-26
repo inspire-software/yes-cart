@@ -5,4 +5,4 @@
 #
 # @author Denys Pavlov
 
-call mvn clean install -PdevIntellijIDEA,derby,ftEmbededLucene,paymentBase -DskipTests=true
+call mvn clean install -PdevIntellijIDEA,derby,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
