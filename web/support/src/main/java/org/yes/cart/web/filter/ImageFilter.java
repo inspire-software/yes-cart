@@ -133,13 +133,13 @@ public class ImageFilter extends AbstractFilter implements Filter {
         } else {
 
             /*
-                RequestURI  -> /yes-shop/imgvault/product/file.pdf
+                RequestURI  -> /yes-shop/imgvault/product/image.png
                 ContextPath -> /yes-shop
-                ServletPath ->          /imgvault/product/file.pdf
+                ServletPath ->          /imgvault/product/image.png
 
-                RequestURI  -> /imgvault/product/file.pdf
+                RequestURI  -> /imgvault/product/image.png
                 ContextPath ->
-                ServletPath -> /imgvault/product/file.pdf
+                ServletPath -> /imgvault/product/image.png
              */
 
             final String requestPath = HttpUtil.decodeUtf8UriParam(httpServletRequest.getRequestURI());

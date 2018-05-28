@@ -74,13 +74,13 @@ public class FileFilter extends AbstractFilter implements Filter {
                                       final HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
         /*
-            RequestURI  -> /yes-shop/filevault/product/image.png
+            RequestURI  -> /yes-shop/filevault/product/file.pdf
             ContextPath -> /yes-shop
-            ServletPath ->          /filevault/product/image.png
+            ServletPath ->          /filevault/product/file.pdf
 
-            RequestURI  -> /filevault/product/image.png
+            RequestURI  -> /filevault/product/file.pdf
             ContextPath ->
-            ServletPath -> /filevault/product/image.png
+            ServletPath -> /filevault/product/file.pdf
          */
         final String requestPath = HttpUtil.decodeUtf8UriParam(httpServletRequest.getRequestURI());
         final String contextPath = httpServletRequest.getContextPath();
