@@ -114,7 +114,7 @@ public class HomePage extends AbstractWebPage {
                 currentCategoriesIds.getSecond(),
                 (Map) mapParams);
 
-        addOrReplace(new BreadCrumbsView("breadCrumbs", browsingShopId, categoryId));
+        addOrReplace(new BreadCrumbsView("breadCrumbs", shopId, browsingShopId, categoryId));
 
 
         addOrReplace(new RecentlyViewedProducts("recentlyViewed"));

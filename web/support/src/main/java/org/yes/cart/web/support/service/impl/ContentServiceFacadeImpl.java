@@ -27,9 +27,12 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryRankDisplayNameComparator;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -187,6 +190,19 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
 
         if (currentContentId > 0L && shopService.getShopContentIds(shopId).contains(currentContentId)) {
 
+            Category content = contentService.getById(currentContentId);
+            final LocalDateTime now = now();
+
+            while (content != null && !content.isRoot() &&  !CentralViewLabel.INCLUDE.equals(content.getUitemplate())) {
+
+                if (!DomainApiUtils.isObjectAvailableNow(!content.isDisabled(), content.getAvailablefrom(), content.getAvailableto(), now)) {
+                    return Collections.emptyList(); // not available
+                }
+
+                content = contentService.getById(content.getParentId());
+
+            }
+
             final List<Category> categories = new ArrayList<>(contentService.getChildContent(currentContentId));
             categories.removeIf(cat -> CentralViewLabel.INCLUDE.equals(cat.getUitemplate()));
 
@@ -199,6 +215,10 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
         return Collections.emptyList();
     }
 
+
+    private LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
+    }
 
     private static final String[] CATEGORYLIST_IMAGE_SIZE =
             new String[]{

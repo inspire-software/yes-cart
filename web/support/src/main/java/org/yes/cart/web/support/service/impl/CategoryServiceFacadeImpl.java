@@ -74,7 +74,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     public Category getCategory(final long categoryId, final long customerShopId) {
         if (categoryId > 0L && shopService.getShopCategoriesIds(customerShopId).contains(categoryId)) {
             final Category category = categoryService.getById(categoryId);
-            if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now())) {
+            if (DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now())) {
                 return category;
             }
         }
@@ -134,7 +134,30 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
         if (currentCategoryId > 0L && shopService.getShopCategoriesIds(customerShopId).contains(currentCategoryId)) {
 
-            categories = new ArrayList<>(categoryService.getChildCategories(currentCategoryId));
+            Category category = categoryService.getById(currentCategoryId);
+            final LocalDateTime now = now();
+
+            boolean available = true;
+            while (category != null && !category.isRoot()) { // while enabled and not reached root
+
+                if (!DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+                    available = false; // not available
+                    break;
+                }
+
+                category = categoryService.getById(category.getParentId());
+
+            }
+
+            if (available) {
+
+                categories = new ArrayList<>(categoryService.getChildCategories(currentCategoryId));
+
+            } else {
+
+                categories = new ArrayList<>(shopService.getTopLevelCategories(customerShopId));
+
+            }
 
         } else {
 

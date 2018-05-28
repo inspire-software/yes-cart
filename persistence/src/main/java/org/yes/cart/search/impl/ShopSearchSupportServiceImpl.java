@@ -63,7 +63,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
 
             Category category = categoryService.getById(categoryId);
 
-            if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now())) {
+            if (DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now())) {
 
                 while (category != null) {
                     final String searchInSub = category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH);

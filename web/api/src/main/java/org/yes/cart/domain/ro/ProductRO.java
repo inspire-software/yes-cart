@@ -60,6 +60,9 @@ public class ProductRO implements Serializable {
     @DtoField(value = "tag", readOnly = true)
     private String tag;
 
+    @DtoField(value = "disabled", readOnly = true)
+    private boolean disabled;
+
     @DtoField(value = "availablefrom", readOnly = true)
     private LocalDateTime availablefrom;
 
@@ -192,6 +195,15 @@ public class ProductRO implements Serializable {
 
     public void setTag(final String tag) {
         this.tag = tag;
+    }
+
+    @XmlAttribute(name = "disabled")
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)

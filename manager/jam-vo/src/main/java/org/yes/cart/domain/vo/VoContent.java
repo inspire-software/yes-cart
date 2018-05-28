@@ -55,6 +55,9 @@ public class VoContent {
     @DtoField(value = "uitemplate")
     private String uitemplate;
 
+    @DtoField(value = "disabled")
+    private boolean disabled;
+
     @DtoField(value = "availablefrom")
     private LocalDateTime availablefrom;
 
@@ -163,6 +166,14 @@ public class VoContent {
 
     public void setUitemplate(String uitemplate) {
         this.uitemplate = uitemplate;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     public LocalDateTime getAvailablefrom() {

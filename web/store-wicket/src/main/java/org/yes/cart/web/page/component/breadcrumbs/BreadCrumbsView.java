@@ -55,6 +55,7 @@ public class BreadCrumbsView extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
     private ShopService shopService;
 
+    private final long shopId;
     private final long customerShopId;
     private final long categoryId;
 
@@ -62,16 +63,19 @@ public class BreadCrumbsView extends BaseComponent {
      * Build bread crumbs navigation view.
      *
      * @param id              component id
+     * @param shopId          current shop id
      * @param customerShopId  current shop id
      * @param categoryId      current category id
      */
     public BreadCrumbsView(final String id,
+                           final long shopId,
                            final long customerShopId,
                            final long categoryId) {
 
         super(id);
 
         this.categoryId = categoryId;
+        this.shopId = shopId;
         this.customerShopId = customerShopId;
 
     }
@@ -90,7 +94,7 @@ public class BreadCrumbsView extends BaseComponent {
             final String tagPrefix = StringUtils.EMPTY;
 
             crumbs = breadCrumbsBuilder.getBreadCrumbs(getLocale().getLanguage(),
-                    customerShopId, categoryId, getPage().getPageParameters(), shopService.getShopAllCategoriesIds(customerShopId),
+                    shopId, customerShopId, categoryId, getPage().getPageParameters(), shopService.getShopAllCategoriesIds(customerShopId),
                     pricePrefix, queryPrefix, tagPrefix);
 
         }

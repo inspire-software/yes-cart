@@ -123,6 +123,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         root.setName(shopcode);
         root.setParentId(0L);
         root.setUitemplate("content");
+        root.setDisabled(false);
         root.setAvailablefrom(now.truncatedTo(ChronoUnit.DAYS));
         root.setAvailableto(now.plusYears(100).truncatedTo(ChronoUnit.DAYS));
         root.setNavigationByPrice(false);
@@ -154,7 +155,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     @Override
     public String getContentBody(final long contentId, final String locale) {
         final String attributeKey = "CONTENT_BODY_" + locale + "_%";
-        final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, now());
+        final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, now(), Boolean.FALSE);
         if (bodyList != null && bodyList.size() > 0) {
             final StringBuilder content = new StringBuilder();
             for (final Object bodyPart : bodyList) {
@@ -302,7 +303,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         if (withAvailability) {
 
             final LocalDateTime now = now();
-            cats.removeIf(cat -> !DomainApiUtils.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now));
+            cats.removeIf(cat -> !DomainApiUtils.isObjectAvailableNow(!cat.isDisabled(), cat.getAvailablefrom(), cat.getAvailableto(), now));
 
         }
         return cats;

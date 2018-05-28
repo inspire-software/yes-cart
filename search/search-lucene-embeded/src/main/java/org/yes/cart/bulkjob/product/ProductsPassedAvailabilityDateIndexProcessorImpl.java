@@ -136,7 +136,7 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl
         final LocalDateTime now = now();
         return (List) productService.getGenericDao()
                 .findQueryObjectByNamedQuery("DISCONTINUED.PRODUCTS.AFTER.DATE.CHANGED.AFTER",
-                        now, now.plusDays(-numberOfDays));
+                        now, now.plusDays(-numberOfDays), Boolean.TRUE);
     }
 
 

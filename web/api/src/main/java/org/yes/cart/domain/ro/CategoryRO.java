@@ -72,6 +72,9 @@ public class CategoryRO implements Serializable {
     private String uitemplate;
     private String uitemplateFallback;
 
+    @DtoField(value = "disabled", readOnly = true)
+    private boolean disabled;
+
     @DtoField(value = "availablefrom", readOnly = true)
     private LocalDateTime availablefrom;
 
@@ -218,6 +221,15 @@ public class CategoryRO implements Serializable {
 
     public void setUitemplateFallback(final String uitemplateFallback) {
         this.uitemplateFallback = uitemplateFallback;
+    }
+
+    @XmlAttribute(name = "disabled")
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)

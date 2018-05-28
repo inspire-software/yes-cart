@@ -7,9 +7,10 @@
         <th>{{ 'CODE' | translate }}</th>
         <th>{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}</th>
         <th>{{ 'CATEGORY_TEMPLATE' | translate }}</th>
+        <th>{{ 'CATEGORY_NAV' | translate }}</th>
         <th>{{ 'CATEGORY_FROM' | translate }}</th>
         <th>{{ 'CATEGORY_TO' | translate }}</th>
-        <th>{{ 'CATEGORY_NAV' | translate }}</th>
+        <th>{{ 'CATEGORY_ENABLED' | translate }}</th>
       </tr>
       </thead>
       <tbody>
@@ -18,9 +19,10 @@
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.guid}}</a></td>
           <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><i class="fa fa-sitemap" title="{{row.parentName}}"></i> <a class="js-click" (click)="onSelectRow(row)">{{row.name}} ({{row.rank}})</a> <span [innerHTML]="getUri(row)"></span> <span [innerHTML]="getLink(row)"></span></td>
           <td title="{{ 'CATEGORY_TEMPLATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.uitemplate}}</a>&nbsp;</td>
+          <td title="{{ 'CATEGORY_NAV' | translate }}"><a class="js-click" (click)="onSelectRow(row)"> <span [innerHTML]="getNavFlags(row)"></span></a>&nbsp;</td>
           <td title="{{ 'CATEGORY_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
           <td title="{{ 'CATEGORY_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'CATEGORY_NAV' | translate }}"><a class="js-click" (click)="onSelectRow(row)"> <span [innerHTML]="getNavFlags(row)"></span></a>&nbsp;</td>
+          <td title="{{ 'CATEGORY_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{!row.disabled && isAvailableFromNow(row) && isAvailableToNow(row) ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
         </ng-template>
       </tr>
       </tbody>

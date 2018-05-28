@@ -87,6 +87,20 @@ public interface CategoryRelationDTO extends Identifiable, Guidable {
     void setRank(int rank);
 
     /**
+     * Flag to denote if object is disabled on not.
+     *
+     * @return true if object is disabled
+     */
+    boolean isDisabled();
+
+    /**
+     * Flag to denote if object is disabled on not.
+     *
+     * @param disabled true if object is disabled
+     */
+    void setDisabled(boolean disabled);
+
+    /**
      * Get available from date.  Null value means no start.
      *
      * @return available from date.

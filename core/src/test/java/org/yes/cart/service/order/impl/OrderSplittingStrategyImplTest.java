@@ -798,6 +798,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(sku).getCode(); will(returnValue(skuCode));
             allowing(sku).getProduct(); will(returnValue(product));
             allowing(product).getAvailability(); will(returnValue(availability));
+            allowing(product).isDisabled(); will(returnValue(false));
             allowing(product).getAvailablefrom(); will(returnValue(availableFrom));
             allowing(product).getAvailableto(); will(returnValue(availableTo));
             allowing(product).getProducttype(); will(returnValue(productType));

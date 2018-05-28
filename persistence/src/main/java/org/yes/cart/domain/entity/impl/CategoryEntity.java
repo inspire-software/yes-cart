@@ -45,6 +45,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     private String displayName;
     private String description;
     private String uitemplate;
+    private boolean disabled;
     private LocalDateTime availablefrom;
     private LocalDateTime availableto;
     private Collection<AttrValueCategory> attributes = new ArrayList<>(0);
@@ -142,6 +143,16 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     @Override
     public void setUitemplate(String uitemplate) {
         this.uitemplate = uitemplate;
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    @Override
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     @Override

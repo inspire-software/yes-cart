@@ -144,31 +144,23 @@ export interface CategoryVO {
   productTypeName : string;
 
   name : string;
-
   guid  : string;
-
   displayNames :  Pair<string, string>[];
-
   description : string;
 
   uitemplate  : string;
 
+  disabled : boolean;
   availablefrom : Date;
-
   availableto : Date;
 
   uri  : string;
 
   title  : string;
-
   metakeywords  : string;
-
   metadescription  : string;
-
   displayTitles : Pair<string, string>[];
-
   displayMetakeywords : Pair<string, string>[];
-
   displayMetadescriptions : Pair<string, string>[];
 
   navigationByAttributes : boolean;

@@ -89,7 +89,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
       pimOutdated: false,
       pimUpdated: null,
       tag: null,
-      availablefrom: null, availableto: null,
+      disabled: false, availablefrom: null, availableto: null,
       availability: 1,
       brand: null, productType: null, productCategories: [],
       name: '', description: null, displayNames: [],

@@ -204,6 +204,20 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
     void setPimUpdated(Instant pimUpdated);
 
 
+    /**
+     * Flag to denote if object is disabled on not.
+     *
+     * @return true if object is disabled
+     */
+    boolean isDisabled();
+
+    /**
+     * Flag to denote if object is disabled on not.
+     *
+     * @param disabled true if object is disabled
+     */
+    void setDisabled(boolean disabled);
+
 
     /**
      * Get start of product availability.

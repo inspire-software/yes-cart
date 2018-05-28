@@ -134,7 +134,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Override
     public List<Product> findProductByCategory(final long categoryId) {
-        return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID", categoryId, now());
+        return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID", categoryId, now(), Boolean.FALSE);
     }
 
     LocalDateTime now() {
@@ -510,7 +510,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 firstResult,
                 maxResults,
                 categoryId,
-                now()
+                now(),
+                Boolean.FALSE
         );
     }
 
@@ -611,7 +612,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Override
     public List<Long> findProductIdsByUnavailableBefore(final LocalDateTime before) {
-        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.AVAILABLETO", before);
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.AVAILABLETO", before, Boolean.TRUE);
     }
 
     /**
@@ -705,7 +706,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @Override
     public int getProductQty(final long categoryId) {
         return Integer.valueOf(
-                String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, now())));
+                String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, now(), Boolean.FALSE)));
     }
 
 

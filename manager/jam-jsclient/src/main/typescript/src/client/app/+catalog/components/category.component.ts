@@ -108,6 +108,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       'description': [''],
       'rank': ['', YcValidators.requiredRank],
       'uitemplate': ['', YcValidators.nonBlankTrimmed],
+      'disabled': [''],
       'availablefrom': ['', YcValidators.validDate],
       'availableto': ['', YcValidators.validDate],
       'uri': ['', validUri],

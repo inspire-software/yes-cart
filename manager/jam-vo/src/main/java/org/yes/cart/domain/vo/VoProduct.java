@@ -75,6 +75,9 @@ public class VoProduct {
     @DtoField(value = "tag")
     private String tag;
 
+    @DtoField(value = "disabled")
+    private boolean disabled;
+
     @DtoField(value = "availablefrom")
     private LocalDateTime availablefrom;
 
@@ -258,6 +261,14 @@ public class VoProduct {
 
     public void setTag(final String tag) {
         this.tag = tag;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     public LocalDateTime getAvailablefrom() {

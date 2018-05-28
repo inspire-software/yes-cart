@@ -246,3 +246,17 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11167,  'JOB_CACHE_EVICT_PAUSE', 'JOB_CACHE_EVICT_PAUSE',  0,  NULL,  'Job\\Evict frontend cache: pause image vault scanning',
     'Pause frontend cache eviction (if paused updates in admin will not take effect unless manual cache evict is triggered)',  1008, 1000, 0, 0, 0, 0);
 
+--
+-- YC-889 Products, Categories and Content available flag
+--
+
+alter table TPRODUCT add column DISABLED bit default 0;
+-- alter table TPRODUCT add column DISABLED smallint DEFAULT 0;
+create index PRODUCT_DISABLED on TPRODUCT (DISABLED);
+
+alter table TCATEGORY add column DISABLED bit default 0;
+-- alter table TCATEGORY add column DISABLED smallint DEFAULT 0;
+create index CAT_DISABLED on TCATEGORY (DISABLED);
+
+
+

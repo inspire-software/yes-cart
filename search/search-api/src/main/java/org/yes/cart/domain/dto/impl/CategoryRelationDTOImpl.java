@@ -42,6 +42,8 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
 
     private String displayName;
 
+    private boolean disabled;
+
     private LocalDateTime availablefrom;
 
     private LocalDateTime availableto;
@@ -56,6 +58,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
                                    final int rank,
                                    final String name,
                                    final String displayName,
+                                   final boolean disabled,
                                    final LocalDateTime availablefrom,
                                    final LocalDateTime availableto) {
         this.categoryId = categoryId;
@@ -65,6 +68,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         this.name = name;
         this.guid = guid;
         this.displayName = displayName;
+        this.disabled = disabled;
         this.availablefrom = availablefrom;
         this.availableto = availableto;
     }
@@ -139,6 +143,22 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
     @Override
     public void setRank(final int rank) {
         this.rank = rank;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     /**

@@ -121,6 +121,8 @@ export interface ProductVO {
   pimUpdated : Date;
 
   tag : string;
+
+  disabled : boolean;
   availablefrom : Date;
   availableto : Date;
 

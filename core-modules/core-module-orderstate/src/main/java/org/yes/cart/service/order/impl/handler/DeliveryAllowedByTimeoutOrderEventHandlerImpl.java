@@ -64,6 +64,9 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
             for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
                 final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+                if (product.isDisabled()) {
+                    return false; // no transition, because it is disabled (manual cancel order flow)
+                }
                 final LocalDateTime availableFrom = product.getAvailablefrom();
                 if ((availableFrom != null) && (availableFrom.isAfter(now))) {
                     return false; // no transition, because need to wait

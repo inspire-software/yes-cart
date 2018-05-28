@@ -329,14 +329,14 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
             switch (availability) {
                 case Product.AVAILABILITY_PREORDER:
                     // For preorders check only available to date since that is the whole point of preorders
-                    return DomainApiUtils.isObjectAvailableNow(true, null, entity.getProduct().getAvailableto(), now);
+                    return DomainApiUtils.isObjectAvailableNow(!entity.getProduct().isDisabled(), null, entity.getProduct().getAvailableto(), now);
                 case Product.AVAILABILITY_STANDARD:
                 case Product.AVAILABILITY_BACKORDER:
                 case Product.AVAILABILITY_ALWAYS:
                 case Product.AVAILABILITY_SHOWROOM:
                 default:
                     // standard, showroom, always and backorder must be in product date range
-                    return DomainApiUtils.isObjectAvailableNow(true, entity.getProduct().getAvailablefrom(), entity.getProduct().getAvailableto(), now);
+                    return DomainApiUtils.isObjectAvailableNow(!entity.getProduct().isDisabled(), entity.getProduct().getAvailablefrom(), entity.getProduct().getAvailableto(), now);
             }
 
         }

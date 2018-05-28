@@ -496,7 +496,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
         assertNotNull("No product exists: " + skuCode, product);
         product.setAvailablefrom(availableFrom);
         productService.update(product);
-        assertEquals(expectedAvailable, DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), TimeContext.getLocalDateTime()));
+        assertEquals(expectedAvailable, DomainApiUtils.isObjectAvailableNow(!product.isDisabled(), product.getAvailablefrom(), product.getAvailableto(), TimeContext.getLocalDateTime()));
     }
 
     // Common asserts below this line ---------------------------------------------------------

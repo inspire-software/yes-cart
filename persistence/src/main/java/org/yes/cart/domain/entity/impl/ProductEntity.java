@@ -50,6 +50,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private boolean pimOutdated;
     private Instant pimUpdated;
 
+    private boolean disabled;
     private LocalDateTime availablefrom;
     private LocalDateTime availableto;
     private String name;
@@ -168,6 +169,16 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @Override
     public void setPimUpdated(final Instant pimUpdated) {
         this.pimUpdated = pimUpdated;
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    @Override
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     @Override

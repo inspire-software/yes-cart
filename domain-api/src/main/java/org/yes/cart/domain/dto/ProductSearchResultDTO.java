@@ -183,6 +183,8 @@ public interface ProductSearchResultDTO extends Identifiable {
      * Get start of product availability.
      * Null - product has not start date, means no limitation.
      *
+     * Note that search result does not have isDisabled() because it would not be part of the index if it was
+     *
      * @return start of product availability.
      */
     LocalDateTime getAvailablefrom();
@@ -197,6 +199,8 @@ public interface ProductSearchResultDTO extends Identifiable {
     /**
      * Get end of product availability.
      * Null - product has not end date, means no limitation.
+     *
+     * Note that search result does not have isDisabled() because it would not be part of the index if it was
      *
      * @return end of product availability.
      */

@@ -190,7 +190,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
     private void appendCategory(final OutputStreamWriter writer, final Category category, final Set<Long> accessible, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
-        if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)) {
+        if (DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
 
             appendCategoryLoc(writer, category, languages, urlBase);
 
@@ -229,7 +229,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
     private void appendContent(final OutputStreamWriter writer, final Category content, final boolean childInclude, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
-        if (DomainApiUtils.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
+        if (DomainApiUtils.isObjectAvailableNow(!content.isDisabled(), content.getAvailablefrom(), content.getAvailableto(), now)) {
 
             final boolean include = CentralViewLabel.INCLUDE.equals(content.getUitemplate()) ||
                     childInclude && StringUtils.isBlank(content.getUitemplate());
@@ -262,7 +262,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         productService.findAllIterator(product -> {
 
-            if (DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), now)) {
+            if (DomainApiUtils.isObjectAvailableNow(!product.isDisabled(), product.getAvailablefrom(), product.getAvailableto(), now)) {
 
                 try {
                     for (final ProductCategory productCategory : product.getProductCategory()) {

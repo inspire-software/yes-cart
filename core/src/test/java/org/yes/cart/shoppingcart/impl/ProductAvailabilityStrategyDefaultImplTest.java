@@ -357,6 +357,7 @@ public class ProductAvailabilityStrategyDefaultImplTest {
             allowing(sku).getProduct(); will(returnValue(product));
             allowing(sku).getCode(); will(returnValue("ABC"));
             allowing(product).getProductId(); will(returnValue(123L));
+            allowing(product).isDisabled(); will(returnValue(false));
             allowing(product).getAvailablefrom(); will(returnValue(null));
             allowing(product).getAvailableto(); will(returnValue(null));
             allowing(product).getAvailability(); will(returnValue(availability));

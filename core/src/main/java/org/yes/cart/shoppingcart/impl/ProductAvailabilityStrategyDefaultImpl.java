@@ -55,7 +55,7 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);
         final Map<String, BigDecimal> qty = skuWarehouseService.getProductAvailableToSellQuantity(product.getProductId(), warehouses);
-        final boolean availableNow = isAvailableNow(product.getAvailability(), product.getAvailablefrom(), product.getAvailableto());
+        final boolean availableNow = isAvailableNow(product.getAvailability(), !product.isDisabled(), product.getAvailablefrom(), product.getAvailableto());
 
         return new ProductAvailabilityModelImpl(
                 product.getDefaultSku().getCode(),
@@ -69,7 +69,7 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSearchResultDTO product) {
 
         final Map<String, BigDecimal> skuInventory = product.getQtyOnWarehouse(shopId);
-        final boolean availableNow = isAvailableNow(product.getAvailability(), product.getAvailablefrom(), product.getAvailableto());
+        final boolean availableNow = isAvailableNow(product.getAvailability(), true, product.getAvailablefrom(), product.getAvailableto());
 
         return new ProductAvailabilityModelImpl(
                 product.getDefaultSkuCode(),
@@ -85,7 +85,7 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
         final Product product = sku.getProduct();
         final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);
         final Map<String, BigDecimal> qty = skuWarehouseService.getProductSkuAvailableToSellQuantity(sku.getCode(), warehouses);
-        final boolean availableNow = isAvailableNow(product.getAvailability(), product.getAvailablefrom(), product.getAvailableto());
+        final boolean availableNow = isAvailableNow(product.getAvailability(), !product.isDisabled(), product.getAvailablefrom(), product.getAvailableto());
 
         return new ProductAvailabilityModelImpl(
                 sku.getCode(),
@@ -109,12 +109,12 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
                 qty);
     }
 
-    private boolean isAvailableNow(final int availability, final LocalDateTime from, final LocalDateTime to) {
+    private boolean isAvailableNow(final int availability, final boolean enabled, final LocalDateTime from, final LocalDateTime to) {
         final LocalDateTime now = now();
         if (availability == Product.AVAILABILITY_PREORDER) {
-            return DomainApiUtils.isObjectAvailableNow(true, null, to, now);
+            return DomainApiUtils.isObjectAvailableNow(enabled, null, to, now);
         }
-        return DomainApiUtils.isObjectAvailableNow(true, from, to, now);
+        return DomainApiUtils.isObjectAvailableNow(enabled, from, to, now);
     }
 
     private LocalDateTime now() {

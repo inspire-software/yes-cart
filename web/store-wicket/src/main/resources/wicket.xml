@@ -246,8 +246,9 @@
     <bean id="wicketCentralViewProvider" class="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="categoryService"/>
-        <constructor-arg index="2" ref="wicketRendererPanelMap"/>
-        <constructor-arg index="3" ref="wicketCategoryTypeMap"/>
+        <constructor-arg index="2" ref="contentService"/>
+        <constructor-arg index="3" ref="wicketRendererPanelMap"/>
+        <constructor-arg index="4" ref="wicketCategoryTypeMap"/>
     </bean>
 
     <bean id="sitemapXmlResource" class="org.yes.cart.web.resource.SitemapXmlResource">
@@ -287,10 +288,11 @@
     <bean id="breadCrumbsBuilder" class="org.yes.cart.web.page.component.breadcrumbs.impl.BreadCrumbsBuilderImpl">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="categoryService"/>
-        <constructor-arg index="2" ref="currencySymbolService"/>
-        <constructor-arg index="3" ref="priceNavigation"/>
-        <constructor-arg index="4" ref="attributeService"/>
-        <constructor-arg index="5" ref="wicketUtil"/>
+        <constructor-arg index="2" ref="contentService"/>
+        <constructor-arg index="3" ref="currencySymbolService"/>
+        <constructor-arg index="4" ref="priceNavigation"/>
+        <constructor-arg index="5" ref="attributeService"/>
+        <constructor-arg index="6" ref="wicketUtil"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

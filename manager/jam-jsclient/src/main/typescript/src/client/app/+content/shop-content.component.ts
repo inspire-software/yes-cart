@@ -100,7 +100,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
       rank: 500,
       name: '', guid: null, displayNames: [], description: null,
       uitemplate: 'content',
-      availablefrom: null, availableto: null,
+      disabled: false, availablefrom: null, availableto: null,
       uri: null, title: null, metakeywords: null, metadescription: null, displayTitles: [], displayMetakeywords: [], displayMetadescriptions: [],
       children: [],
       contentBodies: []

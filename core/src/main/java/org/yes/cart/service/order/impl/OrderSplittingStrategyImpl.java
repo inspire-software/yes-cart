@@ -193,24 +193,27 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         final ProductSku productSku = productService.getProductSkuByCode(sku);
         final int availability;
+        final boolean enabled;
         final LocalDateTime availableFrom;
         final LocalDateTime availableTo;
         final boolean digital;
         if (productSku != null) {
             final Product product = productSku.getProduct();
             availability = product.getAvailability();
+            enabled = !product.isDisabled();
             availableFrom = product.getAvailablefrom();
             availableTo = product.getAvailableto();
             digital = product.getProducttype().isDigital();
         } else { // default behaviour for SKU not in PIM
             availability = Product.AVAILABILITY_STANDARD;
+            enabled = true;
             availableFrom = null;
             availableTo = null;
             digital = false;
         }
 
-        final boolean isAvailableNow = availability != Product.AVAILABILITY_SHOWROOM && DomainApiUtils.isObjectAvailableNow(true, availableFrom, availableTo, now);
-        final boolean isAvailableLater = availability == Product.AVAILABILITY_PREORDER && DomainApiUtils.isObjectAvailableNow(true, null, availableTo, now);
+        final boolean isAvailableNow = availability != Product.AVAILABILITY_SHOWROOM && DomainApiUtils.isObjectAvailableNow(enabled, availableFrom, availableTo, now);
+        final boolean isAvailableLater = availability == Product.AVAILABILITY_PREORDER && DomainApiUtils.isObjectAvailableNow(enabled, null, availableTo, now);
 
         // Must not create orders with items that are unavailable
         if (!isAvailableNow && !isAvailableLater) {

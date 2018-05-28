@@ -495,8 +495,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
             final LocalDateTime now = now();
             final int availability = sku.getProduct().getAvailability();
-            final boolean isAvailableNow = availability != Product.AVAILABILITY_SHOWROOM && DomainApiUtils.isObjectAvailableNow(true, sku.getProduct().getAvailablefrom(), sku.getProduct().getAvailableto(), now);
-            final boolean isAvailableLater = availability == Product.AVAILABILITY_PREORDER && DomainApiUtils.isObjectAvailableNow(true, null, sku.getProduct().getAvailableto(), now);
+            final boolean isAvailableNow = availability != Product.AVAILABILITY_SHOWROOM && DomainApiUtils.isObjectAvailableNow(!sku.getProduct().isDisabled(), sku.getProduct().getAvailablefrom(), sku.getProduct().getAvailableto(), now);
+            final boolean isAvailableLater = availability == Product.AVAILABILITY_PREORDER && DomainApiUtils.isObjectAvailableNow(!sku.getProduct().isDisabled(), null, sku.getProduct().getAvailableto(), now);
 
             if (!isAvailableNow && !isAvailableLater) {
                 final I18NModel name = new FailoverStringI18NModel(sku.getDisplayName(), sku.getName());

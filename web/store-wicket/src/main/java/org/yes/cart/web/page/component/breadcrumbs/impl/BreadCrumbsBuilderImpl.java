@@ -28,7 +28,10 @@ import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.search.util.SearchUtil;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsBuilder;
 import org.yes.cart.web.page.component.breadcrumbs.Crumb;
 import org.yes.cart.web.support.constants.CentralViewLabel;
@@ -37,7 +40,11 @@ import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Bread crumbs builder produce category and
@@ -51,18 +58,18 @@ import java.util.*;
  */
 public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
-
     private final ShopService shopService;
     private final CategoryService categoryService;
+    private final ContentService contentService;
     private final CurrencySymbolService currencySymbolService;
     private final PriceNavigation priceNavigation;
     private final AttributeService attributeService;
     private final WicketUtil wicketUtil;
 
     /**
-     *
      * @param shopService           shop service
      * @param categoryService       category service
+     * @param contentService        content service
      * @param currencySymbolService currency symbols for price crumbs
      * @param priceNavigation       price navigation
      * @param attributeService      attribute service
@@ -70,6 +77,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      */
     public BreadCrumbsBuilderImpl(final ShopService shopService,
                                   final CategoryService categoryService,
+                                  final ContentService contentService,
                                   final CurrencySymbolService currencySymbolService,
                                   final PriceNavigation priceNavigation,
                                   final AttributeService attributeService,
@@ -77,6 +85,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         this.shopService = shopService;
 
         this.categoryService = categoryService;
+        this.contentService = contentService;
         this.currencySymbolService = currencySymbolService;
         this.priceNavigation = priceNavigation;
         this.attributeService = attributeService;
@@ -89,6 +98,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     @Cacheable(value = "breadCrumbBuilder-breadCrumbs")
     public List<Crumb> getBreadCrumbs(final String locale,
                                       final long shopId,
+                                      final long customerShopId,
                                       final long categoryId,
                                       final PageParameters pageParameters,
                                       final Set<Long> shopCategoryIds,
@@ -97,7 +107,8 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                       final String tagPrefix) {
 
         final List<Crumb> crumbs = new ArrayList<>();
-        crumbs.addAll(getCategoriesCrumbs(shopId, categoryId, shopCategoryIds, pageParameters.getNamedKeys().contains(WebParametersKeys.CONTENT_ID)));
+        final boolean isContent = pageParameters.getNamedKeys().contains(WebParametersKeys.CONTENT_ID);
+        crumbs.addAll(getCategoriesCrumbs(shopId, customerShopId, categoryId, shopCategoryIds, isContent));
         crumbs.addAll(getFilteredNavigationCrumbs(locale, pageParameters, pricePrefix, queryPrefix, tagPrefix));
         return crumbs;
     }
@@ -112,13 +123,20 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         return navigationCrumbs;
     }
 
-    private List<Crumb> getCategoriesCrumbs(final long shopId, final long categoryId, final Set<Long> shopCategoryIds, final boolean isContent) {
-        final List<Crumb> categoriesCrumbs = new ArrayList<>();
+    private List<Crumb> getCategoriesCrumbs(final long shopId,
+                                            final long customerShopId,
+                                            final long categoryId,
+                                            final Set<Long> shopCategoryIds,
+                                            final boolean isContent) {
+        final List<Crumb> crumbs = new ArrayList<>();
         if (categoryId > 0) {
-            fillCategories(categoriesCrumbs, shopId, categoryId, shopCategoryIds, isContent);
-            Collections.reverse(categoriesCrumbs);
+            if (isContent) {
+                fillContent(crumbs, shopId, categoryId, shopCategoryIds, now());
+            } else {
+                fillCategories(crumbs, customerShopId, categoryId, shopCategoryIds, now());
+            }
         }
-        return categoriesCrumbs;
+        return crumbs;
     }
 
 
@@ -128,25 +146,90 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      * @param categoriesCrumbs the crumbs list
      * @param shopId           the current shop id
      * @param categoryId       the current category id
-     * @param isContent        true if this is content hierarchy, category otherwise
+     * @param now              for availability check
      */
-    private void fillCategories(final List<Crumb> categoriesCrumbs, final long shopId, final long categoryId, final Set<Long> shopCategoryIds, final boolean isContent) {
+    private boolean fillContent(final List<Crumb> categoriesCrumbs,
+                                final long shopId,
+                                final long categoryId,
+                                final Set<Long> shopCategoryIds,
+                                final LocalDateTime now) {
         if (categoryId > 0L && shopCategoryIds.contains(categoryId)) {
             final Category category = categoryService.getById(categoryId);
             if (!category.isRoot() && !CentralViewLabel.INCLUDE.equals(category.getUitemplate())) {
-                categoriesCrumbs.add(
-                        new Crumb("category", category.getName(),
-                                category.getDisplayName(), getCategoryLinkParameters(categoryId, isContent),
-                                getRemoveCategoryLinkParameters(category, shopCategoryIds, isContent)
-                        )
-                );
 
-                final Long parentId = shopService.getShopCategoryParentId(shopId, categoryId);
-                if (parentId != null) {
-                    fillCategories(categoriesCrumbs, shopId, parentId, shopCategoryIds, isContent);
+                if (!DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+                    return false; // Not available
                 }
+
+                boolean parentAvailable = true;
+
+                final long parentId = category.getParentId();
+                if (parentId > 0L) {
+                    parentAvailable = fillContent(categoriesCrumbs, shopId, parentId, shopCategoryIds, now);
+                }
+
+                if (parentAvailable) {
+                    categoriesCrumbs.add(
+                            new Crumb("category", category.getName(),
+                                    category.getDisplayName(), getCategoryLinkParameters(categoryId, true),
+                                    getRemoveCategoryLinkParameters(category, shopCategoryIds, true)
+                            )
+                    );
+                }
+
+                return parentAvailable;
+
             }
         }
+        return true; // reached the top
+    }
+
+    /**
+     * Recursive function to reverse build the breadcrumbs by categories, starting from currently selected one.
+     *
+     * @param categoriesCrumbs the crumbs list
+     * @param customerShopId   the current shop id
+     * @param categoryId       the current category id
+     * @param now              for availability check
+     */
+    private boolean fillCategories(final List<Crumb> categoriesCrumbs,
+                                   final long customerShopId,
+                                   final long categoryId,
+                                   final Set<Long> shopCategoryIds,
+                                   final LocalDateTime now) {
+        if (categoryId > 0L && shopCategoryIds.contains(categoryId)) {
+            final Category category = categoryService.getById(categoryId);
+            if (!category.isRoot()) {
+
+                if (!DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+                    return false; // Not available
+                }
+
+                boolean parentAvailable = true;
+
+                final Long parentId = shopService.getShopCategoryParentId(customerShopId, categoryId);
+                if (parentId != null && parentId > 0L) {
+                    parentAvailable = fillCategories(categoriesCrumbs, customerShopId, parentId, shopCategoryIds, now);
+                }
+
+                if (parentAvailable) {
+                    categoriesCrumbs.add(
+                            new Crumb("category", category.getName(),
+                                    category.getDisplayName(), getCategoryLinkParameters(categoryId, false),
+                                    getRemoveCategoryLinkParameters(category, shopCategoryIds, false)
+                            )
+                    );
+                }
+
+                return parentAvailable;
+
+            }
+        }
+        return true; // reached the top
+    }
+
+    private LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
     }
 
     /**

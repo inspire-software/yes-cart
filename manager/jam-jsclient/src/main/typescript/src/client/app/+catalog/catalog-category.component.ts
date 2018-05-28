@@ -79,7 +79,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
       productTypeId: 0, productTypeName: null,
       name: '', guid: null, displayNames: [], description: null,
       uitemplate: null,
-      availablefrom: null, availableto: null,
+      disabled: false, availablefrom: null, availableto: null,
       uri: null, title: null, metakeywords: null, metadescription: null, displayTitles: [], displayMetakeywords: [], displayMetadescriptions: [],
       navigationByAttributes: false, navigationByPrice: false, navigationByPriceTiers: { tiers: [] }, children: []
     };

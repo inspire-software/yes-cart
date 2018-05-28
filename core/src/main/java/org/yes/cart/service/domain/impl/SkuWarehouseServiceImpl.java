@@ -347,10 +347,10 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             Product product = sku.getProduct();
             if (Product.AVAILABILITY_PREORDER == product.getAvailability()) {
                 // for preorder do not check from date
-                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(true, null, product.getAvailableto(), now());
+                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(!product.isDisabled(), null, product.getAvailableto(), now());
             } else if (Product.AVAILABILITY_BACKORDER == product.getAvailability()) {
                 // for back order check both dates
-                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), now());
+                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(!product.isDisabled(), product.getAvailablefrom(), product.getAvailableto(), now());
             }
         }
         return false;

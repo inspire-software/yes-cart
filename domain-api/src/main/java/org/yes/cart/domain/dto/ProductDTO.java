@@ -258,6 +258,19 @@ public interface ProductDTO extends Identifiable, Guidable {
      */
     void setDescription(String description);
 
+    /**
+     * Flag to denote if object is disabled on not.
+     *
+     * @return true if object is disabled
+     */
+    boolean isDisabled();
+
+    /**
+     * Flag to denote if object is disabled on not.
+     *
+     * @param disabled true if object is disabled
+     */
+    void setDisabled(boolean disabled);
 
     /**
      * Get start of product availability.

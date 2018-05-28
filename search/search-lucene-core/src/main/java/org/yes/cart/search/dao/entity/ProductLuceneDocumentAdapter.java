@@ -516,7 +516,15 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         }
     }
 
-    private void addCategoryFields(final Document document, final Product entity, final Set<Long> available, final LocalDateTime now) {
+    /**
+     * Add category field.
+     *
+     * @param document   document
+     * @param entity     entity
+     * @param available  shop PKs
+     * @param now        time now
+     */
+    protected void addCategoryFields(final Document document, final Product entity, final Set<Long> available, final LocalDateTime now) {
 
         final Set<Long> availableCategories = new HashSet<>();
 
@@ -591,10 +599,16 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
     /**
      * This check should be done only at the lowest level. Catalog is independent of the shops and hence criteria for
-     * category being unavailable is global through settigs of availability dates.
+     * category being unavailable is global through settings of availability dates.
      *
      * Note that we do not consider option to check if this category is reachable by a shop since we want to allow
      * shop category assignment without the need for re-indexing afterwards.
+     *
+     * This algorithm uses category parent IDs which include linked IDs. There is an edge case whereby if the main
+     * branch category is directly attached to the "root" and then linked from a category which is disabled, it
+     * disables this category as the only path to root becomes via the linked category. It is therefore recommended
+     * to have all product categories inside a "catalog" category. E.g. root -> Catalog X -> Laptops instead of
+     * Laptops linking odrectly to root.
      *
      * @param currentId         category PK to check
      * @param now               time now to check availability
@@ -606,7 +620,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         if (currentId != null) {
 
             final CategoryRelationDTO category = shopCategorySupport.getCategoryRelationById(currentId);
-            if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)) {
+            if (DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
 
                 final Set<Long> parentIds = shopCategorySupport.getCategoryParentsIds(category.getCategoryId());
                 if (parentIds.isEmpty()) {
@@ -746,7 +760,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         for (final ProductSku sku : entity.getSku()) {
 
             final boolean preorderInSale = sku.getProduct().getAvailability() == Product.AVAILABILITY_PREORDER &&
-                    DomainApiUtils.isObjectAvailableNow(true, sku.getProduct().getAvailablefrom(), null, now);
+                    DomainApiUtils.isObjectAvailableNow(!sku.getProduct().isDisabled(), sku.getProduct().getAvailablefrom(), null, now);
 
             if (sku.getProduct().getAvailability() != Product.AVAILABILITY_ALWAYS) {
                 final List<SkuWarehouse> inventory = skuWarehouseSupport.getQuantityOnWarehouse(sku.getCode());
@@ -908,14 +922,14 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             switch (availability) {
                 case Product.AVAILABILITY_PREORDER:
                     // For preorders check only available to date since that is the whole point of preorders
-                    return DomainApiUtils.isObjectAvailableNow(true, null, entity.getAvailableto(), now);
+                    return DomainApiUtils.isObjectAvailableNow(!entity.isDisabled(), null, entity.getAvailableto(), now);
                 case Product.AVAILABILITY_STANDARD:
                 case Product.AVAILABILITY_BACKORDER:
                 case Product.AVAILABILITY_ALWAYS:
                 case Product.AVAILABILITY_SHOWROOM:
                 default:
                     // standard, showroom, always and backorder must be in product date range
-                    return DomainApiUtils.isObjectAvailableNow(true, entity.getAvailablefrom(), entity.getAvailableto(), now);
+                    return DomainApiUtils.isObjectAvailableNow(!entity.isDisabled(), entity.getAvailablefrom(), entity.getAvailableto(), now);
             }
 
         }

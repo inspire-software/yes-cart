@@ -21,7 +21,7 @@
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>categorynames(.*).csv(.*)</file-name-mask>
+        <file-name-mask>shopcategorynames(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
@@ -30,14 +30,6 @@
     <select-sql>select p from ShopCategoryEntity p where p.category.guid = {category} and p.shop.code = 'SHOP10'</select-sql>
 
     <import-columns>
-
-        <column-descriptor>
-            <column-index>-1</column-index>
-            <field-type>FIELD</field-type>
-            <name>guid</name>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-        </column-descriptor>
 
         <!-- Category -->
         <column-descriptor>

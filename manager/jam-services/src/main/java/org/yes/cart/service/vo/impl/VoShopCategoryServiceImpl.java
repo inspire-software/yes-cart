@@ -82,7 +82,7 @@ public class VoShopCategoryServiceImpl implements VoShopCategoryService {
                     name = dto.getDisplayNames().get(lang);
                 }
 
-                summary.getCategories().add(MutablePair.of(name, !DomainApiUtils.isObjectAvailableNow(true, dto.getAvailablefrom(), dto.getAvailableto(), now())));
+                summary.getCategories().add(MutablePair.of(name, !DomainApiUtils.isObjectAvailableNow(!dto.isDisabled(), dto.getAvailablefrom(), dto.getAvailableto(), now())));
             }
         } else {
             throw new AccessDeniedException("Access is denied");

@@ -133,6 +133,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       'pimOutdated': [''],
       'pimUpdated': [''],
       'tag': ['', YcValidators.nonBlankTrimmed],
+      'disabled': [''],
       'availablefrom': ['', YcValidators.validDate],
       'availableto': ['', YcValidators.validDate],
       'availability': ['', YcValidators.requiredPositiveNumber],

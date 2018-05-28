@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.ShopCodeContext;
@@ -29,6 +30,7 @@ import org.yes.cart.util.TimeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.AbstractCentralView;
 import org.yes.cart.web.page.component.EmptyCentralView;
+import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.theme.WicketCentralViewProvider;
 
 import java.lang.reflect.Constructor;
@@ -55,15 +57,18 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
     private final ShopService shopService;
     private final CategoryService categoryService;
+    private final ContentService contentService;
 
     public WicketCentralViewProviderImpl(final ShopService shopService,
                                          final CategoryService categoryService,
+                                         final ContentService contentService,
                                          final Map<String, Class<? extends AbstractCentralView>> rendererPanelMap,
                                          final Map<Class<? extends AbstractCentralView>, CategoryType> categoryTypeMap) {
         this.rendererPanelMap = rendererPanelMap;
         this.categoryTypeMap = categoryTypeMap;
         this.shopService = shopService;
         this.categoryService = categoryService;
+        this.contentService = contentService;
     }
 
     /**
@@ -164,23 +169,25 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
     private boolean isCategoryVisibleInShop(final Long categoryId) {
 
         if (categoryId != null) {
-            final Set<Long> catIds = shopService.getShopCategoriesIds(ApplicationDirector.getShoppingCart().getShoppingContext().getCustomerShopId());
+            final long customerShopId = ApplicationDirector.getShoppingCart().getShoppingContext().getCustomerShopId();
+            final Set<Long> catIds = shopService.getShopCategoriesIds(customerShopId);
             if (catIds.contains(categoryId)) {
                 Category category = categoryService.getById(categoryId);
                 final LocalDateTime now = now();
 
-                while (category != null
-                        && DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)
-                        && category.getCategoryId() != category.getParentId()) { // while enabled and not reached root
+                while (category != null && !category.isRoot()) { // while enabled and not reached root
 
-                    if (catIds.contains(categoryId)) {
-
-                        return true;
-
+                    if (!DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+                        LOG.warn("Attempted to access category {} in shop {} but {} category is not available", categoryId, customerShopId, category.getCategoryId());
+                        return false; // not available
                     }
+
                     category = categoryService.getById(category.getParentId());
 
                 }
+
+                return true; // loop finished successfully
+                
             }
         }
         return false;
@@ -193,12 +200,9 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
     /**
      * Check if given content is visible in current shop.
      *
-     * NOTE: we are using categoryService for retrieving content since Breadcrumbs use
-     * categoryService and thus cache will work better
-     *
      * Criteria to satisfy:
      * 1. Content parent must be root content for given shop
-     * 2. Only current content object must satisfy Availablefrom/Availableto time frame
+     * 2. All content in hierarchy leading to content object must satisfy Availablefrom/Availableto time frame
      *
      * @param contentId content to check
      *
@@ -207,26 +211,25 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
     private boolean isContentVisibleInShop(final Long contentId) {
 
         if (contentId != null) {
-            final Set<Long> catIds = shopService.getShopContentIds(ApplicationDirector.getShoppingCart().getShoppingContext().getShopId());
+            final long shopId = ApplicationDirector.getShoppingCart().getShoppingContext().getShopId();
+            final Set<Long> catIds = shopService.getShopContentIds(shopId);
             if (catIds.contains(contentId)) {
-                Category content = categoryService.getById(contentId);
+                Category content = contentService.getById(contentId);
                 final LocalDateTime now = now();
 
-                if (DomainApiUtils.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
+                while (content != null && !content.isRoot() &&  !CentralViewLabel.INCLUDE.equals(content.getUitemplate())) {
 
-                    while (content != null && content.getCategoryId() != content.getParentId()) {
-
-                        if (catIds.contains(content.getCategoryId())) {
-
-                            return true;
-
-                        }
-
-                        content = categoryService.getById(content.getParentId());
-
+                    if (!DomainApiUtils.isObjectAvailableNow(!content.isDisabled(), content.getAvailablefrom(), content.getAvailableto(), now)) {
+                        LOG.warn("Attempted to access content {} in shop {} but {} content is not available", contentId, shopId, content.getCategoryId());
+                        return false; // not available
                     }
 
+                    content = contentService.getById(content.getParentId());
+
                 }
+
+                return true; // loop finished successfully
+
             }
         }
         return false;

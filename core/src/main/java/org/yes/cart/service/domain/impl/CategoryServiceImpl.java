@@ -170,7 +170,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (withAvailability) {
 
             final LocalDateTime now = now();
-            cats.removeIf(cat -> !DomainApiUtils.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now));
+            cats.removeIf(cat -> !DomainApiUtils.isObjectAvailableNow(!cat.isDisabled(), cat.getAvailablefrom(), cat.getAvailableto(), now));
 
         }
         return cats;

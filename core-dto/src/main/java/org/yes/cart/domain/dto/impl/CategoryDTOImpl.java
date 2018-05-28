@@ -75,6 +75,9 @@ public class CategoryDTOImpl implements CategoryDTO {
     @DtoField(value = "uitemplate")
     private String uitemplate;
 
+    @DtoField(value = "disabled")
+    private boolean disabled;
+
     @DtoField(value = "availablefrom")
     private LocalDateTime availablefrom;
 
@@ -353,6 +356,22 @@ public class CategoryDTOImpl implements CategoryDTO {
     @Override
     public void setUitemplate(final String uitemplate) {
         this.uitemplate = uitemplate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     /**

@@ -150,6 +150,10 @@
                   </select>
                 </div>
                 <div class="form-group">
+                  <input formControlName="disabled" name="disabled" type="checkbox" [(ngModel)]="product.disabled">
+                  <label>{{ 'PRODUCT_DISABLED' | translate }}</label>
+                </div>
+                <div class="form-group">
                   <label>{{ 'PRODUCT_FROM' | translate }}</label>
                   <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom">
                   <div [hidden]="productForm.controls['availablefrom'].valid || productForm.controls['availablefrom'].pristine" class="alert alert-danger">

@@ -200,6 +200,7 @@
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
         UITEMPLATE varchar(255),
+        DISABLED bit default 0,
         AVAILABLEFROM datetime,
         AVAILABLETO datetime,
         URI varchar(255) unique,
@@ -620,6 +621,7 @@
         PIM_DISABLED bit not null default 0,
         PIM_OUTDATED bit not null default 0,
         PIM_UPDATED datetime,
+        DISABLED bit default 0,
         AVAILABLEFROM datetime,
         AVAILABLETO datetime,
         NAME varchar(255) not null,
@@ -1321,6 +1323,8 @@
         foreign key (PRODUCTTYPE_ID) 
         references TPRODUCTTYPE (PRODUCTTYPE_ID);
 
+    create index CAT_DISABLED on TCATEGORY (DISABLED);
+
 
     alter table TCATEGORYATTRVALUE
         add index FK_AV_CATEGORY_CATEGORYID (CATEGORY_ID),
@@ -1450,7 +1454,6 @@
         foreign key (MAILTEMPLATEGROUP_ID) 
         references TMAILTEMPLATEGROUP (MAILTEMPLATEGROUP_ID);
 
-
     create index MANAGER_EMAIL on TMANAGER (EMAIL);
 
     alter table TPRODTYPEATTRVIEWGROUP 
@@ -1535,7 +1538,6 @@
         references TATTRIBUTE (CODE);
 
     create index ROLE_CODE on TROLE (CODE);
-
 
     alter table TSHOPADVPLACE 
         add index FK_ADVP_SHOP (SHOP_ID), 
@@ -1623,6 +1625,7 @@
     create index PRODUCT_PCODE on TPRODUCT (PIM_CODE);
     create index PRODUCT_PDISABLED on TPRODUCT (PIM_DISABLED);
     create index PRODUCT_POUTDATED on TPRODUCT (PIM_OUTDATED);
+    create index PRODUCT_DISABLED on TPRODUCT (DISABLED);
     create index SKU_MCODE on TSKU (MANUFACTURER_CODE);
     create index SKU_MPCODE on TSKU (MANUFACTURER_PART_CODE);
     create index SKU_SCODE on TSKU (SUPPLIER_CODE);
@@ -1692,7 +1695,6 @@
         add constraint FK_ORD_COUPON_USAGE
         foreign key (CUSTOMERORDER_ID)
         references TCUSTOMERORDER (CUSTOMERORDER_ID) on delete cascade;
-
 
     create index PROMOTIONCOUPONUSAGE_EMAIL on TPROMOTIONCOUPONUSAGE (CUSTOMER_EMAIL);
 

@@ -170,19 +170,22 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                     final BigDecimal toReserve = det.getQty();
 
                     final int availability;
+                    final boolean enabled;
                     final LocalDateTime availableFrom;
                     final LocalDateTime availableTo;
                     if (product != null) {
                         availability = product.getAvailability();
+                        enabled = !product.isDisabled();
                         availableFrom = product.getAvailablefrom();
                         availableTo = product.getAvailableto();
                     } else { // default behaviour for SKU not in PIM
                         availability = Product.AVAILABILITY_STANDARD;
+                        enabled = true;
                         availableFrom = null;
                         availableTo = null;
                     }
 
-                    final boolean preorder = availability == Product.AVAILABILITY_PREORDER && !DomainApiUtils.isObjectAvailableNow(true, availableFrom, availableTo, now) && DomainApiUtils.isObjectAvailableNow(true, null, availableTo, now);
+                    final boolean preorder = availability == Product.AVAILABILITY_PREORDER && !DomainApiUtils.isObjectAvailableNow(enabled, availableFrom, availableTo, now) && DomainApiUtils.isObjectAvailableNow(enabled, null, availableTo, now);
                     final boolean backorder = availability == Product.AVAILABILITY_BACKORDER;
 
                     final BigDecimal rem = inventoryResolver.reservation(selected, skuCode, toReserve, backorder || preorder);

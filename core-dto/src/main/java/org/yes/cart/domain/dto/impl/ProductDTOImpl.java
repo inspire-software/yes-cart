@@ -77,6 +77,9 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "tag")
     private String tag;
 
+    @DtoField(value = "disabled")
+    private boolean disabled;
+
     @DtoField(value = "availablefrom")
     private LocalDateTime availablefrom;
 
@@ -358,6 +361,22 @@ public class ProductDTOImpl implements ProductDTO {
     @Override
     public void setPimUpdated(final Instant pimUpdated) {
         this.pimUpdated = pimUpdated;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     /**

@@ -972,6 +972,7 @@
                 </comment>
             </column>
         </property>
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="CAT_DISABLED"/>
         <property name="availablefrom" column="AVAILABLEFROM" type="java.time.LocalDateTime"/>
         <property name="availableto" column="AVAILABLETO" type="java.time.LocalDateTime"/>
 
@@ -1075,6 +1076,7 @@
         <property name="pimOutdated" column="PIM_OUTDATED" type="boolean" index="PRODUCT_POUTDATED" not-null="true"/>
         <property name="pimUpdated" column="PIM_UPDATED" type="java.time.Instant" not-null="false"/>
 
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="PRODUCT_DISABLED"/>
         <property name="availablefrom" column="AVAILABLEFROM" type="java.time.LocalDateTime" not-null="false"/>
         <property name="availableto" column="AVAILABLETO" type="java.time.LocalDateTime" not-null="false"/>
 
@@ -2711,6 +2713,7 @@
          l.rank,
          l.name,
          l.displayName,
+         l.disabled,
          l.availablefrom,
          l.availableto
        ) from CategoryEntity l where l.categoryId = ?1
@@ -2754,6 +2757,7 @@
          c.rank,
          c.name,
          c.displayName,
+         c.disabled,
          c.availablefrom,
          c.availableto
        ) from CategoryEntity c where c.parentId = ?1 and c.categoryId <> c.parentId
@@ -2804,6 +2808,7 @@
         <![CDATA[
        select av.val from CategoryEntity c, AttrValueEntityCategory av
        where c.categoryId = av.category.categoryId and c.categoryId = ?1 and av.attributeCode like ?2
+       and (c.disabled = ?4)
        and (c.availablefrom < ?3 OR c.availablefrom IS NULL)
        and (c.availableto > ?3 OR c.availableto IS NULL)
        order by av.attributeCode
@@ -2842,6 +2847,7 @@
        select p from ProductEntity p, ProductCategoryEntity pc
             where p.productId = pc.product.productId
             and pc.category.categoryId = ?1
+            and p.disabled = ?3
             and (p.availablefrom < ?2 OR p.availablefrom IS NULL)
             and (p.availableto > ?2 OR p.availableto IS NULL)
             order by pc.rank
@@ -2853,6 +2859,7 @@
        select count(p) from ProductEntity p, ProductCategoryEntity pc
             where p.productId = pc.product.productId
             and pc.category.categoryId = ?1
+            and p.disabled = ?3
             and (p.availablefrom < ?2 OR p.availablefrom IS NULL)
             and (p.availableto > ?2 OR p.availableto IS NULL)
        ]]>
@@ -2890,7 +2897,7 @@
     <query name="DISCONTINUED.PRODUCTS.AFTER.DATE.CHANGED.AFTER">
         <![CDATA[
        select p.productId from ProductEntity p
-            where p.availableto IS NOT NULL and p.availableto <= ?1 and  p.availableto > ?2
+            where p.disabled = ?3 or (p.availableto IS NOT NULL and p.availableto <= ?1 and  p.availableto > ?2)
        ]]>
     </query>
 
@@ -3364,7 +3371,7 @@
 
     <query name="PRODUCT.IDS.BY.AVAILABLETO">
         <![CDATA[
-                 select p.productId from ProductEntity p   where p.availableto is not null and p.availableto < ?1 order by p.availableto
+                 select p.productId from ProductEntity p   where (p.availableto is null and p.disabled = ?2) or (p.availableto is not null and p.availableto < ?1) order by p.availableto
         ]]>
     </query>
 

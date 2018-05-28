@@ -104,6 +104,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(dto.getProductId() > 0);
         long pk = dto.getProductId();
         LocalDateTime availableFrom = TimeContext.getLocalDateTime();
+        dto.setDisabled(true);
         dto.setAvailablefrom(availableFrom);
         dto.setAvailableto(availableFrom);
         dto.setName("new-name");
@@ -113,6 +114,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dto.setAvailability(Product.AVAILABILITY_ALWAYS);
         dtoService.update(dto);
         dto = dtoService.getById(pk);
+        assertTrue(dto.isDisabled());
         assertEquals(availableFrom, dto.getAvailablefrom());
         assertEquals(availableFrom, dto.getAvailableto());
         assertEquals("new-name", dto.getName());
