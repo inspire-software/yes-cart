@@ -157,6 +157,8 @@
   "PANEL_PIM_EXTERNAL": "External PIM",
   "PANEL_CMS": "CMS",
   "PANEL_CMS_CONTENT": "Content",
+  "PANEL_FSM": "Media data",
+  "PANEL_FSM_REPO": "Media repository",
   "PANEL_MARKETING": "Marketing & Pricing",
   "PANEL_MARKETING_PROMO": "Promotions",
   "PANEL_MARKETING_PRICE": "Price lists",

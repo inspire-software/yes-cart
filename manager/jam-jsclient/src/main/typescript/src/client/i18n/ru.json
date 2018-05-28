@@ -157,6 +157,8 @@
   "PANEL_PIM_EXTERNAL": "Внешний PIM",
   "PANEL_CMS": "CMS",
   "PANEL_CMS_CONTENT": "Контент",
+  "PANEL_FSM": "Мультимедиа",
+  "PANEL_FSM_REPO": "Хранилище мультимедиа",
   "PANEL_MARKETING": "Маркетинг и ценообразование",
   "PANEL_MARKETING_PROMO": "Акции",
   "PANEL_MARKETING_PRICE": "Прайс-листы",

@@ -39,6 +39,15 @@
     <yc-shop-select [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></yc-shop-select>
   </accordion-group>
 
+  <accordion-group #fsm *ngIf="menuType.CMS === true" (click)="onExpandFull('FSM', fsm?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_FSM' | translate }} <i class="fa fa-cloud-upload pull-right" title="{{ 'PANEL_FSM' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_FSM_REPO' | translate }} <i class="fa fa-floppy-o pull-right" title="{{ 'PANEL_FSM_REPO' | translate }}"></i></span>
+      </li>
+    </ul>
+  </accordion-group>
+
   <accordion-group *ngIf="menuType.MRK === true">
     <div accordion-heading>{{ 'PANEL_MARKETING' | translate }} <i class="fa fa-pie-chart pull-right" title="{{ 'PANEL_MARKETING' | translate }}"></i></div>
     <ul class="nav nav-second-level">
@@ -171,7 +180,7 @@
     <div accordion-heading>{{ 'PANEL_HELP' | translate }} <i class="fa fa-question-circle pull-right" title="{{ 'PANEL_HELP' | translate }}"></i></div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/license']" routerLinkActive="bg-info">{{ 'PANEL_HELP_LICENSE' | translate }} <i class="fa fa-certificate pull-right" title="{{ 'PANEL_HELP_LICENSE' | translate }}"></i></a>
+        <a [routerLink]="['/license']" routerLinkActive="bg-info">{{ 'PANEL_HELP_LICENSE' | translate }} <i class="fa fa-drivers-license-o pull-right" title="{{ 'PANEL_HELP_LICENSE' | translate }}"></i></a>
       </li>
       <li>
         <a href="{{ docLink }}" target="_blank">{{ 'PANEL_HELP_DOCS' | translate }} <i class="fa fa-file-text-o pull-right" title="{{ 'PANEL_HELP_DOCS' | translate }}"></i></a>

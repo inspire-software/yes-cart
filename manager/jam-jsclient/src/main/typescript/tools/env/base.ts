@@ -15,7 +15,7 @@ const BaseConfig: EnvConfig = {
   UI_TABLE_PAGE_NUMS: 5,
   UI_ORDER_TOTALS: 'gross',
   UI_DOC_LINK: 'http://www.inspire-software.com/documentation/wiki/docyescart/',
-  UI_COPY_NOTE: '<a href=http://www.yes-cart.org target=_blank>YesCart.org</a>',
+  UI_COPY_NOTE: '<a href=\\"http://www.yes-cart.org\\" target=\\"_blank\\">&copy; YC - pure e-Commerce <i class=\\"fa fa-globe pull-right\\" title=\\"YesCart.org\\"></i></a>',
   UI_LABEL: ''
 };
 
