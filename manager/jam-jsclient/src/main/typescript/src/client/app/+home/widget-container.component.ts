@@ -36,7 +36,7 @@ export class WidgetMapping {
 
 @Component({
   selector: 'yc-widget-container',
-  template: `<ng-template yc-widget></ng-template>`
+  template: `<ng-template ycWidget></ng-template>`
 })
 export class WidgetContainerComponent implements OnInit {
 
