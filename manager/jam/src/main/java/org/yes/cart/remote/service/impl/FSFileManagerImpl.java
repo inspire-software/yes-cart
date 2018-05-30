@@ -1,6 +1,20 @@
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package org.yes.cart.remote.service.impl;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,15 +25,15 @@ import org.yes.cart.bulkcommon.service.ImportDirectorService;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.remote.service.FileManager;
 import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.impl.ZipByteArrayUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * User: denispavlov
@@ -201,30 +215,7 @@ public class FSFileManagerImpl implements FileManager {
 
         if (fileToDownload.exists()) {
 
-            if (fileToDownload.getName().endsWith(".zip")) {
-                // Zip's just download
-                return FileUtils.readFileToByteArray(fileToDownload);
-            } else {
-                // Non zip's, zip first
-                final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                final ZipOutputStream zos = new ZipOutputStream(baos);
-                final InputStream is = new BufferedInputStream(new FileInputStream(fileToDownload));
-
-                byte[] buff = new byte[1024];
-                final ZipEntry entry = new ZipEntry(fileToDownload.getName());
-                zos.putNextEntry(entry);
-
-                int len;
-                while ((len = is.read(buff)) > 0) {
-                    zos.write(buff, 0, len);
-                }
-
-                is.close();
-                zos.closeEntry();
-                zos.close();
-
-                return baos.toByteArray();
-            }
+            return ZipByteArrayUtils.fileToZipBytes(fileToDownload);
 
         }
 

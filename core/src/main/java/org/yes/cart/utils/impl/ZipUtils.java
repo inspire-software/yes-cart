@@ -24,7 +24,6 @@ import java.io.*;
 import java.util.Enumeration;
 
 
-
 /**
  *
  * Modified by I.Azarny to support different entry encoding via apache commons.
@@ -50,6 +49,7 @@ public class ZipUtils {
      *
      * @param archive   given archive
      * @param outputDir given folder
+     *
      * @throws IOException in case of error
      */
     public void unzipArchive(final String archive, final String outputDir) throws IOException {
@@ -60,8 +60,10 @@ public class ZipUtils {
     }
     /**
      * Unzip archive to given folder.
+     *
      * @param archive given archive
      * @param outputDir  given folder
+     *
      * @throws IOException in case of error
      */
 
