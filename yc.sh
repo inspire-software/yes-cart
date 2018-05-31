@@ -232,7 +232,7 @@ build_demo() {
     echo "================================================";
     echo " ";
 
-    "$MVN" clean install -PdevIntellijIDEA,derby,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
+    "$MVN" clean install -PbuildDemo,mysql,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
 
 }
 
