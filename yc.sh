@@ -10,7 +10,7 @@ RUNDIR=`pwd`
 
 YC_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-MVN="$M2_HOME/bin/mvn"
+MVN="mvn"
 
 show_env() {
     echo "================================================";
@@ -50,6 +50,11 @@ show_help() {
     echo "  derbygob  - start derby server (in back mode) ";
     echo "  derbyend  - stop derby server                 ";
     echo "  derbycon  - connect to derby with ij          ";
+    echo "  derbycon  - connect to derby with ij          ";
+    echo "                                                ";
+    echo "  builddemo - build demo                        ";
+    echo "  buildidea - build idea                        ";
+    echo "  builddev  - build dev                         ";
     echo "                                                ";
     echo "  aws       - initialise aws image              ";
     echo "================================================";
@@ -217,6 +222,39 @@ start_nullsmtp() {
     echo "================================================";
 
     java -jar "$YC_HOME/env/devnullsmtp/DevNullSmtp.jar" &
+
+}
+
+build_demo() {
+
+    echo "================================================";
+    echo " Build DEMO           ";
+    echo "================================================";
+    echo " ";
+
+    "$MVN" clean install -PdevIntellijIDEA,derby,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
+
+}
+
+build_dev() {
+
+    echo "================================================";
+    echo " Build DEV           ";
+    echo "================================================";
+    echo " ";
+
+    "$MVN" clean install -Pdev,derby,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
+
+}
+
+build_idea() {
+
+    echo "================================================";
+    echo " Build DEV           ";
+    echo "================================================";
+    echo " ";
+
+    "$MVN" clean install -PdevIntellijIDEA,derby,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
 
 }
 
@@ -429,6 +467,24 @@ then
     then
         cd "$YC_HOME"
         start_nullsmtp;
+        cd "$RUNDIR"
+        exit 0;
+    elif [ $1 = "builddemo" ];
+    then
+        cd "$YC_HOME"
+        build_demo;
+        cd "$RUNDIR"
+        exit 0;
+    elif [ $1 = "buildidea" ];
+    then
+        cd "$YC_HOME"
+        build_idea;
+        cd "$RUNDIR"
+        exit 0;
+    elif [ $1 = "builddev" ];
+    then
+        cd "$YC_HOME"
+        build_dev;
         cd "$RUNDIR"
         exit 0;
     elif [ $1 = "aws" ];

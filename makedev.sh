@@ -5,4 +5,4 @@
 #
 # @author Denys Pavlov
 
-mvn clean install -Pdev,derby,ftEmbededLucene,paymentBase -DskipTests=true
+mvn clean install -Pdev,derby,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
