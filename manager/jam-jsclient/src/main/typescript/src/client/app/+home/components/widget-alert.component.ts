@@ -19,7 +19,7 @@ import { DashboardWidgetVO } from '../../shared/model/index';
 @Component({
   selector: 'yc-widget-alert',
   template: `    
-  <div class="col-xs-12">
+  <div class="col-xs-12" *ngIf="widget.data.length > 0">
     <div class="panel panel-red">
       <div class="panel-heading">
         <div class="row">
