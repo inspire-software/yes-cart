@@ -43,6 +43,7 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
     private static final Logger LOG = LoggerFactory.getLogger(ShopCustomerCustomisationSupportImpl.class);
 
     private static final String GUEST_TYPE = AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST;
+    private static final String EMAIL_TYPE = AttributeNamesKeys.Cart.CUSTOMER_TYPE_EMAIL;
 
     private final CustomerService customerService;
     private final AttributeService attributeService;
@@ -156,10 +157,16 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
             }
         }
 
-        final List<String> allowed = getSupportedRegistrationFormAttributesAsList(shop, customerType);
+        List<String> allowed = getSupportedRegistrationFormAttributesAsList(shop, customerType);
         if (CollectionUtils.isEmpty(allowed)) {
-            // must explicitly configure to avoid exposing personal data
-            return Collections.emptyList();
+
+            if (EMAIL_TYPE.equals(customerType)) {
+                // fallback for non-configured email attribute
+                allowed = Collections.singletonList("email"); // This is Customer attribute
+            }  else {
+                // must explicitly configure to avoid exposing personal data
+                return Collections.emptyList();
+            }
         }
 
         final List<AttrValueCustomer> attrValueCollection = customerService.getRankedAttributeValues(null);
