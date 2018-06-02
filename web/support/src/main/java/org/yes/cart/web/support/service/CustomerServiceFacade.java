@@ -188,8 +188,10 @@ public interface CustomerServiceFacade {
 
     /**
      * List of custom attributes eligible for profile edit form.
-     * This will be available to the shoppers to edit as they please, so
-     * need to restrict attributes that should be hidden from shoppers.
+     *
+     * Depends on the Shop configuration for customer type specific profile settings.
+     * See:
+     * {@link org.yes.cart.constants.AttributeNamesKeys.Shop#CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX}
      *
      * @param shop shop
      * @param customerType customer type {@link Customer#getCustomerType()}
@@ -200,8 +202,10 @@ public interface CustomerServiceFacade {
 
     /**
      * List of custom attributes eligible for profile edit form.
-     * This will be available to the shoppers to edit as they please, so
-     * need to restrict attributes that should be hidden from shoppers.
+     *
+     * Depends on the Shop configuration for customer type specific profile settings.
+     * See:
+     * {@link org.yes.cart.constants.AttributeNamesKeys.Shop#CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX}
      *
      * @param shop shop
      * @param customerType customer type {@link Customer#getCustomerType()}
@@ -214,9 +218,11 @@ public interface CustomerServiceFacade {
 
     /**
      * List of custom attributes eligible for profile edit form.
-     * CPOINT - This will be available to the shoppers to edit as they please, so
-     * need to restrict attributes that should be hidden from shoppers.
      *
+     * Depends on the Shop configuration for customer type specific profile settings.
+     * See:
+     * {@link org.yes.cart.constants.AttributeNamesKeys.Shop#CUSTOMER_PROFILE_ATTRIBUTES_READONLY_PREFIX}
+     * {@link org.yes.cart.constants.AttributeNamesKeys.Shop#CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_PREFIX}
      *
      * @param shop shop
      * @param customer customer

@@ -259,4 +259,9 @@ alter table TCATEGORY add column DISABLED bit default 0;
 create index CAT_DISABLED on TCATEGORY (DISABLED);
 
 
+--
+-- YC-868 Customer registration improvements
+--
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11168,  'regAddressForm', 'regAddressForm',  1,  'regAddressForm',  'Address form for registration marker',  'Address form for registration marker', 1000,  1006, 0, 0, 0, 0);

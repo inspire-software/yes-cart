@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -46,17 +47,20 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     private final AttributeService attributeService;
     private final PassPhraseGenerator phraseGenerator;
     private final CustomerCustomisationSupport customerCustomisationSupport;
+    private final AddressCustomisationSupport addressCustomisationSupport;
 
     public CustomerServiceFacadeImpl(final CustomerService customerService,
                                      final CustomerWishListService customerWishListService,
                                      final AttributeService attributeService,
                                      final PassPhraseGenerator phraseGenerator,
-                                     final CustomerCustomisationSupport customerCustomisationSupport) {
+                                     final CustomerCustomisationSupport customerCustomisationSupport,
+                                     final AddressCustomisationSupport addressCustomisationSupport) {
         this.customerService = customerService;
         this.customerWishListService = customerWishListService;
         this.attributeService = attributeService;
         this.phraseGenerator = phraseGenerator;
         this.customerCustomisationSupport = customerCustomisationSupport;
+        this.addressCustomisationSupport = addressCustomisationSupport;
     }
 
     /** {@inheritDoc} */
@@ -152,13 +156,16 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         }
 
         final Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
-
         customer.setEmail(email);
-        customer.setSalutation((String) registrationData.get("salutation"));
-        customer.setFirstname((String) registrationData.get("firstname"));
-        customer.setLastname((String) registrationData.get("lastname"));
-        customer.setMiddlename((String) registrationData.get("middlename"));
         customer.setCustomerType(customerType);
+
+        final Map<String, String> addressFormParamKeys = mapAddressFormParameters(customer, customerType, configShop, registrationData);
+
+        // Allow fallback, so that we do not need to repeat fields if we include address form
+        customer.setSalutation(getFallbackParameter(registrationData, "salutation", addressFormParamKeys.get("salutation")));
+        customer.setFirstname(getFallbackParameter(registrationData, "firstname", addressFormParamKeys.get("firstname")));
+        customer.setLastname(getFallbackParameter(registrationData, "lastname", addressFormParamKeys.get("lastname")));
+        customer.setMiddlename(getFallbackParameter(registrationData, "middlename", addressFormParamKeys.get("middlename")));
 
         if (StringUtils.isBlank(customer.getEmail()) ||
                 StringUtils.isBlank(customer.getFirstname()) ||
@@ -173,14 +180,89 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         customer.setPassword(password); // aspect will create hash but we need to generate password to be able to auto-login
         customer.setPasswordExpiry(null); // TODO: YC-906 Create password expiry flow for customers
 
-        registerCustomerCustomAttributes(customer, customerType, configShop, registrationData);
+        registerCustomerAddress(customer, customerType, configShop, registrationData, addressFormParamKeys);
+
+        registerCustomerCustomAttributes(customer, customerType, configShop, registrationData, addressFormParamKeys);
 
         customerService.create(customer, registrationShop);
 
         return password; // email is sent via RegistrationAspect
     }
 
-    private void registerCustomerCustomAttributes(final Customer customer, final String customerType, final Shop configShop, final Map<String, Object> registrationData) {
+    private String getFallbackParameter(final Map<String, Object> registrationData, final String key1, final String key2) {
+        final String salutation = (String) registrationData.get(key1);
+        if (StringUtils.isNotBlank(salutation)) {
+            return salutation;
+        }
+        return (String) registrationData.get(key2);
+    }
+
+    private Map<String, String> mapAddressFormParameters(final Customer customer, final String customerType, final Shop configShop, final Map<String, Object> registrationData) {
+
+        final String addressType = Address.ADDR_TYPE_SHIPPING;
+        final List<AttrValueWithAttribute> config = addressCustomisationSupport.getShopCustomerAddressAttributes(customer, configShop, addressType);
+        if (CollectionUtils.isNotEmpty(config)) {
+
+            // remap by value
+            final Map<String, String> biDirectionalMap = new HashMap<>();
+            for (final AttrValueWithAttribute attValue : config) {
+                final String param = "regAddressForm.".concat(attValue.getAttributeCode());
+                if (registrationData.containsKey(param)) { // only map submitted parameters
+                    final String prop = attValue.getAttribute().getVal();
+                    biDirectionalMap.put(param, prop);
+                    biDirectionalMap.put(prop, param);
+                }
+            }
+
+            // if this map is not empty then address form was submitted
+            return Collections.unmodifiableMap(biDirectionalMap);
+
+        }
+
+        return Collections.emptyMap();
+
+    }
+
+    private void registerCustomerAddress(final Customer customer,
+                                         final String customerType,
+                                         final Shop configShop,
+                                         final Map<String, Object> registrationData,
+                                         final Map<String, String> addressFormParamKeys) {
+
+        if (!addressFormParamKeys.isEmpty()) {
+
+            final String addressType = Address.ADDR_TYPE_SHIPPING;
+
+            // create address instance
+            final Address regAddress = customerService.getGenericDao().getEntityFactory().getByIface(Address.class);
+            regAddress.setCustomer(customer);
+            regAddress.setAddressType(addressType);
+            regAddress.setDefaultAddress(true);
+            customer.getAddress().add(regAddress);
+
+            final Map<String, Object> attrData = new HashMap<>(registrationData);
+            for (final String key : attrData.keySet()) {
+                if (addressFormParamKeys.containsKey(key)) {
+                    final String prop = addressFormParamKeys.get(key);
+                    final Object val = attrData.get(key);
+                    try {
+                        PropertyUtils.setProperty(regAddress, prop, val);
+                    } catch (Exception e) {
+                        LOG.error("Unable to set address property {}, val {}", prop, val);
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    private void registerCustomerCustomAttributes(final Customer customer,
+                                                  final String customerType,
+                                                  final Shop configShop,
+                                                  final Map<String, Object> registrationData,
+                                                  final Map<String, String> addressFormParamKeys) {
+
         final Map<String, Object> attrData = new HashMap<>(registrationData);
         attrData.remove("email");
         attrData.remove("salutation");
@@ -190,9 +272,13 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         attrData.remove("customerType");
         attrData.remove("password");
         attrData.remove("confirmPassword");
-        if (attrData.containsKey("phone") && !attrData.containsKey(AttributeNamesKeys.Customer.CUSTOMER_PHONE)) {
-            attrData.put(AttributeNamesKeys.Customer.CUSTOMER_PHONE, attrData.remove("phone"));
+        final String phone = getFallbackParameter(attrData, "phone", addressFormParamKeys.get("phone1"));
+        if (StringUtils.isNotBlank(phone) && !attrData.containsKey(AttributeNamesKeys.Customer.CUSTOMER_PHONE)) {
+            attrData.put(AttributeNamesKeys.Customer.CUSTOMER_PHONE, phone);
+            attrData.remove("phone");
         }
+        // remove included address form parameters
+        attrData.entrySet().removeIf(entry -> entry.getKey().startsWith("regAddressForm."));
 
         final List<String> allowed = customerCustomisationSupport.getSupportedRegistrationFormAttributesAsList(configShop, customerType);
         final List<String> allowedFull = new ArrayList<>();
@@ -283,7 +369,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             so will leave this.
          */
 
-        registerCustomerCustomAttributes(customer, customerType, registrationShop, registrationData);
+        registerCustomerCustomAttributes(customer, customerType, registrationShop, registrationData, Collections.emptyMap());
 
         customerService.create(customer, registrationShop);
 

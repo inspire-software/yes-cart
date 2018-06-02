@@ -16,17 +16,16 @@
 
 package org.yes.cart.web.page.component.customer.auth;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -35,22 +34,26 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.domain.entity.AttrValueWithAttribute;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.order.impl.CustomerTypeAdapter;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.customer.dynaform.EditorFactory;
+import org.yes.cart.web.page.component.util.CountryModel;
+import org.yes.cart.web.page.component.util.CountryRenderer;
+import org.yes.cart.web.page.component.util.StateModel;
+import org.yes.cart.web.page.component.util.StateRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.AddressBookFacade;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -66,10 +69,15 @@ public class RegisterPanel extends BaseComponent {
     private static final String REGISTER_FORM = "registerForm";
     private static final String CUSTOMER_TYPE_FORM = "customerTypesForm";
     private static final String CUSTOMER_TYPE_RADIO_GROUP = "customerTypesRadioGroup";
-    private final static String FIELDS = "fields";
-    private final static String NAME = "name";
-    private final static String EDITOR = "editor";
-    private final static String CONTENT = "regformContent";
+    private static final String FIELDS = "fields";
+    private static final String NAME = "name";
+    private static final String EDITOR = "editor";
+    private static final String COUNTRY = "country";
+    private static final String STATE = "state";
+    private static final String CONTENT = "regformContent";
+
+    private static final String REG_FORM_CODE = "regAddressForm";
+
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -78,6 +86,9 @@ public class RegisterPanel extends BaseComponent {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
+    private AddressBookFacade addressBookFacade;
 
     @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
     private WicketPagesMounter wicketPagesMounter;
@@ -237,17 +248,107 @@ public class RegisterPanel extends BaseComponent {
 
             add(fields);
 
+            final String addressType = Address.ADDR_TYPE_SHIPPING;
             final String lang = getLocale().getLanguage();
-            final List<AttrValueWithAttribute> reg = getCustomerServiceFacade()
+            final List<AttrValueWithAttribute> allReg = new ArrayList<>();
+            final List<AttrValueWithAttribute> regProf = getCustomerServiceFacade()
                     .getShopRegistrationAttributes(getCurrentShop(), customerType);
 
-            for (final AttrValueWithAttribute attrValue : reg) {
+            final Map<String, AttrValueWithAttribute> countryAndState = new HashMap<>();
 
-                WebMarkupContainer row = new WebMarkupContainer(fields.newChildId());
+            for (final AttrValueWithAttribute attrValue : regProf) {
+                if (REG_FORM_CODE.equals(attrValue.getAttributeCode())) {
+                    final List<AttrValueWithAttribute> regAddressForm = addressBookFacade
+                            .getShopCustomerAddressAttributes(new CustomerTypeAdapter(customerType),
+                                    getCurrentShop(), addressType);
+                    if (CollectionUtils.isNotEmpty(regAddressForm)) {
+                        for (final AttrValueWithAttribute attrValueAddr : regAddressForm) {
+                            // include address form attributes but prefix them with address form code
+                            attrValueAddr.setAttributeCode(REG_FORM_CODE.concat(".").concat(attrValueAddr.getAttributeCode()));
+                            if ("stateCode".equals(attrValueAddr.getAttribute().getVal())) {
+                                countryAndState.put("stateCode", attrValueAddr);
+                            } else if ("countryCode".equals(attrValueAddr.getAttribute().getVal())) {
+                                countryAndState.put("countryCode", attrValueAddr);
+                            }
+                            allReg.add(attrValueAddr);
+                        }
+                    }
+                } else {
+                    allReg.add(attrValue);
+                }
+            }
 
-                row.add(getLabel(attrValue, lang));
+            final List<Country> countryList = addressBookFacade.getAllCountries(ShopCodeContext.getShopCode(), addressType);
+            final List<State> stateList = CollectionUtils.isNotEmpty(countryList) ?
+                    addressBookFacade.getStatesByCountry(countryList.get(0).getCountryCode()) : Collections.emptyList();
 
-                row.add(getEditor(attrValue, false));
+
+            final AbstractChoice<State, State> stateDropDownChoice;
+            if (countryAndState.containsKey("stateCode")) {
+                 stateDropDownChoice = new DropDownChoice<>(
+                        STATE,
+                        new StateModel(new PropertyModel(countryAndState.get("stateCode"), "val"), stateList),
+                        stateList).setChoiceRenderer(new StateRenderer());
+                final boolean needState = !stateList.isEmpty();
+                stateDropDownChoice.setRequired(needState);
+                stateDropDownChoice.setVisible(needState);
+            } else {
+                stateDropDownChoice = null;
+            }
+
+            final AbstractChoice<Country, Country> countryDropDownChoice;
+            if (countryAndState.containsKey("countryCode")) {
+                countryDropDownChoice = new DropDownChoice<Country>(
+                        COUNTRY,
+                        new CountryModel(new PropertyModel(countryAndState.get("countryCode"), "val"), countryList),
+                        countryList) {
+
+                    @Override
+                    protected void onSelectionChanged(final Country country) {
+                        super.onSelectionChanged(country);
+                        stateDropDownChoice.setChoices(addressBookFacade.getStatesByCountry(country.getCountryCode()));
+                        final boolean needState = !stateDropDownChoice.getChoices().isEmpty();
+                        stateDropDownChoice.setRequired(needState);
+                        stateDropDownChoice.setVisible(needState);
+                        if (countryAndState.containsKey("stateCode")) {
+                            countryAndState.get("stateCode").setVal(StringUtils.EMPTY);
+                        }
+                    }
+
+                    @Override
+                    protected boolean wantOnSelectionChangedNotifications() {
+                        return true;
+                    }
+
+                }.setChoiceRenderer(new CountryRenderer());
+                countryDropDownChoice.setRequired(true);
+            } else {
+                countryDropDownChoice = null;
+            }
+
+
+            for (final AttrValueWithAttribute attrValue : allReg) {
+
+                WebMarkupContainer row;
+
+                if ("countryCode".equals(attrValue.getAttribute().getVal())) {
+                    row = new WebMarkupContainer(fields.newChildId());
+                    row.add(getLabel(attrValue, lang));
+                    row.add(new Fragment("editor", "countryCodeEditor", RegisterPanel.this).add(countryDropDownChoice));
+                } else if ("stateCode".equals(attrValue.getAttribute().getVal())) {
+                    row = new WebMarkupContainer(fields.newChildId()) {
+                        @Override
+                        public boolean isVisible() {
+                            return stateDropDownChoice.isVisible();
+                        }
+                    };
+                    row.add(getLabel(attrValue, lang));
+                    row.add(new Fragment("editor", "stateCodeEditor", RegisterPanel.this).add(stateDropDownChoice));
+                } else {
+                    row = new WebMarkupContainer(fields.newChildId());
+                    row.add(getLabel(attrValue, lang));
+                    row.add(getEditor(attrValue, false));
+                }
 
                 fields.add(row);
 
@@ -274,7 +375,7 @@ public class RegisterPanel extends BaseComponent {
                             String email = null;
                             String userPass = null;
                             String confirmPass = null;
-                            for (final AttrValueWithAttribute av : reg) {
+                            for (final AttrValueWithAttribute av : allReg) {
                                 if (StringUtils.isNotBlank(av.getVal())) {
                                     data.put(av.getAttributeCode(), av.getVal());
                                 }
@@ -309,12 +410,6 @@ public class RegisterPanel extends BaseComponent {
                                 error(
                                         getLocalizer().getString("customerExists", this)
                                 );
-
-                                //CPOINT
-                                //this commented out, because of YC-168
-                                //but it may be valid behavior for some clients.
-                                //Customer customer = getCustomerService().getCustomerByEmail(getEmail());
-                                //getCustomerService().resetPassword(customer, getCurrentShop());
 
                             } else {
 

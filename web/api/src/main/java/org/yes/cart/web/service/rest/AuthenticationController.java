@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,22 +25,21 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValueWithAttribute;
-import org.yes.cart.domain.entity.Attribute;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.*;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.LanguageService;
+import org.yes.cart.service.order.impl.CustomerTypeAdapter;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.RegExUtils;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
+import org.yes.cart.web.support.service.AddressBookFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,8 +56,17 @@ import java.util.regex.Pattern;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
+    private static final String REG_FORM_CODE = "regAddressForm";
+
+    private static final Pattern EMAIL =
+            Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)",
+                    Pattern.CASE_INSENSITIVE);
+
+
     @Autowired
     private CustomerServiceFacade customerServiceFacade;
+    @Autowired
+    private AddressBookFacade addressBookFacade;
     @Autowired
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
@@ -494,9 +503,9 @@ public class AuthenticationController {
                 formRO.setCustomerTypeSupported(customerServiceFacade.isShopCustomerTypeSupported(shop, customerType));
             }
 
-            final List<AttrValueWithAttribute> avs = customerServiceFacade.getShopRegistrationAttributes(shop, customerType);
+            final List<AttrValueWithAttribute> allReg = getAllRegistrationAttributes(customerType, shop);
 
-            formRO.setCustom(mappingMixin.map(avs, AttrValueAndAttributeRO.class, AttrValueWithAttribute.class));
+            formRO.setCustom(mappingMixin.map(allReg, AttrValueAndAttributeRO.class, AttrValueWithAttribute.class));
 
         } else {
             // If no type then present form with allowed types.
@@ -533,9 +542,28 @@ public class AuthenticationController {
 
     }
 
-    private static final Pattern EMAIL =
-            Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)",
-            Pattern.CASE_INSENSITIVE);
+    private List<AttrValueWithAttribute> getAllRegistrationAttributes(final @RequestParam(value = "customerType", required = false) String customerType, final Shop shop) {
+        final List<AttrValueWithAttribute> allReg = new ArrayList<>();
+        final List<AttrValueWithAttribute> avs = customerServiceFacade.getShopRegistrationAttributes(shop, customerType);
+
+        for (final AttrValueWithAttribute attrValue : avs) {
+            if (REG_FORM_CODE.equals(attrValue.getAttributeCode())) {
+                final List<AttrValueWithAttribute> regAddressForm = addressBookFacade
+                        .getShopCustomerAddressAttributes(new CustomerTypeAdapter(customerType),
+                                shop, Address.ADDR_TYPE_SHIPPING);
+                if (CollectionUtils.isNotEmpty(regAddressForm)) {
+                    for (final AttrValueWithAttribute attrValueAddr : regAddressForm) {
+                        // include address form attributes but prefix them with address form code
+                        attrValueAddr.setAttributeCode(REG_FORM_CODE.concat(".").concat(attrValueAddr.getAttributeCode()));
+                        allReg.add(attrValueAddr);
+                    }
+                }
+            } else {
+                allReg.add(attrValue);
+            }
+        }
+        return allReg;
+    }
 
 
     /**
@@ -687,7 +715,9 @@ public class AuthenticationController {
 
         if (registerRO.getCustom() != null) {
 
-            for (final AttrValueWithAttribute av : customerServiceFacade.getShopRegistrationAttributes(shop, registerRO.getCustomerType())) {
+            final List<AttrValueWithAttribute> allReg = getAllRegistrationAttributes(registerRO.getCustomerType(), shop);
+
+            for (final AttrValueWithAttribute av : allReg) {
 
                 final Attribute attr = av.getAttribute();
 
@@ -1097,7 +1127,31 @@ public class AuthenticationController {
 
         cartMixin.persistShoppingCart(request, response);
 
-        if (StringUtils.isBlank(email)
+        final Shop shop = cartMixin.getCurrentShop();
+        final AuthenticationResultRO result = checkValidEmail(email, shop);
+        if (result != null) {
+            return result;
+        }
+
+        customerServiceFacade.registerNewsletter(shop, email, new HashMap<>());
+
+        return new AuthenticationResultRO();
+
+    }
+
+    private AuthenticationResultRO checkValidEmail(final @RequestParam(value = "email", required = false) String email, final Shop shop) {
+
+        final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(shop);
+        if (emailConfig != null) {
+
+            final AuthenticationResultRO result = checkValid(emailConfig.getAttribute(), email, cartMixin.getCurrentCart().getCurrentLocale());
+            if (result != null) {
+
+                return result;
+
+            }
+
+        } else if (StringUtils.isBlank(email)
                 || email.length() < 6
                 || email.length() > 256
                 || !EMAIL.matcher(email).matches()) {
@@ -1105,17 +1159,7 @@ public class AuthenticationController {
             return new AuthenticationResultRO("EMAIL_FAILED");
 
         }
-
-        final Shop shop = cartMixin.getCurrentShop();
-
-
-
-
-
-        customerServiceFacade.registerNewsletter(shop, email, new HashMap<>());
-
-        return new AuthenticationResultRO();
-
+        return null;
     }
 
     /**
@@ -1194,15 +1238,12 @@ public class AuthenticationController {
 
         cartMixin.persistShoppingCart(request, response);
 
-        if (StringUtils.isBlank(email)
-                || email.length() < 6
-                || email.length() > 256
-                || !EMAIL.matcher(email).matches()) {
-
-            return new AuthenticationResultRO("EMAIL_FAILED");
-
+        final Shop shop = cartMixin.getCurrentShop();
+        final AuthenticationResultRO result = checkValidEmail(email, shop);
+        if (result != null) {
+            return result;
         }
-
+        
         final Map<String, Object> data = new HashMap<>();
         data.put("name", name);
         data.put("phone", phone);
@@ -1221,7 +1262,6 @@ public class AuthenticationController {
         }
 
 
-        final Shop shop = cartMixin.getCurrentShop();
         customerServiceFacade.registerEmailRequest(shop, email, data);
 
         return new AuthenticationResultRO();

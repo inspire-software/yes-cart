@@ -70,13 +70,13 @@ public class AddressForm extends Form<Address> {
     private static final Logger LOG = LoggerFactory.getLogger(AddressForm.class);
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    private final static String FIELDS = "fields";
-    private final static String NAME = "name";
-    private final static String EDITOR = "editor";
-    private final static String COUNTRY = "country";
-    private final static String STATE = "state";
-    private final static String ADD_ADDRESS = "addAddress";
-    private final static String CANCEL_LINK = "cancel";
+    private static final String FIELDS = "fields";
+    private static final String NAME = "name";
+    private static final String EDITOR = "editor";
+    private static final String COUNTRY = "country";
+    private static final String STATE = "state";
+    private static final String ADD_ADDRESS = "addAddress";
+    private static final String CANCEL_LINK = "cancel";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 

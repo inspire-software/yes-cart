@@ -116,6 +116,7 @@
         <constructor-arg index="2" ref="attributeService"/>
         <constructor-arg index="3" ref="passPhraseGenerator"/>
         <constructor-arg index="4" ref="shopCustomerCustomisationSupport"/>
+        <constructor-arg index="5" ref="shopAddressCustomisationSupport"/>
     </bean>
 
     <bean id="promotionFacade" class="org.yes.cart.web.support.service.impl.PromotionFacadeImpl">
