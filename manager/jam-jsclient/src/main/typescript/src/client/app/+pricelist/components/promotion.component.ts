@@ -190,7 +190,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
   formChange():void {
     LogUtil.debug('PromotionComponent formChange', this.promotionForm.valid, this._promotion);
-    this.dataChanged.emit({ source: this._promotion, valid: !this._promotion.enabled && this.promotionForm.valid });
+    this.dataChanged.emit({ source: this._promotion, valid: this.promotionForm.valid });
   }
 
   formChangeCoupons():void {

@@ -87,6 +87,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   private changed:boolean = false;
   private validForSave:boolean = false;
+  private validForSaveAndDisabled:boolean = false;
 
   @ViewChild('selectShopModalDialog')
   private selectShopModalDialog:ModalComponent;
@@ -289,6 +290,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopPromotionsComponent onPromotionChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
+    this.validForSaveAndDisabled = this.validForSave && !event.source.enabled;
     this.promotionEdit = event.source;
   }
 
@@ -336,6 +338,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopPromotionsComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
+    this.validForSaveAndDisabled = false;
     if (this.viewMode === ShopPromotionsComponent.PROMOTIONS) {
       this.promotionEdit = this.newPromotionInstance();
       this.viewMode = ShopPromotionsComponent.PROMOTION;
@@ -367,6 +370,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     this.promotionEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
+    this.validForSaveAndDisabled = false;
     this.viewMode = ShopPromotionsComponent.PROMOTION;
   }
 
@@ -389,7 +393,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   protected onSaveHandler() {
 
-    if (this.validForSave && this.changed) {
+    if (this.validForSaveAndDisabled && this.changed) {
 
       if (this.promotionEdit != null) {
 
@@ -463,12 +467,11 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
           if (this.promotionEdit != null && this.selectedPromotion.promotionId == this.promotionEdit.promotionId) {
             this.promotionEdit = Util.clone(this.promotionEdit); // Trigger form INIT
             this.promotionEdit.enabled = this.selectedPromotion.enabled;
-            if (!this.promotionEdit.enabled) {
-              this.validForSave = false;
-            }
+            this.validForSaveAndDisabled = this.validForSave && !this.promotionEdit.enabled;
           } else {
             this.changed = false;
             this.validForSave = false;
+            this.validForSaveAndDisabled = false;
           }
           this.loading = false;
           _sub.unsubscribe();
@@ -516,6 +519,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
         this.viewMode = ShopPromotionsComponent.PROMOTIONS;
         this.changed = false;
         this.validForSave = false;
+        this.validForSaveAndDisabled = false;
         this.promotionFilterCapped = this.promotions.length >= max;
         this.loading = false;
         _sub.unsubscribe();
@@ -527,6 +531,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       this.viewMode = ShopPromotionsComponent.PROMOTIONS;
       this.changed = false;
       this.validForSave = false;
+      this.validForSaveAndDisabled = false;
       this.promotionFilterCapped = false;
     }
   }
