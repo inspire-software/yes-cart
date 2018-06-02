@@ -68,6 +68,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       'SHP': false,
       'SHO': false,
       'ORG': false,
+      'OPS': false,
       'SYS': false
     };
     this.docLink = Config.UI_DOC_LINK;

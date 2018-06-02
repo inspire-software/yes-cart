@@ -96,6 +96,7 @@ export class ManagementService {
       'SHP': false,
       'SHO': false,
       'ORG': false,
+      'OPS': false,
       'SYS': false
     };
     manager.managerRoles.forEach(role => {
@@ -111,6 +112,7 @@ export class ManagementService {
           ui.SHP = true;
           ui.SHO = true;
           ui.ORG = true;
+          ui.OPS = true;
           ui.SYS = true;
           break;
         case 'ROLE_SMSUBSHOPUSER':

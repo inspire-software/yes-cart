@@ -176,6 +176,7 @@
   "PANEL_HELP": "Помощь",
   "PANEL_HELP_LICENSE": "Лицензия",
   "PANEL_HELP_DOCS": "Руководство пользователя",
+  "PANEL_OPERATIONS": "Операции",
   "PANEL_SYSTEM": "Система",
   "PANEL_SYSTEM_ATTR": "Атрибуты",
   "PANEL_SYSTEM_IMPORT": "Импорт",
@@ -191,7 +192,9 @@
   "PANEL_SYSTEM_PERFORMANCE_SENSORS": "Сенсоры производительности",
   "PANEL_SYSTEM_PERFORMANCE_SAMPLES": "Проба производительности",
   "PANEL_SYSTEM_JOBS": "Задачи",
-  "PANEL_SYSTEM_SHOP_CLONE": "Клонировать Магазин",
+  "PANEL_SYSTEM_SHOP_CLONE": "Клонировать магазин",
+  "PANEL_SYSTEM_SHOP_REMOVE": "Удалить магазин",
+  "PANEL_SYSTEM_SHOP_TRANSFER": "Передать магазин",
 
   "PANEL_UI_SETTINGS": "Настройки",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Страница: {{value}} ",

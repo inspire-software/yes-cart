@@ -119,13 +119,9 @@
     </ul>
   </accordion-group>
 
-  <accordion-group #sys *ngIf="menuType.SYS === true" (click)="onExpandFull('SYS', sys?.isOpen)">
-    <div accordion-heading>{{ 'PANEL_SYSTEM' | translate }} <i class="fa fa-cogs pull-right" title="{{ 'PANEL_SYSTEM' | translate }}"></i></div>
+  <accordion-group #ops *ngIf="menuType.OPS === true" (click)="onExpandFull('OPS', ops?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_OPERATIONS' | translate }} <i class="fa fa-tasks pull-right" title="{{ 'PANEL_OPERATIONS' | translate }}"></i></div>
     <ul class="nav nav-second-level">
-      <li>
-        <a [routerLink]="['/system/attributes']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_ATTR' | translate }} <i class="fa fa-list pull-right" title="{{ 'PANEL_SYSTEM_ATTR' | translate }}"></i></a>
-      </li>
-      <li><hr/></li>
       <li>
         <a [routerLink]="['/impex/import']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_IMPORT' | translate }} <i class="fa fa-download pull-right" title="{{ 'PANEL_SYSTEM_IMPORT' | translate }}"></i></a>
       </li>
@@ -138,14 +134,30 @@
       </li>
       <li><hr/></li>
       <li>
-        <a [routerLink]="['/system/payment']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_PG' | translate }} <i class="fa fa-credit-card pull-right" title="{{ 'PANEL_SYSTEM_PG' | translate }}"></i></a>
-      </li>
-      <li>
         <span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_PG_CALLBACK' | translate }} <i class="fa fa-money pull-right" title="{{ 'PANEL_PG_CALLBACK' | translate }}"></i></span>
       </li>
       <li><hr/></li>
       <li>
         <span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_SYSTEM_SHOP_CLONE' | translate }} <i class="fa fa-copy pull-right" title="{{ 'PANEL_SYSTEM_SHOP_CLONE' | translate }}"></i></span>
+      </li>
+      <li>
+        <span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_SYSTEM_SHOP_REMOVE' | translate }} <i class="fa fa-ban pull-right" title="{{ 'PANEL_SYSTEM_SHOP_REMOVE' | translate }}"></i></span>
+      </li>
+      <li>
+        <span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_SYSTEM_SHOP_TRANSFER' | translate }} <i class="fa fa-code-fork pull-right" title="{{ 'PANEL_SYSTEM_SHOP_TRANSFER' | translate }}"></i></span>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group #sys *ngIf="menuType.SYS === true" (click)="onExpandFull('SYS', sys?.isOpen)">
+    <div accordion-heading>{{ 'PANEL_SYSTEM' | translate }} <i class="fa fa-cogs pull-right" title="{{ 'PANEL_SYSTEM' | translate }}"></i></div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/system/attributes']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_ATTR' | translate }} <i class="fa fa-list pull-right" title="{{ 'PANEL_SYSTEM_ATTR' | translate }}"></i></a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/system/payment']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_PG' | translate }} <i class="fa fa-credit-card pull-right" title="{{ 'PANEL_SYSTEM_PG' | translate }}"></i></a>
       </li>
       <li><hr/></li>
       <li>

@@ -176,6 +176,7 @@
   "PANEL_HELP": "Hilfe",
   "PANEL_HELP_LICENSE": "Lizenz",
   "PANEL_HELP_DOCS": "Handbuch",
+  "PANEL_OPERATIONS": "Operationen",
   "PANEL_SYSTEM": "System",
   "PANEL_SYSTEM_ATTR": "Attribute",
   "PANEL_SYSTEM_IMPORT": "Import",
@@ -192,6 +193,8 @@
   "PANEL_SYSTEM_PERFORMANCE_SAMPLES": "Leistungsproben",
   "PANEL_SYSTEM_JOBS": "Tasks/Aufgaben",
   "PANEL_SYSTEM_SHOP_CLONE": "Shop kopieren",
+  "PANEL_SYSTEM_SHOP_REMOVE": "Shop entfernen",
+  "PANEL_SYSTEM_SHOP_TRANSFER": "Shop übertragen",
 
   "PANEL_UI_SETTINGS": "UI Einstellungen",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Anzahl Zeilen: {{value}} ",
