@@ -47,9 +47,10 @@ public class BestValuePromotionApplicationStrategyImpl implements PromotionAppli
     }
 
     /**
-     * CPOINT - best deal is the industry standard since provide customer with lowest
-     *          price possible. However there are use cases when we want alternative
-     *          promotion strategy - e.g. by priority.
+     * best deal is the industry standard since it provides customer with lowest price possible. However
+     * there are use cases when we want alternative promotion strategy - e.g. by priority or some other.
+     *
+     * In such cases the bean definition must be overriden with custom implementation.
      *
      * {@inheritDoc}
      */

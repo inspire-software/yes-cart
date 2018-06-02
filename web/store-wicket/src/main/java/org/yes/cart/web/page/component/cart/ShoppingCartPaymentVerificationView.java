@@ -48,7 +48,7 @@ import java.util.*;
 /**
  * Class responsible to show cart with delivery amount and taxes for verification before payments.
  * Different  countries may require different models of representation.
- * CPOINT
+ *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 12/3/11
  * Time: 8:42 PM

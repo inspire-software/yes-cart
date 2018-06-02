@@ -170,7 +170,7 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
                 );
                 item.setItemPrice(paymentLine.getUnitPrice());
                 item.setItemQuantity(paymentLine.getQuantity());
-                //item.setItemTaxable(); // CPOINT
+                //item.setItemTaxable();
                 itemsInDelivery.add(
                         item
                 );

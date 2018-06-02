@@ -389,9 +389,6 @@ public class ShippingView extends BaseComponent {
     /**
      * Add shipping price view to given form if shipping method is selected.
      *
-     * CPOINT - this method just displays the fixed price for this SLA, potentially this
-     *          value can be calculated based on order or promotions
-     *
      * @param form given form.
      */
     private void addPriceView(final Form form) {

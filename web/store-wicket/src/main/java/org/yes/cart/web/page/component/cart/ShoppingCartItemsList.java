@@ -281,9 +281,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 }*/
 
 
-                //TODOv2 add flag for product is quantity with float point enabled for this product or not
-                //ATM this is CPOINT
-                if (NumberUtils.isNumber(qty) /*&& NumberUtils.toInt(qty) >= 1*/) {
+                if (NumberUtils.isNumber(qty)) {
                     qtyField.setConvertedInput(new BigDecimal(qty).setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP));
                     setResponsePage(
                             getPage().getPageClass(),
