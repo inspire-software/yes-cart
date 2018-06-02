@@ -234,6 +234,9 @@ build_demo() {
 
     "$MVN" clean install -PbuildDemo,mysql,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
 
+    cp $YC_HOME/manager/jam/target/yes-manager.war $YC_HOME/
+    cp $YC_HOME/web/store-wicket/target/ROOT.war $YC_HOME/
+
 }
 
 build_dev() {
