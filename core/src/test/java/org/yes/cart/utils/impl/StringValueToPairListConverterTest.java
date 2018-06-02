@@ -47,5 +47,27 @@ public class StringValueToPairListConverterTest {
         assertEquals("Red", pairList.get(0).getSecond());
         assertEquals("G", pairList.get(1).getFirst());
         assertEquals("Green", pairList.get(1).getSecond());
+        values = "Red,-,Blue";
+        pairList = converter.getOptions(values);
+        assertEquals(3, pairList.size());
+        assertEquals("Red", pairList.get(0).getFirst());
+        assertEquals("Red", pairList.get(0).getSecond());
+        assertEquals("", pairList.get(1).getFirst());
+        assertEquals("", pairList.get(1).getSecond());
+        values = "";
+        pairList = converter.getOptions(values);
+        assertEquals(0, pairList.size());
+        values = "-";
+        pairList = converter.getOptions(values);
+        assertEquals(1, pairList.size());
+        assertEquals("", pairList.get(0).getFirst());
+        assertEquals("", pairList.get(0).getSecond());
+        values = "-,-";
+        pairList = converter.getOptions(values);
+        assertEquals(2, pairList.size());
+        assertEquals("", pairList.get(0).getFirst());
+        assertEquals("", pairList.get(0).getSecond());
+        assertEquals("", pairList.get(1).getFirst());
+        assertEquals("", pairList.get(1).getSecond());
     }
 }

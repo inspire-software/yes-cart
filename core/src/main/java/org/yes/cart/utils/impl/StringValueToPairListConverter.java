@@ -53,12 +53,14 @@ public class StringValueToPairListConverter implements Converter<String, List> {
     List<Pair<String, String>> getOptions(final String values) {
         final List<Pair<String, String>> res = new ArrayList<>();
         if (StringUtils.isNotBlank(values)) {
-            final String [] entryies= values.split(",");
-            for (String entry : entryies) {
-                final String [] keyValue = entry.split("-");
-                res.add(
-                        new Pair<>(keyValue[0], keyValue[keyValue.length - 1])
-                );
+            final String [] entries = StringUtils.split(values,',');
+            for (String entry : entries) {
+                final String [] keyValue = StringUtils.splitPreserveAllTokens(entry,'-');
+                if (keyValue.length > 1) {
+                    res.add(new Pair<>(keyValue[0], keyValue[1]));
+                } else {
+                    res.add(new Pair<>(keyValue[0], keyValue[0]));
+                }
             }
         }
         return res;
