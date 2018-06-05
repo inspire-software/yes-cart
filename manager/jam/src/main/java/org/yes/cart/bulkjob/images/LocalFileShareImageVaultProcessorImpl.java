@@ -52,9 +52,9 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(LocalFileShareImageVaultProcessorImpl.class);
 
-    public static final long INDEX_GET_READY_TIMEOUT = 5000L;
-    public static final long INDEX_PING_INTERVAL = 15000L;
-    public static final long WARMUP_GET_READY_TIMEOUT = 15000L;
+    private static final long INDEX_GET_READY_TIMEOUT = 5000L;
+    private static final long INDEX_PING_INTERVAL = 15000L;
+    private static final long WARMUP_GET_READY_TIMEOUT = 15000L;
 
     private final SystemService systemService;
     private final FileSystemIOProvider ioProvider;
@@ -66,8 +66,6 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
     private final RuntimeAttributeService runtimeAttributeService;
 
     private final AuthenticationManager authenticationManager;
-
-    private boolean pauseInitialised = false;
 
     public LocalFileShareImageVaultProcessorImpl(final SystemService systemService,
                                                  final FileSystemIOProvider ioProvider,
@@ -264,9 +262,9 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
         }
 
         if (count > 0) {
-            LOG.info("Scanning imagevault directory 100% {} ... all images were attached", dir.getAbsolutePath());
-        } else {
             LOG.info("Scanning imagevault directory 100% {} ... reattached {} images", dir.getAbsolutePath(), count);
+        } else {
+            LOG.info("Scanning imagevault directory 100% {} ... all images were attached", dir.getAbsolutePath());
         }
 
         return count;

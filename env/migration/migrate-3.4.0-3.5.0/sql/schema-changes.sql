@@ -265,3 +265,16 @@ create index CAT_DISABLED on TCATEGORY (DISABLED);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11168,  'regAddressForm', 'regAddressForm',  1,  'regAddressForm',  'Address form for registration marker',  'Address form for registration marker', 1000,  1006, 0, 0, 0, 0);
+
+--
+-- YC-916 Create a product image vault clean up job
+--
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11122,  'JOB_LOCAL_PRODIMAGECLEAN_SCAN_PAUSE', 'JOB_LOCAL_PRODIMAGECLEAN_SCAN_PAUSE',  0,  NULL,  'Job\\Product image vault clean up: pause product image vault clean up',
+    'Pause local file system product image vault clean up',  1008, 1000, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11123,  'JOB_LOCAL_PRODIMAGEVAULT_CLEAN_MODE', 'JOB_LOCAL_PRODIMAGEVAULT_CLEAN_MODE',  0,  NULL,  'Job\\Product image vault clean up: mode',
+    'Mode can be SCAN (logging only) or DELETE (removes the orphan image files)',  1000, 1000, 0, 0, 0, 0);

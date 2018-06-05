@@ -274,7 +274,7 @@
         <property name="cronExpression" value="${admin.cron.autoImportJob}" />
     </bean>
 
-    <!-- ################################ Image scanner  ################################################### -->
+    <!-- ################################ Image vault processors  ################################################### -->
 
 
     <bean id="imageVaultProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
@@ -372,6 +372,53 @@
     </bean>
 
 
+    <bean id="productImageVaultCleanupProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean class="org.yes.cart.bulkjob.images.LocalFileShareProductImageVaultCleanupProcessorImpl">
+                <constructor-arg index="0" ref="systemService"/>
+                <constructor-arg index="1" ref="ioProviderFactory"/>
+                <constructor-arg index="2" ref="productService"/>
+                <property name="processingModeAttribute" value="JOB_LOCAL_PRODIMAGEVAULT_CLEAN_MODE"/>
+            </bean>
+        </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_LOCAL_PRODIMAGECLEAN_SCAN_PAUSE"/>
+        <property name="pausePreferenceDefault" value="true"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="pim"/>
+                <property name="name" value="productImageVaultCleanupProcessor"/>
+                <property name="cfgInterface" value="Runnable"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">Pausable cron job</prop>
+                        <prop key="description">Utility to to scan imagevault/product and remove all images for products that do not exist</prop>
+                        <prop key="SYSTEM[JOB_LOCAL_PRODIMAGEVAULT_CLEAN_PAUSE]">Pause</prop>
+                        <prop key="SYSTEM[JOB_LOCAL_PRODIMAGEVAULT_CLEAN_MODE]">SCAN (logging only) or DELETE (removes the orphan image files)</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean name="productImageVaultCleanupProcessorJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Product Image Vault Clean Up" />
+                <entry key="job" value-ref="productImageVaultCleanupProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="productImageVaultCleanupProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="productImageVaultCleanupProcessorJob" />
+        <property name="cronExpression" value="${admin.cron.productImageVaultCleanupProcessorJob}" />
+    </bean>
+
 
     <!-- ################################ Cache eviction propagation  ######################################## -->
 
@@ -460,6 +507,7 @@
                 <ref bean="sendMailJobCronTrigger" />
                 <ref bean="autoImportJobCronTrigger" />
                 <ref bean="imageVaultProcessorJobCronTrigger" />
+                <ref bean="productImageVaultCleanupProcessorJobCronTrigger" />
             </list>
         </constructor-arg>
     </bean>
