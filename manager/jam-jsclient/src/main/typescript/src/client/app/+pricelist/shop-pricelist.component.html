@@ -36,7 +36,7 @@
       </button>
 
       <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'pricelist'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
-        <i class="fa fa-sitemap"></i>
+        <i class="fa fa-home"></i>
       </button>
 
       <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'pricelist'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
@@ -85,7 +85,7 @@
       <p class="bg-danger text-padding">
         {{ 'SHOP_SELECTION_REQUIRED' | translate }}
         <span>
-          <button type="button" (click)="onShopSelect()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button>
+          <button type="button" (click)="onShopSelect()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button>
         </span>
       </p>
     </div>
