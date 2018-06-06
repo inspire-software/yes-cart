@@ -9,6 +9,7 @@ package org.yes.cart.bulkjob.images;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.stream.io.FileSystemIOProvider;
@@ -59,7 +60,7 @@ public class LocalFileShareProductImageVaultCleanupProcessorImpl implements Runn
             return;
         }
 
-        final int removed = scanRoot(imageVault);
+        final int removed = scanRoot(productImageVault);
 
         LOG.info("Cleaning product imagevault ... completed, removed {}", removed);
 
@@ -96,7 +97,9 @@ public class LocalFileShareProductImageVaultCleanupProcessorImpl implements Runn
 
                 for (final File code : codes) {
 
-                    LOG.info("Cleaning product imagevault directory {}% {}", letterProgress, code.getAbsolutePath());
+                    if (Constants.NO_IMAGE.equals(code.getName())) {
+                        continue; // Must not remove noimage directory
+                    }
 
                     final Long productId = productService.findProductIdByCode(code.getName());
                     if (productId == null) {
