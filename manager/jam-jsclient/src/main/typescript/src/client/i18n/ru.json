@@ -195,6 +195,7 @@
   "PANEL_SYSTEM_SHOP_CLONE": "Клонировать магазин",
   "PANEL_SYSTEM_SHOP_REMOVE": "Удалить магазин",
   "PANEL_SYSTEM_SHOP_TRANSFER": "Передать магазин",
+  "PANEL_SYSTEM_CATALOG_REMOVE": "Удалить ветку категорий",
 
   "PANEL_UI_SETTINGS": "Настройки",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Страница: {{value}} ",
