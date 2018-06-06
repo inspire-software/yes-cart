@@ -130,9 +130,9 @@ public class LocalFileShareProductImageVaultCleanupProcessorImpl implements Runn
                                 if (!hasFailures) {
 
                                     if (code.delete()) {
-                                        LOG.error("Unable to delete directory {}", code.getAbsolutePath());
-                                    } else {
                                         LOG.info("Removed directory {}", code.getAbsolutePath());
+                                    } else {
+                                        LOG.error("Unable to delete directory {}", code.getAbsolutePath());
                                     }
 
                                 }
