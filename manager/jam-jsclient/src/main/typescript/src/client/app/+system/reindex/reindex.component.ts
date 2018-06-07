@@ -13,8 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ShopVO, JobStatusVO } from './../../shared/model/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { SystemService } from './../../shared/services/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
@@ -30,10 +31,16 @@ export class ReindexComponent implements OnInit, OnDestroy {
 
   private static _selectedShop:ShopVO;
 
+  private shopSelection:ShopVO;
+  private selectedShopCode:string;
+
   private static _jobStatus:JobStatusVO;
   private static _jobRunning:boolean = false;
   private static _jobCompleted:boolean = false;
   private static _lastReport:string = '';
+
+  @ViewChild('selectShopModalDialog')
+  private selectShopModalDialog:ModalComponent;
 
   private delayedUpdate:Future;
   private _delayedFilteringMs:number = Config.UI_BULKSERVICE_DELAY;
@@ -56,6 +63,7 @@ export class ReindexComponent implements OnInit, OnDestroy {
 
   public set selectedShop(value:ShopVO) {
     ReindexComponent._selectedShop = value;
+    this.selectedShopCode = value != null ? value.code : '';
   }
 
   public get jobStatus():JobStatusVO {
@@ -110,6 +118,27 @@ export class ReindexComponent implements OnInit, OnDestroy {
     LogUtil.debug('ReindexComponent ngOnDestroy');
     this.delayedUpdate.cancel();
   }
+
+
+  protected onShopSelect() {
+    if (!this.jobRunning) {
+      LogUtil.debug('ShopPriceListComponent onShopSelect');
+      this.selectShopModalDialog.show();
+    }
+  }
+
+  protected onShopSelected(event:ShopVO) {
+    LogUtil.debug('ShopPriceListComponent onShopSelected');
+    this.shopSelection = event;
+  }
+
+  protected onSelectShopResult(modalresult: ModalResult) {
+    LogUtil.debug('ShopPriceListComponent onSelectShopResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action && this.shopSelection != null) {
+      this.selectedShop = this.shopSelection;
+    }
+  }
+
 
   protected selectShop(shop:ShopVO) {
     if (!this.jobRunning) {
