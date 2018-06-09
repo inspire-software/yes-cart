@@ -1820,10 +1820,8 @@
 
 
 
-        <bag name="wishList" inverse="false">
-            <key>
-                <column name="CUSTOMER_ID" not-null="true"/>
-            </key>
+        <bag name="wishList" inverse="true" cascade="all">
+            <key column="CUSTOMER_ID" not-null="true" on-delete="cascade"/>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.CustomerWishListEntity"/>
         </bag>
 
