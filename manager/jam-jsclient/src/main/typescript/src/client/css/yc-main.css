@@ -255,6 +255,10 @@ body {
   overflow-y: auto;
 }
 
+.sidebar li span.fa-stack {
+  margin-right: -8px;
+}
+
 .btn-outline {
   color: inherit;
   background-color: transparent;

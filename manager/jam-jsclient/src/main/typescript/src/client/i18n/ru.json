@@ -196,6 +196,7 @@
   "PANEL_SYSTEM_SHOP_REMOVE": "Удалить магазин",
   "PANEL_SYSTEM_SHOP_TRANSFER": "Передать магазин",
   "PANEL_SYSTEM_CATALOG_REMOVE": "Удалить ветку категорий",
+  "PANEL_SYSTEM_FULFILMENT_CENTRE_REMOVE": "Удалить центры доставки",
 
   "PANEL_UI_SETTINGS": "Настройки",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Страница: {{value}} ",

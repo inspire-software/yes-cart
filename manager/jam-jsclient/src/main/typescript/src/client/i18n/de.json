@@ -196,6 +196,7 @@
   "PANEL_SYSTEM_SHOP_REMOVE": "Shop entfernen",
   "PANEL_SYSTEM_SHOP_TRANSFER": "Shop übertragen",
   "PANEL_SYSTEM_CATALOG_REMOVE": "Entferne den Zweig der Kategorien",
+  "PANEL_SYSTEM_FULFILMENT_CENTRE_REMOVE": "Auslieferzentren entfernen",
 
   "PANEL_UI_SETTINGS": "UI Einstellungen",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Anzahl Zeilen: {{value}} ",

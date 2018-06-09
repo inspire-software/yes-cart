@@ -196,6 +196,7 @@
   "PANEL_SYSTEM_SHOP_REMOVE": "Remove Shop",
   "PANEL_SYSTEM_SHOP_TRANSFER": "Transfer Shop",
   "PANEL_SYSTEM_CATALOG_REMOVE": "Remove category branch",
+  "PANEL_SYSTEM_FULFILMENT_CENTRE_REMOVE": "Remove Fulfilment centres",
 
   "PANEL_UI_SETTINGS": "UI settings",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Page size: {{value}} ",

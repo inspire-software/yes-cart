@@ -196,6 +196,7 @@
   "PANEL_SYSTEM_SHOP_REMOVE": "Видалити магазин",
   "PANEL_SYSTEM_SHOP_TRANSFER": "Передати магазин",
   "PANEL_SYSTEM_CATALOG_REMOVE": "Видалити гілку категорій",
+  "PANEL_SYSTEM_FULFILMENT_CENTRE_REMOVE": "Видалити центри доставки",
 
   "PANEL_UI_SETTINGS": "Налаштування",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Сторінка: {{value}} ",
