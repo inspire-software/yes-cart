@@ -31,13 +31,13 @@ export class ReindexComponent implements OnInit, OnDestroy {
 
   private static _selectedShop:ShopVO;
 
-  private shopSelection:ShopVO;
-  private selectedShopCode:string;
-
   private static _jobStatus:JobStatusVO;
   private static _jobRunning:boolean = false;
   private static _jobCompleted:boolean = false;
   private static _lastReport:string = '';
+
+  private shopSelection:ShopVO;
+  private selectedShopCode:string;
 
   @ViewChild('selectShopModalDialog')
   private selectShopModalDialog:ModalComponent;
