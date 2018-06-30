@@ -27,7 +27,7 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Customer extends RegisteredPerson, Auditable, Taggable {
+public interface Customer extends RegisteredPerson, Auditable, Attributable, Taggable {
 
     /**
      * Get primary key.

@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.*;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -322,6 +323,46 @@ public class CustomerNameAdapter implements Customer {
 
     @Override
     public void setTag(final String tag) {
+
+    }
+
+    @Override
+    public Collection<AttrValue> getAllAttributes() {
+        return null;
+    }
+
+    @Override
+    public Map<String, AttrValue> getAllAttributesAsMap() {
+        return null;
+    }
+
+    @Override
+    public String getAttributeValueByCode(final String attributeCode) {
+        return null;
+    }
+
+    @Override
+    public boolean isAttributeValueByCodeTrue(final String attributeCode) {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public void setName(final String name) {
+
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
+    public void setDescription(final String description) {
 
     }
 

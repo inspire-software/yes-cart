@@ -16,6 +16,7 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.*;
 
 import java.time.Instant;
@@ -365,7 +366,20 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public AttrValueCustomer getAttributeByCode(String attributeCode) {
+    public Map<String, AttrValue> getAllAttributesAsMap() {
+        final Map<String, AttrValue> rez = new HashMap<>();
+        if (this.attributes != null) {
+            for (AttrValue attrValue : this.attributes) {
+                if (attrValue != null && attrValue.getAttributeCode() != null) {
+                    rez.put(attrValue.getAttributeCode(), attrValue);
+                }
+            }
+        }
+        return rez;
+    }
+
+    @Override
+    public AttrValueCustomer getAttributeByCode(final String attributeCode) {
         if (attributeCode == null) {
             return null;
         }
@@ -377,6 +391,28 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
             }
         }
         return null;
+    }
+
+
+
+    @Override
+    public String getAttributeValueByCode(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null ? val.getVal() : null;
+    }
+
+
+    @Override
+    public boolean isAttributeValueByCodeTrue(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null && Boolean.valueOf(val.getVal());
+    }
+
+
+
+    @Override
+    public Collection<AttrValue> getAllAttributes() {
+        return new ArrayList<>(attributes);
     }
 
     @Override
@@ -398,6 +434,48 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
             }
         }
         return null;
+    }
+
+    @Override
+    public String getName() {
+        final StringBuilder name = new StringBuilder();
+        if (StringUtils.isNotBlank(salutation)) {
+            name.append(salutation);
+        }
+        if (StringUtils.isNotBlank(firstname)) {
+            if (name.length() > 0) {
+                name.append(' ');
+            }
+            name.append(firstname);
+        }
+        if (StringUtils.isNotBlank(middlename)) {
+            if (name.length() > 0) {
+                name.append(' ');
+            }
+            name.append(middlename);
+        }
+        if (StringUtils.isNotBlank(lastname)) {
+            if (name.length() > 0) {
+                name.append(' ');
+            }
+            name.append(lastname);
+        }
+        return name.toString();
+    }
+
+    @Override
+    public void setName(final String name) {
+        // do nothing
+    }
+
+    @Override
+    public String getDescription() {
+        return email;
+    }
+
+    @Override
+    public void setDescription(final String description) {
+        // do nothing
     }
 
     @Override
