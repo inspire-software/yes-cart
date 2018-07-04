@@ -50,6 +50,7 @@
                 <entry key="PairMapToPairList"                  value-ref="voPairMapToPairList"/>
                 <entry key="ProductTypeAttrNavigationRanges"    value-ref="voProductTypeAttrNavigationRanges"/>
                 <entry key="CategoryNavigationPriceTiers"       value-ref="voCategoryNavigationPriceTiers"/>
+                <entry key="StringToMappingConverter"           value-ref="voStringToMappingConverter"/>
             </map>
         </constructor-arg>
     </bean>
@@ -72,6 +73,7 @@
     <bean id="voPairMapToPairList" class="org.yes.cart.domain.vo.converter.PairMapToPairListConverter"/>
     <bean id="voProductTypeAttrNavigationRanges" class="org.yes.cart.domain.vo.converter.StringToProductTypeAttrNavigationRangesConverter"/>
     <bean id="voCategoryNavigationPriceTiers" class="org.yes.cart.domain.vo.converter.StringToCategoryNavigationPriceTiersConverter"/>
+    <bean id="voStringToMappingConverter" class="org.yes.cart.domain.vo.converter.StringToMappingConverter"/>
 
     <bean id="voAssemblySupport" class="org.yes.cart.service.vo.impl.VoAssemblySupportImpl">
         <constructor-arg index="0" ref="voKeyToClassFactory"/>
