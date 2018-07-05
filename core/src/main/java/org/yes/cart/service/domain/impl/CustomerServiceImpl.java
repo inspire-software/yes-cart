@@ -32,6 +32,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.log.Markers;
 import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.impl.AttributeRankComparator;
 
@@ -206,7 +207,12 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("PASS.CHECK", email.toLowerCase(), shop.getShopId(), hash, Boolean.FALSE);
 
             if (CollectionUtils.isNotEmpty(counts)) {
-                return ((Number) counts.get(0)).intValue() == 1;
+                final int validLoginsFound = ((Number) counts.get(0)).intValue();
+                if (validLoginsFound == 1) {
+                    return true;
+                } else if (validLoginsFound > 1) {
+                    LOG.warn(Markers.alert(), "Customer {} assigned to multiple shops when checking {} ... password will be marked as invalid", email, shop.getCode());
+                }
             }
             return false;
 

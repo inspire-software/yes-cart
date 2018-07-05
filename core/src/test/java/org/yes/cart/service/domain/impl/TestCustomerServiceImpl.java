@@ -18,9 +18,13 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerShop;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 
@@ -69,7 +73,6 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         assertEquals(customer20check.getCustomerId(), customer20.getCustomerId());
     }
 
-    // TODO: YC-64 fix to not depend on order of running
     @Test
     public void testUpdate() {
         Customer customer = getCustomer(getTestName());
@@ -83,7 +86,6 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         assertEquals("Freeman", customer.getLastname());
     }
 
-    // TODO fix to not depend on order of running
     @Test
     public void testDelete() {
         Customer customer = getCustomer(getTestName());
@@ -95,11 +97,10 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         assertNull(customer);
     }
 
-    //TODO: YC-64 refactor to param test
     @Test
     public void testFindCustomer() {
         Customer customer = getCustomer(getTestName());
-        customer.setEmail("user1@somedomain.com");
+        customer.setEmail("user1@finddomain.com");
         customer.setFirstname("SomeFirsname");
         customer.setLastname("user1LastName");
         customer.setPassword("rawpassword");
@@ -108,7 +109,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         customer.setFirstname("SomeFirsname");
         customer.setLastname("Akintola");
         customer.setPassword("rawpassword");
-        customer.setEmail("user2@somedomain.com");
+        customer.setEmail("user2@finddomain.com");
         customer.setTag("tag1 tag2 tag3");
         customer.setCustomerType("B2B");
         customer.setPricingPolicy("P1 P2");
@@ -117,7 +118,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(list);
         list = customerService.findCustomer("user2", null, null, null, null, null, null);
         assertEquals(1, list.size());
-        list = customerService.findCustomer("somedomain", null, null, null, null, null, null);
+        list = customerService.findCustomer("finddomain", null, null, null, null, null, null);
         assertEquals(2, list.size());
         list = customerService.findCustomer(null, "SomeFirsname", null, null, null, null, null);
         assertEquals(2, list.size());
@@ -141,6 +142,42 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         assertEquals(1, list.size());
         list = customerService.findCustomer(null, null, null, null, null, null, "P2");
         assertEquals(1, list.size());
+    }
+
+    @Test
+    public void testIsPasswordValid() throws Exception {
+
+        final Shop shop = shopService.getById(10L);
+        final Shop subShop = shopService.getById(1010L);
+
+        Customer customer = getCustomer(getTestName() + "_1");
+        customer.setEmail("user1@passvalid.com");
+
+        assertFalse(customerService.isCustomerExists(customer.getEmail(), shop));
+        assertFalse(customerService.isPasswordValid(customer.getEmail(), shop, "rawpassword"));
+
+        customerService.create(customer, shop);
+
+        assertTrue(customerService.isCustomerExists(customer.getEmail(), shop));
+        assertTrue(customerService.isPasswordValid(customer.getEmail(), shop, "rawpassword"));
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+                final Customer cust = customerService.findById(customer.getId());
+                final CustomerShop customerShop = customerService.getGenericDao().getEntityFactory().getByIface(CustomerShop.class);
+                customerShop.setShop(subShop);
+                customerShop.setCustomer(cust);
+                customerShop.setDisabled(false);
+                cust.getShops().add(customerShop);
+                customerService.update(cust);
+            }
+        });
+
+        assertTrue(customerService.isCustomerExists(customer.getEmail(), shop));
+        assertFalse("Cannot determine shop with multiple assignments",
+                customerService.isPasswordValid(customer.getEmail(), shop, "rawpassword"));
+
     }
 
     private Customer getCustomer(String prefix) {
