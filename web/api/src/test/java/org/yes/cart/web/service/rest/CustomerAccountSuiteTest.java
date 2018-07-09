@@ -260,6 +260,35 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
+        mockMvc.perform(get("/auth/check")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
+                .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/auth/logout").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        
+        mockMvc.perform(get("/auth/check")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"authenticated\":false")))
+                .andExpect(header().string("yc", uuid));
+
     }
 
     @Test
@@ -449,6 +478,34 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
+        mockMvc.perform(get("/auth/check")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
+                .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/auth/logout").contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+
+        mockMvc.perform(get("/auth/check")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("<authenticated>false</authenticated>")))
+                .andExpect(header().string("yc", uuid));
     }
 
     private byte[] toJsonAddToWishListCommand(final String sku) throws Exception {

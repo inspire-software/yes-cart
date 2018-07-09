@@ -1290,7 +1290,7 @@ public class AuthenticationController {
      * Execute logout command.
      */
     protected void executeLogoutCommand() {
-        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, cartMixin.getCurrentCart(),
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT, cartMixin.getCurrentCart(),
                 new HashMap<String, Object>() {{
                     put(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
                 }}
