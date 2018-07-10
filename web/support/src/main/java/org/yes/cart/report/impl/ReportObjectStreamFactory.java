@@ -89,7 +89,7 @@ public class ReportObjectStreamFactory {
         xStream.alias("carrierSla", CarrierSlaEntity.class);
 
         xStream.alias("order", CustomerOrderEntity.class);
-        xStream.omitField(CustomerOrderEntity.class, "shop");
+//        xStream.omitField(CustomerOrderEntity.class, "shop");
         xStream.alias("orderLine", CustomerOrderDetEntity.class);
         xStream.omitField(CustomerOrderDetEntity.class, "customerOrder");
         xStream.alias("orderDelivery", CustomerOrderDeliveryEntity.class);
@@ -99,6 +99,9 @@ public class ReportObjectStreamFactory {
 
         xStream.alias("shop", ShopEntity.class);
         xStream.alias("shopurl", ShopUrlEntity.class);
+        xStream.omitField(ShopUrlEntity.class, "shop");
+        xStream.omitField(AttrValueEntityShop.class, "shop");
+        xStream.omitField(ShopCategoryEntity.class, "shop");
 
         xStream.alias("pair", Pair.class);
 
