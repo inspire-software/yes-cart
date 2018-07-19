@@ -1227,8 +1227,28 @@
     </bean>
 
     <bean id="deliveryTimeEstimationVisitor" class="org.yes.cart.shoppingcart.impl.DeliveryTimeEstimationVisitorImpl">
-        <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="carrierSlaService"/>
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1">
+            <bean class="org.yes.cart.shoppingcart.impl.DeliveryTimeEstimationVisitorDefaultImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="carrierSlaService"/>
+            </bean>
+        </constructor-arg>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="fulfilment"/>
+                <property name="name" value="deliveryTimeEstimationVisitor"/>
+                <property name="cfgInterface" value="DeliveryTimeEstimationVisitor"/>
+                <property name="cfgDefault" value="true"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.deliveryTimeEstimationVisitor=configurationBeanName, where SHOPCODE is the code of the shop and deliveryTimeEstimationVisitor is custom implementation</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
     </bean>
 
     <bean id="taxProvider" class="org.yes.cart.shoppingcart.impl.TaxProviderImpl">
@@ -1318,7 +1338,7 @@
                     <props>
                         <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
                         <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
-                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.inventoryResolver=configurationBeanName, where SHOPCODE is the code of the shop and configurationBeanName is custom implementation</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">FFCODE.inventoryResolver=configurationBeanName, where FFCODE is the code of the centre and configurationBeanName is custom implementation</prop>
                     </props>
                 </property>
             </bean>

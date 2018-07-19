@@ -16,64 +16,51 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
+import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.service.domain.CarrierSlaService;
-import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.TimeContext;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: denispavlov
  * Date: 07/02/2017
  * Time: 07:36
  */
-public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimationVisitor {
+public class DeliveryTimeEstimationVisitorImpl 
+        implements DeliveryTimeEstimationVisitor, ConfigurationRegistry<String, DeliveryTimeEstimationVisitor>, Configuration {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeliveryTimeEstimationVisitorImpl.class);
 
-    private static final int MAX_NAMED_DAY_IF_NOT_SET = 60; // +60days upfront for customer to choose by default
+    private final ShopService shopService;
+    private final DeliveryTimeEstimationVisitor defaultDeliveryTimeEstimationVisitor;
+    private final Map<String, DeliveryTimeEstimationVisitor> customDeliveryTimeEstimationVisitors = new HashMap<>();
+    private ConfigurationContext cfgContext;
 
-    private final WarehouseService warehouseService;
-    private final CarrierSlaService carrierSlaService;
-
-    public DeliveryTimeEstimationVisitorImpl(final WarehouseService warehouseService,
-                                             final CarrierSlaService carrierSlaService) {
-        this.warehouseService = warehouseService;
-        this.carrierSlaService = carrierSlaService;
+    public DeliveryTimeEstimationVisitorImpl(final ShopService shopService,
+                                             final DeliveryTimeEstimationVisitor deliveryTimeEstimationVisitor) {
+        this.shopService = shopService;
+        this.defaultDeliveryTimeEstimationVisitor = deliveryTimeEstimationVisitor;
     }
+
 
     /** {@inheritDoc} */
     @Override
     public void visit(final CustomerOrder order) {
 
-        final Collection<CustomerOrderDelivery> deliveries = order.getDelivery();
-        if (CollectionUtils.isNotEmpty(deliveries)) {
+        final Shop orderShop = shopService.getById(order.getShop().getShopId());
+        final Shop cfgShop = orderShop.getMaster() == null ? orderShop : shopService.getById(orderShop.getMaster().getShopId());
 
-            final Map<String, Warehouse> warehouseByCode = getFulfilmentCentresMap(order);
-
-            for (final CustomerOrderDelivery delivery : deliveries) {
-
-                determineDeliveryTime(delivery, warehouseByCode);
-
-            }
-
-        }
+        getDeliveryTimeEstimationVisitor(cfgShop.getCode()).visit(order);
 
     }
 
@@ -81,387 +68,59 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
     @Override
     public void visit(final CustomerOrderDelivery delivery) {
 
-        final Map<String, Warehouse> warehouseByCode = getFulfilmentCentresMap(delivery.getCustomerOrder());
+        final Shop orderShop = shopService.getById(delivery.getCustomerOrder().getShop().getShopId());
+        final Shop cfgShop = orderShop.getMaster() == null ? orderShop : shopService.getById(orderShop.getMaster().getShopId());
 
-        determineDeliveryTime(delivery, warehouseByCode);
+        getDeliveryTimeEstimationVisitor(cfgShop.getCode()).visit(delivery);
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public void visit(final MutableShoppingCart shoppingCart) {
 
-        final Map<String, Warehouse> warehouseByCode = getFulfilmentCentresMap(shoppingCart);
+        final Shop cfgShop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
 
-        for (final Map.Entry<String, Long> carrierSlaEntry : shoppingCart.getOrderInfo().getCarrierSlaId().entrySet()) {
-            determineDeliveryAvailableTimeRange(shoppingCart, carrierSlaEntry.getValue(), warehouseByCode.get(carrierSlaEntry.getKey()));
-        }
+        getDeliveryTimeEstimationVisitor(cfgShop.getCode()).visit(shoppingCart);
 
     }
 
-    /**
-     * Fulfilment centres map.
-     *
-     * @param order order
-     *
-     * @return applicable suppliers
-     */
-    protected Map<String, Warehouse> getFulfilmentCentresMap(final CustomerOrder order) {
-        return warehouseService.getByShopIdMapped(order.getShop().getShopId(), false);
+    protected DeliveryTimeEstimationVisitor getDeliveryTimeEstimationVisitor(final String warehouseCode) {
+        DeliveryTimeEstimationVisitor resolver = customDeliveryTimeEstimationVisitors.get(warehouseCode);
+        if (resolver == null) {
+            resolver = defaultDeliveryTimeEstimationVisitor;
+        }
+        return resolver;
     }
 
-    /**
-     * Fulfilment centres map.
-     *
-     * @param cart cart
-     *
-     * @return applicable suppliers
-     */
-    protected Map<String, Warehouse> getFulfilmentCentresMap(final MutableShoppingCart cart) {
-        return warehouseService.getByShopIdMapped(cart.getShoppingContext().getCustomerShopId(), false);
+    /** {@inheritDoc} */
+    @Override
+    public boolean supports(final Object configuration) {
+        return configuration instanceof DeliveryTimeEstimationVisitor ||
+                (configuration instanceof Class && DeliveryTimeEstimationVisitor.class.isAssignableFrom((Class<?>) configuration));
     }
 
-    /**
-     * Visit shopping cart for given carrier SLA selection.
-     *
-     * @param shoppingCart cart
-     * @param carrierSlaId carrier SLA
-     * @param ff           fulfilment centre
-     */
-    protected void determineDeliveryAvailableTimeRange(final MutableShoppingCart shoppingCart, final Long carrierSlaId, final Warehouse ff) {
+    /** {@inheritDoc} */
+    @Override
+    public void register(final String shopCode, final DeliveryTimeEstimationVisitor provider) {
 
-        if (carrierSlaId == null) {
-            return; // do nothing if we have no selection
-        }
-
-        final CarrierSla sla = carrierSlaService.findById(carrierSlaId);
-        if (sla == null) {
-            return; // do nothing if we have no selection
-        }
-
-        final String suffix = sla.getCarrierslaId() + (ff != null ? ff.getCode() : "");
-        final String requestedDateKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + suffix;
-        final String minKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "Min" + suffix;
-        final String maxKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "Max" + suffix;
-        final String excludedDatesKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "DExcl" + suffix;
-        final String excludedWeekdaysKey = AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID + "WExcl" + suffix;
-
-        // Get existing selection, so that we can check it against valid dates later
-        LocalDate requestedDate = DateUtils.ldFrom(NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(requestedDateKey)));
-
-        // Ensure we clean up any old data
-        shoppingCart.getOrderInfo().putDetail(requestedDateKey, null);
-        shoppingCart.getOrderInfo().putDetail(minKey, null);
-        shoppingCart.getOrderInfo().putDetail(maxKey, null);
-        shoppingCart.getOrderInfo().putDetail(excludedDatesKey, null);
-        shoppingCart.getOrderInfo().putDetail(excludedWeekdaysKey, null);
-
-        if (!sla.isNamedDay()) {
-            return; // Only named date should have this calculation, as all others are automatic min/max
-        }
-
-        LocalDate minDeliveryTime = now();
-
-        if (ff != null && ff.getDefaultBackorderStockLeadTime() > 0) {
-            for (final CartItem item : shoppingCart.getCartItemList()) {
-                final String dgroup = item.getDeliveryBucket().getGroup();
-                if (!CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(dgroup) &&
-                        !CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(dgroup)) {
-                    minDeliveryTime = minDeliveryTime.plusDays(ff.getDefaultBackorderStockLeadTime());
-                }
-            }
-        }
-
-        final Map<LocalDate, LocalDate> slaExcludedDates = getCarrierSlaExcludedDates(sla);
-
-        final int minDays = sla.getMinDays() != null ? sla.getMinDays() : 0;
-        final int maxDays = sla.getMaxDays() != null ? sla.getMaxDays() : MAX_NAMED_DAY_IF_NOT_SET;
-
-        if (minDays > 0) {
-            minDeliveryTime = minDeliveryTime.plusDays(minDays);
-        }
-
-        // Set hard lower limit, before skipping exclusions
-        LocalDate maxDeliveryTime = minDeliveryTime;
-
-        minDeliveryTime = skipWeekdayExclusions(sla, minDeliveryTime);
-        minDeliveryTime = skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
-
-        LocalDate min = minDeliveryTime;
-
-        // Ensure we are not below lower limit before we check exclusions
-        if (requestedDate.isBefore(minDeliveryTime)) {
-            requestedDate = minDeliveryTime;
-        }
-
-        if (maxDays > minDays) {
-            maxDeliveryTime = maxDeliveryTime.plusDays(maxDays - minDays);
+        if (provider != null) {
+            LOG.debug("Custom shop settings for {} registering delivery time estimation visitor {}", shopCode, provider.getClass());
+            customDeliveryTimeEstimationVisitors.put(shopCode, provider);
         } else {
-            maxDeliveryTime = maxDeliveryTime.plusDays(1); // Misconfiguration - just show one day
-        }
-        // We want a hard limit on max, so we do not skip beyond maxDays
-        // skipWeekdayExclusions(sla, maxDeliveryTime);
-
-        LocalDate max = maxDeliveryTime;
-
-        final Map<LocalDate, LocalDate> exclusions = sla.getExcludeDatesAsMap();
-        if (!exclusions.isEmpty() || !sla.getExcludeWeekDaysAsList().isEmpty()) {
-
-            final StringBuilder exclusionsInMinMax = new StringBuilder();
-
-            LocalDate nextDay = min;
-            LocalDate lastValidDate = min;
-
-            while (nextDay.isBefore(max)) {
-
-                nextDay = nextDay.plusDays(1);
-
-                LocalDate expectedNextDay = nextDay;
-
-                nextDay = skipWeekdayExclusions(sla, nextDay);
-                nextDay = skipDatesExclusions(sla, nextDay, exclusions);
-
-                if (!expectedNextDay.isEqual(nextDay)) {
-                    // we skipped
-                    LocalDate excluded = expectedNextDay;
-
-                    // Ensure requested date is not in exclusion range and if it is set the first day after the exclusion
-                    if (!requestedDate.isBefore(expectedNextDay) && requestedDate.isBefore(nextDay)) {
-                        requestedDate = nextDay;
-                    }
-
-                    do {
-
-                        if (exclusionsInMinMax.length() > 0) {
-                            exclusionsInMinMax.append(',');
-                        }
-                        exclusionsInMinMax.append(DateUtils.millis(excluded));
-                        excluded = excluded.plusDays(1);
-
-                    } while (excluded.isBefore(nextDay));
-                } else {
-                    // This date is not excluded
-                    lastValidDate = expectedNextDay;
-                }
-
-            }
-
-            // Save excluded dates as long values
-            if (exclusionsInMinMax.length() > 0) {
-                shoppingCart.getOrderInfo().putDetail(excludedDatesKey, exclusionsInMinMax.toString());
-            }
-
-            // Save excluded week days as long values
-            if (StringUtils.isNotBlank(sla.getExcludeWeekDays())) {
-                shoppingCart.getOrderInfo().putDetail(excludedWeekdaysKey, sla.getExcludeWeekDays());
-            }
-
-            // Tailing exclusions
-            if (lastValidDate.isBefore(max)) {
-                max = lastValidDate;
-            }
-            if (requestedDate.isAfter(lastValidDate)) {
-                requestedDate = lastValidDate;
-            }
-
-        }
-
-        // Ensure we are not above upper limit after we checked exclusions
-        if (requestedDate.isAfter(max)) {
-            requestedDate = max;
-        }
-
-        // Save possible min - max range and preselect requested date, since this is named delivery
-        shoppingCart.getOrderInfo().putDetail(requestedDateKey, String.valueOf(DateUtils.millis(requestedDate)));
-        shoppingCart.getOrderInfo().putDetail(minKey, String.valueOf(DateUtils.millis(min)));
-        shoppingCart.getOrderInfo().putDetail(maxKey, String.valueOf(DateUtils.millis(max)));
-
-    }
-
-
-    /**
-     * Visit single delivery.
-     *
-     * @param customerOrderDelivery customer order delivery
-     * @param warehouseByCode       all fulfilment centres
-     */
-    protected void determineDeliveryTime(final CustomerOrderDelivery customerOrderDelivery, final Map<String, Warehouse> warehouseByCode) {
-
-        if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(customerOrderDelivery.getDeliveryGroup())) {
-
-            final CarrierSla sla = customerOrderDelivery.getCarrierSla();
-
-            LocalDate minDeliveryTime = now();
-
-            // Honour warehouse lead inventory
-            minDeliveryTime = skipInventoryLeadTime(customerOrderDelivery, warehouseByCode, minDeliveryTime);
-
-            boolean namedDay = sla.isNamedDay();
-
-            final Map<LocalDate, LocalDate> slaExcludedDates = getCarrierSlaExcludedDates(sla);
-
-            final int minDays = sla.getMinDays() != null ? sla.getMinDays() : 0;
-            final int maxDays = sla.getMaxDays() != null ? sla.getMaxDays() : (namedDay ? MAX_NAMED_DAY_IF_NOT_SET : 0);
-
-            // Ensure delivery lead time
-            if (minDays > 0) {
-                minDeliveryTime = minDeliveryTime.plusDays(minDays);
-            }
-
-            // Process exclusions to ensure that we do not set excluded day (For named day this should not make any changes
-            // since we already checked it, this is just to ensure we do not have manual tampering with data)
-            minDeliveryTime = skipWeekdayExclusions(sla, minDeliveryTime);
-            minDeliveryTime = skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
-
-            // For named days ensure that requested date is valid
-            if (namedDay) {
-                // It must set and not before the lower limit
-                if (customerOrderDelivery.getRequestedDeliveryDate() != null && !customerOrderDelivery.getRequestedDeliveryDate().isBefore(minDeliveryTime.atStartOfDay())) {
-
-                    LocalDate checkRequested = customerOrderDelivery.getRequestedDeliveryDate().toLocalDate();
-
-                    // Attempt to skip exclusion to see if the date changes
-                    checkRequested = skipWeekdayExclusions(sla, checkRequested);
-                    checkRequested = skipDatesExclusions(sla, checkRequested, slaExcludedDates);
-
-                    if (customerOrderDelivery.getRequestedDeliveryDate().isEqual(checkRequested.atStartOfDay())) {
-                        // We have not changed the date so it is valid, for named date we do not estimate
-                        return;
-                    }
-
-                    // else the requested date is invalid, so we use the next available after the exclusions
-                    minDeliveryTime = checkRequested;
-
-                }
-
-                // else requested date is less than minimal
-            }
-
-            LocalDate guaranteed = null;
-            LocalDate min = null;
-            LocalDate max = null;
-
-            // Named day assumes that it is guaranteed
-            if (sla.isGuaranteed() || namedDay) {
-                if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(customerOrderDelivery.getDeliveryGroup())) {
-                    // guarantee is only for in stock items
-                    guaranteed = minDeliveryTime;
-                } else {
-                    min = minDeliveryTime;
-                }
-
-            } else {
-                min = minDeliveryTime;
-                if (maxDays > minDays) {
-                    minDeliveryTime = skipWeekdayExclusions(sla, minDeliveryTime.plusDays(maxDays - minDays));
-                }
-                max = minDeliveryTime;
-            }
-
-            // Need to reset all in case we have dirty fields
-            customerOrderDelivery.setDeliveryGuaranteed(guaranteed != null ? guaranteed.atStartOfDay() : null);
-            customerOrderDelivery.setDeliveryEstimatedMin(min != null ? min.atStartOfDay() : null);
-            customerOrderDelivery.setDeliveryEstimatedMax(max != null ? max.atStartOfDay() : null);
-
+            LOG.debug("Custom shop settings for {} registering delivery time estimation visitor DEFAULT", shopCode);
+            customDeliveryTimeEstimationVisitors.remove(shopCode);
         }
 
     }
 
-    /**
-     * Skip lead time set by inventory
-     *
-     * @param customerOrderDelivery delivery
-     * @param warehouseByCode       fulfilment centers
-     * @param minDeliveryTime       start date (i.e. now)
-     */
-    protected LocalDate skipInventoryLeadTime(final CustomerOrderDelivery customerOrderDelivery, final Map<String, Warehouse> warehouseByCode, final LocalDate minDeliveryTime) {
-
-        LocalDate min = minDeliveryTime;
-        if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(customerOrderDelivery.getDeliveryGroup())) {
-
-            final Warehouse ff = warehouseByCode.get(customerOrderDelivery.getDetail().iterator().next().getSupplierCode());
-            if (ff != null && ff.getDefaultStandardStockLeadTime() > 0) {
-                min = min.plusDays(ff.getDefaultStandardStockLeadTime());
-            }
-
-        } else {
-            // Pre, Back and Mixed (very simplistic) TODO: account for product specific lead times and pre-order release dates
-            final Warehouse ff = warehouseByCode.get(customerOrderDelivery.getDetail().iterator().next().getSupplierCode());
-            if (ff != null && ff.getDefaultBackorderStockLeadTime() > 0) {
-                min = min.plusDays(ff.getDefaultBackorderStockLeadTime());
-            }
-
-        }
-        return min;
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
     }
 
-    protected LocalDate now() {
-        return TimeContext.getLocalDate();
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
     }
-
-    protected Map<LocalDate, LocalDate> getCarrierSlaExcludedDates(final CarrierSla sla) {
-
-        return sla.getExcludeDatesAsMap();
-
-    }
-
-    protected LocalDate skipWeekdayExclusions(final CarrierSla sla, final LocalDate date) {
-
-        LocalDate thisDate = date;
-        final List<Integer> skip = sla.getExcludeWeekDaysAsList();
-        if (!skip.isEmpty()) {
-            final List<DayOfWeek> excluded = new ArrayList<>(DateUtils.fromCalendarDaysOfWeekToISO(skip));
-            while (!excluded.isEmpty()) {
-                final DayOfWeek dayOfWeek = thisDate.getDayOfWeek();
-                final Iterator<DayOfWeek> itExcluded = excluded.iterator();
-                boolean removed = false;
-                while (itExcluded.hasNext()) {
-                    if (dayOfWeek == itExcluded.next()) {
-                        thisDate = thisDate.plusDays(1);  // This date is excluded
-                        itExcluded.remove();
-                        removed = true;
-                    }
-                }
-                if (!removed) {
-                    return thisDate;
-                }
-            }
-        }
-        return thisDate;
-
-    }
-
-
-    protected LocalDate skipDatesExclusions(final CarrierSla sla, final LocalDate startDate, final Map<LocalDate, LocalDate> exclusions) {
-
-        LocalDate thisDate = startDate;
-        if (!exclusions.isEmpty()) {
-
-            final TreeSet<LocalDate> startDates = new TreeSet<>(exclusions.keySet());
-
-            while (true) {
-                final LocalDate beforeOrEqual = startDates.floor(thisDate);
-                if (beforeOrEqual == null) {
-                    return thisDate; // no exclusions before
-                } else if (beforeOrEqual.isBefore(thisDate)) {
-                    final LocalDate rangeEnd = exclusions.get(beforeOrEqual);
-                    // Two cases here:
-                    // 1) Single date - same as beforeOfEqual
-                    // 2) Range - need to make sure it is before this date
-                    if (thisDate.isAfter(rangeEnd)) {
-                        return thisDate; // This date is after the min in exclusions
-                    } else {
-                        thisDate = skipWeekdayExclusions(sla, rangeEnd.plusDays(1L));
-                    }
-                } else {
-                    // equal, so need to move next day and check weekdays
-                    thisDate = skipWeekdayExclusions(sla, thisDate.plusDays(1L));
-                }
-            }
-
-        }
-        return thisDate;
-
-    }
-
-
 }

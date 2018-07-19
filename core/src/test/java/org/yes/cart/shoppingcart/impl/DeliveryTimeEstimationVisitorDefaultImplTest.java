@@ -42,7 +42,7 @@ import static org.junit.Assert.*;
  * Date: 07/02/2017
  * Time: 13:03
  */
-public class DeliveryTimeEstimationVisitorImplTest {
+public class DeliveryTimeEstimationVisitorDefaultImplTest {
 
     private final Mockery context = new JUnit4Mockery();
 
@@ -62,7 +62,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(det).getSupplierCode(); will(returnValue("CED"));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
+        new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
         assertEquals("2017-02-07", DateUtils.formatSD(calendar));
 
@@ -87,7 +87,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
+        new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
 
         assertEquals("2017-02-07", DateUtils.formatSD(calendar));
 
@@ -113,7 +113,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         ;
 
         assertEquals("2017-02-09", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), DateUtils.ldParseSDT("2017-02-07"))
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), DateUtils.ldParseSDT("2017-02-07"))
         ));
 
         this.context.assertIsSatisfied();
@@ -138,7 +138,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         ;
 
         assertEquals("2017-02-09", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), DateUtils.ldParseSDT("2017-02-07"))
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), DateUtils.ldParseSDT("2017-02-07"))
         ));
 
         this.context.assertIsSatisfied();
@@ -163,7 +163,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         ;
 
         assertEquals("2017-02-09", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), DateUtils.ldParseSDT("2017-02-07"))
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), DateUtils.ldParseSDT("2017-02-07"))
         ));
 
         this.context.assertIsSatisfied();
@@ -181,7 +181,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
             allowing(sla).getExcludeWeekDaysAsList(); will(returnValue(Collections.emptyList()));
         }});
 
-        new DeliveryTimeEstimationVisitorImpl(null, null).skipWeekdayExclusions(sla, calendar);
+        new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipWeekdayExclusions(sla, calendar);
 
         assertEquals("2017-02-07", DateUtils.formatSD(calendar));
 
@@ -194,7 +194,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final CarrierSla sla = this.context.mock(CarrierSla.class, "sla");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, null);
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, null);
 
         context.checking(new Expectations() {{
             allowing(sla).getExcludeWeekDaysAsList(); will(returnValue(Arrays.asList(1,7)));
@@ -220,7 +220,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CarrierSlaEntity sla = new CarrierSlaEntity();
         sla.setExcludeDates("");
 
-        final Map<LocalDate, LocalDate> dates = new DeliveryTimeEstimationVisitorImpl(null, null).getCarrierSlaExcludedDates(sla);
+        final Map<LocalDate, LocalDate> dates = new DeliveryTimeEstimationVisitorDefaultImpl(null, null).getCarrierSlaExcludedDates(sla);
 
         assertNotNull(dates);
         assertTrue(dates.isEmpty());
@@ -236,7 +236,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         LocalDate date, date2;
 
-        final Map<LocalDate, LocalDate> dates = new DeliveryTimeEstimationVisitorImpl(null, null).getCarrierSlaExcludedDates(sla);
+        final Map<LocalDate, LocalDate> dates = new DeliveryTimeEstimationVisitorDefaultImpl(null, null).getCarrierSlaExcludedDates(sla);
 
         assertNotNull(dates);
         assertEquals(3, dates.size());
@@ -265,7 +265,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         ;
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorImpl(null, null).skipDatesExclusions(sla, DateUtils.ldParseSDT("2017-02-07"), Collections.<LocalDate, LocalDate>emptyMap())
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipDatesExclusions(sla, DateUtils.ldParseSDT("2017-02-07"), Collections.<LocalDate, LocalDate>emptyMap())
         ));
 
         this.context.assertIsSatisfied();
@@ -280,7 +280,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         final CarrierSlaEntity sla = new CarrierSlaEntity();
         sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, null);
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, null);
 
         final Map<LocalDate, LocalDate> dates = visitor.getCarrierSlaExcludedDates(sla);
 
@@ -308,7 +308,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
         sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
         sla.setExcludeWeekDays("1,5,7");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, null);
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, null);
 
         final Map<LocalDate, LocalDate> dates = visitor.getCarrierSlaExcludedDates(sla);
 
@@ -353,7 +353,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(warehouseService, null) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -405,7 +405,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(warehouseService, null) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -456,7 +456,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(warehouseService, null) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -509,7 +509,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(warehouseService, null) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -560,7 +560,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(warehouseService, null) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -611,7 +611,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(warehouseService, null) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -661,7 +661,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(warehouseService, null) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -711,7 +711,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(warehouseService, null) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -760,7 +760,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(warehouseService, null) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(warehouseService, null) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -802,7 +802,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -831,7 +831,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -869,7 +869,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -913,7 +913,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -962,7 +962,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1012,7 +1012,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1064,7 +1064,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1116,7 +1116,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1167,7 +1167,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1219,7 +1219,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1271,7 +1271,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1325,7 +1325,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1381,7 +1381,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1437,7 +1437,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;
@@ -1495,7 +1495,7 @@ public class DeliveryTimeEstimationVisitorImplTest {
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        final DeliveryTimeEstimationVisitorImpl visitor = new DeliveryTimeEstimationVisitorImpl(null, carrierSlaService) {
+        final DeliveryTimeEstimationVisitorDefaultImpl visitor = new DeliveryTimeEstimationVisitorDefaultImpl(null, carrierSlaService) {
             @Override
             protected LocalDate now() {
                 return calendar;

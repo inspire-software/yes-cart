@@ -106,10 +106,10 @@ public class InventoryResolverImpl
     public void register(final String warehouseCode, final InventoryResolver provider) {
 
         if (provider != null) {
-            LOG.debug("Custom shop settings for {} registering inventory resolver {}", warehouseCode, provider.getClass());
+            LOG.debug("Custom fulfilment centre settings for {} registering inventory resolver {}", warehouseCode, provider.getClass());
             customInventoryResolvers.put(warehouseCode, provider);
         } else {
-            LOG.debug("Custom shop settings for {} registering inventory resolver DEFAULT", warehouseCode);
+            LOG.debug("Custom fulfilment centre settings for {} registering inventory resolver DEFAULT", warehouseCode);
             customInventoryResolvers.remove(warehouseCode);
         }
 
