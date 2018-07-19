@@ -20,6 +20,7 @@ public class PriceModelImpl implements PriceModel {
     private final BigDecimal salePrice;
 
     private final boolean priceUponRequest;
+    private final boolean priceOnOffer;
 
     private final boolean taxInfoEnabled;
     private final boolean taxInfoUseNet;
@@ -37,15 +38,17 @@ public class PriceModelImpl implements PriceModel {
                           final String currency,
                           final BigDecimal quantity,
                           final boolean priceUponRequest,
+                          final boolean priceOnOffer,
                           final BigDecimal regularPrice,
                           final BigDecimal salePrice) {
-        this(ref, currency, quantity, priceUponRequest, regularPrice, salePrice, false, false, false, null, null, false, null);
+        this(ref, currency, quantity, priceUponRequest, priceOnOffer, regularPrice, salePrice, false, false, false, null, null, false, null);
     }
 
     public PriceModelImpl(final String ref,
                           final String currency,
                           final BigDecimal quantity,
                           final boolean priceUponRequest,
+                          final boolean priceOnOffer,
                           final BigDecimal regularPrice,
                           final BigDecimal salePrice,
                           final boolean taxInfoEnabled,
@@ -59,6 +62,7 @@ public class PriceModelImpl implements PriceModel {
         this.currency = currency;
         this.quantity = quantity;
         this.priceUponRequest = priceUponRequest;
+        this.priceOnOffer = priceOnOffer;
         this.regularPrice = regularPrice;
         this.salePrice = salePrice;
         this.taxInfoEnabled = taxInfoEnabled;
@@ -104,6 +108,12 @@ public class PriceModelImpl implements PriceModel {
     @Override
     public boolean isPriceUponRequest() {
         return priceUponRequest;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isPriceOnOffer() {
+        return priceOnOffer;
     }
 
     /** {@inheritDoc} */

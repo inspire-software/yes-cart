@@ -493,6 +493,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
@@ -557,6 +558,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
@@ -625,6 +627,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
@@ -699,6 +702,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
@@ -776,6 +780,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
@@ -852,6 +857,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), null)));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
@@ -929,6 +935,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
@@ -1003,6 +1010,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
@@ -1080,6 +1088,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
@@ -1156,6 +1165,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
+            allowing(skuPrice).isPriceOnOffer(); will(returnValue(false));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("100.00"), new BigDecimal("80.00"))));
             allowing(shopService).getById(234L); will(returnValue(shop));
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
@@ -2204,6 +2214,7 @@ public class ProductServiceFacadeImplTest {
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
             allowing(priceNow).getRegularPrice(); will(returnValue(null));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2216,7 +2227,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2266,6 +2277,7 @@ public class ProductServiceFacadeImplTest {
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("9.99")));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(true));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(true));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2278,7 +2290,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertTrue(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2328,6 +2340,7 @@ public class ProductServiceFacadeImplTest {
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("USD"));
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("9.99")));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.99"), null)));
         }});
 
@@ -2341,7 +2354,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2393,6 +2406,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("9.99")));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("9.99"), null)));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2405,7 +2419,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2457,6 +2471,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("12.99")));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), new BigDecimal("9.99"))));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2469,7 +2484,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2521,6 +2536,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("8.99")));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("8.99"), null)));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2533,7 +2549,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2585,6 +2601,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("12.99")));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), new BigDecimal("8.99"))));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2597,7 +2614,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2650,6 +2667,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("12.99")));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), null)));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2662,7 +2680,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2715,6 +2733,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("14.99")));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("14.99"), new BigDecimal("12.99"))));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2727,7 +2746,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2781,6 +2800,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("12.99")));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("12.99"), null)));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2793,7 +2813,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
@@ -2846,6 +2866,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("14.99")));
             allowing(priceNow).getSalePriceForCalculation(); will(returnValue(new Pair<>(new BigDecimal("14.99"), new BigDecimal("12.99"))));
             allowing(priceNow).isPriceUponRequest(); will(returnValue(false));
+            allowing(priceNow).isPriceOnOffer(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
@@ -2858,7 +2879,7 @@ public class ProductServiceFacadeImplTest {
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);

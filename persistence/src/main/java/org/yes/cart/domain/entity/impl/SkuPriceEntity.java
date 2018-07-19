@@ -39,6 +39,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     private String currency;
     private BigDecimal quantity;
     private boolean priceUponRequest;
+    private boolean priceOnOffer;
     private BigDecimal regularPrice;
     private BigDecimal salePrice;
     private BigDecimal minimalPrice;
@@ -106,6 +107,16 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     @Override
     public void setPriceUponRequest(final boolean priceUponRequest) {
         this.priceUponRequest = priceUponRequest;
+    }
+
+    @Override
+    public boolean isPriceOnOffer() {
+        return priceOnOffer;
+    }
+
+    @Override
+    public void setPriceOnOffer(final boolean priceOnOffer) {
+        this.priceOnOffer = priceOnOffer;
     }
 
     @Override

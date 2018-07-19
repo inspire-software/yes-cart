@@ -163,20 +163,23 @@ public class PriceView extends BaseComponent {
         final String lang = getLocale().getLanguage();
 
         final boolean priceUponRequest = priceModel.isPriceUponRequest();
+        final boolean priceOnOffer = priceModel.isPriceOnOffer();
 
         BigDecimal priceToFormat = priceModel.getRegularPrice();
-        String cssModificator = "regular";
+        String cssModifier = "regular";
         if (priceUponRequest) {
-            cssModificator = "upon-request";
+            cssModifier = "upon-request";
         } else if (priceModel.getSalePrice() != null && MoneyUtils.isFirstBiggerThanSecond(priceModel.getRegularPrice(), priceModel.getSalePrice())) {
             priceToFormat = priceModel.getSalePrice();
-            cssModificator = "sale";
+            cssModifier = "sale";
             showSave = this.showSavings;
             if (showSave) {
                 final BigDecimal save = MoneyUtils.getDiscountDisplayValue(priceModel.getRegularPrice(), priceModel.getSalePrice());
                 savePercent = save.toString();
                 listPrice = priceModel.getRegularPrice().setScale(Constants.MONEY_SCALE, RoundingMode.HALF_UP).toPlainString();
             }
+        } else if (priceOnOffer) {
+            cssModifier = "sale"; // if we have "on offer" flag then display price as sale
         }
         final boolean nonZero = MoneyUtils.isPositive(priceToFormat);
         final String[] formatted;
@@ -192,15 +195,15 @@ public class PriceView extends BaseComponent {
 
         addOrReplace(
                 new Label(WHOLE_LABEL, formatted[0])
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_WHOLE)));
+                        .add(new AttributeModifier(HTML_CLASS, cssModifier + CSS_SUFFIX_WHOLE)));
         addOrReplace(
                 new Label(DOT_LABEL, ".")
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DOT))
+                        .add(new AttributeModifier(HTML_CLASS, cssModifier + CSS_SUFFIX_DOT))
                         .setVisible(showFractionalPart)
         );
         addOrReplace(
                 new Label(DECIMAL_LABEL, formatted[1])
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL))
+                        .add(new AttributeModifier(HTML_CLASS, cssModifier + CSS_SUFFIX_DECIMAL))
                         .setVisible(showFractionalPart)
         );
 
@@ -212,13 +215,13 @@ public class PriceView extends BaseComponent {
                 new Label(CURRENCY_LABEL, symbol.getFirst())
                         .setVisible(showMainCurrencySymbol && !symbol.getSecond())
                         .setEscapeModelStrings(false)
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY)));
+                        .add(new AttributeModifier(HTML_CLASS, cssModifier + CSS_SUFFIX_CURRENCY)));
 
         addOrReplace(
                 new Label(CURRENCY2_LABEL, symbol.getFirst())
                         .setVisible(showMainCurrencySymbol && symbol.getSecond())
                         .setEscapeModelStrings(false)
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY)));
+                        .add(new AttributeModifier(HTML_CLASS, cssModifier + CSS_SUFFIX_CURRENCY)));
 
 
         final Map<String, Object> tax = new HashMap<>();
@@ -235,7 +238,7 @@ public class PriceView extends BaseComponent {
         taxWrapper.add(new Label(TAX_LABEL,
                 WicketUtil.createStringResourceModel(this, taxNote, tax))
                 .setVisible(this.showTax && nonZero && !priceUponRequest)
-                .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_TAX)));
+                .add(new AttributeModifier(HTML_CLASS, cssModifier + CSS_SUFFIX_TAX)));
         taxWrapper.setVisible(this.showTax && nonZero && !priceUponRequest);
 
         addOrReplace(taxWrapper);

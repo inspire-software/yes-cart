@@ -109,6 +109,22 @@ public interface SkuPrice extends Auditable, Taggable {
      */
     void setPriceUponRequest(boolean priceUponRequest);
 
+    /**
+     * Get price on offer flag. This flag is used to indicate special (sale) prices when the list price
+     * is the same as sale price. This flag is generally used by "limited" third party ERP integrations
+     * that cannot provide full list price but can only indicate that price is on offer and is already
+     * discounted but it cannot specify by how much.
+     *
+     * @return flag
+     */
+    boolean isPriceOnOffer();
+
+    /**
+     * Set price on offer flag.
+     *
+     * @param priceOnOffer set flag
+     */
+    void setPriceOnOffer(boolean priceOnOffer);
 
     /**
      * Get regular/list price.

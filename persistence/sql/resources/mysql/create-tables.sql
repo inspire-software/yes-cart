@@ -961,6 +961,7 @@
         CURRENCY varchar(3) not null,
         QTY decimal(19,2) not null,
         PRICE_UPON_REQUEST bit not null default 0,
+        PRICE_ON_OFFER bit not null default 0,
         REGULAR_PRICE decimal(19,2) not null,
         SALE_PRICE decimal(19,2),
         MINIMAL_PRICE decimal(19,2),

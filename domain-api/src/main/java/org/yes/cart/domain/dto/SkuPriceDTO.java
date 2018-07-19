@@ -88,6 +88,20 @@ public interface SkuPriceDTO extends Identifiable {
     void setPriceUponRequest(boolean priceUponRequest);
 
     /**
+     * Get price on offer flag.
+     *
+     * @return flag
+     */
+    boolean isPriceOnOffer();
+
+    /**
+     * Set price on offer flag.
+     *
+     * @param priceOnOffer set flag
+     */
+    void setPriceOnOffer(boolean priceOnOffer);
+
+    /**
      * Get regular/list price.
      *
      * @return regular price.

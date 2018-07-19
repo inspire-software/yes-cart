@@ -52,6 +52,9 @@ public class VoPriceList {
     @DtoField(value = "priceUponRequest")
     private boolean priceUponRequest;
 
+    @DtoField(value = "priceOnOffer")
+    private boolean priceOnOffer;
+
     @DtoField(value = "currency")
     private String currency;
 
@@ -139,6 +142,14 @@ public class VoPriceList {
 
     public void setPriceUponRequest(final boolean priceUponRequest) {
         this.priceUponRequest = priceUponRequest;
+    }
+
+    public boolean isPriceOnOffer() {
+        return priceOnOffer;
+    }
+
+    public void setPriceOnOffer(final boolean priceOnOffer) {
+        this.priceOnOffer = priceOnOffer;
     }
 
     public String getCurrency() {

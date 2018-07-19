@@ -187,6 +187,12 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-xs-3">{{ 'PRICELIST_POF' | translate }} <i class="fa fa-question-circle" title="{{ 'PRICELIST_POF_TIP' | translate }}" [hidden]="!pricelistEdit.priceOnOffer"></i></div>
+            <div class="col-xs-9">
+              <input formControlName="priceOnOffer" name="priceOnOffer" type="checkbox" [(ngModel)]="pricelistEdit.priceOnOffer">
+            </div>
+          </div>
+          <div class="row">
             <div class="col-xs-3">{{ 'PRICELIST_REGULAR' | translate }}</div>
             <div class="col-xs-9">
               <div class="input-group">

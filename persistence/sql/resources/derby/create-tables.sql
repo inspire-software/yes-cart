@@ -961,6 +961,7 @@
         CURRENCY varchar(3) not null,
         QTY numeric(19,2) not null,
         PRICE_UPON_REQUEST smallint not null default 0,
+        PRICE_ON_OFFER smallint not null default 0,
         REGULAR_PRICE numeric(19,2) not null,
         SALE_PRICE numeric(19,2),
         MINIMAL_PRICE numeric(19,2),

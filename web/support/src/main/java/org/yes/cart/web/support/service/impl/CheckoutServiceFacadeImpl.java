@@ -142,6 +142,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
                     false,
+                    false,
                     showTaxNet ? grandTotal.getTotalAmount().subtract(grandTotal.getTotalTax()) : grandTotal.getTotalAmount(),
                     null,
                     showTax, showTaxNet, showTaxAmount,
@@ -158,6 +159,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 ORDER_SUB_TOTAL_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
+                false,
                 false,
                 grandTotal.getTotal(),
                 null
@@ -192,6 +194,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
                     false,
+                    false,
                     hasDiscounts ? grandTotal.getListTotalAmount() : grandTotal.getTotalAmount(),
                     hasDiscounts ? grandTotal.getTotalAmount() : null,
                     showTax, false, showTaxAmount,
@@ -211,6 +214,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
                     false,
+                    false,
                     grandTotal.getListTotalAmount(),
                     grandTotal.getTotalAmount()
             );
@@ -221,6 +225,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 ORDER_TOTAL_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
+                false,
                 false,
                 grandTotal.getTotalAmount(),
                 null
@@ -263,6 +268,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
                     false,
+                    false,
                     showTaxNet ? grandTotal.getSubTotalAmount().subtract(grandTotal.getSubTotalTax()) : grandTotal.getSubTotalAmount(),
                     null,
                     showTax, showTaxNet, showTaxAmount,
@@ -279,6 +285,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 DELIVERY_TOTAL_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
+                false,
                 false,
                 grandTotal.getSubTotal(),
                 null
@@ -314,6 +321,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
                 return new PriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
                         false,
+                        false,
                         showTaxNet ?
                                 MoneyUtils.getNetAmount(grandTotal.getDeliveryListCost(), taxRate, !priceTaxExclusive) :
                                 MoneyUtils.getGrossAmount(grandTotal.getDeliveryListCost(), taxRate, !priceTaxExclusive),
@@ -331,6 +339,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
 
             return new PriceModelImpl(DELIVERY_SHIPPING_REF, customerOrder.getCurrency(), BigDecimal.ONE,
+                    false,
                     false,
                     showTaxNet ?
                             grandTotal.getDeliveryCostAmount().subtract(grandTotal.getDeliveryTax()) :
@@ -352,6 +361,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                     customerOrder.getCurrency(),
                     BigDecimal.ONE,
                     false,
+                    false,
                     grandTotal.getDeliveryListCost(),
                     grandTotal.getDeliveryCost()
             );
@@ -362,6 +372,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                 DELIVERY_SHIPPING_REF,
                 customerOrder.getCurrency(),
                 BigDecimal.ONE,
+                false,
                 false,
                 grandTotal.getDeliveryCost(),
                 null

@@ -477,7 +477,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * @return null price model
      */
     protected PriceModelImpl getNullProductPriceModel(final String currency) {
-        return new PriceModelImpl(null, currency, null, false, null, null);
+        return new PriceModelImpl(null, currency, null, false, false, null, null);
     }
 
     /**
@@ -550,7 +550,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.OFFLINE, null);
         }
 
-        final PriceModel model = getSkuPrice(cart, sku, BigDecimal.ONE, priceNow.isPriceUponRequest(), price.getFirst(), price.getSecond());
+        final PriceModel model = getSkuPrice(cart, sku, BigDecimal.ONE, priceNow.isPriceUponRequest(), priceNow.isPriceOnOffer(), price.getFirst(), price.getSecond());
 
         return new Pair<>(model, priceInfo);
 
@@ -579,6 +579,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         resolved.getSkuCode(),
                         resolved.getQuantity(),
                         resolved.isPriceUponRequest(),
+                        resolved.isPriceOnOffer(),
                         listAndSale.getFirst(),
                         listAndSale.getSecond()
                 );
@@ -597,13 +598,14 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                   final BigDecimal quantity,
                                   final BigDecimal listPrice,
                                   final BigDecimal salePrice) {
-        return getSkuPrice(cart, ref, quantity, false, listPrice, salePrice);
+        return getSkuPrice(cart, ref, quantity, false, false, listPrice, salePrice);
     }
 
     protected PriceModel getSkuPrice(final ShoppingCart cart,
                                      final String ref,
                                      final BigDecimal quantity,
                                      final boolean priceUponRequest,
+                                     final boolean priceOnOffer,
                                      final BigDecimal listPrice,
                                      final BigDecimal salePrice) {
 
@@ -643,6 +645,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         currency,
                         quantity,
                         priceUponRequest,
+                        priceOnOffer,
                         listAdjusted, saleAdjusted,
                         showTax, showTaxNet, showTaxAmount,
                         saleModel.getTaxCode(),
@@ -662,6 +665,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         currency,
                         quantity,
                         priceUponRequest,
+                        priceOnOffer,
                         listAdjusted, null,
                         showTax, showTaxNet, showTaxAmount,
                         listModel.getTaxCode(),
@@ -679,6 +683,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 currency,
                 quantity,
                 priceUponRequest,
+                priceOnOffer,
                 list, sale
         );
 
@@ -745,6 +750,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             currency,
                             item.getQty(),
                             false,
+                            false,
                             listAdjusted, saleAdjusted,
                             showTax, showTaxNet, showTaxAmount,
                             item.getTaxCode(),
@@ -775,6 +781,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         currency,
                         item.getQty(),
                         false,
+                        false,
                         listAdjusted, saleAdjusted,
                         showTax, showTaxNet, showTaxAmount,
                         item.getTaxCode(),
@@ -795,6 +802,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             currency,
                             item.getQty(),
                             false,
+                            false,
                             listAdjusted.setScale(Constants.MONEY_SCALE, BigDecimal.ROUND_HALF_UP), null,
                             showTax, showTaxNet, showTaxAmount,
                             item.getTaxCode(),
@@ -812,6 +820,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         item.getProductSkuCode(),
                         currency,
                         item.getQty(),
+                        false,
                         false,
                         listAdjusted, null,
                         showTax, showTaxNet, showTaxAmount,
@@ -843,6 +852,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 currency,
                 item.getQty(),
                 false,
+                false,
                 list, sale
         );
 
@@ -872,6 +882,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             price.getSkuCode(),
                             price.getQuantity(),
                             price.isPriceUponRequest(),
+                            price.isPriceOnOffer(),
                             listAndSale.getFirst(),
                             listAndSale.getSecond()
                     ));
@@ -950,6 +961,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             currency,
                             BigDecimal.ONE,
                             false,
+                            false,
                             listAdjusted, totalAdjusted,
                             showTax, showTaxNet, showTaxAmount,
                             tax,
@@ -964,6 +976,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                         CART_ITEMS_TOTAL_REF,
                         currency,
                         BigDecimal.ONE,
+                        false,
                         false,
                         totalAdjusted, null,
                         showTax, showTaxNet, showTaxAmount,
@@ -986,6 +999,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                     currency,
                     BigDecimal.ONE,
                     false,
+                    false,
                     list, sale
             );
 
@@ -995,6 +1009,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 CART_ITEMS_TOTAL_REF,
                 currency,
                 BigDecimal.ONE,
+                false,
                 false,
                 sale, null
         );

@@ -325,6 +325,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                             currency,
                             deliveriesCount,
                             false,
+                            false,
                             listAdjusted, totalAdjusted,
                             showTax, showTaxNet, showTaxAmount,
                             tax,
@@ -339,6 +340,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                         CART_SHIPPING_TOTAL_REF,
                         currency,
                         deliveriesCount,
+                        false,
                         false,
                         totalAdjusted, null,
                         showTax, showTaxNet, showTaxAmount,
@@ -361,6 +363,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                     currency,
                     deliveriesCount,
                     false,
+                    false,
                     list, sale
             );
 
@@ -370,6 +373,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 CART_SHIPPING_TOTAL_REF,
                 currency,
                 deliveriesCount,
+                false,
                 false,
                 sale, null
         );
@@ -451,6 +455,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                             currency,
                             deliveriesCount,
                             false,
+                            false,
                             listAdjusted, totalAdjusted,
                             showTax, showTaxNet, showTaxAmount,
                             tax,
@@ -465,6 +470,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                         CART_SHIPPING_TOTAL_REF,
                         currency,
                         deliveriesCount,
+                        false,
                         false,
                         totalAdjusted, null,
                         showTax, showTaxNet, showTaxAmount,
@@ -487,6 +493,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                     currency,
                     deliveriesCount,
                     false,
+                    false,
                     list, sale
             );
 
@@ -496,6 +503,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 CART_SHIPPING_TOTAL_REF,
                 currency,
                 deliveriesCount,
+                false,
                 false,
                 sale, null
         );

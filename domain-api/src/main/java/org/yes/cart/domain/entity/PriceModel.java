@@ -53,6 +53,13 @@ public interface PriceModel extends Serializable {
     boolean isPriceUponRequest();
 
     /**
+     * Get price on offer flag.
+     *
+     * @return flag
+     */
+    boolean isPriceOnOffer();
+
+    /**
      * Get flag to indicate if tax info is enabled.
      *
      * @return true if tax info is enabled

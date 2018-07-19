@@ -278,3 +278,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11125,  'JOB_LOCAL_PRODIMAGEVAULT_CLEAN_MODE', 'JOB_LOCAL_PRODIMAGEVAULT_CLEAN_MODE',  0,  NULL,  'Job\\Product image vault clean up: mode',
     'Mode can be SCAN (logging only) or DELETE (removes the orphan image files)',  1000, 1000, 0, 0, 0, 0);
+
+--
+-- YC-922 API for offer prices
+--
+
+alter table TSKUPRICE add column PRICE_ON_OFFER bit not null default 0;
+-- alter table TSKUPRICE add column PRICE_ON_OFFER smallint not null default 0;
