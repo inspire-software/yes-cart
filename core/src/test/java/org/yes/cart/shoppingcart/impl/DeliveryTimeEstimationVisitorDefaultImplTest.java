@@ -50,21 +50,36 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
     @Test
     public void testSkipInventoryLeadTimeNoFf() throws Exception {
 
-        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
-        final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
-        final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
-
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
-        context.checking(new Expectations() {{
-            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-            allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
-            allowing(det).getSupplierCode(); will(returnValue("CED"));
-        }});
 
-        new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, null, null, calendar)
+        ));
 
-        assertEquals("2017-02-07", DateUtils.formatSD(calendar));
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, null, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.MIX_DELIVERY_GROUP, null, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, null, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, null, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP, null, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP, null, null, calendar)
+        ));
 
         this.context.assertIsSatisfied();
 
@@ -74,96 +89,84 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
     public void testSkipInventoryLeadTimeFfNoLead() throws Exception {
 
         final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
-        final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
-        final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
 
         final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
         context.checking(new Expectations() {{
-            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-            allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
-            allowing(det).getSupplierCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultStandardStockLeadTime(); will(returnValue(0));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
         }});
 
-        new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), calendar);
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
 
-        assertEquals("2017-02-07", DateUtils.formatSD(calendar));
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.MIX_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
+
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
 
         this.context.assertIsSatisfied();
 
     }
 
     @Test
-    public void testSkipInventoryLeadTimeFfStdLead() throws Exception {
+    public void testSkipInventoryLeadTimeFfWithLead() throws Exception {
 
         final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
-        final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
-        final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
+
+        final LocalDate calendar = DateUtils.ldParseSDT("2017-02-07");
 
         context.checking(new Expectations() {{
-            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-            allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
-            allowing(det).getSupplierCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultStandardStockLeadTime(); will(returnValue(2));
-            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
+            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(4));
         }});
 
-        ;
-
         assertEquals("2017-02-09", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), DateUtils.ldParseSDT("2017-02-07"))
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, warehouse, null, calendar)
         ));
 
-        this.context.assertIsSatisfied();
-
-    }
-
-    @Test
-    public void testSkipInventoryLeadTimeFfBackOrderLead() throws Exception {
-
-        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
-        final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
-        final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
-
-        context.checking(new Expectations() {{
-            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
-            allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
-            allowing(det).getSupplierCode(); will(returnValue("ABC"));
-            allowing(warehouse).getDefaultStandardStockLeadTime(); will(returnValue(0));
-            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(2));
-        }});
-
-        ;
-
-        assertEquals("2017-02-09", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), DateUtils.ldParseSDT("2017-02-07"))
+        assertEquals("2017-02-07", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, warehouse, null, calendar)
         ));
 
-        this.context.assertIsSatisfied();
+        assertEquals("2017-02-11", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.MIX_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
 
-    }
+        assertEquals("2017-02-11", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
 
-    @Test
-    public void testSkipInventoryLeadTimeFfMixedLead() throws Exception {
+        assertEquals("2017-02-11", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
 
-        final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
-        final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
-        final CustomerOrderDeliveryDet det = this.context.mock(CustomerOrderDeliveryDet.class, "det");
+        assertEquals("2017-02-11", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP, warehouse, null, calendar)
+        ));
 
-        context.checking(new Expectations() {{
-            allowing(delivery).getDeliveryGroup(); will(returnValue(CustomerOrderDelivery.MIX_DELIVERY_GROUP));
-            allowing(delivery).getDetail(); will(returnValue(Collections.singleton(det)));
-            allowing(det).getSupplierCode(); will(returnValue("ABC"));
-            allowing(warehouse).getDefaultStandardStockLeadTime(); will(returnValue(0));
-            allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(2));
-        }});
-
-        ;
-
-        assertEquals("2017-02-09", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(delivery, Collections.singletonMap("ABC", warehouse), DateUtils.ldParseSDT("2017-02-07"))
+        assertEquals("2017-02-11", DateUtils.formatSD(
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP, warehouse, null, calendar)
         ));
 
         this.context.assertIsSatisfied();
@@ -1208,6 +1211,8 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
         final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
         final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+        final CartItem item1 = this.context.mock(CartItem.class, "item1");
+        final DeliveryBucket bucket1 = this.context.mock(DeliveryBucket.class, "bucket1");
 
         final CarrierSlaEntity sla = new CarrierSlaEntity();
         sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
@@ -1229,6 +1234,10 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         context.checking(new Expectations() {{
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(shoppingCart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.singletonList(item1))));
+            allowing(item1).getDeliveryBucket(); will(returnValue(bucket1));
+            allowing(bucket1).getSupplier(); will(returnValue("ABC"));
+            allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
@@ -1260,6 +1269,8 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
         final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
         final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+        final CartItem item1 = this.context.mock(CartItem.class, "item1");
+        final DeliveryBucket bucket1 = this.context.mock(DeliveryBucket.class, "bucket1");
 
         final CarrierSlaEntity sla = new CarrierSlaEntity();
         sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
@@ -1281,6 +1292,10 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         context.checking(new Expectations() {{
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(shoppingCart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.singletonList(item1))));
+            allowing(item1).getDeliveryBucket(); will(returnValue(bucket1));
+            allowing(bucket1).getSupplier(); will(returnValue("ABC"));
+            allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(null));
@@ -1314,6 +1329,8 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
         final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
         final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+        final CartItem item1 = this.context.mock(CartItem.class, "item1");
+        final DeliveryBucket bucket1 = this.context.mock(DeliveryBucket.class, "bucket1");
 
         final CarrierSlaEntity sla = new CarrierSlaEntity();
         sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
@@ -1335,6 +1352,10 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         context.checking(new Expectations() {{
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(shoppingCart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.singletonList(item1))));
+            allowing(item1).getDeliveryBucket(); will(returnValue(bucket1));
+            allowing(bucket1).getSupplier(); will(returnValue("ABC"));
+            allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue("1486771200000")); // Sat 11th Feb
@@ -1370,6 +1391,8 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         final Warehouse warehouse = this.context.mock(Warehouse.class, "warehouse");
         final MutableShoppingCart shoppingCart = this.context.mock(MutableShoppingCart.class, "shoppingCart");
         final MutableOrderInfo orderInfo = this.context.mock(MutableOrderInfo.class, "orderInfo");
+        final CartItem item1 = this.context.mock(CartItem.class, "item1");
+        final DeliveryBucket bucket1 = this.context.mock(DeliveryBucket.class, "bucket1");
 
         final CarrierSlaEntity sla = new CarrierSlaEntity();
         sla.setExcludeDates("2017-02-08,2017-02-10:2017-02-15,2017-02-17");
@@ -1391,6 +1414,10 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         context.checking(new Expectations() {{
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
+            allowing(shoppingCart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.singletonList(item1))));
+            allowing(item1).getDeliveryBucket(); will(returnValue(bucket1));
+            allowing(bucket1).getSupplier(); will(returnValue("ABC"));
+            allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(0));
             allowing(orderInfo).getDetailByKey("deliveryDate0ABC"); will(returnValue(time("2017-02-18"))); // Sat 18th Feb
@@ -1447,8 +1474,9 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         context.checking(new Expectations() {{
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
-            allowing(shoppingCart).getCartItemList(); will(returnValue(Collections.singletonList(item1)));
+            allowing(shoppingCart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.singletonList(item1))));
             allowing(item1).getDeliveryBucket(); will(returnValue(bucket1));
+            allowing(bucket1).getSupplier(); will(returnValue("ABC"));
             allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(10));
@@ -1505,8 +1533,9 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         context.checking(new Expectations() {{
             allowing(carrierSlaService).findById(123L); will(returnValue(sla));
             allowing(shoppingCart).getOrderInfo(); will(returnValue(orderInfo));
-            allowing(shoppingCart).getCartItemList(); will(returnValue(Collections.singletonList(item1)));
+            allowing(shoppingCart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.singletonList(item1))));
             allowing(item1).getDeliveryBucket(); will(returnValue(bucket1));
+            allowing(bucket1).getSupplier(); will(returnValue("ABC"));
             allowing(bucket1).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
             allowing(warehouse).getCode(); will(returnValue("ABC"));
             allowing(warehouse).getDefaultBackorderStockLeadTime(); will(returnValue(15));

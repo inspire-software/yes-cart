@@ -28,6 +28,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
@@ -162,14 +163,23 @@ public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEst
 
         LocalDate minDeliveryTime = now();
 
-        if (ff != null && ff.getDefaultBackorderStockLeadTime() > 0) {
-            for (final CartItem item : shoppingCart.getCartItemList()) {
-                final String dgroup = item.getDeliveryBucket().getGroup();
-                if (!CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(dgroup) &&
-                        !CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(dgroup)) {
-                    minDeliveryTime = minDeliveryTime.plusDays(ff.getDefaultBackorderStockLeadTime());
+        if (ff != null) {
+            final Set<String> checkedGroups = new HashSet<>();
+            LocalDate longestMinDeliveryTime = minDeliveryTime;
+            for (final Map.Entry<DeliveryBucket, List<CartItem>> bucketAndItems : shoppingCart.getCartItemMap().entrySet()) {
+                final DeliveryBucket bucket = bucketAndItems.getKey();
+                if (ff.getCode().equals(bucket.getSupplier())) {
+                    final String dgroup = bucket.getGroup();
+                    if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(dgroup) && !checkedGroups.contains(dgroup)) {
+                        final LocalDate deliveryTime = skipInventoryLeadTime(dgroup, ff, bucketAndItems.getValue(), minDeliveryTime);
+                        if (deliveryTime.isAfter(longestMinDeliveryTime)) {
+                            longestMinDeliveryTime = deliveryTime;
+                        }
+                        checkedGroups.add(dgroup);
+                    }
                 }
             }
+            minDeliveryTime = longestMinDeliveryTime; // advance to longest lead time for given supplier
         }
 
         final Map<LocalDate, LocalDate> slaExcludedDates = getCarrierSlaExcludedDates(sla);
@@ -294,7 +304,8 @@ public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEst
             LocalDate minDeliveryTime = now();
 
             // Honour warehouse lead inventory
-            minDeliveryTime = skipInventoryLeadTime(customerOrderDelivery, warehouseByCode, minDeliveryTime);
+            final Warehouse ff = warehouseByCode.get(customerOrderDelivery.getDetail().iterator().next().getSupplierCode());
+            minDeliveryTime = skipInventoryLeadTime(customerOrderDelivery.getDeliveryGroup(), ff, (Collection) customerOrderDelivery.getDetail(), minDeliveryTime);
 
             boolean namedDay = sla.isNamedDay();
 
@@ -370,23 +381,24 @@ public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEst
     /**
      * Skip lead time set by inventory
      *
-     * @param customerOrderDelivery delivery
-     * @param warehouseByCode       fulfilment centers
+     * @param deliveryGroup         delivery group
+     * @param warehouse             fulfilment center
+     * @param items                 items
      * @param minDeliveryTime       start date (i.e. now)
      */
-    protected LocalDate skipInventoryLeadTime(final CustomerOrderDelivery customerOrderDelivery, final Map<String, Warehouse> warehouseByCode, final LocalDate minDeliveryTime) {
+    protected LocalDate skipInventoryLeadTime(final String deliveryGroup, final Warehouse warehouse, final Collection<CartItem> items, final LocalDate minDeliveryTime) {
 
         LocalDate min = minDeliveryTime;
-        if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(customerOrderDelivery.getDeliveryGroup())) {
+        if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(deliveryGroup)) {
 
-            final Warehouse ff = warehouseByCode.get(customerOrderDelivery.getDetail().iterator().next().getSupplierCode());
+            final Warehouse ff = warehouse;
             if (ff != null && ff.getDefaultStandardStockLeadTime() > 0) {
                 min = min.plusDays(ff.getDefaultStandardStockLeadTime());
             }
 
-        } else {
+        } else if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(deliveryGroup)) {
             // Pre, Back and Mixed (very simplistic) TODO: account for product specific lead times and pre-order release dates
-            final Warehouse ff = warehouseByCode.get(customerOrderDelivery.getDetail().iterator().next().getSupplierCode());
+            final Warehouse ff = warehouse;
             if (ff != null && ff.getDefaultBackorderStockLeadTime() > 0) {
                 min = min.plusDays(ff.getDefaultBackorderStockLeadTime());
             }
