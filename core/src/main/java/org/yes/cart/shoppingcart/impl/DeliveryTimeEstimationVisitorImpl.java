@@ -85,8 +85,8 @@ public class DeliveryTimeEstimationVisitorImpl
 
     }
 
-    protected DeliveryTimeEstimationVisitor getDeliveryTimeEstimationVisitor(final String warehouseCode) {
-        DeliveryTimeEstimationVisitor resolver = customDeliveryTimeEstimationVisitors.get(warehouseCode);
+    protected DeliveryTimeEstimationVisitor getDeliveryTimeEstimationVisitor(final String shopCode) {
+        DeliveryTimeEstimationVisitor resolver = customDeliveryTimeEstimationVisitors.get(shopCode);
         if (resolver == null) {
             resolver = defaultDeliveryTimeEstimationVisitor;
         }
