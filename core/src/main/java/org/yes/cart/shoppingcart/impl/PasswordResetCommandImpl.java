@@ -48,7 +48,8 @@ public class PasswordResetCommandImpl extends AbstractCartCommandImpl implements
 
     /**
      * Construct command.
-     *  @param registry shopping cart command registry
+     *
+     * @param registry shopping cart command registry
      * @param customerService customer service
      * @param customerCustomisationSupport customisation support
      * @param shopService shop service

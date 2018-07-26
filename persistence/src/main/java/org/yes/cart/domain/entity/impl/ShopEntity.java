@@ -86,6 +86,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfShowTaxAmountTypes;
     private Set<String> sfShowTaxOptionsTypes;
     private Set<String> sfShowSameBillingAddressDisabledTypes;
+    private Set<String> sfDeleteAccountDisabledTypes;
     private Set<String> sfHidePricesTypes;
 
     private Boolean B2BProfileActive = null;
@@ -826,6 +827,18 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     @Override
     public boolean isSfShowSameBillingAddressDisabledTypes(final String customerType) {
         return getSfShowSameBillingAddressDisabledTypes().contains(customerType);
+    }
+
+    private Set<String> getSfDeleteAccountDisabledTypes() {
+        if (this.sfDeleteAccountDisabledTypes == null) {
+            this.sfDeleteAccountDisabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_DELETE_ACCOUNT_DISABLE);
+        }
+        return this.sfDeleteAccountDisabledTypes;
+    }
+
+    @Override
+    public boolean isSfDeleteAccountDisabled(final String customerType) {
+        return getSfDeleteAccountDisabledTypes().contains(customerType);
     }
 
     private Set<String> getSfHidePricesTypes() {

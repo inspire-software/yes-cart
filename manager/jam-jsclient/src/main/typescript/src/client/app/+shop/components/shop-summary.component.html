@@ -214,6 +214,10 @@
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesAbleToRegister.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
                 </tr>
                 <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-user text-danger"></i> {{ shopSummary.customerTypesDisableAccountDelete.first }}</td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesDisableAccountDelete.second) ? 'fa-check text-danger' : 'fa-remove text-success' }}"></i></td>
+                </tr>
+                <tr>
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-envelope-square"></i> {{ shopSummary.customerTypesRequireRegistrationNotification.first }}</td>
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesRequireRegistrationNotification.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
                 </tr>

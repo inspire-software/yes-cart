@@ -261,7 +261,7 @@
     <entry key="tryToRestore">Нажмите "восстановить пароль" и он будет выслан Вам на почту</entry>
     <entry key="newPasswordRequestEmailSent">Запрос на новый пароль был выслан на почту ${email}</entry>
     <entry key="newPasswordEmailSent">Новый пароль был выслан на почту</entry>
-    <entry key="newPasswordInvalidToken">Неверный код авторизации. Невозможно сгенирировать новый пароль.</entry>
+    <entry key="newPasswordInvalidToken">Неверный код авторизации</entry>
 
     <!-- GuestPanel -->
     <entry key="guestUser">Заказать без регистрации</entry>
@@ -320,6 +320,13 @@
     <entry key="changePassword">Запрос на новый пароль будет выслан по почте после нажатия кнопки "Сменить пароль"</entry>
     <entry key="changePasswordBtn">Сменить пароль</entry>
     <entry key="newPasswordSent">Новый пароль выслан на почту</entry>
+
+    <!-- DeleteAccountPanel -->
+    <entry key="deleteAccountTitle">Удалить аккаунт</entry>
+    <entry key="deleteAccount">Запрос на удаление учетной записи будет отправлен вам по электронной почте после нажатия кнопки "Удалить учетную запись"</entry>
+    <entry key="deleteAccountBtn">Удалить учетную запись</entry>
+    <entry key="deleteAccountSent">Аккаунт удален</entry>
+    <entry key="deleteAccountRequestEmailSent">Запрос удаления учетной записи был отправлен на ${email}. Проверьте электронную почту, пожалуйста.</entry>
 
     <!-- SummaryPanel -->
     <entry key="customerSummary">Основная информация</entry>

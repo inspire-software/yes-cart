@@ -35,6 +35,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.CustomerRemoveService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoAttributeService;
@@ -59,6 +60,8 @@ public class DtoCustomerServiceImpl
 
     private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
 
+    private final CustomerRemoveService customerRemoveService;
+
     private final DtoAttributeService dtoAttributeService;
 
     private final GenericDAO<AttrValueEntityCustomer, Long> attrValueEntityCustomerDao;
@@ -73,8 +76,10 @@ public class DtoCustomerServiceImpl
 
     /**
      * Construct base remote service.
-     *  @param dtoFactory               {@link DtoFactory}
+     *
+     * @param dtoFactory               {@link DtoFactory}
      * @param customerGenericService   {@link GenericService}
+     * @param customerRemoveService    remove service
      * @param adaptersRepository {@link AdaptersRepository}
      * @param dtoAttributeService      {@link DtoAttributeService}
      * @param attrValueEntityCustomerDao       link to customer attribute values dao
@@ -84,6 +89,7 @@ public class DtoCustomerServiceImpl
     public DtoCustomerServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<Customer> customerGenericService,
+            final CustomerRemoveService customerRemoveService,
             final AdaptersRepository adaptersRepository,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityCustomer, Long> attrValueEntityCustomerDao,
@@ -91,6 +97,8 @@ public class DtoCustomerServiceImpl
             final GenericDAO<Address, Long> addressDao) {
 
         super(dtoFactory, customerGenericService, adaptersRepository);
+
+        this.customerRemoveService = customerRemoveService;
 
         this.dtoAttributeService = dtoAttributeService;
 
@@ -432,6 +440,20 @@ public class DtoCustomerServiceImpl
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void remove(final long id) {
+        final Customer cust = service.findById(id);
+        if (cust != null) {
+            this.customerRemoveService.deleteAccount(cust);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void updateCustomerTags(final CustomerDTO customer, final String tags) {
         final Customer cust = service.findById(customer.getCustomerId());

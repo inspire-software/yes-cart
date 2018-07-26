@@ -130,6 +130,7 @@
                 <value>setOrderMsgCmd</value>
                 <value>setOrderDetailsCmd</value>
                 <value>resetPasswordCmd</value>
+                <value>deleteAccountCmd</value>
             </list>
         </property>
         <property name="cmdInternalKeys">

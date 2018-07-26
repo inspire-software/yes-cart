@@ -261,7 +261,7 @@
     <entry key="tryToRestore">Try to restore password. It will be send to your email.</entry>
     <entry key="newPasswordRequestEmailSent">New password request was sent to ${email}. Check email please.</entry>
     <entry key="newPasswordEmailSent">New password was sent. Check email please.</entry>
-    <entry key="newPasswordInvalidToken">Invalid token. Unable to reset password.</entry>
+    <entry key="newPasswordInvalidToken">Invalid token</entry>
 
     <!-- GuestPanel -->
     <entry key="guestUser">Guest checkout</entry>
@@ -320,6 +320,13 @@
     <entry key="changePassword">New password request will be send to you via email after clicking "Change password" button</entry>
     <entry key="changePasswordBtn">Change password</entry>
     <entry key="newPasswordSent">New password sent</entry>
+
+    <!-- DeleteAccountPanel -->
+    <entry key="deleteAccountTitle">Delete account</entry>
+    <entry key="deleteAccount">Account deletion request will be send to you via email after clicking "Delete account" button</entry>
+    <entry key="deleteAccountBtn">Delete account</entry>
+    <entry key="deleteAccountSent">Account removed</entry>
+    <entry key="deleteAccountRequestEmailSent">Account deletion request was sent to ${email}. Check email please.</entry>
 
     <!-- SummaryPanel -->
     <entry key="customerSummary">Mandatory information</entry>

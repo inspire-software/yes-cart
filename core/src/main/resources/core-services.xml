@@ -854,6 +854,15 @@
         <constructor-arg index="1" ref="attributeService"/>
     </bean>
 
+    <bean id="customerRemoveService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CustomerRemoveServiceImpl">
+                <constructor-arg index="0" ref="customerService"/>
+                <constructor-arg index="1" ref="customerOrderService"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="managerService" class="org.yes.cart.service.domain.impl.ManagerServiceCachedImpl">
        <constructor-arg>
            <bean parent="txProxyTemplate">

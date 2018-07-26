@@ -73,7 +73,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final byte[] regBody = toJsonBytesRegistrationDetails("bob.doe@yc-checkout-json.com");
+        final String email = "bob.doe@yc-checkout-json.com";
+        final byte[] regBody = toJsonBytesRegistrationDetails(email);
 
 
         final MvcResult regResult =
@@ -92,11 +93,11 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals("bob.doe@yc-checkout-json.com", state.getCustomerEmail());
+        assertEquals(email, state.getCustomerEmail());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals("bob.doe@yc-checkout-json.com", cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerEmail());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -404,7 +405,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final byte[] regBody = toJsonBytesSubRegistrationDetails("bob.doe@yc-sub-checkout-json.com");
+        final String email = "bob.doe@yc-sub-checkout-json.com";
+        final byte[] regBody = toJsonBytesSubRegistrationDetails(email);
 
 
         final MvcResult regResult =
@@ -423,11 +425,11 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals("bob.doe@yc-sub-checkout-json.com", state.getCustomerEmail());
+        assertEquals(email, state.getCustomerEmail());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals("bob.doe@yc-sub-checkout-json.com", cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerEmail());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -1041,7 +1043,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final byte[] regBody = toJsonBytesGuestDetails("bob.doe@yc-guest-json.com");
+        final String email = "bob.doe@yc-guest-json.com";
+        final byte[] regBody = toJsonBytesGuestDetails(email);
 
 
         final MvcResult regResult =
@@ -1350,7 +1353,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final byte[] regBody = toJsonBytesRegistrationDetails("bob.doe@yc-checkout-xml.com");
+        final String email = "bob.doe@yc-checkout-xml.com";
+        final byte[] regBody = toJsonBytesRegistrationDetails(email);
 
 
         final MvcResult regResult =
@@ -1369,11 +1373,11 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals("bob.doe@yc-checkout-xml.com", state.getCustomerEmail());
+        assertEquals(email, state.getCustomerEmail());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals("bob.doe@yc-checkout-xml.com", cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerEmail());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -1679,7 +1683,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final byte[] regBody = toJsonBytesSubRegistrationDetails("bob.doe@yc-sub-checkout-xml.com");
+        final String email = "bob.doe@yc-sub-checkout-xml.com";
+        final byte[] regBody = toJsonBytesSubRegistrationDetails(email);
 
 
         final MvcResult regResult =
@@ -1698,11 +1703,11 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals("bob.doe@yc-sub-checkout-xml.com", state.getCustomerEmail());
+        assertEquals(email, state.getCustomerEmail());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals("bob.doe@yc-sub-checkout-xml.com", cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerEmail());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -2299,7 +2304,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         reindex();
 
-        final byte[] regBody = toJsonBytesGuestDetails("bob.doe@yc-guest-xml.com");
+        final String email = "bob.doe@yc-guest-xml.com";
+        final byte[] regBody = toJsonBytesGuestDetails(email);
 
 
         final MvcResult regResult =

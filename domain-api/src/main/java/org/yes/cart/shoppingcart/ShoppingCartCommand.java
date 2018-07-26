@@ -99,6 +99,8 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_RESET_PASSWORD = "resetPasswordCmd";
     String CMD_RESET_PASSWORD_PW = "resetPasswordCmd_pw";
 
+    String CMD_DELETE_ACCOUNT = "deleteAccountCmd";
+    String CMD_DELETE_ACCOUNT_PW = "deleteAccountCmd_pw";
 
     /**
      * Execute command on shopping cart to perform changes.

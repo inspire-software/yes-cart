@@ -35,8 +35,6 @@ import java.util.Collections;
  */
 public class PasswordPanel extends BaseComponent {
 
-    private static final String PASSWORD_SENT = "newPasswordRequestEmailSent";
-
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String PASSWORD_FORM = "passwordForm";
     private final static String SAVE_LINK = "saveLink";

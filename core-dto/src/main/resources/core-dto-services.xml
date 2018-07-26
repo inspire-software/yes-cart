@@ -289,11 +289,12 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCustomerServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="customerService"/>
-                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="3" ref="dtoAttributeService"/>
-                <constructor-arg index="4" ref="attrValueEntityCustomerDao"/>
-                <constructor-arg index="5" ref="shopDao"/>
-                <constructor-arg index="6" ref="addressDao"/>
+                <constructor-arg index="2" ref="customerRemoveService"/>
+                <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="4" ref="dtoAttributeService"/>
+                <constructor-arg index="5" ref="attrValueEntityCustomerDao"/>
+                <constructor-arg index="6" ref="shopDao"/>
+                <constructor-arg index="7" ref="addressDao"/>
             </bean>
         </property>
     </bean>

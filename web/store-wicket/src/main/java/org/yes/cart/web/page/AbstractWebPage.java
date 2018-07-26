@@ -240,6 +240,10 @@ public class AbstractWebPage extends WebPage {
                 final PageParameters resetParams = new PageParameters();
                 resetParams.add("token", paramsMap.get(ShoppingCartCommand.CMD_RESET_PASSWORD));
                 setResponsePage(wicketPagesMounter.getPageProviderByUri("/reset").get(), resetParams);
+            } else if (Constants.DELETE_ACCOUNT_PASSWORD_INVALID.equals(bce.getMessage())) {
+                final PageParameters resetParams = new PageParameters();
+                resetParams.add("token", paramsMap.get(ShoppingCartCommand.CMD_DELETE_ACCOUNT));
+                setResponsePage(wicketPagesMounter.getPageProviderByUri("/deleteaccount").get(), resetParams);
             }
 
         } catch (Exception exp) {

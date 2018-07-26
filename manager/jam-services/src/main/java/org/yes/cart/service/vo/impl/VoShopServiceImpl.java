@@ -424,6 +424,10 @@ public class VoShopServiceImpl implements VoShopService {
         final MutablePair<String, List<String>> ableToRegister =
                 getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES, lang);
 
+        // Disable account deletion
+        final MutablePair<String, List<String>> disableAccountDelete =
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_DELETE_ACCOUNT_DISABLE, lang);
+
         // Email related config is at master level
         final MutablePair<String, List<String>> approveRegister =
                 getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE, lang);
@@ -468,6 +472,7 @@ public class VoShopServiceImpl implements VoShopService {
 
         final Set<String> additionalTypes = new HashSet<>();
         additionalTypes.addAll(ableToRegister.getSecond());
+        additionalTypes.addAll(disableAccountDelete.getSecond());
         additionalTypes.addAll(approveRegister.getSecond());
         additionalTypes.addAll(notifyRegister.getSecond());
         additionalTypes.addAll(seeTax.getSecond());
@@ -495,6 +500,7 @@ public class VoShopServiceImpl implements VoShopService {
         }
 
         summary.setCustomerTypesAbleToRegister(ableToRegister);
+        summary.setCustomerTypesDisableAccountDelete(disableAccountDelete);
         summary.setCustomerTypesRequireRegistrationApproval(approveRegister);
         summary.setCustomerTypesRequireRegistrationNotification(notifyRegister);
         summary.setCustomerTypesSeeTax(seeTax);

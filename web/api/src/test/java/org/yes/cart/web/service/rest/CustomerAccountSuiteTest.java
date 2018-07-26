@@ -26,19 +26,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.ShoppingCartState;
+import org.yes.cart.domain.ro.LoginRO;
+import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.YcMockMvcResultHandlers.print;
@@ -61,6 +66,12 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private HashHelper hashHelper;
 
 
     @Test
@@ -89,7 +100,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
 
-        final byte[] regBody = toJsonBytesRegistrationDetails("bob.doe@yc-account-json.com");
+        final String email = "bob.doe@yc-account-json.com";
+        final byte[] regBody = toJsonBytesRegistrationDetails(email);
 
 
         final MvcResult regResult =
@@ -108,11 +120,11 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals("bob.doe@yc-account-json.com", state.getCustomerEmail());
+        assertEquals(email, state.getCustomerEmail());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals("bob.doe@yc-account-json.com", cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerEmail());
 
 
         mockMvc.perform(get("/auth/check")
@@ -132,7 +144,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("bob.doe@yc-account-json.com")))
+                .andExpect(content().string(StringContains.containsString(email)))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -289,6 +301,88 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":false")))
                 .andExpect(header().string("yc", uuid));
 
+        assertNull(getCustomerToken(email));
+        final String pwHash = getCustomerPasswordHash(email);
+        assertNotNull(pwHash);
+
+        mockMvc.perform(post("/auth/resetpassword?email=" + email)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid));
+
+        final String resetTokenP1 = getCustomerToken(email);
+        assertNotNull(resetTokenP1);
+        final String pwHashResetP1 = getCustomerPasswordHash(email);
+        assertEquals("Phase 1 password not yet chaged, we just sent token via email", pwHash, pwHashResetP1);
+
+        mockMvc.perform(post("/auth/resetpassword?email=" + email + "&authToken=" + resetTokenP1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid));
+
+        final String resetTokenP2 = getCustomerToken(email);
+        assertNull(resetTokenP2);
+        final String pwHashResetP2 = getCustomerPasswordHash(email);
+        assertFalse("Phase 2 password is now changed", pwHash.equals(pwHashResetP2));
+
+        final String password = "1234567";
+        setCustomerPassword(email, password);
+
+        final LoginRO login = new LoginRO();
+        login.setUsername(email);
+        login.setPassword(password);
+        final byte[] loginBody = toJsonBytes(login);
+
+        final MvcResult loginResult =
+        mockMvc.perform(put("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .content(loginBody))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                .andReturn();
+
+        final String uuid2 = loginResult.getResponse().getHeader("yc");
+
+        assertNull(getCustomerToken(email));
+
+        mockMvc.perform(post("/auth/deleteaccount")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid2))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid2));
+
+        final String deleteTokenP1 = getCustomerToken(email);
+        assertNotNull(deleteTokenP1);
+
+
+        mockMvc.perform(post("/auth/deleteaccount?authToken=" + deleteTokenP1 + "&password=" + password)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid2))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid2));
+
+
+        assertNull("Account removed", getCustomer(email));
+
+
     }
 
     @Test
@@ -308,7 +402,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
 
-        final byte[] regBody = toJsonBytesRegistrationDetails("bob.doe@yc-account-xml.com");
+        final String email = "bob.doe@yc-account-xml.com";
+        final byte[] regBody = toJsonBytesRegistrationDetails(email);
 
 
         final MvcResult regResult =
@@ -327,11 +422,11 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
-        assertEquals("bob.doe@yc-account-xml.com", state.getCustomerEmail());
+        assertEquals(email, state.getCustomerEmail());
 
         final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
         assertNotNull(uuid, cart);
-        assertEquals("bob.doe@yc-account-xml.com", cart.getCustomerEmail());
+        assertEquals(email, cart.getCustomerEmail());
 
         mockMvc.perform(get("/auth/check")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -350,7 +445,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("bob.doe@yc-account-xml.com")))
+                .andExpect(content().string(StringContains.containsString(email)))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -506,6 +601,138 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<authenticated>false</authenticated>")))
                 .andExpect(header().string("yc", uuid));
+
+
+        assertNull(getCustomerToken(email));
+        final String pwHash = getCustomerPasswordHash(email);
+        assertNotNull(pwHash);
+
+        mockMvc.perform(post("/auth/resetpassword?email=" + email)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid));
+
+        final String resetTokenP1 = getCustomerToken(email);
+        assertNotNull(resetTokenP1);
+        final String pwHashResetP1 = getCustomerPasswordHash(email);
+        assertEquals("Phase 1 password not yet chaged, we just sent token via email", pwHash, pwHashResetP1);
+
+        mockMvc.perform(post("/auth/resetpassword?email=" + email + "&authToken=" + resetTokenP1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid));
+
+        final String resetTokenP2 = getCustomerToken(email);
+        assertNull(resetTokenP2);
+        final String pwHashResetP2 = getCustomerPasswordHash(email);
+        assertFalse("Phase 2 password is now changed", pwHash.equals(pwHashResetP2));
+
+        final String password = "1234567";
+        setCustomerPassword(email, password);
+
+        final LoginRO login = new LoginRO();
+        login.setUsername(email);
+        login.setPassword(password);
+        final byte[] loginBody = toJsonBytes(login);
+
+        final MvcResult loginResult =
+        mockMvc.perform(put("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .content(loginBody))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                .andReturn();
+
+        final String uuid2 = loginResult.getResponse().getHeader("yc");
+
+        assertNull(getCustomerToken(email));
+
+        mockMvc.perform(post("/auth/deleteaccount")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid2))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid2));
+
+        final String deleteTokenP1 = getCustomerToken(email);
+        assertNotNull(deleteTokenP1);
+
+
+        mockMvc.perform(post("/auth/deleteaccount?authToken=" + deleteTokenP1 + "&password=" + password)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale)
+                .header("yc", uuid2))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid2));
+
+
+        assertNull("Account removed", getCustomer(email));
+
+
+    }
+
+
+    private String getCustomerToken(final String email) {
+
+        final Customer customer = getCustomer(email);
+        if (customer == null) {
+            return null;
+        }
+
+        return customer.getAuthToken();
+
+    }
+
+    private String getCustomerPasswordHash(final String email) {
+
+        final Customer customer = getCustomer(email);
+        if (customer == null) {
+            return null;
+        }
+
+        return customer.getPassword();
+
+    }
+
+    private Customer getCustomer(final String email) {
+
+        final List<Customer> customers = this.customerService.findByCriteria(" where e.email = ?1", email);
+        if (customers.isEmpty()) {
+            return null;
+        }
+
+        return customers.get(0);
+
+    }
+
+    private void setCustomerPassword(final String email, final String password) throws Exception {
+
+        final List<Customer> customers = this.customerService.findByCriteria(" where e.email = ?1", email);
+        if (!customers.isEmpty()) {
+
+            final Customer customer = customers.get(0);
+            customer.setPassword(hashHelper.getHash(password));
+
+            this.customerService.update(customer);
+
+        }
+
     }
 
     private byte[] toJsonAddToWishListCommand(final String sku) throws Exception {

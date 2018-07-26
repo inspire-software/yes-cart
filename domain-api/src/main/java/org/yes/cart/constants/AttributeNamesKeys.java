@@ -507,6 +507,11 @@ public interface AttributeNamesKeys {
         String SHOP_DELIVERY_ONE_ADDRESS_DISABLE = "SHOP_DELIVERY_ONE_ADDRESS_DISABLE";
 
         /**
+         * Setting for whether to allow deletion of the account
+         */
+        String SHOP_DELETE_ACCOUNT_DISABLE = "SHOP_DELETE_ACCOUNT_DISABLE";
+
+        /**
          * Setting for whether to show prices
          */
         String SHOP_PRODUCT_HIDE_PRICES = "SHOP_PRODUCT_HIDE_PRICES";

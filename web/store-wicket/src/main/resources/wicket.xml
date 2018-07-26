@@ -76,6 +76,11 @@
                         <entry key="default" value="org.yes.cart.web.page.ResetPage"/>
                     </map>
                 </entry>
+                <entry key="/deleteaccount">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.DeleteAccountPage"/>
+                    </map>
+                </entry>
                 <entry key="/wishlistadd">
                     <map>
                         <entry key="default" value="org.yes.cart.web.page.component.customer.wishlist.WishListItemAddPage"/>

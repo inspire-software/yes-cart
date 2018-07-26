@@ -148,6 +148,14 @@ public interface CustomerServiceFacade {
     void resetPassword(Shop shop, Customer customer);
 
     /**
+     * Initiate account removal process and send email.
+     *
+     * @param shop     shop to render email
+     * @param customer customer to create
+     */
+    void deleteAccount(Shop shop, Customer customer);
+
+    /**
      * List of supported customer types.
      *
      * @param shop shop

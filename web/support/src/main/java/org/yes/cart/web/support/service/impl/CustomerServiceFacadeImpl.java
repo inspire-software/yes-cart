@@ -43,6 +43,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     private static final String GUEST_TYPE = AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST;
 
     private final CustomerService customerService;
+    private final CustomerRemoveService customerRemoveService;
     private final CustomerWishListService customerWishListService;
     private final AttributeService attributeService;
     private final PassPhraseGenerator phraseGenerator;
@@ -50,12 +51,14 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     private final AddressCustomisationSupport addressCustomisationSupport;
 
     public CustomerServiceFacadeImpl(final CustomerService customerService,
+                                     final CustomerRemoveService customerRemoveService,
                                      final CustomerWishListService customerWishListService,
                                      final AttributeService attributeService,
                                      final PassPhraseGenerator phraseGenerator,
                                      final CustomerCustomisationSupport customerCustomisationSupport,
                                      final AddressCustomisationSupport addressCustomisationSupport) {
         this.customerService = customerService;
+        this.customerRemoveService = customerRemoveService;
         this.customerWishListService = customerWishListService;
         this.attributeService = attributeService;
         this.phraseGenerator = phraseGenerator;
@@ -139,6 +142,14 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     @Override
     public void resetPassword(final Shop shop, final Customer customer) {
         customerService.resetPassword(customer, shop, null);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void deleteAccount(final Shop shop, final Customer customer) {
+        if (customer != null && !shop.isSfDeleteAccountDisabled(customer.getCustomerType())) {
+            customerRemoveService.deleteAccount(customer, shop, null);
+        }
     }
 
     /** {@inheritDoc} */

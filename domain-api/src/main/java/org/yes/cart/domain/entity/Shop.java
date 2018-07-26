@@ -378,6 +378,15 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     boolean isSfShowSameBillingAddressDisabledTypes(String customerType);
 
     /**
+     * Flag whether to disable delete account option for given customer type.
+     *
+     * @param customerType  type of customer
+     *
+     * @return true customer can see "delete account" section
+     */
+    boolean isSfDeleteAccountDisabled(String customerType);
+
+    /**
      * Flag whether to hide all prices for given customer type.
      *
      * @param customerType  type of customer

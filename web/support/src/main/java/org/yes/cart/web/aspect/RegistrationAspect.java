@@ -396,4 +396,20 @@ public class RegistrationAspect extends BaseNotificationAspect {
         return notifyInternal(pjp, false, false, "customer-deactivation");
     }
 
+    /**
+     * Handle account deletion operation.
+     *
+     * @param pjp {@link ProceedingJoinPoint}
+     * @return Object
+     * @throws Throwable in case of target method errors
+     */
+    @Around("execution(* org.yes.cart.service.domain.impl.CustomerRemoveServiceImpl.deleteAccount(..))")
+    public Object doDeleteAccount(final ProceedingJoinPoint pjp) throws Throwable {
+        final Object[] args = pjp.getArgs();
+        if (args.length == 3) {
+            return notifyInternal(pjp, false, true, "customer-delete");
+        }
+        return pjp.proceed();  // CC deletion
+    }
+
 }

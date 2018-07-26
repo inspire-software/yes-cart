@@ -285,3 +285,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 alter table TSKUPRICE add column PRICE_ON_OFFER bit not null default 0;
 -- alter table TSKUPRICE add column PRICE_ON_OFFER smallint not null default 0;
+
+--
+-- YC-924 Customer delete account feature
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10981,  'SHOP_DELETE_ACCOUNT_DISABLE', 'SHOP_DELETE_ACCOUNT_DISABLE',  0,  NULL,  'Customer: Disable account deletion',
+  'Disable account deletion feature for customer types. Blank value is treated as enabled.',  1004, 1001, 0, 0, 0, 0);

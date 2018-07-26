@@ -232,6 +232,14 @@
         <property name="priority" value="120"/>
     </bean>
 
+    <bean id="deleteAccountCmd" class="org.yes.cart.shoppingcart.impl.DeleteAccountCommandImpl">
+        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
+        <constructor-arg index="1" ref="customerService"/>
+        <constructor-arg index="2" ref="customerRemoveService"/>
+        <constructor-arg index="3" ref="shopService"/>
+        <property name="priority" value="130"/>
+    </bean>
+
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">

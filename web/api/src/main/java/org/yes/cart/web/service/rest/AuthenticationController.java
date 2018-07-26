@@ -977,6 +977,10 @@ public class AuthenticationController {
      *         Authentication token of a registered customer.  Supplying this parameter will trigger an
      *         email with new password.
      *     </td></tr>
+     *     <tr><td>newPassword</td><td>
+     *         New password to accompany authToken for configurations that support customer selectable
+     *         passwords.
+     *     </td></tr>
      * </table>
      * <p>
      * <p>
@@ -1027,6 +1031,7 @@ public class AuthenticationController {
     )
     public @ResponseBody AuthenticationResultRO resetPassword(@RequestParam(value = "email", required = false) final String email,
                                                               @RequestParam(value = "authToken", required = false) final String authToken,
+                                                              @RequestParam(value = "newPassword", required = false) final String newPassword,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 
@@ -1034,7 +1039,7 @@ public class AuthenticationController {
 
         if (StringUtils.isNotBlank(authToken)) {
 
-            if (executePasswordResetCommand(authToken)) {
+            if (executePasswordResetCommand(authToken, newPassword)) {
                 return new AuthenticationResultRO();
             }
             return new AuthenticationResultRO("INVALID_TOKEN");
@@ -1047,6 +1052,110 @@ public class AuthenticationController {
                 return new AuthenticationResultRO("INVALID_EMAIL");
             }
             customerServiceFacade.resetPassword(shop, customer);
+            return new AuthenticationResultRO();
+
+        }
+        return new AuthenticationResultRO("INVALID_PARAMETERS");
+    }
+
+
+    /**
+     * Interface: POST /yes-api/rest/auth/deleteaccount
+     * <p>
+     * <p>
+     * Delete account of currently logged in user.
+     * Delete account is a two step process. First step is to provide valid email of registered
+     * customer and generate authToken. Second step is to use authToken in order to confirm account
+     * deletion.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>authToken</td><td>
+     *         Authentication token of a registered customer.  Supplying this parameter will trigger an
+     *         email with new password.
+     *     </td></tr>
+     *     <tr><td>password</td><td>
+     *         Password to accompany authToken to confirm account deletion.
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <p>
+     * Output that does not have error code indicates successful processing.
+     * <p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *    "success" : false,
+     *    "greeting" : null,
+     *    "token" : null,
+     *    "error" : null
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;authentication-result&gt;
+     *    &lt;greeting/&gt;
+     *    &lt;success&gt;false&lt;/success&gt;
+     *    &lt;token/&gt;
+     * &lt;/authentication-result&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>INVALID_PARAMETERS</td><td>if either "email" or "authToken" was not sent</td></tr>
+     *     <tr><td>INVALID_TOKEN</td><td>Supplied authToken is not valid or expired</td></tr>
+     *     <tr><td>INVALID_EMAIL</td><td>Supplied email does not belong to a registered customer</td></tr>
+     * </table>
+     *
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return authentication result
+     */
+    @RequestMapping(
+            value = "/deleteaccount",
+            method = RequestMethod.POST,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody AuthenticationResultRO deleteAccount(@RequestParam(value = "authToken", required = false) final String authToken,
+                                                              @RequestParam(value = "password", required = false) final String password,
+                                                              final HttpServletRequest request,
+                                                              final HttpServletResponse response) {
+
+        cartMixin.persistShoppingCart(request, response);
+
+        if (StringUtils.isNotBlank(authToken)) {
+
+            if (executeDeleteAccountCommand(authToken, password)) {
+                return new AuthenticationResultRO();
+            }
+            return new AuthenticationResultRO("INVALID_TOKEN");
+
+        } else if (check(request, response).isAuthenticated()) {
+
+            final Shop shop = cartMixin.getCurrentShop();
+            final ShoppingCart cart = cartMixin.getCurrentCart();
+            final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), cart.getCustomerEmail());
+            if (customer == null) {
+                return new AuthenticationResultRO("INVALID_EMAIL");
+            }
+            customerServiceFacade.deleteAccount(shop, customer);
             return new AuthenticationResultRO();
 
         }
@@ -1300,13 +1409,29 @@ public class AuthenticationController {
     /**
      * Execute password reset command.
      */
-    protected boolean executePasswordResetCommand(final String token) {
+    protected boolean executePasswordResetCommand(final String token, final String newPassword) {
         try {
-            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RESET_PASSWORD, cartMixin.getCurrentCart(),
-                    new HashMap<String, Object>() {{
-                        put(ShoppingCartCommand.CMD_RESET_PASSWORD, token);
-                    }}
-            );
+            final Map<String, Object> params = new HashMap<>();
+            params.put(ShoppingCartCommand.CMD_RESET_PASSWORD, token);
+            if (StringUtils.isNotBlank(newPassword)) {
+                params.put(ShoppingCartCommand.CMD_RESET_PASSWORD_PW, newPassword);
+            }
+            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RESET_PASSWORD, cartMixin.getCurrentCart(), params);
+            return true;
+        } catch (BadCredentialsException bce) {
+            return false;
+        }
+    }
+
+    /**
+     * Execute delete account command.
+     */
+    protected boolean executeDeleteAccountCommand(final String token, final String password) {
+        try {
+            final Map<String, Object> params = new HashMap<>();
+            params.put(ShoppingCartCommand.CMD_DELETE_ACCOUNT, token);
+            params.put(ShoppingCartCommand.CMD_DELETE_ACCOUNT_PW, password);
+            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_DELETE_ACCOUNT, cartMixin.getCurrentCart(), params);
             return true;
         } catch (BadCredentialsException bce) {
             return false;

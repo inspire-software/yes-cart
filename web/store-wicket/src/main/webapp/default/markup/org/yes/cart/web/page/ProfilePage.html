@@ -64,6 +64,7 @@
                     <li class="active"><a href="#customerSummary"><wicket:message key="email">[summary]</wicket:message></a></li>
                     <li><a href="#customerAdditional"><wicket:message key="customerAdditional">[additional]</wicket:message></a></li>
                     <li><a href="#password"><wicket:message key="password">[password]</wicket:message></a></li>
+                    <li id="deleteAccountMenu"><a href="#deleteAccount"><wicket:message key="deleteAccountTitle">[delete account]</wicket:message></a></li>
                     <li><a href="#addresses"><wicket:message key="addresses">[addresses]</wicket:message></a></li>
                 </ul>
             </div>
@@ -93,6 +94,11 @@
                     </wicket:container>
                 </div>
                 <div class="col-xs-12">
+                    <wicket:container wicket:id="deleteView">
+                        [remove account]
+                    </wicket:container>
+                </div>
+                <div class="col-xs-12">
                     <h2 class="col-xs-12 profile-title address-title">
                         <wicket:message key="addresses">[addresses]</wicket:message>
                     </h2>
@@ -118,6 +124,14 @@
         <![endif]-->
         <script type="text/javascript" src="../../../../../js/yc.js"></script>
     </wicket:link>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            if (jQuery('#deleteAccount').length == 0) {
+                jQuery('#deleteAccountMenu').remove();
+            }
+        });
+    </script>
 
 </body>
 </html>

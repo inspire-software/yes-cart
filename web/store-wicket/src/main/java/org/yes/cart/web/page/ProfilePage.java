@@ -32,6 +32,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
+import org.yes.cart.web.page.component.customer.deleteaccount.DeleteAccountPanel;
 import org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel;
 import org.yes.cart.web.page.component.customer.password.PasswordPanel;
 import org.yes.cart.web.page.component.customer.summary.SummaryPanel;
@@ -58,6 +59,7 @@ public class ProfilePage extends AbstractWebPage {
     private final static String SUMMARY_PANEL = "summaryView";
     private final static String ATTR_PANEL = "attributesView";
     private final static String PASSWORD_PANEL = "passwordView";
+    private final static String DELETE_PANEL = "deleteView";
     private final static String SHIPPING_ADDR_PANEL = "shippingAddressesView";
     private final static String BILLING_ADDR_PANEL = "billingAddressesView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
@@ -90,6 +92,7 @@ public class ProfilePage extends AbstractWebPage {
 
         add(new FeedbackPanel(FEEDBACK));
         add(new PasswordPanel(PASSWORD_PANEL, customerModel));
+        add(new DeleteAccountPanel(DELETE_PANEL, customerModel));
         add(new ManageAddressesView(SHIPPING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_SHIPPING, false));
         add(new ManageAddressesView(BILLING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_BILLING, false));
         add(new DynaFormPanel(ATTR_PANEL, customerModel));

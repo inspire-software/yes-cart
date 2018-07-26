@@ -154,6 +154,11 @@ public interface Constants {
     String PASSWORD_RESET_PASSWORD_INVALID = "PASSWORD_RESET_PASSWORD_INVALID";
 
     /**
+     * Constant to determine if password used to confirm account deletion is invalid
+     */
+    String DELETE_ACCOUNT_PASSWORD_INVALID = "DELETE_ACCOUNT_PASSWORD_INVALID";
+
+    /**
      * Delimiter for range navigation value. Need to select this value carefully so that
      * parameter parser can distinguish between range and single values.
      */
