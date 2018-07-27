@@ -171,7 +171,7 @@ public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEst
                 if (ff.getCode().equals(bucket.getSupplier())) {
                     final String dgroup = bucket.getGroup();
                     if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(dgroup) && !checkedGroups.contains(dgroup)) {
-                        final LocalDate deliveryTime = skipInventoryLeadTime(dgroup, ff, bucketAndItems.getValue(), minDeliveryTime);
+                        final LocalDate deliveryTime = skipInventoryLeadTime(dgroup, ff, shoppingCart, bucketAndItems.getValue(), minDeliveryTime);
                         if (deliveryTime.isAfter(longestMinDeliveryTime)) {
                             longestMinDeliveryTime = deliveryTime;
                         }
@@ -305,7 +305,7 @@ public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEst
 
             // Honour warehouse lead inventory
             final Warehouse ff = warehouseByCode.get(customerOrderDelivery.getDetail().iterator().next().getSupplierCode());
-            minDeliveryTime = skipInventoryLeadTime(customerOrderDelivery.getDeliveryGroup(), ff, (Collection) customerOrderDelivery.getDetail(), minDeliveryTime);
+            minDeliveryTime = skipInventoryLeadTime(customerOrderDelivery.getDeliveryGroup(), ff, customerOrderDelivery, (Collection) customerOrderDelivery.getDetail(), minDeliveryTime);
 
             boolean namedDay = sla.isNamedDay();
 
@@ -383,10 +383,11 @@ public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEst
      *
      * @param deliveryGroup         delivery group
      * @param warehouse             fulfilment center
+     * @param itemsContainer        items container (either CustomerOrderDelivery or ShoppingCart)
      * @param items                 items
      * @param minDeliveryTime       start date (i.e. now)
      */
-    protected LocalDate skipInventoryLeadTime(final String deliveryGroup, final Warehouse warehouse, final Collection<CartItem> items, final LocalDate minDeliveryTime) {
+    protected LocalDate skipInventoryLeadTime(final String deliveryGroup, final Warehouse warehouse, final Object itemsContainer, final Collection<CartItem> items, final LocalDate minDeliveryTime) {
 
         LocalDate min = minDeliveryTime;
         if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP.equals(deliveryGroup)) {

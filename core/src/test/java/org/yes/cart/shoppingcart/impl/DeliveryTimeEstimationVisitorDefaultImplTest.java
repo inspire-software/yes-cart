@@ -54,31 +54,31 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
 
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, null, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, null, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, null, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, null, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.MIX_DELIVERY_GROUP, null, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.MIX_DELIVERY_GROUP, null, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, null, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, null, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, null, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, null, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP, null, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP, null, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP, null, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP, null, null, null, calendar)
         ));
 
         this.context.assertIsSatisfied();
@@ -98,31 +98,31 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         }});
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.MIX_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.MIX_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         this.context.assertIsSatisfied();
@@ -142,31 +142,31 @@ public class DeliveryTimeEstimationVisitorDefaultImplTest {
         }});
 
         assertEquals("2017-02-09", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-07", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-11", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.MIX_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.MIX_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-11", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-11", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-11", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         assertEquals("2017-02-11", DateUtils.formatSD(
-                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP, warehouse, null, calendar)
+                new DeliveryTimeEstimationVisitorDefaultImpl(null, null).skipInventoryLeadTime(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP, warehouse, null, null, calendar)
         ));
 
         this.context.assertIsSatisfied();
