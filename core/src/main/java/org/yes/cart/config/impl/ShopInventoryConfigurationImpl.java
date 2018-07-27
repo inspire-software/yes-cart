@@ -20,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
 import org.yes.cart.shoppingcart.ProductAvailabilityStrategy;
 
 import java.util.List;
@@ -49,11 +50,20 @@ public class ShopInventoryConfigurationImpl extends AbstractShopConfigurationImp
         }
     }
 
+    void registerCustomDeliveryTimeEstimationVisitor(final Shop shop, final List<Shop> subs, final Properties properties) {
+
+        final DeliveryTimeEstimationVisitor dtev = determineConfiguration(properties, shop.getCode() + ".deliveryTimeEstimationVisitor", DeliveryTimeEstimationVisitor.class);
+
+        customise(shop.getCode(), shop.getShopId(), DeliveryTimeEstimationVisitor.class, dtev);
+        
+    }
+
     /** {@inheritDoc} */
     @Override
     protected void doConfigurations(final Shop shop, final List<Shop> subs, final Properties properties) {
 
         this.registerCustomProductAvailabilityStrategy(shop, subs, properties);
+        this.registerCustomDeliveryTimeEstimationVisitor(shop, subs, properties);
 
     }
 
