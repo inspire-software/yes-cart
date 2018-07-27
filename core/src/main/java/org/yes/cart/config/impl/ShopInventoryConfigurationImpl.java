@@ -54,7 +54,7 @@ public class ShopInventoryConfigurationImpl extends AbstractShopConfigurationImp
 
         final DeliveryTimeEstimationVisitor dtev = determineConfiguration(properties, shop.getCode() + ".deliveryTimeEstimationVisitor", DeliveryTimeEstimationVisitor.class);
 
-        customise(shop.getCode(), shop.getShopId(), DeliveryTimeEstimationVisitor.class, dtev);
+        customise(shop.getCode(), shop.getCode(), DeliveryTimeEstimationVisitor.class, dtev);
         
     }
 
