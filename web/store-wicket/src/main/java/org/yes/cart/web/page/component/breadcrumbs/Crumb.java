@@ -31,6 +31,8 @@ public class Crumb implements Serializable {
 
     private final String key;
 
+    private final String value;
+
     private final String name;
 
     private final Object displayName;
@@ -41,6 +43,10 @@ public class Crumb implements Serializable {
 
     public String getKey() {
         return key;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     public String getName() {
@@ -64,11 +70,13 @@ public class Crumb implements Serializable {
     }
 
     public Crumb(final String key,
+                 final String value,
                  final String name,
                  final Object displayName,
                  final PageParameters crumbLinkParameters,
                  final PageParameters removeCrumbLinkParameters) {
         this.key = key;
+        this.value = value;
         this.name = name;
         this.displayName = displayName;
         this.crumbLinkParameters = crumbLinkParameters;

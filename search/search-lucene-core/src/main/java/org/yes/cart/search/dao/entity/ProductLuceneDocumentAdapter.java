@@ -406,7 +406,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                 final Map<String, BigDecimal> stock = result.getQtyOnWarehouse(skuPrice.getShop().getShopId());
                 if (stock != null && !stock.containsKey(skuPrice.getSkuCode())) {
-                    continue; // This SKU is available in this shop
+                    continue; // This SKU is not available in this shop
                 }
 
                 if (!DomainApiUtils.isObjectAvailableNow(true, skuPrice.getSalefrom(), skuPrice.getSaleto(), now)) {
@@ -443,11 +443,14 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 for (final Map.Entry<Long, Map<String, SkuPrice>> shop : lowestQuantityPrice.entrySet()) {
                     for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
 
+                        final Pair<BigDecimal, BigDecimal> listAndSale = currency.getValue().getSalePriceForCalculation();
                         final BigDecimal price = currency.getValue().isPriceUponRequest() ?
                                 BigDecimal.ZERO : MoneyUtils.minPositive(currency.getValue().getSalePriceForCalculation());
                         // Pad 2 decimal places 99.99 => 9999
                         final long longPrice = SearchUtil.priceToLong(price);
                         final String facetName = SearchUtil.priceFacetName(shop.getKey(), currency.getKey());
+                        final boolean hasOffer = !currency.getValue().isPriceUponRequest()
+                                && (currency.getValue().isPriceOnOffer() || MoneyUtils.isPositive(listAndSale.getSecond()));
 
                         if (LOGFTQ.isTraceEnabled()) {
                             addStoredField(document, facetName + "_debug", String.valueOf(longPrice));
@@ -455,6 +458,9 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                         addFacetField(document, facetName, longPrice);
                         addNumericField(document, facetName + "_range", longPrice, false);
                         addSortField(document, facetName + "_sort", longPrice, false);
+                        if (hasOffer) {
+                            addNumericField(document, PRODUCT_SHOP_HASOFFER_FIELD + currency.getKey(), shop.getKey(), false);
+                        }
 
                         final Set<Shop> subs = skuPriceSupport.getAllShopsAndSubs().get(shop.getKey());
 
@@ -469,6 +475,9 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                                     addFacetField(document, subFacetName, longPrice);
                                     addNumericField(document, subFacetName + "_range", longPrice, false);
                                     addSortField(document, subFacetName + "_sort", longPrice, false);
+                                    if (hasOffer) {
+                                        addNumericField(document, PRODUCT_SHOP_HASOFFER_FIELD + currency.getKey(), subShop.getShopId(), false);
+                                    }
 
                                     // Note that price is inherited for this sub shop
                                     availableIn.add(subShop.getShopId());
@@ -702,21 +711,20 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      */
     protected void addInventoryFields(final Document document, final ProductSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
 
+        float boost = 1.0f;
         for (final Long shop : available) {
             if (LOGFTQ.isTraceEnabled()) {
                 addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_debug", shop.toString());
             }
             addNumericField(document, PRODUCT_SHOP_INSTOCK_FIELD, shop, false);
             if (result.getAvailability() == Product.AVAILABILITY_ALWAYS) {
-                // Always = -5% boost (stocked items must be first)
-                addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", 0.95f);
+                boost = 0.95f; // Always = -5% boost (stocked items must be first)
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "095");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + "1", shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), "1");
             } else if (result.getAvailability() == Product.AVAILABILITY_PREORDER &&
                     DomainApiUtils.isObjectAvailableNow(true, result.getAvailablefrom(), null, now)) {
-                // Preorder is 1.25f = 25% boost
-                addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", 1.25f);
+                boost = 1.25f; // Preorder is 1.25f = 25% boost
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "125");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + "1", shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), "1");
@@ -729,13 +737,13 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                         break;
                     }
                 }
-                // Standard + Backorder in stock = no boost, out of stock = -10% boost
-                addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", hasStock ? 1.0f : 0.9f);
+                boost = hasStock ? 1.0f : 0.9f; // Standard + Backorder in stock = no boost, out of stock = -10% boost
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), hasStock ? "100" : "090");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + (hasStock ? "1" : "0"), shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), hasStock ? "1" : "0");
             }
         }
+        addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", boost);
 
     }
 

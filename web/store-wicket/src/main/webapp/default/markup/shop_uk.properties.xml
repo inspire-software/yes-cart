@@ -72,6 +72,9 @@
     <entry key="sale">Розпродаж</entry>
     <entry key="instock1">Товари на складі</entry>
     <entry key="instock0">Товари відсутні на складі</entry>
+    <entry key="featured1">Рекомендовані товари</entry>
+    <entry key="featured0">Інші товари</entry>
+    <entry key="hasoffer">Акційні товари</entry>
     <entry key="newArrivals">Нові надходження</entry>
     <entry key="addToCart">В кошик</entry>
     <entry key="preorderCart">Замовити</entry>

@@ -72,6 +72,9 @@
     <entry key="sale">Abverkauf</entry>
     <entry key="instock1">Produkte an Lager</entry>
     <entry key="instock0">Produkte nicht an Lager</entry>
+    <entry key="featured1">Gekennzeichnet Produkte</entry>
+    <entry key="featured0">Nicht Gekennzeichnet Produkte</entry>
+    <entry key="hasoffer">Produkte im Angebot</entry>
     <entry key="newArrivals">Neu eingetroffen</entry>
     <entry key="addToCart">In den Warenkorb</entry>
     <entry key="preorderCart">Vorbestellen</entry>

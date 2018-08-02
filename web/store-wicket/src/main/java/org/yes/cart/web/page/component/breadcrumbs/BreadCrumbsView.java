@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.breadcrumbs;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -26,15 +25,13 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
-import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -54,6 +51,9 @@ public class BreadCrumbsView extends BaseComponent {
 
     @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
     private ShopService shopService;
+
+    @SpringBean(name = "wicketBreadCrumbsMapping")
+    private Map<String, CrumbNameFormatter> breadCrumbMapping;
 
     private final long shopId;
     private final long customerShopId;
@@ -89,13 +89,8 @@ public class BreadCrumbsView extends BaseComponent {
     public List<Crumb> getCrumbs() {
         if (crumbs == null) {
 
-            final String pricePrefix = getLocalizer().getString(ProductSearchQueryBuilder.PRODUCT_PRICE, this);
-            final String queryPrefix = getLocalizer().getString(WebParametersKeys.QUERY, this);
-            final String tagPrefix = StringUtils.EMPTY;
-
             crumbs = breadCrumbsBuilder.getBreadCrumbs(getLocale().getLanguage(),
-                    shopId, customerShopId, categoryId, getPage().getPageParameters(), shopService.getShopAllCategoriesIds(customerShopId),
-                    pricePrefix, queryPrefix, tagPrefix);
+                    shopId, customerShopId, categoryId, getPage().getPageParameters(), shopService.getShopAllCategoriesIds(customerShopId));
 
         }
         return crumbs;
@@ -116,31 +111,18 @@ public class BreadCrumbsView extends BaseComponent {
                     @Override
                     protected void populateItem(final ListItem<Crumb> crumbListItem) {
                         final Crumb crumb = crumbListItem.getModelObject();
-                        final I18NModel crumbModel;
-                        if (ProductSearchQueryBuilder.PRODUCT_TAG_FIELD.equals(crumb.getKey())) {
-                            String tag = crumb.getName();
-                            try {
-                                tag = getString(tag);
-                            } catch (Exception exp) {
-                                // catch for wicket unknown resource key exception
-                            }
-                            crumbModel = getI18NSupport().getFailoverModel(null, tag);
-                        } else if (ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD.equals(crumb.getKey())) {
-                            String inStock = crumb.getName();
-                            try {
-                                inStock = getString(ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD + inStock);
-                            } catch (Exception exp) {
-                                // catch for wicket unknown resource key exception
-                            }
-                            crumbModel = getI18NSupport().getFailoverModel(null, inStock);
+                        final CrumbNameFormatter crumbName = breadCrumbMapping.get(crumb.getKey());
+                        final String crumbModel;
+                        if (crumbName != null) {
+                            crumbModel = crumbName.format(this, crumb, getI18NSupport(), getLocale().getLanguage());
                         } else {
-                            crumbModel = getI18NSupport().getFailoverModel(crumb.getDisplayName(), crumb.getName());
+                            final String selectedLocale = getLocale().getLanguage();
+                            crumbModel = getI18NSupport().getFailoverModel(crumb.getDisplayName(), crumb.getName()).getValue(selectedLocale);
                         }
-                        final String selectedLocale = getLocale().getLanguage();
 
                         crumbListItem
-                                .add(getPageLink(BREADCRUMBS_LINK, crumbModel.getValue(selectedLocale), new PageParameters(crumb.getCrumbLinkParameters()), true))
-                                .add(getPageLink(BREADCRUMBS_REMOVE_LINK, crumbModel.getValue(selectedLocale), new PageParameters(crumb.getRemoveCrumbLinkParameters()), false)
+                                .add(getPageLink(BREADCRUMBS_LINK, crumbModel, new PageParameters(crumb.getCrumbLinkParameters()), true))
+                                .add(getPageLink(BREADCRUMBS_REMOVE_LINK, crumbModel, new PageParameters(crumb.getRemoveCrumbLinkParameters()), false)
                                 );
                     }
 

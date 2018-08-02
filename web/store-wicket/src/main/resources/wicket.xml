@@ -48,6 +48,49 @@
         <lookup-method name="getNewInstance" bean="wicketMultiMarkupCache"/>
     </bean>
 
+    <bean id="wicketBreadCrumbsMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map>
+                <entry key="brand">
+                    <bean class="org.yes.cart.web.page.component.breadcrumbs.CrumbNameFormatter">
+                        <property name="useKeyAsPrefix" value="true"/>
+                        <property name="useValueAsKey" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="query">
+                    <bean class="org.yes.cart.web.page.component.breadcrumbs.CrumbNameFormatter">
+                        <property name="useKeyAsPrefix" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="tag">
+                    <bean class="org.yes.cart.web.page.component.breadcrumbs.CrumbNameFormatter">
+                        <property name="useValueAsKey" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="price">
+                    <bean class="org.yes.cart.web.page.component.breadcrumbs.CrumbNameFormatter">
+                        <property name="useKeyAsPrefix" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="featured">
+                    <bean class="org.yes.cart.web.page.component.breadcrumbs.CrumbNameFormatter">
+                        <property name="useKeyAndValueAsKey" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="instock">
+                    <bean class="org.yes.cart.web.page.component.breadcrumbs.CrumbNameFormatter">
+                        <property name="useKeyAndValueAsKey" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="hasoffer">
+                    <bean class="org.yes.cart.web.page.component.breadcrumbs.CrumbNameFormatter">
+                        <property name="useKeyOnly" value="true"/>
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
     <bean id="wicketPagesMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>

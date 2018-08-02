@@ -62,6 +62,7 @@ public interface ProductSearchQueryBuilder<T> extends SearchQueryBuilder<T> {
 
     String PRODUCT_TAG_FIELD = "tag";
     String PRODUCT_INSTOCK_FIELD = "instock";
+    String PRODUCT_HASOFFER_FIELD = "hasoffer";
     String SKU_PRODUCT_CODE_FIELD = "sku.code";
     String SKU_PRODUCT_CODE_FIELD_SEARCH = "sku.code_search";
     String SKU_PRODUCT_CODE_SORT_FIELD = "sku.code_sort";
@@ -91,6 +92,7 @@ public interface ProductSearchQueryBuilder<T> extends SearchQueryBuilder<T> {
     String PRODUCT_SHOP_INSTOCK_FLAG_FIELD = "productInStockFlagShopId";
     String PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD = "productInStockFlagShopId_sort";
     String PRODUCT_SHOP_HASPRICE_FIELD = "productHasPriceShopId";
+    String PRODUCT_SHOP_HASOFFER_FIELD = "productHasOfferShopId";
     String PRODUCT_ID_FIELD = "productId";
     String SKU_ID_FIELD = "sku.skuId"; //////////////////////////////////////////////
 

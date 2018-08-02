@@ -101,25 +101,19 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                       final long customerShopId,
                                       final long categoryId,
                                       final PageParameters pageParameters,
-                                      final Set<Long> shopCategoryIds,
-                                      final String pricePrefix,
-                                      final String queryPrefix,
-                                      final String tagPrefix) {
+                                      final Set<Long> shopCategoryIds) {
 
         final List<Crumb> crumbs = new ArrayList<>();
         final boolean isContent = pageParameters.getNamedKeys().contains(WebParametersKeys.CONTENT_ID);
         crumbs.addAll(getCategoriesCrumbs(shopId, customerShopId, categoryId, shopCategoryIds, isContent));
-        crumbs.addAll(getFilteredNavigationCrumbs(locale, pageParameters, pricePrefix, queryPrefix, tagPrefix));
+        crumbs.addAll(getFilteredNavigationCrumbs(locale, pageParameters));
         return crumbs;
     }
 
     private List<Crumb> getFilteredNavigationCrumbs(final String locale,
-                                                    final PageParameters pageParameters,
-                                                    final String pricePrefix,
-                                                    final String queryPrefix,
-                                                    final String tagPrefix) {
+                                                    final PageParameters pageParameters) {
         final List<Crumb> navigationCrumbs = new ArrayList<>();
-        fillAttributes(locale, navigationCrumbs, pageParameters, pricePrefix, queryPrefix, tagPrefix);
+        fillAttributes(locale, navigationCrumbs, pageParameters);
         return navigationCrumbs;
     }
 
@@ -170,7 +164,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
                 if (parentAvailable) {
                     categoriesCrumbs.add(
-                            new Crumb("category", category.getName(),
+                            new Crumb("category", String.valueOf(categoryId), category.getName(),
                                     category.getDisplayName(), getContentLinkParameters(categoryId),
                                     getRemoveContentLinkParameters(category, shopCategoryIds)
                             )
@@ -214,7 +208,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
                 if (parentAvailable) {
                     categoriesCrumbs.add(
-                            new Crumb("category", category.getName(),
+                            new Crumb("category", String.valueOf(categoryId), category.getName(),
                                     category.getDisplayName(), getCategoryLinkParameters(categoryId),
                                     getRemoveCategoryLinkParameters(category, shopCategoryIds)
                             )
@@ -294,10 +288,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
     private void fillAttributes(final String locale,
                                 final List<Crumb> navigationCrumbs,
-                                final PageParameters pageParameters,
-                                final String pricePrefix,
-                                final String queryPrefix,
-                                final String tagPrefix) {
+                                final PageParameters pageParameters) {
 
         final Set<String> allowedAttributeNames = attributeService.getAllNavigatableAttributeCodes();
         /*
@@ -327,7 +318,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
             final String displayValueName = determineDisplayValueName(namedPair.getKey(), namedPair.getValue(), locale);
             navigationCrumbs.add(createFilteredNavigationCrumb(
                     base, namedPair.getKey(), namedPair.getValue(), displayValueName, locale, pageParameters,
-                    pricePrefix, queryPrefix, tagPrefix, attributeCodeName));
+                    attributeCodeName));
         }
     }
 
@@ -378,9 +369,6 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                                 final String displayValue,
                                                 final String locale,
                                                 final PageParameters pageParameters,
-                                                final String pricePrefix,
-                                                final String queryPrefix,
-                                                final String tagPrefix,
                                                 final Map<String, I18NModel> attributeCodeName) {
 
         final PageParameters withoutCurrent = wicketUtil.getFilteredRequestParameters(
@@ -389,7 +377,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                 value
         );
 
-        String linkName = getLinkNamePrefix(key, locale, pricePrefix, queryPrefix, tagPrefix, attributeCodeName);
+        String linkName = getLinkNamePrefix(key, locale, attributeCodeName);
         if (StringUtils.isNotBlank(linkName)) {
             linkName += "::" + getLinkName(key, value, displayValue);
         } else {
@@ -397,31 +385,19 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         }
 
         base.add(key, value);
-        return new Crumb(key, linkName, null, new PageParameters(base), withoutCurrent);
+        return new Crumb(key, value, linkName, null, new PageParameters(base), withoutCurrent);
     }
 
     private String getLinkNamePrefix(final String key,
                                      final String locale,
-                                     final String pricePrefix,
-                                     final String queryPrefix,
-                                     final String tagPrefix,
                                      final Map<String, I18NModel> attributeCodeName) {
-        final String name;
-        if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(key)) {
-            name = pricePrefix;
-        } else if (ProductSearchQueryBuilder.PRODUCT_TAG_FIELD.equals(key)) {
-            name = tagPrefix;
-        } else if (WebParametersKeys.QUERY.equals(key)) {
-            name = queryPrefix;
-        } else {
-            final I18NModel nameModel = attributeCodeName.get(key);
-            if (nameModel == null) {
-                name = "";
-            } else {
-                name = nameModel.getValue(locale);
-            }
+
+        final I18NModel nameModel = attributeCodeName.get(key);
+        if (nameModel == null) {
+            return "";
         }
-        return name;
+        return nameModel.getValue(locale);
+
     }
 
     private String getLinkName(final String key, final String value, final String displayValue) {

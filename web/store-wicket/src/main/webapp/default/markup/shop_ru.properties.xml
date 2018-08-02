@@ -72,6 +72,9 @@
     <entry key="sale">Распродажа</entry>
     <entry key="instock1">Товары на складе</entry>
     <entry key="instock0">Товары отсутствующие на складе</entry>
+    <entry key="featured1">Рекомендуемые товары</entry>
+    <entry key="featured0">Другие Товары</entry>
+    <entry key="hasoffer">Акционные товары</entry>
     <entry key="newArrivals">Новые послупления</entry>
     <entry key="addToCart">В корзину</entry>
     <entry key="preorderCart">Резерв</entry>
