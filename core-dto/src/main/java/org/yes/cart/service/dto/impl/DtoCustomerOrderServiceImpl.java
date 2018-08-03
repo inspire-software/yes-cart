@@ -44,6 +44,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerOrderTransitionService;
+import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.OrderException;
@@ -71,6 +72,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     protected final PaymentModulesManager paymentModulesManager;
     protected final CustomerOrderTransitionService transitionService;
     protected final CustomerOrderPaymentService customerOrderPaymentService;
+    protected final CustomerService customerService;
 
 
     /**
@@ -81,14 +83,15 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
      * @param adaptersRepository          value converter
      * @param transitionService           transition service
      * @param customerOrderPaymentService payment service
+     * @param customerService             customer service
      */
-    public DtoCustomerOrderServiceImpl(
-            final DtoFactory dtoFactory,
-            final GenericService<CustomerOrder> customerOrderGenericService,
-            final AdaptersRepository adaptersRepository,
-            final PaymentModulesManager paymentModulesManager,
-            final CustomerOrderTransitionService transitionService,
-            final CustomerOrderPaymentService customerOrderPaymentService) {
+    public DtoCustomerOrderServiceImpl(final DtoFactory dtoFactory,
+                                       final GenericService<CustomerOrder> customerOrderGenericService,
+                                       final AdaptersRepository adaptersRepository,
+                                       final PaymentModulesManager paymentModulesManager,
+                                       final CustomerOrderTransitionService transitionService,
+                                       final CustomerOrderPaymentService customerOrderPaymentService,
+                                       final CustomerService customerService) {
         super(dtoFactory, customerOrderGenericService, adaptersRepository);
         this.transitionService = transitionService;
         this.customerOrderPaymentService = customerOrderPaymentService;
@@ -96,6 +99,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         orderDeliveryAssembler = DTOAssembler.newAssembler(CustomerOrderDeliveryDTOImpl.class, CustomerOrderDelivery.class);
         orderDetailAssembler = DTOAssembler.newAssembler(CustomerOrderDetailDTOImpl.class, CustomerOrderDet.class);
         this.paymentModulesManager = paymentModulesManager;
+        this.customerService = customerService;
     }
 
     /**
@@ -662,13 +666,38 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                     // shop search
                     final String shopCode = orderNumberOrCustomerOrAddressOrSku.getSecond();
 
-                    entities = service.getGenericDao().findRangeByCriteria(
-                            " where lower(e.shop.code) = ?1 and (?2 = 0 or e.orderStatus in (?3)) order by e.orderTimestamp desc, e.ordernum desc",
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIeq(shopCode),
-                            HQLUtils.criteriaInTest(statuses),
-                            HQLUtils.criteriaIn(statuses)
+                    final List<Long> customerIds = new ArrayList<>();
+                    customerService.findByCriteriaIterator(
+                            " where lower(e.tag) like ?1",
+                            new Object[] { HQLUtils.criteriaIlikeAnywhere(shopCode) },
+                            customer -> {
+                                customerIds.add(customer.getCustomerId());
+                                return true; // read all
+                            }
                     );
+
+                    if (customerIds.isEmpty()) {
+
+                        entities = service.getGenericDao().findRangeByCriteria(
+                                " where lower(e.shop.code) = ?1 and (?2 = 0 or e.orderStatus in (?3)) order by e.orderTimestamp desc, e.ordernum desc",
+                                page * pageSize, pageSize,
+                                HQLUtils.criteriaIeq(shopCode),
+                                HQLUtils.criteriaInTest(statuses),
+                                HQLUtils.criteriaIn(statuses)
+                        );
+
+                    } else {
+
+                        entities = service.getGenericDao().findRangeByCriteria(
+                                " left join e.customer as cust where (lower(e.shop.code) = ?1 or cust.customerId in ?4) and (?2 = 0 or e.orderStatus in (?3)) order by e.orderTimestamp desc, e.ordernum desc",
+                                page * pageSize, pageSize,
+                                HQLUtils.criteriaIeq(shopCode),
+                                HQLUtils.criteriaInTest(statuses),
+                                HQLUtils.criteriaIn(statuses),
+                                customerIds
+                        );
+
+                    }
 
                 } else if ("!".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     if (page > 0) {

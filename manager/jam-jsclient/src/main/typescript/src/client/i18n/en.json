@@ -769,7 +769,7 @@
   "SEARCH_HELP_CUSTOMER_ORDERS_CUSTOMER": "To search only by customer details (email, first name and last name). Format: '?keyword'",
   "SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS": "To search only by address details. Format: '@keyword'",
   "SEARCH_HELP_CUSTOMER_ORDERS_RESERVED": "To search orders where SKU is reserved and pending allocation (exact match). Format: '!SKU'",
-  "SEARCH_HELP_CUSTOMER_SHOP": "To search orders by shop code (exact match). Format: '^code'",
+  "SEARCH_HELP_CUSTOMER_SHOP": "To search orders by shop code (exact match) or customer tag. Format: '^code'",
 
   "SEARCH_HELP_CUSTOMER_RFQ_ALL": "all RFQ statuses: ",
 
