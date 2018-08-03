@@ -102,6 +102,7 @@ public class ReportObjectStreamFactory {
         xStream.omitField(ShopUrlEntity.class, "shop");
         xStream.omitField(AttrValueEntityShop.class, "shop");
         xStream.omitField(ShopCategoryEntity.class, "shop");
+        xStream.omitField(ShopAliasEntity.class, "shop");
 
         xStream.alias("pair", Pair.class);
 
