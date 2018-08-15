@@ -320,15 +320,20 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
                                 Pair<Pair<String, I18NModel>, Integer> existing = distinctFacetValues.get(label.getFirst());
                                 if (existing != null) {
-                                    // if we have this value then need to de-duplicate
-                                    // we choose more complete I18n model (assumed to be the one with most translations)
-                                    if (existing.getFirst().getSecond().getAllValues().size() >
-                                            label.getSecond().getAllValues().size()) {
+                                    /*
+                                        if we have this value then need to de-duplicate
+                                        we choose more complete I18n model (assumed to be the one with most translations)
+                                     */
+
+                                    // if existing i18n model is not null and has more values we keep it
+                                    if (existing.getFirst().getSecond() != null &&
+                                            (label.getSecond() == null ||
+                                            existing.getFirst().getSecond().getAllValues().size() > label.getSecond().getAllValues().size())) {
                                         distinctFacetValues.put(
                                                 label.getFirst(),
                                                 new Pair<>(existing.getFirst(), lav.value.intValue() + existing.getSecond())
                                         );
-                                    } else {
+                                    } else { // otherwise swap it for new AV i18n model
                                         distinctFacetValues.put(
                                                 label.getFirst(),
                                                 new Pair<>(label, lav.value.intValue() + existing.getSecond())
