@@ -100,42 +100,38 @@ public class MailTemplateResourcesProviderShopContentImpl implements MailTemplat
 
             final Category content = contentService.getById(contentId);
 
-            // Locale specific
-            final String imageValueLocale = content.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE + "_" + locale);
-            if (StringUtils.isNotBlank(imageValueLocale)) {
-
-                final String path = systemService.getImageRepositoryDirectory();
-
-                if (imageService.isImageInRepository(imageValueLocale, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
-                    return imageService.imageToByteArray(imageValueLocale, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
-                }
-
-                if (imageService.isImageInRepository(imageValueLocale, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
-                    return imageService.imageToByteArray(imageValueLocale, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
-                }
-
+            final byte[] localeSpecificImage = getImageAsBytes(content, AttributeNamesKeys.Category.CATEGORY_IMAGE + "_" + locale, contentFullUri);
+            if (localeSpecificImage != null && localeSpecificImage.length > 0) {
+                return localeSpecificImage;
             }
 
-            // Default
-            final String imageValue = content.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE);
-            if (StringUtils.isNotBlank(imageValue)) {
-
-                final String path = systemService.getImageRepositoryDirectory();
-
-                if (imageService.isImageInRepository(imageValue, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
-                    return imageService.imageToByteArray(imageValue, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
-                }
-
-                if (imageService.isImageInRepository(imageValue, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
-                    return imageService.imageToByteArray(imageValue, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
-                }
-
+            final byte[] defaultImage = getImageAsBytes(content, AttributeNamesKeys.Category.CATEGORY_IMAGE, contentFullUri);
+            if (defaultImage != null && defaultImage.length > 0) {
+                return defaultImage;
             }
 
         }
 
         return null;
 
+    }
+
+    private byte[] getImageAsBytes(final Category content, final String imageAttribute, final String contentFullUri) throws IOException {
+        final String imageValue = content.getAttributeValueByCode(imageAttribute);
+        if (StringUtils.isNotBlank(imageValue)) {
+
+            final String path = systemService.getImageRepositoryDirectory();
+
+            if (imageService.isImageInRepository(imageValue, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
+                return imageService.imageToByteArray(imageValue, contentFullUri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
+            }
+
+            if (imageService.isImageInRepository(imageValue, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path)) {
+                return imageService.imageToByteArray(imageValue, content.getGuid(), Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
+            }
+
+        }
+        return null;
     }
 
 

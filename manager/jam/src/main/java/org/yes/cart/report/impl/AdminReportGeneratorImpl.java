@@ -20,7 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.report.ReportDescriptor;
 import org.yes.cart.service.domain.ContentService;
+import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.theme.ThemeService;
 
 import javax.xml.transform.Source;
@@ -42,8 +44,10 @@ public class AdminReportGeneratorImpl extends AbstractThemeAwareFopReportGenerat
 
     public AdminReportGeneratorImpl(final ThemeService themeService,
                                     final ShopService shopService,
-                                    final ContentService contentService) {
-        super(themeService, shopService, contentService);
+                                    final ContentService contentService,
+                                    final SystemService systemService,
+                                    final ImageService imageService) {
+        super(themeService, shopService, contentService, systemService, imageService);
     }
 
     /**
