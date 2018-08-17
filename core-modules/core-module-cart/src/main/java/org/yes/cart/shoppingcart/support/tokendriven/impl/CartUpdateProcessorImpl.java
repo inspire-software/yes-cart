@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.ShoppingCartState;
@@ -83,7 +84,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
                         mergeNonGiftSKU(shoppingCart, oldCart, cmdParams);
                         mergeCouponCodes(shoppingCart, oldCart, cmdParams);
-                        mergeShoppingContext(shoppingCart, oldCart);
+                        mergeShoppingContext(shoppingCart, oldCart, cmdParams);
                         mergeOrderInfo(shoppingCart, oldCart, cmdParams);
 
                         // 4.4. Remove merged cart state
@@ -152,33 +153,33 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
         }
     }
 
-    private void mergeShoppingContext(final ShoppingCart shoppingCart, final ShoppingCart oldCart) {
+    private void mergeShoppingContext(final ShoppingCart shoppingCart, final ShoppingCart oldCart, final Map<String, Object> cmdParams) {
 
         final ShoppingContext oldCartCtx = oldCart.getShoppingContext();
         final ShoppingContext shoppingCartCtx = shoppingCart.getShoppingContext();
-        if (oldCartCtx.getLatestViewedSkus() != null && shoppingCartCtx instanceof MutableShoppingContext) {
-            final List<String> viewed = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(oldCartCtx.getLatestViewedSkus()) && shoppingCartCtx instanceof MutableShoppingContext) {
 
-            // Current cart first
-            if (shoppingCartCtx.getLatestViewedSkus() != null) {
-                viewed.addAll(shoppingCartCtx.getLatestViewedSkus());
-            }
-            // Then old
-            viewed.addAll(oldCartCtx.getLatestViewedSkus());
-            ((MutableShoppingContext) shoppingCartCtx).setLatestViewedSkus(viewed);
-        }
-        if (oldCartCtx.getLatestViewedCategories() != null && shoppingCartCtx instanceof MutableShoppingContext) {
-            final List<String> viewed = new ArrayList<>();
+            // Keep reference to current SKU
+            final List<String> thisCartSku = shoppingCartCtx.getLatestViewedSkus();
+            final List<String> oldCartSkuCopy = new ArrayList<>(oldCartCtx.getLatestViewedSkus());
 
-            // Current cart first
-            if (shoppingCartCtx.getLatestViewedCategories() != null) {
-                viewed.addAll(shoppingCartCtx.getLatestViewedCategories());
+            // Set old ones first
+            ((MutableShoppingContext) shoppingCartCtx).setLatestViewedSkus(oldCartSkuCopy);
+
+            // replay new ones
+            if (CollectionUtils.isNotEmpty(thisCartSku)) {
+                cmdParams.clear();
+                cmdParams.put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, thisCartSku);
+                shoppingCartCommandFactory.execute(shoppingCart, cmdParams);
             }
-            // Then old
-            viewed.addAll(oldCartCtx.getLatestViewedCategories());
-            ((MutableShoppingContext) shoppingCartCtx).setLatestViewedCategories(viewed);
 
         }
+        /*
+        if (CollectionUtils.isNotEmpty(oldCartCtx.getLatestViewedCategories()) && shoppingCartCtx instanceof MutableShoppingContext) {
+
+            TODO: YC-360 Track latest viewed categories in shopping context
+
+        }*/
 
     }
 

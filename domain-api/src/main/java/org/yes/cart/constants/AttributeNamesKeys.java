@@ -386,6 +386,11 @@ public interface AttributeNamesKeys {
         String SHOP_SF_B2B_ORDER_FORM_TYPES = "SHOP_SF_B2B_ORDER_FORM_TYPES";
 
         /**
+         * Maximum number of SKU to keep track of in Cart.
+         */
+        String SHOP_SF_MAX_LAST_VIEWED_SKU = "SHOP_SF_MAX_LAST_VIEWED_SKU";
+
+        /**
          * Supported by shop currencies.
          */
         String SUPPORTED_CURRENCIES = "CURRENCY";

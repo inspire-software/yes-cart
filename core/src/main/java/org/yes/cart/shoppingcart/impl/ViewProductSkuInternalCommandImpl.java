@@ -16,12 +16,17 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.math.NumberUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -33,17 +38,20 @@ import java.util.Map;
  */
 public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
+    private final ShopService shopService;
     private final int maxProductHistory;
 
     /**
      * Construct sku command.
-     *
      * @param registry shopping cart command registry
+     * @param shopService shop service
      * @param maxProductHistory max product history to keep
      */
     public ViewProductSkuInternalCommandImpl(final ShoppingCartCommandRegistry registry,
+                                             final ShopService shopService,
                                              final int maxProductHistory) {
         super(registry);
+        this.shopService = shopService;
         this.maxProductHistory = maxProductHistory;
     }
 
@@ -51,18 +59,30 @@ public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl i
     @Override
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
-            final Object sku = parameters.get(getCmdKey());
-            if (sku instanceof ProductSku) {
-                updateViewedSku(shoppingCart, String.valueOf(((ProductSku) sku).getProduct().getProductId()));
-            } else if (sku instanceof Product) {
-                updateViewedSku(shoppingCart, String.valueOf(((Product) sku).getProductId()));
-            } else if (sku instanceof String) {
-                updateViewedSku(shoppingCart, (String) sku);
+            final Shop shop = this.shopService.getById(shoppingCart.getShoppingContext().getShopId());
+            final int max = NumberUtils.toInt(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_MAX_LAST_VIEWED_SKU), maxProductHistory);
+            final Object skus = parameters.get(getCmdKey());
+            if (skus instanceof Collection) {
+                for (final Object sku : (Collection) skus) {
+                    executeOneItem(shoppingCart, sku, max);
+                }
+            } else {
+                executeOneItem(shoppingCart, skus, max);
             }
         }
     }
 
-    private void updateViewedSku(final MutableShoppingCart shoppingCart, final String productId) {
+    private void executeOneItem(final MutableShoppingCart shoppingCart, final Object sku, final int max) {
+        if (sku instanceof ProductSku) {
+            updateViewedSku(shoppingCart, String.valueOf(((ProductSku) sku).getProduct().getProductId()), max);
+        } else if (sku instanceof Product) {
+            updateViewedSku(shoppingCart, String.valueOf(((Product) sku).getProductId()), max);
+        } else if (sku instanceof String) {
+            updateViewedSku(shoppingCart, (String) sku, max);
+        }
+    }
+
+    private void updateViewedSku(final MutableShoppingCart shoppingCart, final String skuCode, final int max) {
 
         List<String> skus = shoppingCart.getShoppingContext().getLatestViewedSkus();
 
@@ -71,14 +91,14 @@ public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl i
             shoppingCart.getShoppingContext().setLatestViewedSkus(skus);
         }
 
-        if (!skus.contains(productId)) {
-            if (skus.size() >= maxProductHistory) {
+        if (!skus.contains(skuCode)) {
+            if (skus.size() >= max) {
                 // if maxed out remove the first element
                 final List<String> last = new LinkedList<>(skus.subList(1, skus.size()));
                 skus.clear();
                 skus.addAll(last);
             }
-            skus.add(productId);
+            skus.add(skuCode);
             shoppingCart.markDirty();
         }
 

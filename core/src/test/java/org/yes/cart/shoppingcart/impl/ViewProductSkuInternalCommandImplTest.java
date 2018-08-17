@@ -24,6 +24,7 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,11 +48,17 @@ public class ViewProductSkuInternalCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
+        commands.execute(shoppingCart, new HashMap<String, Object>() {{
+            put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
+            put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
+            put(ShoppingCartCommand.CMD_SETSHOP, "10");
+        }});
+
         assertNull(shoppingCart.getShoppingContext().getLatestViewedSkus());
 
         // Test adding single sku
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, "1");
         commands.execute(shoppingCart, (Map) params);
 
@@ -91,6 +98,19 @@ public class ViewProductSkuInternalCommandImplTest extends BaseCoreDBTestCase {
 
         }
 
+        // Test adding multiple items
+
+        params.put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, Arrays.asList("12", "13"));
+        commands.execute(shoppingCart, (Map) params);
+
+        skus = shoppingCart.getShoppingContext().getLatestViewedSkus();
+        assertNotNull(skus);
+        assertEquals(10, skus.size());
+        for (int i = 1; i <= 10; i++) {
+
+            assertEquals(String.valueOf(i + 3), skus.get(i - 1));
+
+        }
 
 
     }

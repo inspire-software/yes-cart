@@ -356,5 +356,12 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11511,  'default_name', 'default_name',  0,  'name',  'Address Name',  'Address Name', 1000,  1007, 0, 0, 0, 0,
   'de#~#Adressname#~#en#~#Address Name#~#ru#~#Название#~#uk#~#Назва#~#');
 
+--
+-- YC-929 latestViewedSkus are not de-duplicated during cart merge
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8015,  'SHOP_SF_MAX_LV_SKU', 'SHOP_SF_MAX_LAST_VIEWED_SKU',  0,  NULL,  'Customer: Max last viewed SKU',  'Maximum number of last viewed SKU to track (default is 10)',
+    1006, 1001, 0, 0, 0, 0);
 
 

@@ -145,7 +145,7 @@ public interface ShoppingContext extends Serializable {
     /**
      * Get last viewed categories.
      *
-     * TODO: YC-360
+     * TODO: YC-360 Track latest viewed categories in shopping context
      *
      * @return comma separated string of category ids.
      */
