@@ -64,7 +64,17 @@ public class CustomerRO implements Serializable {
     @DtoField(value = "tag")
     private String tag;
 
-//    @DtoCollection(
+    @DtoField(value = "companyName1")
+    private String companyName1;
+
+    @DtoField(value = "companyName2")
+    private String companyName2;
+
+    @DtoField(value = "companyDepartment")
+    private String companyDepartment;
+
+
+    //    @DtoCollection(
 //            value="attributes",
 //            dtoBeanKey="org.yes.cart.domain.ro.AttrValueCustomerRO",
 //            entityGenericType = AttrValueCustomer.class,
@@ -148,6 +158,33 @@ public class CustomerRO implements Serializable {
 
     public void setTag(final String tag) {
         this.tag = tag;
+    }
+
+    @XmlElement(name = "company-name-1")
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    @XmlElement(name = "company-name-2")
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    @XmlElement(name = "company-department")
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
     }
 
     @XmlElementWrapper(name = "attribute-values")

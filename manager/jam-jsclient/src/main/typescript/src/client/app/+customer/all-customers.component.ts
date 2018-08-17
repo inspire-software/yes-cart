@@ -78,6 +78,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
       customerId: 0, email: '',
       salutation: null, firstname: null, lastname: null, middlename: null,
       tag: null, customerType: 'B2C', pricingPolicy: null,
+      companyName1: null, companyName2: null, companyDepartment: null,
       checkoutBocked: false, checkoutBockedForOrdersOver: undefined,
       ordersRequireApproval: false, ordersRequireApprovalForOrdersOver: undefined,
       attributes: [],

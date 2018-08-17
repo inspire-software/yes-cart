@@ -668,7 +668,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
                     final List<Long> customerIds = new ArrayList<>();
                     customerService.findByCriteriaIterator(
-                            " where lower(e.tag) like ?1",
+                            " where lower(e.tag) like ?1 or lower(e.companyName1) like ?1 or lower(e.companyName2) like ?1",
                             new Object[] { HQLUtils.criteriaIlikeAnywhere(shopCode) },
                             customer -> {
                                 customerIds.add(customer.getCustomerId());

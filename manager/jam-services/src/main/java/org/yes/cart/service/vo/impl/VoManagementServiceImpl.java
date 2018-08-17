@@ -179,8 +179,15 @@ public class VoManagementServiceImpl implements VoManagementService {
                 }
             }
             final ShopDTO shop = shopService.getById(voManager.getManagerShops().get(0).getShopId());
-            managementService.addUser(voManager.getEmail(), voManager.getFirstName(),
-                    voManager.getLastName(), shop.getCode());
+            managementService.addUser(
+                    voManager.getEmail(),
+                    voManager.getFirstName(),
+                    voManager.getLastName(),
+                    voManager.getCompanyName1(),
+                    voManager.getCompanyName2(),
+                    voManager.getCompanyDepartment(),
+                    shop.getCode()
+            );
 
             if (voManager.getManagerShops().size() > 1) {
                 for (final VoManagerShop otherShop : voManager.getManagerShops().subList(1, voManager.getManagerShops().size())) {
@@ -225,8 +232,14 @@ public class VoManagementServiceImpl implements VoManagementService {
                     throw new AccessDeniedException("Access is denied");
                 }
             }
-            managementService.updateUser(voManager.getEmail(), voManager.getFirstName(),
-                    voManager.getLastName());
+            managementService.updateUser(
+                    voManager.getEmail(),
+                    voManager.getFirstName(),
+                    voManager.getLastName(),
+                    voManager.getCompanyName1(),
+                    voManager.getCompanyName2(),
+                    voManager.getCompanyDepartment()
+            );
 
             for (final ShopDTO link : managementService.getAssignedManagerShops(voManager.getEmail(), false)) {
                 if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {

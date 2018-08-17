@@ -177,6 +177,9 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         customer.setFirstname(getFallbackParameter(registrationData, "firstname", addressFormParamKeys.get("firstname")));
         customer.setLastname(getFallbackParameter(registrationData, "lastname", addressFormParamKeys.get("lastname")));
         customer.setMiddlename(getFallbackParameter(registrationData, "middlename", addressFormParamKeys.get("middlename")));
+        customer.setCompanyName1(getFallbackParameter(registrationData, "companyname1", addressFormParamKeys.get("companyName1")));
+        customer.setCompanyName2(getFallbackParameter(registrationData, "companyname2", addressFormParamKeys.get("companyName2")));
+        customer.setCompanyDepartment(getFallbackParameter(registrationData, "companydepartment", addressFormParamKeys.get("companyDepartment")));
 
         if (StringUtils.isBlank(customer.getEmail()) ||
                 StringUtils.isBlank(customer.getFirstname()) ||
@@ -201,9 +204,9 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     private String getFallbackParameter(final Map<String, Object> registrationData, final String key1, final String key2) {
-        final String salutation = (String) registrationData.get(key1);
-        if (StringUtils.isNotBlank(salutation)) {
-            return salutation;
+        final String paramValue = (String) registrationData.get(key1);
+        if (StringUtils.isNotBlank(paramValue)) {
+            return paramValue;
         }
         return (String) registrationData.get(key2);
     }
@@ -283,6 +286,9 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         attrData.remove("customerType");
         attrData.remove("password");
         attrData.remove("confirmPassword");
+        attrData.remove("companyname1");
+        attrData.remove("companyname2");
+        attrData.remove("companydepartment");
         final String phone = getFallbackParameter(attrData, "phone", addressFormParamKeys.get("phone1"));
         if (StringUtils.isNotBlank(phone) && !attrData.containsKey(AttributeNamesKeys.Customer.CUSTOMER_PHONE)) {
             attrData.put(AttributeNamesKeys.Customer.CUSTOMER_PHONE, phone);
@@ -353,6 +359,9 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         customer.setFirstname((String) registrationData.get("firstname"));
         customer.setLastname((String) registrationData.get("lastname"));
         customer.setMiddlename((String) registrationData.get("middlename"));
+        customer.setCompanyName1((String) registrationData.get("companyname1"));
+        customer.setCompanyName2((String) registrationData.get("companyname2"));
+        customer.setCompanyDepartment((String) registrationData.get("companydepartment"));
         customer.setCustomerType(customerType);
 
         if (StringUtils.isBlank(customer.getEmail()) ||
@@ -482,7 +491,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             // must explicitly configure to avoid exposing personal data
             final List<String> readonly = new ArrayList<>(customerCustomisationSupport.getSupportedProfileFormReadOnlyAttributesAsList(profileShop, customer.getCustomerType()));
             // Ensure dummy attributes are not updated
-            readonly.addAll(Arrays.asList("salutation", "firstname", "middlename", "lastname"));
+            readonly.addAll(Arrays.asList("salutation", "firstname", "middlename", "lastname", "companyname1", "companyname2", "companydepartment"));
 
             for (final Map.Entry<String, String> entry : values.entrySet()) {
 

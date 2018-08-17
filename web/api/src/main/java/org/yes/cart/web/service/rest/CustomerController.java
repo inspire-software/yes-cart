@@ -447,6 +447,9 @@ public class CustomerController {
         customer.setFirstname(update.getFirstname());
         customer.setLastname(update.getLastname());
         customer.setMiddlename(update.getMiddlename());
+        customer.setCompanyName1(update.getCompanyName1());
+        customer.setCompanyName2(update.getCompanyName2());
+        customer.setCompanyDepartment(update.getCompanyDepartment());
 
         customerServiceFacade.updateCustomerAttributes(shop, customer, valuesToUpdate);
 
@@ -880,6 +883,7 @@ public class CustomerController {
 
         final Address addressEntity = addressBookFacade.getAddress(customer, customerShop, String.valueOf(address.getAddressId()), type);
 
+        addressEntity.setName(address.getName());
         if (StringUtils.isNotBlank(address.getSalutation())) {
             addressEntity.setSalutation(address.getSalutation());
         }
@@ -904,6 +908,10 @@ public class CustomerController {
         if (StringUtils.isNotBlank(address.getPhone1())) {
             addressEntity.setPhone1(address.getPhone1());
         }
+
+        addressEntity.setCompanyName1(address.getCompanyName1());
+        addressEntity.setCompanyName2(address.getCompanyName2());
+        addressEntity.setCompanyDepartment(address.getCompanyDepartment());
 
         addressBookFacade.createOrUpdate(addressEntity, customerShop);
 

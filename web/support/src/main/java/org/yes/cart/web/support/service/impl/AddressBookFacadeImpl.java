@@ -112,6 +112,10 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setFirstname(customer.getFirstname());
             rez.setMiddlename(customer.getMiddlename());
             rez.setLastname(customer.getLastname());
+            rez.setCompanyName1(customer.getCompanyName1());
+            rez.setCompanyName2(customer.getCompanyName2());
+            rez.setCompanyDepartment(customer.getCompanyDepartment());
+            rez.setEmail1(customer.getContactEmail());
             rez.setPhone1(attrValue == null ? StringUtils.EMPTY : attrValue.getVal());
         }
         return rez;
@@ -187,6 +191,9 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setAddrline2(original.getAddrline2());
             rez.setCountryCode(original.getCountryCode());
             rez.setStateCode(original.getStateCode());
+            rez.setCompanyName1(original.getCompanyName1());
+            rez.setCompanyName2(original.getCompanyName2());
+            rez.setCompanyDepartment(original.getCompanyDepartment());
             rez.setCustom0(original.getCustom0());
             rez.setCustom1(original.getCustom1());
             rez.setCustom2(original.getCustom2());

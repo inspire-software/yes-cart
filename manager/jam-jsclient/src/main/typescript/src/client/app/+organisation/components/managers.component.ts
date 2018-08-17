@@ -113,7 +113,10 @@ export class ManagersComponent implements OnInit, OnDestroy {
       this.filteredManagers = this._managers.filter(manager =>
         manager.email.toLowerCase().indexOf(this._filter) !== -1 ||
         manager.firstName !== null && manager.firstName.toLowerCase().indexOf(this._filter) !== -1 ||
-        manager.lastName !== null && manager.lastName.toLowerCase().indexOf(this._filter) !== -1
+        manager.lastName !== null && manager.lastName.toLowerCase().indexOf(this._filter) !== -1 ||
+        manager.companyName1 !== null && manager.companyName1.toLowerCase().indexOf(this._filter) !== -1 ||
+        manager.companyName2 !== null && manager.companyName2.toLowerCase().indexOf(this._filter) !== -1 ||
+        manager.companyDepartment !== null && manager.companyDepartment.toLowerCase().indexOf(this._filter) !== -1
       );
       LogUtil.debug('ManagersComponent filterManagers', this._filter);
     } else {

@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto;
 
 
 import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.domain.entity.Nameable;
 
 /**
  * Shipment and billing address interface.
@@ -26,7 +27,7 @@ import org.yes.cart.domain.entity.Identifiable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface AddressDTO extends Identifiable {
+public interface AddressDTO extends Identifiable, Nameable {
 
     /**
      * Get pk value
@@ -228,6 +229,50 @@ public interface AddressDTO extends Identifiable {
      * @param stateCode state.
      */
     void setStateCode(final String stateCode);
+
+
+    /**
+     * Company name for this person.
+     *
+     * @return company name
+     */
+    String getCompanyName1();
+
+    /**
+     * Company name for this person.
+     *
+     * @param companyName1 name
+     */
+    void setCompanyName1(String companyName1);
+
+    /**
+     * Company name for this person.
+     *
+     * @return company name
+     */
+    String getCompanyName2();
+
+    /**
+     * Company name for this person.
+     *
+     * @param companyName2 name
+     */
+    void setCompanyName2(String companyName2);
+
+
+    /**
+     * Company department for this person.
+     *
+     * @return company department
+     */
+    String getCompanyDepartment();
+
+    /**
+     * Company department for this person.
+     *
+     * @param companyDepartment department
+     */
+    void setCompanyDepartment(String companyDepartment);
 
 
     /**

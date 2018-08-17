@@ -38,6 +38,9 @@ public class AddressRO implements Serializable {
     @DtoField(value = "addressId", readOnly = true)
     private long addressId;
 
+    @DtoField(value = "name", readOnly = true)
+    private String name;
+
     @DtoField(value = "city", readOnly = true)
     private String city;
 
@@ -96,6 +99,15 @@ public class AddressRO implements Serializable {
     @DtoField(value = "email2", readOnly = true)
     private String email2;
 
+    @DtoField(value = "companyName1", readOnly = true)
+    private String companyName1;
+
+    @DtoField(value = "companyName2", readOnly = true)
+    private String companyName2;
+
+    @DtoField(value = "companyDepartment", readOnly = true)
+    private String companyDepartment;
+
     @DtoField(value = "custom0", readOnly = true)
     private String custom0;
 
@@ -137,6 +149,14 @@ public class AddressRO implements Serializable {
 
     public void setAddressId(final long addressId) {
         this.addressId = addressId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
     }
 
     public String getCity() {
@@ -327,6 +347,33 @@ public class AddressRO implements Serializable {
 
     public void setEmail2(final String email2) {
         this.email2 = email2;
+    }
+
+    @XmlElement(name = "company-name-1")
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    @XmlElement(name = "company-name-2")
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    @XmlElement(name = "company-department")
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
     }
 
     @XmlElement(name = "custom-0")

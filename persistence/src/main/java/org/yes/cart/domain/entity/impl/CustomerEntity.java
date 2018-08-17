@@ -47,6 +47,9 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private String publicKey;
     private String customerType;
     private String pricingPolicy;
+    private String companyName1;
+    private String companyName2;
+    private String companyDepartment;
 
     private Collection<CustomerOrder> orders = new ArrayList<>(0);
     private Collection<CustomerWishList> wishList = new ArrayList<>(0);
@@ -220,6 +223,36 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     @Override
     public void setPricingPolicy(final String pricingPolicy) {
         this.pricingPolicy = pricingPolicy;
+    }
+
+    @Override
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    @Override
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    @Override
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    @Override
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    @Override
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    @Override
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
     }
 
     @Override

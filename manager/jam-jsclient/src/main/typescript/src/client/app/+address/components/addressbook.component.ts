@@ -76,6 +76,8 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       'addressType': [''],
       'defaultAddress': [''],
 
+      'name': ['', YcValidators.nonBlankTrimmed],
+
       'countryCode': ['', Validators.required],
       'stateCode': [''],
       'city': ['', YcValidators.requiredNonBlankTrimmed],
@@ -95,6 +97,10 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
       'email1': ['', YcValidators.validEmail],
       'email2': ['', YcValidators.validEmail],
+
+      'companyName1': ['', YcValidators.nonBlankTrimmed],
+      'companyName2': ['', YcValidators.nonBlankTrimmed],
+      'companyDepartment': ['', YcValidators.nonBlankTrimmed],
 
       'custom0': [''],
       'custom1': [''],
@@ -171,6 +177,10 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       this.addressForm.controls['email1'].validator = this.formConfigureValidator(cfg['email1'], YcValidators.validEmail);
       this.addressForm.controls['email2'].validator = this.formConfigureValidator(cfg['email2'], YcValidators.validEmail);
 
+      this.addressForm.controls['companyName1'].validator = this.formConfigureValidator(cfg['companyName1'], YcValidators.nonBlankTrimmed);
+      this.addressForm.controls['companyName2'].validator = this.formConfigureValidator(cfg['companyName2'], YcValidators.nonBlankTrimmed);
+      this.addressForm.controls['companyDepartment'].validator = this.formConfigureValidator(cfg['companyDepartment'], YcValidators.nonBlankTrimmed);
+
       this.addressForm.controls['custom0'].validator = this.formConfigureValidator(cfg['custom0'], null);
       this.addressForm.controls['custom1'].validator = this.formConfigureValidator(cfg['custom1'], null);
       this.addressForm.controls['custom2'].validator = this.formConfigureValidator(cfg['custom2'], null);
@@ -196,6 +206,11 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
       this.addressForm.controls['email1'].validator = YcValidators.validEmail;
       this.addressForm.controls['email2'].validator = YcValidators.validEmail;
+
+      this.addressForm.controls['companyName1'].validator = YcValidators.nonBlankTrimmed;
+      this.addressForm.controls['companyName2'].validator = YcValidators.nonBlankTrimmed;
+      this.addressForm.controls['companyDepartment'].validator = YcValidators.nonBlankTrimmed;
+
 
       this.addressForm.controls['custom0'].validator = null;
       this.addressForm.controls['custom1'].validator = null;
@@ -277,13 +292,15 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
     let address:AddressVO = {
       addressId: 0, customerId: this._customer.customerId,
+      name: null,
       addressType: 'S', defaultAddress: true,
       city: null, countryCode: null, stateCode: null,
       salutation: this._customer.salutation, firstname: this._customer.firstname, middlename: this._customer.middlename, lastname: this._customer.lastname,
       postcode: null, addrline1: null, addrline2: null,
       phone1: null, phone2: null,
       mobile1: null, mobile2: null,
-      email1: null, email2: null,
+      email1: this._customer.email.startsWith('#') ? null : this._customer.email, email2: null,
+      companyName1: this._customer.companyName1, companyName2: this._customer.companyName2, companyDepartment: this._customer.companyDepartment,
       custom0: null, custom1: null, custom2: null, custom3: null, custom4: null,
       custom5: null, custom6: null, custom7: null, custom8: null, custom9: null
     };
@@ -501,7 +518,11 @@ export class AddressBookComponent implements OnInit, OnDestroy {
           addr.custom6 && addr.custom6.toLowerCase().indexOf(_filter) !== -1 ||
           addr.custom7 && addr.custom7.toLowerCase().indexOf(_filter) !== -1 ||
           addr.custom8 && addr.custom8.toLowerCase().indexOf(_filter) !== -1 ||
-          addr.custom9 && addr.custom9.toLowerCase().indexOf(_filter) !== -1
+          addr.custom9 && addr.custom9.toLowerCase().indexOf(_filter) !== -1 ||
+          addr.name && addr.name.toLowerCase().indexOf(_filter) !== -1 ||
+          addr.companyName1 && addr.companyName1.toLowerCase().indexOf(_filter) !== -1 ||
+          addr.companyName2 && addr.companyName2.toLowerCase().indexOf(_filter) !== -1 ||
+          addr.companyDepartment && addr.companyDepartment.toLowerCase().indexOf(_filter) !== -1
         );
 
       } else {

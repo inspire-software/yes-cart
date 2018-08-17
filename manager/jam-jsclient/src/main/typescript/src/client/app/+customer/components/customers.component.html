@@ -7,6 +7,7 @@
         <th>{{ 'CODE' | translate }}</th>
         <th>{{ 'CUSTOMER_EMAIL' | translate }}</th>
         <th>{{ 'CUSTOMER_FULLNAME' | translate }}</th>
+        <th>{{ 'CUSTOMER_FULLCOMPANY' | translate }}</th>
         <th>{{ 'CUSTOMER_TYPE' | translate }}</th>
         <th>{{ 'CUSTOMER_POLICY' | translate }}</th>
         <th>{{ 'CUSTOMER_TAG' | translate }}</th>
@@ -18,6 +19,7 @@
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.customerId}}</a></td>
           <td title="{{ 'CUSTOMER_EMAIL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.email}}</a></td>
           <td title="{{ 'CUSTOMER_FULLNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.salutation}} {{row.firstname}}  {{row.middlename}}  {{row.lastname}}</a></td>
+          <td title="{{ 'CUSTOMER_FULLCOMPANY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.companyName1}} {{row.companyName2}}  {{row.companyDepartment}}</a></td>
           <td title="{{ 'CUSTOMER_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.customerType}}</a>&nbsp;</td>
           <td title="{{ 'CUSTOMER_POLICY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.pricingPolicy}}</a>&nbsp;</td>
           <td title="{{ 'CUSTOMER_TAG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}}</a>&nbsp;</td>

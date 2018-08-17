@@ -89,6 +89,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 {{salutation}} {{firstname}} {{middlename}} {{lastname}}
 {{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}
 {{phone1}} {{phone2}} {{mobile1}} {{mobile2}} {{email1}} {{email2}}
+{{company1}} {{company2}} {{department}}
 {{custom0}} {{custom1}} {{custom2}} {{custom3}} {{custom4}}
 {{custom5}} {{custom6}} {{custom7}} {{custom8}} {{custom9}}
 For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]',  1011, 1001, 0, 0, 0, 0);
@@ -895,6 +896,13 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   'en#~#''${input}'' is not a valid email address#~#uk#~#''${input}'' не є коректною електронною поштою#~#ru#~#''${input}'' не является корректной электронной почтой#~#de#~#''${input}'' ist keine gültige E-Mail Adresse');
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11169,  'companyname1', 'companyname1',  1,  NULL,  'Company Name 1',  'Company Name 1', 1000,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11170,  'companyname2', 'companyname2',  1,  NULL,  'Company Name 2',  'Company Name 2', 1000,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11171,  'companydepartment', 'companydepartment',  1,  NULL,  'Company Department',  'Company Department', 1000,  1006, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11168,  'regAddressForm', 'regAddressForm',  1,  'regAddressForm',  'Address form',  'Address form for registration marker', 1000,  1006, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
@@ -918,10 +926,12 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   'Customer: "default_" address form (CSV)',
     'List of address form attributes separated by comma.
 Available fields:
+name
 salutation, firstname, middlename, lastname
 addrline1, addrline2, postcode, city, countrycode, statecode
 phone1, phone2, mobile1, mobile2
-email1, email2
+email1, email2,
+companyName1, companyName2, companyDepartment
 custom0, custom1, custom2, custom3, custom4
 custom5, custom6, custom7, custom8, custom9',  1004, 1007, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)

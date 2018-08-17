@@ -246,6 +246,50 @@ public interface RegistrationMessage extends Serializable {
     void setMiddlename(String middlename);
 
     /**
+     * Company name for this person.
+     *
+     * @return company name
+     */
+    String getCompanyName1();
+
+    /**
+     * Company name for this person.
+     *
+     * @param companyName1 name
+     */
+    void setCompanyName1(String companyName1);
+
+    /**
+     * Company name for this person.
+     *
+     * @return company name
+     */
+    String getCompanyName2();
+
+    /**
+     * Company name for this person.
+     *
+     * @param companyName2 name
+     */
+    void setCompanyName2(String companyName2);
+
+
+    /**
+     * Company department for this person.
+     *
+     * @return company department
+     */
+    String getCompanyDepartment();
+
+    /**
+     * Company department for this person.
+     *
+     * @param companyDepartment department
+     */
+    void setCompanyDepartment(String companyDepartment);
+
+
+    /**
      * Additional data for registration message.
      *
      * @return additional data

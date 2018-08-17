@@ -41,6 +41,9 @@
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
         <property name="authTokenExpiry" type="java.time.Instant" column="AUTHTOKENEXPIRY" not-null="false"/>
         <property name="dashboardWidgets" type="java.lang.String" column="DASHBOARDWIDGETS" not-null="false"/>
+        <property name="companyName1" length="255" type="java.lang.String" column="COMPANYNAME1" not-null="false"/>
+        <property name="companyName2" length="255" type="java.lang.String" column="COMPANYNAME2" not-null="false"/>
+        <property name="companyDepartment" length="255" type="java.lang.String" column="COMPANYDEPARTMENT" not-null="false"/>
 
         <property name="enabled" length="1" type="boolean" not-null="true">
             <column name="ENABLED" length="1" not-null="true">
@@ -552,6 +555,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
+        <property name="name" type="string" column="NAME" length="128" not-null="false"/>
         <property name="city" type="string" column="CITY" length="128" not-null="true"/>
         <property name="postcode" type="string" column="POSTCODE" length="16" not-null="false"/>
         <property name="addrline1" type="string" column="ADDRLINE1" length="255" not-null="true"/>
@@ -568,6 +572,9 @@
         <property name="mobile2" type="string" column="MOBILE2" length="255" not-null="false"/>
         <property name="email1" type="string" column="EMAIL1" length="255" not-null="false"/>
         <property name="email2" type="string" column="EMAIL2" length="255" not-null="false"/>
+        <property name="companyName1" type="string" column="COMPANYNAME1" length="255" not-null="false"/>
+        <property name="companyName2" type="string" column="COMPANYNAME2" length="255" not-null="false"/>
+        <property name="companyDepartment" type="string" column="COMPANYDEPARTMENT" length="255" not-null="false"/>
         <property name="custom0" type="string" column="CUSTOM0" length="255" not-null="false"/>
         <property name="custom1" type="string" column="CUSTOM1" length="255" not-null="false"/>
         <property name="custom2" type="string" column="CUSTOM2" length="255" not-null="false"/>
@@ -1803,6 +1810,9 @@
         <property name="publicKey" length="255" type="java.lang.String" column="PUBLICKEY" not-null="false"/>
         <property name="customerType" length="255" type="java.lang.String" column="CUSTOMERTYPE" not-null="false"/>
         <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" not-null="false"/>
+        <property name="companyName1" length="255" type="java.lang.String" column="COMPANYNAME1" not-null="false"/>
+        <property name="companyName2" length="255" type="java.lang.String" column="COMPANYNAME2" not-null="false"/>
+        <property name="companyDepartment" length="255" type="java.lang.String" column="COMPANYDEPARTMENT" not-null="false"/>
 
         <property name="tag" type="string" length="255">
             <column name="TAG">
@@ -3614,7 +3624,7 @@
         <![CDATA[
             select distinct(a.customer.customerId) from AddressEntity a
                 where a.customer.customerId is not null and
-                (lower(a.addrline1) like ?1 or lower(a.addrline2) like ?1 or lower(a.city) like ?1 or lower(a.countryCode) like ?1 or lower(a.stateCode) like ?1 or lower(a.postcode) like ?1)
+                (lower(a.addrline1) like ?1 or lower(a.addrline2) like ?1 or lower(a.city) like ?1 or lower(a.countryCode) like ?1 or lower(a.stateCode) like ?1 or lower(a.postcode) like ?1 or lower(a.companyName1) like ?1 or lower(a.companyName2) like ?1)
         ]]>
     </query>
 

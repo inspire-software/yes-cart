@@ -118,6 +118,9 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
         registrationMessage.setFirstname(manager.getFirstname());
         registrationMessage.setLastname(manager.getLastname());
         registrationMessage.setMiddlename(manager.getMiddlename());
+        registrationMessage.setCompanyName1(manager.getCompanyName1());
+        registrationMessage.setCompanyName2(manager.getCompanyName2());
+        registrationMessage.setCompanyDepartment(manager.getCompanyDepartment());
         registrationMessage.setPassword(generatedPassword);
         registrationMessage.setMailTemplatePathChain(Arrays.asList("/admin/mail/", "/default/mail/"));
 

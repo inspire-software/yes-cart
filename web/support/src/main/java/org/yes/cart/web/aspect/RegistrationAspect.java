@@ -241,6 +241,9 @@ public class RegistrationAspect extends BaseNotificationAspect {
         registrationMessage.setFirstname(registeredPerson.getFirstname());
         registrationMessage.setLastname(registeredPerson.getLastname());
         registrationMessage.setMiddlename(registeredPerson.getMiddlename());
+        registrationMessage.setCompanyName1(registeredPerson.getCompanyName1());
+        registrationMessage.setCompanyName2(registeredPerson.getCompanyName2());
+        registrationMessage.setCompanyDepartment(registeredPerson.getCompanyDepartment());
         registrationMessage.setPassword(generatedPassword);
         registrationMessage.setAuthToken(generatedToken);
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();

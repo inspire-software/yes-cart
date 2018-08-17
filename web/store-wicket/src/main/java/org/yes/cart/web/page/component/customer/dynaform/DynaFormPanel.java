@@ -125,6 +125,12 @@ public class DynaFormPanel extends BaseComponent {
                             if (StringUtils.isNotBlank(av.getFirst().getVal())) {
                                 customer.setLastname(av.getFirst().getVal());
                             }
+                        } else if ("companyname1".equals(av.getFirst().getAttribute().getCode())) {
+                            customer.setCompanyName1(av.getFirst().getVal());
+                        } else if ("companyname2".equals(av.getFirst().getAttribute().getCode())) {
+                            customer.setCompanyName2(av.getFirst().getVal());
+                        } else if ("companydepartment".equals(av.getFirst().getAttribute().getCode())) {
+                            customer.setCompanyDepartment(av.getFirst().getVal());
                         } else if (!av.getFirst().getAttribute().isMandatory() || StringUtils.isNotBlank(av.getFirst().getVal())) {
                             values.put(av.getFirst().getAttribute().getCode(), av.getFirst().getVal());
                         }

@@ -327,6 +327,36 @@ public class CustomerTypeAdapter implements Customer {
     }
 
     @Override
+    public String getCompanyName1() {
+        return null;
+    }
+
+    @Override
+    public void setCompanyName1(final String companyName1) {
+
+    }
+
+    @Override
+    public String getCompanyName2() {
+        return null;
+    }
+
+    @Override
+    public void setCompanyName2(final String companyName2) {
+
+    }
+
+    @Override
+    public String getCompanyDepartment() {
+        return null;
+    }
+
+    @Override
+    public void setCompanyDepartment(final String companyDepartment) {
+
+    }
+
+    @Override
     public Collection<AttrValue> getAllAttributes() {
         return null;
     }

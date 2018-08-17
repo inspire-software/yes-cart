@@ -52,11 +52,13 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
     );
 
     private static final List<String> OPTIONAL_FIELDS = Arrays.asList(
+            "name",
             "salutation", "middlename",
             "addrline2",
             "stateCode",
             "phone2", "mobile1", "mobile2",
             "email1", "email2",
+            "companyName1", "companyName2", "companyDepartment",
             "custom0", "custom1", "custom2", "custom3", "custom4",
             "custom5", "custom6", "custom7", "custom8", "custom9"
     );

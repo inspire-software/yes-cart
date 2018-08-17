@@ -45,13 +45,23 @@ public interface ManagementService {
      * @param userId    user email
      * @param firstName first name
      * @param lastName  last name
+     * @param company1   company1
+     * @param company2   company2
+     * @param department department
      * @param shopCode  shop code for this user
+     *
      * @throws java.io.UnsupportedEncodingException
      *          in case of bad encoding
      * @throws java.security.NoSuchAlgorithmException
      *          in case of bad algorithm
      */
-    void addUser(String userId, String firstName, String lastName, String shopCode)
+    void addUser(String userId,
+                 String firstName,
+                 String lastName,
+                 String company1,
+                 String company2,
+                 String department,
+                 String shopCode)
             throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     /**
@@ -128,11 +138,19 @@ public interface ManagementService {
     /**
      * Update user names by given user id.
      *
-     * @param userId    user email
-     * @param firstName first name
-     * @param lastName  last name
+     * @param userId     user email
+     * @param firstName  first name
+     * @param lastName   last name
+     * @param company1   company1
+     * @param company2   company2
+     * @param department department
      */
-    void updateUser(String userId, String firstName, String lastName);
+    void updateUser(String userId,
+                    String firstName,
+                    String lastName,
+                    String company1,
+                    String company2,
+                    String department);
 
     /**
      * Update dashboard to given vo.

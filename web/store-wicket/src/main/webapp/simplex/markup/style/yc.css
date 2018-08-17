@@ -1323,6 +1323,10 @@ fieldset[disabled] .btn-primary2.active {
     margin-top: 10px;
 }
 
+.single-address-row .address-name {
+    font-weight: bold;
+}
+
 .manage-address-btn {
     margin-left: 12px;
 }

@@ -53,6 +53,14 @@ public class VoCustomerInfo {
     @DtoField(value = "pricingPolicy")
     private String pricingPolicy;
 
+    @DtoField(value = "companyName1")
+    private String companyName1;
+
+    @DtoField(value = "companyName2")
+    private String companyName2;
+
+    @DtoField(value = "companyDepartment")
+    private String companyDepartment;
 
     public long getCustomerId() {
         return customerId;
@@ -126,4 +134,27 @@ public class VoCustomerInfo {
         this.pricingPolicy = pricingPolicy;
     }
 
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
+    }
 }

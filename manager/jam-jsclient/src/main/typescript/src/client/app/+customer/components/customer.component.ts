@@ -89,6 +89,9 @@ export class CustomerComponent implements OnInit, OnDestroy {
       'tag': ['', YcValidators.nonBlankTrimmed255],
       'customerType': ['', YcValidators.validCode255],
       'pricingPolicy': ['', YcValidators.validCode255],
+      'companyName1': ['', YcValidators.nonBlankTrimmed255],
+      'companyName2': ['', YcValidators.nonBlankTrimmed255],
+      'companyDepartment': ['', YcValidators.nonBlankTrimmed255],
     });
 
     let that = this;

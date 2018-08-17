@@ -190,6 +190,12 @@ public class DtoCustomerServiceImpl
                     attrValueCategoryDTO.setVal(customerDTO.getCustomerType());
                 } else if ("pricingpolicy".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
                     attrValueCategoryDTO.setVal(customerDTO.getPricingPolicy());
+                } else if ("companyname1".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getCompanyName1());
+                } else if ("companyname2".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getCompanyName2());
+                } else if ("companydepartment".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getCompanyDepartment());
                 }
                 result.add(attrValueCategoryDTO);
             }
@@ -247,8 +253,14 @@ public class DtoCustomerServiceImpl
                 customer.setCustomerType(attrValueDTO.getVal());
             }
             getService().update(customer);
-        }  else if ("pricingpolicy".equals(atr.getCode())) {
+        } else if ("pricingpolicy".equals(atr.getCode())) {
             customer.setPricingPolicy(attrValueDTO.getVal());
+        } else if ("companyname1".equals(atr.getCode())) {
+            customer.setCompanyName1(attrValueDTO.getVal());
+        } else if ("companyname2".equals(atr.getCode())) {
+            customer.setCompanyName2(attrValueDTO.getVal());
+        } else if ("companydepartment".equals(atr.getCode())) {
+            customer.setCompanyDepartment(attrValueDTO.getVal());
         } else {
             if (!multivalue) {
                 for (final AttrValueCustomer avp : customer.getAttributes()) {
@@ -342,7 +354,7 @@ public class DtoCustomerServiceImpl
                     final String refNumber = refOrCustomerOrAddressOrPolicy.getSecond();
 
                     entities = service.getGenericDao().findRangeByCriteria(
-                            " where e.customerId = ?1 or lower(e.email) like ?2 or lower(e.tag) like ?2 order by e.email",
+                            " where e.customerId = ?1 or lower(e.email) like ?2 or lower(e.tag) like ?2 or lower(e.companyName1) like ?2 or lower(e.companyName2) like ?2 order by e.email",
                             page * pageSize, pageSize,
                             NumberUtils.toLong(refNumber),
                             HQLUtils.criteriaIlikeAnywhere(refNumber)

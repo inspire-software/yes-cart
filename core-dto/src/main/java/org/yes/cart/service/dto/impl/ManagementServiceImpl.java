@@ -199,7 +199,13 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @Override
-    public void addUser(final String userId, final String firstName, final String lastName, final String shopCode)
+    public void addUser(final String userId,
+                        final String firstName,
+                        final String lastName,
+                        final String company1,
+                        final String company2,
+                        final String department,
+                        final String shopCode)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
         final Manager manager = managerService.getGenericDao().getEntityFactory().getByIface(Manager.class);
@@ -207,6 +213,9 @@ public class ManagementServiceImpl implements ManagementService {
         manager.setEmail(userId);
         manager.setFirstname(firstName);
         manager.setLastname(lastName);
+        manager.setCompanyName1(company1);
+        manager.setCompanyName2(company2);
+        manager.setCompanyDepartment(department);
         // manager.setPassword(); No need to set password as we already generating it in the aspect
 
         final Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
@@ -222,11 +231,19 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @Override
-    public void updateUser(final String userId, final String firstName, final String lastName) {
+    public void updateUser(final String userId,
+                           final String firstName,
+                           final String lastName,
+                           final String company1,
+                           final String company2,
+                           final String department) {
         final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (manager != null) {
             manager.setFirstname(firstName);
             manager.setLastname(lastName);
+            manager.setCompanyName1(company1);
+            manager.setCompanyName2(company2);
+            manager.setCompanyDepartment(department);
             managerService.update(manager);
         }
     }

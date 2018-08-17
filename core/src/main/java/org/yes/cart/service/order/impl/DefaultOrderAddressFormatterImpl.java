@@ -55,6 +55,8 @@ public class DefaultOrderAddressFormatterImpl implements OrderAddressFormatter {
 
 
             final Map<String, String> values = new HashMap<>();
+            values.put("name", StringUtils.defaultString(address.getName()));
+
             values.put("salutation", StringUtils.defaultString(address.getSalutation()));
             values.put("firstname", StringUtils.defaultString(address.getFirstname()));
             values.put("middlename", StringUtils.defaultString(address.getMiddlename()));
@@ -76,6 +78,10 @@ public class DefaultOrderAddressFormatterImpl implements OrderAddressFormatter {
 
             values.put("email1", StringUtils.defaultString(address.getEmail1()));
             values.put("email2", StringUtils.defaultString(address.getEmail2()));
+
+            values.put("company1", StringUtils.defaultString(address.getCompanyName1()));
+            values.put("company2", StringUtils.defaultString(address.getCompanyName2()));
+            values.put("department", StringUtils.defaultString(address.getCompanyDepartment()));
 
             values.put("custom0", StringUtils.defaultString(address.getCustom0()));
             values.put("custom1", StringUtils.defaultString(address.getCustom1()));

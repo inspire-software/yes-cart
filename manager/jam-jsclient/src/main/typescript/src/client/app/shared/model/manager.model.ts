@@ -21,10 +21,13 @@ export interface ManagerInfoVO {
   email : string;
 
   firstName  : string;
-
   lastName  : string;
 
   enabled  : boolean;
+
+  companyName1  : string;
+  companyName2  : string;
+  companyDepartment  : string;
 
 }
 

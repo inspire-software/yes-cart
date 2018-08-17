@@ -63,6 +63,15 @@ public class CustomerDTOImpl implements CustomerDTO {
     @DtoField(value = "pricingPolicy")
     private String pricingPolicy;
 
+    @DtoField(value = "companyName1")
+    private String companyName1;
+
+    @DtoField(value = "companyName2")
+    private String companyName2;
+
+    @DtoField(value = "companyDepartment")
+    private String companyDepartment;
+
     @DtoCollection(
             value="attributes",
             dtoBeanKey="org.yes.cart.domain.dto.AttrValueCustomerDTO",
@@ -202,6 +211,42 @@ public class CustomerDTOImpl implements CustomerDTO {
         this.pricingPolicy = pricingPolicy;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
+    }
+
     @Override
     public String toString() {
         return "CustomerDTOImpl{" +
@@ -214,7 +259,10 @@ public class CustomerDTOImpl implements CustomerDTO {
                 ", tag='" + tag + '\'' +
                 ", customerType='" + customerType + '\'' +
                 ", pricingPolicy='" + pricingPolicy + '\'' +
-                ", attribute=" + attributes +
+                ", companyName1='" + companyName1 + '\'' +
+                ", companyName2='" + companyName2 + '\'' +
+                ", companyDepartment='" + companyDepartment + '\'' +
+                ", attributes=" + attributes +
                 '}';
     }
 }

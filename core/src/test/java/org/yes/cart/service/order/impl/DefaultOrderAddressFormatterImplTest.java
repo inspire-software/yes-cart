@@ -39,6 +39,7 @@ public class DefaultOrderAddressFormatterImplTest {
         final Address address = context.mock(Address.class, "address");
 
         context.checking(new Expectations() {{
+            allowing(address).getName(); will(returnValue("AN"));
             allowing(address).getSalutation(); will(returnValue("S"));
             allowing(address).getFirstname(); will(returnValue("N1"));
             allowing(address).getMiddlename(); will(returnValue("N2"));
@@ -55,6 +56,9 @@ public class DefaultOrderAddressFormatterImplTest {
             allowing(address).getMobile2(); will(returnValue("M2"));
             allowing(address).getEmail1(); will(returnValue("E1"));
             allowing(address).getEmail2(); will(returnValue("E2"));
+            allowing(address).getCompanyName1(); will(returnValue("CN1"));
+            allowing(address).getCompanyName2(); will(returnValue("CN2"));
+            allowing(address).getCompanyDepartment(); will(returnValue("CD"));
             allowing(address).getCustom0(); will(returnValue("C0"));
             allowing(address).getCustom1(); will(returnValue("C1"));
             allowing(address).getCustom2(); will(returnValue("C2"));
@@ -68,13 +72,14 @@ public class DefaultOrderAddressFormatterImplTest {
         }});
 
         final DefaultOrderAddressFormatterImpl formatter = new DefaultOrderAddressFormatterImpl(
-                "{{salutation}} {{firstname}} {{middlename}} {{lastname}} " +
+                "{{name}} {{salutation}} {{firstname}} {{middlename}} {{lastname}} " +
                 "{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}} " +
                 "{{phone1}} {{phone2}} {{mobile1}} {{mobile2}} " +
                 "{{email1}} {{email2}} " +
+                "{{company1}} {{company2}} {{department}} " +
                 "{{custom1}} {{custom2}} {{custom3}} {{custom4}}");
 
-        assertEquals("S N1 N2 N3 L1 L2 PC C CC SC P1 P2 M1 M2 E1 E2 C1 C2 C3 C4", formatter.formatAddress(address));
+        assertEquals("AN S N1 N2 N3 L1 L2 PC C CC SC P1 P2 M1 M2 E1 E2 CN1 CN2 CD C1 C2 C3 C4", formatter.formatAddress(address));
         assertEquals("N1 N3", formatter.formatAddress(address, "{{firstname}} {{lastname}}"));
         assertEquals("N1 N3 N2", formatter.formatAddress(address, "{{firstname}} {{lastname}} {{middlename}}"));
         assertEquals("C0 C5 C6 C7 C8 C9", formatter.formatAddress(address, "{{custom0}} {{custom5}} {{custom6}} {{custom7}} {{custom8}} {{custom9}}"));

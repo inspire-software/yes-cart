@@ -30,6 +30,10 @@ export interface CustomerInfoVO {
   customerType : string;
   pricingPolicy : string;
 
+  companyName1  : string;
+  companyName2  : string;
+  companyDepartment  : string;
+
 }
 
 

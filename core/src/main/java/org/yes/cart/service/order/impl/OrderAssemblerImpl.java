@@ -595,6 +595,9 @@ public class OrderAssemblerImpl implements OrderAssembler {
             copy.setMobile2(address.getMobile2());
             copy.setEmail1(address.getEmail1());
             copy.setEmail2(address.getEmail2());
+            copy.setCompanyName1(address.getCompanyName1());
+            copy.setCompanyName2(address.getCompanyName2());
+            copy.setCompanyDepartment(address.getCompanyDepartment());
             copy.setCustom0(address.getCustom0());
             copy.setCustom1(address.getCustom1());
             copy.setCustom2(address.getCustom2());

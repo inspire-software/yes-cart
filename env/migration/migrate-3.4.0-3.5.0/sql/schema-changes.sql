@@ -293,3 +293,68 @@ alter table TSKUPRICE add column PRICE_ON_OFFER bit not null default 0;
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10981,  'SHOP_DELETE_ACCOUNT_DISABLE', 'SHOP_DELETE_ACCOUNT_DISABLE',  0,  NULL,  'Customer: Disable account deletion',
   'Disable account deletion feature for customer types. Blank value is treated as enabled.',  1004, 1001, 0, 0, 0, 0);
+
+--
+-- YC-928 Customer and Address objects should have additional dedicated fields to better support B2C and B2B models
+--
+
+alter table TCUSTOMER add column COMPANYNAME1 varchar(255);
+alter table TCUSTOMER add column COMPANYNAME2 varchar(255);
+alter table TCUSTOMER add column COMPANYDEPARTMENT varchar(255);
+
+alter table TMANAGER add column COMPANYNAME1 varchar(255);
+alter table TMANAGER add column COMPANYNAME2 varchar(255);
+alter table TMANAGER add column COMPANYDEPARTMENT varchar(255);
+
+alter table TADDRESS add column NAME varchar(128);
+alter table TADDRESS add column COMPANYNAME1 varchar(255);
+alter table TADDRESS add column COMPANYNAME2 varchar(255);
+alter table TADDRESS add column COMPANYDEPARTMENT varchar(255);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11169,  'companyname1', 'companyname1',  1,  NULL,  'Company Name 1',  'Company Name 1', 1000,  1006, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11170,  'companyname2', 'companyname2',  1,  NULL,  'Company Name 2',  'Company Name 2', 1000,  1006, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11171,  'companydepartment', 'companydepartment',  1,  NULL,  'Company Department',  'Company Department', 1000,  1006, 0, 0, 0, 0);
+
+update TATTRIBUTE set DESCRIPTION = 'List of address form attributes separated by comma.
+Available fields:
+name
+salutation, firstname, middlename, lastname
+addrline1, addrline2, postcode, city, countrycode, statecode
+phone1, phone2, mobile1, mobile2
+email1, email2,
+companyName1, companyName2, companyDepartment
+custom0, custom1, custom2, custom3, custom4
+custom5, custom6, custom7, custom8, custom9' where GUID = 'default_addressform';
+
+update TATTRIBUTE set DESCRIPTION = 'Placeholders:
+{{salutation}} {{firstname}} {{middlename}} {{lastname}}
+{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}
+{{phone1}} {{phone2}} {{mobile1}} {{mobile2}} {{email1}} {{email2}}
+{{companyName1}} {{companyName2}} {{companyDepartment}}
+{{custom0}} {{custom1}} {{custom2}} {{custom3}} {{custom4}}
+{{custom5}} {{custom6}} {{custom7}} {{custom8}} {{custom9}}
+For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]' where GUID = 'SHOP_ADDRESS_FORMATTER';
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11508,  'default_company1', 'default_company1',  0,  'companyName1',  'Company Name 1',  'Address Company Name 1', 1000,  1007, 0, 0, 0, 0,
+  'de#~#Firmenname 1#~#en#~#Company Name 1#~#ru#~#Компания 1#~#uk#~#Компанія 1#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11509,  'default_company2', 'default_company2',  0,  'companyName2',  'Company Name 2',  'Address Company Name 2', 1000,  1007, 0, 0, 0, 0,
+  'de#~#Firmenname 2#~#en#~#Company Name 2#~#ru#~#Компания 2#~#uk#~#Компанія 2#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11510,  'default_department', 'default_department',  0,  'companyDepartment',  'Company Department',  'Address Company Company Department', 1000,  1007, 0, 0, 0, 0,
+  'de#~#Abteilung#~#en#~#Department#~#ru#~#Отдел#~#uk#~#Вітділ#~#');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11511,  'default_name', 'default_name',  0,  'name',  'Address Name',  'Address Name', 1000,  1007, 0, 0, 0, 0,
+  'de#~#Adressname#~#en#~#Address Name#~#ru#~#Название#~#uk#~#Назва#~#');
+
+
+

@@ -48,6 +48,15 @@ public class ManagerDTOImpl implements ManagerDTO {
     @DtoField(value = "dashboardWidgets", readOnly = true)
     private String dashboardWidgets;
 
+    @DtoField(value = "companyName1")
+    private String companyName1;
+
+    @DtoField(value = "companyName2")
+    private String companyName2;
+
+    @DtoField(value = "companyDepartment")
+    private String companyDepartment;
+
     /**
      * {@inheritDoc}
      */
@@ -150,6 +159,54 @@ public class ManagerDTOImpl implements ManagerDTO {
     @Override
     public void setDashboardWidgets(final String dashboardWidgets) {
         this.dashboardWidgets = dashboardWidgets;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
     }
 
     /**

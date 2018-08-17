@@ -46,6 +46,10 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     private String authToken;
     private boolean enabled;
     private Instant authTokenExpiry;
+    private String companyName1;
+    private String companyName2;
+    private String companyDepartment;
+
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -154,6 +158,36 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     @Override
     public void setAuthTokenExpiry(final Instant authTokenExpiry) {
         this.authTokenExpiry = authTokenExpiry;
+    }
+
+    @Override
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    @Override
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    @Override
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    @Override
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    @Override
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    @Override
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
     }
 
     @Override

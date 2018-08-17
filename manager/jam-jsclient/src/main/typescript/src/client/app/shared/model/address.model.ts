@@ -21,6 +21,7 @@ export interface AddressVO {
 
   addressId: number;
   customerId: number;
+  name: string;
   addressType: string;
   defaultAddress: boolean;
 
@@ -43,6 +44,10 @@ export interface AddressVO {
   mobile2: string;
   email1: string;
   email2: string;
+
+  companyName1  : string;
+  companyName2  : string;
+  companyDepartment  : string;
 
   custom0: string;
   custom1: string;

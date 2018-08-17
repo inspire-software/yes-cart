@@ -31,6 +31,7 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     private long addressId;
     private long version;
 
+    private String name;
     private String city;
     private String postcode;
     private String addrline1;
@@ -48,6 +49,9 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     private String middlename;
     private String email1;
     private String email2;
+    private String companyName1;
+    private String companyName2;
+    private String companyDepartment;
     private String custom0;
     private String custom1;
     private String custom2;
@@ -58,8 +62,10 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     private String custom7;
     private String custom8;
     private String custom9;
+
     private boolean defaultAddress;
     private Customer customer;
+
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -67,6 +73,16 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     private String guid;
 
     public AddressEntity() {
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(final String name) {
+        this.name = name;
     }
 
     @Override
@@ -237,6 +253,36 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     @Override
     public void setEmail2(final String email2) {
         this.email2 = email2;
+    }
+
+    @Override
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    @Override
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    @Override
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    @Override
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    @Override
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    @Override
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
     }
 
     @Override

@@ -75,6 +75,9 @@ export class ManagerComponent implements OnInit, OnDestroy {
       'lastName': ['', YcValidators.requiredNonBlankTrimmed128],
       'managerShops': [''],
       'managerRoles': [''],
+      'companyName1': ['', YcValidators.nonBlankTrimmed255],
+      'companyName2': ['', YcValidators.nonBlankTrimmed255],
+      'companyDepartment': ['', YcValidators.nonBlankTrimmed255],
     });
 
     this.delayedChange = Futures.perpetual(function() {

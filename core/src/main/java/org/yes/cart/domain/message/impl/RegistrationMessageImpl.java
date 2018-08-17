@@ -45,6 +45,9 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     private String firstname;
     private String lastname;
     private String middlename;
+    private String companyName1;
+    private String companyName2;
+    private String companyDepartment;
     private String password;
     private String authToken;
     private List<String> mailTemplatePathChain;
@@ -231,6 +234,42 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     @Override
     public void setMiddlename(final String middlename) {
         this.middlename = middlename;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
     }
 
     /** {@inheritDoc} */

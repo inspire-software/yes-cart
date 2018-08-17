@@ -117,6 +117,16 @@
               </select>
             </div>
           </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].name != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].name.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="name" name="name" type="text" [(ngModel)]="addressEdit.name">
+              <div [hidden]="addressForm.controls['name'].valid || addressForm.controls['name'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].name.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].name.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
           <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].salutation != null">
             <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].salutation.label }}</div>
             <div class="col-xs-9">
@@ -152,6 +162,36 @@
               <div [hidden]="addressForm.controls['lastname'].valid || addressForm.controls['lastname'].pristine" class="alert alert-danger">
                 {{ addressFormConfig[addressEdit.addressType].lastname.validationMessage != null ?
                 addressFormConfig[addressEdit.addressType].lastname.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].companyName1 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].companyName1.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="companyName1" name="companyName1" type="text" [(ngModel)]="addressEdit.companyName1">
+              <div [hidden]="addressForm.controls['companyName1'].valid || addressForm.controls['companyName1'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].companyName1.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].companyName1.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].companyName2 != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].companyName2.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="companyName2" name="companyName2" type="text" [(ngModel)]="addressEdit.companyName2">
+              <div [hidden]="addressForm.controls['companyName2'].valid || addressForm.controls['companyName2'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].companyName2.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].companyName2.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].companyDepartment != null">
+            <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].companyDepartment.label }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" formControlName="companyDepartment" name="companyDepartment" type="text" [(ngModel)]="addressEdit.companyDepartment">
+              <div [hidden]="addressForm.controls['companyDepartment'].valid || addressForm.controls['companyDepartment'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].companyDepartment.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].companyDepartment.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
               </div>
             </div>
           </div>

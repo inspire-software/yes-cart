@@ -91,6 +91,36 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <label>{{ 'CUSTOMER_COMPANY1' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_COMPANY1' | translate }}" formControlName="companyName1" name="companyName1" type="text" [(ngModel)]="customer.companyName1">
+                  <div [hidden]="customerForm.controls['companyName1'].valid || customerForm.controls['companyName1'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['companyName1'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_COMPANY2' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_COMPANY2' | translate }}" formControlName="companyName2" name="companyName2" type="text" [(ngModel)]="customer.companyName2">
+                  <div [hidden]="customerForm.controls['companyName2'].valid || customerForm.controls['companyName2'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['companyName2'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_DEPARTMENT' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_DEPARTMENT' | translate }}" formControlName="companyDepartment" name="companyDepartment" type="text" [(ngModel)]="customer.companyDepartment">
+                  <div [hidden]="customerForm.controls['companyDepartment'].valid || customerForm.controls['companyDepartment'].pristine" class="alert alert-danger">
+                    <div [hidden]="!customerForm.controls['companyDepartment'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
                   <label>{{ 'CUSTOMER_TAG' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CUSTOMER_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="customer.tag">
                   <div [hidden]="customerForm.controls['tag'].valid || customerForm.controls['tag'].pristine" class="alert alert-danger">
@@ -116,6 +146,10 @@
         <div class="row">
           <div class="col-xs-12">
             <div class="panel-body text-muted">
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMER_FULLCOMPANY' | translate }}</strong></div>
+                <div class="col-xs-9">{{customer.companyName1}} {{customer.companyName2}}  {{customer.companyDepartment}}&nbsp;</div>
+              </div>
               <div class="row">
                 <div class="col-xs-3"><strong>{{ 'CUSTOMER_TYPE' | translate }}</strong></div>
                 <div class="col-xs-9">{{ customer.customerType }}&nbsp;</div>

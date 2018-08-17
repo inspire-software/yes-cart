@@ -33,6 +33,9 @@ public class AddressDTOImpl implements AddressDTO {
     @DtoField(value = "addressId", readOnly = true)
     private long addressId;
 
+    @DtoField(value = "name")
+    private String name;
+
     @DtoField(value = "city")
     private String city;
 
@@ -69,6 +72,15 @@ public class AddressDTOImpl implements AddressDTO {
 
     @DtoField(value = "defaultAddress", readOnly = true)
     private boolean defaultAddress;
+
+    @DtoField(value = "companyName1")
+    private String companyName1;
+
+    @DtoField(value = "companyName2")
+    private String companyName2;
+
+    @DtoField(value = "companyDepartment")
+    private String companyDepartment;
 
     @DtoField(value = "phone1")
     private String phone1;
@@ -121,6 +133,17 @@ public class AddressDTOImpl implements AddressDTO {
     @DtoField(value = "customer.customerId", readOnly = true)
     private long customerId;
 
+    /** {@inheritDoc} */
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setName(final String name) {
+        this.name = name;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -334,6 +357,42 @@ public class AddressDTOImpl implements AddressDTO {
     @Override
     public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
     }
 
     /** {@inheritDoc} */

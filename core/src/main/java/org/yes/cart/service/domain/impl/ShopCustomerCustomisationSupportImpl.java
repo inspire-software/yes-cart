@@ -238,6 +238,12 @@ public class ShopCustomerCustomisationSupportImpl implements CustomerCustomisati
                 av.setVal(customer.getMiddlename());
             } else if ("lastname".equals(av.getAttributeCode())) {
                 av.setVal(customer.getLastname());
+            } else if ("companyname1".equals(av.getAttributeCode())) {
+                av.setVal(customer.getCompanyName1());
+            } else if ("companyname2".equals(av.getAttributeCode())) {
+                av.setVal(customer.getCompanyName2());
+            } else if ("companydepartment".equals(av.getAttributeCode())) {
+                av.setVal(customer.getCompanyDepartment());
             }
         }
         for (final String code : allowed) {

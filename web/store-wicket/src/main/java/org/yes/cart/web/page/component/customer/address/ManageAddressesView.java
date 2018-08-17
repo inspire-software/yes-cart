@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.customer.address;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -177,9 +178,16 @@ public class ManageAddressesView extends BaseComponent {
                 getLocale().getLanguage()
         );
 
+        final String htmlAddressString;
+        if (StringUtils.isNotBlank(address.getName())) {
+            htmlAddressString = "<span class=\"address-name\">" + address.getName() + "</span><br/>" + makeHtml(addressString);
+        } else {
+            htmlAddressString = makeHtml(addressString);
+        }
+
         addressListItem
                 .add(new Radio<>(ADDRESS_RADIO, new Model<>(address)))
-                .add(new Label(FORMATTED_ADDRESS, makeHtml(addressString)).setEscapeModelStrings(false))
+                .add(new Label(FORMATTED_ADDRESS, htmlAddressString).setEscapeModelStrings(false))
                 .add(
                         new SubmitLink(EDIT_LINK) {
                             @Override

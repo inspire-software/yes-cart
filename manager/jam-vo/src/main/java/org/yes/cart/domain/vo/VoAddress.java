@@ -30,6 +30,9 @@ public class VoAddress {
     @DtoField(value = "addressId", readOnly = true)
     private long addressId;
 
+    @DtoField(value = "name")
+    private String name;
+
     @DtoField(value = "city")
     private String city;
 
@@ -85,6 +88,15 @@ public class VoAddress {
     @DtoField(value = "email2")
     private String email2;
 
+    @DtoField(value = "companyName1")
+    private String companyName1;
+
+    @DtoField(value = "companyName2")
+    private String companyName2;
+
+    @DtoField(value = "companyDepartment")
+    private String companyDepartment;
+
     @DtoField(value = "custom0")
     private String custom0;
 
@@ -124,6 +136,14 @@ public class VoAddress {
 
     public void setAddressId(final long addressId) {
         this.addressId = addressId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
     }
 
     public String getCity() {
@@ -268,6 +288,30 @@ public class VoAddress {
 
     public void setEmail2(final String email2) {
         this.email2 = email2;
+    }
+
+    public String getCompanyName1() {
+        return companyName1;
+    }
+
+    public void setCompanyName1(final String companyName1) {
+        this.companyName1 = companyName1;
+    }
+
+    public String getCompanyName2() {
+        return companyName2;
+    }
+
+    public void setCompanyName2(final String companyName2) {
+        this.companyName2 = companyName2;
+    }
+
+    public String getCompanyDepartment() {
+        return companyDepartment;
+    }
+
+    public void setCompanyDepartment(final String companyDepartment) {
+        this.companyDepartment = companyDepartment;
     }
 
     public String getCustom0() {

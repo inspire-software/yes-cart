@@ -197,6 +197,13 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  protected getUserNumber(row:CustomerOrderVO) {
+    if (row.customerId > 0) {
+      return ' (' + row.customerId + ')';
+    }
+    return '';
+  }
+
   protected isOrderType() {
 
     return this._customerorder.orderStatus != null && this._customerorder.orderStatus.indexOf('os.') == 0;
