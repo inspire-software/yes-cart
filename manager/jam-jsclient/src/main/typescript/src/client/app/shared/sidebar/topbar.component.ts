@@ -37,6 +37,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   private evictingCache:boolean = false;
   private hasAlerts:boolean = false;
+  private continuePolling:boolean = true;
 
   private delayedAlerts:Future;
   private delayedAlertsMs:number = Config.UI_ALERTCHECK_DELAY;
@@ -56,9 +57,19 @@ export class TopbarComponent implements OnInit, OnDestroy {
     });
     let that = this;
     this.delayedAlerts = Futures.perpetual(function() {
-      that.checkAlerts();
+      if (that.continuePolling) {
+        that.checkAlerts();
+        that.continuePolling = false; // disable polling
+      }
     }, this.delayedAlertsMs);
     this.delayedAlerts.delay(3000);
+    var _pollingRefresh = function() {
+      if (!that.continuePolling) {
+        that.continuePolling = true; // enable polling if user interaction detected
+        LogUtil.debug('TopbarComponent user interaction detected, continue polling');
+      }
+    };
+    document.addEventListener('mousemove', _pollingRefresh);
   }
 
   protected configureUser(user:any) {
