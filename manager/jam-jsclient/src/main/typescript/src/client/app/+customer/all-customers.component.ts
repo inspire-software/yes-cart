@@ -340,6 +340,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
           this.onCustomerSelected(this.customers[0]);
           this.onRowEditSelected();
         }
+        this.openFirstResultOnSearch = false;
       });
     } else {
       this.customers = [];
