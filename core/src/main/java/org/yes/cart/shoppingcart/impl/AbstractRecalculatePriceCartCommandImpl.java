@@ -26,6 +26,7 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 
@@ -151,10 +152,10 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
     private PricingPolicyProvider.PricingPolicy determinePricingPolicy(final MutableShoppingCart shoppingCart) {
         return getPricingPolicyProvider().determinePricingPolicy(
-                        shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
-                        shoppingCart.getShoppingContext().getCountryCode(),
-                        shoppingCart.getShoppingContext().getStateCode()
-                );
+                shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
+                shoppingCart.getShoppingContext().getCountryCode(),
+                shoppingCart.getShoppingContext().getStateCode()
+        );
     }
 
     private void setProductSkuPrice(final MutableShoppingCart shoppingCart,
@@ -177,15 +178,25 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
         final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
         final BigDecimal list = skuPrice.isPriceUponRequest() ? null : listAndSale.getFirst();
         final BigDecimal sale = skuPrice.isPriceUponRequest() ? null : listAndSale.getSecond();
-        if (shoppingCart.setProductSkuPrice(skuCode, sale != null ? sale : list, list)) {
-            final String key = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + skuCode;
-            if (StringUtils.isNotBlank(skuPrice.getRef())) {
-                shoppingCart.getOrderInfo().putDetail(key, skuPrice.getRef());
+        if (skuPrice.isPriceOnOffer()) {
+            if (shoppingCart.setProductSkuOffer(skuCode, MoneyUtils.minPositive(list, sale), skuPrice.getRef())) {
+                setSkuPriceRef(shoppingCart, skuCode, skuPrice);
             } else {
-                shoppingCart.getOrderInfo().putDetail(key, null);
+                LOG.warn("Can not set offer {} to sku with code {}", skuPrice.getSkuPriceId(), skuCode);
             }
+        } else if (shoppingCart.setProductSkuPrice(skuCode, sale != null ? sale : list, list)) {
+            setSkuPriceRef(shoppingCart, skuCode, skuPrice);
         } else {
-            LOG.warn("Can not set price to sku with code {}", skuCode);
+            LOG.warn("Can not set price {} to sku with code {}", skuPrice.getSkuPriceId(), skuCode);
+        }
+    }
+
+    private void setSkuPriceRef(final MutableShoppingCart shoppingCart, final String skuCode, final SkuPrice skuPrice) {
+        final String key = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + skuCode;
+        if (StringUtils.isNotBlank(skuPrice.getRef())) {
+            shoppingCart.getOrderInfo().putDetail(key, skuPrice.getRef());
+        } else {
+            shoppingCart.getOrderInfo().putDetail(key, null);
         }
     }
 
