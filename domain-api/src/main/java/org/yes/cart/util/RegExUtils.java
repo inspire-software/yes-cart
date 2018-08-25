@@ -16,6 +16,8 @@
 
 package org.yes.cart.util;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -29,6 +31,8 @@ public final class RegExUtils {
 
     private static final Map<String, RegEx> CACHE = new ConcurrentHashMap<>();
 
+    private static final RegEx NULL = new RegEx(null);
+
     private RegExUtils() {
         // no instance
     }
@@ -41,6 +45,9 @@ public final class RegExUtils {
      * @return regex
      */
     public static RegEx getInstance(final String pattern) {
+        if (StringUtils.isBlank(pattern)) {
+            return NULL;
+        }
         return CACHE.computeIfAbsent(pattern, RegEx::new);
     }
 
@@ -52,7 +59,7 @@ public final class RegExUtils {
 
         public RegEx(final String patternString) {
             this.patternString = patternString;
-            this.pattern = Pattern.compile(patternString);
+            this.pattern = StringUtils.isBlank(patternString) ? null : Pattern.compile(patternString);
         }
 
         /**
@@ -75,7 +82,7 @@ public final class RegExUtils {
          * @return quick match method
          */
         public boolean matches(final String input) {
-            return pattern.matcher(input).matches();
+            return pattern == null || pattern.matcher(input).matches();
         }
     }
 
