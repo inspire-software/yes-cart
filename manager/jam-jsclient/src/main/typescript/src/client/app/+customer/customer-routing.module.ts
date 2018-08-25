@@ -8,6 +8,10 @@ import { AllCustomersComponent } from './index';
       {
         path: 'customer/allcustomers',
         component: AllCustomersComponent
+      },
+      {
+        path: 'customer/allcustomers/:customerId',
+        component: AllCustomersComponent
       }
     ])
   ],

@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO, Pair } from './../../shared/model/index';
 import { CookieUtil } from './../../shared/cookies/index';
@@ -40,7 +41,8 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
 
   private  deliveryActionsAvailable:boolean = false;
 
-  constructor(fb: FormBuilder) {
+  constructor(fb: FormBuilder,
+              private _router : Router) {
     LogUtil.debug('CustomerOrderComponent constructed');
   }
 
@@ -203,6 +205,13 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     }
     return '';
   }
+
+
+  onCustomerClick(row:CustomerOrderVO) {
+    LogUtil.debug('CustomerOrderComponent onCustomerClick', row);
+    this._router.navigate(['/customer/allcustomers', row.customerId]);
+  }
+
 
   protected isOrderType() {
 

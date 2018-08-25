@@ -28,7 +28,7 @@
               </div>
               <div class="row">
                 <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMER_FULLNAME' | translate }}</strong></div>
-                <div class="col-xs-9 col-md-6"><span [innerHTML]="getUserIcon(customerorder)"></span> {{ customerorder.salutation }} {{ customerorder.firstname }} {{ customerorder.middlename }} {{ customerorder.lastname }} <span [innerHTML]="getUserNumber(customerorder)"></span></div>
+                <div class="col-xs-9 col-md-6"><span [innerHTML]="getUserIcon(customerorder)"></span> {{ customerorder.salutation }} {{ customerorder.firstname }} {{ customerorder.middlename }} {{ customerorder.lastname }} <a (click)="onCustomerClick(customerorder)" class="js-click" [innerHTML]="getUserNumber(customerorder)"></a></div>
               </div>
               <div class="row">
                 <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMERORDER_ADDR_B' | translate }}</strong></div>

@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CustomerService, ShopEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ShopVO, CustomerInfoVO, CustomerVO, AttrValueCustomerVO, Pair } from './../shared/model/index';
@@ -66,7 +67,11 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
   private changed:boolean = false;
   private validForSave:boolean = false;
 
-  constructor(private _customerService:CustomerService) {
+  private customerIdSub:any;
+  private openFirstResultOnSearch:boolean = false;
+
+  constructor(private _customerService:CustomerService,
+              private _route: ActivatedRoute) {
     LogUtil.debug('AllCustomersComponent constructed');
     this.shopAllSub = ShopEventBus.getShopEventBus().shopsUpdated$.subscribe(shopsevt => {
       this.shops = shopsevt;
@@ -93,12 +98,22 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
     this.delayedFiltering = Futures.perpetual(function() {
       that.getFilteredCustomers();
     }, this.delayedFilteringMs);
+    this.customerIdSub = this._route.params.subscribe(params => {
+      let customerId = params['customerId'];
+      LogUtil.debug('AllCustomersComponent customerId from params is ' + customerId);
+      this.customerFilter = '#' + customerId;
+      this.openFirstResultOnSearch = true;
+      this.getFilteredCustomers();
+    });
   }
 
   ngOnDestroy() {
     LogUtil.debug('AllCustomersComponent ngOnDestroy');
     if (this.shopAllSub) {
       this.shopAllSub.unsubscribe();
+    }
+    if (this.customerIdSub) {
+      this.customerIdSub.unsubscribe();
     }
   }
 
@@ -319,6 +334,10 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
         this.customerFilterCapped = this.customers.length >= max;
         this.loading = false;
         _sub.unsubscribe();
+        if (this.openFirstResultOnSearch && this.customers.length > 0) {
+          this.onCustomerSelected(this.customers[0]);
+          this.onRowEditSelected();
+        }
       });
     } else {
       this.customers = [];
