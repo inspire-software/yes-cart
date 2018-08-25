@@ -100,10 +100,12 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
     }, this.delayedFilteringMs);
     this.customerIdSub = this._route.params.subscribe(params => {
       let customerId = params['customerId'];
-      LogUtil.debug('AllCustomersComponent customerId from params is ' + customerId);
-      this.customerFilter = '#' + customerId;
-      this.openFirstResultOnSearch = true;
-      this.getFilteredCustomers();
+      if (customerId != null) {
+        LogUtil.debug('AllCustomersComponent customerId from params is ' + customerId);
+        this.customerFilter = '#' + customerId;
+        this.openFirstResultOnSearch = true;
+        this.getFilteredCustomers();
+      }
     });
   }
 
