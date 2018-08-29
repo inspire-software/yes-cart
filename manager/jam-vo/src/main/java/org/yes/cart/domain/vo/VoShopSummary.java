@@ -69,11 +69,9 @@ public class VoShopSummary {
     private MutablePair<String, Boolean> checkoutEnableMessage;
     private MutablePair<String, Boolean> checkoutEnableQuantityPicker;
     private MutablePair<String, Boolean> checkoutEnablePreselectShipping;
+    private MutablePair<String, Boolean> checkoutEnablePreselectPayment;
 
-    private MutablePair<String, Boolean> taxEnableShow;
-    private MutablePair<String, Boolean> taxEnableShowNet;
-    private MutablePair<String, Boolean> taxEnableShowAmount;
-
+    
     private MutablePair<String, Boolean> searchInSubCatsEnable;
     private MutablePair<String, Boolean> searchCompoundEnable;
     private MutablePair<String, Boolean> searchSuggestEnable;
@@ -341,6 +339,14 @@ public class VoShopSummary {
 
     public void setCheckoutEnablePreselectShipping(final MutablePair<String, Boolean> checkoutEnablePreselectShipping) {
         this.checkoutEnablePreselectShipping = checkoutEnablePreselectShipping;
+    }
+
+    public MutablePair<String, Boolean> getCheckoutEnablePreselectPayment() {
+        return checkoutEnablePreselectPayment;
+    }
+
+    public void setCheckoutEnablePreselectPayment(final MutablePair<String, Boolean> checkoutEnablePreselectPayment) {
+        this.checkoutEnablePreselectPayment = checkoutEnablePreselectPayment;
     }
 
     public MutablePair<String, Boolean> getSearchInSubCatsEnable() {

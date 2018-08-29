@@ -364,4 +364,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  8015,  'SHOP_SF_MAX_LV_SKU', 'SHOP_SF_MAX_LAST_VIEWED_SKU',  0,  NULL,  'Customer: Max last viewed SKU',  'Maximum number of last viewed SKU to track (default is 10)',
     1006, 1001, 0, 0, 0, 0);
 
+--
+-- YC-933 Preselect payment method option for payment page
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8016,  'SHOP_CHECKOUT_PRESELECT_PAYMENT', 'SHOP_CHECKOUT_PRESELECT_PAYMENT',  0,  NULL,  'Checkout: pre-select payment method',
+  'If enabled will forcefully pre-select payment method during checkout',  1008, 1001, 0, 0, 0, 0);
 

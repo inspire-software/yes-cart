@@ -431,6 +431,11 @@ public interface AttributeNamesKeys {
         String SHOP_CHECKOUT_PRESELECT_SHIPPING = "SHOP_CHECKOUT_PRESELECT_SHIPPING";
 
         /**
+         * Preselect payment method when opening payment page.
+         */
+        String SHOP_CHECKOUT_PRESELECT_PAYMENT = "SHOP_CHECKOUT_PRESELECT_PAYMENT";
+
+        /**
          * Supported by shop customer types for request for quote.
          */
         String SHOP_RFQ_CUSTOMER_TYPES = "SHOP_RFQ_CUSTOMER_TYPES";
