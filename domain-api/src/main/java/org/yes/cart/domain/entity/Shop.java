@@ -324,13 +324,23 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
 
 
     /**
-     * Determine if address book management is enable for customer type.
+     * Determine if address book management is enabled for customer type.
      *
      * @param customerType type of customer
      *
      * @return true if B2B address mode is set.
      */
     boolean isSfAddressBookEnabled(String customerType);
+
+
+    /**
+     * Determine if address book management for billing address is enabled for customer type.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if B2B address mode is set.
+     */
+    boolean isSfAddressBookBillingEnabled(String customerType);
 
     /**
      * Flag whether to display tax information for given customer type.

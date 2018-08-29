@@ -81,6 +81,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfShoppingListsEnabledTypes;
     private Set<String> sfRFQEnabledTypes;
     private Set<String> sfAddressBookDisabledTypes;
+    private Set<String> sfAddressBookBillingDisabledTypes;
     private Set<String> sfShowTaxInfoTypes;
     private Set<String> sfShowTaxNetTypes;
     private Set<String> sfShowTaxAmountTypes;
@@ -761,6 +762,19 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     @Override
     public boolean isSfAddressBookEnabled(final String customerType) {
         return !getSfAddressBookDisabledTypes().contains(customerType);
+    }
+
+
+    private Set<String> getSfAddressBookBillingDisabledTypes() {
+        if (this.sfAddressBookBillingDisabledTypes == null) {
+            this.sfAddressBookBillingDisabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_ADDRESSBOOK_BILL_DISABLED_CUSTOMER_TYPES);
+        }
+        return this.sfAddressBookBillingDisabledTypes;
+    }
+
+    @Override
+    public boolean isSfAddressBookBillingEnabled(final String customerType) {
+        return !getSfAddressBookBillingDisabledTypes().contains(customerType);
     }
 
 

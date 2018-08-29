@@ -203,6 +203,7 @@ export interface ShopSummaryVO {
   customerTypesB2BOrderLineRemarks: Pair<string, string[]>;
   customerTypesB2BOrderForm: Pair<string, string[]>;
   customerTypesAddressBookDisabled: Pair<string, string[]>;
+  customerTypesAddressBookBillingDisabled: Pair<string, string[]>;
   customerTypesDisableAccountDelete: Pair<string, string[]>;
 
   emailTemplates: Pair<string, boolean[]>;

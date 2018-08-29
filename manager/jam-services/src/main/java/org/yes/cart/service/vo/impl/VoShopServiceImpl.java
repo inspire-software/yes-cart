@@ -469,6 +469,8 @@ public class VoShopServiceImpl implements VoShopService {
                 getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_SHOPPING_LIST_TYPES, lang);
         final MutablePair<String, List<String>> addressBookDisabled =
                 getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES, lang);
+        final MutablePair<String, List<String>> addressBookBillingDisabled =
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_ADDRESSBOOK_BILL_DISABLED_CUSTOMER_TYPES, lang);
 
         final Set<String> additionalTypes = new HashSet<>();
         additionalTypes.addAll(ableToRegister.getSecond());
@@ -489,6 +491,7 @@ public class VoShopServiceImpl implements VoShopService {
         additionalTypes.addAll(orderForm.getSecond());
         additionalTypes.addAll(shoppingLists.getSecond());
         additionalTypes.addAll(addressBookDisabled.getSecond());
+        additionalTypes.addAll(addressBookBillingDisabled.getSecond());
         if (CollectionUtils.isNotEmpty(additionalTypes)) {
             additionalTypes.removeAll(knownCustomerTypes);
             if (!additionalTypes.isEmpty()) {
@@ -517,6 +520,7 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerTypesB2BOrderForm(orderForm);
         summary.setCustomerTypesShoppingLists(shoppingLists);
         summary.setCustomerTypesAddressBookDisabled(addressBookDisabled);
+        summary.setCustomerTypesAddressBookBillingDisabled(addressBookBillingDisabled);
     }
 
     protected void addCheckoutConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {

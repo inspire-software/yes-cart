@@ -372,3 +372,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  8016,  'SHOP_CHECKOUT_PRESELECT_PAYMENT', 'SHOP_CHECKOUT_PRESELECT_PAYMENT',  0,  NULL,  'Checkout: pre-select payment method',
   'If enabled will forcefully pre-select payment method during checkout',  1008, 1001, 0, 0, 0, 0);
 
+--
+-- YC-934 Prevent customers from updating invoice address
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  5018,  'SHOP_ADRDISBILL_CUSTOMER_TYPES', 'SHOP_ADDRESSBOOK_BILL_DISABLED_CUSTOMER_TYPES',  0,  NULL,  'Customer: types that cannot modify billing address',
+  'CSV of customer types that cannot modify billing address in address book (e.g. B2B setup with admin authorised addresses only)
+  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);

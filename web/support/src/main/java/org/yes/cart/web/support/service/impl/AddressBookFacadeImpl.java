@@ -239,7 +239,9 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     @Override
     public void createOrUpdate(final Address address, final Shop customerShop) {
         if (!customerShop.isB2BAddressBookActive() &&
-                customerShop.isSfAddressBookEnabled(address.getCustomer().getCustomerType())) {
+                customerShop.isSfAddressBookEnabled(address.getCustomer().getCustomerType()) &&
+                    (!Address.ADDR_TYPE_BILLING.equals(address.getAddressType()) ||
+                            customerShop.isSfAddressBookBillingEnabled(address.getCustomer().getCustomerType()))) {
             if (address.getAddressId() == 0) {
                 // Need to add address to customer only just before the creation
                 address.getCustomer().getAddress().add(address);
@@ -255,7 +257,9 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     public void remove(Address address, final Shop customerShop) {
 
         if (!customerShop.isB2BAddressBookActive() &&
-                customerShop.isSfAddressBookEnabled(address.getCustomer().getCustomerType())) {
+                customerShop.isSfAddressBookEnabled(address.getCustomer().getCustomerType()) &&
+                (!Address.ADDR_TYPE_BILLING.equals(address.getAddressType()) ||
+                        customerShop.isSfAddressBookBillingEnabled(address.getCustomer().getCustomerType()))) {
             final boolean isDefault = address.isDefaultAddress();
             addressService.delete(address);
 

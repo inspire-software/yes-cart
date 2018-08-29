@@ -277,8 +277,12 @@
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesB2BOrderLineRemarks.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
                 </tr>
                 <tr>
-                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted"><i class="fa fa-edit"></i> {{ shopSummary.customerTypesAddressBookDisabled.first }} <span class="label label-info">YCE</span></td>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted"><i class="fa fa-address-book"></i> {{ shopSummary.customerTypesAddressBookDisabled.first }} <span class="label label-info">YCE</span></td>
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ shopSummary.b2bAddressbookActive.second || isTypeEnabled(type.first, shopSummary.customerTypesAddressBookDisabled.second) ? 'fa-check text-danger' : 'fa-remove text-success' }}"></i></td>
+                </tr>
+                <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted"><i class="fa fa-address-book"></i> {{ shopSummary.customerTypesAddressBookBillingDisabled.first }} <span class="label label-info">YCE</span></td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ shopSummary.b2bAddressbookActive.second || isTypeEnabled(type.first, shopSummary.customerTypesAddressBookBillingDisabled.second) ? 'fa-check text-danger' : 'fa-remove text-success' }}"></i></td>
                 </tr>
                 <tr>
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}"><i class="fa fa-truck"></i> {{ shopSummary.customerTypesDisableOneAddress.first }}</td>

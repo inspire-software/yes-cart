@@ -61,6 +61,7 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
         boolean orderMessageEnabled = shop.isSfOrderMessageEnabled(customerType);
         boolean promoCouponsEnabled = shop.isSfPromoCouponsEnabled(customerType);
         boolean addressBookEnabled = !shop.isB2BAddressBookActive() && shop.isSfAddressBookEnabled(customerType);
+        boolean addressBookBillingEnabled = addressBookEnabled && shop.isSfAddressBookBillingEnabled(customerType);
 
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_TYPE, String.valueOf(orderRequiresApproval));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_TYPE, String.valueOf(blockCheckout));
@@ -72,6 +73,7 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_MESSAGE_ON, String.valueOf(orderMessageEnabled));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_COUPONS_ON, String.valueOf(promoCouponsEnabled));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_ADDRESSBOOK_ON, String.valueOf(addressBookEnabled));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_ADDRESSBOOK_BILLING_ON, String.valueOf(addressBookBillingEnabled));
 
         if (customer != null) {
 

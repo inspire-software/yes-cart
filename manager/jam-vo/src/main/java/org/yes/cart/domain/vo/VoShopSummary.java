@@ -107,6 +107,7 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesB2BOrderLineRemarks;
     private MutablePair<String, List<String>> customerTypesB2BOrderForm;
     private MutablePair<String, List<String>> customerTypesAddressBookDisabled;
+    private MutablePair<String, List<String>> customerTypesAddressBookBillingDisabled;
     private MutablePair<String, List<String>> customerTypesDisableAccountDelete;
 
     private List<MutablePair<String, Boolean>> emailTemplates = new ArrayList<>();
@@ -611,6 +612,14 @@ public class VoShopSummary {
 
     public void setCustomerTypesAddressBookDisabled(final MutablePair<String, List<String>> customerTypesAddressBookDisabled) {
         this.customerTypesAddressBookDisabled = customerTypesAddressBookDisabled;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesAddressBookBillingDisabled() {
+        return customerTypesAddressBookBillingDisabled;
+    }
+
+    public void setCustomerTypesAddressBookBillingDisabled(final MutablePair<String, List<String>> customerTypesAddressBookBillingDisabled) {
+        this.customerTypesAddressBookBillingDisabled = customerTypesAddressBookBillingDisabled;
     }
 
     public MutablePair<String, List<String>> getCustomerTypesDisableAccountDelete() {
