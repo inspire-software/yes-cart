@@ -403,9 +403,11 @@ export class ContentComponent implements OnInit, OnDestroy {
       let _previewBase = this.shopPreviewUrl;
       let _preview = body.text;
       // replace relative images
-      _preview = _preview.replace(/<img([^>]*)\ssrc=(['"])\/{0,1}([^'"]*)\2([^>]*)/gi, '<img$1 data-preview="enhanced" src=$2' + _previewBase + '$3$2$4');
+      _preview = _preview.replace(/<img([^>]*)\ssrc=(['"])(?!http:\/\/)(?!https:\/\/)(?!\/\/)\/{0,1}([^'"]*)\2([^>]*)/gi, '<img$1 data-preview-url="rel" src=$2' + _previewBase + '$3$2$4');
+      // retarget absolute urls
+      _preview = _preview.replace(/href=(['"])([http:\/\/]|[https:\/\/]|[\/\/]){1}([^'"]*)\1/gi, 'href=$1$2$3$1 data-preview-url="abs" target="_blank"');
       // replace relative urls
-      _preview = _preview.replace(/href=(['"])\/{0,1}([^'"]*)\1/gi, 'href=$1' + _previewBase + '$2$1  data-preview="enhanced" target="_blank"');
+      _preview = _preview.replace(/href=(['"])(?!http:\/\/)(?!https:\/\/)(?!\/\/)\/{0,1}([^'"]*)\1/gi, 'href=$1' + _previewBase + '$2$1  data-preview-url="rel" target="_blank"');
 
       LogUtil.debug('ContentComponent getCMSPreview ', _preview);
 
