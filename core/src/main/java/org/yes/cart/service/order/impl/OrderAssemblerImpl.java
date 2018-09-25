@@ -121,11 +121,6 @@ public class OrderAssemblerImpl implements OrderAssembler {
     @Override
     public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart, final boolean temp) throws OrderAssemblyException {
 
-        final CustomerOrder customerOrder = entityFactory.getByIface(CustomerOrder.class);
-
-        // sets shop from cache
-        customerOrder.setShop(shopService.getById(shoppingCart.getShoppingContext().getCustomerShopId()));
-
         final Total cartTotal = shoppingCart.getTotal();
 
         if (cartTotal == null
@@ -135,6 +130,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 || cartTotal.getSubTotalAmount() == null) {
             throw new OrderAssemblyException("No order total");
         }
+
+        final CustomerOrder customerOrder = entityFactory.getByIface(CustomerOrder.class);
+
+        // sets shop from cache
+        customerOrder.setShop(shopService.getById(shoppingCart.getShoppingContext().getCustomerShopId()));
 
         // Basic data
         customerOrder.setLocale(shoppingCart.getCurrentLocale());
@@ -231,7 +231,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param shoppingCart  cart
      * @param temp temporary flag
      */
-    private void fillCustomerData(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final boolean temp) {
+    private void fillCustomerData(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final boolean temp) throws OrderAssemblyException {
 
         final boolean guest = shoppingCart.getLogonState() != ShoppingCart.LOGGED_IN;
 
@@ -275,20 +275,24 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
             final boolean sameAddress = !shoppingCart.isSeparateBillingAddress() || billingAddress == null;
 
-            if (!shippingNotRequired) {
-                customerOrder.setShippingAddress(formatAddress(shippingAddress, configShop, customer, customerOrder.getLocale()));
-            } else {
+            if (shippingNotRequired) {
                 customerOrder.setShippingAddress("");
+            } else if (shippingAddress == null) {
+                throw new OrderAssemblyException("Shipping address is required");
+            } else {
+                customerOrder.setShippingAddress(formatAddress(shippingAddress, configShop, customer, customerOrder.getLocale()));
             }
 
             if (sameAddress) {
                 billingAddress = shippingAddress;
             }
 
-            if (!billingNotRequired) {
-                customerOrder.setBillingAddress(formatAddress(billingAddress, configShop, customer, customerOrder.getLocale()));
-            } else {
+            if (billingNotRequired) {
                 customerOrder.setBillingAddress("");
+            } else if (billingAddress == null) {
+                throw new OrderAssemblyException("Billing address is required");
+            } else {
+                customerOrder.setBillingAddress(formatAddress(billingAddress, configShop, customer, customerOrder.getLocale()));
             }
 
             if (!temp) {
