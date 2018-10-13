@@ -1590,9 +1590,9 @@
       "dev": true
     },
     "deep-extend": {
-      "version": "0.4.2",
-      "from": "deep-extend@>=0.4.1 <0.5.0",
-      "resolved": "https://registry.npmjs.org/deep-extend/-/deep-extend-0.4.2.tgz",
+      "version": "0.5.1",
+      "from": "deep-extend@>=0.5.1 <0.6.0",
+      "resolved": "https://registry.npmjs.org/deep-extend/-/deep-extend-0.5.1.tgz",
       "dev": true
     },
     "deep-is": {
@@ -6609,7 +6609,15 @@
       "version": "1.2.2",
       "from": "rc@>=1.1.6 <2.0.0",
       "resolved": "https://registry.npmjs.org/rc/-/rc-1.2.2.tgz",
-      "dev": true
+      "dev": true,
+      "dependencies": {
+        "deep-extend": {
+          "version": "0.4.2",
+          "from": "deep-extend@>=0.4.0 <0.5.0",
+          "resolved": "https://registry.npmjs.org/deep-extend/-/deep-extend-0.4.2.tgz",
+          "dev": true
+        }
+      }
     },
     "read-pkg": {
       "version": "1.1.0",
