@@ -55,6 +55,25 @@ NOTE: step 4 copies th files, however because all files are plain JS sometimes b
 
  - located in typescript/tools/config/seed.config.ts
  
+## Updating npm-shrinkwrap.json
+
+ If you need to update dependencies this is the recommended way:
+
+```sh
+# backup & remove
+cp npm-shrinkwrap.json npm-shrinkwrap.json.bkp
+rm npm-shrinkwrap.json
+# remove downloaded dependencies that you need to update (e.g. deep-extend)
+rm -rf node_modules/deep-extend
+# Re-run install
+npm install
+# redo shrinkwrap
+npm shrinkwrap
+```
+
+ After re-creating npm-shrinkwrap.json compare it to npm-shrinkwrap.json.bkp to ensure the changes are valid as multiple dependencies may have updated
+ 
+ 
 ## Hints
 
  - indexing of typescript/node_modules and typescript/dist make take some time, so better to mark this folders as excluded
