@@ -26,6 +26,9 @@ import java.util.Map;
  */
 public interface I18NModel extends Serializable {
 
+    // Default locale code
+    String DEFAULT = "xx";
+
     /**
      * @param locale locale
      * @return string value for that locale

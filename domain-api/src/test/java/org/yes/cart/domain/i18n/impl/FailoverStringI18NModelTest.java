@@ -59,4 +59,15 @@ public class FailoverStringI18NModelTest {
         assertEquals("failover", model.getValue("UK"));
         assertEquals("failover", model.getValue("CA"));
     }
+
+    @Test
+    public void testString2() throws Exception {
+        final I18NModel model = new FailoverStringI18NModel("EN#~#Some text#~#RU#~#Текст#~#UK#~##~#xx#~#model failover", "failover");
+        assertNotNull(model.getAllValues());
+        assertEquals(3, model.getAllValues().size());
+        assertEquals("Some text", model.getValue("EN"));
+        assertEquals("Текст", model.getValue("RU"));
+        assertEquals("model failover", model.getValue("UK"));
+        assertEquals("model failover", model.getValue("CA"));
+    }
 }

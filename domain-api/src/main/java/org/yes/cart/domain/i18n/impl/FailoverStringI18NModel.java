@@ -32,12 +32,14 @@ public class FailoverStringI18NModel implements I18NModel {
 
     public FailoverStringI18NModel(final String localisable, final String failover) {
         this.model = new StringI18NModel(localisable);
-        this.failover = failover;
+        final String modelFailover = this.model.getValue(I18NModel.DEFAULT);
+        this.failover = modelFailover == null || modelFailover.length() == 0 ? failover : modelFailover;
     }
 
     public FailoverStringI18NModel(final Map<String, String> values, final String failover) {
         this.model = new StringI18NModel(values);
-        this.failover = failover;
+        final String modelFailover = this.model.getValue(I18NModel.DEFAULT);
+        this.failover = modelFailover == null || modelFailover.length() == 0 ? failover : modelFailover;
     }
 
     @Override
