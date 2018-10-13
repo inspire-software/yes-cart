@@ -289,7 +289,7 @@ public class ManagementServiceImpl implements ManagementService {
             }
             if (!RegExUtils.getInstance(regex).matches(password)) {
 
-                String error = AttributeNamesKeys.System.MANAGER_PASSWORD_REGEX;
+                String error = AttributeNamesKeys.System.MANAGER_PASSWORD_REGEX + " (" + lang + ")";
                 final Attribute attribute = attributeService.findByAttributeCode(AttributeNamesKeys.System.MANAGER_PASSWORD_REGEX);
                 if (attribute != null) {
                     error = new FailoverStringI18NModel(attribute.getValidationFailedMessage(), error).getValue(lang);
