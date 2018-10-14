@@ -527,7 +527,10 @@ table.dataTable thead .sorting:after {
 }
 
 .av-image-preview img {
-  width: 100%;
+  /*width: 100%;*/
+  max-width: 100%;
+  float: left;
+  height: auto;
 }
 
 .av-td-value img {
