@@ -120,7 +120,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
             long dt = System.currentTimeMillis();
             String fileToExport = "target/attributenames-export-" + UUID.randomUUID().toString() + ".csv";
-            bulkExportService.doExport(createContext("src/test/resources/export/attributenames.xml", listener, fileToExport));
+            bulkExportService.doExport(createContext("src/test/resources/export/csv/attributenames.xml", listener, fileToExport));
             final long attrs = System.currentTimeMillis() - dt;
             System.out.println(cntProductAttr + " attributes  in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
 
@@ -135,7 +135,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
             dt = System.currentTimeMillis();
             fileToExport = "target/productnames-export-" + UUID.randomUUID().toString() + ".csv";
-            bulkExportService.doExport(createContext("src/test/resources/export/productnames.xml", listener, fileToExport));
+            bulkExportService.doExport(createContext("src/test/resources/export/csv/productnames.xml", listener, fileToExport));
             final long prods = System.currentTimeMillis() - dt;
             System.out.println(cntProd + " products in " + prods + "millis (~" + (prods / cntProd) + " per item)");
 

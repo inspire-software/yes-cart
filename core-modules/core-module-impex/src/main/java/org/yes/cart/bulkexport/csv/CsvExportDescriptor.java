@@ -16,7 +16,10 @@
 
 package org.yes.cart.bulkexport.csv;
 
+import org.yes.cart.bulkcommon.csv.CsvImpExDescriptor;
 import org.yes.cart.bulkexport.model.ExportDescriptor;
+
+import java.util.Collection;
 
 /**
  * Csv export descriptor.
@@ -25,7 +28,30 @@ import org.yes.cart.bulkexport.model.ExportDescriptor;
  * Date: 26/11/2015
  * Time: 08:00
  */
-public interface CsvExportDescriptor extends ExportDescriptor {
+public interface CsvExportDescriptor extends
+        ExportDescriptor<CsvExportContext>, CsvImpExDescriptor<CsvExportContext, CsvExportColumn> {
+
+    /**
+     * Get the collection of export columns.
+     *
+     * @return collection of export columns
+     */
+    Collection<CsvExportColumn> getColumns();
+
+
+    /**
+     * @param columnName column name
+     * @return get column by name
+     */
+    CsvExportColumn getColumn(String columnName);
+
+    /**
+     * Get the collection of export columns filtered by given field type.
+     *
+     * @param fieldType Field type constant discriminator.
+     * @return collection of export columns
+     */
+    Collection<CsvExportColumn> getColumns(String fieldType);
 
 
     /**

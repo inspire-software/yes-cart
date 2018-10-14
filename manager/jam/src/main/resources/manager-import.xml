@@ -24,6 +24,7 @@
     <!-- ########################################## bulk import ########################## -->
 
     <import resource="classpath:core-import.xml"/>
+    <import resource="classpath*:manager-import-ext.xml"/>
 
     <bean id="bulkImportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <description>
@@ -40,7 +41,7 @@
         <constructor-arg index="1" ref="dataDescriptorService"/>
     </bean>
 
-    <bean id="webInfXmlImportDataDescriptorTuplizer" class="org.yes.cart.bulkimport.service.impl.WebInfXmlImportDataDescriptorTuplizerImpl">
+    <bean id="webInfXmlImportDataDescriptorReader" class="org.yes.cart.bulkimport.service.impl.WebInfXmlImportDataDescriptorReaderImpl">
         <constructor-arg index="0" value="import-descriptor"/>
         <property name="dataDescriptorResolver" ref="importDataDescriptorResolver"/>
         <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
@@ -67,10 +68,7 @@
             </bean>
         </constructor-arg>
         <constructor-arg index="8" ref="uiFederationFacade"/>
-
-        <lookup-method name="getNewBulkImportService" bean="csvBulkImportService"/>
-        <lookup-method name="getNewBulkImportImagesService" bean="imagesBulkImportService"/>
-
+        <constructor-arg index="9" ref="bulkImportServiceBeanMap"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

@@ -18,9 +18,9 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
 import org.yes.cart.bulkcommon.model.impl.AbstractExtensibleValueAdapter;
 
 import java.math.BigDecimal;
@@ -41,15 +41,15 @@ public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter implem
     private final GenericConversionService extendedConversionService;
 
     private static final Map<String, Class> MAPPING = new HashMap<String, Class>() {{
-        put(ImpExColumn.STRING,    String.class);
-        put(ImpExColumn.BOOLEAN,   Boolean.class);
-        put(ImpExColumn.INT,       Integer.class);
-        put(ImpExColumn.LONG,      Long.class);
-        put(ImpExColumn.DECIMAL,   BigDecimal.class);
-        put(ImpExColumn.DATE,      LocalDate.class);
-        put(ImpExColumn.DATETIME,  LocalDateTime.class);
-        put(ImpExColumn.ZONEDTIME, ZonedDateTime.class);
-        put(ImpExColumn.INSTANT,   Instant.class);
+        put(CsvImpExColumn.STRING,    String.class);
+        put(CsvImpExColumn.BOOLEAN,   Boolean.class);
+        put(CsvImpExColumn.INT,       Integer.class);
+        put(CsvImpExColumn.LONG,      Long.class);
+        put(CsvImpExColumn.DECIMAL,   BigDecimal.class);
+        put(CsvImpExColumn.DATE,      LocalDate.class);
+        put(CsvImpExColumn.DATETIME,  LocalDateTime.class);
+        put(CsvImpExColumn.ZONEDTIME, ZonedDateTime.class);
+        put(CsvImpExColumn.INSTANT,   Instant.class);
     }};
 
     public CsvImportValueAdapter(final GenericConversionService extendedConversionService) {
@@ -57,14 +57,14 @@ public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter implem
     }
 
     @Override
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final CsvImpExColumn csvImpExColumn, final CsvImpExTuple tuple) {
         if (requiredType == null) {
             return rawValue;
         }
 
         final ValueAdapter specific = getTypeSpecific(requiredType);
         if (specific != null) {
-            return specific.fromRaw(rawValue, requiredType, impExColumn, tuple);
+            return specific.fromRaw(rawValue, requiredType, csvImpExColumn, tuple);
         }
         if (!MAPPING.containsKey(requiredType)) {
             return rawValue;

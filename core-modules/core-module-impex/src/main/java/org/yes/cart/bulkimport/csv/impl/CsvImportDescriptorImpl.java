@@ -19,12 +19,11 @@ package org.yes.cart.bulkimport.csv.impl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
+import org.yes.cart.bulkimport.csv.CsvImportContext;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
-import org.yes.cart.bulkimport.model.ImportColumn;
-import org.yes.cart.bulkimport.model.ImportContext;
 
 import java.io.Serializable;
 import java.util.*;
@@ -42,14 +41,14 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
     private Collection<CsvImportColumn> columns;
 
-    private ImportColumn pkColumn;
-    private Map<String, ImportColumn> columnByName;
-    private Map<String, List<ImportColumn>> columnsByType;
+    private CsvImportColumn pkColumn;
+    private Map<String, CsvImportColumn> columnByName;
+    private Map<String, List<CsvImportColumn>> columnsByType;
 
     private String importDirectory;
 
     private ImportMode mode;
-    private ImportContext context;
+    private CsvImportContext context;
     private String entityType;
     private Class entityTypeClass;
 
@@ -107,7 +106,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
     /** {@inheritDoc} */
     @Override
-    public ImportContext getContext() {
+    public CsvImportContext getContext() {
         if (context == null) {
             context = new CsvImportContextImpl();
         }
@@ -117,7 +116,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * @param context import context
      */
-    public void setContext(final ImportContext context) {
+    public void setContext(final CsvImportContext context) {
         this.context = context;
     }
 
@@ -192,7 +191,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         this.deleteSql = deleteSql;
     }
 
-    ImportColumn getPrimaryKeyColumn() {
+    CsvImportColumn getPrimaryKeyColumn() {
         if (!initialised) {
             this.reloadMappings();
         }
@@ -221,21 +220,21 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
      * {@inheritDoc}
      */
     @Override
-    public Collection<ImportColumn> getColumns() {
+    public Collection<CsvImportColumn> getColumns() {
         if (!initialised) {
             this.reloadMappings();
         }
         if (columns == null) {
             return Collections.emptyList();
         }
-        return Collections.unmodifiableCollection((Collection) columns);
+        return Collections.unmodifiableCollection(columns);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ImportColumn getColumn(final String columnName) {
+    public CsvImportColumn getColumn(final String columnName) {
         if (!initialised) {
             this.reloadMappings();
         }
@@ -246,11 +245,11 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
      * {@inheritDoc}
      */
     @Override
-    public Collection<ImportColumn> getColumns(String fieldType) {
+    public Collection<CsvImportColumn> getColumns(String fieldType) {
         if (!initialised) {
             this.reloadMappings();
         }
-        final Collection<ImportColumn> cols = columnsByType.get(fieldType);
+        final Collection<CsvImportColumn> cols = columnsByType.get(fieldType);
         if (cols == null) {
             return Collections.emptyList();
         }
@@ -295,9 +294,9 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
         for (CsvImportColumn importColumn : columns) {
             importColumn.setParentDescriptor(this);
-            final List<ImportColumn> byType = columnsByType.computeIfAbsent(importColumn.getFieldType(), k -> new ArrayList<>());
+            final List<CsvImportColumn> byType = columnsByType.computeIfAbsent(importColumn.getFieldType(), k -> new ArrayList<>());
             byType.add(importColumn);
-            if (pkColumn == null && importColumn.getLookupQuery() != null && ImpExColumn.FIELD.equals(importColumn.getFieldType())) {
+            if (pkColumn == null && importColumn.getLookupQuery() != null && CsvImpExColumn.FIELD.equals(importColumn.getFieldType())) {
                 pkColumn = importColumn;
             }
             if (importColumn.getName() != null && importColumn.getName().length() > 0) {

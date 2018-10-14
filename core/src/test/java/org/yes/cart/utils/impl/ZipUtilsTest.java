@@ -38,7 +38,7 @@ public class ZipUtilsTest {
 
 
         (new ZipUtils("Cp866")).unzipArchive(
-                "src/test/resources/import/archive/testfile.zip",
+                "src/test/resources/archive/testfile.zip",
                 "target/test-classes/import/archive"
         );
 

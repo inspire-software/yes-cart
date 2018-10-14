@@ -23,7 +23,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.yes.cart.bulkcommon.service.ExportService;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.image.ImageExportDomainObjectStrategy;
-import org.yes.cart.bulkimport.service.impl.AbstractExportService;
+import org.yes.cart.bulkexport.service.impl.AbstractExportService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;

@@ -20,10 +20,9 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
+import org.yes.cart.bulkexport.csv.CsvExportContext;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.csv.CsvExportFile;
-import org.yes.cart.bulkexport.model.ExportColumn;
-import org.yes.cart.bulkexport.model.ExportContext;
 
 import java.io.Serializable;
 import java.util.*;
@@ -41,10 +40,10 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
 
     private Collection<CsvExportColumn> columns;
 
-    private Map<String, ExportColumn> columnByName;
-    private Map<String, List<ExportColumn>> columnsByType;
+    private Map<String, CsvExportColumn> columnByName;
+    private Map<String, List<CsvExportColumn>> columnsByType;
 
-    private ExportContext context;
+    private CsvExportContext context;
     private String entityType;
     private Class entityTypeClass;
 
@@ -63,7 +62,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
 
     /** {@inheritDoc} */
     @Override
-    public ExportContext getContext() {
+    public CsvExportContext getContext() {
         if (context == null) {
             context = new CsvExportContextImpl();
         }
@@ -73,7 +72,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     /**
      * @param context import context
      */
-    public void setContext(final ExportContext context) {
+    public void setContext(final CsvExportContext context) {
         this.context = context;
     }
 
@@ -144,7 +143,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
      * {@inheritDoc}
      */
     @Override
-    public Collection<ExportColumn> getColumns() {
+    public Collection<CsvExportColumn> getColumns() {
         if (!initialised) {
             this.reloadMappings();
         }
@@ -158,7 +157,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
      * {@inheritDoc}
      */
     @Override
-    public ExportColumn getColumn(final String columnName) {
+    public CsvExportColumn getColumn(final String columnName) {
         if (!initialised) {
             this.reloadMappings();
         }
@@ -169,11 +168,11 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
      * {@inheritDoc}
      */
     @Override
-    public Collection<ExportColumn> getColumns(String fieldType) {
+    public Collection<CsvExportColumn> getColumns(String fieldType) {
         if (!initialised) {
             this.reloadMappings();
         }
-        final Collection<ExportColumn> cols = columnsByType.get(fieldType);
+        final Collection<CsvExportColumn> cols = columnsByType.get(fieldType);
         if (cols == null) {
             return Collections.emptyList();
         }
@@ -198,7 +197,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
 
         for (CsvExportColumn exportColumn : columns) {
             exportColumn.setParentDescriptor(this);
-            final List<ExportColumn> byType = columnsByType.computeIfAbsent(exportColumn.getFieldType(), k -> new ArrayList<>());
+            final List<CsvExportColumn> byType = columnsByType.computeIfAbsent(exportColumn.getFieldType(), k -> new ArrayList<>());
             byType.add(exportColumn);
             if (exportColumn.getName() != null && exportColumn.getName().length() > 0) {
                 columnByName.put(exportColumn.getName(), exportColumn);

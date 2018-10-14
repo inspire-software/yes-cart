@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ########################################## bulk export ########################## -->
+
+    <bean id="customerOrderPaymentImpexFederationFilter" class="org.yes.cart.service.federation.impl.CustomerOrderPaymentImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="impexPaymentFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment"       value-ref="customerOrderPaymentImpexFederationFilter"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="paymentGenericDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>java.lang.Object</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="paySessionFactory"/>
+    </bean>
+
+
+    <bean id="csvBulkPaymentExportService" parent="txPayProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkexport.csv.impl.CsvBulkExportServiceImpl" scope="prototype">
+                <constructor-arg index="0" ref="impexPaymentFederationFacade"/>
+                <property name="genericDAO" ref="paymentGenericDao"/>
+                <property name="columnLookUpQueryParameterStrategy" ref="exportCsvColumnLookUpQueryStrategy"/>
+                <property name="valueDataAdapter" ref="exportCsvExportValueAdapter"/>
+                <property name="valueLanguageAdapter" ref="exportCsvLanguageValueAdapter"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="bulkExportServiceBeanMapExtPayment" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg ref="bulkExportServiceBeanMap">
+        </constructor-arg>
+        <property name="extension">
+            <map>
+                <entry key="CSV-org.yes.cart.payment.persistence.entity.CustomerOrderPayment" value="csvBulkPaymentExportService"/>
+            </map>
+        </property>
+    </bean>
+    
+    <!-- ########################################## order export ########################## -->
+
+    <bean id="emailNotificationOrderExporter" class="org.yes.cart.orderexport.mail.EmailNotificationOrderExporterImpl">
+        <constructor-arg ref="aspectExecutor"/>
+        <constructor-arg index="1" type="org.yes.cart.service.theme.ThemeService" ref="themeService"/>
+        <constructor-arg index="2" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
+        <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="6" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
+        <constructor-arg index="7">
+            <map>
+                <!--
+                    There are 3 mappings: in progress is normal flow, partially shipped and completed are for orders
+                    containing electronic delivery
+                 -->
+                <entry key="os.in.progress"         value="sup-order-new"/>
+                <entry key="os.partially.shipped"   value="sup-order-new"/>
+                <entry key="os.completed"           value="sup-order-new"/>
+            </map>
+        </constructor-arg>
+        <property name="orderAutoExportListener" ref="orderAutoExportProcessorInternal"/>
+        <property name="exporterId" value="EMAIL"/>
+        <property name="priority" value="100"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="fulfilment"/>
+                <property name="name" value="emailNotificationOrderExporter"/>
+                <property name="cfgInterface" value="OrderExporter"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="priority">100</prop>
+                        <prop key="exporterId">EMAIL</prop>
+                        <prop key="extension">Exporter is triggered by setting SHOP[ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS]</prop>
+                        <prop key="description">E-mail notification to supplier exporter, sends email to specific fulfilment centre using specified template once the order is confirmed</prop>
+                        <prop key="template">[os.in.progress=sup-order-new,os.partially.shipped=sup-order-new,os.completed=sup-order-new]</prop>
+                        <prop key="SHOP[ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS]">FFCODE.EXPORT_ELIGIBILITY=emails, where FFCODE is fulfilment centre code, EXPORT_ELIGIBILITY is export eligibility (usually INITPAID) and emails is CSV of emails to send notification to. E.g. Main.INITPAID=email1@domain.com,email2@domain.com</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="manualStateOrderExporter" class="org.yes.cart.orderexport.manual.ManualStateOrderExporterImpl">
+        <constructor-arg index="0" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <property name="orderAutoExportListener" ref="orderAutoExportProcessorInternal"/>
+        <property name="exporterId" value="MANUALSTATE"/>
+        <property name="priority" value="10"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="fulfilment"/>
+                <property name="name" value="manualStateOrderExporter"/>
+                <property name="cfgInterface" value="OrderExporter"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="priority">10</prop>
+                        <prop key="exporterId">MANUALSTATE</prop>
+                        <prop key="extension">Exporter is triggered by setting SHOP[ORDER_EXPORTER_MANUAL_STATE_PROXY]</prop>
+                        <prop key="description">Proxy exporter to transition from one eligibility state to another and optionally block the flow thus transfering the order export to manual mode</prop>
+                        <prop key="SHOP[ORDER_EXPORTER_MANUAL_STATE_PROXY]">EXPORT_ELIGIBILITY=NEXT|(BLOCK/UNBLOCK), where EXPORT_ELIGIBILITY is export eligibility (usually INITPAID), NEXT is name for target eligibility BLOCK/UNBLOCK is to set/unset manual flag to. E.g. INITPAID=EMAILNOTIFY|BLOCK</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="jam"/>
+        <property name="subName" value="manager-export-ext"/>
+    </bean>
+
+</beans>
+        

@@ -23,7 +23,30 @@ package org.yes.cart.domain.entity;
  */
 public interface DataDescriptor extends Auditable {
 
+    /**
+     * @deprecated use TYPE_WEBINF_XML_CSV instead
+     */
+    @Deprecated
     String TYPE_WEBINF_XML = "WEBINF_XML";
+
+    /**
+     * @deprecated use TYPE_RAWINF_XML_CSV instead
+     */
+    @Deprecated
+    String TYPE_RAWINF_XML = "RAWINF_XML";
+
+    // WebInf XML descriptor for CSV service
+    String TYPE_WEBINF_XML_CSV = "WEBINF_XML/CSV";
+
+    // Raw XML descriptor for CSV service (YCE)
+    String TYPE_RAW_XML_CSV = "RAWINF_XML/CSV";
+
+    // WebInf XML descriptor for XML service
+    String TYPE_WEBINF_XML_XML = "WEBINF_XML/XML";
+
+    // Raw XML descriptor for XML service (YCE)
+    String TYPE_RAW_XML_XML = "RAWINF_XML/XML";
+
 
     /**
      * Get data descriptor pk.

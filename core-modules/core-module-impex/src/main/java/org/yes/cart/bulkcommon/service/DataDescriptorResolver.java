@@ -58,6 +58,6 @@ public interface DataDescriptorResolver<T> {
      *
      * @param tuplizer tuplizer
      */
-    void register(DataDescriptorTuplizer<T> tuplizer);
+    void register(DataDescriptorReader<T> tuplizer);
 
 }

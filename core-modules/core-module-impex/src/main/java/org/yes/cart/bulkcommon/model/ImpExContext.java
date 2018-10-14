@@ -24,17 +24,17 @@ package org.yes.cart.bulkcommon.model;
 public interface ImpExContext {
 
     /**
+     * Type of service for given descriptor.
+     *
+     * @return import/export service (e.g. CSV, XML, JSON)
+     */
+    String getImpExService();
+
+    /**
      * Get shop context or null if no specific shop is defined.
      *
      * @return shop code
      */
     String getShopCode();
-
-    /**
-     * Get shop context column name (dynamic lookup).
-     *
-     * @return name of column that holds shop code
-     */
-    String getShopCodeColumn();
 
 }

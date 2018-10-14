@@ -105,7 +105,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         CsvFileReader csvFileReader = new CsvFileReaderImpl();
 
         csvFileReader.open(
-                "src/test/resources/import/brandnames.csv",
+                "src/test/resources/import/csv/brandnames.csv",
                 ';',
                 '"',
                 "UTF-8",
@@ -126,7 +126,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     private JobContext createContext(final String descriptorPath, final JobStatusListener listener, final Set<String> importFileSet) throws Exception {
 
         final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File(descriptorPath)));
-        descriptor.setImportDirectory(new File("src/test/resources/import").getAbsolutePath());
+        descriptor.setImportDirectory(new File("src/test/resources/import/csv").getAbsolutePath());
 
         return new JobContextImpl(false, listener, new HashMap<String, Object>() {{
             put(JobContextKeys.IMPORT_DESCRIPTOR, descriptor);
@@ -159,7 +159,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             long dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/brandnames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/brandnames.xml", listener, importedFilesSet));
 
             final long brandMillis = System.currentTimeMillis() - dt;
             System.out.println("  12 brands in " + brandMillis + "millis (~" + (brandMillis / 12) + " per item)");
@@ -183,7 +183,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             long cntBeforeAttrGroups = rs.getLong("cnt");
             rs.close();
 
-            bulkImportService.doImport(createContext("src/test/resources/import/attributegroupnames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/attributegroupnames.xml", listener, importedFilesSet));
             final long attrGroups = System.currentTimeMillis() - dt;
             System.out.println("   3 attribute groups in " + attrGroups + "millis (~" + (attrGroups / 3) + " per item)");
 
@@ -211,7 +211,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/attributenames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/attributenames.xml", listener, importedFilesSet));
             final long attrs = System.currentTimeMillis() - dt;
             System.out.println("1312 attributes  in " + attrs + "millis (~" + (attrs / 1312) + " per item)");
 
@@ -254,7 +254,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/producttypenames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/producttypenames.xml", listener, importedFilesSet));
             final long prodTypes = System.currentTimeMillis() - dt;
             System.out.println("  12 product types in " + prodTypes + "millis (~" + (prodTypes / 12) + " per item)");
 
@@ -275,7 +275,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/categorynames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/categorynames.xml", listener, importedFilesSet));
             final long cats = System.currentTimeMillis() - dt;
             System.out.println("  14 categories in " + cats + "millis (~" + (cats / 14) + " per item)");
 
@@ -322,7 +322,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(catWirelessId, parentOpticalId);
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/contentnames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/contentnames.xml", listener, importedFilesSet));
             final long cont = System.currentTimeMillis() - dt;
             System.out.println("   2 content in " + cont + "millis (~" + (cont / 2) + " per item)");
 
@@ -379,7 +379,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/shopcategory.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/shopcategory.xml", listener, importedFilesSet));
             final long shopCats = System.currentTimeMillis() - dt;
             System.out.println("  12 shop categories in " + shopCats + "millis (~" + (shopCats / 12) + " per item)");
 
@@ -396,7 +396,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/productypeattributeviewgroupnames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/productypeattributeviewgroupnames.xml", listener, importedFilesSet));
 
             final long prodTypeAttrGroups = System.currentTimeMillis() - dt;
             System.out.println(" 179 product type attribute view groups in " + prodTypeAttrGroups + "millis (~" + (prodTypeAttrGroups / 179) + " per item)");
@@ -427,7 +427,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/producttypeattrnames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/producttypeattrnames.xml", listener, importedFilesSet));
             final long prodTypeAttr = System.currentTimeMillis() - dt;
             System.out.println("1312 product type attributes in " + prodTypeAttr + "millis (~" + (prodTypeAttr / 1312) + " per item)");
 
@@ -459,7 +459,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/productnames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/productnames.xml", listener, importedFilesSet));
             final long prods = System.currentTimeMillis() - dt;
             System.out.println("  60 products in " + prods + "millis (~" + (prods / 60) + " per item)");
 
@@ -487,7 +487,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/productsku.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/productsku.xml", listener, importedFilesSet));
             final long skus = System.currentTimeMillis() - dt;
             System.out.println("  60 product sku's in " + skus + "millis (~" + (skus / 60) + " per item)");
 
@@ -521,7 +521,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/productsattributes.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/productsattributes.xml", listener, importedFilesSet));
             final long prodAttrs = System.currentTimeMillis() - dt;
             System.out.println("3286 products' attributes in " + prodAttrs + "millis (~" + (prodAttrs / 3286) + " per item)");
 
@@ -545,7 +545,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/productsattributes.delete.native.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/productsattributes.delete.native.xml", listener, importedFilesSet));
             final long prodAttrsDelNative = System.currentTimeMillis() - dt;
             System.out.println(" -20 products' attributes in " + prodAttrsDelNative + "millis (~" + (prodAttrsDelNative / 20) + " per item) native");
 
@@ -557,7 +557,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/productsattributes.delete.hbm.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/productsattributes.delete.hbm.xml", listener, importedFilesSet));
             final long prodAttrsDelHbm = System.currentTimeMillis() - dt;
             System.out.println(" -20 products' attributes in " + prodAttrsDelHbm + "millis (~" + (prodAttrsDelHbm / 20) + " per item) hbm");
 
@@ -569,7 +569,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/productsattributes.delete.native.all.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/productsattributes.delete.native.all.xml", listener, importedFilesSet));
             final long prodAttrsDelNativeAll = System.currentTimeMillis() - dt;
             System.out.println(" -25 products' attributes in " + prodAttrsDelNativeAll + "millis (~" + (prodAttrsDelNativeAll / 25) + " per item) native all");
 
@@ -588,7 +588,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/warehouse.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/warehouse.xml", listener, importedFilesSet));
             System.out.println("   1 warehouse in " + (System.currentTimeMillis() - dt) + "millis");
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TWAREHOUSE  ");
@@ -604,7 +604,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/skuinventory.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/skuinventory.xml", listener, importedFilesSet));
             final long skuInv = System.currentTimeMillis() - dt;
             System.out.println("  60 sku inventory records in " + skuInv + "millis (~" + (skuInv / 60) + " per item)");
 
@@ -622,7 +622,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/skuprices.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/skuprices.xml", listener, importedFilesSet));
             final long skuPrice = System.currentTimeMillis() - dt;
             System.out.println(" 180 sku price records in " + skuPrice + "millis (~" + (skuPrice / 180) + " per item)");
 
@@ -639,7 +639,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/productcategorynames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/productcategorynames.xml", listener, importedFilesSet));
             final long prodCats = System.currentTimeMillis() - dt;
             System.out.println("  60 product categories in " + prodCats + "millis (~" + (prodCats / 60) + " per item)");
 
@@ -656,7 +656,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/promotionnames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/promotionnames.xml", listener, importedFilesSet));
             final long promos = System.currentTimeMillis() - dt;
             System.out.println("   9 promotions in " + promos + "millis (~" + (promos / 9) + " per item)");
 
@@ -672,7 +672,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/promotioncouponnames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/promotioncouponnames.xml", listener, importedFilesSet));
             final long promocoupons = System.currentTimeMillis() - dt;
             System.out.println("   3 promotion coupons in " + promocoupons + "millis (~" + (promocoupons / 3) + " per item)");
 
@@ -690,7 +690,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/taxnames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/taxnames.xml", listener, importedFilesSet));
             final long taxes = System.currentTimeMillis() - dt;
             System.out.println("   2 tax entries in " + taxes + "millis (~" + (taxes / 2) + " per item)");
 
@@ -707,7 +707,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/taxconfignames.xml", listener, importedFilesSet));
+            bulkImportService.doImport(createContext("src/test/resources/import/csv/taxconfignames.xml", listener, importedFilesSet));
             final long taxConfigs = System.currentTimeMillis() - dt;
             System.out.println("   5 tax configs in " + taxConfigs + "millis (~" + (taxConfigs / 5) + " per item)");
 
@@ -850,9 +850,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         Set<String> importedFilesSet = new HashSet<>();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/carriernames.xml", listenerCarrier, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/carriernames.xml", listenerCarrier, importedFilesSet));
 
-        bulkImportService.doImport(createContext("src/test/resources/import/carrierslanames.xml", listenerCarrierSla, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/carrierslanames.xml", listenerCarrierSla, importedFilesSet));
 
         dumpDataBase("impex_fk", "TCARRIER", "TCARRIERSLA");
 
@@ -899,7 +899,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         Set<String> importedFilesSet = new HashSet<>();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/shop.xml", listener, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/shop.xml", listener, importedFilesSet));
 
         try {
             ResultSet rs;
@@ -945,7 +945,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         Set<String> importedFilesSet = new HashSet<>();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/conversiontest001.xml", listener, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/conversiontest001.xml", listener, importedFilesSet));
 
         try {
             ResultSet rs;
@@ -995,7 +995,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         Set<String> importedFilesSet = new HashSet<>();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/insertonlytest001a.xml", listener, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/insertonlytest001a.xml", listener, importedFilesSet));
 
         long version = 0;
 
@@ -1031,7 +1031,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         importedFilesSet.clear();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/insertonlytest001b.xml", listener, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/insertonlytest001b.xml", listener, importedFilesSet));
 
         try {
             ResultSet rs;
@@ -1085,7 +1085,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         Set<String> importedFilesSet = new HashSet<>();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/skipfktest001a.xml", listener, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/skipfktest001a.xml", listener, importedFilesSet));
 
         try {
             ResultSet rs;
@@ -1131,7 +1131,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         Set<String> importedFilesSet = new HashSet<>();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/skipnochangetest001a.xml", listener1, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/skipnochangetest001a.xml", listener1, importedFilesSet));
 
         long version = 0;
 
@@ -1154,7 +1154,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         importedFilesSet.clear();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/skipnochangetest001a.xml", listener2, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/skipnochangetest001a.xml", listener2, importedFilesSet));
 
         try {
             ResultSet rs;
@@ -1203,7 +1203,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         Set<String> importedFilesSet = new HashSet<>();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/modeinsertonly001a.xml", listener1, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/modeinsertonly001a.xml", listener1, importedFilesSet));
 
         try {
             ResultSet rs;
@@ -1223,7 +1223,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         importedFilesSet.clear();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/modeinsertonly001b.xml", listener2, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/modeinsertonly001b.xml", listener2, importedFilesSet));
 
         try {
             ResultSet rs;
@@ -1276,7 +1276,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         Set<String> importedFilesSet = new HashSet<>();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/modeupdateonly001a.xml", listener1, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/modeupdateonly001a.xml", listener1, importedFilesSet));
 
         try {
             ResultSet rs;
@@ -1295,7 +1295,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         importedFilesSet.clear();
 
-        bulkImportService.doImport(createContext("src/test/resources/import/modeupdateonly001b.xml", listener2, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/modeupdateonly001b.xml", listener2, importedFilesSet));
 
         try {
             ResultSet rs;
@@ -1317,7 +1317,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         importedFilesSet.clear();
 
 
-        bulkImportService.doImport(createContext("src/test/resources/import/modeupdateonly001c.xml", listener3, importedFilesSet));
+        bulkImportService.doImport(createContext("src/test/resources/import/csv/modeupdateonly001c.xml", listener3, importedFilesSet));
 
         try {
             ResultSet rs;

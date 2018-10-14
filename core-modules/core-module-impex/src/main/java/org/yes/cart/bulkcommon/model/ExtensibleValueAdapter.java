@@ -16,6 +16,8 @@
 
 package org.yes.cart.bulkcommon.model;
 
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
+
 /**
  * User: denispavlov
  * Date: 30/11/2015

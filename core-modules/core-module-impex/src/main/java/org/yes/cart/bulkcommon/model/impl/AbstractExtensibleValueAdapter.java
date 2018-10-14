@@ -16,8 +16,8 @@
 
 package org.yes.cart.bulkcommon.model.impl;
 
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
 import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
 
 import java.util.HashMap;
 import java.util.Map;

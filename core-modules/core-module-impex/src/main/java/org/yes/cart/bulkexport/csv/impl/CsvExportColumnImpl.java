@@ -17,13 +17,13 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
+import org.yes.cart.bulkexport.csv.CsvExportTuple;
 import org.yes.cart.bulkexport.model.ExportDescriptor;
-import org.yes.cart.bulkexport.model.ExportTuple;
 
 import java.io.Serializable;
 import java.util.regex.Matcher;
@@ -120,12 +120,12 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public String getValue(final Object rawValue, final ValueAdapter adapter, final ExportTuple tuple) {
+    public String getValue(final Object rawValue, final ValueAdapter adapter, final CsvExportTuple tuple) {
         if (getValueConstant() != null) {
             return getValueConstant();
         } else if (rawValue != null) {
 
-            final String strValue = (String) adapter.fromRaw(rawValue, ImpExColumn.STRING, this, tuple);
+            final String strValue = (String) adapter.fromRaw(rawValue, CsvImpExColumn.STRING, this, tuple);
 
             if (strValue != null) {
                 if (getPattern() != null) {
@@ -156,8 +156,8 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public Object getValue(final Object rawValue, final ValueAdapter adapter, final ImpExTuple tuple) {
-        return getValue(rawValue, adapter, (ExportTuple) tuple);
+    public Object getValue(final Object rawValue, final ValueAdapter adapter, final CsvImpExTuple tuple) {
+        return getValue(rawValue, adapter, (CsvExportTuple) tuple);
     }
 
 

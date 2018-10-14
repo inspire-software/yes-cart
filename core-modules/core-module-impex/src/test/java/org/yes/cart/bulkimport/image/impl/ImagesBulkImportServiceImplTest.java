@@ -118,8 +118,8 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
                     final XStreamProvider<ImportDescriptor> xml =
                             createContext().getBean("importDescriptorXStreamProvider", XStreamProvider.class);
-                    final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/productimages.xml")));
-                    descriptor.setImportDirectory(new File("src/test/resources/import/").getAbsolutePath());
+                    final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/img/productimages.xml")));
+                    descriptor.setImportDirectory(new File("src/test/resources/import/img/").getAbsolutePath());
 
                     final JobContext context = mockery.mock(JobContext.class, "context");
                     final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
@@ -132,7 +132,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                         allowing(context).getAttribute(JobContextKeys.IMPORT_FILE_SET);
                         will(returnValue(imported));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_FILE);
-                        will(returnValue(new File("src/test/resources/import/im-image-file_SOBOT-BEER_c.jpeg").getAbsolutePath()));
+                        will(returnValue(new File("src/test/resources/import/img/im-image-file_SOBOT-BEER_c.jpeg").getAbsolutePath()));
                         allowing(context).getAttribute(JobContextKeys.IMAGE_VAULT_PATH);
                         will(returnValue("file:" + File.separator + File.separator + "target" + File.separator));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_NAME);
@@ -197,8 +197,8 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
                     final XStreamProvider<ImportDescriptor> xml =
                             createContext().getBean("importDescriptorXStreamProvider", XStreamProvider.class);
-                    final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/productimages.xml")));
-                    descriptor.setImportDirectory(new File("src/test/resources/import/").getAbsolutePath());
+                    final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/img/productimages.xml")));
+                    descriptor.setImportDirectory(new File("src/test/resources/import/img/").getAbsolutePath());
 
                     final JobContext context = mockery.mock(JobContext.class, "context");
                     final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
@@ -208,7 +208,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     mockery.checking(new Expectations() {{
                         allowing(context).getListener(); will(returnValue(listener));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_FILE_SET); will(returnValue(imported));
-                        allowing(context).getAttribute(JobContextKeys.IMPORT_FILE); will(returnValue(new File("src/test/resources/import/im-image-file_BENDER_c.jpeg").getAbsolutePath()));
+                        allowing(context).getAttribute(JobContextKeys.IMPORT_FILE); will(returnValue(new File("src/test/resources/import/img/im-image-file_BENDER_c.jpeg").getAbsolutePath()));
                         allowing(context).getAttribute(JobContextKeys.IMAGE_VAULT_PATH); will(returnValue("file:" + File.separator + File.separator + "target" + File.separator));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_NAME); will(returnValue("productimages.xml"));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR); will(returnValue(descriptor));
@@ -270,8 +270,8 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
                     final XStreamProvider<ImportDescriptor> xml =
                             createContext().getBean("importDescriptorXStreamProvider", XStreamProvider.class);
-                    final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/productimages_simple.xml")));
-                    descriptor.setImportDirectory(new File("src/test/resources/import/").getAbsolutePath());
+                    final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/img/productimages_simple.xml")));
+                    descriptor.setImportDirectory(new File("src/test/resources/import/img/").getAbsolutePath());
 
                     final JobContext context = mockery.mock(JobContext.class, "context");
                     final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
@@ -281,7 +281,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     mockery.checking(new Expectations() {{
                         allowing(context).getListener(); will(returnValue(listener));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_FILE_SET); will(returnValue(imported));
-                        allowing(context).getAttribute(JobContextKeys.IMPORT_FILE); will(returnValue(new File("src/test/resources/import/BENDER.jpeg").getAbsolutePath()));
+                        allowing(context).getAttribute(JobContextKeys.IMPORT_FILE); will(returnValue(new File("src/test/resources/import/img/BENDER.jpeg").getAbsolutePath()));
                         allowing(context).getAttribute(JobContextKeys.IMAGE_VAULT_PATH); will(returnValue("file:" + File.separator + File.separator + "target" + File.separator));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_NAME); will(returnValue("productimages_simple.xml"));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR); will(returnValue(descriptor));

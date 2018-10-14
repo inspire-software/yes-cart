@@ -16,7 +16,10 @@
 
 package org.yes.cart.bulkimport.csv;
 
+import org.yes.cart.bulkcommon.csv.CsvImpExDescriptor;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
+
+import java.util.Collection;
 
 /**
  * Csv Import descriptor.
@@ -25,8 +28,24 @@ import org.yes.cart.bulkimport.model.ImportDescriptor;
  * Date: 11/27/11
  * Time: 11:49 AM
  */
-public interface CsvImportDescriptor extends ImportDescriptor {
+public interface CsvImportDescriptor
+        extends ImportDescriptor<CsvImportContext>, CsvImpExDescriptor<CsvImportContext, CsvImportColumn> {
 
+    enum ImportMode { MERGE, DELETE, INSERT_ONLY, UPDATE_ONLY }
+
+    /**
+     * Get import mode for given descriptor.
+     *
+     * @return import mode
+     */
+    ImportMode getMode();
+
+    /**
+     * Get import mode for given descriptor.
+     *
+     * @return import mode
+     */
+    String getModeName();
 
     /**
      * Get the import file description.
@@ -35,5 +54,29 @@ public interface CsvImportDescriptor extends ImportDescriptor {
      */
     @Override
     CsvImportFile getImportFileDescriptor();
+
+
+    /**
+     * Get the collection of export columns.
+     *
+     * @return collection of export columns
+     */
+    Collection<CsvImportColumn> getColumns();
+
+
+    /**
+     * @param columnName column name
+     * @return get column by name
+     */
+    CsvImportColumn getColumn(String columnName);
+
+    /**
+     * Get the collection of export columns filtered by given field type.
+     *
+     * @param fieldType Field type constant discriminator.
+     * @return collection of export columns
+     */
+    Collection<CsvImportColumn> getColumns(String fieldType);
+
 
 }

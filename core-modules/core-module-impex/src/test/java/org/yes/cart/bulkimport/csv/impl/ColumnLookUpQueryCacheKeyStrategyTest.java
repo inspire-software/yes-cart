@@ -20,13 +20,13 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
-import org.yes.cart.bulkcommon.service.support.LookUpQuery;
-import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategy;
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.service.support.csv.LookUpQuery;
+import org.yes.cart.bulkcommon.service.support.csv.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
-import org.yes.cart.bulkimport.model.ImportTuple;
-import org.yes.cart.bulkimport.service.support.EntityCacheKeyStrategy;
+import org.yes.cart.bulkimport.csv.CsvImportTuple;
+import org.yes.cart.bulkimport.service.support.csv.EntityCacheKeyStrategy;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Identifiable;
 
@@ -50,7 +50,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
         final Identifiable master = mockery.mock(Identifiable.class, "master");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
-        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final CsvImportTuple tuple = mockery.mock(CsvImportTuple.class, "tuple");
         final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
 
         mockery.checking(new Expectations() {{
@@ -81,7 +81,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
-        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final CsvImportTuple tuple = mockery.mock(CsvImportTuple.class, "tuple");
         final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
 
         mockery.checking(new Expectations() {{
@@ -111,7 +111,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
-        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final CsvImportTuple tuple = mockery.mock(CsvImportTuple.class, "tuple");
         final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
 
 
@@ -142,7 +142,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
-        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final CsvImportTuple tuple = mockery.mock(CsvImportTuple.class, "tuple");
         final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
 
 

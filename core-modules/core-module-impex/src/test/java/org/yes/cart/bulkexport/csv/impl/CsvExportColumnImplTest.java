@@ -17,7 +17,7 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.junit.Test;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
 
 import java.util.Map;
 import java.util.Properties;

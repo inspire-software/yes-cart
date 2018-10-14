@@ -17,10 +17,10 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
 import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.domain.entity.AttrValue;
 
 import java.util.Collection;
@@ -37,8 +37,8 @@ public class CsvAttributeValueByCodeValueAdapterImpl implements ValueAdapter {
      * {@inheritDoc}
      */
     @Override
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
-        final String code = impExColumn.getContext();
+    public Object fromRaw(final Object rawValue, final String requiredType, final CsvImpExColumn csvImpExColumn, final CsvImpExTuple tuple) {
+        final String code = csvImpExColumn.getContext();
         final Collection<AttrValue> values = (Collection<AttrValue>) rawValue;
         if (CollectionUtils.isNotEmpty(values)) {
             for (final AttrValue av : values) {

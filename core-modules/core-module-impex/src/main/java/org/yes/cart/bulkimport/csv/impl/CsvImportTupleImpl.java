@@ -16,13 +16,11 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
-import org.yes.cart.bulkimport.model.ImportColumn;
-import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.model.ImportTuple;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +59,7 @@ public class CsvImportTupleImpl implements CsvImportTuple {
 
     /** {@inheritDoc} */
     @Override
-    public Object getColumnValue(final ImportColumn column, final ValueAdapter valueAdapter) {
+    public Object getColumnValue(final CsvImportColumn column, final ValueAdapter valueAdapter) {
         final int colIndex = column.getColumnIndex();
         String rawValue = null;
         if (colIndex > -1 && line != null && colIndex < line.length) {
@@ -73,20 +71,22 @@ public class CsvImportTupleImpl implements CsvImportTuple {
         return column.getValue(rawValue, valueAdapter, this);
     }
 
+
+
     /** {@inheritDoc} */
     @Override
-    public List<ImportTuple<String, String[]>> getSubTuples(final ImportDescriptor importDescriptor, final ImportColumn column, final ValueAdapter valueAdapter) {
-        if (ImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType())) {
+    public List<CsvImportTuple> getSubTuples(final CsvImportDescriptor importDescriptor, final CsvImportColumn column, final ValueAdapter valueAdapter) {
+        if (CsvImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType())) {
             final String rawValue = (String) getColumnValue(column, SUB_TUPLE);
             final String[] rows = rawValue.split(",");
-            final List<ImportTuple<String, String[]>> subTuples = new ArrayList<>(rows.length);
+            final List<CsvImportTuple> subTuples = new ArrayList<>(rows.length);
             int subLine = 0;
             for (String row : rows) {
                 subTuples.add(new CsvImportTupleImpl(filename + ":" + lineNumber + ":" + column.getName(), subLine++,
                         row.split(String.valueOf(((CsvImportDescriptor) importDescriptor).getImportFileDescriptor().getColumnDelimiter()))));
             }
             return subTuples;
-        } else if (ImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
+        } else if (CsvImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
             return (List) Collections.singletonList(this);
         }
         return Collections.emptyList();

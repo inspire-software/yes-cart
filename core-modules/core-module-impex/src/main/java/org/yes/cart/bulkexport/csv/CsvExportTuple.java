@@ -16,7 +16,10 @@
 
 package org.yes.cart.bulkexport.csv;
 
-import org.yes.cart.bulkexport.model.ExportTuple;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
+
+import java.util.List;
 
 /**
  * CSV tuple is a line of comma separated columns, with source identifier being
@@ -26,6 +29,8 @@ import org.yes.cart.bulkexport.model.ExportTuple;
  * Date: 12-07-31
  * Time: 8:03 AM
  */
-public interface CsvExportTuple extends ExportTuple<String, Object> {
+public interface CsvExportTuple extends CsvImpExTuple<String, Object, CsvExportDescriptor, CsvExportColumn> {
 
+    @Override
+    List<CsvExportTuple> getSubTuples(CsvExportDescriptor importDescriptor, CsvExportColumn column, ValueAdapter adapter);
 }

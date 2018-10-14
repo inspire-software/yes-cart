@@ -33,7 +33,7 @@ public class ZipByteArrayUtilsTest {
     @Test
     public void fileToZipBytesZip() throws Exception {
 
-        final File zipFile = new File("src/test/resources/import/archive/testfile.zip");
+        final File zipFile = new File("src/test/resources/archive/testfile.zip");
 
         final byte[] zipBytes = ZipByteArrayUtils.fileToZipBytes(zipFile);
 

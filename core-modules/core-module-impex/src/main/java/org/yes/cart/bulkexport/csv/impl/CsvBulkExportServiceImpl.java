@@ -1,19 +1,31 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
 import org.yes.cart.bulkcommon.service.ExportService;
-import org.yes.cart.bulkcommon.service.support.LookUpQuery;
-import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategy;
+import org.yes.cart.bulkcommon.service.support.csv.LookUpQuery;
+import org.yes.cart.bulkcommon.service.support.csv.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkexport.csv.*;
-import org.yes.cart.bulkexport.model.ExportColumn;
-import org.yes.cart.bulkexport.model.ExportDescriptor;
-import org.yes.cart.bulkexport.model.ExportTuple;
-import org.yes.cart.bulkimport.model.ImportColumn;
-import org.yes.cart.bulkimport.service.impl.AbstractExportService;
+import org.yes.cart.bulkexport.service.impl.AbstractExportService;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -142,7 +154,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
             final String filename = fileToExport;
 
             final List<String> headers = new ArrayList<>(csvExportDescriptor.getColumns().size());
-            for (final ExportColumn column : csvExportDescriptor.getColumns()) {
+            for (final CsvExportColumn column : csvExportDescriptor.getColumns()) {
                 headers.add(column.getColumnHeader());
             }
 
@@ -207,7 +219,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
      * This method can be called recursive in case of sub exports.
      */
     String[] doExportTuple(final JobStatusListener statusListener,
-                           final ExportTuple tuple,
+                           final CsvExportTuple tuple,
                            final String csvExportDescriptorName,
                            final CsvExportDescriptor descriptor,
                            final Object masterObject) throws Exception {
@@ -235,9 +247,9 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
 
             final String[] csv = new String[descriptor.getColumns().size()];
             int i = 0;
-            for (final ExportColumn column : descriptor.getColumns()) {
+            for (final CsvExportColumn column : descriptor.getColumns()) {
 
-                if (ImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType()) || ImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
+                if (CsvImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType()) || CsvImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
 
                     final CsvExportFile subDescriptor = ((CsvExportFile) column.getDescriptor().getExportFileDescriptor());
                     final CsvStringWriter subWriter = new CsvStringWriterImpl();
@@ -327,7 +339,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
 
     /**
      * Try to get existing entity for update. In case of sub import master object will be used in parameters if
-     * {@link ImportColumn#isUseMasterObject()} set to true.
+     * {@link CsvExportColumn#isUseMasterObject()} set to true.
      *
      * @param exportDescriptor descriptor
      * @param queryTemplate    template to use with tuple columns as parameter values
@@ -336,10 +348,10 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
      *
      * @return existing entity or null if not found
      */
-    private ResultsIterator<Object> getExistingEntities(final ExportDescriptor exportDescriptor,
+    private ResultsIterator<Object> getExistingEntities(final CsvExportDescriptor exportDescriptor,
                                                         final String queryTemplate,
                                                         final Object masterObject,
-                                                        final ExportTuple tuple) {
+                                                        final CsvExportTuple tuple) {
 
         final LookUpQuery query = columnLookUpQueryParameterStrategy.getQuery(exportDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
         return genericDAO.findByQueryIterator(query.getQueryString(), query.getParameters());

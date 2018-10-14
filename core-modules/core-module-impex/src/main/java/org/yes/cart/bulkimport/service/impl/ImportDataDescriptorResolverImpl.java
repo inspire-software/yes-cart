@@ -19,8 +19,8 @@ package org.yes.cart.bulkimport.service.impl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.bulkcommon.service.DataDescriptorReader;
 import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
-import org.yes.cart.bulkcommon.service.DataDescriptorTuplizer;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.domain.entity.DataGroup;
@@ -44,7 +44,7 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
     private final DataGroupService dataGroupService;
     private final DataDescriptorService dataDescriptorService;
 
-    private final List<DataDescriptorTuplizer<ImportDescriptor>> tuplizers = new ArrayList<>();
+    private final List<DataDescriptorReader<ImportDescriptor>> tuplizers = new ArrayList<>();
 
     public ImportDataDescriptorResolverImpl(final DataGroupService dataGroupService,
                                             final DataDescriptorService dataDescriptorService) {
@@ -61,7 +61,7 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
         final DataDescriptor dataDescriptor = dataDescriptorService.findByName(name);
 
         if (dataDescriptor != null) {
-            for (final DataDescriptorTuplizer<ImportDescriptor> tuplizer : this.tuplizers) {
+            for (final DataDescriptorReader<ImportDescriptor> tuplizer : this.tuplizers) {
 
                 if (tuplizer.supports(dataDescriptor)) {
 
@@ -123,15 +123,15 @@ public class ImportDataDescriptorResolverImpl implements DataDescriptorResolver<
      * {@inheritDoc}
      */
     @Override
-    public void register(final DataDescriptorTuplizer<ImportDescriptor> importDescriptorDataDescriptorTuplizer) {
-        for (final DataDescriptorTuplizer<ImportDescriptor> tuplizer : this.tuplizers) {
-            if (importDescriptorDataDescriptorTuplizer.equals(tuplizer)) {
+    public void register(final DataDescriptorReader<ImportDescriptor> importDescriptorDataDescriptorReader) {
+        for (final DataDescriptorReader<ImportDescriptor> tuplizer : this.tuplizers) {
+            if (importDescriptorDataDescriptorReader.equals(tuplizer)) {
                 return; // already registered
             }
         }
 
-        this.tuplizers.add(importDescriptorDataDescriptorTuplizer);
+        this.tuplizers.add(importDescriptorDataDescriptorReader);
 
-        LOG.info("Registered data import descriptor tuplizer: {}", importDescriptorDataDescriptorTuplizer);
+        LOG.info("Registered data import descriptor tuplizer: {}", importDescriptorDataDescriptorReader);
     }
 }

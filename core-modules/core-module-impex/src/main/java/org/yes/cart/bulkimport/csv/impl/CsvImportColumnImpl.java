@@ -17,12 +17,12 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.ValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
+import org.yes.cart.bulkimport.csv.CsvImportTuple;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.model.ImportTuple;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -126,7 +126,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public List getValues(final String rawValue, final ValueAdapter adapter, final ImportTuple tuple) {
+    public List getValues(final String rawValue, final ValueAdapter adapter, final CsvImportTuple tuple) {
         List result = new ArrayList();
         if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
@@ -144,21 +144,21 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public Object getValue(final Object rawValue, final ValueAdapter adapter, final ImpExTuple tuple) {
+    public Object getValue(final Object rawValue, final ValueAdapter adapter, final CsvImpExTuple tuple) {
         final String value;
         if (rawValue == null) {
             value = null;
         } else {
             value = String.valueOf(rawValue);
         }
-        return getValue(value, adapter, (ImportTuple) tuple);
+        return getValue(value, adapter, tuple);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Object getValue(final String rawValue, final ValueAdapter adapter, final ImportTuple tuple) {
+    public Object getValue(final String rawValue, final ValueAdapter adapter, final CsvImportTuple tuple) {
         if (getValueConstant() != null) {
             return adapter.fromRaw(getValueConstant(), getDataType(), this, tuple);
         } else if (rawValue != null) {
