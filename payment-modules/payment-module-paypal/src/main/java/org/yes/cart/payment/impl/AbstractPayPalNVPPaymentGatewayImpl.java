@@ -66,7 +66,7 @@ public abstract class AbstractPayPalNVPPaymentGatewayImpl extends AbstractPayPal
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment paymentIn) {
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
 
         payment.setTransactionOperation(REFUND);

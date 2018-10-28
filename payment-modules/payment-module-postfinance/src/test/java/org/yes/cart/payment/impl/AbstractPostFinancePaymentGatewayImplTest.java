@@ -50,32 +50,32 @@ public class AbstractPostFinancePaymentGatewayImplTest {
 
         final AbstractPostFinancePaymentGatewayImpl pg = new AbstractPostFinancePaymentGatewayImpl() {
             @Override
-            public Payment authorizeCapture(final Payment payment) {
+            public Payment authorizeCapture(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment authorize(final Payment payment) {
+            public Payment authorize(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment reverseAuthorization(final Payment payment) {
+            public Payment reverseAuthorization(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment capture(final Payment payment) {
+            public Payment capture(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment voidCapture(final Payment payment) {
+            public Payment voidCapture(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment refund(final Payment payment) {
+            public Payment refund(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
@@ -100,7 +100,7 @@ public class AbstractPostFinancePaymentGatewayImplTest {
             }
 
             @Override
-            public Payment createPaymentPrototype(final String operation, final Map map) {
+            public Payment createPaymentPrototype(final String operation, final Map map, final boolean forceProcessing) {
                 return null;
             }
         };
@@ -119,32 +119,32 @@ public class AbstractPostFinancePaymentGatewayImplTest {
 
         final AbstractPostFinancePaymentGatewayImpl pg = new AbstractPostFinancePaymentGatewayImpl() {
             @Override
-            public Payment authorizeCapture(final Payment payment) {
+            public Payment authorizeCapture(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment authorize(final Payment payment) {
+            public Payment authorize(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment reverseAuthorization(final Payment payment) {
+            public Payment reverseAuthorization(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment capture(final Payment payment) {
+            public Payment capture(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment voidCapture(final Payment payment) {
+            public Payment voidCapture(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
             @Override
-            public Payment refund(final Payment payment) {
+            public Payment refund(final Payment payment, final boolean forceProcessing) {
                 return null;
             }
 
@@ -169,7 +169,7 @@ public class AbstractPostFinancePaymentGatewayImplTest {
             }
 
             @Override
-            public Payment createPaymentPrototype(final String operation, final Map map) {
+            public Payment createPaymentPrototype(final String operation, final Map map, final boolean forceProcessing) {
                 return null;
             }
         };

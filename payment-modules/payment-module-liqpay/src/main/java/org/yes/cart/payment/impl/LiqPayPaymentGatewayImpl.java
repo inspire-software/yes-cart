@@ -102,7 +102,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Callback convertToCallback(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters,
+                                      final boolean forceProcessing) {
 
         if (privateCallBackParameters != null) {
 
@@ -134,7 +135,9 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     transaction_id +
                     sender_phone);
 
-            if (signature.equals(validSignature)) {
+            final boolean valid = signature.equals(validSignature);
+
+            if (valid || forceProcessing) {
 
                 BigDecimal callbackAmount = null;
                 try {
@@ -143,12 +146,17 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     LOG.error("Callback for {} did not have a valid amount {}", order_id, amount);
                 }
 
-                LOG.debug("Signature is valid");
+                if (valid) {
+                    LOG.debug("Signature is valid");
+                } else {
+                    LOG.warn("Signature is not valid ... forced processing");
+                }
                 return new BasicCallbackInfoImpl(
                         order_id,
                         CallbackOperation.PAYMENT,
                         callbackAmount,
-                        privateCallBackParameters
+                        privateCallBackParameters,
+                        valid
                 );
             } else {
                 LOG.debug("Signature is not valid");
@@ -160,7 +168,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                 null,
                 CallbackOperation.INVALID,
                 null,
-                privateCallBackParameters
+                privateCallBackParameters,
+                false
         );
 
     }
@@ -169,7 +178,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult,
+                                                                  final boolean forceProcessing) {
 
         String statusRes = null;
 
@@ -201,8 +211,14 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     transaction_id +
                     sender_phone);
 
-            if (validSignature.equals(signature)) {
-                LOG.debug("Signature is valid");
+            final boolean valid = signature.equals(validSignature);
+
+            if (valid || forceProcessing) {
+                if (valid) {
+                    LOG.debug("Signature is valid");
+                } else {
+                    LOG.warn("Signature is not valid ... forced processing");
+                }
                 statusRes = status;
             } else {
                 LOG.debug("Signature is not valid");
@@ -318,7 +334,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment payment) {
+    public Payment authorizeCapture(final Payment payment, final boolean forceProcessing) {
         return payment;
     }
 
@@ -328,7 +344,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * Shipment not included. Will be added at capture operation.
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -342,7 +358,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -356,7 +372,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(final Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -370,7 +386,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -384,7 +400,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment payment) {
+    public Payment refund(final Payment payment, final boolean forceProcessing) {
 
         final LiqPay api = getLiqPayAPI();
 
@@ -409,7 +425,9 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment createPaymentPrototype(final String operation, final Map map) {
+    public Payment createPaymentPrototype(final String operation,
+                                          final Map map,
+                                          final boolean forceProcessing) {
 
         final Payment payment = new PaymentImpl();
         final Map<String, String> singleParamMap = HttpParamsUtils.createSingleValueMap(map);
@@ -422,7 +440,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
         payment.setTransactionReferenceId(singleParamMap.get("transaction_id"));
         payment.setTransactionAuthorizationCode(singleParamMap.get("order_id")); // this is order guid - we need it for refunds
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(singleParamMap);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(singleParamMap, forceProcessing);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

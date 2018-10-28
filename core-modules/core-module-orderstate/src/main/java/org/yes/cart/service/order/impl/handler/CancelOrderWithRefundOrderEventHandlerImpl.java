@@ -95,13 +95,13 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
                 // We need to attempt to cancel first as this may throw an exception, then we should not make any payment refunds
                 creditQuantity(orderEvent.getCustomerOrder());
 
-                final String resultCancel = paymentProcessor.cancelOrder(order, Collections.emptyMap());
+                final String resultCancel = paymentProcessor.cancelOrder(order, isForceProcessing(orderEvent), Collections.emptyMap());
                 if (!Payment.PAYMENT_STATUS_OK.equals(resultCancel)) {
                     orderEvent.getRuntimeParams().put("cancelFailed", Boolean.TRUE);
                 }
             } else {
                 // offline PG should always work
-                final String resultCancel = paymentProcessor.cancelOrder(order, Collections.emptyMap());
+                final String resultCancel = paymentProcessor.cancelOrder(order, isForceProcessing(orderEvent), Collections.emptyMap());
                 if (!Payment.PAYMENT_STATUS_OK.equals(resultCancel)) {
                     return false;
                 }

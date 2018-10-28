@@ -72,7 +72,7 @@ public class ExternalRefundOrderEventHandlerImpl extends AbstractOrderEventHandl
             }
 
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
-                final String state = paymentProcessor.refundNotification(orderEvent.getCustomerOrder(), orderEvent.getParams());
+                final String state = paymentProcessor.refundNotification(orderEvent.getCustomerOrder(), isForceProcessing(orderEvent), orderEvent.getParams());
                 if (Payment.PAYMENT_STATUS_OK.equals(state)) {
                     LOG.info(Markers.alert(), "Received refund notification for order {}", orderEvent.getCustomerOrder().getOrdernum());
                 }

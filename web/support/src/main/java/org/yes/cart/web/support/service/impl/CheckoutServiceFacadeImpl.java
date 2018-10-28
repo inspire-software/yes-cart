@@ -399,6 +399,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             return processor.createPaymentsToAuthorize(
                     order,
                     true,
+                    false,
                     Collections.EMPTY_MAP,
                     PaymentGateway.AUTH
             ).get(0);

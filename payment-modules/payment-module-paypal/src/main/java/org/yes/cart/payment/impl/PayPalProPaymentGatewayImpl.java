@@ -76,7 +76,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         final NvpBuilder npvs = createAuthRequest(payment, "Authorization");
@@ -87,7 +87,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment paymentIn) {
+    public Payment authorizeCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -102,7 +102,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
         final NvpBuilder npvs = new NvpBuilder();
@@ -116,14 +116,14 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
 
-        final Payment reverse = reverseAuthorization(paymentIn);
+        final Payment reverse = reverseAuthorization(paymentIn, forceProcessing);
         if (Payment.PAYMENT_STATUS_OK.equals(reverse.getPaymentProcessorResult())) {
             reverse.setTransactionOperation(VOID_CAPTURE);
             return reverse;
         }
-        final Payment refund = super.refund(paymentIn);
+        final Payment refund = super.refund(paymentIn, forceProcessing);
         refund.setTransactionOperation(VOID_CAPTURE);
         return refund;
     }
@@ -132,13 +132,13 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment paymentIn) {
-        final Payment reverse = reverseAuthorization(paymentIn);
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
+        final Payment reverse = reverseAuthorization(paymentIn, forceProcessing);
         if (Payment.PAYMENT_STATUS_OK.equals(reverse.getPaymentProcessorResult())) {
             reverse.setTransactionOperation(VOID_CAPTURE);
             return reverse;
         }
-        return super.refund(paymentIn);
+        return super.refund(paymentIn, forceProcessing);
     }
 
 
@@ -146,7 +146,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(final Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
         final NvpBuilder npvs = new NvpBuilder();
@@ -352,7 +352,7 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
+    public Payment createPaymentPrototype(final String operation, final Map parametersMap, final boolean forceProcessing) {
 
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);
         final Payment payment = new PaymentImpl();

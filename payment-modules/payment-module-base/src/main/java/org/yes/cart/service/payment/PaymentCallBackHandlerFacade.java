@@ -50,8 +50,10 @@ public interface PaymentCallBackHandlerFacade {
     /**
      * Handle call back from payment gateway
      *
-     * @param callback callback object to handle
+     * @param callback                  callback object to handle
+     * @param forceProcessing           force processing of parameters (will create callback even when parameters
+     *                                  are not validated)
      */
-    void handlePaymentCallback(PaymentGatewayCallback callback) throws OrderException;
+    void handlePaymentCallback(PaymentGatewayCallback callback, boolean forceProcessing) throws OrderException;
 
 }

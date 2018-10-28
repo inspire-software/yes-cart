@@ -122,7 +122,8 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Callback convertToCallback(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters,
+                                      final boolean forceProcessing) {
 
         if (privateCallBackParameters != null) {
 
@@ -130,8 +131,15 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             final Map<String, String> sorted = new TreeMap<>();
             final String signature = copyHttpParamsAndRemoveSignature(params, sorted);
             final String verify = sha1sign(sorted, getParameterValue(PF_SHA_OUT));
-            if (verify.equals(signature)) {
-                LOG.debug("Signature is valid");
+
+            final boolean valid = verify.equals(signature);
+
+            if (valid || forceProcessing) {
+                if (valid) {
+                    LOG.debug("Signature is valid");
+                } else {
+                    LOG.warn("Signature is not valid ... forced processing");
+                }
 
                 BigDecimal callbackAmount = null;
                 try {
@@ -144,7 +152,8 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
                         sorted.get("ORDERID"),
                         CallbackOperation.PAYMENT,
                         callbackAmount,
-                        privateCallBackParameters
+                        privateCallBackParameters,
+                        valid
                 );
             } else {
                 LOG.warn("Signature is not valid");
@@ -156,7 +165,8 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
                 null,
                 CallbackOperation.INVALID,
                 null,
-                privateCallBackParameters
+                privateCallBackParameters,
+                false
         );
 
     }
@@ -189,7 +199,8 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult,
+                                                                  final boolean forceProcessing) {
 
         String statusRes = null;
 
@@ -199,8 +210,15 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             final Map<String, String> sorted = new TreeMap<>();
             final String signature = copyHttpParamsAndRemoveSignature(params, sorted);
             final String verify = sha1sign(sorted, getParameterValue(PF_SHA_OUT));
-            if (verify.equals(signature)) {
-                LOG.debug("Signature is valid");
+
+            final boolean valid = verify.equals(signature);
+
+            if (valid || forceProcessing) {
+                if (valid) {
+                    LOG.debug("Signature is valid");
+                } else {
+                    LOG.warn("Signature is not valid ... forced processing");
+                }
                 statusRes = sorted.get("STATUS");
             } else {
                 LOG.warn("Signature is not valid");
@@ -509,7 +527,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment payment) {
+    public Payment authorizeCapture(final Payment payment, final boolean forceProcessing) {
         return payment;
     }
 
@@ -519,7 +537,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * Shipment not included. Will be added at capture operation.
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -533,7 +551,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -547,7 +565,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(final Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -561,7 +579,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -575,7 +593,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment paymentIn) {
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -590,7 +608,9 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment createPaymentPrototype(final String operation, final Map map) {
+    public Payment createPaymentPrototype(final String operation,
+                                          final Map map,
+                                          final boolean forceProcessing) {
 
         final Payment payment = new PaymentImpl();
         final Map<String, String> raw = HttpParamsUtils.createSingleValueMap(map);
@@ -611,7 +631,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             payment.setCardExpireYear(sorted.get("ED").substring(2, 4));
         }
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(raw);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(raw, forceProcessing);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
         final StringBuilder msg = new StringBuilder();

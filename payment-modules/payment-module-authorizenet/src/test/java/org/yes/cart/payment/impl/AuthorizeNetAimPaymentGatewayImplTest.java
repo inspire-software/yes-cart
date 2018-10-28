@@ -151,6 +151,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -159,7 +161,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
                         Payment.PAYMENT_STATUS_OK,
                         PaymentGateway.AUTH).size());
         //lets perform reverse authorization
-        paymentProcessor.reverseAuthorizations(orderNum);
+        paymentProcessor.reverseAuthorizations(orderNum, false);
         //two records for reverse
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -185,6 +187,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -195,7 +199,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         //capture on first completed shipment
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
+                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false));
         assertEquals(1,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -204,7 +208,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
                         PaymentGateway.CAPTURE).size());
         //capture on second completed shipment
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
+                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -225,6 +229,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -235,7 +241,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         //capture on first completed shipment
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
+                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false));
         assertEquals(1,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -246,7 +252,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         //capture on second completed shipment with sum more that authorized
 
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), new BigDecimal("-3.34")));
+                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false, new BigDecimal("-3.34")));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -280,6 +286,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -289,7 +297,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
                         PaymentGateway.AUTH).size());
         //capture on first completed shipment
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
-        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum());
+        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false);
         assertEquals(1,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -297,7 +305,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
                         Payment.PAYMENT_STATUS_OK,
                         PaymentGateway.CAPTURE).size());
         //capture on second completed shipment
-        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum());
+        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false);
         assertEquals(
                 2,
                 customerOrderPaymentService.findBy(
@@ -307,7 +315,7 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
                         PaymentGateway.CAPTURE).size());
         //lets void capture
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.cancelOrder(customerOrder, useRefund));
+                paymentProcessor.cancelOrder(customerOrder, false, useRefund));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -331,6 +339,8 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorizeCapture(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(

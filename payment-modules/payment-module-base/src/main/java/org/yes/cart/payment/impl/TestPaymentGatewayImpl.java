@@ -320,7 +320,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         if (isParameterActivated(AUTH_FAIL) || isParameterActivated(AUTH_FAIL_NO + getAuthNum()) || isParameterActivated(AUTH_FAIL_NO + payment.getPaymentAmount().toPlainString())) {
@@ -351,7 +351,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment paymentIn) {
+    public Payment authorizeCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH_CAPTURE);
         if (isParameterActivated(AUTH_CAPTURE_FAIL) || isParameterActivated(AUTH_CAPTURE_FAIL_NO + payment.getPaymentAmount().toPlainString())) {
@@ -391,7 +391,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
         if (isParameterActivated(REVERSE_AUTH_FAIL) || isParameterActivated(REVERSE_AUTH_FAIL_NO + payment.getPaymentAmount().toPlainString())) {
@@ -418,7 +418,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(final Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
         if (isParameterActivated(CAPTURE_FAIL) || isParameterActivated(CAPTURE_FAIL_NO + payment.getPaymentAmount().toPlainString())) {
@@ -449,7 +449,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
         if (isParameterActivated(VOID_CAPTURE_FAIL) || isParameterActivated(VOID_CAPTURE_FAIL_NO + payment.getPaymentAmount().toPlainString())) {
@@ -471,7 +471,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment paymentIn) {
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
         if (isParameterActivated(REFUND_FAIL) || isParameterActivated(REFUND_FAIL_NO + payment.getPaymentAmount().toPlainString())) {

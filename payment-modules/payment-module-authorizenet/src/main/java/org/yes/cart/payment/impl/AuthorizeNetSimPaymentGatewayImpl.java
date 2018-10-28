@@ -148,7 +148,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment payment) {
+    public Payment authorizeCapture(final Payment payment, final boolean forceProcessing) {
         return payment;
     }
 
@@ -156,7 +156,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -170,7 +170,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -184,7 +184,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(final Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -198,7 +198,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -212,7 +212,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment paymentIn) {
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -335,10 +335,17 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Callback convertToCallback(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters, final boolean forceProcessing) {
 
-        if (isValid(privateCallBackParameters)) {
-            LOG.debug("Signature is valid");
+        final boolean valid = isValid(privateCallBackParameters);
+
+        if (valid || forceProcessing) {
+
+            if (valid) {
+                LOG.debug("Signature is valid");
+            } else {
+                LOG.warn("Signature is not valid ... forced processing");
+            }
 
             final String xType = HttpParamsUtils.getSingleValue(privateCallBackParameters.get("x_type"));
             CallbackOperation op = CallbackOperation.PAYMENT;
@@ -361,7 +368,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
                     HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID)),
                     op,
                     callbackAmount,
-                    privateCallBackParameters
+                    privateCallBackParameters,
+                    valid
             );
         } else {
             LOG.debug("Signature is not valid");
@@ -370,7 +378,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
                 null,
                 CallbackOperation.INVALID,
                 null,
-                privateCallBackParameters
+                privateCallBackParameters,
+                valid
         );
     }
 
@@ -378,7 +387,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult,
+                                                                  final boolean forceProcessing) {
 
         /*
            See http://developer.authorize.net/guides/SIM/wwhelp/wwhimpl/js/html/wwhelp.htm#href=SIM_Trans_response.09.2.html
@@ -389,8 +399,15 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
            4—Held for Review
         */
         String responseCode = null;
-        if (isValid(callbackResult)) {
-            LOG.debug("Signature is valid");
+
+        final boolean valid = isValid(callbackResult);
+
+        if (valid || forceProcessing) {
+            if (valid) {
+                LOG.debug("Signature is valid");
+            } else {
+                LOG.warn("Signature is not valid ... forced processing");
+            }
             responseCode = callbackResult.get("x_response_code");
         } else {
             LOG.debug("Signature is not valid");
@@ -601,15 +618,12 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
 
     /**
-     * Process public call back request from payment gateway.
-     *
-     * @param operation operation
-     * @param privateCallBackParameters get/post parameters
-     *
-     * @return true in case in payment was ok, false in case if payment failed
+     * {@inheritDoc}
      */
     @Override
-    public Payment createPaymentPrototype(final String operation, final Map privateCallBackParameters) {
+    public Payment createPaymentPrototype(final String operation,
+                                          final Map privateCallBackParameters,
+                                          boolean forceProcessing) {
 
         final Payment payment = new PaymentImpl();
 
@@ -618,7 +632,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         payment.setTransactionReferenceId(params.get("x_trans_id"));
         payment.setTransactionAuthorizationCode(params.get("x_auth_code"));
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(params);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(params, forceProcessing);
 
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());

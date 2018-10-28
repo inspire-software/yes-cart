@@ -73,7 +73,7 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
 
             } else {
 
-                final String result = paymentProcessor.shipmentComplete(order, thisDelivery.getDeliveryNum(), orderEvent.getParams());
+                final String result = paymentProcessor.shipmentComplete(order, thisDelivery.getDeliveryNum(), isForceProcessing(orderEvent), orderEvent.getParams());
 
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                     // payment was ok so continue
@@ -107,6 +107,14 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
         orderEvent.getCustomerOrder().setOrderStatus(CustomerOrder.ORDER_STATUS_COMPLETED);
 
         LOG.info("Order {} completed ", orderEvent.getCustomerOrder().getOrdernum());
+    }
+
+
+    protected boolean isForceProcessing(final OrderEvent orderEvent) {
+
+        final Object forceProcessing = orderEvent.getRuntimeParams().get("forceProcessing");
+        return forceProcessing instanceof Boolean && (Boolean) forceProcessing;
+
     }
 
 

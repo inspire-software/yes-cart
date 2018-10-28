@@ -68,15 +68,21 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
     /**
      * AuthCapture or immediate sale operation will be be used if payment gateway does not support normal flow authorize - delivery - capture.
      *
-     * @param order  to authorize payments.
-     * @param params for payment gateway to create template from. Also if this map contains key
-     *               forceSinglePayment, only one payment will be created (hack to support pay pal express).
+     * @param order                     to authorize payments.
+     * @param forceSinglePayment        flag is true for authCapture operation, when payment gateway not supports
+     *                                  several payments per order
+     * @param forceProcessing           force processing
+     * @param params                    for payment gateway to create template from.
+     *
      * @return status of operation.
      */
     @Override
-    public String authorizeCapture(final CustomerOrder order, final Map params) {
+    public String authorizeCapture(final CustomerOrder order,
+                                   boolean forceSinglePayment,
+                                   boolean forceProcessing,
+                                   final Map params) {
 
-        return super.authorizeCapture(order, params);
+        return super.authorizeCapture(order, forceSinglePayment, forceProcessing, params);
     }
 
 
@@ -87,19 +93,22 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
      * Reverse authorization will be applied to authorized payments only
      *
      * @param orderNum order with some authorized payments
+     * @param forceProcessing
      */
     @Override
-    public void reverseAuthorizations(final String orderNum) {
+    public void reverseAuthorizations(final String orderNum, final boolean forceProcessing) {
 
-        super.reverseAuthorizations(orderNum);
+        super.reverseAuthorizations(orderNum, forceProcessing);
 
     }
 
     /**
      * {@inheritDoc}
      */
-    public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber) {
-        return shipmentComplete(order, orderShipmentNumber, BigDecimal.ZERO);
+    public String shipmentComplete(final CustomerOrder order,
+                                   final String orderShipmentNumber,
+                                   boolean forceProcessing) {
+        return shipmentComplete(order, orderShipmentNumber, forceProcessing, BigDecimal.ZERO);
     }
 
     /**
@@ -112,9 +121,12 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
      * @param addToPayment        amount to add for each payment if it not null
      * @return status of operation.
      */
-    public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber, final BigDecimal addToPayment) {
+    public String shipmentComplete(final CustomerOrder order,
+                                   final String orderShipmentNumber,
+                                   boolean forceProcessing,
+                                   final BigDecimal addToPayment) {
 
-        return shipmentComplete(order, orderShipmentNumber, new HashMap() {{
+        return shipmentComplete(order, orderShipmentNumber, forceProcessing, new HashMap() {{
             put("forceManualProcessing", false);
             put("forceManualProcessingMessage", null);
             put("forceAddToEveryPaymentAmount", addToPayment);
@@ -127,9 +139,11 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
     /**
      * {@inheritDoc}
      */
-    public String cancelOrder(final CustomerOrder order, final boolean useRefund) {
+    public String cancelOrder(final CustomerOrder order,
+                              final boolean forceProcessing,
+                              final boolean useRefund) {
 
-        return cancelOrder(order, new HashMap() {{
+        return cancelOrder(order, forceProcessing, new HashMap() {{
             put("forceManualProcessing", false);
             put("forceManualProcessingMessage", null);
             put("forceAutoProcessingOperation", useRefund ? PaymentGateway.REFUND : PaymentGateway.VOID_CAPTURE);

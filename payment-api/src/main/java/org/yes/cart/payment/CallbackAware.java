@@ -18,17 +18,21 @@ public interface CallbackAware {
      * Restore order number by given parameters
      *
      * @param privateCallBackParameters request parameters
+     * @param forceProcessing           force processing
+     *
      * @return restore order number
      */
-    Callback convertToCallback(Map privateCallBackParameters);
+    Callback convertToCallback(Map privateCallBackParameters, boolean forceProcessing);
 
     /**
      * Check the result for success attributes.
      *
-     * @param callbackResult  call result
+     * @param callbackResult            callback result
+     * @param forceProcessing           force processing
+     *
      * @return  true in case of success
      */
-    CallbackResult getExternalCallbackResult(Map<String, String> callbackResult);
+    CallbackResult getExternalCallbackResult(Map<String, String> callbackResult, boolean forceProcessing);
 
     /**
      * Pre process payment operation. This is a hook to inject additional data using
@@ -93,6 +97,14 @@ public interface CallbackAware {
          * @return parameters
          */
         Map getParameters();
+
+        /**
+         * Flag that determines if callback has been validated (e.g. hash checked, or external call validation performed).
+         * Should be true for most use cases, can return false when forceProcessing is enabled
+         *
+         * @return flag
+         */
+        boolean isValidated();
 
     }
 

@@ -117,6 +117,7 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
                 final Payment payment = paymentProcessor.createPaymentsToAuthorize(
                         customerOrder,
                         true,
+                        false,
                         servletRequest.getParameterMap(),
                         "tmp")
                         .get(0);
@@ -152,6 +153,7 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
                         final Payment payment = paymentProcessor.createPaymentsToAuthorize(
                                 customerOrder,
                                 true,
+                                false,
                                 servletRequest.getParameterMap(),
                                 "tmp")
                                 .get(0);
@@ -162,7 +164,7 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
                         final PaymentGatewayCallback callback = paymentCallBackHandlerFacade.registerCallback(
                                 result, paymentGatewayLabel, ShopCodeContext.getShopCode(), callbackDump);
 
-                        paymentCallBackHandlerFacade.handlePaymentCallback(callback);
+                        paymentCallBackHandlerFacade.handlePaymentCallback(callback, false);
 
                         final CustomerOrder updatedOrder = customerOrderService.findByReference(orderGuid);
                         final String target;

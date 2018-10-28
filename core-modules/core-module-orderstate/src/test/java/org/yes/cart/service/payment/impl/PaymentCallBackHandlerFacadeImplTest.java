@@ -96,7 +96,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
                 "testExtFormPaymentGatewayLabel",
                 customerOrder.getShop().getCode(), "TEST"
         );
-        paymentCallBackHandlerFacade.handlePaymentCallback(callback);
+        paymentCallBackHandlerFacade.handlePaymentCallback(callback, false);
         ShopCodeContext.clear();
         customerOrder = customerOrderService.findByReference(customerOrder.getCartGuid());
         assertEquals("Order must be in ORDER_STATUS_IN_PROGRESS state",
@@ -141,7 +141,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
                 "testExtFormPaymentGatewayLabel",
                 customerOrder.getShop().getCode(), "TEST"
         );
-        paymentCallBackHandlerFacade.handlePaymentCallback(callback);
+        paymentCallBackHandlerFacade.handlePaymentCallback(callback, false);
         ShopCodeContext.clear();
         customerOrder = customerOrderService.findByReference(customerOrder.getCartGuid());
         assertEquals("Order must be in ORDER_STATUS_CANCELLED_WAITING_PAYMENT state",  //because item is out of stock and we have AUTH_CAPTURE so we need a REFUND

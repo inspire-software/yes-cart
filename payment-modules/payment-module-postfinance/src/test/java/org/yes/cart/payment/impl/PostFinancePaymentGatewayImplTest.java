@@ -12,8 +12,7 @@ import org.yes.cart.payment.dto.impl.PaymentLineImpl;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -205,11 +204,22 @@ public class PostFinancePaymentGatewayImplTest {
 
         }};
 
-        assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult);
+        // Always should fail with invalid signature
+        assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult, false).getStatus());
+        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult, false);
         assertEquals(CallbackAware.CallbackOperation.INVALID, badCallback.getOperation());
         assertNull(badCallback.getOrderGuid());
         assertNull(badCallback.getAmount());
+        assertFalse(badCallback.isValidated());
+
+        // Forced will not fail
+        assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult, true).getStatus());
+        final CallbackAware.Callback forcedCallback = gatewayImpl.convertToCallback(callBackresult, true);
+        assertEquals("12", forcedCallback.getOrderGuid());
+        assertEquals(CallbackAware.CallbackOperation.PAYMENT, forcedCallback.getOperation());
+        assertEquals(new BigDecimal("15"), forcedCallback.getAmount());
+        assertFalse(forcedCallback.isValidated());
+
 
         final Map<String, String> sorted = new TreeMap<>();
         gatewayImpl.copyHttpParamsAndRemoveSignature(callBackresult, sorted);
@@ -217,11 +227,12 @@ public class PostFinancePaymentGatewayImplTest {
         callBackresult.put("SHASIGN", validSignature);
 
 
-        assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        final CallbackAware.Callback goodCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult, false).getStatus());
+        final CallbackAware.Callback goodCallback = gatewayImpl.convertToCallback(callBackresult, false);
         assertEquals(CallbackAware.CallbackOperation.PAYMENT, goodCallback.getOperation());
         assertEquals("12", goodCallback.getOrderGuid());
         assertEquals(new BigDecimal("15"), goodCallback.getAmount());
+        assertTrue(goodCallback.isValidated());
     }
 
 

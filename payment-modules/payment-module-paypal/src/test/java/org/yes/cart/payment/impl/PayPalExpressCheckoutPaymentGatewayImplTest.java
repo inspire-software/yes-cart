@@ -165,7 +165,7 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends PaymentModuleDB
             assertTrue(nvpCallResult.isEmpty());
 
             assertEquals("Express checkout call must be authorised before DoExpressCheckoutPayment",
-                    CallbackAware.CallbackResult.FAILED, paymentGateway.getExternalCallbackResult(nvpCallResult));
+                    CallbackAware.CallbackResult.FAILED, paymentGateway.getExternalCallbackResult(nvpCallResult, false));
 
 
         } finally {

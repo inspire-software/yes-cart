@@ -82,10 +82,10 @@ public class CancelNewOrderWithRefundOrderEventHandlerImpl extends CancelOrderEv
             }
 
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isExternalFormProcessing()) {
-                final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
+                final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), false, isForceProcessing(orderEvent), orderEvent.getParams());
                 if (Payment.PAYMENT_STATUS_OK.equals(result) || Payment.PAYMENT_STATUS_PROCESSING.equals(result)) {
                     //payment was ok, but we are out of stock
-                    final String resultCancel = paymentProcessor.cancelOrder(order, Collections.emptyMap());
+                    final String resultCancel = paymentProcessor.cancelOrder(order, isForceProcessing(orderEvent), Collections.emptyMap());
                     if (!Payment.PAYMENT_STATUS_OK.equals(resultCancel)) {
                         orderEvent.getRuntimeParams().put("cancelFailed", Boolean.TRUE);
                     }

@@ -66,7 +66,7 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -80,7 +80,7 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -94,7 +94,7 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -108,7 +108,7 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(Payment paymentIn) {
+    public Payment authorizeCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -122,7 +122,7 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -136,7 +136,7 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(Payment paymentIn) {
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());

@@ -65,7 +65,7 @@ public class RefundProcessedOrderEventHandlerImpl extends AbstractOrderEventHand
 
             boolean handled = false;
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
-                final String result = paymentProcessor.cancelOrder(orderEvent.getCustomerOrder(), orderEvent.getParams());
+                final String result = paymentProcessor.cancelOrder(orderEvent.getCustomerOrder(), isForceProcessing(orderEvent), orderEvent.getParams());
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                     //payment was ok, proceed
                     handleInternal(orderEvent);

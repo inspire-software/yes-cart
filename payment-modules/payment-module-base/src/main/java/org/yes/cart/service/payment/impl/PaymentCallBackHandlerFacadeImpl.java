@@ -100,11 +100,11 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
      * {@inheritDoc}
      */
     @Override
-    public void handlePaymentCallback(final PaymentGatewayCallback callback) throws OrderException {
+    public void handlePaymentCallback(final PaymentGatewayCallback callback, final boolean forceProcessing) throws OrderException {
 
         final Map parameters = callback.getParameterMap();
 
-        final CallbackAware.Callback pgCallback = convertToPgCallback(callback);
+        final CallbackAware.Callback pgCallback = convertToPgCallback(callback, forceProcessing);
 
         if (pgCallback == null
                 || pgCallback.getOperation() == null
@@ -354,7 +354,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
     }
 
 
-    private CallbackAware.Callback convertToPgCallback(final PaymentGatewayCallback callback) {
+    private CallbackAware.Callback convertToPgCallback(final PaymentGatewayCallback callback, final boolean forceProcessing) {
         final Map privateCallBackParameters = callback.getParameterMap();
         final String paymentGatewayLabel = callback.getLabel();
         final PaymentGateway paymentGateway = getPaymentGateway(paymentGatewayLabel, callback.getShopCode());
@@ -367,7 +367,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                     paymentGatewayLabel, HttpParamsUtils.stringify("CALLBACK:\n", privateCallBackParameters));
             return null;
         }
-        final CallbackAware.Callback pgCallback = ((CallbackAware) paymentGateway).convertToCallback(privateCallBackParameters);
+        final CallbackAware.Callback pgCallback = ((CallbackAware) paymentGateway).convertToCallback(privateCallBackParameters, forceProcessing);
         LOG.debug("Resolved callback {} from http request with {} payment gateway.", pgCallback, paymentGatewayLabel);
         return pgCallback;
     }

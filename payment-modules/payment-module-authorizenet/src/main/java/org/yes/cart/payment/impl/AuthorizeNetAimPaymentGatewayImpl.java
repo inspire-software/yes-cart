@@ -66,7 +66,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
 
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
@@ -91,7 +91,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
 
@@ -112,7 +112,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
 
@@ -134,7 +134,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment paymentIn) {
+    public Payment authorizeCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH_CAPTURE);
 
@@ -155,7 +155,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     }
 
     @Override
-    public Payment capture(final Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
 
@@ -177,7 +177,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment paymentIn) {
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
 

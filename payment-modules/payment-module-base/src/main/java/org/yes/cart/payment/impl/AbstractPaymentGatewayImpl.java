@@ -129,7 +129,7 @@ public abstract class AbstractPaymentGatewayImpl implements ConfigurablePaymentG
      * {@inheritDoc}
      */
     @Override
-    public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
+    public Payment createPaymentPrototype(final String operation, final Map parametersMap, final boolean forceProcessing) {
 
         final Payment payment = new PaymentImpl();
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);
