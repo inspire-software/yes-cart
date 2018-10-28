@@ -36,15 +36,39 @@
         <property name="maxPoolSize" value="1"/>
     </bean>
 
+    <bean id="importDataDescriptorResolverDataDescriptorReaders" class="org.yes.cart.util.spring.ArrayListBean">
+        <constructor-arg>
+            <list value-type="org.yes.cart.bulkcommon.service.DataDescriptorReader">
+                <!-- WebInf CSV descriptors -->
+                <bean class="org.yes.cart.bulkimport.service.impl.WebInfXmlImportDataCsvDescriptorReaderImpl">
+                    <constructor-arg index="0" value="import-descriptor"/>
+                    <property name="importDescriptorXStreamProvider" ref="importCsvDescriptorXStreamProvider"/>
+                </bean>
+                <!-- Raw XML CSV descriptors -->
+                <bean class="org.yes.cart.bulkimport.service.impl.RawXmlImportDataCsvDescriptorReaderImpl">
+                    <property name="importDescriptorXStreamProvider" ref="importCsvDescriptorXStreamProvider"/>
+                </bean>
+                <!-- WebInf XML descriptors -->
+                <bean class="org.yes.cart.bulkimport.service.impl.WebInfXmlImportDataXmlDescriptorReaderImpl">
+                    <constructor-arg index="0" value="import-descriptor"/>
+                    <!-- TODO: YC-941
+                    <property name="importDescriptorXStreamProvider" ref="importCsvDescriptorXStreamProvider"/>
+                    -->
+                </bean>
+                <!-- Raw XML XML descriptors -->
+                <bean class="org.yes.cart.bulkimport.service.impl.RawXmlImportDataXmlDescriptorReaderImpl">
+                    <!-- TODO: YC-941
+                    <property name="importDescriptorXStreamProvider" ref="importCsvDescriptorXStreamProvider"/>
+                    -->
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
     <bean id="importDataDescriptorResolver" class="org.yes.cart.bulkimport.service.impl.ImportDataDescriptorResolverImpl">
         <constructor-arg index="0" ref="dataGroupService"/>
         <constructor-arg index="1" ref="dataDescriptorService"/>
-    </bean>
-
-    <bean id="webInfXmlImportDataDescriptorReader" class="org.yes.cart.bulkimport.service.impl.WebInfXmlImportDataDescriptorReaderImpl">
-        <constructor-arg index="0" value="import-descriptor"/>
-        <property name="dataDescriptorResolver" ref="importDataDescriptorResolver"/>
-        <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
+        <constructor-arg index="2" ref="importDataDescriptorResolverDataDescriptorReaders"/>
     </bean>
 
     <bean id="bulkImportService" class="org.yes.cart.bulkimport.service.impl.ImportDirectorImplService">

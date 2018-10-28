@@ -100,12 +100,12 @@ public interface CsvImpExColumn {
      *
      * @return value
      */
-    Object getValue(Object rawValue, ValueAdapter adapter, CsvImpExTuple tuple);
+    Object getValue(Object rawValue, CsvValueAdapter adapter, CsvImpExTuple tuple);
 
     /**
      * In case if column has reg exp.
      *
-     * @param value the whole value from {@link #getValue(Object, ValueAdapter, CsvImpExTuple)}
+     * @param value the whole value from {@link #getValue(Object, CsvValueAdapter, CsvImpExTuple)}
      * @return matched groups or 0 if column has not reg exp.
      */
     int getGroupCount(String value);

@@ -16,9 +16,9 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
-import org.yes.cart.bulkcommon.service.support.csv.LookUpQuery;
-import org.yes.cart.bulkcommon.service.support.csv.LookUpQueryParameterStrategy;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
+import org.yes.cart.bulkcommon.service.support.query.LookUpQuery;
+import org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
@@ -32,10 +32,10 @@ import org.yes.cart.dao.GenericDAO;
  */
 public class ColumnLookUpQueryCacheKeyStrategy implements EntityCacheKeyStrategy {
 
-    private final LookUpQueryParameterStrategy hsqlStrategy;
+    private final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> hsqlStrategy;
     private final GenericDAO<Object, Long> genericDAO;
 
-    public ColumnLookUpQueryCacheKeyStrategy(final LookUpQueryParameterStrategy hsqlStrategy,
+    public ColumnLookUpQueryCacheKeyStrategy(final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> hsqlStrategy,
                                              final GenericDAO<Object, Long> genericDAO) {
         this.hsqlStrategy = hsqlStrategy;
         this.genericDAO = genericDAO;
@@ -47,7 +47,7 @@ public class ColumnLookUpQueryCacheKeyStrategy implements EntityCacheKeyStrategy
                          final CsvImportColumn column,
                          final Object masterObject,
                          final CsvImportTuple tuple,
-                         final ValueAdapter adapter) {
+                         final CsvValueAdapter adapter) {
 
         final LookUpQuery query = hsqlStrategy.getQuery(descriptor, masterObject, tuple, adapter, column.getLookupQuery());
 

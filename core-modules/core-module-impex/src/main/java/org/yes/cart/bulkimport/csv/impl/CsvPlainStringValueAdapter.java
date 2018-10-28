@@ -18,14 +18,14 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 
 /**
  * User: denispavlov
  * Date: 12-08-11
  * Time: 1:28 PM
  */
-public class CsvPlainStringValueAdapter implements ValueAdapter {
+public class CsvPlainStringValueAdapter implements CsvValueAdapter {
 
     /**
      * Simple string value pass through.

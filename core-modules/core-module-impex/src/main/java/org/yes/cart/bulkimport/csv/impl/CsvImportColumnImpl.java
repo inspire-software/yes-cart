@@ -18,7 +18,7 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
@@ -126,7 +126,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public List getValues(final String rawValue, final ValueAdapter adapter, final CsvImportTuple tuple) {
+    public List getValues(final String rawValue, final CsvValueAdapter adapter, final CsvImportTuple tuple) {
         List result = new ArrayList();
         if (getPattern() != null) {
             Matcher matcher = getPattern().matcher(rawValue);
@@ -144,7 +144,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public Object getValue(final Object rawValue, final ValueAdapter adapter, final CsvImpExTuple tuple) {
+    public Object getValue(final Object rawValue, final CsvValueAdapter adapter, final CsvImpExTuple tuple) {
         final String value;
         if (rawValue == null) {
             value = null;
@@ -158,7 +158,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public Object getValue(final String rawValue, final ValueAdapter adapter, final CsvImportTuple tuple) {
+    public Object getValue(final String rawValue, final CsvValueAdapter adapter, final CsvImportTuple tuple) {
         if (getValueConstant() != null) {
             return adapter.fromRaw(getValueConstant(), getDataType(), this, tuple);
         } else if (rawValue != null) {

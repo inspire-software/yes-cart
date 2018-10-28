@@ -16,7 +16,7 @@
 
 package org.yes.cart.bulkimport.service.support.csv;
 
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
@@ -43,6 +43,6 @@ public interface EntityCacheKeyStrategy {
                   final CsvImportColumn column,
                   final Object masterObject,
                   final CsvImportTuple tuple,
-                  final ValueAdapter adapter);
+                  final CsvValueAdapter adapter);
 
 }

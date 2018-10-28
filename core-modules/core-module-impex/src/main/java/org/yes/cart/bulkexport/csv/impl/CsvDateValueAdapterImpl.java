@@ -21,8 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
-import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.util.DateUtils;
 
 import java.time.Instant;
@@ -35,7 +34,7 @@ import java.time.ZonedDateTime;
  * Date: 10/11/2017
  * Time: 22:52
  */
-public class CsvDateValueAdapterImpl implements ValueAdapter {
+public class CsvDateValueAdapterImpl implements CsvValueAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(CsvDateValueAdapterImpl.class);
 
@@ -67,15 +66,6 @@ public class CsvDateValueAdapterImpl implements ValueAdapter {
         return null;
 
 
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param extensibleValueAdapter extend
-     */
-    public void setExtensibleValueAdapter(ExtensibleValueAdapter extensibleValueAdapter) {
-        extensibleValueAdapter.extend(this, "DATE");
     }
 
 }

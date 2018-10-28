@@ -17,7 +17,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class CsvImportTupleImpl implements CsvImportTuple {
 
-    private static final ValueAdapter SUB_TUPLE = new CsvPlainStringValueAdapter();
+    private static final CsvValueAdapter SUB_TUPLE = new CsvPlainStringValueAdapter();
 
     private final String filename;
     private final long lineNumber;
@@ -59,7 +59,7 @@ public class CsvImportTupleImpl implements CsvImportTuple {
 
     /** {@inheritDoc} */
     @Override
-    public Object getColumnValue(final CsvImportColumn column, final ValueAdapter valueAdapter) {
+    public Object getColumnValue(final CsvImportColumn column, final CsvValueAdapter valueAdapter) {
         final int colIndex = column.getColumnIndex();
         String rawValue = null;
         if (colIndex > -1 && line != null && colIndex < line.length) {
@@ -75,7 +75,7 @@ public class CsvImportTupleImpl implements CsvImportTuple {
 
     /** {@inheritDoc} */
     @Override
-    public List<CsvImportTuple> getSubTuples(final CsvImportDescriptor importDescriptor, final CsvImportColumn column, final ValueAdapter valueAdapter) {
+    public List<CsvImportTuple> getSubTuples(final CsvImportDescriptor importDescriptor, final CsvImportColumn column, final CsvValueAdapter valueAdapter) {
         if (CsvImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType())) {
             final String rawValue = (String) getColumnValue(column, SUB_TUPLE);
             final String[] rows = rawValue.split(",");

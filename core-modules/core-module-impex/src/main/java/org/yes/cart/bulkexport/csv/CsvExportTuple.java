@@ -17,7 +17,7 @@
 package org.yes.cart.bulkexport.csv;
 
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 
 import java.util.List;
 
@@ -31,6 +31,10 @@ import java.util.List;
  */
 public interface CsvExportTuple extends CsvImpExTuple<String, Object, CsvExportDescriptor, CsvExportColumn> {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    List<CsvExportTuple> getSubTuples(CsvExportDescriptor importDescriptor, CsvExportColumn column, ValueAdapter adapter);
+    List<CsvExportTuple> getSubTuples(CsvExportDescriptor importDescriptor, CsvExportColumn column, CsvValueAdapter adapter);
+
 }

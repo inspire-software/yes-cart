@@ -21,7 +21,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.csv.CsvExportTuple;
@@ -62,7 +62,7 @@ public class CsvExportTupleImpl implements CsvExportTuple {
 
     /** {@inheritDoc} */
     @Override
-    public Object getColumnValue(final CsvExportColumn column, final ValueAdapter adapter) {
+    public Object getColumnValue(final CsvExportColumn column, final CsvValueAdapter adapter) {
         final Object rawValue = getObjectValue(column);
         return column.getValue(rawValue, adapter, this);
     }
@@ -82,7 +82,7 @@ public class CsvExportTupleImpl implements CsvExportTuple {
 
     /** {@inheritDoc} */
     @Override
-    public List<CsvExportTuple> getSubTuples(final CsvExportDescriptor importDescriptor, final CsvExportColumn column, final ValueAdapter adapter) {
+    public List<CsvExportTuple> getSubTuples(final CsvExportDescriptor importDescriptor, final CsvExportColumn column, final CsvValueAdapter adapter) {
         if (CsvImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType())
                 || CsvImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
             final Object rawValue = getObjectValue(column);

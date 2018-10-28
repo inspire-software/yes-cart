@@ -20,9 +20,9 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
-import org.yes.cart.bulkcommon.service.support.csv.LookUpQuery;
-import org.yes.cart.bulkcommon.service.support.csv.LookUpQueryParameterStrategy;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
+import org.yes.cart.bulkcommon.service.support.query.LookUpQuery;
+import org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
@@ -44,14 +44,14 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
     @Test
     public void testKeyForMaster() throws Exception {
 
-        final LookUpQueryParameterStrategy sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
+        final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
         final GenericDAO<Object, Long> genericDAO = mockery.mock(GenericDAO.class, "genericDAO");
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final Identifiable master = mockery.mock(Identifiable.class, "master");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
         final CsvImportTuple tuple = mockery.mock(CsvImportTuple.class, "tuple");
-        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+        final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
         mockery.checking(new Expectations() {{
             oneOf(genericDAO).getEntityIdentifier(master); will(returnValue(10L));
@@ -76,13 +76,13 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
     @Test
     public void testKeyForMasterNull() throws Exception {
 
-        final LookUpQueryParameterStrategy sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
+        final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
         final GenericDAO<Object, Long> genericDAO = mockery.mock(GenericDAO.class, "genericDAO");
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
         final CsvImportTuple tuple = mockery.mock(CsvImportTuple.class, "tuple");
-        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+        final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
         mockery.checking(new Expectations() {{
             allowing(codeColumn).getColumnIndex(); will(returnValue(3));
@@ -106,13 +106,13 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
     @Test
     public void testKeyForNoMaster() throws Exception {
 
-        final LookUpQueryParameterStrategy sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
+        final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
         final GenericDAO<Object, Long> genericDAO = mockery.mock(GenericDAO.class, "genericDAO");
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
         final CsvImportTuple tuple = mockery.mock(CsvImportTuple.class, "tuple");
-        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+        final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
 
         mockery.checking(new Expectations() {{
@@ -137,13 +137,13 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
     @Test
     public void testKeyForNoMasterNoParams() throws Exception {
 
-        final LookUpQueryParameterStrategy sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
+        final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
         final GenericDAO<Object, Long> genericDAO = mockery.mock(GenericDAO.class, "genericDAO");
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
         final CsvImportTuple tuple = mockery.mock(CsvImportTuple.class, "tuple");
-        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+        final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
 
         mockery.checking(new Expectations() {{

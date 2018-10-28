@@ -1,0 +1,79 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!--
+    Schema for all import descriptor files.
+
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/import-descriptor-xml.xsd"
+
+    This namespace is not actually pointing to the URL for schema, so you need to
+    create an alias in your IDE that would point that namespace to this file.
+
+    @author D.Pavlov
+ -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="import-descriptor" type="ImportDescriptorType"/>
+
+    <xs:complexType name="ImportDescriptorType">
+        <xs:annotation>
+            <xs:documentation>
+                Defines the schema for how to represent an import descriptor.
+                In general it maps and entity type (by interface) to XML handler.
+
+                File descriptor section specifies file specific configurations.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="context" type="ContextType" minOccurs="0"/>
+            <xs:element name="entity-type" type="xs:string" minOccurs="1"/>
+            <xs:element name="import-file-descriptor" type="ImportFileDescriptorType" minOccurs="1"/>
+            <xs:element name="xml-handler" type="xs:string" minOccurs="1"/>
+        </xs:sequence>
+
+    </xs:complexType>
+
+
+    <xs:complexType name="ContextType">
+        <xs:annotation>
+            <xs:documentation>
+                Context defines additional runtime constraints.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element name="shop-code" type="xs:string" minOccurs="0"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="ImportFileDescriptorType">
+        <xs:annotation>
+            <xs:documentation>
+                Filemask is important aspect of the import descriptor since when uploading a zip file
+                with many sources this mask will filter out only relevant files applicable to this
+                import descriptor.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="file-encoding" type="xs:string"/>
+            <xs:element name="file-name-mask" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

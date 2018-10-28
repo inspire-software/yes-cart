@@ -35,21 +35,6 @@ public interface CsvImpExDescriptor<C extends CsvImpExContext, T extends CsvImpE
     C getContext();
 
     /**
-     * Get fully qualified entity interface. For example - org.yes.cart.domain.entity.Brand
-     *
-     * @return fully qualified entity interface
-     */
-    String getEntityType();
-
-    /**
-     * Get entity interface. For example - org.yes.cart.domain.entity.Brand
-     *
-     * @return entity interface
-     */
-    Class getEntityTypeClass();
-
-
-    /**
      * Get the collection of export columns.
      *
      * @return collection of export columns

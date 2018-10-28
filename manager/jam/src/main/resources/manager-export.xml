@@ -36,17 +36,36 @@
         <property name="maxPoolSize" value="1"/>
     </bean>
 
+    <bean id="exportDataDescriptorResolverDataDescriptorReaders" class="org.yes.cart.util.spring.ArrayListBean">
+        <constructor-arg>
+            <list value-type="org.yes.cart.bulkcommon.service.DataDescriptorReader">
+                <!-- WebInf CSV descriptors -->
+                <bean class="org.yes.cart.bulkexport.service.impl.WebInfXmlExportDataCsvDescriptorReaderImpl">
+                    <constructor-arg index="0" value="export-descriptor"/>
+                    <property name="exportDescriptorXStreamProvider" ref="exportCsvDescriptorXStreamProvider"/>
+                </bean>
+                <!-- Raw XML CSV descriptors -->
+                <bean class="org.yes.cart.bulkexport.service.impl.RawXmlExportDataCsvDescriptorReaderImpl">
+                    <property name="exportDescriptorXStreamProvider" ref="exportCsvDescriptorXStreamProvider"/>
+                </bean>
+                <!-- WebInf XML descriptors -->
+                <bean class="org.yes.cart.bulkexport.service.impl.WebInfXmlExportDataXmlDescriptorReaderImpl">
+                    <constructor-arg index="0" value="export-descriptor"/>
+                    <property name="exportDescriptorXStreamProvider" ref="exportXmlDescriptorXStreamProvider"/>
+                </bean>
+                <!-- Raw XML XML descriptors -->
+                <bean class="org.yes.cart.bulkexport.service.impl.RawXmlExportDataXmlDescriptorReaderImpl">
+                    <property name="exportDescriptorXStreamProvider" ref="exportXmlDescriptorXStreamProvider"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
     <bean id="exportDataDescriptorResolver" class="org.yes.cart.bulkexport.service.impl.ExportDataDescriptorResolverImpl">
         <constructor-arg index="0" ref="dataGroupService"/>
         <constructor-arg index="1" ref="dataDescriptorService"/>
+        <constructor-arg index="2" ref="exportDataDescriptorResolverDataDescriptorReaders"/>
     </bean>
-
-    <bean id="webInfXmlExportDataDescriptorReader" class="org.yes.cart.bulkexport.service.impl.WebInfXmlExportDataDescriptorReaderImpl">
-        <constructor-arg index="0" value="export-descriptor"/>
-        <property name="dataDescriptorResolver" ref="exportDataDescriptorResolver"/>
-        <property name="exportDescriptorXStreamProvider" ref="exportDescriptorXStreamProvider"/>
-    </bean>
-
 
 
     <bean id="bulkExportService" class="org.yes.cart.bulkexport.service.impl.ExportDirectorImplService">

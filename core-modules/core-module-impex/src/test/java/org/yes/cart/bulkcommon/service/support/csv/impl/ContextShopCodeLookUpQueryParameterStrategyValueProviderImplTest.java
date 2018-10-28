@@ -22,7 +22,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.bulkcommon.csv.CsvImpExContext;
 import org.yes.cart.bulkcommon.csv.CsvImpExDescriptor;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
 
@@ -43,7 +43,7 @@ public class ContextShopCodeLookUpQueryParameterStrategyValueProviderImplTest {
 
         final CsvImpExDescriptor descriptor = mockery.mock(CsvImpExDescriptor.class, "descriptor");
         final CsvImpExContext context = mockery.mock(CsvImpExContext.class, "context");
-        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+        final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
         final ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl provider = new ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl();
 
@@ -64,7 +64,7 @@ public class ContextShopCodeLookUpQueryParameterStrategyValueProviderImplTest {
 
         final CsvImpExDescriptor descriptor = mockery.mock(CsvImpExDescriptor.class, "descriptor");
         final CsvImpExContext context = mockery.mock(CsvImpExContext.class, "context");
-        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+        final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
         final ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl provider = new ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl();
 
@@ -87,7 +87,7 @@ public class ContextShopCodeLookUpQueryParameterStrategyValueProviderImplTest {
         final CsvImpExContext context = mockery.mock(CsvImpExContext.class, "context");
         final CsvImportColumn shopCode = mockery.mock(CsvImportColumn.class, "shopCode");
         final CsvImportTuple importTuple = mockery.mock(CsvImportTuple.class, "importTuple");
-        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+        final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
         final ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl provider = new ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl();
 
@@ -96,7 +96,7 @@ public class ContextShopCodeLookUpQueryParameterStrategyValueProviderImplTest {
             allowing(context).getShopCode(); will(returnValue(null));
             allowing(context).getShopCodeColumn(); will(returnValue("shopCode"));
             allowing(descriptor).getColumn("shopCode"); will(returnValue(shopCode));
-            allowing(importTuple).getColumnValue(with(equal(shopCode)), with(any(ValueAdapter.class))); will(returnValue("CDE"));
+            allowing(importTuple).getColumnValue(with(equal(shopCode)), with(any(CsvValueAdapter.class))); will(returnValue("CDE"));
         }});
 
         assertEquals("CDE", provider.getPlaceholderValue(null, descriptor, null, importTuple, adapter, null));

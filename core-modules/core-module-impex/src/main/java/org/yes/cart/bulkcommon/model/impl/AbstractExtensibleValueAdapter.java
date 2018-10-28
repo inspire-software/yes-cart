@@ -16,10 +16,7 @@
 
 package org.yes.cart.bulkcommon.model.impl;
 
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
-import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
-
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -27,10 +24,9 @@ import java.util.Map;
  * Date: 30/11/2015
  * Time: 21:43
  */
-public abstract class AbstractExtensibleValueAdapter implements ExtensibleValueAdapter {
+public abstract class AbstractExtensibleValueAdapter<T> {
 
-    private final Map<String, ValueAdapter> extensions = new HashMap<>();
-
+    private Map<String, T> extensions = Collections.emptyMap();
 
     /**
      * Get data type specific adapter.
@@ -39,13 +35,16 @@ public abstract class AbstractExtensibleValueAdapter implements ExtensibleValueA
      *
      * @return value adapter or null
      */
-    protected final ValueAdapter getTypeSpecific(final String dataType) {
+    protected final T getTypeSpecific(final String dataType) {
         return extensions.get(dataType);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void extend(final ValueAdapter extension, final String customDataType) {
-        extensions.put(customDataType, extension);
+    /**
+     * Spring IoC.
+     *
+     * @param extensions extensions
+     */
+    public void setExtensions(final Map<String, T> extensions) {
+        this.extensions = extensions;
     }
 }

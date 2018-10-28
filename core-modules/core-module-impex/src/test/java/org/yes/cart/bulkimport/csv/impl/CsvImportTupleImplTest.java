@@ -20,7 +20,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 
 import static org.junit.Assert.assertEquals;
@@ -38,7 +38,7 @@ public class CsvImportTupleImplTest {
     public void testGetColumnValue() throws Exception {
 
         final CsvImportColumn column = mockery.mock(CsvImportColumn.class, "column");
-        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+        final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
         final String[] line = new String[] { "A'''BC", "123" };
         final CsvImportTupleImpl tuple = new CsvImportTupleImpl("file", 1, line);
@@ -59,7 +59,7 @@ public class CsvImportTupleImplTest {
     public void testGetColumnConstant() throws Exception {
 
         final CsvImportColumn column = mockery.mock(CsvImportColumn.class, "column");
-        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+        final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
         final String[] line = new String[] { "val1", "val2" };
         final CsvImportTupleImpl tuple = new CsvImportTupleImpl("file", 1, line);

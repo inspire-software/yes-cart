@@ -18,8 +18,8 @@ package org.yes.cart.bulkcommon.service.support.csv.impl;
 
 import org.yes.cart.bulkcommon.csv.CsvImpExDescriptor;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
-import org.yes.cart.bulkcommon.service.support.csv.LookUpQueryParameterStrategyValueProvider;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
+import org.yes.cart.bulkcommon.service.support.csv.CsvLookUpQueryParameterStrategyValueProvider;
 import org.yes.cart.service.domain.ShopService;
 
 /**
@@ -28,7 +28,7 @@ import org.yes.cart.service.domain.ShopService;
  * Time: 12:22
  */
 public class ContextShopLookUpQueryParameterStrategyValueProviderImpl extends ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl
-        implements LookUpQueryParameterStrategyValueProvider {
+        implements CsvLookUpQueryParameterStrategyValueProvider {
 
     private final ShopService shopService;
 
@@ -44,7 +44,7 @@ public class ContextShopLookUpQueryParameterStrategyValueProviderImpl extends Co
                                       final CsvImpExDescriptor descriptor,
                                       final Object masterObject,
                                       final CsvImpExTuple tuple,
-                                      final ValueAdapter adapter,
+                                      final CsvValueAdapter adapter,
                                       final String queryTemplate) {
 
         final String code = (String) super.getPlaceholderValue(placeholder, descriptor, masterObject, tuple, adapter, queryTemplate);

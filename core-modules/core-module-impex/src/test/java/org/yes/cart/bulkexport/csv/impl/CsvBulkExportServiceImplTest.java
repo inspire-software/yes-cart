@@ -65,7 +65,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
         if (bulkExportService == null) {
             bulkExportService = createContext().getBean("csvBulkExportService", ExportService.class);
-            xml = createContext().getBean("exportDescriptorXStreamProvider", XStreamProvider.class);
+            xml = createContext().getBean("exportCsvDescriptorXStreamProvider", XStreamProvider.class);
         }
         super.setUp();
 

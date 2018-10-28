@@ -19,7 +19,7 @@ package org.yes.cart.bulkexport.csv.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.csv.CsvExportTuple;
@@ -120,7 +120,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public String getValue(final Object rawValue, final ValueAdapter adapter, final CsvExportTuple tuple) {
+    public String getValue(final Object rawValue, final CsvValueAdapter adapter, final CsvExportTuple tuple) {
         if (getValueConstant() != null) {
             return getValueConstant();
         } else if (rawValue != null) {
@@ -156,7 +156,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public Object getValue(final Object rawValue, final ValueAdapter adapter, final CsvImpExTuple tuple) {
+    public Object getValue(final Object rawValue, final CsvValueAdapter adapter, final CsvImpExTuple tuple) {
         return getValue(rawValue, adapter, (CsvExportTuple) tuple);
     }
 

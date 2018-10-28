@@ -26,58 +26,61 @@
 
     <!-- ########################################## bulk import ########################## -->
 
-    <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.csv.impl.CsvImportDescriptorXStreamProvider"/>
+    <bean id="importCsvDescriptorXStreamProvider" class="org.yes.cart.bulkimport.csv.impl.CsvImportDescriptorXStreamProvider"/>
 
-    <util:map id="importLookUpQueryParameterStrategyValueProviders"
-              key-type="java.lang.String"
-              value-type="org.yes.cart.bulkcommon.service.support.csv.LookUpQueryParameterStrategyValueProvider">
-        <entry key="{GUID}">
-            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.GUIDLookUpQueryParameterStrategyValueProviderImpl"/>
-        </entry>
-        <entry key="{masterObject}">
-            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.MasterObjectLookUpQueryParameterStrategyValueProviderImpl"/>
-        </entry>
-        <entry key="{masterObjectId}">
-            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl"/>
-        </entry>
-        <entry key="{contextShop}">
-            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopLookUpQueryParameterStrategyValueProviderImpl">
-                <constructor-arg index="0" ref="shopService"/>
-            </bean>
-        </entry>
-        <entry key="{contextShopId}">
-            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopIdLookUpQueryParameterStrategyValueProviderImpl">
-                <constructor-arg index="0" ref="shopService"/>
-            </bean>
-        </entry>
-        <entry key="{contextShopCode}">
-            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl"/>
-        </entry>
-        <entry key="{NOW}">
-            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.NowLookUpQueryParameterStrategyValueProviderImpl">
-                <property name="javaType" value="java.time.LocalDateTime"/>
-            </bean>
-        </entry>
-        <entry key="{DATE}">
-            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.NowLookUpQueryParameterStrategyValueProviderImpl">
-                <property name="javaType" value="java.time.LocalDate"/>
-            </bean>
-        </entry>
-        <entry key="{INSTANT}">
-            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.NowLookUpQueryParameterStrategyValueProviderImpl">
-                <property name="javaType" value="java.time.Instant"/>
-            </bean>
-        </entry>
-    </util:map>
+    <bean id="importLookUpQueryParameterStrategyValueProviders" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategyValueProvider">
+                <entry key="{GUID}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.GUIDLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{masterObject}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.MasterObjectLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{masterObjectId}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{contextShop}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopLookUpQueryParameterStrategyValueProviderImpl">
+                        <constructor-arg index="0" ref="shopService"/>
+                    </bean>
+                </entry>
+                <entry key="{contextShopId}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopIdLookUpQueryParameterStrategyValueProviderImpl">
+                        <constructor-arg index="0" ref="shopService"/>
+                    </bean>
+                </entry>
+                <entry key="{contextShopCode}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{NOW}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.NowLookUpQueryParameterStrategyValueProviderImpl">
+                        <property name="javaType" value="java.time.LocalDateTime"/>
+                    </bean>
+                </entry>
+                <entry key="{DATE}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.NowLookUpQueryParameterStrategyValueProviderImpl">
+                        <property name="javaType" value="java.time.LocalDate"/>
+                    </bean>
+                </entry>
+                <entry key="{INSTANT}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.NowLookUpQueryParameterStrategyValueProviderImpl">
+                        <property name="javaType" value="java.time.Instant"/>
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 
-    <bean id="importCsvColumnLookUpQueryStrategy" class="org.yes.cart.bulkcommon.service.support.csv.impl.ImpExColumnLookUpQueryStrategy">
+    <bean id="importCsvColumnLookUpQueryStrategy" class="org.yes.cart.bulkcommon.service.support.common.impl.ImpExColumnLookUpQueryStrategy">
         <property name="providers" ref="importLookUpQueryParameterStrategyValueProviders"/>
         <property name="defaultProvider">
             <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ColumnValueLookUpQueryParameterStrategyValueProviderImpl"/>
         </property>
     </bean>
 
-    <bean id="importCsvDescriptorNativeInsertStrategy" class="org.yes.cart.bulkcommon.service.support.csv.impl.ImpExDescriptorNativeInsertStrategy">
+    <bean id="importCsvDescriptorNativeInsertStrategy" class="org.yes.cart.bulkcommon.service.support.common.impl.ImpExDescriptorNativeInsertStrategy">
         <property name="providers" ref="importLookUpQueryParameterStrategyValueProviders"/>
         <property name="defaultProvider">
             <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ColumnValueLookUpQueryParameterStrategyValueProviderImpl"/>
@@ -88,14 +91,25 @@
         <constructor-arg index="0" ref="importCsvColumnLookUpQueryStrategy"/>
         <constructor-arg index="1" ref="genericDao"/>
     </bean>
+
+
+    <bean id="importCsvImportValueAdapterMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkcommon.csv.CsvValueAdapter"/>
+        </constructor-arg>
+    </bean>
+
     <bean id="importCsvImportValueAdapter" class="org.yes.cart.bulkimport.csv.impl.CsvImportValueAdapter">
         <constructor-arg index="0" ref="extendedConversionService"/>
+        <property name="extensions" ref="importCsvImportValueAdapterMap"/>
     </bean>
+
     <bean id="importCsvPlainStringValueAdapter"  class="org.yes.cart.bulkimport.csv.impl.CsvPlainStringValueAdapter"/>
 
     <bean id="csvBulkImportService" parent="txProxyTemplate">
         <property name="target">
-            <bean  class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
+            <bean  class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl">
                 <constructor-arg index="0" ref="importFederationFacade"/>
                 <property name="genericDAO" ref="genericDao"/>
                 <property name="extendedConversionService" ref="extendedConversionService"/>

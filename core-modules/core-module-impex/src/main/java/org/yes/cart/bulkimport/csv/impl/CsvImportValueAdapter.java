@@ -20,7 +20,7 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkcommon.model.impl.AbstractExtensibleValueAdapter;
 
 import java.math.BigDecimal;
@@ -36,7 +36,7 @@ import java.util.Map;
  * Date: 12-08-11
  * Time: 1:04 PM
  */
-public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter implements ValueAdapter {
+public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter<CsvValueAdapter> implements CsvValueAdapter {
 
     private final GenericConversionService extendedConversionService;
 
@@ -62,7 +62,7 @@ public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter implem
             return rawValue;
         }
 
-        final ValueAdapter specific = getTypeSpecific(requiredType);
+        final CsvValueAdapter specific = getTypeSpecific(requiredType);
         if (specific != null) {
             return specific.fromRaw(rawValue, requiredType, csvImpExColumn, tuple);
         }

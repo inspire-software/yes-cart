@@ -117,7 +117,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     assertNull(product.getAttributeByCode("IMAGE2")); // product has not IMAGE2 attribute
 
                     final XStreamProvider<ImportDescriptor> xml =
-                            createContext().getBean("importDescriptorXStreamProvider", XStreamProvider.class);
+                            createContext().getBean("importCsvDescriptorXStreamProvider", XStreamProvider.class);
                     final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/img/productimages.xml")));
                     descriptor.setImportDirectory(new File("src/test/resources/import/img/").getAbsolutePath());
 
@@ -196,7 +196,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     assertNull(product.getAttributeByCode("IMAGE2")); // product has not IMAGE2 attribute
 
                     final XStreamProvider<ImportDescriptor> xml =
-                            createContext().getBean("importDescriptorXStreamProvider", XStreamProvider.class);
+                            createContext().getBean("importCsvDescriptorXStreamProvider", XStreamProvider.class);
                     final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/img/productimages.xml")));
                     descriptor.setImportDirectory(new File("src/test/resources/import/img/").getAbsolutePath());
 
@@ -269,7 +269,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     assertFalse("BENDER.jpeg".equals(product.getAttributeValueByCode("IMAGE0"))); // product has different IMAGE0
 
                     final XStreamProvider<ImportDescriptor> xml =
-                            createContext().getBean("importDescriptorXStreamProvider", XStreamProvider.class);
+                            createContext().getBean("importCsvDescriptorXStreamProvider", XStreamProvider.class);
                     final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/img/productimages_simple.xml")));
                     descriptor.setImportDirectory(new File("src/test/resources/import/img/").getAbsolutePath());
 

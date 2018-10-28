@@ -17,7 +17,7 @@
 package org.yes.cart.bulkimport.csv;
 
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public interface CsvImportColumn extends CsvImpExColumn {
      *
      * @return value
      */
-    Object getValue(String rawValue, ValueAdapter adapter, CsvImportTuple tuple);
+    Object getValue(String rawValue, CsvValueAdapter adapter, CsvImportTuple tuple);
 
 
     /**
@@ -50,7 +50,7 @@ public interface CsvImportColumn extends CsvImpExColumn {
      *
      * @return field value as string array
      */
-    List getValues(String rawValue, ValueAdapter adapter, CsvImportTuple tuple);
+    List getValues(String rawValue, CsvValueAdapter adapter, CsvImportTuple tuple);
 
     /**
      * Column index from csv file

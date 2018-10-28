@@ -17,8 +17,7 @@
 package org.yes.cart.bulkexport.csv;
 
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
-import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 
 /**
  * User: denispavlov
@@ -36,7 +35,7 @@ public interface CsvExportColumn extends CsvImpExColumn {
      *
      * @return value
      */
-    String getValue(Object rawValue, ValueAdapter adapter, CsvExportTuple tuple);
+    String getValue(Object rawValue, CsvValueAdapter adapter, CsvExportTuple tuple);
 
     /**
      * Column header for csv file

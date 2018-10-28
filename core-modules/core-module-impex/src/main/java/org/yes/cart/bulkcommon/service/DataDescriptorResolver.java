@@ -53,11 +53,4 @@ public interface DataDescriptorResolver<T> {
      */
     List<DataGroup> getGroups();
 
-    /**
-     * Register tuplizer.
-     *
-     * @param tuplizer tuplizer
-     */
-    void register(DataDescriptorReader<T> tuplizer);
-
 }

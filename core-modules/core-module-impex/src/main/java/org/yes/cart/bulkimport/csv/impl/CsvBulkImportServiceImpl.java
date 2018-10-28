@@ -24,10 +24,10 @@ import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkcommon.service.ImportService;
-import org.yes.cart.bulkcommon.service.support.csv.LookUpQuery;
-import org.yes.cart.bulkcommon.service.support.csv.LookUpQueryParameterStrategy;
+import org.yes.cart.bulkcommon.service.support.query.LookUpQuery;
+import org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
@@ -72,11 +72,11 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
     private GenericConversionService extendedConversionService;
 
-    private ValueAdapter valueDataAdapter;
+    private CsvValueAdapter valueDataAdapter;
 
-    private ValueAdapter valueStringAdapter;
-    private LookUpQueryParameterStrategy descriptorInsertLookUpQueryParameterStrategy;
-    private LookUpQueryParameterStrategy columnLookUpQueryParameterStrategy;
+    private CsvValueAdapter valueStringAdapter;
+    private LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> descriptorInsertLookUpQueryParameterStrategy;
+    private LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> columnLookUpQueryParameterStrategy;
     private EntityCacheKeyStrategy cacheKey;
 
     public CsvBulkImportServiceImpl(final FederationFacade federationFacade) {
@@ -859,18 +859,18 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
     /**
      * IoC.
      *
-     * @param valueDataAdapter {@link ValueAdapter}  to use.
+     * @param valueDataAdapter {@link CsvValueAdapter}  to use.
      */
-    public void setValueDataAdapter(final ValueAdapter valueDataAdapter) {
+    public void setValueDataAdapter(final CsvValueAdapter valueDataAdapter) {
         this.valueDataAdapter = valueDataAdapter;
     }
 
     /**
      * IoC.
      *
-     * @param valueStringAdapter {@link ValueAdapter}  to use.
+     * @param valueStringAdapter {@link CsvValueAdapter}  to use.
      */
-    public void setValueStringAdapter(final ValueAdapter valueStringAdapter) {
+    public void setValueStringAdapter(final CsvValueAdapter valueStringAdapter) {
         this.valueStringAdapter = valueStringAdapter;
     }
 
@@ -888,7 +888,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      *
      * @param descriptorInsertLookUpQueryParameterStrategy {@link LookUpQueryParameterStrategy}  to use.
      */
-    public void setDescriptorInsertLookUpQueryParameterStrategy(final LookUpQueryParameterStrategy descriptorInsertLookUpQueryParameterStrategy) {
+    public void setDescriptorInsertLookUpQueryParameterStrategy(final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> descriptorInsertLookUpQueryParameterStrategy) {
         this.descriptorInsertLookUpQueryParameterStrategy = descriptorInsertLookUpQueryParameterStrategy;
     }
 
@@ -897,7 +897,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      *
      * @param columnLookUpQueryParameterStrategy {@link LookUpQueryParameterStrategy}  to use.
      */
-    public void setColumnLookUpQueryParameterStrategy(final LookUpQueryParameterStrategy columnLookUpQueryParameterStrategy) {
+    public void setColumnLookUpQueryParameterStrategy(final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> columnLookUpQueryParameterStrategy) {
         this.columnLookUpQueryParameterStrategy = columnLookUpQueryParameterStrategy;
     }
 

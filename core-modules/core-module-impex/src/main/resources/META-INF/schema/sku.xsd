@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:include schemaLocation="common.xsd"/>
+
+  <xs:element name="skus" type="skusType"/>
+
+  <xs:complexType name="skusType">
+    <xs:sequence>
+      <xs:element type="skuType" name="sku" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="skuType">
+    <xs:sequence>
+      <xs:element name="manufacturer">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element type="xs:string" name="manufacturer-code" minOccurs="0"/>
+            <xs:element type="xs:string" name="manufacturer-part-code" minOccurs="0"/>
+            <xs:element type="xs:string" name="barcode" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element type="xs:string" name="supplier">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element type="xs:string" name="supplier-code" minOccurs="0"/>
+            <xs:element type="xs:string" name="supplier-catalog-code" minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element type="xs:string" name="name"/>
+      <xs:element type="i18nsType" name="display-name" minOccurs="0"/>
+      <xs:element type="xs:string"  name="description" minOccurs="0"/>
+      <xs:element type="seoType" name="seo" minOccurs="0"/>
+      <xs:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
+      <xs:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+      <xs:element type="xs:string" name="created-by" minOccurs="0"/>
+      <xs:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+      <xs:element type="xs:string" name="updated-by" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:long" name="id"/>
+    <xs:attribute type="xs:long" name="product-id"/>
+    <xs:attribute type="xs:string" name="guid"/>
+    <xs:attribute type="xs:string" name="code" use="required"/>
+    <xs:attribute type="xs:string" name="product-code" use="required"/>
+    <xs:attribute type="xs:int" name="rank"/>
+  </xs:complexType>
+
+</xs:schema>

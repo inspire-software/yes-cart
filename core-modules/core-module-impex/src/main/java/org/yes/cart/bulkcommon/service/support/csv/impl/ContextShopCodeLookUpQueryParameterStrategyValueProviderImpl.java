@@ -19,8 +19,8 @@ package org.yes.cart.bulkcommon.service.support.csv.impl;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvImpExDescriptor;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
-import org.yes.cart.bulkcommon.service.support.csv.LookUpQueryParameterStrategyValueProvider;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
+import org.yes.cart.bulkcommon.service.support.csv.CsvLookUpQueryParameterStrategyValueProvider;
 import org.yes.cart.bulkexport.csv.impl.CsvAsIsValueAdapter;
 
 /**
@@ -28,9 +28,9 @@ import org.yes.cart.bulkexport.csv.impl.CsvAsIsValueAdapter;
  * Date: 11/06/2015
  * Time: 12:22
  */
-public class ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl implements LookUpQueryParameterStrategyValueProvider {
+public class ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl implements CsvLookUpQueryParameterStrategyValueProvider {
 
-    private final ValueAdapter asIs = new CsvAsIsValueAdapter();
+    private final CsvValueAdapter asIs = new CsvAsIsValueAdapter();
 
     /**
      * {@inheritDoc}
@@ -40,7 +40,7 @@ public class ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl implem
                                       final CsvImpExDescriptor descriptor,
                                       final Object masterObject,
                                       final CsvImpExTuple tuple,
-                                      final ValueAdapter adapter,
+                                      final CsvValueAdapter adapter,
                                       final String queryTemplate) {
 
         if (descriptor.getContext().getShopCode() != null) {

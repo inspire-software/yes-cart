@@ -17,6 +17,7 @@
 package org.yes.cart.bulkcommon.csv;
 
 import org.yes.cart.bulkcommon.model.ImpExDescriptor;
+import org.yes.cart.bulkcommon.model.ImpExTuple;
 
 import java.util.List;
 
@@ -27,24 +28,14 @@ import java.util.List;
  * Date: 12-08-11
  * Time: 12:54 PM
  */
-public interface CsvImpExTuple<S, T, D extends ImpExDescriptor, C extends CsvImpExColumn> {
-
-    /**
-     * @return id to trace back to the import source.
-     */
-    S getSourceId();
-
-    /**
-     * @return data to be imported
-     */
-    T getData();
+public interface CsvImpExTuple<S, T, D extends ImpExDescriptor, C extends CsvImpExColumn> extends ImpExTuple<S, T> {
 
     /**
      * @param column column descriptor
      * @param adapter value adapter
      * @return column value (or values) depending on data
      */
-    Object getColumnValue(C column, ValueAdapter adapter);
+    Object getColumnValue(C column, CsvValueAdapter adapter);
 
     /**
      * @param importDescriptor import descriptor
@@ -52,6 +43,6 @@ public interface CsvImpExTuple<S, T, D extends ImpExDescriptor, C extends CsvImp
      * @param adapter value adapter
      * @return sub tuple from a column
      */
-    <I extends CsvImpExTuple<S, T, D, C>> List<I> getSubTuples(D importDescriptor, C column, ValueAdapter adapter);
+    <I extends CsvImpExTuple<S, T, D, C>> List<I> getSubTuples(D importDescriptor, C column, CsvValueAdapter adapter);
 
 }

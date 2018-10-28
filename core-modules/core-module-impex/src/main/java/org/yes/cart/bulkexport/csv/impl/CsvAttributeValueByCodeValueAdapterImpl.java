@@ -19,8 +19,7 @@ package org.yes.cart.bulkexport.csv.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
-import org.yes.cart.bulkcommon.csv.ValueAdapter;
-import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.domain.entity.AttrValue;
 
 import java.util.Collection;
@@ -30,7 +29,7 @@ import java.util.Collection;
  * Date: 30/11/2015
  * Time: 22:16
  */
-public class CsvAttributeValueByCodeValueAdapterImpl implements ValueAdapter {
+public class CsvAttributeValueByCodeValueAdapterImpl implements CsvValueAdapter {
 
 
     /**
@@ -48,15 +47,6 @@ public class CsvAttributeValueByCodeValueAdapterImpl implements ValueAdapter {
             }
         }
         return null;
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param extensibleValueAdapter extend
-     */
-    public void setExtensibleValueAdapter(ExtensibleValueAdapter extensibleValueAdapter) {
-        extensibleValueAdapter.extend(this, "AVC");
     }
 
 }

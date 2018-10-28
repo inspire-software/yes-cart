@@ -69,7 +69,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         if (bulkImportService == null) {
             bulkImportService = createContext().getBean("csvBulkImportService", ImportService.class);
-            xml = createContext().getBean("importDescriptorXStreamProvider", XStreamProvider.class);
+            xml = createContext().getBean("importCsvDescriptorXStreamProvider", XStreamProvider.class);
         }
         super.setUp();
 

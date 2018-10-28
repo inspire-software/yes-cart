@@ -39,13 +39,13 @@ public interface DataDescriptor extends Auditable {
     String TYPE_WEBINF_XML_CSV = "WEBINF_XML/CSV";
 
     // Raw XML descriptor for CSV service (YCE)
-    String TYPE_RAW_XML_CSV = "RAWINF_XML/CSV";
+    String TYPE_RAW_XML_CSV = "RAW_XML/CSV";
 
     // WebInf XML descriptor for XML service
     String TYPE_WEBINF_XML_XML = "WEBINF_XML/XML";
 
     // Raw XML descriptor for XML service (YCE)
-    String TYPE_RAW_XML_XML = "RAWINF_XML/XML";
+    String TYPE_RAW_XML_XML = "RAW_XML/XML";
 
 
     /**

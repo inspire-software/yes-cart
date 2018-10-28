@@ -19,7 +19,10 @@ package org.yes.cart.domain.entity.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueProductSku;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.Seo;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -50,7 +53,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     private Product product;
     private int rank;
     private String barCode;
-    private Collection<SkuPrice> skuPrice = new ArrayList<>(0);
     private Collection<AttrValueProductSku> attributes = new ArrayList<>(0);
     private SeoEntity seoInternal;
     private Instant createdTimestamp;

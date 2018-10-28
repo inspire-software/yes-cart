@@ -27,7 +27,6 @@ import org.yes.cart.domain.entity.DataGroup;
 import org.yes.cart.service.domain.DataDescriptorService;
 import org.yes.cart.service.domain.DataGroupService;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,12 +43,14 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
     private final DataGroupService dataGroupService;
     private final DataDescriptorService dataDescriptorService;
 
-    private final List<DataDescriptorReader<ExportDescriptor>> readers = new ArrayList<>();
+    private final List<DataDescriptorReader<ExportDescriptor>> readers;
 
     public ExportDataDescriptorResolverImpl(final DataGroupService dataGroupService,
-                                            final DataDescriptorService dataDescriptorService) {
+                                            final DataDescriptorService dataDescriptorService,
+                                            final List<DataDescriptorReader<ExportDescriptor>> readers) {
         this.dataGroupService = dataGroupService;
         this.dataDescriptorService = dataDescriptorService;
+        this.readers = readers;
     }
 
     /**
@@ -119,19 +120,4 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
         return dataGroupService.findByType(DataGroup.TYPE_EXPORT);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void register(final DataDescriptorReader<ExportDescriptor> exportDescriptorDataDescriptorReader) {
-        for (final DataDescriptorReader<ExportDescriptor> reader : this.readers) {
-            if (exportDescriptorDataDescriptorReader.equals(reader)) {
-                return; // already registered
-            }
-        }
-
-        this.readers.add(exportDescriptorDataDescriptorReader);
-
-        LOG.info("Registered data export descriptor reader: {}", exportDescriptorDataDescriptorReader);
-    }
 }
