@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>search</artifactId>
-        <version>3.5.0-SNAPSHOT</version>
+        <version>3.5.0</version>
     </parent>
     <artifactId>search-lucene-core</artifactId>
     <name>Yes cart search: Lucene core</name>

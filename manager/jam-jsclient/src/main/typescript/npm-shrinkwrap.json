@@ -1,6 +1,6 @@
 {
   "name": "yes-cart-jam",
-  "version": "3.5.0-SNAPSHOT",
+  "version": "3.5.0",
   "dependencies": {
     "@angular/animations": {
       "version": "4.4.6",
