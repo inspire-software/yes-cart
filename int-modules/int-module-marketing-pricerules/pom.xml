@@ -21,7 +21,7 @@
     <parent>
         <artifactId>int-modules</artifactId>
         <groupId>org.yes</groupId>
-        <version>3.5.0</version>
+        <version>3.5.1-SNAPSHOT</version>
     </parent>
     <artifactId>int-module-marketing-pricerules</artifactId>
     <name>Yes cart integration: Price rules</name>
