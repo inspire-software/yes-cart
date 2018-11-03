@@ -16,15 +16,18 @@ public class BasicCallbackInfoImpl implements CallbackAware.Callback {
     private final CallbackAware.CallbackOperation operation;
     private final BigDecimal amount;
     private final Map parameters;
+    private final boolean validated;
 
     public BasicCallbackInfoImpl(final String orderGuid,
                                  final CallbackAware.CallbackOperation operation,
                                  final BigDecimal amount,
-                                 final Map parameters) {
+                                 final Map parameters,
+                                 final boolean validated) {
         this.orderGuid = orderGuid;
         this.operation = operation;
         this.amount = amount;
         this.parameters = parameters;
+        this.validated = validated;
     }
 
     /** {@inheritDoc} */
@@ -51,6 +54,12 @@ public class BasicCallbackInfoImpl implements CallbackAware.Callback {
         return parameters;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public boolean isValidated() {
+        return validated;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -60,6 +69,7 @@ public class BasicCallbackInfoImpl implements CallbackAware.Callback {
                 "orderGuid='" + orderGuid + '\'' +
                 ", operation=" + operation +
                 ", amount=" + amount +
+                ", validated=" + validated +
                 '}';
     }
 }

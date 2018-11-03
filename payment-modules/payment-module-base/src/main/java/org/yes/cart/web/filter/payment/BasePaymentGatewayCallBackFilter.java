@@ -100,7 +100,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
             try {
 
-                paymentCallBackHandlerFacade.handlePaymentCallback(callback);
+                paymentCallBackHandlerFacade.handlePaymentCallback(callback, false);
 
                 ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_OK);
 

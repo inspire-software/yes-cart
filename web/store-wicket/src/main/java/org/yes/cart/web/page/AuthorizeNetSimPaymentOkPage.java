@@ -117,7 +117,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
                     ShopCodeContext.getShopCode(), callbackDump);
 
             // Authorize.Net does not have callback, so relay page should be used instead
-            paymentCallBackHandlerFacade.handlePaymentCallback(callback);
+            paymentCallBackHandlerFacade.handlePaymentCallback(callback, false);
 
         } catch (OrderException e) {
 

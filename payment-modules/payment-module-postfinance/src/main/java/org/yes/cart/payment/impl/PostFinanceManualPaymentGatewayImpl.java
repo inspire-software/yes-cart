@@ -53,7 +53,7 @@ public class PostFinanceManualPaymentGatewayImpl extends PostFinancePaymentGatew
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment paymentIn) {
+    public Payment authorizeCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -67,7 +67,7 @@ public class PostFinanceManualPaymentGatewayImpl extends PostFinancePaymentGatew
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         return paymentIn;
     }
 

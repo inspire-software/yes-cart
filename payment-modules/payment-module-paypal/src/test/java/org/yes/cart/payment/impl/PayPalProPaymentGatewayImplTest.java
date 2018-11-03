@@ -161,6 +161,8 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -169,7 +171,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         Payment.PAYMENT_STATUS_OK,
                         PaymentGateway.AUTH).size());
         //lets perform reverse authorization
-        paymentProcessor.reverseAuthorizations(orderNum);
+        paymentProcessor.reverseAuthorizations(orderNum, false);
         //two records for reverse
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -196,6 +198,8 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -206,7 +210,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         //capture on first completed shipment
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
+                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false));
         assertEquals(1,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -215,7 +219,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         PaymentGateway.CAPTURE).size());
         //capture on second completed shipment
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
+                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -233,6 +237,8 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -243,7 +249,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         //capture on first completed shipment
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum()));
+                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false));
         assertEquals(1,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -252,7 +258,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         PaymentGateway.CAPTURE).size());
         //capture on second completed shipment
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), new BigDecimal("-23.23")));
+                paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false, new BigDecimal("-23.23")));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -283,6 +289,8 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.authorize(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
@@ -292,7 +300,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         PaymentGateway.AUTH).size());
         //capture on first completed shipment
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
-        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum());
+        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false);
         assertEquals(1,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -300,7 +308,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         Payment.PAYMENT_STATUS_OK,
                         PaymentGateway.CAPTURE).size());
         //capture on second completed shipment
-        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum());
+        paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false);
         assertEquals(2,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -309,7 +317,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         PaymentGateway.CAPTURE).size());
         //lets void capture
         assertEquals(Payment.PAYMENT_STATUS_OK,
-                paymentProcessor.cancelOrder(customerOrder, useRefund));
+                paymentProcessor.cancelOrder(customerOrder, false, useRefund));
         assertEquals(2,
                 customerOrderPaymentService.findBy(
                         orderNum,
@@ -333,6 +341,8 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_FAILED,
                 paymentProcessor.authorizeCapture(
                         customerOrder,
+                        false,
+                        false,
                         createCardParameters()));
         assertEquals(2,
                 customerOrderPaymentService.findBy(

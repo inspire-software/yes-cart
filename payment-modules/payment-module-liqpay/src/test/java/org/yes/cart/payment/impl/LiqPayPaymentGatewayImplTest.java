@@ -30,8 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -177,21 +176,31 @@ public class LiqPayPaymentGatewayImplTest {
         }};
 
         // Always should fail with invalid signature
-        assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult, false).getStatus());
+        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult, false);
         assertNull(badCallback.getOrderGuid());
         assertEquals(CallbackAware.CallbackOperation.INVALID, badCallback.getOperation());
         assertNull(badCallback.getAmount());
+        assertFalse(badCallback.isValidated());
+
+        // Forced will not fail
+        assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult, true).getStatus());
+        final CallbackAware.Callback forcedCallback = gatewayImpl.convertToCallback(callBackresult, true);
+        assertEquals(order_id, forcedCallback.getOrderGuid());
+        assertEquals(CallbackAware.CallbackOperation.PAYMENT, forcedCallback.getOperation());
+        assertEquals(new BigDecimal("10.00"), forcedCallback.getAmount());
+        assertFalse(forcedCallback.isValidated());
 
         // Check with valid signature
         callBackresult.put("signature", validSignature);
 
-        assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        final CallbackAware.Callback goodCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult, false).getStatus());
+        final CallbackAware.Callback goodCallback = gatewayImpl.convertToCallback(callBackresult, false);
         assertEquals(order_id, goodCallback.getOrderGuid());
         // Only PAYMENT operation callback is supported as refund is a synchronous REST call with immediate result
         assertEquals(CallbackAware.CallbackOperation.PAYMENT, goodCallback.getOperation());
         assertEquals(new BigDecimal("10.00"), goodCallback.getAmount());
+        assertTrue(goodCallback.isValidated());
     }
 
 

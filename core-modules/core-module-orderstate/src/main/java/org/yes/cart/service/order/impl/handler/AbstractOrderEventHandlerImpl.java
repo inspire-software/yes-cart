@@ -48,6 +48,11 @@ public abstract class AbstractOrderEventHandlerImpl implements OrderEventHandler
         orderEvent.getCustomerOrder().setOrderStatus(getTransitionTarget(orderEvent));
     }
 
+    protected boolean isForceProcessing(final OrderEvent orderEvent) {
 
+        final Object forceProcessing = orderEvent.getRuntimeParams().get("forceProcessing");
+        return forceProcessing instanceof Boolean && (Boolean) forceProcessing;
+
+    }
 
 }

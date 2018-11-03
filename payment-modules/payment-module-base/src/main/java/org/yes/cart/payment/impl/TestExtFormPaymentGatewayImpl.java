@@ -110,7 +110,8 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Callback convertToCallback(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters,
+                                      final boolean forceProcessing) {
         CallbackOperation op = CallbackOperation.PAYMENT;
         String responseCode = HttpParamsUtils.getSingleValue(privateCallBackParameters.get(AUTH_RESPONSE_CODE_PARAM_KEY));
         String amountKey = AUTH_RESPONSE_AMOUNT_PARAM_KEY;
@@ -133,7 +134,8 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
                 HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID_PARAM_KEY)),
                 op,
                 callbackAmount,
-                privateCallBackParameters
+                privateCallBackParameters,
+                true
         );
     }
 
@@ -141,7 +143,8 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult,
+                                                                  final boolean forceProcessing) {
 
         String responseCode = callbackResult.get(AUTH_RESPONSE_CODE_PARAM_KEY);
         if (responseCode == null) {
@@ -165,14 +168,14 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment createPaymentPrototype(final String operation, final Map privateCallBackParameters) {
+    public Payment createPaymentPrototype(final String operation, final Map privateCallBackParameters, final boolean forceProcessing) {
         final Payment payment = new PaymentImpl();
 
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
 
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(privateCallBackParameters);
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(params);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(params, forceProcessing);
 
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
@@ -191,7 +194,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment paymentIn) {
+    public Payment authorizeCapture(final Payment paymentIn, final boolean forceProcessing) {
         return (Payment) SerializationUtils.clone(paymentIn);
     }
 
@@ -199,7 +202,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -213,7 +216,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -227,7 +230,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(final Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -241,7 +244,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -255,7 +258,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment paymentIn) {
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -281,14 +284,14 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
 
             if (callback != null) {
                 responseCode = HttpParamsUtils.getSingleValue(callback.getParameters().get(REFUND_RESPONSE_CODE_PARAM_KEY));
-                res = getExternalCallbackResult(HttpParamsUtils.createSingleValueMap(callback.getParameters()));
+                res = getExternalCallbackResult(HttpParamsUtils.createSingleValueMap(callback.getParameters()), false);
             } else {
                 responseCode = gatewayConfig.containsKey(REFUND_RESPONSE_CODE_PARAM_KEY) ?
                         gatewayConfig.get(REFUND_RESPONSE_CODE_PARAM_KEY).getValue() : Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED;
 
                 res = getExternalCallbackResult(new HashMap<String, String>() {{
                     put(REFUND_RESPONSE_CODE_PARAM_KEY, responseCode);
-                }});
+                }}, false);
             }
 
             payment.setTransactionOperationResultCode(responseCode);

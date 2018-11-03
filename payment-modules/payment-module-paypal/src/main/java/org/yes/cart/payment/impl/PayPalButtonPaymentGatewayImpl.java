@@ -116,11 +116,18 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Callback convertToCallback(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters, final boolean forceProcessing) {
 
         final IPNMessage ipn = createIPNMessage(privateCallBackParameters);
-        if (ipn.validate()) {
-            LOG.debug("Signature is valid");
+
+        final boolean valid = ipn.validate();
+
+        if (valid || forceProcessing) {
+            if (valid) {
+                LOG.debug("Signature is valid");
+            } else {
+                LOG.warn("Signature is not valid ... forced processing");
+            }
             final String invoice = ipn.getIpnValue("invoice");
             final String paymentStatus = ipn.getIpnValue("payment_status");
             final boolean refund = "Refunded".equalsIgnoreCase(paymentStatus);
@@ -138,13 +145,13 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
                 return new BasicCallbackInfoImpl(
                         ipn.getIpnValue("custom"),
                         refund ? CallbackOperation.REFUND : CallbackOperation.PAYMENT,
-                        callbackAmount, privateCallBackParameters
+                        callbackAmount, privateCallBackParameters, valid
                 );
             }
             return new BasicCallbackInfoImpl(
                     invoice,
                     refund ? CallbackOperation.REFUND : CallbackOperation.PAYMENT,
-                    callbackAmount, privateCallBackParameters
+                    callbackAmount, privateCallBackParameters, valid
             );
         } else {
             LOG.debug("Signature is not valid");
@@ -152,7 +159,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         return new BasicCallbackInfoImpl(
                 null,
                 CallbackOperation.INVALID,
-                null, privateCallBackParameters
+                null, privateCallBackParameters, valid
         );
     }
 
@@ -160,14 +167,22 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult,
+                                                                  final boolean forceProcessing) {
 
         final Map<String, String[]> request = HttpParamsUtils.createArrayValueMap(callbackResult);
 
         final IPNMessage ipn = createIPNMessage(request);
-        if (ipn.validate()) {
 
-            LOG.debug("Signature is valid");
+        final boolean valid = ipn.validate();
+
+        if (valid || forceProcessing) {
+
+            if (valid) {
+                LOG.debug("Signature is valid");
+            } else {
+                LOG.warn("Signature is not valid ... forced processing");
+            }
 
             final String paymentStatus = ipn.getIpnValue("payment_status");
 
@@ -254,7 +269,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment payment) {
+    public Payment authorizeCapture(final Payment payment, final boolean forceProcessing) {
         return payment;
     }
 
@@ -262,7 +277,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -276,7 +291,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -290,7 +305,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(final Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -304,7 +319,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -318,7 +333,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment paymentIn) {
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -409,7 +424,9 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
      * {@inheritDoc}
      */
     @Override
-    public Payment createPaymentPrototype(final String operation, final Map map) {
+    public Payment createPaymentPrototype(final String operation,
+                                          final Map map,
+                                          final boolean forceProcessing) {
 
         final Payment payment = new PaymentImpl();
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(map);
@@ -435,7 +452,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         }
         payment.setCardHolderName(name.length() > 0 ? name.toString() : null);
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(params);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(params, forceProcessing);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

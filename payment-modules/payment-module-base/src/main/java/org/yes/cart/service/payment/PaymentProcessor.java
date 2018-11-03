@@ -43,48 +43,63 @@ public interface PaymentProcessor {
      * and funds are available on the customer's credit card. In case if authorize operation ot supported by
      * payment gateway the auth_capture operation will be use instead.
      *
-     * @param order to authorize payments.
-     * @param params for payment gateway to create template from. Also if this map contains key
-     *               forceSinglePayment, only one payment will be created (hack to support pay pal express).
+     * @param order                     to authorize payments.
+     * @param forceSinglePayment        flag is true for authCapture operation, when payment gateway not supports
+     *                                  several payments per order
+     * @param forceProcessing           force processing
+     * @param params                    for payment gateway to create template from.
      *
      * @return status of operation.
      */
-    String authorize(CustomerOrder order, Map params);
+    String authorize(CustomerOrder order,
+                     boolean forceSinglePayment,
+                     boolean forceProcessing,
+                     Map params);
 
 
     /**
      * Cancel order. All authorized payments will be reversed, captured funds will be void of refunded.
      * No rollback operations will be performed if order already has cancel state
      *
-     * @param order order to cancel.
-     * @param params for payment gateway to create template from.
+     * @param order                     order to cancel.
+     * @param forceProcessing           force processing
+     * @param params                    for payment gateway to create template from.
      *
      * @return status of operation.
      */
-    String cancelOrder(CustomerOrder order, Map params);
+    String cancelOrder(CustomerOrder order,
+                       boolean forceProcessing,
+                       Map params);
 
 
     /**
      * Particular shipment is complete. Funds can be captured.
      *
-     * @param order order
-     * @param orderShipmentNumber internal shipment number. Each order has at least one delivery.
-     * @param params for payment gateway to create template from.
+     * @param order                     order
+     * @param orderShipmentNumber       internal shipment number. Each order has at least one delivery.
+     * @param forceProcessing           force processing
+     * @param params                    for payment gateway to create template from.
      *
      * @return status of operation.
      */
-    String shipmentComplete(CustomerOrder order, String orderShipmentNumber, Map params);
+    String shipmentComplete(CustomerOrder order,
+                            String orderShipmentNumber,
+                            boolean forceProcessing,
+                            Map params);
 
     /**
      * Perform local refund operation, i.e. find payment transactions notification refers to
      * and mark them as refunded externally.
      *
-     * @param order order to cancel.
-     * @param params for payment gateway to create template from.
+     * @param order                     order to cancel.
+     * @param forceProcessing           force processing
+     * @param params                    for payment gateway to create template from.
      *
      * @return status of operation.
      */
-    String refundNotification(CustomerOrder order, Map params);
+    String refundNotification(CustomerOrder order,
+                              boolean forceProcessing,
+                              Map params);
 
 
     /**
@@ -112,18 +127,20 @@ public interface PaymentProcessor {
     /**
      * Create list of payment to authorize.
      *
-     * @param order              order
-     * @param params for payment gateway to create template from. Also if this map contains key
-     *               forceSinglePayment, only one payment will be created (hack to support pay pal express).
-     * @param forceSinglePayment flag is true for authCapture operation, when payment gateway not supports several payments per order
+     * @param order                     order
+     * @param forceSinglePayment        flag is true for authCapture operation, when payment gateway not supports
+     *                                  several payments per order
+     * @param forceProcessing           force processing
+     * @param params                    for payment gateway to create template from.
      * @param transactionOperation operation name on YC payment processor
      *
      * @return list of  {@link Payment} to process
      */
     List<Payment> createPaymentsToAuthorize(CustomerOrder order,
                                             boolean forceSinglePayment,
-                                            final Map params,
-                                            final String transactionOperation);
+                                            boolean forceProcessing,
+                                            Map params,
+                                            String transactionOperation);
 
 
 }

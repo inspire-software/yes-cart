@@ -83,11 +83,12 @@ public interface PaymentGateway extends Serializable {
      * <p/>
      * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
-     * @param payment to capture.
+     * @param payment                   to capture.
+     * @param forceProcessing           force processing of parameters
      *
      * @return payment
      */
-    Payment authorizeCapture(Payment payment);
+    Payment authorizeCapture(Payment payment, boolean forceProcessing);
 
 
     /**
@@ -97,46 +98,49 @@ public interface PaymentGateway extends Serializable {
      * <p/>
      * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
-     * @param payment to authorize.
+     * @param payment                   to authorize.
+     * @param forceProcessing           force processing
      *
      * @return payment. Gateways can return reference id, token, etc.
      */
-    Payment authorize(Payment payment);
+    Payment authorize(Payment payment, boolean forceProcessing);
 
     /**
      * Reverse the authorization. Not always supported by payment gateways. Used to cancel
-     * AUTH transaction (see {@link #authorize(org.yes.cart.payment.dto.Payment)}).
+     * AUTH transaction (see {@link #authorize(org.yes.cart.payment.dto.Payment,boolean)}).
      * <p/>
      * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
-     * @param payment payment
+     * @param payment                   payment
+     * @param forceProcessing           force processing
      *
      * @return payment.
      */
-    Payment reverseAuthorization(Payment payment);
+    Payment reverseAuthorization(Payment payment, boolean forceProcessing);
 
     /**
      * Payment capture on authorized card.
      * Capture of prior authorization of credit card transaction request to capture funds.
      * With this type of transaction, the merchant will submit an authorization code
      * that was received from the issuing bank at the time of the original authorization-only
-     * transaction. (see {@link #authorize(org.yes.cart.payment.dto.Payment)}
+     * transaction. (see {@link #authorize(org.yes.cart.payment.dto.Payment,boolean)}
      * <p/>
      * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
-     * @param payment to capture.
+     * @param payment                   to capture.
+     * @param forceProcessing           force processing
      *
      * @return payment
      */
-    Payment capture(Payment payment);
+    Payment capture(Payment payment, boolean forceProcessing);
 
 
     /**
      * Void transactions are used to cancel original charge transactions (CAPTURE or AUTH_CAPTURE)
      * that have not yet been submitted for batch settlement. For this type of transaction,
      * the merchant must submit the transaction ID of the original charge transaction against
-     * which the Void is being submitted (see {@link #capture(org.yes.cart.payment.dto.Payment)}
-     * and {@link #authorizeCapture(org.yes.cart.payment.dto.Payment)}).
+     * which the Void is being submitted (see {@link #capture(org.yes.cart.payment.dto.Payment,boolean)}
+     * and {@link #authorizeCapture(org.yes.cart.payment.dto.Payment,boolean)}).
      * <p/>
      * No further action may be taken for Void transactions.
      *
@@ -144,10 +148,12 @@ public interface PaymentGateway extends Serializable {
      * <p/>
      * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
-     * @param payment to void capture.
+     * @param payment                   to void capture.
+     * @param forceProcessing           force processing
+     *
      * @return payment
      */
-    Payment voidCapture(Payment payment);
+    Payment voidCapture(Payment payment, boolean forceProcessing);
 
 
     /**
@@ -161,10 +167,12 @@ public interface PaymentGateway extends Serializable {
      * <p/>
      * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
-     * @param payment to refund
+     * @param payment                   to refund
+     * @param forceProcessing           force processing
+     *
      * @return payment
      */
-    Payment refund(Payment payment);
+    Payment refund(Payment payment, boolean forceProcessing);
 
 
     /**
@@ -173,13 +181,15 @@ public interface PaymentGateway extends Serializable {
      * will simply return given argument
      *
      *
-     * @param operation operation for which to create prototype for
-     * @param map given map of parameters, from http request. Each Payment gateway know how to
-     *            create template payment from HttpServletRequest#getParameterMap and configuration parameters.
+     * @param operation                 operation for which to create prototype for
+     * @param map                       given map of parameters, from http request. Each Payment gateway know how to
+     *                                  create template payment from HttpServletRequest#getParameterMap and configuration
+     *                                  parameters.
+     * @param forceProcessing           force processing
      *
      * @return payment template.
      */
-    Payment createPaymentPrototype(String operation, Map map);
+    Payment createPaymentPrototype(String operation, Map map, boolean forceProcessing);
 
 
     /**

@@ -59,7 +59,7 @@ public class PaymentConfirmedOrderEventHandlerImpl extends PaymentOkOrderEventHa
 
         if (!paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
 
-            final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
+            final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), false, isForceProcessing(orderEvent), orderEvent.getParams());
             if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                 return super.handle(orderEvent);
             }

@@ -120,7 +120,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment payment) {
+    public Payment authorizeCapture(final Payment payment, final boolean forceProcessing) {
         return payment;
     }
 
@@ -128,7 +128,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(final Payment paymentIn) {
+    public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -142,7 +142,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment paymentIn) {
+    public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REVERSE_AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -156,7 +156,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(final Payment paymentIn) {
+    public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -170,7 +170,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment paymentIn) {
+    public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(VOID_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
@@ -184,19 +184,19 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment paymentIn) {
-        return super.refund(paymentIn);
+    public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
+        return super.refund(paymentIn, forceProcessing);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Callback convertToCallback(final Map privateCallBackParameters) {
+    public Callback convertToCallback(final Map privateCallBackParameters, final boolean forceProcessing) {
         return new BasicCallbackInfoImpl(
                 HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID)),
                 CallbackOperation.PAYMENT,
-                null, privateCallBackParameters
+                null, privateCallBackParameters, true
         );
     }
 
@@ -438,7 +438,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
 
             final String redirectUrl;
 
-            if (CallbackAware.CallbackResult.OK == getExternalCallbackResult(result)) {
+            if (CallbackAware.CallbackResult.OK == getExternalCallbackResult(result, false)) {
                 /*not encoded answer will be like this
                 TOKEN=EC%2d8DX631540T256421Y&TIMESTAMP=2011%2d12%2d21T20%3a12%3a37Z&CORRELATIONID=2d2aa98bcd550&ACK=Success&VERSION=2%2e3&BUILD=2271164
                  Redirect url  to paypal for perform login and payment */
@@ -480,7 +480,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      * @return true in case of success
      */
     @Override
-    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+    public CallbackAware.CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult, final boolean forceProcessing) {
         if (isAckSuccess(callbackResult)) {
             return CallbackAware.CallbackResult.OK;
         }
@@ -503,7 +503,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
      * {@inheritDoc}
      */
     @Override
-    public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
+    public Payment createPaymentPrototype(final String operation, final Map parametersMap, final boolean forceProcessing) {
 
         final Payment payment = new PaymentImpl();
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);
@@ -511,7 +511,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
         payment.setTransactionReferenceId(params.get("PAYMENTINFO_0_TRANSACTIONID"));
         payment.setTransactionAuthorizationCode(params.get("PAYERID"));
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(params);
+        final CallbackAware.CallbackResult res = getExternalCallbackResult(params, forceProcessing);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

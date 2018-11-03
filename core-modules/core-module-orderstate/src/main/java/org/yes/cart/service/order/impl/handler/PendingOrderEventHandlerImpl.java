@@ -108,7 +108,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
                 // online payment processing
-                final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
+                final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), false, isForceProcessing(orderEvent), orderEvent.getParams());
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                     //payment was ok, so quantity on warehouses will be decreased
                     getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_PAYMENT_OK, orderEvent.getCustomerOrder()));

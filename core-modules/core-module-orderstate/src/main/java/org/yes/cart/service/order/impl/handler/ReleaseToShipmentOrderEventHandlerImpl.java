@@ -68,7 +68,7 @@ public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler
                 if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
 
                     // need to capture before shipping
-                    if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.shipmentComplete(order, delivery.getDeliveryNum(), orderEvent.getParams()))) {
+                    if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.shipmentComplete(order, delivery.getDeliveryNum(), isForceProcessing(orderEvent), orderEvent.getParams()))) {
 
                         // payment was ok so continue
                         delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
@@ -83,7 +83,7 @@ public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler
                 }  else if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isAutoCapture()) {
 
                     // offline payments for auto capture (e.g. B2B invoice through contact)
-                    if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.shipmentComplete(order, delivery.getDeliveryNum(), orderEvent.getParams()))) {
+                    if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.shipmentComplete(order, delivery.getDeliveryNum(), isForceProcessing(orderEvent), orderEvent.getParams()))) {
 
                         // payment was ok so continue
                         delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
@@ -113,5 +113,14 @@ public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler
             return true;
         }
     }
+
+
+    protected boolean isForceProcessing(final OrderEvent orderEvent) {
+
+        final Object forceProcessing = orderEvent.getRuntimeParams().get("forceProcessing");
+        return forceProcessing instanceof Boolean && (Boolean) forceProcessing;
+
+    }
+
 
 }

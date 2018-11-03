@@ -81,7 +81,7 @@ public class PaymentProcessedOrderEventHandlerImpl extends AbstractOrderEventHan
 
             boolean handled = false;
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
-                final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
+                final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), false, isForceProcessing(orderEvent), orderEvent.getParams());
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                     //payment was ok, proceed
                     handleInternal(orderEvent);

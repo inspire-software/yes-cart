@@ -27,10 +27,12 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.dto.impl.PaymentLineImpl;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -284,8 +286,8 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
         }};
 
         // Test failure with invalid signature
-        assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult, false).getStatus());
+        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult, false);
         assertEquals(CallbackAware.CallbackOperation.INVALID, badCallback.getOperation());
         assertNull(badCallback.getOrderGuid());
         assertNull(badCallback.getAmount());
@@ -298,8 +300,8 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
         };
 
         // Test behaviour with valid signature
-        assertEquals(expectedStatus, gatewayImpl2.getExternalCallbackResult(callBackresult).getStatus());
-        final CallbackAware.Callback goodCallback = gatewayImpl2.convertToCallback(callBackresult);
+        assertEquals(expectedStatus, gatewayImpl2.getExternalCallbackResult(callBackresult, false).getStatus());
+        final CallbackAware.Callback goodCallback = gatewayImpl2.convertToCallback(callBackresult, false);
         assertEquals("12", goodCallback.getOrderGuid());
         assertEquals(new BigDecimal("15.00"), goodCallback.getAmount());
 
@@ -344,11 +346,58 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
         }};
 
 
-        assertEquals(CallbackAware.CallbackResult.OK, gatewayImpl.getExternalCallbackResult(callBackresult));
-        final CallbackAware.Callback goodCallback = gatewayImpl.convertToCallback(callBackresult);
+        assertEquals(CallbackAware.CallbackResult.OK, gatewayImpl.getExternalCallbackResult(callBackresult, false));
+        final CallbackAware.Callback goodCallback = gatewayImpl.convertToCallback(callBackresult, false);
         assertEquals(CallbackAware.CallbackOperation.PAYMENT, goodCallback.getOperation());
         assertEquals("151013162426-26", goodCallback.getOrderGuid());
         assertEquals(new BigDecimal("1035.10"), goodCallback.getAmount());
+        assertTrue(goodCallback.isValidated());
+    }
+
+
+    @Test
+    public void testIsSuccessWithStatus2Force() {
+
+
+
+        final Map<String, String> params = new HashMap<>();
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_MD5_HASH_KEY, "Simon");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "yescartauthorise1");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "5yaqwaA8Uk5X");
+
+        final AuthorizeNetSimPaymentGatewayImpl gatewayImpl = new AuthorizeNetSimPaymentGatewayImpl() {
+
+            @Override
+            public String getParameterValue(String valueLabel) {
+                if (params.containsKey(valueLabel)) {
+                    return params.get(valueLabel);
+                }
+                return "";
+            }
+
+            @Override
+            protected boolean isValid(final Map privateCallBackParameters) {
+                return false; // Overwritten, since this is performed by pure AuthNet API
+            }
+        };
+
+        Map<String, String> callBackresult = new HashMap<String, String>() {{
+
+            put("x_amount", "1035.10");
+            put("x_trans_id", "2242023261");
+            put("x_response_code", "1");
+            put("x_MD5_Hash", "E7184C27CDCF2AF604AA50C2174C244C");
+            put("orderGuid", "151013162426-26");
+
+        }};
+
+
+        assertEquals(CallbackAware.CallbackResult.OK, gatewayImpl.getExternalCallbackResult(callBackresult, true));
+        final CallbackAware.Callback badCallback = gatewayImpl.convertToCallback(callBackresult, true);
+        assertEquals(CallbackAware.CallbackOperation.PAYMENT, badCallback.getOperation());
+        assertEquals("151013162426-26", badCallback.getOrderGuid());
+        assertEquals(new BigDecimal("1035.10"), badCallback.getAmount());
+        assertFalse(badCallback.isValidated());
     }
 
 

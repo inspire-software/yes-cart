@@ -180,7 +180,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment authorize(final Payment payment) {
+    public Payment authorize(final Payment payment, final boolean forceProcessing) {
 
         LOG.debug("Authorize: {}", payment);
 
@@ -299,7 +299,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment reverseAuthorization(final Payment payment) {
+    public Payment reverseAuthorization(final Payment payment, final boolean forceProcessing) {
 
         LOG.debug("Reverse authorization: {}", payment);
 
@@ -324,7 +324,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment capture(final Payment payment) {
+    public Payment capture(final Payment payment, final boolean forceProcessing) {
 
         LOG.debug("Capture: {}", payment);
 
@@ -348,16 +348,16 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment authorizeCapture(final Payment payment) {
-        Payment authPayment = authorize(payment);
-        return capture(payment);
+    public Payment authorizeCapture(final Payment payment, final boolean forceProcessing) {
+        Payment authPayment = authorize(payment, forceProcessing);
+        return capture(payment, forceProcessing);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Payment voidCapture(final Payment payment) {
+    public Payment voidCapture(final Payment payment, final boolean forceProcessing) {
 
         LOG.debug("Void capture: {}", payment);
 
@@ -381,7 +381,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public Payment refund(final Payment payment) {
+    public Payment refund(final Payment payment, final boolean forceProcessing) {
 
         LOG.debug("Credit on prev auth: {}", payment);
 

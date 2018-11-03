@@ -100,16 +100,23 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     /**
      * AuthCapture or immediate sale operation will be be used if payment gateway does not support normal flow authorize - delivery - capture.
      *
-     * @param order  to authorize payments.
-     * @param params for payment gateway to create template from. Also if this map contains key
-     *               forceSinglePayment, only one payment will be created (hack to support pay pal express).
+     * @param order                     to authorize payments.
+     * @param forceSinglePayment        flag is true for authCapture operation, when payment gateway not supports
+     *                                  several payments per order
+     * @param forceProcessing           force processing
+     * @param params                    for payment gateway to create template from.
+     *
      * @return status of operation.
      */
-    protected String authorizeCapture(final CustomerOrder order, final Map params) {
+    protected String authorizeCapture(final CustomerOrder order,
+                                      final boolean forceSinglePayment,
+                                      final boolean forceProcessing,
+                                      final Map params) {
 
         final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(
                 order,
-                params.containsKey("forceSinglePayment"),
+                forceSinglePayment,
+                forceProcessing,
                 params,
                 PaymentGateway.AUTH_CAPTURE);
 
@@ -120,7 +127,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         boolean atLeastOneError = false;
         for (Payment payment : paymentsToAuthorize) {
             try {
-                payment = getPaymentGateway().authorizeCapture(payment);
+                payment = getPaymentGateway().authorizeCapture(payment, forceProcessing);
                 paymentResult = payment.getPaymentProcessorResult();
             } catch (Throwable th) {
                 LOG.error(th.getMessage(), th);
@@ -167,13 +174,17 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * {@inheritDoc}
      */
     @Override
-    public String authorize(final CustomerOrder order, final Map params) {
+    public String authorize(final CustomerOrder order,
+                            final boolean forceSinglePayment,
+                            final boolean forceProcessing,
+                            final Map params) {
 
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
 
             final List<Payment> paymentsToAuthorize = createPaymentsToAuthorize(
                     order,
-                    params.containsKey("forceSinglePayment"),
+                    forceSinglePayment,
+                    forceProcessing,
                     params,
                     PaymentGateway.AUTH);
 
@@ -190,7 +201,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                         payment.setPaymentProcessorBatchSettlement(false);
                         payment.setTransactionOperationResultMessage("skipped due to previous errors");
                     } else {
-                        payment = getPaymentGateway().authorize(payment);
+                        payment = getPaymentGateway().authorize(payment, forceProcessing);
                         paymentResult = payment.getPaymentProcessorResult();
                     }
                 } catch (Throwable th) {
@@ -214,14 +225,14 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 }
             }
             if (atLeastOneError) {
-                reverseAuthorizations(order.getOrdernum());
+                reverseAuthorizations(order.getOrdernum(), forceProcessing);
                 return Payment.PAYMENT_STATUS_FAILED;
             }
             return atLeastOneProcessing ? Payment.PAYMENT_STATUS_PROCESSING : Payment.PAYMENT_STATUS_OK;
 
         } else if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizeCapture()) {
 
-            return authorizeCapture(order, params);
+            return authorizeCapture(order, forceSinglePayment, forceProcessing, params);
 
         }
         throw new RuntimeException(
@@ -237,9 +248,11 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * Reverse authorized payments. This can be when one of the payments from whole set is failed.
      * Reverse authorization will be applied to authorized payments only
      *
-     * @param orderNum order with some authorized payments
+     * @param orderNum                  order with some authorized payments
+     * @param forceProcessing           force processing
      */
-    protected void reverseAuthorizations(final String orderNum) {
+    protected void reverseAuthorizations(final String orderNum,
+                                         final boolean forceProcessing) {
 
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportReverseAuthorization()) {
 
@@ -251,7 +264,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
                 String paymentResult = null;
                 try {
-                    payment = getPaymentGateway().reverseAuthorization(payment); //pass "original" to perform reverse authorization.
+                    payment = getPaymentGateway().reverseAuthorization(payment, forceProcessing); //pass "original" to perform reverse authorization.
                     paymentResult = payment.getPaymentProcessorResult();
                 } catch (Throwable th) {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
@@ -270,7 +283,10 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * {@inheritDoc}
      */
     @Override
-    public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber, final Map params) {
+    public String shipmentComplete(final CustomerOrder order,
+                                   final String orderShipmentNumber,
+                                   final boolean forceProcessing,
+                                   final Map params) {
 
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
 
@@ -325,7 +341,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                         payment.setTransactionOperationResultCode("forceManualProcessing");
                         payment.setTransactionOperationResultMessage(forceManualProcessingMessage);
                     } else {
-                        payment = getPaymentGateway().capture(payment); //pass "original" to perform fund capture.
+                        payment = getPaymentGateway().capture(payment, forceProcessing); //pass "original" to perform fund capture.
                     }
                     paymentResult = payment.getPaymentProcessorResult();
                 } catch (Throwable th) {
@@ -353,14 +369,16 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * {@inheritDoc}
      */
     @Override
-    public String cancelOrder(final CustomerOrder order, final Map params) {
+    public String cancelOrder(final CustomerOrder order,
+                              final boolean forceProcessing,
+                              final Map params) {
 
         if (!CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus()) &&
                 !CustomerOrder.ORDER_STATUS_RETURNED.equals(order.getOrderStatus())) {
 
             final CallbackAware.Callback callback = (CallbackAware.Callback) params.get(CallbackAware.CALLBACK_PARAM);
 
-            reverseAuthorizations(order.getOrdernum());
+            reverseAuthorizations(order.getOrdernum(), forceProcessing);
 
             final boolean forceManualProcessing = Boolean.TRUE.equals(params.get("forceManualProcessing"));
             final String forceManualProcessingMessage = (String) params.get("forceManualProcessingMessage");
@@ -432,7 +450,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                     orderRemainderAmount = orderRemainderAmount.subtract(payment.getPaymentAmount());
                                 }
                                 preProcessCallbackAware(payment, callback, PaymentGateway.REFUND);
-                                payment = getPaymentGateway().refund(payment);
+                                payment = getPaymentGateway().refund(payment, forceProcessing);
                                 postProcessCallbackAware(payment, callback, PaymentGateway.REFUND);
 
                             } else {
@@ -440,7 +458,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                 // force void
                                 payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
                                 preProcessCallbackAware(payment, callback, PaymentGateway.VOID_CAPTURE);
-                                payment = getPaymentGateway().voidCapture(payment);
+                                payment = getPaymentGateway().voidCapture(payment, forceProcessing);
                                 postProcessCallbackAware(payment, callback, PaymentGateway.VOID_CAPTURE);
 
                             }
@@ -456,13 +474,13 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                 orderRemainderAmount = orderRemainderAmount.subtract(payment.getPaymentAmount());
                             }
                             preProcessCallbackAware(payment, callback, PaymentGateway.REFUND);
-                            payment = getPaymentGateway().refund(payment);
+                            payment = getPaymentGateway().refund(payment, forceProcessing);
                             postProcessCallbackAware(payment, callback, PaymentGateway.REFUND);
                         } else {
                             // void
                             payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
                             preProcessCallbackAware(payment, callback, PaymentGateway.VOID_CAPTURE);
-                            payment = getPaymentGateway().voidCapture(payment);
+                            payment = getPaymentGateway().voidCapture(payment, forceProcessing);
                             postProcessCallbackAware(payment, callback, PaymentGateway.VOID_CAPTURE);
                         }
                     }
@@ -495,16 +513,12 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
 
     /**
-     * Perform local refund operation, i.e. find payment transactions notification refers to
-     * and mark them as refunded externally.
-     *
-     * @param order order to cancel.
-     * @param params for payment gateway to create template from.
-     *
-     * @return status of operation.
+     * {@inheritDoc}
      */
     @Override
-    public String refundNotification(final CustomerOrder order, final Map params) {
+    public String refundNotification(final CustomerOrder order,
+                                     final boolean forceProcessing,
+                                     final Map params) {
 
         final CallbackAware.Callback callback = (CallbackAware.Callback) params.get(CallbackAware.CALLBACK_PARAM);
         final Object amountObj = callback != null ? callback.getAmount() : params.get("refundNotificationAmount");
@@ -607,26 +621,26 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     /**
      * Create list of payment to authorize.
      *
-     * @param order                order
-     * @param params               parameters
-     * @param transactionOperation operation in term of payment processor
-     * @param forceSinglePaymentIn flag is true for authCapture operation, when payment gateway not supports several payments per
-     *                             order
+     * @param order                     order
+     * @param forceSinglePayment        flag is true for authCapture operation, when payment gateway not supports
+     *                                  several payments per order
+     * @param forceProcessing           force processing
+     * @param params                    for payment gateway to create template from.
+     * @param transactionOperation      operation in term of payment processor
      * @return list of  payments with details
      */
     @Override
     public List<Payment> createPaymentsToAuthorize(final CustomerOrder order,
-                                                   final boolean forceSinglePaymentIn,
+                                                   final boolean forceSinglePayment,
+                                                   final boolean forceProcessing,
                                                    final Map params,
                                                    final String transactionOperation) {
 
         Assert.notNull(order, "Customer order expected");
 
-        final boolean forceSinglePayment = forceSinglePaymentIn || params.containsKey("forceSinglePayment");
-
         final Payment templatePayment = fillPaymentPrototype(
                 order,
-                getPaymentGateway().createPaymentPrototype(transactionOperation, params),
+                getPaymentGateway().createPaymentPrototype(transactionOperation, params, forceProcessing),
                 transactionOperation,
                 getPaymentGateway().getLabel());
 

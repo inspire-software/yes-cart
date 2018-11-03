@@ -388,7 +388,8 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
                                             customerOrder.getOrdernum(),
                                             CallbackAware.CallbackOperation.REFUND,
                                             new BigDecimal("689.74"),
-                                            Collections.singletonMap(TestExtFormPaymentGatewayImpl.REFUND_RESPONSE_CODE_PARAM_KEY, "1")
+                                            Collections.singletonMap(TestExtFormPaymentGatewayImpl.REFUND_RESPONSE_CODE_PARAM_KEY, "1"),
+                                            true
                                     )
                             );
                         }})));
@@ -447,7 +448,8 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
                                             customerOrder.getOrdernum(),
                                             CallbackAware.CallbackOperation.REFUND,
                                             new BigDecimal("1479.20"),
-                                            Collections.singletonMap(TestExtFormPaymentGatewayImpl.REFUND_RESPONSE_CODE_PARAM_KEY, "1")
+                                            Collections.singletonMap(TestExtFormPaymentGatewayImpl.REFUND_RESPONSE_CODE_PARAM_KEY, "1"),
+                                            true
                                     )
                             );
                         }})));

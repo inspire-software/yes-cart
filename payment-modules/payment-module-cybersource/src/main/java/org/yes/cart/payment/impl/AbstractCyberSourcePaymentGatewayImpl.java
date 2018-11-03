@@ -151,7 +151,7 @@ public abstract class AbstractCyberSourcePaymentGatewayImpl implements Configura
      * {@inheritDoc}
      */
     @Override
-    public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
+    public Payment createPaymentPrototype(final String operation, final Map parametersMap, final boolean forceProcessing) {
 
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);
         final Payment payment = new PaymentImpl();
