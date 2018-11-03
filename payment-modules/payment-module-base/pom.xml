@@ -22,7 +22,7 @@
     <parent>
         <artifactId>payment-modules</artifactId>
         <groupId>org.yes</groupId>
-        <version>3.5.0</version>
+        <version>3.6.0-SNAPSHOT</version>
     </parent>
     <artifactId>payment-module-base</artifactId>
     <name>Yes cart payment: Basic payment module Courier, In Store and Pre paid offline (+Test and TestExt)</name>
