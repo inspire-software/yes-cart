@@ -100,11 +100,15 @@ public class ProductXmlEntityHandler extends AbstractXmlEntityHandler<Product> {
 
         catTag.end();
 
+        final Tag skuTag = tag.tag("product-sku");
+
         for (final ProductSku sku : product.getSku()) {
 
-            this.skuHandler.tagSku(tag, sku);
+            this.skuHandler.tagSku(skuTag, sku);
             
         }
+
+        skuTag.end();
 
         return tag
                 .tagTime(product)

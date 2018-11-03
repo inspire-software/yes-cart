@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+
+    <!-- Common -->
+
+    <xsd:simpleType name="entityImportModeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="MERGE"/>
+            <xsd:enumeration value="DELETE"/>
+            <xsd:enumeration value="INSERT_ONLY"/>
+            <xsd:enumeration value="UPDATE_ONLY"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="collectionImportModeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="MERGE"/>
+            <xsd:enumeration value="DELETE"/>
+            <xsd:enumeration value="INSERT_ONLY"/>
+            <xsd:enumeration value="UPDATE_ONLY"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="dateTimeType">
+        <xsd:restriction base="xsd:token">
+            <xsd:pattern
+                    value="\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="i18nsType">
+        <xsd:sequence>
+            <xsd:element type="i18nType" name="i18n" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="i18nType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute type="xsd:string" name="lang" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="custom-attributesType">
+        <xsd:sequence>
+            <xsd:element type="custom-attributeType" name="custom-attribute" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="custom-attributeType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="custom-value"/>
+            <xsd:element type="i18nsType" name="custom-display-value" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="seoType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="uri" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="meta-title" minOccurs="0"/>
+            <xsd:element type="i18nsType" name="meta-title-display" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="meta-keywords" minOccurs="0"/>
+            <xsd:element type="i18nsType" name="meta-keywords-display" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="meta-description" minOccurs="0"/>
+            <xsd:element type="i18nsType" name="meta-description-display" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- Attributes -->
+
+
+    <xsd:element name="attributes" type="attributesType"/>
+
+    <xsd:complexType name="attributesType">
+        <xsd:sequence>
+            <xsd:element type="attributeType" name="attribute" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="attributeType">
+        <xsd:sequence>
+            <xsd:element type="xsd:boolean" name="mandatory"/>
+            <xsd:element type="xsd:boolean" name="secure"/>
+            <xsd:element type="xsd:boolean" name="allow-duplicate"/>
+            <xsd:element type="xsd:boolean" name="allow-failover"/>
+            <xsd:element type="xsd:boolean" name="store"/>
+            <xsd:element type="xsd:boolean" name="search"/>
+            <xsd:element type="xsd:boolean" name="primary"/>
+            <xsd:element type="xsd:boolean" name="navigation"/>
+            <xsd:element type="xsd:string" name="val" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="regexp" minOccurs="0"/>
+            <xsd:element type="i18nsType" name="validation-failed-message" minOccurs="0"/>
+            <xsd:element type="i18nsType" name="choice-data" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+        <xsd:attribute type="xsd:string" name="group" use="required"/>
+        <xsd:attribute type="xsd:string" name="etype" use="required"/>
+        <xsd:attribute type="xsd:int" name="rank"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <!-- Categories -->
+
+
+    <xsd:element name="categories" type="categoriesType"/>
+
+    <xsd:complexType name="categoriesType">
+        <xsd:sequence>
+            <xsd:element type="categoryType" name="category" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="categoryType">
+        <xsd:sequence>
+            <xsd:element type="baseCategoryType" name="parent" minOccurs="0"/> <!-- TODO: remove minOccurs when we separate out the content -->
+            <xsd:element type="baseCategoryType" name="link" minOccurs="0"/>
+            <xsd:element name="availability">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="dateTimeType" name="available-from" minOccurs="0"/>
+                        <xsd:element type="dateTimeType" name="available-to" minOccurs="0"/>
+                    </xsd:sequence>
+                    <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="navigationType" name="navigation"/>
+            <xsd:element type="renderingType" name="rendering"/>
+            <xsd:element type="seoType" name="seo"/>
+            <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="xsd:int" name="rank"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="navigation-by-priceType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="price-tiers"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:boolean" name="enabled"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="renderingType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="ui-template" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="navigation-by-attributesType">
+        <xsd:sequence>
+            <xsd:element type="navigation-product-typeType" name="navigation-product-type" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:boolean" name="enabled"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="navigation-product-typeType">
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="navigationType">
+        <xsd:sequence>
+            <xsd:element type="navigation-by-attributesType" name="navigation-by-attributes" minOccurs="0"/>
+            <xsd:element type="navigation-by-priceType" name="navigation-by-price" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="baseCategoryType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute type="xsd:long" name="id"/>
+                <xsd:attribute type="xsd:string" name="guid" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <!-- Inventory -->
+
+
+    <xsd:element name="inventory" type="inventoryType"/>
+
+    <xsd:complexType name="inventoryType">
+        <xsd:sequence>
+            <xsd:element type="recordType" name="record" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="recordType">
+        <xsd:sequence>
+            <xsd:element type="quantityType" name="quantity" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="sku" use="required"/>
+        <xsd:attribute type="xsd:string" name="warehouse" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="quantityType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:decimal">
+                <xsd:attribute type="quantityTypeType" name="type" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="quantityTypeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="stock"/>
+            <xsd:enumeration value="reserved"/>
+            <xsd:enumeration value="ats"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- SKU -->
+
+
+    <xsd:element name="skus" type="skusType"/>
+
+    <xsd:complexType name="skusType">
+        <xsd:sequence>
+            <xsd:element type="skuType" name="sku" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="skuType">
+        <xsd:sequence>
+            <xsd:element name="manufacturer">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="xsd:string" name="manufacturer-code" minOccurs="0"/>
+                        <xsd:element type="xsd:string" name="manufacturer-part-code" minOccurs="0"/>
+                        <xsd:element type="xsd:string" name="barcode" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="supplier">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="xsd:string" name="supplier-code" minOccurs="0"/>
+                        <xsd:element type="xsd:string" name="supplier-catalog-code" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="seoType" name="seo" minOccurs="0"/>
+            <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:long" name="product-id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+        <xsd:attribute type="xsd:string" name="product-code" use="required"/>
+        <xsd:attribute type="xsd:int" name="rank"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <!-- Products -->
+
+    <xsd:element name="products" type="productsType"/>
+
+    <xsd:complexType name="productsType">
+        <xsd:sequence>
+            <xsd:element type="productType" name="product" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="productType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="brand"/>
+            <xsd:element type="product-typeType" name="product-type"/>
+            <xsd:element name="manufacturer">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="xsd:string" name="manufacturer-code" minOccurs="0"/>
+                        <xsd:element type="xsd:string" name="manufacturer-part-code" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="supplier">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="xsd:string" name="supplier-code" minOccurs="0"/>
+                        <xsd:element type="xsd:string" name="supplier-catalog-code" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="pim">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="xsd:string" name="pim-code" minOccurs="0"/>
+                        <xsd:element type="xsd:boolean" name="pim-outdated" minOccurs="0"/>
+                        <xsd:element type="dateTimeType" name="pim-updated" minOccurs="0"/>
+                    </xsd:sequence>
+                    <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="availability">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="dateTimeType" name="available-from" minOccurs="0"/>
+                        <xsd:element type="dateTimeType" name="available-to" minOccurs="0"/>
+                    </xsd:sequence>
+                    <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
+                    <xsd:attribute type="xsd:int" name="type"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="tags" minOccurs="0"/>
+            <xsd:element type="seoType" name="seo" minOccurs="0"/>
+            <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
+            <xsd:element type="product-categoriesType" name="product-categories" minOccurs="0"/>
+            <xsd:element type="product-skuType" name="product-sku" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-typeType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute type="xsd:long" name="id"/>
+                <xsd:attribute type="xsd:string" name="guid" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-skuType">
+        <xsd:sequence>
+            <xsd:element type="skuType" name="sku" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-categoriesType">
+        <xsd:sequence>
+            <xsd:element type="product-categoryType" name="product-category" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-categoryType">
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="xsd:int" name="rank"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+
+</xsd:schema>

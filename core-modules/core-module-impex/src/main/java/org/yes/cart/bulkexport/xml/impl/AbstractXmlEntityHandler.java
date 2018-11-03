@@ -334,6 +334,7 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
                     }
                 }
                 this.parent.xml.append(this.toXml());
+                this.parent.hasTextOrTag = true;
                 return this.parent;
             }
             return this;

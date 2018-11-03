@@ -36,6 +36,10 @@ import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.stream.xml.XStreamProvider;
 
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.ResultSet;
@@ -123,9 +127,11 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             final long attrs = System.currentTimeMillis() - dt;
             System.out.println(cntProductAttr + " attributes  in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
 
-            String content = FileUtils.readFileToString(new File(fileToExport), "UTF-8");
+            File xml = new File(fileToExport);
+            String content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("group=\"PRODUCT\" etype=\"String\" rank=\"500\">"));
 
+            validateXmlFile(xml);
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCT  ");
             rs.next();
@@ -139,7 +145,8 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             System.out.println(cntProd + " products in " + prods + "millis (~" + (prods / cntProd) + " per item)");
 
 
-            content = FileUtils.readFileToString(new File(fileToExport), "UTF-8");
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("<product id=\""));
             assertTrue(content.contains("guid=\"SOBOT\" code=\"SOBOT\">"));
             assertTrue(content.contains("<name><![CDATA[Bender Bending Rodriguez]]></name>"));
@@ -147,6 +154,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(content.contains("<sku id=\""));
             assertTrue(content.contains("guid=\"SOBOT-BEER\" code=\"SOBOT-BEER\" product-code=\"SOBOT\" rank=\"1\""));
 
+            validateXmlFile(xml);
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCATEGORY  ");
             rs.next();
@@ -160,11 +168,33 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             System.out.println(cntCat + " categories in " + cats + "millis (~" + (cats / cntCat) + " per item)");
 
 
-            content = FileUtils.readFileToString(new File(fileToExport), "UTF-8");
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("<category id=\""));
             assertTrue(content.contains(" guid=\"112\" rank=\"60\""));
             assertTrue(content.contains("<name><![CDATA[KnickKnacks]]></name>"));
             assertTrue(content.contains("<custom-value><![CDATA[10,20,50]]></custom-value>"));
+
+            validateXmlFile(xml);
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSKUWAREHOUSE  ");
+            rs.next();
+            long cntSW = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/inventory-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/inventory.xml", listener, fileToExport));
+            final long inv = System.currentTimeMillis() - dt;
+            System.out.println(cntSW + " inventory in " + inv + "millis (~" + (inv / cntSW) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<record id=\""));
+            assertTrue(content.contains(" sku=\"SOBOT-BEER\" warehouse=\"WAREHOUSE_1\">"));
+
+            validateXmlFile(xml);
 
             mockery.assertIsSatisfied();
 
@@ -173,6 +203,19 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             fail(e.getMessage());
         }
 
+    }
+
+    private void validateXmlFile(final File xml) throws Exception {
+
+        final String schemaLang = "http://www.w3.org/2001/XMLSchema";
+
+        final SchemaFactory factory = SchemaFactory.newInstance(schemaLang);
+
+        final Schema schema = factory.newSchema(new StreamSource(new FileInputStream(new File("src/main/resources/META-INF/schema/impex.xsd"))));
+        final Validator validator = schema.newValidator();
+
+        validator.validate(new StreamSource(new FileInputStream(xml)));
+        
     }
 
     private static class StringStartsWithMatcher extends TypeSafeMatcher<String> {
