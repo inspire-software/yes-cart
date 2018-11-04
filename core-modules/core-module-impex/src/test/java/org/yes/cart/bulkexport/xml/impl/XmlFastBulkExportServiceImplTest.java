@@ -196,6 +196,28 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
             validateXmlFile(xml);
 
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSKUPRICE  ");
+            rs.next();
+            long cntSP = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/pricelist-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/pricelists.xml", listener, fileToExport));
+            final long price = System.currentTimeMillis() - dt;
+            System.out.println(cntSP + " prices in " + price + "millis (~" + (price / cntSP) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("sku=\"SOBOT-BEER\" shop=\"SHOIP1\" currency=\"EUR\" quantity=\"1.00\""));
+            assertTrue(content.contains("<list-price>150.85</list-price>"));
+
+            validateXmlFile(xml);
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

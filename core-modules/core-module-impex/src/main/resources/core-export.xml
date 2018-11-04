@@ -212,6 +212,14 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="PRICE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SkuPriceXmlEntityHandler"/>
+                </entry>
+                <entry key="PRICE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SkuPriceXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>
