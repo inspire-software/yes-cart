@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHandler<T, String> {
 
-    public static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private final String rootTag;
     private boolean prettyPrint = false;
@@ -161,7 +161,7 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
                     custom.tag("custom-attribute")
                             .attr("id", attrValue.getAttrvalueId())
                             .attr("guid", attrValue.getGuid())
-                            .attr("code", attrValue.getAttributeCode())
+                            .attr("attribute", attrValue.getAttributeCode())
                                 .tagCdata("custom-value", attrValue.getVal())
                                 .tagI18n("custom-display-value", attrValue.getDisplayVal())
                             .end();

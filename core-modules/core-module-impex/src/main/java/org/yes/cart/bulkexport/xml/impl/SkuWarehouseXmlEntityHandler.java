@@ -48,19 +48,25 @@ public class SkuWarehouseXmlEntityHandler extends AbstractXmlEntityHandler<SkuWa
 
     Tag tagInventory(final Tag parent, final SkuWarehouse inventory) {
 
-        return tag(parent, "record")
+        final Tag tag = tag(parent, "stock")
                 .attr("id", inventory.getSkuWarehouseId())
                 .attr("guid", inventory.getGuid())
                 .attr("sku", inventory.getSkuCode())
-                .attr("warehouse", inventory.getWarehouse().getCode())
-                .tag("quantity")
+                .attr("warehouse", inventory.getWarehouse().getCode());
+
+        if (inventory.getQuantity() != null) {
+                   tag(tag, "quantity")
                     .attr("type", "stock")
-                    .chars(inventory.getQuantity().toPlainString())
-                .end()
-                .tag("quantity")
+                        .chars(inventory.getQuantity().toPlainString())
+                    .end();
+        }
+        if (inventory.getReserved() != null) {
+                   tag(tag, "quantity")
                     .attr("type", "reserved")
-                    .chars(inventory.getReserved().toPlainString())
-                .end()
+                        .chars(inventory.getReserved().toPlainString())
+                    .end();
+        }
+        return tag
                 .tag("quantity")
                     .attr("type", "ats")
                     .chars(inventory.getAvailableToSell().toPlainString())

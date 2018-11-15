@@ -178,7 +178,7 @@
             <xs:element name="data-type" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        This field must correspond to org.yes.cart.bulkcommon.csv.ImpExColumn constants.
+                        This field must correspond to org.yes.cart.bulkcommon.model.ImpExValues constants.
                         I.e. STRING, BOOLEAN, LONG, INT, DECIMAL, DATE, DATETIME, ZONEDTIME, INSTANT
                         This field is not restricted to allow more flexibility in custom implementations
                     </xs:documentation>

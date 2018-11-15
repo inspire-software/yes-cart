@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tax-configs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<tax-config guid="XML_SHOIP1_EUR_1010" tax="SHOIP1_EUR_XML_VAT"/>
+<tax-config guid="XML_SHOIP1_EUR_1011" tax="SHOIP1_EUR_XML_VAT (UA)">
+    <tax-region country="UA"/>
+</tax-config>
+<tax-config guid="XML_SHOIP1_EUR_1012" tax="SHOIP1_EUR_XML_VAT (US-US)">
+    <tax-region country="US" state="US-US"/>
+</tax-config>
+<tax-config guid="XML_SHOIP1_EUR_1013" tax="SHOIP1_EUR_XML_VAT (CC_TEST1 UA)">
+    <sku>CC_TEST1</sku>
+    <tax-region country="UA"/>
+</tax-config>
+<tax-config guid="XML_SHOIP1_EUR_1014" tax="SHOIP1_EUR_XML_VAT (CC_TEST1 US-US)">
+    <sku>CC_TEST1</sku>
+    <tax-region country="US" state="US-US"/>
+</tax-config>
+<tax-config guid="XML_SHOIP1_EUR_1015" tax="SHOIP1_EUR_XML_VAT (CC_TEST1)">
+    <sku>CC_TEST1</sku>
+</tax-config>
+<tax-config guid="XML_SHOIP1_USD_1020" tax="SHOIP1_USD_XML_VAT"/>
+<tax-config guid="XML_SHOIP1_UAH_1030" tax="SHOIP1_UAH_XML_VAT"/>
+</tax-configs>

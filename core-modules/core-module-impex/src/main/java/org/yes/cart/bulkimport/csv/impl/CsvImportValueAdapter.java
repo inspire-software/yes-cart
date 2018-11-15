@@ -21,6 +21,7 @@ import org.springframework.core.convert.support.GenericConversionService;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
 import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
+import org.yes.cart.bulkcommon.model.ImpExValues;
 import org.yes.cart.bulkcommon.model.impl.AbstractExtensibleValueAdapter;
 
 import java.math.BigDecimal;
@@ -41,15 +42,15 @@ public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter<CsvVal
     private final GenericConversionService extendedConversionService;
 
     private static final Map<String, Class> MAPPING = new HashMap<String, Class>() {{
-        put(CsvImpExColumn.STRING,    String.class);
-        put(CsvImpExColumn.BOOLEAN,   Boolean.class);
-        put(CsvImpExColumn.INT,       Integer.class);
-        put(CsvImpExColumn.LONG,      Long.class);
-        put(CsvImpExColumn.DECIMAL,   BigDecimal.class);
-        put(CsvImpExColumn.DATE,      LocalDate.class);
-        put(CsvImpExColumn.DATETIME,  LocalDateTime.class);
-        put(CsvImpExColumn.ZONEDTIME, ZonedDateTime.class);
-        put(CsvImpExColumn.INSTANT,   Instant.class);
+        put(ImpExValues.STRING,    String.class);
+        put(ImpExValues.BOOLEAN,   Boolean.class);
+        put(ImpExValues.INT,       Integer.class);
+        put(ImpExValues.LONG,      Long.class);
+        put(ImpExValues.DECIMAL,   BigDecimal.class);
+        put(ImpExValues.DATE,      LocalDate.class);
+        put(ImpExValues.DATETIME,  LocalDateTime.class);
+        put(ImpExValues.ZONEDTIME, ZonedDateTime.class);
+        put(ImpExValues.INSTANT,   Instant.class);
     }};
 
     public CsvImportValueAdapter(final GenericConversionService extendedConversionService) {

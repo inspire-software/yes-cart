@@ -55,6 +55,28 @@ public interface CsvImportDescriptor
     @Override
     CsvImportFile getImportFileDescriptor();
 
+    /**
+     * Get select sql, which used to look up objects that are to
+     * be modified (if they exist).
+     * @return        select sql
+     */
+    String getSelectSql();
+
+    /**
+     * Get insert sql, which used instead of hibernate object save to
+     * speed up bulk import.
+     *
+     * @return        insert sql
+     */
+    String getInsertSql();
+
+    /**
+     * Get delete sql, which used instead of hibernate object delete to
+     * speed up bulk import.
+     *
+     * @return        delete sql
+     */
+    String getDeleteSql();
 
     /**
      * Get the collection of export columns.

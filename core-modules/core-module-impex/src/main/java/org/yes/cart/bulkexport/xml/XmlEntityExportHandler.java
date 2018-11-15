@@ -16,14 +16,16 @@
 
 package org.yes.cart.bulkexport.xml;
 
-import org.yes.cart.bulkcommon.service.support.xml.XmlEntityHandler;
+import org.yes.cart.bulkcommon.model.ImpExTuple;
+import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
+import org.yes.cart.service.async.JobStatusListener;
 
 /**
  * User: denispavlov
  * Date: 26/10/2018
  * Time: 08:13
  */
-public interface XmlEntityExportHandler<T, O> extends XmlEntityHandler<T, O> {
+public interface XmlEntityExportHandler<T, O> {
 
     /**
      * Start XML output (header + root element).
@@ -31,6 +33,26 @@ public interface XmlEntityExportHandler<T, O> extends XmlEntityHandler<T, O> {
      * @return start
      */
     String startXml();
+
+
+    /**
+     * Handle single item
+     *
+     * @param statusListener      status listener
+     * @param xmlExportDescriptor descriptor
+     * @param tuple               tuple
+     * @param xmlValueAdapter     adapter
+     * @param fileToExport        file to export
+     *
+     * @return XML fragment
+     */
+    O handle(JobStatusListener statusListener,
+             XmlExportDescriptor xmlExportDescriptor,
+             ImpExTuple<String, T> tuple,
+             XmlValueAdapter xmlValueAdapter,
+             String fileToExport);
+
+
 
     /**
      * End XML (close root).

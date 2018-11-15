@@ -17,9 +17,9 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
 import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
+import org.yes.cart.bulkcommon.model.ImpExValues;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.csv.CsvExportTuple;
@@ -125,7 +125,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
             return getValueConstant();
         } else if (rawValue != null) {
 
-            final String strValue = (String) adapter.fromRaw(rawValue, CsvImpExColumn.STRING, this, tuple);
+            final String strValue = (String) adapter.fromRaw(rawValue, ImpExValues.STRING, this, tuple);
 
             if (strValue != null) {
                 if (getPattern() != null) {

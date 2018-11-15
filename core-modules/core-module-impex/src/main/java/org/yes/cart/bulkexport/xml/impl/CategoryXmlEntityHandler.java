@@ -110,8 +110,8 @@ public class CategoryXmlEntityHandler extends AbstractXmlEntityHandler<Category>
                         .end()
                     .end()
                 .end()
-                .tag("rendering")
-                    .tagChars("ui-template", category.getUitemplate())
+                .tag("templates")
+                    .tagChars("category", category.getUitemplate())
                 .end()
                 .tagSeo(category)
                 .tagExt(category);

@@ -18,13 +18,12 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/util
-                           http://www.springframework.org/schema/util/spring-util.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- ########################################## bulk import ########################## -->
+
+    <!-- ########################################## CSV ########################## -->
 
     <bean id="importCsvDescriptorXStreamProvider" class="org.yes.cart.bulkimport.csv.impl.CsvImportDescriptorXStreamProvider"/>
 
@@ -130,6 +129,119 @@
         </property>
     </bean>
 
+    <!-- ########################################## XML ########################## -->
+
+    <bean id="importXmlDescriptorXStreamProvider" class="org.yes.cart.bulkimport.xml.impl.XmlImportDescriptorXStreamProvider"/>
+
+
+    <bean id="importXmlImportValueAdapterMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkcommon.xml.XmlValueAdapter"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="exportXmlExportValueAdapter" class="org.yes.cart.bulkimport.xml.impl.XmlImportValueAdapter">
+        <constructor-arg index="0" ref="extendedConversionService"/>
+        <property name="extensions" ref="importXmlImportValueAdapterMap"/>
+    </bean>
+
+    <bean id="xmlFastBulkImportServiceHandlerMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkimport.xml.XmlEntityImportHandler">
+                <entry key="ATTRIBUTE">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.AttributeXmlEntityHandler">
+                        <property name="attributeGroupService" ref="attributeGroupService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                        <property name="etypeService" ref="etypeService"/>
+                    </bean>
+                </entry>
+                <entry key="PRODUCTTYPE">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ProductTypeXmlEntityHandler">
+                        <property name="productTypeService" ref="productTypeService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                    </bean>
+                </entry>
+                <entry key="CATEGORY">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.CategoryXmlEntityHandler">
+                        <property name="categoryService" ref="categoryService"/>
+                        <property name="productTypeService" ref="productTypeService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                    </bean>
+                </entry>
+                <entry key="INVENTORY">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.InventoryXmlEntityHandler">
+                        <property name="skuWarehouseService" ref="skuWarehouseService"/>
+                        <property name="warehouseService" ref="warehouseService"/>
+                    </bean>
+                </entry>
+                <entry key="PRICE">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.PriceXmlEntityHandler">
+                        <property name="priceService" ref="priceService"/>
+                        <property name="shopService" ref="shopService"/>
+                    </bean>
+                </entry>
+                <entry key="TAX">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.TaxXmlEntityHandler">
+                        <property name="taxService" ref="taxService"/>
+                        <property name="shopService" ref="shopService"/>
+                    </bean>
+                </entry>
+                <entry key="TAXCONFIG">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.TaxConfigXmlEntityHandler">
+                        <property name="taxConfigService" ref="taxConfigService"/>
+                        <property name="taxService" ref="taxService"/>
+                    </bean>
+                </entry>
+                <entry key="SKU">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.SkuXmlEntityHandler">
+                        <property name="productSkuService" ref="productSkuService"/>
+                        <property name="productService" ref="productService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                    </bean>
+                </entry>
+                <entry key="PRODUCT">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ProductXmlEntityHandler">
+                        <property name="productService" ref="productService"/>
+                        <property name="categoryService" ref="categoryService"/>
+                        <property name="brandService" ref="brandService"/>
+                        <property name="productTypeService" ref="productTypeService"/>
+                        <property name="productCategoryService" ref="productCategoryService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                        <property name="skuXmlEntityImportHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.SkuXmlEntityHandler">
+                                <property name="productSkuService" ref="productSkuService"/>
+                                <property name="productService" ref="productService"/>
+                                <property name="attributeService" ref="attributeService"/>
+                            </bean>
+                        </property>
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="xmlFastBulkImportService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkimport.xml.impl.XmlFastBulkImportServiceImpl">
+                <property name="valueDataAdapter" ref="exportXmlExportValueAdapter"/>
+                <property name="handlerMap" ref="xmlFastBulkImportServiceHandlerMap"/>
+                <lookup-method name="getSelf" bean="xmlFastBulkImportService"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <!-- Import -->
+                <prop key="doSingleFileImport*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!-- ########################################## IMAGE ########################## -->
+
     <bean id="categoryImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.CategoryImageImportDomainObjectStrategyImpl">
         <constructor-arg index="0" ref="importFederationFacade"/>
         <constructor-arg index="1" ref="categoryService"/>
@@ -185,12 +297,14 @@
         </property>
     </bean>
 
+    <!-- ########################################## Main ########################## -->
 
     <bean id="bulkImportServiceBeanMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="CSV-IMAGE"                              value="imagesBulkImportService"/>
                 <entry key="CSV"                                    value="csvBulkImportService"/>
+                <entry key="XML"                                    value="xmlFastBulkImportService"/>
             </map>
         </constructor-arg>
     </bean>

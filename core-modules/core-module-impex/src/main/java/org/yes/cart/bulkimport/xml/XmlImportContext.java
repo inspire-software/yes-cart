@@ -14,24 +14,15 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.bulkcommon.service.support.xml;
+package org.yes.cart.bulkimport.xml;
 
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
-import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
-import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.bulkcommon.xml.XmlImpExContext;
 
 /**
  * User: denispavlov
- * Date: 20/10/2018
- * Time: 15:57
+ * Date: 04/11/2018
+ * Time: 16:34
  */
-public interface XmlEntityHandler<T, O> {
+public interface XmlImportContext extends XmlImpExContext {
 
-    O handle(JobStatusListener statusListener,
-             XmlExportDescriptor xmlExportDescriptor,
-             ImpExTuple<String, T> tuple,
-             XmlValueAdapter xmlValueAdapter,
-             String fileToExport);
-    
 }

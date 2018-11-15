@@ -1,0 +1,3279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<categories xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<category guid="XML_101" rank="10">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Big Boys Gadgets]]></name>
+    <description><![CDATA[Big Boys Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>boys</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_102" rank="10">
+    <parent guid="XML_101"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Flying Machines]]></name>
+    <description><![CDATA[Flying Machines]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_103" rank="20">
+    <parent guid="XML_101"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Paintballing]]></name>
+    <description><![CDATA[Paintballing]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_104" rank="5">
+    <parent guid="XML_101"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Robotics]]></name>
+    <description><![CDATA[Robotics]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_105" rank="30">
+    <parent guid="XML_101"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Ultimate Gadgets]]></name>
+    <description><![CDATA[Ultimate Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+    <custom-attributes>
+        <custom-attribute guid="XML_22_TCATEGORYATTRVALUE" attribute="CATEGORY_ITEMS_PER_PAGE">
+            <custom-value><![CDATA[10,20,50]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+</category>
+<category guid="XML_106" rank="20">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Fun Gadgets]]></name>
+    <description><![CDATA[Fun Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>fun</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_107" rank="10">
+    <parent guid="XML_106"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Party Gadgets]]></name>
+    <description><![CDATA[Party Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_108" rank="20">
+    <parent guid="XML_106"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Books]]></name>
+    <description><![CDATA[Books]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_109" rank="30">
+    <parent guid="XML_106"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Retro Gadgets]]></name>
+    <description><![CDATA[Retro Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_110" rank="40">
+    <parent guid="XML_106"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Office Fun]]></name>
+    <description><![CDATA[Office Fun]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>office</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_111" rank="50">
+    <parent guid="XML_106"/>
+    <availability disabled="false"/>
+    <name><![CDATA[TV and Film]]></name>
+    <description><![CDATA[TV and Film]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_112" rank="60">
+    <parent guid="XML_106"/>
+    <availability disabled="false"/>
+    <name><![CDATA[KnickKnacks]]></name>
+    <description><![CDATA[KnickKnacks]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_113" rank="30">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Lifestyle Gadgets]]></name>
+    <description><![CDATA[Lifestyle Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_114" rank="10">
+    <parent guid="XML_113"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Kitch and Home]]></name>
+    <description><![CDATA[Kitch and Home]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_115" rank="20">
+    <parent guid="XML_113"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Urban Essentials]]></name>
+    <description><![CDATA[Urban Essentials]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_116" rank="30">
+    <parent guid="XML_113"/>
+    <availability disabled="false"/>
+    <name><![CDATA[On The Go]]></name>
+    <description><![CDATA[On The Go]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_117" rank="40">
+    <parent guid="XML_113"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Eco Friendly]]></name>
+    <description><![CDATA[Eco Friendly]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_118" rank="50">
+    <parent guid="XML_113"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Clocks and Radios]]></name>
+    <description><![CDATA[Clocks and Radios]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_119" rank="60">
+    <parent guid="XML_113"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Lighting]]></name>
+    <description><![CDATA[Lighting]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_120" rank="40">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Techno Gadgets]]></name>
+    <description><![CDATA[Techno Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_121" rank="10">
+    <parent guid="XML_120"/>
+    <availability disabled="false"/>
+    <name><![CDATA[USB Gadgets]]></name>
+    <description><![CDATA[USB Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_122" rank="20">
+    <parent guid="XML_120"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Robotics]]></name>
+    <description><![CDATA[Robotics]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_123" rank="30">
+    <parent guid="XML_120"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Scientific Gadgets]]></name>
+    <description><![CDATA[Scientific Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_124" rank="40">
+    <parent guid="XML_120"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Remote Control Gadgets]]></name>
+    <description><![CDATA[Remote Control Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_125" rank="50">
+    <parent guid="XML_120"/>
+    <availability disabled="false"/>
+    <name><![CDATA[USB Gadgets]]></name>
+    <description><![CDATA[USB Gadgets]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_126" rank="60">
+    <parent guid="XML_120"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Mobile Accessories]]></name>
+    <description><![CDATA[Mobile Accessories]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_127" rank="70">
+    <parent guid="XML_120"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Batteries]]></name>
+    <description><![CDATA[Batteries]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_128" rank="80">
+    <parent guid="XML_120"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Accessories for iPods]]></name>
+    <description><![CDATA[Accessories for iPods]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_129" rank="49">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Outdoor Gadgets]]></name>
+    <description><![CDATA[Outdoor Gadgets 2]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[<price-navigation><currencies><currency><name>EUR</name><price-tiers><price-tier><from>0</from><to>100</to></price-tier><price-tier><from>100</from><to>300</to></price-tier><price-tier><from>300</from><to>500</to></price-tier></price-tiers></currency></currencies></price-navigation>]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_130" rank="10">
+    <parent guid="XML_129"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Summer Time]]></name>
+    <description><![CDATA[Summer Time]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_131" rank="20">
+    <parent guid="XML_129"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Outdoor Fun]]></name>
+    <description><![CDATA[Outdoor Fun]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_132" rank="30">
+    <parent guid="XML_129"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Outdoor Survival]]></name>
+    <description><![CDATA[Outdoor Survival]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_133" rank="60">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Gadget Girl]]></name>
+    <description><![CDATA[Gadget Girl]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>girls</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_134" rank="70">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Games and Gifts]]></name>
+    <description><![CDATA[Games and Gifts]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+    <custom-attributes>
+        <custom-attribute guid="XML_20_TCATEGORYATTRVALUE" attribute="CATEGORY_ITEMS_PER_PAGE">
+            <custom-value><![CDATA[6,12,24]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+</category>
+<category guid="XML_135" rank="10">
+    <parent guid="XML_134"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Games]]></name>
+    <description><![CDATA[Games]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_136" rank="20">
+    <parent guid="XML_134"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Puzzlers]]></name>
+    <description><![CDATA[Puzzlers]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_137" rank="30">
+    <parent guid="XML_134"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Electric Shocking Games]]></name>
+    <description><![CDATA[Electric Shocking Games]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_138" rank="40">
+    <parent guid="XML_134"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Gift Boxes]]></name>
+    <description><![CDATA[Gift Boxes]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_139" rank="50">
+    <parent guid="XML_134"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Games and Gifts]]></name>
+    <description><![CDATA[Games and Gifts]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_140" rank="80">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Christmas Catalogue 2009]]></name>
+    <description><![CDATA[Christmas Catalogue 2009]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_141" rank="80">
+    <parent guid="100"/>
+    <availability disabled="false">
+        <available-from>2008-12-12 00:00:00</available-from>
+        <available-to>2008-12-28 00:00:00</available-to>
+    </availability>
+    <name><![CDATA[Christmas Catalogue 2008]]></name>
+    <description><![CDATA[Christmas Catalogue 2008]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_142" rank="80">
+    <parent guid="100"/>
+    <availability disabled="false">
+        <available-from>2108-12-12 00:00:00</available-from>
+        <available-to>2108-12-28 00:00:00</available-to>
+    </availability>
+    <name><![CDATA[Christmas Catalogue 2108]]></name>
+    <description><![CDATA[Christmas Catalogue 2108]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_143" rank="10">
+    <parent guid="XML_102"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Helicopters]]></name>
+    <description><![CDATA[Helicopters]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_144" rank="7">
+    <parent guid="XML_102"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Aircraft]]></name>
+    <description><![CDATA[aircrafts]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_200" rank="80">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Cat 200]]></name>
+    <description><![CDATA[Cat 200]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_201" rank="80">
+    <parent guid="XML_200"/>
+    <availability disabled="false">
+        <available-from>2108-12-12 00:00:00</available-from>
+        <available-to>2108-12-28 00:00:00</available-to>
+    </availability>
+    <name><![CDATA[Cat 201]]></name>
+    <description><![CDATA[Cat 201]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_202" rank="80">
+    <parent guid="XML_201"/>
+    <availability disabled="false">
+        <available-from>2108-12-12 00:00:00</available-from>
+        <available-to>2108-12-28 00:00:00</available-to>
+    </availability>
+    <name><![CDATA[Cat 203]]></name>
+    <description><![CDATA[Cat 203]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_203" rank="80">
+    <parent guid="XML_200"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Cat 202]]></name>
+    <description><![CDATA[Cat 202]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_204" rank="80">
+    <parent guid="XML_200"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Cat 202]]></name>
+    <description><![CDATA[Cat 202]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_205" rank="80">
+    <parent guid="XML_203"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Cat 202]]></name>
+    <description><![CDATA[Cat 202]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_206" rank="80">
+    <parent guid="XML_205"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Cat 202]]></name>
+    <description><![CDATA[Cat 202]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_207" rank="80">
+    <parent guid="XML_205"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Cat 202]]></name>
+    <description><![CDATA[Cat 202]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_208" rank="80">
+    <parent guid="XML_206"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Cat 202]]></name>
+    <description><![CDATA[Cat 202]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_209" rank="80">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Каблучки]]></name>
+    <description><![CDATA[Каблучки]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_210" rank="81">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Сережки]]></name>
+    <description><![CDATA[Сережки]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_211" rank="81">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Featured products]]></name>
+    <description><![CDATA[featured products category]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_212" rank="82">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Availability test category]]></name>
+    <description><![CDATA[Availability test category]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>christmas</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_300" rank="0">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Get parent chain test]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_301" rank="0">
+    <parent guid="XML_300"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Get parent chain test]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_302" rank="0">
+    <parent guid="XML_301"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Get parent chain test]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_303" rank="0">
+    <parent guid="XML_302"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Get parent chain test]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_304" rank="0">
+    <parent guid="XML_303"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Get parent chain test]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_310" rank="0">
+    <parent guid="XML_300"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Get parent chain test]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_311" rank="0">
+    <parent guid="XML_310"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Get parent chain test]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_312" rank="0">
+    <parent guid="XML_311"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Get parent chain test]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_313" rank="0">
+    <parent guid="XML_312"/>
+    <availability disabled="false"/>
+    <name><![CDATA[For cc products categorysearch CATCC]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+    <custom-attributes>
+        <custom-attribute guid="XML_31301_TCATEGORYATTRVALUE" attribute="CATEGORY_IMAGE_RETRIEVE_STRATEGY">
+            <custom-value><![CDATA[ATTRIBUTE]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_31302_TCATEGORYATTRVALUE" attribute="CATEGORY_IMAGE0">
+            <custom-value><![CDATA[category.jpeg]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+</category>
+<category guid="XML_401" rank="0">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Virtual Branch]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_411" rank="0">
+    <parent guid="XML_401"/>
+    <link guid="XML_312"/>
+    <availability disabled="false"/>
+    <name><![CDATA[Virtual Branch Link]]></name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category/>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_SHOIP2" rank="0">
+    <availability disabled="false">
+        <available-from>2009-01-01 00:00:00</available-from>
+        <available-to>2108-12-28 00:00:00</available-to>
+    </availability>
+    <name><![CDATA[SHOIP2 Content Root]]></name>
+    <description><![CDATA[SHOIP2 Content Root]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="false">
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>default</category>
+    </templates>
+    <seo/>
+    <custom-attributes>
+        <custom-attribute guid="XML_1010501_TCATEGORYATTRVALUE" attribute="CATEGORY_ITEMS_PER_PAGE">
+            <custom-value><![CDATA[10,20,50]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+</category>
+<category guid="XML_SHOIP2">
+    <parent guid="XML_SHOIP2"/>
+    <availability disabled="false"/>
+    <name><![CDATA[SHOIP2 Content 001]]></name>
+    <description><![CDATA[SHOIP2 Content 001]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_SHOIP2">
+    <parent guid="XML_SHOIP2"/>
+    <availability disabled="false"/>
+    <name><![CDATA[SHOIP2 Content 002]]></name>
+    <description><![CDATA[SHOIP2 Content 002]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>content</category>
+    </templates>
+    <seo/>
+    <custom-attributes>
+        <custom-attribute guid="XML_1010507_TCATEGORYATTRVALUE" attribute="CATEGORY_ITEMS_PER_PAGE">
+            <custom-value><![CDATA[6,12,24]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+</category>
+<category guid="XML_SHOIP2">
+    <parent guid="XML_SHOIP2"/>
+    <availability disabled="false"/>
+    <name><![CDATA[SHOIP2 Content 0021]]></name>
+    <description><![CDATA[SHOIP2 Content 0021]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_SHOIP2">
+    <parent guid="XML_SHOIP2"/>
+    <availability disabled="false"/>
+    <name><![CDATA[SHOIP2 Content 0022]]></name>
+    <description><![CDATA[SHOIP2 Content 0022]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_SHOIP2">
+    <parent guid="XML_SHOIP2"/>
+    <availability disabled="false">
+        <available-to>2008-12-28 00:00:00</available-to>
+    </availability>
+    <name><![CDATA[SHOIP2 Content 0023]]></name>
+    <description><![CDATA[SHOIP2 Content 0023]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_SHOIP2">
+    <parent guid="XML_SHOIP2"/>
+    <availability disabled="false">
+        <available-from>2108-01-01 00:00:00</available-from>
+    </availability>
+    <name><![CDATA[SHOIP2 Content 0024]]></name>
+    <description><![CDATA[SHOIP2 Content 0024]]></description>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo/>
+</category>
+<category guid="XML_SHOIP1" rank="0">
+    <availability disabled="false"/>
+    <name><![CDATA[SHOIP1]]></name>
+    <navigation>
+        <navigation-by-attributes>
+            <navigation-product-type/>
+        </navigation-by-attributes>
+        <navigation-by-price>
+            <price-tiers/>
+        </navigation-by-price>
+    </navigation>
+    <templates>
+        <category>content</category>
+    </templates>
+    <seo/>
+</category>
+<category guid="XML_151" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[notebooks]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Laptops]]></i18n>
+        <i18n lang="ru"><![CDATA[ноутбуки]]></i18n>
+    </display-name>
+    <description><![CDATA[1) A notebook, also known as laptop, is a portable computer. When you are looking for the right notebook, it is important to know where you are going to work with it. Do you want to use it on the road? Choose a model with a special energy saving 'mobile' processor, a good battery and a reasonably small display. This will allow you to work longer with the same battery and saves you the trouble of carrying around a large display that consumes a lot of precious battery power. Or will you be using you notebook mainly in places where you will have access to a power outlet? Then choose a desktop processor (more processing power for less money) and an ordinary battery, this will save you a lot of money, which you could spend on a bigger screen, you'll work faster because you can view more information at once and it's great for multimedia!]]></description>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_dbdbc13a-d69c-49c7-b998"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_notebooks]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10116_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value><![CDATA[A notebook, also known as laptop, is a portable computer. When you are looking for the right notebook, it is important to know where you are going to work with it. Do you want to use it on the road? Choose a model with a special energy saving 'mobile' processor, a good battery and a reasonably small display. This will allow you to work longer with the same battery and saves you the trouble of carrying around a large display that consumes a lot of precious battery power. Or will you be using you notebook mainly in places where you will have access to a power outlet? Then choose a desktop processor (more processing power for less money) and an ordinary battery, this will save you a lot of money, which you could spend on a bigger screen, you'll work faster because you can view more information at once and it's great for multimedia!]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_10116_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value><![CDATA[A notebook, also known as laptop, is a portable computer. When you are looking for the right notebook, it is important to know where you are going to work with it. Do you want to use it on the road? Choose a model with a special energy saving 'mobile' processor, a good battery and a reasonably small display. This will allow you to work longer with the same battery and saves you the trouble of carrying around a large display that consumes a lot of precious battery power. Or will you be using you notebook mainly in places where you will have access to a power outlet? Then choose a desktop processor (more processing power for less money) and an ordinary battery, this will save you a lot of money, which you could spend on a bigger screen, you'll work faster because you can view more information at once and it's great for multimedia!]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:10</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:10</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_1296" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[computer TV tuners]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Computer TV tuners]]></i18n>
+        <i18n lang="ru"><![CDATA[компьютерные ТВ-тюнеры]]></i18n>
+    </display-name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_4a005633-2b8d-47b8-84c2"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_computer-tv-tuners]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10117_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value/>
+        </custom-attribute>
+        <custom-attribute guid="XML_10117_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value/>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_942" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[flat panel desk mounts]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Flat panel desk mounts]]></i18n>
+        <i18n lang="ru"><![CDATA[подставки и крепления для ЖК-панелей]]></i18n>
+    </display-name>
+    <description><![CDATA[A comfortable, ergonomic computer workstation requires an adjustable computer monitor arm or monitor stand. We offer monitor arms and stands for any budget that help make your computer work easier, pain free and more productive.  Main ergonomic recommendations for monitor use include moving your monitor to a comfortable distance of around an arm's length and position the monitor at a comfortable height of about 2&quot,-3&quot, above eye level. Choose one of our many stylish monitor arms and stands and free up valuable desktop space.]]></description>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_d987ae0a-1b3b-4342-b55b"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_flat-panel-desk-mounts]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10118_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value><![CDATA[A comfortable, ergonomic computer workstation requires an adjustable computer monitor arm or monitor stand. We offer monitor arms and stands for any budget that help make your computer work easier, pain free and more productive.  Main ergonomic recommendations for monitor use include moving your monitor to a comfortable distance of around an arm's length and position the monitor at a comfortable height of about 2&quot,-3&quot, above eye level. Choose one of our many stylish monitor arms and stands and free up valuable desktop space.  ]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_10118_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value><![CDATA[A comfortable, ergonomic computer workstation requires an adjustable computer monitor arm or monitor stand. We offer monitor arms and stands for any budget that help make your computer work easier, pain free and more productive.  Main ergonomic recommendations for monitor use include moving your monitor to a comfortable distance of around an arm's length and position the monitor at a comfortable height of about 2&quot,-3&quot, above eye level. Choose one of our many stylish monitor arms and stands and free up valuable desktop space.  ]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_803" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[software licenses/upgrades]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Software Licenses/Upgrades]]></i18n>
+        <i18n lang="ru"><![CDATA[лицензии/обновления ПО]]></i18n>
+    </display-name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_d51223d3-5cbe-49f9-aa4a"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_software-licenses-upgrades]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10119_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value/>
+        </custom-attribute>
+        <custom-attribute guid="XML_10119_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value/>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_788" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[warranty & support extensions]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Warranty & Support Extensions]]></i18n>
+        <i18n lang="ru"><![CDATA[продление гарантийных обязательств]]></i18n>
+    </display-name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_19623eee-56e7-49d6-ad50"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_warranty-and-support-extensions]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10120_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value/>
+        </custom-attribute>
+        <custom-attribute guid="XML_10120_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value/>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_195" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[XML_mice]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Mice]]></i18n>
+        <i18n lang="ru"><![CDATA[компьютерные мышки]]></i18n>
+    </display-name>
+    <description><![CDATA[The mouse is the second most important way of communicating with a computer. Please be careful to choose the right type of connection when buying a mouse, there are three different types:- USB is the most modern. You can recognize it by the rectangular connector.- PS/2 connectors are round. This type of connection is fairly commonly used in PCs.- Bluetooth is another modern (wireless) connection method.]]></description>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_d3bdabea-5e18-42d6"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_mice]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10121_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value><![CDATA[The mouse is the second most important way of communicating with a computer. Please be careful to choose the right type of connection when buying a mouse, there are three different types:- USB is the most modern. You can recognize it by the rectangular connector.- PS/2 connectors are round. This type of connection is fairly commonly used in PCs.- Bluetooth is another modern (wireless) connection method.]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_10121_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value><![CDATA[The mouse is the second most important way of communicating with a computer. Please be careful to choose the right type of connection when buying a mouse, there are three different types:- USB is the most modern. You can recognize it by the rectangular connector.- PS/2 connectors are round. This type of connection is fairly commonly used in PCs.- Bluetooth is another modern (wireless) connection method.]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_19501" rank="500">
+    <parent guid="XML_195"/>
+    <availability disabled="false"/>
+    <name><![CDATA[XML_wireless mice]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[wireless mice]]></i18n>
+        <i18n lang="ru"><![CDATA[беспроводные мыши]]></i18n>
+    </display-name>
+    <description><![CDATA[wireless mice]]></description>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_d3bdabea-5e18-42d6-acfc"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_wireless-mice]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10122_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value><![CDATA[wireless mice]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_10122_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value><![CDATA[беспроводные мыши]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_19502" rank="500">
+    <parent guid="XML_19501"/>
+    <availability disabled="false"/>
+    <name><![CDATA[XML_optical mice]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[optical mice]]></i18n>
+        <i18n lang="ru"><![CDATA[оптические мыши]]></i18n>
+    </display-name>
+    <description><![CDATA[optical mice]]></description>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_d3bdabea-5e18-42d6-acfc"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_optical-mice]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10123_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value><![CDATA[optical mice]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_10123_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value><![CDATA[оптические мыши]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_194" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[keyboards]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Keyboards & Desktops]]></i18n>
+        <i18n lang="ru"><![CDATA[клавиатури]]></i18n>
+    </display-name>
+    <description><![CDATA[The keyboard is the main input peripheral used by all computers. The keyboard allows for user input and interaction with the computer. Much like many typewriters the keyboard has all the letters of the alphabet, numbers 0 - 9 and additional special operational keys, e.g. for adjusting the volume or going to your inbox directly. There are three different connection types:- USB is the most modern. You can recognize it by the rectangular connector.- PS/2 connectors are round. This type of connection is fairly commonly used by PC's.- Bluetooth is another modern (wireless) connection method.]]></description>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_4e0d969b-4225-4eed-aebe"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_keyboards]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10124_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value><![CDATA[The keyboard is the main input peripheral used by all computers. The keyboard allows for user input and interaction with the computer. Much like many typewriters the keyboard has all the letters of the alphabet, numbers 0 - 9 and additional special operational keys, e.g. for adjusting the volume or going to your inbox directly. There are three different connection types:- USB is the most modern. You can recognize it by the rectangular connector.- PS/2 connectors are round. This type of connection is fairly commonly used by PC's.- Bluetooth is another modern (wireless) connection method.]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_10124_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value><![CDATA[The keyboard is the main input peripheral used by all computers. The keyboard allows for user input and interaction with the computer. Much like many typewriters the keyboard has all the letters of the alphabet, numbers 0 - 9 and additional special operational keys, e.g. for adjusting the volume or going to your inbox directly. There are three different connection types:- USB is the most modern. You can recognize it by the rectangular connector.- PS/2 connectors are round. This type of connection is fairly commonly used by PC's.- Bluetooth is another modern (wireless) connection method.]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_197" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[scanners]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Scanners]]></i18n>
+        <i18n lang="ru"><![CDATA[сканеры]]></i18n>
+    </display-name>
+    <description><![CDATA[With a scanner you can make all your documents, pictures, and photo's digital.]]></description>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_8684ae40-5921-46ae-b602"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_scanners]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10125_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value><![CDATA[With a scanner you can make all your documents, pictures, and photo's digital.]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_10125_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value><![CDATA[With a scanner you can make all your documents, pictures, and photo's digital.]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_943" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[display privacy filters]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Monitor Glare & Privacy Filters]]></i18n>
+        <i18n lang="ru"><![CDATA[защитные фильтры для дисплеев]]></i18n>
+    </display-name>
+    <description><![CDATA[Glare is a common cause of eyestrain among computer users. Glare screens or monitor filters can be used to reduce the glare or the wash out but they do not eliminate the glare problems entirely. Therefore, placing the monitor perpendicular to your windows or obtaining window blinds to prevent the glare on the screen should be the first consideration.]]></description>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_47a01003-a1ff-43b8-a834"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_display-privacy-filters]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10126_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value><![CDATA[Glare is a common cause of eyestrain among computer users. Glare screens or monitor filters can be used to reduce the glare or the wash out but they do not eliminate the glare problems entirely. Therefore, placing the monitor perpendicular to your windows or obtaining window blinds to prevent the glare on the screen should be the first consideration. ]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_10126_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value><![CDATA[Glare is a common cause of eyestrain among computer users. Glare screens or monitor filters can be used to reduce the glare or the wash out but they do not eliminate the glare problems entirely. Therefore, placing the monitor perpendicular to your windows or obtaining window blinds to prevent the glare on the screen should be the first consideration. ]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_196" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[wireless presenters]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Media Presenters]]></i18n>
+        <i18n lang="ru"><![CDATA[беспроводные презентеры]]></i18n>
+    </display-name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_7c4527c2-2187-42ac-9cbf"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_wireless-presenters]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10127_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value/>
+        </custom-attribute>
+        <custom-attribute guid="XML_10127_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value/>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_191" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[data input devices ]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Data-Entry & Controls]]></i18n>
+        <i18n lang="ru"><![CDATA[устройства ввода данных]]></i18n>
+    </display-name>
+    <description/>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_52f8437e-e962-498d-9004"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_data-input-devices]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10128_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value/>
+        </custom-attribute>
+        <custom-attribute guid="XML_10128_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value/>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+<category guid="XML_192" rank="500">
+    <parent guid="100"/>
+    <availability disabled="false"/>
+    <name><![CDATA[graphic tablets]]></name>
+    <display-name>
+        <i18n lang="en"><![CDATA[Graphic Tablets]]></i18n>
+        <i18n lang="ru"><![CDATA[графические планшеты]]></i18n>
+    </display-name>
+    <description><![CDATA[On a graphic tablet you can write and make drawings with special pen. The information your graphic tablet receives is transferred to your computer and can be displayed as a drawing on your screen. With the appropriate software, it is even possible to write in handwriting on your graphic tablet instead of typing.]]></description>
+    <navigation>
+        <navigation-by-attributes enabled="true">
+            <navigation-product-type guid="XML_99aa80a8-c5e3-47d5-9aa1"/>
+        </navigation-by-attributes>
+        <navigation-by-price enabled="true">
+            <price-tiers><![CDATA[
+                
+
+<price-navigation>
+    <currencies>
+        <currency>
+            <name>EUR</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>USD</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>200</to>
+                </price-tier>
+                <price-tier>
+                    <from>200</from>
+                    <to>500</to>
+                </price-tier>
+                <price-tier>
+                    <from>500</from>
+                    <to>1000</to>
+                </price-tier>
+                <price-tier>
+                    <from>1000</from>
+                    <to>1300</to>
+                </price-tier>
+                <price-tier>
+                    <from>1300</from>
+                    <to>1500</to>
+                </price-tier>
+                <price-tier>
+                    <from>1500</from>
+                    <to>2000</to>
+                </price-tier>
+                <price-tier>
+                    <from>2000</from>
+                    <to>3000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+        <currency>
+            <name>UAH</name>
+            <price-tiers>
+                <price-tier>
+                    <from>0</from>
+                    <to>5000</to>
+                </price-tier>
+                <price-tier>
+                    <from>5000</from>
+                    <to>6000</to>
+                </price-tier>
+                <price-tier>
+                    <from>6000</from>
+                    <to>8000</to>
+                </price-tier>
+                <price-tier>
+                    <from>8000</from>
+                    <to>10000</to>
+                </price-tier>
+                <price-tier>
+                    <from>10000</from>
+                    <to>16000</to>
+                </price-tier>
+                <price-tier>
+                    <from>16000</from>
+                    <to>24000</to>
+                </price-tier>
+            </price-tiers>
+        </currency>
+    </currencies>
+</price-navigation>
+
+
+                
+            ]]></price-tiers>
+        </navigation-by-price>
+    </navigation>
+    <templates/>
+    <seo>
+        <uri><![CDATA[XML_graphic-tablets]]></uri>
+    </seo>
+    <custom-attributes>
+        <custom-attribute guid="XML_10129_CATDESC_en" attribute="CATEGORY_DESCRIPTION_en">
+            <custom-value><![CDATA[On a graphic tablet you can write and make drawings with special pen. The information your graphic tablet receives is transferred to your computer and can be displayed as a drawing on your screen. With the appropriate software, it is even possible to write in handwriting on your graphic tablet instead of typing.]]></custom-value>
+        </custom-attribute>
+        <custom-attribute guid="XML_10129_CATDESC_ru" attribute="CATEGORY_DESCRIPTION_ru">
+            <custom-value><![CDATA[On a graphic tablet you can write and make drawings with special pen. The information your graphic tablet receives is transferred to your computer and can be displayed as a drawing on your screen. With the appropriate software, it is even possible to write in handwriting on your graphic tablet instead of typing.]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2018-11-10 17:43:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-11-10 17:43:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</category>
+</categories>

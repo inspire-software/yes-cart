@@ -49,48 +49,6 @@ public interface CsvImpExColumn {
     String SLAVE_TUPLE_FIELD = "SLAVE_TUPLE_FIELD";
 
 
-
-
-    /**
-     * String value (default for all import data).
-     */
-    String STRING = "STRING";
-    /**
-     * Boolean value (e.g. for flags).
-     */
-    String BOOLEAN = "BOOLEAN";
-    /**
-     * Long value (e.g. for PK's).
-     */
-    String LONG = "LONG";
-    /**
-     * Integer value.
-     */
-    String INT = "INT";
-    /**
-     * BigDecimal value.
-     */
-    String DECIMAL = "DECIMAL";
-    /**
-     * Date value. Format: "yyyy-MM-dd" {@link org.yes.cart.util.DateUtils#ldParseSDT(String)}
-     */
-    String DATE = "DATE";
-    /**
-     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#ldtParseSDT(String)}
-     */
-    String DATETIME = "DATETIME";
-    /**
-     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#zdtParseSDT(String)}
-     */
-    String ZONEDTIME = "ZONEDTIME";
-    /**
-     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#iParseSDT(String)}
-     */
-    String INSTANT = "INSTANT";
-
-
-
-
     /**
      * Get the field value. Regular expression will be used for obtain value if reg exp is set.
      *

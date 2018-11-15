@@ -125,7 +125,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             String fileToExport = "target/attributenames-export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/attributenames.xml", listener, fileToExport));
             final long attrs = System.currentTimeMillis() - dt;
-            System.out.println(cntProductAttr + " attributes  in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
+            System.out.println(String.format("%5d", cntProductAttr) + " attributes  in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
 
             File xml = new File(fileToExport);
             String content = FileUtils.readFileToString(xml, "UTF-8");
@@ -142,7 +142,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             fileToExport = "target/productnames-export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/productnames.xml", listener, fileToExport));
             final long prods = System.currentTimeMillis() - dt;
-            System.out.println(cntProd + " products in " + prods + "millis (~" + (prods / cntProd) + " per item)");
+            System.out.println(String.format("%5d", cntProd) + " products in " + prods + "millis (~" + (prods / cntProd) + " per item)");
 
 
             xml = new File(fileToExport);
@@ -165,7 +165,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             fileToExport = "target/categorynames-export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/categorynames.xml", listener, fileToExport));
             final long cats = System.currentTimeMillis() - dt;
-            System.out.println(cntCat + " categories in " + cats + "millis (~" + (cats / cntCat) + " per item)");
+            System.out.println(String.format("%5d", cntCat) + " categories in " + cats + "millis (~" + (cats / cntCat) + " per item)");
 
 
             xml = new File(fileToExport);
@@ -186,12 +186,12 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             fileToExport = "target/inventory-export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/inventory.xml", listener, fileToExport));
             final long inv = System.currentTimeMillis() - dt;
-            System.out.println(cntSW + " inventory in " + inv + "millis (~" + (inv / cntSW) + " per item)");
+            System.out.println(String.format("%5d", cntSW) + " inventory in " + inv + "millis (~" + (inv / cntSW) + " per item)");
 
 
             xml = new File(fileToExport);
             content = FileUtils.readFileToString(xml, "UTF-8");
-            assertTrue(content.contains("<record id=\""));
+            assertTrue(content.contains("<stock id=\""));
             assertTrue(content.contains(" sku=\"SOBOT-BEER\" warehouse=\"WAREHOUSE_1\">"));
 
             validateXmlFile(xml);
@@ -207,13 +207,74 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             fileToExport = "target/pricelist-export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/pricelists.xml", listener, fileToExport));
             final long price = System.currentTimeMillis() - dt;
-            System.out.println(cntSP + " prices in " + price + "millis (~" + (price / cntSP) + " per item)");
+            System.out.println(String.format("%5d", cntSP) + " prices in " + price + "millis (~" + (price / cntSP) + " per item)");
 
 
             xml = new File(fileToExport);
             content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("sku=\"SOBOT-BEER\" shop=\"SHOIP1\" currency=\"EUR\" quantity=\"1.00\""));
             assertTrue(content.contains("<list-price>150.85</list-price>"));
+
+            validateXmlFile(xml);
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TTAX  ");
+            rs.next();
+            long cntTax = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/tax-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/taxnames.xml", listener, fileToExport));
+            final long tax = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", tax) + " taxes in " + tax + "millis (~" + (tax / cntTax) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("code=\"VAT\" shop=\"SHOIP1\" currency=\"EUR\""));
+            assertTrue(content.contains("<rate gross=\"false\">20.00</rate>"));
+
+            validateXmlFile(xml);
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TTAXCONFIG  ");
+            rs.next();
+            long cntTaxCfg = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/taxconfigs-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/taxconfignames.xml", listener, fileToExport));
+            final long taxCfg = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", taxCfg) + " tax configs in " + taxCfg + "millis (~" + (taxCfg / cntTaxCfg) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains(" guid=\"SHOIP1_EUR_"));
+            assertTrue(content.contains("<tax-region country=\"US\" state=\"US-US\"/>"));
+
+            validateXmlFile(xml);
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTTYPE  ");
+            rs.next();
+            long cntPtype = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/producttypes-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/producttypenames.xml", listener, fileToExport));
+            final long pTypes = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", pTypes) + " product types in " + pTypes + "millis (~" + (pTypes / cntPtype) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<name>Power supply</name>"));
+            assertTrue(content.contains("<description><![CDATA[Robots]]></description>"));
+            assertTrue(content.contains("<product-type-attribute-navigation type=\"R\"><![CDATA[<range-list>"));
 
             validateXmlFile(xml);
 

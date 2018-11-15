@@ -16,8 +16,6 @@
 
 package org.yes.cart.bulkexport.xml.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkexport.xml.XmlExportTuple;
 import org.yes.cart.domain.entity.Identifiable;
 
@@ -27,8 +25,6 @@ import org.yes.cart.domain.entity.Identifiable;
  * Time: 12:07
  */
 public class XmlExportTupleImpl implements XmlExportTuple {
-
-    private static final Logger LOG = LoggerFactory.getLogger(XmlExportTupleImpl.class);
 
     private final Object data;
 

@@ -220,6 +220,30 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="TAX">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.TaxXmlEntityHandler"/>
+                </entry>
+                <entry key="TAX_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.TaxXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="TAXCONFIG">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.TaxConfigXmlEntityHandler"/>
+                </entry>
+                <entry key="TAXCONFIG_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.TaxConfigXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PRODUCTTYPE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductTypeXmlEntityHandler"/>
+                </entry>
+                <entry key="PRODUCTTYPE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductTypeXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

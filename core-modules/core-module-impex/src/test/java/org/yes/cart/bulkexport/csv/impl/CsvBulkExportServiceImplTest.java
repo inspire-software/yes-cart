@@ -122,7 +122,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
             String fileToExport = "target/attributenames-export-" + UUID.randomUUID().toString() + ".csv";
             bulkExportService.doExport(createContext("src/test/resources/export/csv/attributenames.xml", listener, fileToExport));
             final long attrs = System.currentTimeMillis() - dt;
-            System.out.println(cntProductAttr + " attributes  in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
+            System.out.println(String.format("%5d", cntProductAttr) + " attributes  in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
 
             String content = FileUtils.readFileToString(new File(fileToExport), "UTF-8");
             assertTrue(content.contains("\"PRODUCT\";\"COLOR\";\"Color\";;;;\"false\";\"false\";\"Failover is: false\";\"500\";\"java.lang.String\""));
@@ -137,7 +137,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
             fileToExport = "target/productnames-export-" + UUID.randomUUID().toString() + ".csv";
             bulkExportService.doExport(createContext("src/test/resources/export/csv/productnames.xml", listener, fileToExport));
             final long prods = System.currentTimeMillis() - dt;
-            System.out.println(cntProd + " products in " + prods + "millis (~" + (prods / cntProd) + " per item)");
+            System.out.println(String.format("%5d", cntProd) + " products in " + prods + "millis (~" + (prods / cntProd) + " per item)");
 
 
             content = FileUtils.readFileToString(new File(fileToExport), "UTF-8");
