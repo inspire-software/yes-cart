@@ -1,567 +1,567 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <price-list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
-<price guid="XML_1_SOBOT-BEER" sku="SOBOT-BEER" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_SOBOT-BEER" sku="XML_SOBOT-BEER" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>150.85</list-price>
     <availability/>
 </price>
-<price guid="XML_2_SOBOT-PINK" sku="SOBOT-PINK" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_SOBOT-PINK" sku="XML_SOBOT-PINK" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>150.85</list-price>
     <sale-price>140.11</sale-price>
     <availability/>
 </price>
-<price guid="XML_3_SOBOT-LIGHT" sku="SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_SOBOT-LIGHT" sku="XML_SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>150.00</list-price>
     <availability/>
 </price>
-<price guid="XML_4_SOBOT-LIGHT" sku="SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="2.00" offer="false" request="false">
+<price guid="XML_4_SOBOT-LIGHT" sku="XML_SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="2.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>150.85</list-price>
     <sale-price>130.11</sale-price>
     <availability/>
 </price>
-<price guid="XML_5_SOBOT-ORIG" sku="SOBOT-ORIG" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_SOBOT-ORIG" sku="XML_SOBOT-ORIG" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>150.85</list-price>
     <sale-price>140.22</sale-price>
     <minimal-price>120.25</minimal-price>
     <availability/>
 </price>
-<price guid="XML_6_NOPROD-SKU" sku="NOPROD-SKU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_NOPROD-SKU" sku="XML_NOPROD-SKU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>99.99</list-price>
     <sale-price>49.99</sale-price>
     <minimal-price>49.99</minimal-price>
     <availability/>
 </price>
-<price guid="XML_7_SOBOT-LIGHT" sku="SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="3.00" offer="false" request="false">
+<price guid="XML_7_SOBOT-LIGHT" sku="XML_SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="3.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>150.85</list-price>
     <sale-price>100.11</sale-price>
     <availability/>
 </price>
-<price guid="XML_A_1_CARRIERSLA" sku="1_CARRIERSLA" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_A_1_CARRIERSLA" sku="XML_1_CARRIERSLA" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>16.77</list-price>
     <sale-price>16.77</sale-price>
     <minimal-price>16.77</minimal-price>
     <availability/>
 </price>
-<price guid="XML_A_2_CARRIERSLA" sku="2_CARRIERSLA" shop="SHOIP1" currency="RUB" quantity="1.00" offer="false" request="false">
+<price guid="XML_A_2_CARRIERSLA" sku="XML_2_CARRIERSLA" shop="SHOIP1" currency="RUB" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>480.24</list-price>
     <sale-price>480.24</sale-price>
     <minimal-price>480.24</minimal-price>
     <availability/>
 </price>
-<price guid="XML_A_3_CARRIERSLA" sku="3_CARRIERSLA" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_A_3_CARRIERSLA" sku="XML_3_CARRIERSLA" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>16.77</list-price>
     <sale-price>16.77</sale-price>
     <minimal-price>16.77</minimal-price>
     <availability/>
 </price>
-<price guid="XML_A_4_CARRIERSLA" sku="4_CARRIERSLA" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_A_4_CARRIERSLA" sku="XML_4_CARRIERSLA" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.00</list-price>
     <sale-price>10.00</sale-price>
     <minimal-price>10.00</minimal-price>
     <availability/>
 </price>
-<price guid="XML_G_WV_CARRIERSLA_KG" sku="WV_CARRIERSLA_KG" shop="SHOIP1" currency="EUR" quantity="0.01" offer="false" request="false">
+<price guid="XML_G_WV_CARRIERSLA_KG" sku="XML_WV_CARRIERSLA_KG" shop="SHOIP1" currency="EUR" quantity="0.01" offer="false" request="false">
     <pricing-policy/>
     <list-price>6.50</list-price>
     <availability/>
 </price>
-<price guid="XML_G_WV_CARRIERSLA_KG" sku="WV_CARRIERSLA_KG" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_G_WV_CARRIERSLA_KG" sku="XML_WV_CARRIERSLA_KG" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12.50</list-price>
     <availability/>
 </price>
-<price guid="XML_G_WV_CARRIERSLA_KG" sku="WV_CARRIERSLA_KG" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_G_WV_CARRIERSLA_KG" sku="XML_WV_CARRIERSLA_KG" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy policy="P1" ref="P1"/>
     <list-price>12.50</list-price>
     <sale-price>10.50</sale-price>
     <availability/>
 </price>
-<price guid="XML_G_WV_CARRIERSLA_KG" sku="WV_CARRIERSLA_KG" shop="SHOIP1" currency="EUR" quantity="5.00" offer="false" request="false">
+<price guid="XML_G_WV_CARRIERSLA_KG" sku="XML_WV_CARRIERSLA_KG" shop="SHOIP1" currency="EUR" quantity="5.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>30.50</list-price>
     <availability/>
 </price>
-<price guid="XML_2_SOBOT-PINK" sku="SOBOT-PINK" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_SOBOT-PINK" sku="XML_SOBOT-PINK" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy policy="P1" ref="P1"/>
     <list-price>150.85</list-price>
     <sale-price>130.11</sale-price>
     <minimal-price>120.25</minimal-price>
     <availability/>
 </price>
-<price guid="XML_3_SOBOT-LIGHT" sku="SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_SOBOT-LIGHT" sku="XML_SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy policy="P1" ref="P1"/>
     <list-price>140.00</list-price>
     <availability/>
 </price>
-<price guid="XML_4_SOBOT-LIGHT" sku="SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="2.00" offer="false" request="false">
+<price guid="XML_4_SOBOT-LIGHT" sku="XML_SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="2.00" offer="false" request="false">
     <pricing-policy policy="P1" ref="P1"/>
     <list-price>150.85</list-price>
     <sale-price>115.22</sale-price>
     <minimal-price>110.25</minimal-price>
     <availability/>
 </price>
-<price guid="XML_5_SOBOT-ORIG" sku="SOBOT-ORIG" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_SOBOT-ORIG" sku="XML_SOBOT-ORIG" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy policy="P1" ref="P1"/>
     <list-price>150.85</list-price>
     <sale-price>120.22</sale-price>
     <minimal-price>110.25</minimal-price>
     <availability/>
 </price>
-<price guid="XML_0_SOBOT-LIGHT" sku="SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="2.00" offer="false" request="false">
+<price guid="XML_0_SOBOT-LIGHT" sku="XML_SOBOT-LIGHT" shop="SHOIP1" currency="EUR" quantity="2.00" offer="false" request="false">
     <pricing-policy policy="TIER" ref="TIER"/>
     <list-price>150.85</list-price>
     <sale-price>115.22</sale-price>
     <minimal-price>110.25</minimal-price>
     <availability/>
 </price>
-<price guid="XML_0_PRODUCT1" sku="PRODUCT1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_PRODUCT1" sku="XML_PRODUCT1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>15.00</list-price>
     <availability/>
 </price>
-<price guid="XML_1_PRODUCT2" sku="PRODUCT2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PRODUCT2" sku="XML_PRODUCT2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>30.00</list-price>
     <availability/>
 </price>
-<price guid="XML_2_PRODUCT3" sku="PRODUCT3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_PRODUCT3" sku="XML_PRODUCT3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>250.00</list-price>
     <availability/>
 </price>
-<price guid="XML_3_PRODUCT4" sku="PRODUCT4" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_PRODUCT4" sku="XML_PRODUCT4" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>400.00</list-price>
     <availability/>
 </price>
-<price guid="XML_4_PRODUCT5" sku="PRODUCT5" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PRODUCT5" sku="XML_PRODUCT5" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>420.00</list-price>
     <availability/>
 </price>
-<price guid="XML_5_PRODUCT6" sku="PRODUCT6" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_PRODUCT6" sku="XML_PRODUCT6" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>420.00</list-price>
     <availability/>
 </price>
-<price guid="XML_6_PRODUCT7" sku="PRODUCT7" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_PRODUCT7" sku="XML_PRODUCT7" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>420.00</list-price>
     <availability/>
 </price>
-<price guid="XML_7_PRODUCT8" sku="PRODUCT8" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_PRODUCT8" sku="XML_PRODUCT8" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>421.00</list-price>
     <availability/>
 </price>
-<price guid="XML_0_CC_TEST1" sku="CC_TEST1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_CC_TEST1" sku="XML_CC_TEST1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>19.99</list-price>
     <availability/>
 </price>
-<price guid="XML_1_CC_TEST1" sku="CC_TEST1" shop="SHOIP1" currency="EUR" quantity="3.00" offer="false" request="false">
+<price guid="XML_1_CC_TEST1" sku="XML_CC_TEST1" shop="SHOIP1" currency="EUR" quantity="3.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>19.00</list-price>
     <availability/>
 </price>
-<price guid="XML_2_CC_TEST1" sku="CC_TEST1" shop="SHOIP1" currency="EUR" quantity="5.00" offer="false" request="false">
+<price guid="XML_2_CC_TEST1" sku="XML_CC_TEST1" shop="SHOIP1" currency="EUR" quantity="5.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>18.00</list-price>
     <availability/>
 </price>
-<price guid="XML_3_CC_TEST2" sku="CC_TEST2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_CC_TEST2" sku="XML_CC_TEST2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>29.99</list-price>
     <availability/>
 </price>
-<price guid="XML_4_CC_TEST2" sku="CC_TEST2" shop="SHOIP1" currency="EUR" quantity="10.00" offer="false" request="false">
+<price guid="XML_4_CC_TEST2" sku="XML_CC_TEST2" shop="SHOIP1" currency="EUR" quantity="10.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>22.17</list-price>
     <availability/>
 </price>
-<price guid="XML_5_CC_TEST3" sku="CC_TEST3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_CC_TEST3" sku="XML_CC_TEST3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>7.99</list-price>
     <availability/>
 </price>
-<price guid="XML_6_CC_TEST3" sku="CC_TEST3" shop="SHOIP1" currency="EUR" quantity="3.00" offer="false" request="false">
+<price guid="XML_6_CC_TEST3" sku="XML_CC_TEST3" shop="SHOIP1" currency="EUR" quantity="3.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>7.00</list-price>
     <availability/>
 </price>
-<price guid="XML_7_CC_TEST4" sku="CC_TEST4" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_CC_TEST4" sku="XML_CC_TEST4" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>123.00</list-price>
     <availability/>
 </price>
-<price guid="XML_8_CC_TEST4" sku="CC_TEST4" shop="SHOIP1" currency="EUR" quantity="5.00" offer="false" request="false">
+<price guid="XML_8_CC_TEST4" sku="XML_CC_TEST4" shop="SHOIP1" currency="EUR" quantity="5.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>99.99</list-price>
     <availability/>
 </price>
-<price guid="XML_9_CC_TEST4-M" sku="CC_TEST4-M" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_CC_TEST4-M" sku="XML_CC_TEST4-M" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>77.99</list-price>
     <availability/>
 </price>
-<price guid="XML_0_CC_TEST4-M" sku="CC_TEST4-M" shop="SHOIP1" currency="EUR" quantity="4.00" offer="false" request="false">
+<price guid="XML_0_CC_TEST4-M" sku="XML_CC_TEST4-M" shop="SHOIP1" currency="EUR" quantity="4.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>77.00</list-price>
     <availability/>
 </price>
-<price guid="XML_1_CC_TEST1" sku="CC_TEST1" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_CC_TEST1" sku="XML_CC_TEST1" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>190.99</list-price>
     <availability/>
 </price>
-<price guid="XML_2_CC_TEST1" sku="CC_TEST1" shop="SHOIP1" currency="USD" quantity="3.00" offer="false" request="false">
+<price guid="XML_2_CC_TEST1" sku="XML_CC_TEST1" shop="SHOIP1" currency="USD" quantity="3.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>190.01</list-price>
     <availability/>
 </price>
-<price guid="XML_3_CC_TEST1" sku="CC_TEST1" shop="SHOIP1" currency="USD" quantity="5.00" offer="false" request="false">
+<price guid="XML_3_CC_TEST1" sku="XML_CC_TEST1" shop="SHOIP1" currency="USD" quantity="5.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>180.00</list-price>
     <availability/>
 </price>
-<price guid="XML_4_CC_TEST2" sku="CC_TEST2" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_CC_TEST2" sku="XML_CC_TEST2" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>290.99</list-price>
     <availability/>
 </price>
-<price guid="XML_5_CC_TEST2" sku="CC_TEST2" shop="SHOIP1" currency="USD" quantity="10.00" offer="false" request="false">
+<price guid="XML_5_CC_TEST2" sku="XML_CC_TEST2" shop="SHOIP1" currency="USD" quantity="10.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>220.17</list-price>
     <availability/>
 </price>
-<price guid="XML_6_CC_TEST3" sku="CC_TEST3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_CC_TEST3" sku="XML_CC_TEST3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>70.99</list-price>
     <availability/>
 </price>
-<price guid="XML_7_CC_TEST3" sku="CC_TEST3" shop="SHOIP1" currency="USD" quantity="3.00" offer="false" request="false">
+<price guid="XML_7_CC_TEST3" sku="XML_CC_TEST3" shop="SHOIP1" currency="USD" quantity="3.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>70.00</list-price>
     <availability/>
 </price>
-<price guid="XML_8_CC_TEST4" sku="CC_TEST4" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_CC_TEST4" sku="XML_CC_TEST4" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1230.00</list-price>
     <availability/>
 </price>
-<price guid="XML_9_CC_TEST4" sku="CC_TEST4" shop="SHOIP1" currency="USD" quantity="5.00" offer="false" request="false">
+<price guid="XML_9_CC_TEST4" sku="XML_CC_TEST4" shop="SHOIP1" currency="USD" quantity="5.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>990.99</list-price>
     <availability/>
 </price>
-<price guid="XML_0_CC_TEST4-M" sku="CC_TEST4-M" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_CC_TEST4-M" sku="XML_CC_TEST4-M" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>177.99</list-price>
     <availability/>
 </price>
-<price guid="XML_1_CC_TEST4-M" sku="CC_TEST4-M" shop="SHOIP1" currency="USD" quantity="4.00" offer="false" request="false">
+<price guid="XML_1_CC_TEST4-M" sku="XML_CC_TEST4-M" shop="SHOIP1" currency="USD" quantity="4.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>177.00</list-price>
     <availability/>
 </price>
-<price guid="XML_0_CC_TEST5" sku="CC_TEST5" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_CC_TEST5" sku="XML_CC_TEST5" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12.00</list-price>
     <availability/>
 </price>
-<price guid="XML_1_CC_TEST6" sku="CC_TEST6" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_CC_TEST6" sku="XML_CC_TEST6" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>55.17</list-price>
     <availability/>
 </price>
-<price guid="XML_2_CC_TEST7" sku="CC_TEST7" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_CC_TEST7" sku="XML_CC_TEST7" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>55.17</list-price>
     <availability/>
 </price>
-<price guid="XML_3_CC_TEST8" sku="CC_TEST8" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_CC_TEST8" sku="XML_CC_TEST8" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>55.17</list-price>
     <availability/>
 </price>
-<price guid="XML_4_CC_TEST9" sku="CC_TEST9" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_CC_TEST9" sku="XML_CC_TEST9" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>65.17</list-price>
     <availability/>
 </price>
-<price guid="XML_5_CC_TEST10-SKU" sku="CC_TEST10-SKU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_CC_TEST10-SKU" sku="XML_CC_TEST10-SKU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>23.10</list-price>
     <availability/>
 </price>
-<price guid="XML_6_CC_TEST11" sku="CC_TEST11" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_CC_TEST11" sku="XML_CC_TEST11" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.10</list-price>
     <availability/>
 </price>
-<price guid="XML_7_CC_TEST5-NOINV" sku="CC_TEST5-NOINV" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_CC_TEST5-NOINV" sku="XML_CC_TEST5-NOINV" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12.00</list-price>
     <availability/>
 </price>
-<price guid="XML_0_REMOVE_ME" sku="REMOVE_ME" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_REMOVE_ME" sku="XML_REMOVE_ME" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.10</list-price>
     <availability/>
 </price>
-<price guid="XML_1_REMOVE_ME1" sku="REMOVE_ME1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_REMOVE_ME1" sku="XML_REMOVE_ME1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.10</list-price>
     <availability/>
 </price>
-<price guid="XML_0_PREORDER-BACK-TO-FLOW0" sku="PREORDER-BACK-TO-FLOW0" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_PREORDER-BACK-TO-FLOW0" sku="XML_PREORDER-BACK-TO-FLOW0" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.10</list-price>
     <availability/>
 </price>
-<price guid="XML_1_PREORDER-BACK-TO-FLOW1" sku="PREORDER-BACK-TO-FLOW1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PREORDER-BACK-TO-FLOW1" sku="XML_PREORDER-BACK-TO-FLOW1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>28.11</list-price>
     <availability/>
 </price>
-<price guid="XML_2_PREORDER-BACK-TO-FLOW2" sku="PREORDER-BACK-TO-FLOW2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_PREORDER-BACK-TO-FLOW2" sku="XML_PREORDER-BACK-TO-FLOW2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.11</list-price>
     <availability/>
 </price>
-<price guid="XML_3_PREORDER-BACK-TO-FLOW3" sku="PREORDER-BACK-TO-FLOW3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_PREORDER-BACK-TO-FLOW3" sku="XML_PREORDER-BACK-TO-FLOW3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.11</list-price>
     <availability/>
 </price>
-<price guid="XML_4_PREORDER-BACK-TO-FLOW4" sku="PREORDER-BACK-TO-FLOW4" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PREORDER-BACK-TO-FLOW4" sku="XML_PREORDER-BACK-TO-FLOW4" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.11</list-price>
     <availability/>
 </price>
-<price guid="XML_5_PREORDER-BACK-TO-FLOW5" sku="PREORDER-BACK-TO-FLOW5" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_PREORDER-BACK-TO-FLOW5" sku="XML_PREORDER-BACK-TO-FLOW5" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.11</list-price>
     <availability/>
 </price>
-<price guid="XML_5_BACKORDER-BACK-TO-FLOW1" sku="BACKORDER-BACK-TO-FLOW1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_BACKORDER-BACK-TO-FLOW1" sku="XML_BACKORDER-BACK-TO-FLOW1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.10</list-price>
     <availability/>
 </price>
-<price guid="XML_5_BACKORDER-BACK-TO-FLOW2" sku="BACKORDER-BACK-TO-FLOW2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_BACKORDER-BACK-TO-FLOW2" sku="XML_BACKORDER-BACK-TO-FLOW2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>28.11</list-price>
     <availability/>
 </price>
-<price guid="XML_0_CC_TEST5" sku="CC_TEST5" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_CC_TEST5" sku="XML_CC_TEST5" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>17.00</list-price>
     <availability/>
 </price>
-<price guid="XML_1_CC_TEST6" sku="CC_TEST6" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_CC_TEST6" sku="XML_CC_TEST6" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>80.99</list-price>
     <availability/>
 </price>
-<price guid="XML_2_CC_TEST7" sku="CC_TEST7" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_CC_TEST7" sku="XML_CC_TEST7" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>80.99</list-price>
     <availability/>
 </price>
-<price guid="XML_3_CC_TEST8" sku="CC_TEST8" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_CC_TEST8" sku="XML_CC_TEST8" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>87.99</list-price>
     <availability/>
 </price>
-<price guid="XML_4_CC_TEST9" sku="CC_TEST9" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_CC_TEST9" sku="XML_CC_TEST9" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>88.99</list-price>
     <availability/>
 </price>
-<price guid="XML_5_CC_TEST10-SKU" sku="CC_TEST10-SKU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_CC_TEST10-SKU" sku="XML_CC_TEST10-SKU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>99.09</list-price>
     <availability/>
 </price>
-<price guid="XML_6_CC_TEST11" sku="CC_TEST11" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_CC_TEST11" sku="XML_CC_TEST11" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>17.15</list-price>
     <availability/>
 </price>
-<price guid="XML_7_CC_TEST5-NOINV" sku="CC_TEST5-NOINV" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_CC_TEST5-NOINV" sku="XML_CC_TEST5-NOINV" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>17.00</list-price>
     <availability/>
 </price>
-<price guid="XML_0_REMOVE_ME" sku="REMOVE_ME" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_REMOVE_ME" sku="XML_REMOVE_ME" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.10</list-price>
     <availability/>
 </price>
-<price guid="XML_1_REMOVE_ME1" sku="REMOVE_ME1" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_REMOVE_ME1" sku="XML_REMOVE_ME1" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.10</list-price>
     <availability/>
 </price>
-<price guid="XML_0_PREORDER-BACK-TO-FLOW0" sku="PREORDER-BACK-TO-FLOW0" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_PREORDER-BACK-TO-FLOW0" sku="XML_PREORDER-BACK-TO-FLOW0" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>11.10</list-price>
     <availability/>
 </price>
-<price guid="XML_1_PREORDER-BACK-TO-FLOW1" sku="PREORDER-BACK-TO-FLOW1" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PREORDER-BACK-TO-FLOW1" sku="XML_PREORDER-BACK-TO-FLOW1" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>34.11</list-price>
     <availability/>
 </price>
-<price guid="XML_2_PREORDER-BACK-TO-FLOW2" sku="PREORDER-BACK-TO-FLOW2" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_PREORDER-BACK-TO-FLOW2" sku="XML_PREORDER-BACK-TO-FLOW2" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12.11</list-price>
     <availability/>
 </price>
-<price guid="XML_3_PREORDER-BACK-TO-FLOW3" sku="PREORDER-BACK-TO-FLOW3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_PREORDER-BACK-TO-FLOW3" sku="XML_PREORDER-BACK-TO-FLOW3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12.11</list-price>
     <availability/>
 </price>
-<price guid="XML_4_PREORDER-BACK-TO-FLOW4" sku="PREORDER-BACK-TO-FLOW4" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PREORDER-BACK-TO-FLOW4" sku="XML_PREORDER-BACK-TO-FLOW4" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12.11</list-price>
     <availability/>
 </price>
-<price guid="XML_5_PREORDER-BACK-TO-FLOW5" sku="PREORDER-BACK-TO-FLOW5" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_PREORDER-BACK-TO-FLOW5" sku="XML_PREORDER-BACK-TO-FLOW5" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12.11</list-price>
     <availability/>
 </price>
-<price guid="XML_6_BENDER-ua" sku="BENDER-ua" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_BENDER-ua" sku="XML_BENDER-ua" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>99.99</list-price>
     <availability/>
 </price>
-<price guid="XML_5_BACKORDER-BACK-TO-FLOW1" sku="BACKORDER-BACK-TO-FLOW1" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_BACKORDER-BACK-TO-FLOW1" sku="XML_BACKORDER-BACK-TO-FLOW1" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>11.10</list-price>
     <availability/>
 </price>
-<price guid="XML_5_BACKORDER-BACK-TO-FLOW2" sku="BACKORDER-BACK-TO-FLOW2" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_BACKORDER-BACK-TO-FLOW2" sku="XML_BACKORDER-BACK-TO-FLOW2" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>34.11</list-price>
     <availability/>
 </price>
-<price guid="XML_0_PAT_PRODUCT_ON_STOCK_ONLY_1" sku="PAT_PRODUCT_ON_STOCK_ONLY_1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_PAT_PRODUCT_ON_STOCK_ONLY_1" sku="XML_PAT_PRODUCT_ON_STOCK_ONLY_1" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.00</list-price>
     <availability/>
 </price>
-<price guid="XML_1_PAT_PRODUCT_ON_STOCK_ONLY_2" sku="PAT_PRODUCT_ON_STOCK_ONLY_2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PAT_PRODUCT_ON_STOCK_ONLY_2" sku="XML_PAT_PRODUCT_ON_STOCK_ONLY_2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.00</list-price>
     <availability/>
 </price>
-<price guid="XML_2_PAT_PRODUCT_ON_STOCK_ONLY_3" sku="PAT_PRODUCT_ON_STOCK_ONLY_3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_PAT_PRODUCT_ON_STOCK_ONLY_3" sku="XML_PAT_PRODUCT_ON_STOCK_ONLY_3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.00</list-price>
     <availability/>
 </price>
-<price guid="XML_3_PAT_PRODUCT_PREORDER" sku="PAT_PRODUCT_PREORDER" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_PAT_PRODUCT_PREORDER" sku="XML_PAT_PRODUCT_PREORDER" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.00</list-price>
     <availability/>
 </price>
-<price guid="XML_4_PAT_PRODUCT_BACKORDER" sku="PAT_PRODUCT_BACKORDER" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PAT_PRODUCT_BACKORDER" sku="XML_PAT_PRODUCT_BACKORDER" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.00</list-price>
     <availability/>
 </price>
-<price guid="XML_5_PAT_PRODUCT_ALWAYS" sku="PAT_PRODUCT_ALWAYS" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_PAT_PRODUCT_ALWAYS" sku="XML_PAT_PRODUCT_ALWAYS" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.00</list-price>
     <availability/>
 </price>
-<price guid="XML_6_PAT_PRODUCT_ALWAYS2" sku="PAT_PRODUCT_ALWAYS2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_PAT_PRODUCT_ALWAYS2" sku="XML_PAT_PRODUCT_ALWAYS2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10.00</list-price>
     <availability/>
 </price>
-<price guid="XML_7_PAT_PRODUCT_PUR" sku="PAT_PRODUCT_PUR" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="true">
+<price guid="XML_7_PAT_PRODUCT_PUR" sku="XML_PAT_PRODUCT_PUR" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="true">
     <pricing-policy/>
     <list-price>0.00</list-price>
     <availability/>
 </price>
-<price guid="XML_8_PAT_PRODUCT_PUR2" sku="PAT_PRODUCT_PUR2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="true">
+<price guid="XML_8_PAT_PRODUCT_PUR2" sku="XML_PAT_PRODUCT_PUR2" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="true">
     <pricing-policy/>
     <list-price>10.00</list-price>
     <availability/>
 </price>
-<price guid="XML_0_CC_TEST12" sku="CC_TEST12" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_CC_TEST12" sku="XML_CC_TEST12" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>7.99</list-price>
     <availability/>
 </price>
-<price guid="XML_1_CC_TEST12" sku="CC_TEST12" shop="SHOIP1" currency="EUR" quantity="3.00" offer="false" request="false">
+<price guid="XML_1_CC_TEST12" sku="XML_CC_TEST12" shop="SHOIP1" currency="EUR" quantity="3.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>7.00</list-price>
     <availability/>
 </price>
-<price guid="XML_2_CC_TEST12" sku="CC_TEST12" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_CC_TEST12" sku="XML_CC_TEST12" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>70.99</list-price>
     <availability/>
 </price>
-<price guid="XML_3_CC_TEST12" sku="CC_TEST12" shop="SHOIP1" currency="USD" quantity="3.00" offer="false" request="false">
+<price guid="XML_3_CC_TEST12" sku="XML_CC_TEST12" shop="SHOIP1" currency="USD" quantity="3.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>70.00</list-price>
     <availability/>
 </price>
-<price guid="XML_G_WV_CARRIERSLA_KG" sku="WV_CARRIERSLA_KG" shop="SUBSHOIP1STR" currency="EUR" quantity="0.01" offer="false" request="false">
+<price guid="XML_G_WV_CARRIERSLA_KG" sku="XML_WV_CARRIERSLA_KG" shop="SUBSHOIP1STR" currency="EUR" quantity="0.01" offer="false" request="false">
     <pricing-policy/>
     <list-price>5.50</list-price>
     <availability/>
 </price>
-<price guid="XML_G_WV_CARRIERSLA_KG" sku="WV_CARRIERSLA_KG" shop="SUBSHOIP1STR" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_G_WV_CARRIERSLA_KG" sku="XML_WV_CARRIERSLA_KG" shop="SUBSHOIP1STR" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy policy="P1" ref="P1"/>
     <list-price>12.50</list-price>
     <sale-price>9.50</sale-price>
     <availability/>
 </price>
-<price guid="XML_0_CC_TEST4" sku="CC_TEST4" shop="SHOIP7" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_CC_TEST4" sku="XML_CC_TEST4" shop="SHOIP7" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>99.99</list-price>
     <availability/>
 </price>
-<price guid="XML_0_BENDER-ua" sku="BENDER-ua" shop="SHOIP2" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_BENDER-ua" sku="XML_BENDER-ua" shop="SHOIP2" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>99.99</list-price>
     <availability/>
 </price>
-<price guid="XML_0_CC_TEST1" sku="CC_TEST1" shop="SUBSHOIP1STR" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_CC_TEST1" sku="XML_CC_TEST1" shop="SUBSHOIP1STR" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>29.99</list-price>
     <availability/>
 </price>
-<price guid="XML_3_CC_TEST2" sku="CC_TEST2" shop="SUBSHOIP1STR" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_CC_TEST2" sku="XML_CC_TEST2" shop="SUBSHOIP1STR" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>39.99</list-price>
     <availability/>
 </price>
-<price guid="XML_5_CC_TEST3" sku="CC_TEST3" shop="SUBSHOIP1STR" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_CC_TEST3" sku="XML_CC_TEST3" shop="SUBSHOIP1STR" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>17.99</list-price>
     <availability/>
 </price>
-<price guid="XML_e_L2708A#BEA" sku="L2708A#BEA" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_L2708A#BEA" sku="XML_L2708A#BEA" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2124.70</list-price>
     <availability/>
@@ -570,7 +570,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_L2708A#BEA" sku="L2708A#BEA" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_L2708A#BEA" sku="XML_L2708A#BEA" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1730.00</list-price>
     <availability/>
@@ -579,7 +579,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_L2708A#BEA" sku="L2708A#BEA" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_L2708A#BEA" sku="XML_L2708A#BEA" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>17205.82</list-price>
     <availability/>
@@ -588,7 +588,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_IPICS2GO" sku="IPICS2GO" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_IPICS2GO" sku="XML_IPICS2GO" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1411.80</list-price>
     <availability/>
@@ -597,7 +597,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_IPICS2GO" sku="IPICS2GO" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_IPICS2GO" sku="XML_IPICS2GO" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1149.53</list-price>
     <availability/>
@@ -606,7 +606,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_IPICS2GO" sku="IPICS2GO" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_IPICS2GO" sku="XML_IPICS2GO" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>11432.76</list-price>
     <availability/>
@@ -615,7 +615,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_6015ES3" sku="6015ES3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_6015ES3" sku="XML_6015ES3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1179.14</list-price>
     <availability/>
@@ -624,7 +624,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_6015ES3" sku="6015ES3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_6015ES3" sku="XML_6015ES3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>960.09</list-price>
     <availability/>
@@ -633,7 +633,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_6015ES3" sku="6015ES3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_6015ES3" sku="XML_6015ES3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>9548.68</list-price>
     <availability/>
@@ -642,7 +642,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_80-106-085" sku="80-106-085" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_80-106-085" sku="XML_80-106-085" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1374.64</list-price>
     <availability/>
@@ -651,7 +651,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_0_80-106-085" sku="80-106-085" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_80-106-085" sku="XML_80-106-085" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1119.28</list-price>
     <availability/>
@@ -660,7 +660,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_80-106-085" sku="80-106-085" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_80-106-085" sku="XML_80-106-085" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>11131.83</list-price>
     <availability/>
@@ -669,7 +669,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_WF723A#B1K" sku="WF723A#B1K" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_WF723A#B1K" sku="XML_WF723A#B1K" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2677.30</list-price>
     <availability/>
@@ -678,7 +678,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_WF723A#B1K" sku="WF723A#B1K" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_WF723A#B1K" sku="XML_WF723A#B1K" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2179.94</list-price>
     <availability/>
@@ -687,7 +687,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_WF723A#B1K" sku="WF723A#B1K" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_WF723A#B1K" sku="XML_WF723A#B1K" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>21680.78</list-price>
     <availability/>
@@ -696,7 +696,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_c_PLL50E-00V012EN" sku="PLL50E-00V012EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_c_PLL50E-00V012EN" sku="XML_PLL50E-00V012EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>689.64</list-price>
     <availability/>
@@ -705,7 +705,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_PLL50E-00V012EN" sku="PLL50E-00V012EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_PLL50E-00V012EN" sku="XML_PLL50E-00V012EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>561.53</list-price>
     <availability/>
@@ -714,7 +714,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_PLL50E-00V012EN" sku="PLL50E-00V012EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_PLL50E-00V012EN" sku="XML_PLL50E-00V012EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>5584.70</list-price>
     <availability/>
@@ -723,7 +723,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_18.01.1083" sku="18.01.1083" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_18.01.1083" sku="XML_18.01.1083" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2530.88</list-price>
     <availability/>
@@ -732,7 +732,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_18.01.1083" sku="18.01.1083" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_18.01.1083" sku="XML_18.01.1083" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2060.72</list-price>
     <availability/>
@@ -741,7 +741,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_18.01.1083" sku="18.01.1083" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_18.01.1083" sku="XML_18.01.1083" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>20495.07</list-price>
     <availability/>
@@ -750,7 +750,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_18.01.1084" sku="18.01.1084" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_18.01.1084" sku="XML_18.01.1084" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1345.93</list-price>
     <availability/>
@@ -759,7 +759,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_18.01.1084" sku="18.01.1084" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_18.01.1084" sku="XML_18.01.1084" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1095.90</list-price>
     <availability/>
@@ -768,7 +768,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_0_18.01.1084" sku="18.01.1084" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_18.01.1084" sku="XML_18.01.1084" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10899.34</list-price>
     <availability/>
@@ -777,7 +777,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_d_VG-KBD1500/XC" sku="VG-KBD1500/XC" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_d_VG-KBD1500/XC" sku="XML_VG-KBD1500/XC" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1275.14</list-price>
     <availability/>
@@ -786,7 +786,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_VG-KBD1500/XC" sku="VG-KBD1500/XC" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_VG-KBD1500/XC" sku="XML_VG-KBD1500/XC" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1038.26</list-price>
     <availability/>
@@ -795,7 +795,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_VG-KBD1500/XC" sku="VG-KBD1500/XC" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_VG-KBD1500/XC" sku="XML_VG-KBD1500/XC" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10326.08</list-price>
     <availability/>
@@ -804,7 +804,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_18.01.1082" sku="18.01.1082" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_18.01.1082" sku="XML_18.01.1082" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1171.80</list-price>
     <availability/>
@@ -813,7 +813,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_6_18.01.1082" sku="18.01.1082" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_18.01.1082" sku="XML_18.01.1082" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>954.12</list-price>
     <availability/>
@@ -822,7 +822,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_3_18.01.1082" sku="18.01.1082" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_18.01.1082" sku="XML_18.01.1082" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>9489.24</list-price>
     <availability/>
@@ -831,7 +831,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_L2708A#201" sku="L2708A#201" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_L2708A#201" sku="XML_L2708A#201" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>694.34</list-price>
     <availability/>
@@ -840,7 +840,7 @@
     <updated-timestamp>2018-11-10 17:43:18</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_L2708A#201" sku="L2708A#201" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_L2708A#201" sku="XML_L2708A#201" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>565.35</list-price>
     <availability/>
@@ -849,7 +849,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_L2708A#201" sku="L2708A#201" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_L2708A#201" sku="XML_L2708A#201" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>5622.77</list-price>
     <availability/>
@@ -858,7 +858,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_JG075B" sku="JG075B" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_JG075B" sku="XML_JG075B" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2683.14</list-price>
     <availability/>
@@ -867,7 +867,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_JG075B" sku="JG075B" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_JG075B" sku="XML_JG075B" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2184.70</list-price>
     <availability/>
@@ -876,7 +876,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_JG075B" sku="JG075B" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_JG075B" sku="XML_JG075B" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>21728.07</list-price>
     <availability/>
@@ -885,7 +885,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_C08-402-001" sku="C08-402-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_C08-402-001" sku="XML_C08-402-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2870.43</list-price>
     <availability/>
@@ -894,7 +894,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_C08-402-001" sku="C08-402-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_C08-402-001" sku="XML_C08-402-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2337.20</list-price>
     <availability/>
@@ -903,7 +903,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_3_C08-402-001" sku="C08-402-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_C08-402-001" sku="XML_C08-402-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>23244.74</list-price>
     <availability/>
@@ -912,7 +912,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_0_C08-460-001" sku="C08-460-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_C08-460-001" sku="XML_C08-460-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1962.10</list-price>
     <availability/>
@@ -921,7 +921,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_C08-460-001" sku="C08-460-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_C08-460-001" sku="XML_C08-460-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1597.60</list-price>
     <availability/>
@@ -930,7 +930,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_e_C08-460-001" sku="C08-460-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_C08-460-001" sku="XML_C08-460-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>15889.09</list-price>
     <availability/>
@@ -939,7 +939,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_C08-284-001" sku="C08-284-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_C08-284-001" sku="XML_C08-284-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1455.51</list-price>
     <availability/>
@@ -948,7 +948,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_C08-284-001" sku="C08-284-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_C08-284-001" sku="XML_C08-284-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1185.12</list-price>
     <availability/>
@@ -957,7 +957,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_C08-284-001" sku="C08-284-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_C08-284-001" sku="XML_C08-284-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>11786.72</list-price>
     <availability/>
@@ -966,7 +966,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_C08-278-001" sku="C08-278-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_C08-278-001" sku="XML_C08-278-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2980.32</list-price>
     <availability/>
@@ -975,7 +975,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_d_C08-278-001" sku="C08-278-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_d_C08-278-001" sku="XML_C08-278-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2426.67</list-price>
     <availability/>
@@ -984,7 +984,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_C08-278-001" sku="C08-278-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_C08-278-001" sku="XML_C08-278-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>24134.63</list-price>
     <availability/>
@@ -993,7 +993,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_PSAW3E-12603HEN" sku="PSAW3E-12603HEN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PSAW3E-12603HEN" sku="XML_PSAW3E-12603HEN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1521.34</list-price>
     <availability/>
@@ -1002,7 +1002,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_PSAW3E-12603HEN" sku="PSAW3E-12603HEN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_PSAW3E-12603HEN" sku="XML_PSAW3E-12603HEN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1238.72</list-price>
     <availability/>
@@ -1011,7 +1011,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_PSAW3E-12603HEN" sku="PSAW3E-12603HEN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_PSAW3E-12603HEN" sku="XML_PSAW3E-12603HEN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12319.81</list-price>
     <availability/>
@@ -1020,7 +1020,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_L2708A#BAZ" sku="L2708A#BAZ" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_L2708A#BAZ" sku="XML_L2708A#BAZ" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1508.31</list-price>
     <availability/>
@@ -1029,7 +1029,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_c_L2708A#BAZ" sku="L2708A#BAZ" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_c_L2708A#BAZ" sku="XML_L2708A#BAZ" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1228.11</list-price>
     <availability/>
@@ -1038,7 +1038,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_L2708A#BAZ" sku="L2708A#BAZ" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_L2708A#BAZ" sku="XML_L2708A#BAZ" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12214.29</list-price>
     <availability/>
@@ -1047,7 +1047,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_PLL5FE-00M008EN" sku="PLL5FE-00M008EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_PLL5FE-00M008EN" sku="XML_PLL5FE-00M008EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>3030.92</list-price>
     <availability/>
@@ -1056,7 +1056,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_PLL5FE-00M008EN" sku="PLL5FE-00M008EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_PLL5FE-00M008EN" sku="XML_PLL5FE-00M008EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2467.87</list-price>
     <availability/>
@@ -1065,7 +1065,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_PLL5FE-00M008EN" sku="PLL5FE-00M008EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_PLL5FE-00M008EN" sku="XML_PLL5FE-00M008EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>24544.39</list-price>
     <availability/>
@@ -1074,7 +1074,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_6_PLL52E-00F00SEN" sku="PLL52E-00F00SEN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_PLL52E-00F00SEN" sku="XML_PLL52E-00F00SEN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2092.57</list-price>
     <availability/>
@@ -1083,7 +1083,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_PLL52E-00F00SEN" sku="PLL52E-00F00SEN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_PLL52E-00F00SEN" sku="XML_PLL52E-00F00SEN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1703.84</list-price>
     <availability/>
@@ -1092,7 +1092,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_PLL52E-00F00SEN" sku="PLL52E-00F00SEN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_PLL52E-00F00SEN" sku="XML_PLL52E-00F00SEN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>16945.63</list-price>
     <availability/>
@@ -1101,7 +1101,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_WF723A#ABD" sku="WF723A#ABD" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_WF723A#ABD" sku="XML_WF723A#ABD" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1865.73</list-price>
     <availability/>
@@ -1110,7 +1110,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_WF723A#ABD" sku="WF723A#ABD" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_WF723A#ABD" sku="XML_WF723A#ABD" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1519.14</list-price>
     <availability/>
@@ -1119,7 +1119,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_WF723A#ABD" sku="WF723A#ABD" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_WF723A#ABD" sku="XML_WF723A#ABD" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>15108.68</list-price>
     <availability/>
@@ -1128,7 +1128,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_d_C05-501-001" sku="C05-501-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_d_C05-501-001" sku="XML_C05-501-001" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1804.27</list-price>
     <availability/>
@@ -1137,7 +1137,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_C05-501-001" sku="C05-501-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_C05-501-001" sku="XML_C05-501-001" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1469.09</list-price>
     <availability/>
@@ -1146,7 +1146,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_C05-501-001" sku="C05-501-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_C05-501-001" sku="XML_C05-501-001" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>14610.98</list-price>
     <availability/>
@@ -1155,7 +1155,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_PLL52E-01800SEN" sku="PLL52E-01800SEN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_PLL52E-01800SEN" sku="XML_PLL52E-01800SEN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2352.38</list-price>
     <availability/>
@@ -1164,7 +1164,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_PLL52E-01800SEN" sku="PLL52E-01800SEN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_PLL52E-01800SEN" sku="XML_PLL52E-01800SEN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1915.38</list-price>
     <availability/>
@@ -1173,7 +1173,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_PLL52E-01800SEN" sku="PLL52E-01800SEN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PLL52E-01800SEN" sku="XML_PLL52E-01800SEN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>19049.57</list-price>
     <availability/>
@@ -1182,7 +1182,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_PLL50E-005012EN" sku="PLL50E-005012EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_PLL50E-005012EN" sku="XML_PLL50E-005012EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2830.33</list-price>
     <availability/>
@@ -1191,7 +1191,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_PLL50E-005012EN" sku="PLL50E-005012EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PLL50E-005012EN" sku="XML_PLL50E-005012EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2304.55</list-price>
     <availability/>
@@ -1200,7 +1200,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_PLL50E-005012EN" sku="PLL50E-005012EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_PLL50E-005012EN" sku="XML_PLL50E-005012EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>22920.01</list-price>
     <availability/>
@@ -1209,7 +1209,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_18307" sku="18307" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_18307" sku="XML_18307" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>662.07</list-price>
     <availability/>
@@ -1218,7 +1218,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_d_18307" sku="18307" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_d_18307" sku="XML_18307" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>539.08</list-price>
     <availability/>
@@ -1227,7 +1227,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_18307" sku="18307" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_18307" sku="XML_18307" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>5361.44</list-price>
     <availability/>
@@ -1236,7 +1236,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_PTME1E-01H02HG3" sku="PTME1E-01H02HG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_PTME1E-01H02HG3" sku="XML_PTME1E-01H02HG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>3169.72</list-price>
     <availability/>
@@ -1245,7 +1245,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PTME1E-01H02HG3" sku="PTME1E-01H02HG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PTME1E-01H02HG3" sku="XML_PTME1E-01H02HG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2580.89</list-price>
     <availability/>
@@ -1254,7 +1254,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_3_PTME1E-01H02HG3" sku="PTME1E-01H02HG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_PTME1E-01H02HG3" sku="XML_PTME1E-01H02HG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>25668.39</list-price>
     <availability/>
@@ -1263,7 +1263,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_PSK01E-01F010G3" sku="PSK01E-01F010G3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_PSK01E-01F010G3" sku="XML_PSK01E-01F010G3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2742.65</list-price>
     <availability/>
@@ -1272,7 +1272,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_PSK01E-01F010G3" sku="PSK01E-01F010G3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_PSK01E-01F010G3" sku="XML_PSK01E-01F010G3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2233.15</list-price>
     <availability/>
@@ -1281,7 +1281,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_PSK01E-01F010G3" sku="PSK01E-01F010G3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PSK01E-01F010G3" sku="XML_PSK01E-01F010G3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>22209.98</list-price>
     <availability/>
@@ -1290,7 +1290,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PSK05E-01201YG3" sku="PSK05E-01201YG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PSK05E-01201YG3" sku="XML_PSK05E-01201YG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>3119.38</list-price>
     <availability/>
@@ -1299,7 +1299,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_6_PSK05E-01201YG3" sku="PSK05E-01201YG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_PSK05E-01201YG3" sku="XML_PSK05E-01201YG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2539.90</list-price>
     <availability/>
@@ -1308,7 +1308,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_PSK05E-01201YG3" sku="PSK05E-01201YG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_PSK05E-01201YG3" sku="XML_PSK05E-01201YG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>25260.74</list-price>
     <availability/>
@@ -1317,7 +1317,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_AMW5021EU" sku="AMW5021EU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_AMW5021EU" sku="XML_AMW5021EU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2517.92</list-price>
     <availability/>
@@ -1326,7 +1326,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_AMW5021EU" sku="AMW5021EU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_AMW5021EU" sku="XML_AMW5021EU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2050.17</list-price>
     <availability/>
@@ -1335,7 +1335,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_e_AMW5021EU" sku="AMW5021EU" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_AMW5021EU" sku="XML_AMW5021EU" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>20390.12</list-price>
     <availability/>
@@ -1344,7 +1344,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PPM78E-08F00PG3" sku="PPM78E-08F00PG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PPM78E-08F00PG3" sku="XML_PPM78E-08F00PG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1300.98</list-price>
     <availability/>
@@ -1353,7 +1353,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PPM78E-08F00PG3" sku="PPM78E-08F00PG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PPM78E-08F00PG3" sku="XML_PPM78E-08F00PG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1059.30</list-price>
     <availability/>
@@ -1362,7 +1362,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_PPM78E-08F00PG3" sku="PPM78E-08F00PG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_PPM78E-08F00PG3" sku="XML_PPM78E-08F00PG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10535.34</list-price>
     <availability/>
@@ -1371,7 +1371,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_AMW5011EU" sku="AMW5011EU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_AMW5011EU" sku="XML_AMW5011EU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>3021.57</list-price>
     <availability/>
@@ -1380,7 +1380,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_6_AMW5011EU" sku="AMW5011EU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_AMW5011EU" sku="XML_AMW5011EU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2460.26</list-price>
     <availability/>
@@ -1389,7 +1389,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_AMW5011EU" sku="AMW5011EU" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_AMW5011EU" sku="XML_AMW5011EU" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>24468.67</list-price>
     <availability/>
@@ -1398,7 +1398,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_PLL5FE-002008EN" sku="PLL5FE-002008EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_PLL5FE-002008EN" sku="XML_PLL5FE-002008EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1387.40</list-price>
     <availability/>
@@ -1407,7 +1407,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_PLL5FE-002008EN" sku="PLL5FE-002008EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_PLL5FE-002008EN" sku="XML_PLL5FE-002008EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1129.67</list-price>
     <availability/>
@@ -1416,7 +1416,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_d_PLL5FE-002008EN" sku="PLL5FE-002008EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_d_PLL5FE-002008EN" sku="XML_PLL5FE-002008EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>11235.17</list-price>
     <availability/>
@@ -1425,7 +1425,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_PLL5FE-004008EN" sku="PLL5FE-004008EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_PLL5FE-004008EN" sku="XML_PLL5FE-004008EN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2829.31</list-price>
     <availability/>
@@ -1434,7 +1434,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_PLL5FE-004008EN" sku="PLL5FE-004008EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_PLL5FE-004008EN" sku="XML_PLL5FE-004008EN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2303.71</list-price>
     <availability/>
@@ -1443,7 +1443,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PLL5FE-004008EN" sku="PLL5FE-004008EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PLL5FE-004008EN" sku="XML_PLL5FE-004008EN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>22911.75</list-price>
     <availability/>
@@ -1452,7 +1452,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_AMP20EU" sku="AMP20EU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_AMP20EU" sku="XML_AMP20EU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>3317.70</list-price>
     <availability/>
@@ -1461,7 +1461,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_AMP20EU" sku="AMP20EU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_AMP20EU" sku="XML_AMP20EU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2701.38</list-price>
     <availability/>
@@ -1470,7 +1470,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_AMP20EU" sku="AMP20EU" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_AMP20EU" sku="XML_AMP20EU" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>26866.73</list-price>
     <availability/>
@@ -1479,7 +1479,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_QY449AT#ABZ" sku="QY449AT#ABZ" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_QY449AT#ABZ" sku="XML_QY449AT#ABZ" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1183.85</list-price>
     <availability/>
@@ -1488,7 +1488,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_0_QY449AT#ABZ" sku="QY449AT#ABZ" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_QY449AT#ABZ" sku="XML_QY449AT#ABZ" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>963.93</list-price>
     <availability/>
@@ -1497,7 +1497,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_QY449AT#ABZ" sku="QY449AT#ABZ" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_QY449AT#ABZ" sku="XML_QY449AT#ABZ" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>9586.82</list-price>
     <availability/>
@@ -1506,7 +1506,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_c_DOCS2GO" sku="DOCS2GO" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_c_DOCS2GO" sku="XML_DOCS2GO" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1296.97</list-price>
     <availability/>
@@ -1515,7 +1515,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_DOCS2GO" sku="DOCS2GO" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_DOCS2GO" sku="XML_DOCS2GO" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1056.03</list-price>
     <availability/>
@@ -1524,7 +1524,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_0_DOCS2GO" sku="DOCS2GO" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_DOCS2GO" sku="XML_DOCS2GO" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10502.86</list-price>
     <availability/>
@@ -1533,7 +1533,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_18471" sku="18471" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_18471" sku="XML_18471" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2490.75</list-price>
     <availability/>
@@ -1542,7 +1542,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_18471" sku="18471" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_18471" sku="XML_18471" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2028.05</list-price>
     <availability/>
@@ -1551,7 +1551,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_18471" sku="18471" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_18471" sku="XML_18471" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>20170.09</list-price>
     <availability/>
@@ -1560,7 +1560,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_e_97-617" sku="97-617" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_97-617" sku="XML_97-617" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2762.18</list-price>
     <availability/>
@@ -1569,7 +1569,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_6_97-617" sku="97-617" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_97-617" sku="XML_97-617" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2249.06</list-price>
     <availability/>
@@ -1578,7 +1578,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_97-617" sku="97-617" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_97-617" sku="XML_97-617" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>22368.13</list-price>
     <availability/>
@@ -1587,7 +1587,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_6_PSK1SE-05Q00PEN" sku="PSK1SE-05Q00PEN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_PSK1SE-05Q00PEN" sku="XML_PSK1SE-05Q00PEN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>3320.39</list-price>
     <availability/>
@@ -1596,7 +1596,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_0_PSK1SE-05Q00PEN" sku="PSK1SE-05Q00PEN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_PSK1SE-05Q00PEN" sku="XML_PSK1SE-05Q00PEN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2703.57</list-price>
     <availability/>
@@ -1605,7 +1605,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_e_PSK1SE-05Q00PEN" sku="PSK1SE-05Q00PEN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_PSK1SE-05Q00PEN" sku="XML_PSK1SE-05Q00PEN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>26888.52</list-price>
     <availability/>
@@ -1614,7 +1614,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_c_PT31LE-00V00JG3" sku="PT31LE-00V00JG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_c_PT31LE-00V00JG3" sku="XML_PT31LE-00V00JG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>854.58</list-price>
     <availability/>
@@ -1623,7 +1623,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_c_PT31LE-00V00JG3" sku="PT31LE-00V00JG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_c_PT31LE-00V00JG3" sku="XML_PT31LE-00V00JG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>695.83</list-price>
     <availability/>
@@ -1632,7 +1632,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PT31LE-00V00JG3" sku="PT31LE-00V00JG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PT31LE-00V00JG3" sku="XML_PT31LE-00V00JG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>6920.39</list-price>
     <availability/>
@@ -1641,7 +1641,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_PT31LE-01E00JG3" sku="PT31LE-01E00JG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_PT31LE-01E00JG3" sku="XML_PT31LE-01E00JG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1593.62</list-price>
     <availability/>
@@ -1650,7 +1650,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_0_PT31LE-01E00JG3" sku="PT31LE-01E00JG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_PT31LE-01E00JG3" sku="XML_PT31LE-01E00JG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1297.58</list-price>
     <availability/>
@@ -1659,7 +1659,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PT31LE-01E00JG3" sku="PT31LE-01E00JG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PT31LE-01E00JG3" sku="XML_PT31LE-01E00JG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12905.13</list-price>
     <availability/>
@@ -1668,7 +1668,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_PSK3AE-05D00REN" sku="PSK3AE-05D00REN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_PSK3AE-05D00REN" sku="XML_PSK3AE-05D00REN" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1713.42</list-price>
     <availability/>
@@ -1677,7 +1677,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_PSK3AE-05D00REN" sku="PSK3AE-05D00REN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PSK3AE-05D00REN" sku="XML_PSK3AE-05D00REN" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1395.12</list-price>
     <availability/>
@@ -1686,7 +1686,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PSK3AE-05D00REN" sku="PSK3AE-05D00REN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PSK3AE-05D00REN" sku="XML_PSK3AE-05D00REN" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>13875.28</list-price>
     <availability/>
@@ -1695,7 +1695,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_5_PQF65E-05X01DG3" sku="PQF65E-05X01DG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_5_PQF65E-05X01DG3" sku="XML_PQF65E-05X01DG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1561.70</list-price>
     <availability/>
@@ -1704,7 +1704,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_PQF65E-05X01DG3" sku="PQF65E-05X01DG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_PQF65E-05X01DG3" sku="XML_PQF65E-05X01DG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1271.59</list-price>
     <availability/>
@@ -1713,7 +1713,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_PQF65E-05X01DG3" sku="PQF65E-05X01DG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_PQF65E-05X01DG3" sku="XML_PQF65E-05X01DG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12646.65</list-price>
     <availability/>
@@ -1722,7 +1722,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_PT31LE-01300KG3" sku="PT31LE-01300KG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_PT31LE-01300KG3" sku="XML_PT31LE-01300KG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2527.08</list-price>
     <availability/>
@@ -1731,7 +1731,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_2_PT31LE-01300KG3" sku="PT31LE-01300KG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_2_PT31LE-01300KG3" sku="XML_PT31LE-01300KG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2057.63</list-price>
     <availability/>
@@ -1740,7 +1740,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_PT31LE-01300KG3" sku="PT31LE-01300KG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_PT31LE-01300KG3" sku="XML_PT31LE-01300KG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>20464.29</list-price>
     <availability/>
@@ -1749,7 +1749,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_0_PSAW9E-01F00MGR" sku="PSAW9E-01F00MGR" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_PSAW9E-01F00MGR" sku="XML_PSAW9E-01F00MGR" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2226.72</list-price>
     <availability/>
@@ -1758,7 +1758,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_d_PSAW9E-01F00MGR" sku="PSAW9E-01F00MGR" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_d_PSAW9E-01F00MGR" sku="XML_PSAW9E-01F00MGR" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1813.07</list-price>
     <availability/>
@@ -1767,7 +1767,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_PSAW9E-01F00MGR" sku="PSAW9E-01F00MGR" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_PSAW9E-01F00MGR" sku="XML_PSAW9E-01F00MGR" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>18031.98</list-price>
     <availability/>
@@ -1776,7 +1776,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_e_PSAW9E-02901TS4" sku="PSAW9E-02901TS4" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_PSAW9E-02901TS4" sku="XML_PSAW9E-02901TS4" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1331.73</list-price>
     <availability/>
@@ -1785,7 +1785,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_d_PSAW9E-02901TS4" sku="PSAW9E-02901TS4" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_d_PSAW9E-02901TS4" sku="XML_PSAW9E-02901TS4" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1084.34</list-price>
     <availability/>
@@ -1794,7 +1794,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_PSAW9E-02901TS4" sku="PSAW9E-02901TS4" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_PSAW9E-02901TS4" sku="XML_PSAW9E-02901TS4" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10784.35</list-price>
     <availability/>
@@ -1803,7 +1803,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_e_PQF65E-068019GR" sku="PQF65E-068019GR" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_PQF65E-068019GR" sku="XML_PQF65E-068019GR" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2234.65</list-price>
     <availability/>
@@ -1812,7 +1812,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PQF65E-068019GR" sku="PQF65E-068019GR" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PQF65E-068019GR" sku="XML_PQF65E-068019GR" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1819.52</list-price>
     <availability/>
@@ -1821,7 +1821,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_1_PQF65E-068019GR" sku="PQF65E-068019GR" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_1_PQF65E-068019GR" sku="XML_PQF65E-068019GR" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>18096.20</list-price>
     <availability/>
@@ -1830,7 +1830,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PTME3E-02M034G3" sku="PTME3E-02M034G3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PTME3E-02M034G3" sku="XML_PTME3E-02M034G3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>3109.37</list-price>
     <availability/>
@@ -1839,7 +1839,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_PTME3E-02M034G3" sku="PTME3E-02M034G3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_PTME3E-02M034G3" sku="XML_PTME3E-02M034G3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2531.75</list-price>
     <availability/>
@@ -1848,7 +1848,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_PTME3E-02M034G3" sku="PTME3E-02M034G3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_PTME3E-02M034G3" sku="XML_PTME3E-02M034G3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>25179.68</list-price>
     <availability/>
@@ -1857,7 +1857,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_c_910-003008" sku="910-003008" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_c_910-003008" sku="XML_910-003008" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1187.39</list-price>
     <availability/>
@@ -1866,7 +1866,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_910-003008" sku="910-003008" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_910-003008" sku="XML_910-003008" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>966.81</list-price>
     <availability/>
@@ -1875,7 +1875,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_e_910-003008" sku="910-003008" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_910-003008" sku="XML_910-003008" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>9615.48</list-price>
     <availability/>
@@ -1884,7 +1884,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_3_DS-700D" sku="DS-700D" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_DS-700D" sku="XML_DS-700D" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1770.39</list-price>
     <availability/>
@@ -1893,7 +1893,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_c_DS-700D" sku="DS-700D" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_c_DS-700D" sku="XML_DS-700D" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1441.51</list-price>
     <availability/>
@@ -1902,7 +1902,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_DS-700D" sku="DS-700D" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_DS-700D" sku="XML_DS-700D" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>14336.62</list-price>
     <availability/>
@@ -1911,7 +1911,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_97-606" sku="97-606" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_97-606" sku="XML_97-606" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>567.78</list-price>
     <availability/>
@@ -1920,7 +1920,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_97-606" sku="97-606" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_97-606" sku="XML_97-606" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>462.30</list-price>
     <availability/>
@@ -1929,7 +1929,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_7_97-606" sku="97-606" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_7_97-606" sku="XML_97-606" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>4597.88</list-price>
     <availability/>
@@ -1938,7 +1938,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_PSPGSE-22L00JHU" sku="PSPGSE-22L00JHU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_PSPGSE-22L00JHU" sku="XML_PSPGSE-22L00JHU" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1546.38</list-price>
     <availability/>
@@ -1947,7 +1947,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PSPGSE-22L00JHU" sku="PSPGSE-22L00JHU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PSPGSE-22L00JHU" sku="XML_PSPGSE-22L00JHU" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1259.11</list-price>
     <availability/>
@@ -1956,7 +1956,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PSPGSE-22L00JHU" sku="PSPGSE-22L00JHU" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PSPGSE-22L00JHU" sku="XML_PSPGSE-22L00JHU" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>12522.59</list-price>
     <availability/>
@@ -1965,7 +1965,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_DS-600" sku="DS-600" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_DS-600" sku="XML_DS-600" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2133.98</list-price>
     <availability/>
@@ -1974,7 +1974,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_c_DS-600" sku="DS-600" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_c_DS-600" sku="XML_DS-600" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1737.55</list-price>
     <availability/>
@@ -1983,7 +1983,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_DS-600" sku="DS-600" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_DS-600" sku="XML_DS-600" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>17280.97</list-price>
     <availability/>
@@ -1992,7 +1992,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_97-605" sku="97-605" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_97-605" sku="XML_97-605" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>3415.24</list-price>
     <availability/>
@@ -2001,7 +2001,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_97-605" sku="97-605" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_97-605" sku="XML_97-605" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2780.80</list-price>
     <availability/>
@@ -2010,7 +2010,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_97-605" sku="97-605" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_97-605" sku="XML_97-605" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>27656.61</list-price>
     <availability/>
@@ -2019,7 +2019,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_e_L2708A#B19" sku="L2708A#B19" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_L2708A#B19" sku="XML_L2708A#B19" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>3005.73</list-price>
     <availability/>
@@ -2028,7 +2028,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_d_L2708A#B19" sku="L2708A#B19" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_d_L2708A#B19" sku="XML_L2708A#B19" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2447.36</list-price>
     <availability/>
@@ -2037,7 +2037,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_L2708A#B19" sku="L2708A#B19" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_L2708A#B19" sku="XML_L2708A#B19" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>24340.40</list-price>
     <availability/>
@@ -2046,7 +2046,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_PSPGSE-1CL02YA3" sku="PSPGSE-1CL02YA3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_PSPGSE-1CL02YA3" sku="XML_PSPGSE-1CL02YA3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1802.67</list-price>
     <availability/>
@@ -2055,7 +2055,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_4_PSPGSE-1CL02YA3" sku="PSPGSE-1CL02YA3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_4_PSPGSE-1CL02YA3" sku="XML_PSPGSE-1CL02YA3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1467.79</list-price>
     <availability/>
@@ -2064,7 +2064,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_8_PSPGSE-1CL02YA3" sku="PSPGSE-1CL02YA3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_8_PSPGSE-1CL02YA3" sku="XML_PSPGSE-1CL02YA3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>14598.02</list-price>
     <availability/>
@@ -2073,7 +2073,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_6_PSPGSE-1J000PSK" sku="PSPGSE-1J000PSK" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_PSPGSE-1J000PSK" sku="XML_PSPGSE-1J000PSK" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2571.05</list-price>
     <availability/>
@@ -2082,7 +2082,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_6_PSPGSE-1J000PSK" sku="PSPGSE-1J000PSK" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_6_PSPGSE-1J000PSK" sku="XML_PSPGSE-1J000PSK" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2093.43</list-price>
     <availability/>
@@ -2091,7 +2091,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_e_PSPGSE-1J000PSK" sku="PSPGSE-1J000PSK" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_e_PSPGSE-1J000PSK" sku="XML_PSPGSE-1J000PSK" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>20820.36</list-price>
     <availability/>
@@ -2100,7 +2100,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_0_910-003014" sku="910-003014" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_0_910-003014" sku="XML_910-003014" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2752.44</list-price>
     <availability/>
@@ -2109,7 +2109,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_c_910-003014" sku="910-003014" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_c_910-003014" sku="XML_910-003014" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>2241.12</list-price>
     <availability/>
@@ -2118,7 +2118,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_910-003014" sku="910-003014" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_910-003014" sku="XML_910-003014" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>22289.26</list-price>
     <availability/>
@@ -2127,7 +2127,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_f_910-003017" sku="910-003017" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_f_910-003017" sku="XML_910-003017" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1336.76</list-price>
     <availability/>
@@ -2136,7 +2136,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_910-003017" sku="910-003017" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_910-003017" sku="XML_910-003017" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>1088.43</list-price>
     <availability/>
@@ -2145,7 +2145,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_b_910-003017" sku="910-003017" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_b_910-003017" sku="XML_910-003017" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>10825.08</list-price>
     <availability/>
@@ -2154,7 +2154,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_3_PSAW9E-01P01MG3" sku="PSAW9E-01P01MG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
+<price guid="XML_3_PSAW9E-01P01MG3" sku="XML_PSAW9E-01P01MG3" shop="SHOIP1" currency="USD" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>519.64</list-price>
     <availability/>
@@ -2163,7 +2163,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_a_PSAW9E-01P01MG3" sku="PSAW9E-01P01MG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
+<price guid="XML_a_PSAW9E-01P01MG3" sku="XML_PSAW9E-01P01MG3" shop="SHOIP1" currency="EUR" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>423.11</list-price>
     <availability/>
@@ -2172,7 +2172,7 @@
     <updated-timestamp>2018-11-10 17:43:19</updated-timestamp>
     <updated-by>anonymous</updated-by>
 </price>
-<price guid="XML_9_PSAW9E-01P01MG3" sku="PSAW9E-01P01MG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
+<price guid="XML_9_PSAW9E-01P01MG3" sku="XML_PSAW9E-01P01MG3" shop="SHOIP1" currency="UAH" quantity="1.00" offer="false" request="false">
     <pricing-policy/>
     <list-price>4208.04</list-price>
     <availability/>
