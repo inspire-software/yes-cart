@@ -64,7 +64,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
     @Test
     public void testProcessAwaitingOrders() throws Exception {
 
-        LocalDateTime calendar = LocalDateTime.now().plusSeconds(5);
+        LocalDateTime calendar = LocalDateTime.now().plusHours(1);
 
         Product product = productService.getProductById(15350L);
         product.setAvailablefrom(calendar);
@@ -108,7 +108,15 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT, delivery.getDeliveryStatus());
         }
 
-        Thread.sleep(5000);
+        calendar = LocalDateTime.now().minusHours(1);
+
+        product = productService.getProductById(15350L);
+        product.setAvailablefrom(calendar);
+        productService.update(product);
+
+        product = productService.getProductById(15360L);
+        product.setAvailablefrom(calendar);
+        productService.update(product);
 
         bulkAwaitingInventoryDeliveriesProcessor.run();
 

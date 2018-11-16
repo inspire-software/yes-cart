@@ -164,7 +164,7 @@ public class AbstractXmlEntityHandlerTest {
             allowing(av2).getDisplayVal(); will(returnValue(displayName));
         }});
 
-        assertEquals("<root><custom-attributes><custom-attribute id=\"1\" guid=\"GUID1\" code=\"CODE1\"><custom-value><![CDATA[val1]]></custom-value><custom-display-value><i18n lang=\"de\"><![CDATA[deutch]]></i18n><i18n lang=\"en\"><![CDATA[english]]></i18n></custom-display-value></custom-attribute><custom-attribute id=\"2\" guid=\"GUID2\" code=\"CODE2\"><custom-value><![CDATA[val2]]></custom-value><custom-display-value><i18n lang=\"de\"><![CDATA[deutch]]></i18n><i18n lang=\"en\"><![CDATA[english]]></i18n></custom-display-value></custom-attribute></custom-attributes></root>",
+        assertEquals("<root><custom-attributes><custom-attribute id=\"1\" guid=\"GUID1\" attribute=\"CODE1\"><custom-value><![CDATA[val1]]></custom-value><custom-display-value><i18n lang=\"de\"><![CDATA[deutch]]></i18n><i18n lang=\"en\"><![CDATA[english]]></i18n></custom-display-value></custom-attribute><custom-attribute id=\"2\" guid=\"GUID2\" attribute=\"CODE2\"><custom-value><![CDATA[val2]]></custom-value><custom-display-value><i18n lang=\"de\"><![CDATA[deutch]]></i18n><i18n lang=\"en\"><![CDATA[english]]></i18n></custom-display-value></custom-attribute></custom-attributes></root>",
                 this.handler
                         .tag("root")
                             .tagExt(attr)
@@ -287,14 +287,14 @@ public class AbstractXmlEntityHandlerTest {
 
         assertEquals("<root>\n" +
                         "    <custom-attributes>\n" +
-                        "        <custom-attribute id=\"1\" guid=\"GUID1\" code=\"CODE1\">\n" +
+                        "        <custom-attribute id=\"1\" guid=\"GUID1\" attribute=\"CODE1\">\n" +
                         "            <custom-value><![CDATA[val1]]></custom-value>\n" +
                         "            <custom-display-value>\n" +
                         "                <i18n lang=\"de\"><![CDATA[deutch]]></i18n>\n" +
                         "                <i18n lang=\"en\"><![CDATA[english]]></i18n>\n" +
                         "            </custom-display-value>\n" +
                         "        </custom-attribute>\n" +
-                        "        <custom-attribute id=\"2\" guid=\"GUID2\" code=\"CODE2\">\n" +
+                        "        <custom-attribute id=\"2\" guid=\"GUID2\" attribute=\"CODE2\">\n" +
                         "            <custom-value><![CDATA[val2]]></custom-value>\n" +
                         "            <custom-display-value>\n" +
                         "                <i18n lang=\"de\"><![CDATA[deutch]]></i18n>\n" +
