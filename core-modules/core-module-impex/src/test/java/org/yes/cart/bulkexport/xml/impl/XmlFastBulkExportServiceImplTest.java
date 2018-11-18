@@ -279,6 +279,26 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             validateXmlFile(xml);
 
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSYSTEMATTRVALUE  ");
+            rs.next();
+            long cntSysPrefs = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/systemnames_export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/systempreferences.xml", listener, fileToExport));
+            final long sysPrefs = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", sysPrefs) + " system preferences in " + sysPrefs + "millis (~" + (sysPrefs / cntSysPrefs) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<name>YesCart e-commerce system</name>"));
+            assertTrue(content.contains("guid=\"1056_TSYSTEMATTRVALUE\" attribute=\"IMPORT_JOB_TIMEOUT_MS\""));
+
+            validateXmlFile(xml);
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

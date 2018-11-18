@@ -220,6 +220,11 @@
                         </property>
                     </bean>
                 </entry>
+                <entry key="SYSTEM">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.SystemXmlEntityHandler">
+                        <property name="systemService" ref="systemService"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

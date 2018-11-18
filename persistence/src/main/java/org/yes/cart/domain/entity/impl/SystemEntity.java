@@ -16,9 +16,12 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueSystem;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -160,6 +163,70 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     public void setVersion(final long version) {
         this.version = version;
     }
+
+
+    @Override
+    public Collection<AttrValueSystem> getAttributesByCode(final String attributeCode) {
+        final Collection<AttrValueSystem> result = new ArrayList<>();
+        if (attributeCode != null && this.attributes != null) {
+            for (AttrValueSystem attrValue : this.attributes.values()) {
+                if (attributeCode.equals(attrValue.getAttributeCode())) {
+                    result.add(attrValue);
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, AttrValue> getAllAttributesAsMap() {
+        final Map<String, AttrValue> rez = new HashMap<>();
+        if (this.attributes != null) {
+            for (AttrValue attrValue : this.attributes.values()) {
+                if (attrValue != null && attrValue.getAttributeCode() != null) {
+                    rez.put(attrValue.getAttributeCode(), attrValue);
+                }
+            }
+        }
+        return rez;
+    }
+
+    @Override
+    public AttrValueSystem getAttributeByCode(final String attributeCode) {
+        if (attributeCode != null) {
+            if (this.attributes != null) {
+                for (AttrValueSystem attrValue : this.attributes.values()) {
+                    if (attributeCode.equals(attrValue.getAttributeCode())) {
+                        return attrValue;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+    @Override
+    public String getAttributeValueByCode(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null ? val.getVal() : null;
+    }
+
+
+    @Override
+    public boolean isAttributeValueByCodeTrue(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null && Boolean.valueOf(val.getVal());
+    }
+
+
+
+    @Override
+    public Collection<AttrValue> getAllAttributes() {
+        return new ArrayList<>(attributes.values());
+    }
+
 }
 
 

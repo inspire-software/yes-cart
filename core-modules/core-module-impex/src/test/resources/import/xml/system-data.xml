@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<systems xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<system id="100" guid="SYSTEM" code="SYSTEM">
+    <name>YesCart e-commerce system</name>
+    <description><![CDATA[System table]]></description>
+    <custom-attributes import-mode="MERGE">
+        <custom-attribute id="1056" guid="1056_TSYSTEMATTRVALUE" attribute="IMPORT_JOB_TIMEOUT_MS">
+            <custom-value><![CDATA[33500]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+</system>
+</systems>

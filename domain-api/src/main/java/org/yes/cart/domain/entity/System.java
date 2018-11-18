@@ -18,42 +18,7 @@ package org.yes.cart.domain.entity;
 
 import java.util.Map;
 
-/**
- * TODO kill this interface.
- */
-public interface System extends Auditable, Codable {
-
-    /**
-     * @return code identifier
-     */
-    @Override
-    String getCode();
-
-    /**
-     * @param code code identifier
-     */
-    @Override
-    void setCode(String code);
-
-    /**
-     * @return name of the system
-     */
-    String getName();
-
-    /**
-     * @param name name of the system
-     */
-    void setName(String name);
-
-    /**
-     * @return description
-     */
-    String getDescription();
-
-    /**
-     * @param description description
-     */
-    void setDescription(String description);
+public interface System extends Auditable, Codable, Attributable {
 
     /**
      * @return system configuration attributes
@@ -74,4 +39,5 @@ public interface System extends Auditable, Codable {
      * @param systemId PK
      */
     void setSystemId(long systemId);
+
 }

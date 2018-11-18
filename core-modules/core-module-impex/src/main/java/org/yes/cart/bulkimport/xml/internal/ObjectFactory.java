@@ -34,6 +34,8 @@ public class ObjectFactory {
     private final static QName _Tax_QNAME = new QName("", "tax");
     private final static QName _Inventory_QNAME = new QName("", "inventory");
     private final static QName _Products_QNAME = new QName("", "products");
+    private final static QName _System_QNAME = new QName("", "system");
+    private final static QName _Systems_QNAME = new QName("", "systems");
     private final static QName _Price_QNAME = new QName("", "price");
     private final static QName _Attributes_QNAME = new QName("", "attributes");
     private final static QName _Attribute_QNAME = new QName("", "attribute");
@@ -152,6 +154,22 @@ public class ObjectFactory {
      */
     public ProductsType createProductsType() {
         return new ProductsType();
+    }
+
+    /**
+     * Create an instance of {@link SystemType }
+     * 
+     */
+    public SystemType createSystemType() {
+        return new SystemType();
+    }
+
+    /**
+     * Create an instance of {@link SystemsType }
+     * 
+     */
+    public SystemsType createSystemsType() {
+        return new SystemsType();
     }
 
     /**
@@ -586,6 +604,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "products")
     public JAXBElement<ProductsType> createProducts(ProductsType value) {
         return new JAXBElement<ProductsType>(_Products_QNAME, ProductsType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SystemType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "system")
+    public JAXBElement<SystemType> createSystem(SystemType value) {
+        return new JAXBElement<SystemType>(_System_QNAME, SystemType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link SystemsType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "systems")
+    public JAXBElement<SystemsType> createSystems(SystemsType value) {
+        return new JAXBElement<SystemsType>(_Systems_QNAME, SystemsType.class, null, value);
     }
 
     /**

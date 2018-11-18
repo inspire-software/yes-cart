@@ -416,6 +416,24 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(8L + cntBeforeTaxConfig, cntTaxConfigs);   // 8 new
 
 
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/system.xml", listener, importedFilesSet));
+            final long sysConfigs = System.currentTimeMillis() - dt;
+
+            change = 1;
+            System.out.println(String.format("%5d", 1) + " system preference in " + taxConfigs + "millis (~" + (sysConfigs / change) + " per item)");
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select VAL from TSYSTEMATTRVALUE where GUID = '1056_TSYSTEMATTRVALUE'");
+            rs.next();
+            final String newValue = rs.getString(1);
+            rs.close();
+
+
+            assertEquals("33500", newValue); 
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

@@ -244,6 +244,14 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="SYSTEM">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SystemXmlEntityHandler"/>
+                </entry>
+                <entry key="SYSTEM_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SystemXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>
