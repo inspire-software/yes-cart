@@ -18,11 +18,9 @@ package org.yes.cart.bulkimport.xml.impl;
 
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
-import org.yes.cart.bulkimport.xml.internal.CollectionImportModeType;
-import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
-import org.yes.cart.bulkimport.xml.internal.ProductCategoryType;
-import org.yes.cart.bulkimport.xml.internal.SkuType;
+import org.yes.cart.bulkimport.xml.internal.*;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.service.domain.*;
 
 import java.util.Iterator;
@@ -39,6 +37,8 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
     private ProductTypeService productTypeService;
     private ProductService productService;
     private ProductCategoryService productCategoryService;
+    private ProductAssociationService productAssociationService;
+    private AssociationService associationService;
 
     private XmlEntityImportHandler<SkuType> skuXmlEntityImportHandler;
 
@@ -108,6 +108,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
         updateSeo(xmlType.getSeo(), domain.getSeo());
         updateExt(xmlType.getCustomAttributes(), domain, domain.getAttributes());
         processCategories(domain, xmlType);
+        processProductAssociations(domain, xmlType);
 
         domain.setName(xmlType.getName());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
@@ -127,6 +128,75 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
                 xmlSkuType.setProductCode(domain.getCode());
                 skuXmlEntityImportHandler.handle(null, null, (ImpExTuple) new XmlImportTupleImpl(xmlSkuType.getCode(), xmlSkuType), null, null);
 
+            }
+        }
+
+    }
+
+    private void processProductAssociations(final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType) {
+
+        if (xmlType.getProductLinks() != null) {
+
+            final CollectionImportModeType collectionMode = xmlType.getProductLinks().getImportMode() != null ? xmlType.getProductLinks().getImportMode() : CollectionImportModeType.MERGE;
+            if (collectionMode == CollectionImportModeType.REPLACE) {
+                domain.getProductAssociations().clear();
+            }
+
+            for (final ProductLinkType link : xmlType.getProductLinks().getProductLink()) {
+                final EntityImportModeType itemMode = link.getImportMode() != null ? link.getImportMode() : EntityImportModeType.MERGE;
+                if (itemMode == EntityImportModeType.DELETE) {
+                    processProductAssociationsRemove(domain, link);
+                } else {
+                    processProductAssociationsSave(domain, link);
+                }
+            }
+
+        }
+
+
+    }
+
+    private void processProductAssociationsSave(final Product domain, final ProductLinkType link) {
+
+        for (final ProductAssociation pa : domain.getProductAssociations()) {
+            if (link.getAssociation().equals(pa.getAssociation().getCode())
+                    && link.getSku().equals(pa.getAssociatedSku())) {
+                processProductAssociationsSaveBasic(link, pa);
+                return;
+            }
+        }
+        final ProductAssociation pa = this.productAssociationService.getGenericDao().getEntityFactory().getByIface(ProductAssociation.class);
+        pa.setProduct(domain);
+        Association assoc = this.associationService.findSingleByCriteria(" where e.code = ?1", link.getAssociation());
+        if (assoc == null) {
+            assoc = this.associationService.getGenericDao().getEntityFactory().getByIface(Association.class);
+            assoc.setCode(link.getAssociation());
+            assoc.setName(link.getAssociation());
+            this.associationService.create(assoc);
+        }
+        pa.setAssociation(assoc);
+        pa.setAssociatedSku(link.getSku());
+        processProductAssociationsSaveBasic(link, pa);
+        domain.getProductAssociations().add(pa);
+
+
+
+    }
+
+    private void processProductAssociationsSaveBasic(final ProductLinkType link, final ProductAssociation pa) {
+        if (link.getRank() != null) {
+            pa.setRank(link.getRank());
+        }
+    }
+
+    private void processProductAssociationsRemove(final Product domain, final ProductLinkType link) {
+        final Iterator<ProductAssociation> it = domain.getProductAssociations().iterator();
+        while (it.hasNext()) {
+            final ProductAssociation next = it.next();
+            if (link.getAssociation().equals(next.getAssociation().getCode())
+                    && link.getSku().equals(next.getAssociatedSku())) {
+                it.remove();
+                return;
             }
         }
 
@@ -271,6 +341,24 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
      */
     public void setProductCategoryService(final ProductCategoryService productCategoryService) {
         this.productCategoryService = productCategoryService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param productAssociationService product association service
+     */
+    public void setProductAssociationService(final ProductAssociationService productAssociationService) {
+        this.productAssociationService = productAssociationService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param associationService association service
+     */
+    public void setAssociationService(final AssociationService associationService) {
+        this.associationService = associationService;
     }
 
     /**

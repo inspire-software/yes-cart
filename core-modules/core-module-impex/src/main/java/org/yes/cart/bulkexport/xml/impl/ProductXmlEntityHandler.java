@@ -20,6 +20,7 @@ import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.async.JobStatusListener;
@@ -115,6 +116,19 @@ public class ProductXmlEntityHandler extends AbstractXmlEntityHandler<Product> {
         }
 
         skuTag.end();
+
+        final Tag assocTag = tag.tag("product-links");
+
+        for (final ProductAssociation pa : product.getProductAssociations()) {
+
+            catTag.tag("product-link")
+                    .attr("association", pa.getAssociation().getCode())
+                    .attr("sku", pa.getAssociatedSku())
+                    .attr("rank", pa.getRank()).end();
+
+        }
+
+        assocTag.end();
 
         return tag
                 .tagTime(product)

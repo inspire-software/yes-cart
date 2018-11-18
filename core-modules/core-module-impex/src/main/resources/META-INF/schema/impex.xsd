@@ -373,6 +373,7 @@
             <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
             <xsd:element type="product-categoriesType" name="product-categories" minOccurs="0"/>
             <xsd:element type="product-skuType" name="product-sku" minOccurs="0"/>
+            <xsd:element type="product-linksType" name="product-links" minOccurs="0"/>
             <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
             <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
@@ -411,6 +412,20 @@
     <xsd:complexType name="product-categoryType">
         <xsd:attribute type="xsd:long" name="id"/>
         <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="xsd:int" name="rank"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-linksType">
+        <xsd:sequence>
+            <xsd:element type="product-linkType" name="product-link" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-linkType">
+        <xsd:attribute type="xsd:string" name="association" use="required"/>
+        <xsd:attribute type="xsd:string" name="sku" use="required"/>
         <xsd:attribute type="xsd:int" name="rank"/>
         <xsd:attribute type="entityImportModeType" name="import-mode"/>
     </xsd:complexType>

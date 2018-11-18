@@ -227,6 +227,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductLinkType }
+     * 
+     */
+    public ProductLinkType createProductLinkType() {
+        return new ProductLinkType();
+    }
+
+    /**
      * Create an instance of {@link RateType }
      * 
      */
@@ -320,6 +328,14 @@ public class ObjectFactory {
      */
     public ProductCategoryType createProductCategoryType() {
         return new ProductCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link ProductLinksType }
+     * 
+     */
+    public ProductLinksType createProductLinksType() {
+        return new ProductLinksType();
     }
 
     /**

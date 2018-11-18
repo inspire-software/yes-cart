@@ -80,6 +80,10 @@
             </custom-attributes>
         </sku>
     </product-sku>
+    <product-links>
+        <product-link association="cross" sku="XML_BENDER"/>
+        <product-link association="new-assoc" sku="XML_BENDER"/>
+    </product-links>
 </product>
 <product code="XML_BENDER">
     <brand>XML_FutureRobots</brand>

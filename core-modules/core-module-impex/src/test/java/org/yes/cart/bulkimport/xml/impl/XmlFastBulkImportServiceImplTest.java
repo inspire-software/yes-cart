@@ -303,6 +303,12 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
             assertEquals(1L, cntSkuValues);
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTASSOCIATION where PRODUCT_ID = " + prodId);
+            rs.next();
+            long cntProdAssocValues = rs.getLong(1);
+            rs.close();
+            assertEquals(2L, cntProdAssocValues);  // 1 cross + 1 new-assoc
+
 
             rs = getConnection().getConnection().createStatement().executeQuery (
                     "select VAL, DISPLAYVAL from TPRODUCTATTRVALUE where CODE = 'WEIGHT' and PRODUCT_ID = " + prodId);

@@ -96,6 +96,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="custom-attributes" type="{}custom-attributesType" minOccurs="0"/>
  *         &lt;element name="product-categories" type="{}product-categoriesType" minOccurs="0"/>
  *         &lt;element name="product-sku" type="{}product-skuType" minOccurs="0"/>
+ *         &lt;element name="product-links" type="{}product-linksType" minOccurs="0"/>
  *         &lt;element name="created-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updated-timestamp" type="{}dateTimeType" minOccurs="0"/>
@@ -130,6 +131,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "customAttributes",
     "productCategories",
     "productSku",
+    "productLinks",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
@@ -164,6 +166,8 @@ public class ProductType {
     protected ProductCategoriesType productCategories;
     @XmlElement(name = "product-sku")
     protected ProductSkuType productSku;
+    @XmlElement(name = "product-links")
+    protected ProductLinksType productLinks;
     @XmlElement(name = "created-timestamp")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -545,6 +549,30 @@ public class ProductType {
      */
     public void setProductSku(ProductSkuType value) {
         this.productSku = value;
+    }
+
+    /**
+     * Gets the value of the productLinks property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ProductLinksType }
+     *     
+     */
+    public ProductLinksType getProductLinks() {
+        return productLinks;
+    }
+
+    /**
+     * Sets the value of the productLinks property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ProductLinksType }
+     *     
+     */
+    public void setProductLinks(ProductLinksType value) {
+        this.productLinks = value;
     }
 
     /**
