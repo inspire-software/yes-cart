@@ -1464,5 +1464,8 @@
     <TCATEGORY CATEGORY_ID="10115" VERSION="0" PARENT_ID="10112" RANK="0" NAME="SHOIP1_mail_customer-registered.properties" URI="SHOIP1_mail_customer-registered.properties" GUID="SHOIP1_email_cr.prop" DISABLED="0"/>
     <TCATEGORYATTRVALUE ATTRVALUE_ID="1011115" VERSION="0" VAL="subject=Registration email&#xA;from=shopadmin@demo.yes-cart.com" CATEGORY_ID="10115" CODE="CONTENT_BODY_en_1" GUID="10115_CB_en_1"/>
 
+    <TDATAGROUP DATAGROUP_ID="1000" VERSION="0" NAME="Import Group" TYPE="IMPORT"  DESCRIPTORS="customer/productandcategorynamesimport.xml, customer/productskuimport.xml , " QUALIFIER=""/>
+    <TDATADESCRIPTOR DATADESCRIPTOR_ID="1000" VERSION="0" NAME="customer/productandcategorynamesimport.xml" TYPE="WEBINF_XML"  VALUE="customer/productandcategorynamesimport.xml"/>
+    <TDATADESCRIPTOR DATADESCRIPTOR_ID="1001" VERSION="0" NAME="customer/productskuimport.xml" TYPE="WEBINF_XML"  VALUE="customer/productskuimport.xml"/>
 
 </dataset>

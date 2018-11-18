@@ -252,6 +252,25 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="DATADESCRIPTOR">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.DataDescriptorXmlEntityHandler"/>
+                </entry>
+                <entry key="DATADESCRIPTOR_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.DataDescriptorXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="DATAGROUP">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.DataGroupXmlEntityHandler">
+                        <property name="dataDescriptorService" ref="dataDescriptorService"/>
+                    </bean>
+                </entry>
+                <entry key="DATAGROUP_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.DataGroupXmlEntityHandler">
+                        <property name="dataDescriptorService" ref="dataDescriptorService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

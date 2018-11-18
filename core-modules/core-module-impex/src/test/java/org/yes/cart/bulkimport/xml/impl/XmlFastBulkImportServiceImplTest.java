@@ -430,9 +430,40 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
 
-            assertEquals("33500", newValue); 
+            assertEquals("33500", newValue);
 
 
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TDATAGROUP  ");
+            rs.next();
+            long cntBeforeDataGroups = rs.getLong(1);
+            rs.close();
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TDATADESCRIPTOR  ");
+            rs.next();
+            long cntBeforeDataDesc = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/datagroups.xml", listener, importedFilesSet));
+            final long dataGroups = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TDATAGROUP  ");
+            rs.next();
+            long cntDataGroups = rs.getLong(1);
+            rs.close();
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TDATADESCRIPTOR  ");
+            rs.next();
+            long cntDataDescriptors = rs.getLong(1);
+            rs.close();
+
+            change = cntDataGroups - cntBeforeDataGroups;
+            System.out.println(String.format("%5d", change) + " data groups in " + dataGroups + "millis (~" + (dataGroups / change) + " per item)");
+
+            assertEquals(1L + cntBeforeDataGroups, cntDataGroups);
+            assertEquals(1L + cntBeforeDataDesc, cntDataDescriptors); // new descriptor added via group
 
             mockery.assertIsSatisfied();
 

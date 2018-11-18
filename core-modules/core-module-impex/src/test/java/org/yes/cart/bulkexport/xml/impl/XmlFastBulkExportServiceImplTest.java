@@ -247,7 +247,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             fileToExport = "target/taxconfigs-export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/taxconfignames.xml", listener, fileToExport));
             final long taxCfg = System.currentTimeMillis() - dt;
-            System.out.println(String.format("%5d", taxCfg) + " tax configs in " + taxCfg + "millis (~" + (taxCfg / cntTaxCfg) + " per item)");
+            System.out.println(String.format("%5d", cntTaxCfg) + " tax configs in " + taxCfg + "millis (~" + (taxCfg / cntTaxCfg) + " per item)");
 
 
             xml = new File(fileToExport);
@@ -267,7 +267,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             fileToExport = "target/producttypes-export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/producttypenames.xml", listener, fileToExport));
             final long pTypes = System.currentTimeMillis() - dt;
-            System.out.println(String.format("%5d", pTypes) + " product types in " + pTypes + "millis (~" + (pTypes / cntPtype) + " per item)");
+            System.out.println(String.format("%5d", cntPtype) + " product types in " + pTypes + "millis (~" + (pTypes / cntPtype) + " per item)");
 
 
             xml = new File(fileToExport);
@@ -288,13 +288,34 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             fileToExport = "target/systemnames_export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/systempreferences.xml", listener, fileToExport));
             final long sysPrefs = System.currentTimeMillis() - dt;
-            System.out.println(String.format("%5d", sysPrefs) + " system preferences in " + sysPrefs + "millis (~" + (sysPrefs / cntSysPrefs) + " per item)");
+            System.out.println(String.format("%5d", cntSysPrefs) + " system preferences in " + sysPrefs + "millis (~" + (sysPrefs / cntSysPrefs) + " per item)");
 
 
             xml = new File(fileToExport);
             content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("<name>YesCart e-commerce system</name>"));
             assertTrue(content.contains("guid=\"1056_TSYSTEMATTRVALUE\" attribute=\"IMPORT_JOB_TIMEOUT_MS\""));
+
+            validateXmlFile(xml);
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TDATAGROUP  ");
+            rs.next();
+            long cntDataGrp = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/datagroups_export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/datagroups.xml", listener, fileToExport));
+            final long dataGrps = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntDataGrp) + " data groups in " + dataGrps + "millis (~" + (dataGrps / cntDataGrp) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("data-descriptor id=\"1000\" name=\"customer/productandcategorynamesimport.xml\""));
+            assertTrue(content.contains("<value><![CDATA[customer/productskuimport.xml]]></value>"));
 
             validateXmlFile(xml);
 

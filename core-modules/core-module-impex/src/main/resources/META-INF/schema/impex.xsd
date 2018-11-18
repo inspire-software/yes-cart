@@ -653,7 +653,7 @@
         </xsd:simpleContent>
     </xsd:complexType>
 
-    <!-- Product types -->
+    <!-- System preferences -->
 
     <xsd:element name="systems" type="systemsType"/>
     <xsd:element name="system" type="systemType"/>
@@ -679,5 +679,84 @@
         <xsd:attribute type="xsd:string" name="code" use="required"/>
         <xsd:attribute type="entityImportModeType" name="import-mode"/>
     </xsd:complexType>
+
+    <!-- Data groups + descriptors -->
+
+    <xsd:element name="data-groups" type="data-groupsType"/>
+    <xsd:element name="data-group" type="data-groupType"/>
+    <xsd:element name="data-descriptors" type="data-descriptorsType"/>
+    <xsd:element name="data-descriptor" type="data-descriptorType"/>
+
+    <xsd:complexType name="data-groupsType">
+        <xsd:sequence>
+            <xsd:element type="data-groupType" name="data-group"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="data-descriptorsType">
+        <xsd:sequence>
+            <xsd:element type="data-descriptorType" name="data-descriptor"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="data-groupType">
+        <xsd:sequence>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="data-group-descriptorsType" name="data-group-descriptors"/>
+            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="id"/>
+        <xsd:attribute type="xsd:string" name="name" use="required"/>
+        <xsd:attribute type="xsd:string" name="qualifier"/>
+        <xsd:attribute type="data-groupTypeType" name="type"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:simpleType name="data-groupTypeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="IMPORT"/>
+            <xsd:enumeration value="EXPORT"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="data-group-descriptorsType">
+        <xsd:sequence>
+            <xsd:element type="data-descriptorType" name="data-descriptor" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="data-descriptorType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="value"/>
+            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="id"/>
+        <xsd:attribute type="xsd:string" name="name" use="required"/>
+        <xsd:attribute type="data-descriptorTypeType" name="type" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:simpleType name="data-descriptorTypeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="WEBINF_XML/CSV"/>
+            <xsd:enumeration value="RAW_XML/CSV"/>
+            <xsd:enumeration value="WEBINF_XML/XML"/>
+            <xsd:enumeration value="RAW_XML/XML"/>
+            <!-- TODO: add JSON support -->
+            <xsd:enumeration value="WEBINF_XML/JSON"/>
+            <xsd:enumeration value="RAW_XML/JSON"/>
+            <!-- Deprecated types for backward compatibility -->
+            <xsd:enumeration value="WEBINF_XML"/>
+            <xsd:enumeration value="RAWINF_XML"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
 
 </xsd:schema>

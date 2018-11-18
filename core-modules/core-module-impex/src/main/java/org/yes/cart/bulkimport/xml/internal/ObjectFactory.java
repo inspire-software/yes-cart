@@ -29,14 +29,18 @@ public class ObjectFactory {
     private final static QName _TaxConfigs_QNAME = new QName("", "tax-configs");
     private final static QName _Product_QNAME = new QName("", "product");
     private final static QName _Skus_QNAME = new QName("", "skus");
+    private final static QName _DataGroups_QNAME = new QName("", "data-groups");
     private final static QName _PriceList_QNAME = new QName("", "price-list");
     private final static QName _Taxes_QNAME = new QName("", "taxes");
     private final static QName _Tax_QNAME = new QName("", "tax");
     private final static QName _Inventory_QNAME = new QName("", "inventory");
     private final static QName _Products_QNAME = new QName("", "products");
+    private final static QName _DataGroup_QNAME = new QName("", "data-group");
     private final static QName _System_QNAME = new QName("", "system");
+    private final static QName _DataDescriptors_QNAME = new QName("", "data-descriptors");
     private final static QName _Systems_QNAME = new QName("", "systems");
     private final static QName _Price_QNAME = new QName("", "price");
+    private final static QName _DataDescriptor_QNAME = new QName("", "data-descriptor");
     private final static QName _Attributes_QNAME = new QName("", "attributes");
     private final static QName _Attribute_QNAME = new QName("", "attribute");
     private final static QName _Categories_QNAME = new QName("", "categories");
@@ -117,6 +121,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DataGroupsType }
+     * 
+     */
+    public DataGroupsType createDataGroupsType() {
+        return new DataGroupsType();
+    }
+
+    /**
      * Create an instance of {@link PriceListType }
      * 
      */
@@ -157,6 +169,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DataGroupType }
+     * 
+     */
+    public DataGroupType createDataGroupType() {
+        return new DataGroupType();
+    }
+
+    /**
      * Create an instance of {@link SystemType }
      * 
      */
@@ -165,11 +185,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DataDescriptorsType }
+     * 
+     */
+    public DataDescriptorsType createDataDescriptorsType() {
+        return new DataDescriptorsType();
+    }
+
+    /**
      * Create an instance of {@link SystemsType }
      * 
      */
     public SystemsType createSystemsType() {
         return new SystemsType();
+    }
+
+    /**
+     * Create an instance of {@link DataDescriptorType }
+     * 
+     */
+    public DataDescriptorType createDataDescriptorType() {
+        return new DataDescriptorType();
     }
 
     /**
@@ -362,6 +398,14 @@ public class ObjectFactory {
      */
     public ProductCategoriesType createProductCategoriesType() {
         return new ProductCategoriesType();
+    }
+
+    /**
+     * Create an instance of {@link DataGroupDescriptorsType }
+     * 
+     */
+    public DataGroupDescriptorsType createDataGroupDescriptorsType() {
+        return new DataGroupDescriptorsType();
     }
 
     /**
@@ -562,6 +606,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataGroupsType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "data-groups")
+    public JAXBElement<DataGroupsType> createDataGroups(DataGroupsType value) {
+        return new JAXBElement<DataGroupsType>(_DataGroups_QNAME, DataGroupsType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PriceListType }{@code >}}
      * 
      */
@@ -607,12 +660,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataGroupType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "data-group")
+    public JAXBElement<DataGroupType> createDataGroup(DataGroupType value) {
+        return new JAXBElement<DataGroupType>(_DataGroup_QNAME, DataGroupType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SystemType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "system")
     public JAXBElement<SystemType> createSystem(SystemType value) {
         return new JAXBElement<SystemType>(_System_QNAME, SystemType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataDescriptorsType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "data-descriptors")
+    public JAXBElement<DataDescriptorsType> createDataDescriptors(DataDescriptorsType value) {
+        return new JAXBElement<DataDescriptorsType>(_DataDescriptors_QNAME, DataDescriptorsType.class, null, value);
     }
 
     /**
@@ -631,6 +702,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "price")
     public JAXBElement<PriceType> createPrice(PriceType value) {
         return new JAXBElement<PriceType>(_Price_QNAME, PriceType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DataDescriptorType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "data-descriptor")
+    public JAXBElement<DataDescriptorType> createDataDescriptor(DataDescriptorType value) {
+        return new JAXBElement<DataDescriptorType>(_DataDescriptor_QNAME, DataDescriptorType.class, null, value);
     }
 
     /**

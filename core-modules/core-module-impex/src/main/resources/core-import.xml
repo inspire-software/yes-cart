@@ -225,6 +225,21 @@
                         <property name="systemService" ref="systemService"/>
                     </bean>
                 </entry>
+                <entry key="DATADESCRIPTOR">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.DataDescriptorXmlEntityHandler">
+                        <property name="dataDescriptorService" ref="dataDescriptorService"/>
+                    </bean>
+                </entry>
+                <entry key="DATAGROUP">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.DataGroupXmlEntityHandler">
+                        <property name="dataGroupService" ref="dataGroupService"/>
+                        <property name="descriptorXmlEntityImportHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.DataDescriptorXmlEntityHandler">
+                                <property name="dataDescriptorService" ref="dataDescriptorService"/>
+                            </bean>
+                        </property>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>
