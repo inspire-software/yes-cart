@@ -25,7 +25,7 @@
 
     <export-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name>target/categorynames_export-{timestamp}.xml</file-name>
+        <file-name>target/categories_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
     <select-sql>select c from CategoryEntity c</select-sql>

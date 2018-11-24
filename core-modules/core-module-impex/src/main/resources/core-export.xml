@@ -204,6 +204,17 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="CONTENT">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentXmlEntityHandler">
+                        <constructor-arg ref="contentService"/>
+                    </bean>
+                </entry>
+                <entry key="CONTENT_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentXmlEntityHandler">
+                        <constructor-arg ref="contentService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
                 <entry key="INVENTORY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.SkuWarehouseXmlEntityHandler"/>
                 </entry>

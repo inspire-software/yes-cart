@@ -122,8 +122,8 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             long dt = System.currentTimeMillis();
-            String fileToExport = "target/attributenames-export-" + UUID.randomUUID().toString() + ".xml";
-            bulkExportService.doExport(createContext("src/test/resources/export/xml/attributenames.xml", listener, fileToExport));
+            String fileToExport = "target/attributes-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/attributes.xml", listener, fileToExport));
             final long attrs = System.currentTimeMillis() - dt;
             System.out.println(String.format("%5d", cntProductAttr) + " attributes  in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
 
@@ -139,8 +139,8 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            fileToExport = "target/productnames-export-" + UUID.randomUUID().toString() + ".xml";
-            bulkExportService.doExport(createContext("src/test/resources/export/xml/productnames.xml", listener, fileToExport));
+            fileToExport = "target/products-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/products.xml", listener, fileToExport));
             final long prods = System.currentTimeMillis() - dt;
             System.out.println(String.format("%5d", cntProd) + " products in " + prods + "millis (~" + (prods / cntProd) + " per item)");
 
@@ -162,8 +162,8 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            fileToExport = "target/categorynames-export-" + UUID.randomUUID().toString() + ".xml";
-            bulkExportService.doExport(createContext("src/test/resources/export/xml/categorynames.xml", listener, fileToExport));
+            fileToExport = "target/categories-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/categories.xml", listener, fileToExport));
             final long cats = System.currentTimeMillis() - dt;
             System.out.println(String.format("%5d", cntCat) + " categories in " + cats + "millis (~" + (cats / cntCat) + " per item)");
 
@@ -176,6 +176,30 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(content.contains("<custom-value><![CDATA[10,20,50]]></custom-value>"));
 
             validateXmlFile(xml);
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCATEGORY  ");
+            rs.next();
+            long cntContent = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/content-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/content.xml", listener, fileToExport));
+            final long cms = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntContent) + " content in " + cms + "millis (~" + (cms / cntContent) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<content id=\""));
+            assertTrue(content.contains(" guid=\"112\" rank=\"60\""));
+            assertTrue(content.contains("<name><![CDATA[KnickKnacks]]></name>"));
+            assertTrue(content.contains("<custom-value><![CDATA[10,20,50]]></custom-value>"));
+
+            validateXmlFile(xml);
+
+
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSKUWAREHOUSE  ");
             rs.next();
@@ -224,8 +248,8 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            fileToExport = "target/tax-export-" + UUID.randomUUID().toString() + ".xml";
-            bulkExportService.doExport(createContext("src/test/resources/export/xml/taxnames.xml", listener, fileToExport));
+            fileToExport = "target/taxes-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/taxes.xml", listener, fileToExport));
             final long tax = System.currentTimeMillis() - dt;
             System.out.println(String.format("%5d", tax) + " taxes in " + tax + "millis (~" + (tax / cntTax) + " per item)");
 
@@ -245,7 +269,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
             dt = System.currentTimeMillis();
             fileToExport = "target/taxconfigs-export-" + UUID.randomUUID().toString() + ".xml";
-            bulkExportService.doExport(createContext("src/test/resources/export/xml/taxconfignames.xml", listener, fileToExport));
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/taxconfigs.xml", listener, fileToExport));
             final long taxCfg = System.currentTimeMillis() - dt;
             System.out.println(String.format("%5d", cntTaxCfg) + " tax configs in " + taxCfg + "millis (~" + (taxCfg / cntTaxCfg) + " per item)");
 
@@ -265,7 +289,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
             dt = System.currentTimeMillis();
             fileToExport = "target/producttypes-export-" + UUID.randomUUID().toString() + ".xml";
-            bulkExportService.doExport(createContext("src/test/resources/export/xml/producttypenames.xml", listener, fileToExport));
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/producttypes.xml", listener, fileToExport));
             final long pTypes = System.currentTimeMillis() - dt;
             System.out.println(String.format("%5d", cntPtype) + " product types in " + pTypes + "millis (~" + (pTypes / cntPtype) + " per item)");
 
@@ -285,7 +309,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             dt = System.currentTimeMillis();
-            fileToExport = "target/systemnames_export-" + UUID.randomUUID().toString() + ".xml";
+            fileToExport = "target/systempreferences_export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/systempreferences.xml", listener, fileToExport));
             final long sysPrefs = System.currentTimeMillis() - dt;
             System.out.println(String.format("%5d", cntSysPrefs) + " system preferences in " + sysPrefs + "millis (~" + (sysPrefs / cntSysPrefs) + " per item)");

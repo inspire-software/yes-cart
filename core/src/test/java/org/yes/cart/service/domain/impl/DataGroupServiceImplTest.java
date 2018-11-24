@@ -47,7 +47,7 @@ public class DataGroupServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testFindByType() throws Exception {
 
-        assertTrue(dataGroupService.findByType(DataGroup.TYPE_IMPORT).isEmpty());
+        int count = dataGroupService.findCountByCriteria(" where e.type = ?1", DataGroup.TYPE_IMPORT);
 
         final DataGroup group001 = dataGroupService.getGenericDao().getEntityFactory().getByIface(DataGroup.class);
 
@@ -57,6 +57,8 @@ public class DataGroupServiceImplTest extends BaseCoreDBTestCase {
 
         dataGroupService.create(group001);
 
+        assertEquals(count + 1, dataGroupService.findCountByCriteria(" where e.type = ?1", DataGroup.TYPE_IMPORT));
+
         final DataGroup group002 = dataGroupService.getGenericDao().getEntityFactory().getByIface(DataGroup.class);
 
         group002.setName("G002");
@@ -65,10 +67,9 @@ public class DataGroupServiceImplTest extends BaseCoreDBTestCase {
 
         dataGroupService.create(group002);
 
-        final List<DataGroup> g001search = dataGroupService.findByType(DataGroup.TYPE_IMPORT);
-        assertFalse(g001search.isEmpty());
+        assertEquals(count + 1, dataGroupService.findCountByCriteria(" where e.type = ?1", DataGroup.TYPE_IMPORT));
 
-        final DataGroup g001 = g001search.get(0);
+        final DataGroup g001 = dataGroupService.findByName("G001");
         assertEquals("G001", g001.getName());
 
         final List<DataGroup> g002search = dataGroupService.findByType("OTHER");

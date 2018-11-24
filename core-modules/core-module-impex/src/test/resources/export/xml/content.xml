@@ -21,15 +21,15 @@
         <shop-code>SHOIP1</shop-code>
     </context>
 
-    <entity-type>org.yes.cart.domain.entity.System</entity-type>
+    <entity-type>org.yes.cart.domain.entity.Category</entity-type>
 
     <export-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name>target/systempreferences_export-{timestamp}.xml</file-name>
+        <file-name>target/content_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select t from SystemEntity t</select-sql>
+    <select-sql>select c from CategoryEntity c</select-sql>
 
-    <xml-handler>SYSTEM_PRETTY</xml-handler>
+    <xml-handler>CONTENT_PRETTY</xml-handler>
 
 </export-descriptor>

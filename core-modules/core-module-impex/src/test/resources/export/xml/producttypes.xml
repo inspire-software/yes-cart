@@ -21,15 +21,15 @@
         <shop-code>SHOIP1</shop-code>
     </context>
 
-    <entity-type>org.yes.cart.domain.entity.Tax</entity-type>
+    <entity-type>org.yes.cart.domain.entity.ProductType</entity-type>
 
     <export-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name>target/taxnames_export-{timestamp}.xml</file-name>
+        <file-name>target/producttypes_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select t from TaxEntity t</select-sql>
+    <select-sql>select t from ProductTypeEntity t</select-sql>
 
-    <xml-handler>TAX_PRETTY</xml-handler>
+    <xml-handler>PRODUCTTYPE_PRETTY</xml-handler>
 
 </export-descriptor>

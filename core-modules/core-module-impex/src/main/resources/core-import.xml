@@ -170,6 +170,13 @@
                         <property name="attributeService" ref="attributeService"/>
                     </bean>
                 </entry>
+                <entry key="CONTENT">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ContentXmlEntityHandler">
+                        <property name="contentService" ref="contentService"/>
+                        <property name="shopService" ref="shopService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                    </bean>
+                </entry>
                 <entry key="INVENTORY">
                     <bean class="org.yes.cart.bulkimport.xml.impl.InventoryXmlEntityHandler">
                         <property name="skuWarehouseService" ref="skuWarehouseService"/>

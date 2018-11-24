@@ -96,7 +96,7 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
 
                     final String descName = dataDescriptor.getName().trim();
                     int pos = groupDescriptors.indexOf(descName);
-                    if (pos != -1) { // adding new
+                    if (pos == -1) { // adding new
                         if (insertIndex >= groupDescriptors.size()) {
                             groupDescriptors.add(descName);
                             insertIndex = groupDescriptors.size();
@@ -108,7 +108,7 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
                     }
                 }
             }
-
+            domain.setDescriptors(StringUtils.join(groupDescriptors, ','));
 
         }
 

@@ -245,6 +245,37 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/content.xml", listener, importedFilesSet));
+            final long cont = System.currentTimeMillis() - dt;
+
+            change = 2;
+            System.out.println(String.format("%5d", change) + " CMS content in " + cont + "millis (~" + (cont / change) + " per item)");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select CATEGORY_ID,PARENT_ID, PRODUCTTYPE_ID, DESCRIPTION, NAME, URI from TCATEGORY where GUID = 'SHOIP3-LVL1'");
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            String conDesc = rs.getString("DESCRIPTION");
+            String conName = rs.getString("NAME");
+            long conParentId = rs.getLong("PARENT_ID");
+            long conId = rs.getLong("CATEGORY_ID");
+            rs.close();
+            assertEquals("Level 1 content", conDesc);
+            assertTrue(conParentId > 0L);
+            assertEquals("Level 1", conName);
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select VAL from TCATEGORYATTRVALUE where CATEGORY_ID = '" + conId + "' and CODE like 'CONTENT_BODY_en_%' order by CODE");
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            assertTrue(rs.getString("VAL").startsWith("EN:\nLorem ipsum dolor sit amet"));
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            assertTrue(rs.getString("VAL").startsWith("m id est laborum.\n"));
+            rs.close();
+
+
+
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCT  ");
             rs.next();
             long cntBeforeProd = rs.getLong(1);

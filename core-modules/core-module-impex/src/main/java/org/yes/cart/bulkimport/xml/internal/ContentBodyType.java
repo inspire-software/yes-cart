@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for data-groupsType complex type.
+ * <p>Java class for contentBodyType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="data-groupsType">
+ * &lt;complexType name="contentBodyType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="data-group" type="{}data-groupType" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="body-content" type="{}body-contentType" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,41 +29,41 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "data-groupsType", propOrder = {
-    "dataGroup"
+@XmlType(name = "contentBodyType", propOrder = {
+    "bodyContent"
 })
-public class DataGroupsType {
+public class ContentBodyType {
 
-    @XmlElement(name = "data-group")
-    protected List<DataGroupType> dataGroup;
+    @XmlElement(name = "body-content")
+    protected List<BodyContentType> bodyContent;
 
     /**
-     * Gets the value of the dataGroup property.
+     * Gets the value of the bodyContent property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the dataGroup property.
+     * This is why there is not a <CODE>set</CODE> method for the bodyContent property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getDataGroup().add(newItem);
+     *    getBodyContent().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DataGroupType }
+     * {@link BodyContentType }
      * 
      * 
      */
-    public List<DataGroupType> getDataGroup() {
-        if (dataGroup == null) {
-            dataGroup = new ArrayList<DataGroupType>();
+    public List<BodyContentType> getBodyContent() {
+        if (bodyContent == null) {
+            bodyContent = new ArrayList<BodyContentType>();
         }
-        return this.dataGroup;
+        return this.bodyContent;
     }
 
 }

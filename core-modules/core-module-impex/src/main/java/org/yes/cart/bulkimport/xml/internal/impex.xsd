@@ -128,7 +128,6 @@
 
     <!-- Categories -->
 
-
     <xsd:element name="categories" type="categoriesType"/>
     <xsd:element name="category" type="categoryType"/>
 
@@ -202,6 +201,77 @@
     </xsd:complexType>
 
     <xsd:complexType name="baseCategoryType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute type="xsd:long" name="id"/>
+                <xsd:attribute type="xsd:string" name="guid" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <!-- Content -->
+
+    <xsd:element name="cms" type="cmsType"/>
+    <xsd:element name="content" type="contentType"/>
+
+    <xsd:complexType name="cmsType">
+        <xsd:sequence>
+            <xsd:element type="contentType" name="content" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="contentType">
+        <xsd:sequence>
+            <xsd:element type="baseContentType" name="parent" minOccurs="0"/>  <!-- TODO: remove minOccurs when we separate out the content -->
+            <xsd:element name="availability">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="dateTimeType" name="available-from" minOccurs="0"/>
+                        <xsd:element type="dateTimeType" name="available-to" minOccurs="0"/>
+                    </xsd:sequence>
+                    <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="contentTemplatesType" name="templates"/>
+            <xsd:element type="seoType" name="seo"/>
+            <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
+            <xsd:element type="contentBodyType" name="body" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="xsd:string" name="shop" use="required"/>
+        <xsd:attribute type="xsd:int" name="rank"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="contentBodyType">
+        <xsd:sequence>
+            <xsd:element type="body-contentType" name="body-content" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="body-contentType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute type="xsd:string" name="lang" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="contentTemplatesType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="content" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="baseContentType">
         <xsd:simpleContent>
             <xsd:extension base="xsd:string">
                 <xsd:attribute type="xsd:long" name="id"/>
@@ -689,7 +759,7 @@
 
     <xsd:complexType name="data-groupsType">
         <xsd:sequence>
-            <xsd:element type="data-groupType" name="data-group"/>
+            <xsd:element type="data-groupType" name="data-group" maxOccurs="unbounded" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
 

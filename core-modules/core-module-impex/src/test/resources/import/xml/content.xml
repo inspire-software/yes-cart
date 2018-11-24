@@ -14,22 +14,16 @@
   ~    limitations under the License.
   -->
 
-<export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:noNamespaceSchemaLocation="file:../../../../../../../domain-api/src/main/resources/META-INF/schema/export-descriptor-xml.xsd">
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="file:../../../../../../../domain-api/src/main/resources/META-INF/schema/import-descriptor-xml.xsd">
 
-    <context>
-        <shop-code>SHOIP1</shop-code>
-    </context>
+    <entity-type>org.yes.cart.domain.entity.Category</entity-type>
 
-    <entity-type>org.yes.cart.domain.entity.TaxConfig</entity-type>
-
-    <export-file-descriptor>
+    <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name>target/taxconfignames_export-{timestamp}.xml</file-name>
-    </export-file-descriptor>
+        <file-name-mask>content-data.xml</file-name-mask>
+    </import-file-descriptor>
 
-    <select-sql>select t from TaxConfigEntity t</select-sql>
+    <xml-handler>CONTENT</xml-handler>
 
-    <xml-handler>TAXCONFIG_PRETTY</xml-handler>
-
-</export-descriptor>
+</import-descriptor>

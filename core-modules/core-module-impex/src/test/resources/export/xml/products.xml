@@ -17,15 +17,19 @@
 <export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="file:../../../../../../../domain-api/src/main/resources/META-INF/schema/export-descriptor-xml.xsd">
 
-    <entity-type>org.yes.cart.domain.entity.Attribute</entity-type>
+    <context>
+        <shop-code>SHOIP1</shop-code>
+    </context>
+
+    <entity-type>org.yes.cart.domain.entity.Product</entity-type>
 
     <export-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name>target/attributenames_export-{timestamp}.xml</file-name>
+        <file-name>target/products_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select b from AttributeEntity b where b.attributeGroup.code = 'PRODUCT'</select-sql>
+    <select-sql>select p from ProductEntity p</select-sql>
 
-    <xml-handler>ATTRIBUTE_PRETTY</xml-handler>
+    <xml-handler>PRODUCT_PRETTY</xml-handler>
 
 </export-descriptor>

@@ -21,15 +21,15 @@
         <shop-code>SHOIP1</shop-code>
     </context>
 
-    <entity-type>org.yes.cart.domain.entity.System</entity-type>
+    <entity-type>org.yes.cart.domain.entity.TaxConfig</entity-type>
 
     <export-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name>target/systempreferences_export-{timestamp}.xml</file-name>
+        <file-name>target/taxconfigs_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select t from SystemEntity t</select-sql>
+    <select-sql>select t from TaxConfigEntity t</select-sql>
 
-    <xml-handler>SYSTEM_PRETTY</xml-handler>
+    <xml-handler>TAXCONFIG_PRETTY</xml-handler>
 
 </export-descriptor>
