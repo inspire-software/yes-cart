@@ -16,11 +16,13 @@
 
 package org.yes.cart.payment.impl;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.CallbackAware;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
@@ -631,7 +633,8 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             payment.setCardExpireYear(sorted.get("ED").substring(2, 4));
         }
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(raw, forceProcessing);
+        final boolean prepare = PaymentGateway.AUTH.equals(operation) && MapUtils.isEmpty(map);
+        final CallbackAware.CallbackResult res = prepare ? CallbackResult.PREPARE : getExternalCallbackResult(raw, forceProcessing);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
         final StringBuilder msg = new StringBuilder();

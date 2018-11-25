@@ -129,7 +129,8 @@ public interface CallbackAware {
         UNSETTLED(Payment.PAYMENT_STATUS_OK, false),
         PROCESSING(Payment.PAYMENT_STATUS_PROCESSING, false),
         FAILED(Payment.PAYMENT_STATUS_FAILED, false),
-        MANUAL_REQUIRED(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED, false);
+        MANUAL_REQUIRED(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED, false),
+        PREPARE(null, false);
 
         private String status;
         private boolean settled;
