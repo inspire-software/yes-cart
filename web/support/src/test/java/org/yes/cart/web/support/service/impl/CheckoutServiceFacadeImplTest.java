@@ -2290,7 +2290,22 @@ public class CheckoutServiceFacadeImplTest {
 
     }
 
+    @Test
+    public void testRestrictAccessByTag() throws Exception {
 
+        final CheckoutServiceFacadeImpl facade = new CheckoutServiceFacadeImpl(null, null, null, null, null, null, null, null);
 
+        assertFalse(facade.restrictAccessByTag(null, null));
+        assertFalse(facade.restrictAccessByTag("  ", null));
+        assertFalse(facade.restrictAccessByTag(null, "  "));
+        assertFalse(facade.restrictAccessByTag("", ""));
+        assertFalse(facade.restrictAccessByTag("tag1", "tag1,tag2,tag3"));
+        assertFalse(facade.restrictAccessByTag("tag2", "tag1,tag2,tag3"));
+        assertFalse(facade.restrictAccessByTag("tag3", "tag1,tag2,tag3"));
+        assertTrue(facade.restrictAccessByTag("tag4", "tag1,tag2,tag3"));
+        assertTrue(facade.restrictAccessByTag("", "tag1,tag2,tag3"));
+        assertTrue(facade.restrictAccessByTag("   ", "tag1,tag2,tag3"));
+        assertTrue(facade.restrictAccessByTag(null, "tag1,tag2,tag3"));
 
+    }
 }

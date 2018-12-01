@@ -16,6 +16,7 @@
 
 package org.yes.cart.promotion.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Customer;
@@ -124,8 +125,8 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
 
 
     private List<String> getCustomerTags(Customer customer) {
-        if (customer != null && customer.getTag() != null) {
-            return Arrays.asList(customer.getTag().split(" "));
+        if (customer != null && StringUtils.isNotBlank(customer.getTag())) {
+            return Arrays.asList(StringUtils.split(customer.getTag(), ' '));
         }
         return Collections.emptyList();
     }

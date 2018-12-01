@@ -98,8 +98,8 @@ public class PromotionContextImpl implements PromotionContext {
     }
 
     private List<String> getCustomerTags(Customer customer) {
-        if (customer != null && customer.getTag() != null) {
-            return Arrays.asList(customer.getTag().split(" "));
+        if (customer != null && StringUtils.isNotBlank(customer.getTag())) {
+            return Arrays.asList(StringUtils.split(customer.getTag(), ' '));
         }
         return Collections.emptyList();
     }

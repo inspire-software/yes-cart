@@ -827,6 +827,7 @@ public interface AttributeNamesKeys {
         String CUSTOMER_TYPE_EMAIL = "EMAIL";
 
         String ORDER_INFO_CUSTOMER_TYPE = "customerType";
+        String ORDER_INFO_CUSTOMER_TAGS = "customerTags";
         String ORDER_INFO_CUSTOMER_SHOPPING_LIST_ON = "shoppingListsEnabled";
         String ORDER_INFO_CUSTOMER_REPEAT_ORDER_ON = "repeatOrderEnabled";
         String ORDER_INFO_CUSTOMER_SHOPPING_RFQ_ON = "rfqEnabled";
