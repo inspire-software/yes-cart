@@ -38,6 +38,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.CreateEditAddressPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -231,15 +232,27 @@ public class ManageAddressesView extends BaseComponent {
                                                                                final long addressId,
                                                                                final String addressType) {
 
-        final Class<? extends Page> successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/address").get();
+        final Class<? extends Page> successfulPage = (Class) wicketPagesMounter.getPageProviderByUri(getAddressPageUri()).get();
         final PageParameters parameters = new PageParameters();
 
         parameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL,
                 isCheckout ? CreateEditAddressPage.RETURN_TO_CHECKOUT : CreateEditAddressPage.RETURN_TO_PROFILE);
         parameters.add(WebParametersKeys.ADDRESS_ID, String.valueOf(addressId));
         parameters.add(WebParametersKeys.ADDRESS_TYPE, addressType);
+        if (isCheckout) {
+            parameters.add(CheckoutPage.STEP, CheckoutPage.STEP_ADDR);
+        }
 
         return new Pair<>(successfulPage, parameters);
+    }
+
+    /**
+     * Extension hook to page that contains this form
+     *
+     * @return uri.
+     */
+    protected String getAddressPageUri() {
+        return "/address";
     }
 
 

@@ -38,6 +38,18 @@ public interface AddressBookFacade {
      */
     boolean customerHasAtLeastOneAddress(String email, Shop customerShop);
 
+    /**
+     * Returns true if customer identified by given email address
+     * has at least one address in the address book.
+     *
+     * @param email customer email
+     * @param customerShop shop
+     * @param type address type to check
+     *
+     * @return true if at least one address exists
+     */
+    boolean customerHasAtLeastOneAddress(String email, Shop customerShop, String type);
+
 
     /**
      * Get addresses applicable for given shop.
@@ -82,6 +94,14 @@ public interface AddressBookFacade {
      * @return new address instance with copy of original data (or null if not found)
      */
     Address copyAddress(Customer customer, Shop customerShop, String addrId, String addressType);
+
+    /**
+     * Copy data from one address to another
+     *
+     * @param from data source
+     * @param to target object
+     */
+    void copyAddressDetails(Address from, Address to);
 
     /**
      * Get address form attributes to be displayed for current customer.
