@@ -651,6 +651,7 @@ public class VoShopServiceImpl implements VoShopService {
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-activation", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-change-password", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-deactivation", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-delete", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-registered", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-canceled", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-confirmed", false);
