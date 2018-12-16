@@ -317,7 +317,10 @@
     <entry key="orderInfo">Bestellungen</entry>
     <entry key="noOrders">Es kann kein Bestellverlauf angezeigt werden.</entry>
     <entry key="orderNotFound">Bestellung wurde nicht gefunden.</entry>
+    <entry key="orderNotFoundGuest">Bestellung wurde nicht gefunden.</entry>
     <entry key="orderNoTitle">Bestellung ${ordernum}</entry>
+    <entry key="verifyOrderTitle">Gast-E-Mail bestätigen</entry>
+    <entry key="verifyOrderBtn">Bestätigen</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">Ein neues Passwort wird nach Klick auf "Passwort ändern" an Ihre E-Mail Adresse gesendet </entry>

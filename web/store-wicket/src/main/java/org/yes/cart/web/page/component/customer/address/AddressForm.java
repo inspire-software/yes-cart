@@ -246,7 +246,7 @@ public class AddressForm extends Form<Address> {
                             Long.valueOf(addr.getAddressId()).equals(cart.getOrderInfo().getDeliveryAddressId())) {
                         final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
                                 ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
-                        final Map parameters = new HashMap();
+                        final Map<String, Object> parameters = new HashMap<>();
                         parameters.put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
                         parameters.put(key, addr);
                         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, cart, parameters);

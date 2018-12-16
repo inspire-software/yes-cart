@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -476,6 +477,18 @@ public class AbstractWebPage extends WebPage {
             }
         }
         return null;
+    }
+
+    boolean isAuthenticated() {
+        final ShoppingCart cart = getCurrentCart();
+        return ((AuthenticatedWebSession) getSession()).isSignedIn()
+                && cart.getLogonState() == ShoppingCart.LOGGED_IN;
+    }
+
+    void forceLogoutRedirect() {
+        final PageParameters params = new PageParameters();
+        params.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+        setResponsePage(Application.get().getHomePage(), params);
     }
 
     /**

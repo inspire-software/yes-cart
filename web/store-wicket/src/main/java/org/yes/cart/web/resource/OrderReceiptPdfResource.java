@@ -45,15 +45,25 @@ public class OrderReceiptPdfResource extends AbstractDynamicResource {
     @Override
     protected byte[] getData(final Attributes attributes) {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        String ordernum = attributes.getParameters().get("ordernum").toString();
+        String guestEmail = null;
+        if (StringUtils.isBlank(ordernum)) {
+            ordernum = attributes.getRequest().getPostParameters().getParameterValue("ordernum").toString();
+            guestEmail = attributes.getRequest().getPostParameters().getParameterValue("guestEmail").toString();
+        }
 
-        if (cart != null && cart.getLogonState() == ShoppingCart.LOGGED_IN) {
+        if (StringUtils.isNotBlank(ordernum)) {
 
-            final String ordernum = attributes.getParameters().get("ordernum").toString();
-            if (StringUtils.isNotBlank(ordernum)) {
+            final CustomerOrder order = checkoutServiceFacade.findByReference(ordernum);
 
-                final CustomerOrder order = checkoutServiceFacade.findByReference(ordernum);
-                if (order != null && cart.getCustomerEmail().equals(order.getEmail())) {
+            if (order != null) {
+                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final boolean loggedIn = cart != null && cart.getLogonState() == ShoppingCart.LOGGED_IN;
+
+                final boolean ownsOrder = (loggedIn && cart.getCustomerEmail().equalsIgnoreCase(order.getEmail()))
+                        || (!loggedIn && guestEmail != null && guestEmail.equalsIgnoreCase(order.getEmail()));
+
+                if (ownsOrder) {
 
                     try {
                         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -64,9 +74,8 @@ public class OrderReceiptPdfResource extends AbstractDynamicResource {
                         LOG.error("Receipt for " + ordernum
                                 + " error, caused by " + exp.getMessage(), exp);
                     }
-
+                    
                 }
-
             }
         }
 

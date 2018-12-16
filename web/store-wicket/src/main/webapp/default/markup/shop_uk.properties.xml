@@ -317,7 +317,10 @@
     <entry key="orderInfo">Замовлення</entry>
     <entry key="noOrders">Немає записів в історії замовлень.</entry>
     <entry key="orderNotFound">Замовлення не знайдено.</entry>
+    <entry key="orderNotFoundGuest">Замовлення не знайдено.</entry>
     <entry key="orderNoTitle">Замовлення ${ordernum}</entry>
+    <entry key="verifyOrderTitle">Підтвердіть гостьову адресу електронної пошти</entry>
+    <entry key="verifyOrderBtn">Перевірити</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">Запит на новий пароль буде висланий на Ваш email після натискання кнопки "Змінити пароль"</entry>

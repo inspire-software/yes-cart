@@ -61,14 +61,22 @@
                 </div>
 
                 <div class="col-xs-12">
-                    <wicket:link>
-                        <a href="OrdersPage.html"  class="btn btn-default" rel="nofollow"><span><wicket:message key="orderHistory">[Order history]</wicket:message></span></a>
-                    </wicket:link>
-                    <a wicket:id="receipt" class="btn btn-primary" rel="nofollow"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></a>
+                    <wicket:container wicket:id="orderVerifyForm">
+                        [order verify]
+                    </wicket:container>
+                </div>
+
+                <div class="col-xs-12">
+                    <a wicket:id="historyBtn" class="btn btn-default" rel="nofollow"><span><wicket:message key="orderHistory">[Order history]</wicket:message></span></a>
+                    <form wicket:id="receiptForm" method="post" class="post-link" target="_pdfinvoice">
+                        <input wicket:id="ordernum" type="hidden"/>
+                        <input wicket:id="guestEmail" type="hidden"/>
+                        <button type="submit" class="btn btn-primary" rel="nofollow"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>
+                    </form>
                 </div>
 
                 <div class="col-xs-12 no-padding">
-                    <h2 id="orderInfo" class="profile-title"><span wicket:id="orderNum">[Order #00001]</span> (<span wicket:id="orderStatus">[status]</span>)</h2>
+                    <h2 id="orderInfo" class="profile-title"><span wicket:id="orderNum">[Order #00001]</span> <span wicket:id="orderStatus">[status]</span></h2>
                 </div>
 
 

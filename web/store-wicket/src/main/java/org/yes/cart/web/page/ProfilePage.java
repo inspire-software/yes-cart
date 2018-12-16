@@ -110,18 +110,17 @@ public class ProfilePage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        final ShoppingCart cart = getCurrentCart();
+        final boolean auth = isAuthenticated();
 
-        if ((!((AuthenticatedWebSession) getSession()).isSignedIn()
-                || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
-            final PageParameters params = new PageParameters();
-            params.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
-            setResponsePage(Application.get().getHomePage(), params);
+        if (!auth) {
+            forceLogoutRedirect();
+        } else {
+            executeHttpPostedCommands();
         }
-
-        executeHttpPostedCommands();
         super.onBeforeRender();
-        persistCartIfNecessary();
+        if (auth) {
+            persistCartIfNecessary();
+        }
     }
 
     /**

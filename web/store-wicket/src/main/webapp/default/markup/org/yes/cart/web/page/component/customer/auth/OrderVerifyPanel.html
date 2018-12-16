@@ -1,0 +1,46 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html  xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:panel>
+
+    <form wicket:id="verifyForm" class="form-horizontal">
+
+        <div class="login-title">
+            <h2><wicket:message key="verifyOrderTitle">[verify order]</wicket:message></h2>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3"><wicket:message key="email">[email]</wicket:message></label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text"  wicket:id="email" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-8 buttons">
+                <input type="submit" class="btn btn-primary" wicket:id="verifyBtn"  wicket:message="value:verifyOrderBtn"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <wicket:container wicket:id="verifyformContent">[verify form content include]</wicket:container>
+        </div>
+    </form>
+
+</wicket:panel>
+</body>
+</html>
