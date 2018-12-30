@@ -48,8 +48,6 @@ public class DeletePanel extends BaseComponent {
     private final long serialVersionUid = 20111016L;
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    private static final String AUTH_INPUT = "token";
-    private static final String PASSWORD_LABEL = "passwordLabel";
     private static final String PASSWORD_INPUT = "password";
     private static final String DELETE_BUTTON = "deleteBtn";
     private static final String DELETE_FORM = "deleteForm";
@@ -64,8 +62,6 @@ public class DeletePanel extends BaseComponent {
 
     @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
     private WicketPagesMounter wicketPagesMounter;
-
-    private final EditorFactory editorFactory = new EditorFactory();
 
     /**
      * Construct login panel.

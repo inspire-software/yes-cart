@@ -115,12 +115,13 @@ public class AddressForm extends Form<Address> {
         super(s, addressIModel);
 
         final Address address = addressIModel.getObject();
+        final Shop shop = ApplicationDirector.getCurrentShop();
 
         preprocessAddress(address);
         final boolean creating = address.getAddressId() == 0L;
 
         final List<State> stateList = getStateList(address.getCountryCode());
-        final List<Country> countryList = addressBookFacade.getAllCountries(ShopCodeContext.getShopCode(), addressType);
+        final List<Country> countryList = addressBookFacade.getAllCountries(shop.getCode(), addressType);
 
 
         RepeatingView fields = new RepeatingView(FIELDS);
@@ -129,7 +130,7 @@ public class AddressForm extends Form<Address> {
 
         final String lang = getLocale().getLanguage();
         values = addressBookFacade
-                .getShopCustomerAddressAttributes(address.getCustomer(), ApplicationDirector.getCurrentShop(), addressType);
+                .getShopCustomerAddressAttributes(address.getCustomer(), shop, addressType);
 
 
         final Map<String, AttrValue> valuesMap = new HashMap<>();
@@ -228,7 +229,15 @@ public class AddressForm extends Form<Address> {
                     }
 
                     final Shop shop = ((AbstractWebPage) getPage()).getCurrentCustomerShop();
-                    addressBookFacade.createOrUpdate(addr, shop);
+                    final Address address;
+                    if (addr.getAddressId() > 0L) {
+                        // Update the original
+                        address = addressBookFacade.getAddress(addr.getCustomer(), shop, String.valueOf(addr.getAddressId()), addr.getAddressType());
+                        addressBookFacade.copyAddressDetails(addr, address);
+                    } else {
+                        address = addr;
+                    }
+                    addressBookFacade.createOrUpdate(address, shop);
 
                     // if we just added new address that became new default or we modified an address that is in the cart
                     // reset address
@@ -237,7 +246,7 @@ public class AddressForm extends Form<Address> {
                             Long.valueOf(addr.getAddressId()).equals(cart.getOrderInfo().getDeliveryAddressId())) {
                         final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
                                 ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
-                        final Map parameters = new HashMap();
+                        final Map<String, Object> parameters = new HashMap<>();
                         parameters.put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
                         parameters.put(key, addr);
                         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, cart, parameters);

@@ -454,11 +454,16 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<>(descriptors.size());
         final Map<String, Integer> sorting = new HashMap<>();
         final boolean approve = cart.getOrderInfo().isDetailByKeyTrue(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER);
+        final String customerTags = cart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_TAGS);
         for (final PaymentGatewayDescriptor descriptor : descriptors) {
             if (carrierSlaPGs.contains(descriptor.getLabel())) {
                 final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel(), cart.getShoppingContext().getShopCode());
                 if (approve && gateway.getPaymentGatewayFeatures().isOnlineGateway()) {
                     continue; // TODO: online PG's should not be allowed through approve flow at least for now
+                }
+                final String restrictToCustomerTags = gateway.getParameterValue("restrictToCustomerTags");
+                if (restrictAccessByTag(customerTags, restrictToCustomerTags)) {
+                    continue; // customer has tags but they do not match restrictions
                 }
                 available.add(new Pair<>(descriptor, gateway.getName(lang)));
                 final String priority = gateway.getParameterValue("priority");
@@ -481,6 +486,23 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         return available;
 
+    }
+
+    boolean restrictAccessByTag(final String customerTags, final String restrictToCustomerTags) {
+
+        if (StringUtils.isNotBlank(restrictToCustomerTags)) {
+            final List<String> allowedTags = Arrays.asList(StringUtils.split(restrictToCustomerTags, ','));
+            if (StringUtils.isNotBlank(customerTags)) {
+                final List<String> existingTags = Arrays.asList(StringUtils.split(customerTags, ' '));
+                for (final String existingTag : existingTags) {
+                    if (allowedTags.contains(existingTag)) {
+                        return false; // matched
+                    }
+                }
+            }
+            return true; // no match
+        }
+        return false; // no restrictions
     }
 
     /** {@inheritDoc} */

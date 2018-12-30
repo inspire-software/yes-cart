@@ -17,10 +17,12 @@
 package org.yes.cart.payment.impl;
 
 import com.liqpay.LiqPay;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.payment.CallbackAware;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -135,7 +137,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     transaction_id +
                     sender_phone);
 
-            final boolean valid = signature.equals(validSignature);
+            final boolean valid = validSignature.equals(signature);
 
             if (valid || forceProcessing) {
 
@@ -211,7 +213,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     transaction_id +
                     sender_phone);
 
-            final boolean valid = signature.equals(validSignature);
+            final boolean valid = validSignature.equals(signature);
 
             if (valid || forceProcessing) {
                 if (valid) {
@@ -440,7 +442,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
         payment.setTransactionReferenceId(singleParamMap.get("transaction_id"));
         payment.setTransactionAuthorizationCode(singleParamMap.get("order_id")); // this is order guid - we need it for refunds
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(singleParamMap, forceProcessing);
+        final boolean prepare = PaymentGateway.AUTH.equals(operation) && MapUtils.isEmpty(map);
+        final CallbackAware.CallbackResult res = prepare ? CallbackResult.PREPARE : getExternalCallbackResult(singleParamMap, forceProcessing);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

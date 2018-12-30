@@ -317,7 +317,10 @@
     <entry key="orderInfo">Orders</entry>
     <entry key="noOrders">There is no order history to display.</entry>
     <entry key="orderNotFound">Order not found.</entry>
+    <entry key="orderNotFoundGuest">Order not found.</entry>
     <entry key="orderNoTitle">Order ${ordernum}</entry>
+    <entry key="verifyOrderTitle">Verify guest email</entry>
+    <entry key="verifyOrderBtn">Verify</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">New password request will be send to you via email after clicking "Change password" button</entry>

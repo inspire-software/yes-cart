@@ -1570,6 +1570,15 @@ ul.feedbackPanel > li {
     border-bottom: 1px solid #dfd7ca;
     margin-top: 5px;
 }
+
+form.post-link {
+    display: inline;
+}
+
+form.post-link button.btn span {
+    font-size: 20px;
+}
+
 /*===================================================================================*/
 /*  RESPONSIVE
 /*===================================================================================*/

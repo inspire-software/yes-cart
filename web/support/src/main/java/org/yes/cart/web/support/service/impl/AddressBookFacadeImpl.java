@@ -67,6 +67,20 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     /** {@inheritDoc} */
     @Override
+    public boolean customerHasAtLeastOneAddress(final String email, final Shop customerShop, final String type) {
+
+        if (StringUtils.isNotBlank(email)) {
+
+            final Customer customer = customerService.getCustomerByEmail(email, customerShop);
+            if (customer != null) {
+                return !getAddresses(customer, customerShop, type).isEmpty();
+            }
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public List<Address> getAddresses(final Customer customer, final Shop customerShop, final String addressType) {
 
         final List<Address> allowed = new ArrayList<>();
@@ -104,7 +118,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
         if (rez == null) {
             rez = customerService.getGenericDao().getEntityFactory().getByIface(Address.class);
             rez.setCustomer(customer);
-            rez.setAddressType(addressType);
+            rez.setAddressType(Address.ADDR_TYPE_BILLING.equals(addressType) ? Address.ADDR_TYPE_BILLING : Address.ADDR_TYPE_SHIPPING);
             // customer.getAddress().add(rez); Must do this when we create address only!
 
             final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.Customer.CUSTOMER_PHONE);
@@ -175,40 +189,50 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setAddressType(addressType);
             // customer.getAddress().add(rez); Must do this when we create address only!
 
-            rez.setSalutation(original.getSalutation());
-            rez.setFirstname(original.getFirstname());
-            rez.setMiddlename(original.getMiddlename());
-            rez.setLastname(original.getLastname());
-            rez.setPhone1(original.getPhone1());
-            rez.setPhone2(original.getPhone2());
-            rez.setMobile1(original.getMobile1());
-            rez.setMobile2(original.getMobile2());
-            rez.setEmail1(original.getEmail1());
-            rez.setEmail2(original.getEmail2());
-            rez.setCity(original.getCity());
-            rez.setPostcode(original.getPostcode());
-            rez.setAddrline1(original.getAddrline1());
-            rez.setAddrline2(original.getAddrline2());
-            rez.setCountryCode(original.getCountryCode());
-            rez.setStateCode(original.getStateCode());
-            rez.setCompanyName1(original.getCompanyName1());
-            rez.setCompanyName2(original.getCompanyName2());
-            rez.setCompanyDepartment(original.getCompanyDepartment());
-            rez.setCustom0(original.getCustom0());
-            rez.setCustom1(original.getCustom1());
-            rez.setCustom2(original.getCustom2());
-            rez.setCustom3(original.getCustom3());
-            rez.setCustom4(original.getCustom4());
-            rez.setCustom5(original.getCustom5());
-            rez.setCustom6(original.getCustom6());
-            rez.setCustom7(original.getCustom7());
-            rez.setCustom8(original.getCustom8());
-            rez.setCustom9(original.getCustom9());
+            copyAddressDetails(original, rez);
 
             return rez;
 
         }
         return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void copyAddressDetails(final Address from, final Address to) {
+
+        to.setName(from.getName());
+        to.setAddressType(from.getAddressType());
+        to.setSalutation(from.getSalutation());
+        to.setFirstname(from.getFirstname());
+        to.setMiddlename(from.getMiddlename());
+        to.setLastname(from.getLastname());
+        to.setPhone1(from.getPhone1());
+        to.setPhone2(from.getPhone2());
+        to.setMobile1(from.getMobile1());
+        to.setMobile2(from.getMobile2());
+        to.setEmail1(from.getEmail1());
+        to.setEmail2(from.getEmail2());
+        to.setCity(from.getCity());
+        to.setPostcode(from.getPostcode());
+        to.setAddrline1(from.getAddrline1());
+        to.setAddrline2(from.getAddrline2());
+        to.setCountryCode(from.getCountryCode());
+        to.setStateCode(from.getStateCode());
+        to.setCompanyName1(from.getCompanyName1());
+        to.setCompanyName2(from.getCompanyName2());
+        to.setCompanyDepartment(from.getCompanyDepartment());
+        to.setCustom0(from.getCustom0());
+        to.setCustom1(from.getCustom1());
+        to.setCustom2(from.getCustom2());
+        to.setCustom3(from.getCustom3());
+        to.setCustom4(from.getCustom4());
+        to.setCustom5(from.getCustom5());
+        to.setCustom6(from.getCustom6());
+        to.setCustom7(from.getCustom7());
+        to.setCustom8(from.getCustom8());
+        to.setCustom9(from.getCustom9());
+
     }
 
     /** {@inheritDoc} */

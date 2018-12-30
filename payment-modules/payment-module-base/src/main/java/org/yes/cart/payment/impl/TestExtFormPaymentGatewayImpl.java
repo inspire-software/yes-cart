@@ -17,6 +17,7 @@
 package org.yes.cart.payment.impl;
 
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -175,7 +176,8 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
 
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(privateCallBackParameters);
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(params, forceProcessing);
+        final boolean prepare = PaymentGateway.AUTH.equals(operation) && MapUtils.isEmpty(privateCallBackParameters);
+        final CallbackAware.CallbackResult res = prepare ? CallbackResult.PREPARE : getExternalCallbackResult(params, forceProcessing);
 
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());

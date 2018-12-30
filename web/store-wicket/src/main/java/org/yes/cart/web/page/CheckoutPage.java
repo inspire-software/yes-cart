@@ -53,6 +53,7 @@ import org.yes.cart.service.order.PlaceOrderDisabledException;
 import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
+import org.yes.cart.web.page.component.customer.address.AddressForm;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
 import org.yes.cart.web.page.component.customer.auth.GuestPanel;
 import org.yes.cart.web.page.component.customer.auth.LoginPanel;
@@ -63,6 +64,7 @@ import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.page.component.shipping.ShippingDeliveriesView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.*;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
@@ -99,6 +101,9 @@ public class CheckoutPage extends AbstractWebPage {
     private static final String LOGIN_FRAGMENT = "loginFragment";
 
     private static final String ADDRESS_FRAGMENT = "addressFragment";
+    private static final String ADDRESS_EDIT_FRAGMENT = "createEditAddressFragment";
+    private static final String ADDRESS_FORM = "addressForm";
+
     private static final String SHIPPING_ADDRESS_VIEW = "shippingAddress";
     private static final String BILLING_ADDRESS_VIEW = "billingAddress";
     private static final String BILLING_THE_SAME_FORM = "billingTheSameForm";
@@ -138,10 +143,6 @@ public class CheckoutPage extends AbstractWebPage {
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     // ---------------------------------- PARAMETER NAMES BEGIN ------------------------------ //
-    /**
-     * Is Billing panel visible.
-     */
-    public static final String BILLING_ADDR_VISIBLE = "billingPanelVisible";
     //three steps checkout process, because customer already logged in
     // or registered
     public static final String THREE_STEPS_PROCESS = "thp";
@@ -193,6 +194,9 @@ public class CheckoutPage extends AbstractWebPage {
                 guestInProgress ||
                         (params.get(THREE_STEPS_PROCESS).toBoolean(sessionSignedIn) && sessionSignedIn);
 
+        final String addressId = params.get(WebParametersKeys.ADDRESS_ID).toString();
+        final String addressType = params.get(WebParametersKeys.ADDRESS_TYPE).toString();
+
         final String currentStep =
                 params.get(STEP).toString(threeStepsProcess ? null : STEP_LOGIN);
         if (currentStep == null) {
@@ -213,7 +217,7 @@ public class CheckoutPage extends AbstractWebPage {
                 new Fragment(NAVIGATION_VIEW, threeStepsProcess ?
                         NAVIGATION_THREE_FRAGMENT : NAVIGATION_FOUR_FRAGMENT, this)
         ).add(
-                getContent(currentStep, customer, cart, guestInProgress, sessionSignedIn)
+                getContent(currentStep, customer, cart, guestInProgress, sessionSignedIn, addressId, addressType)
         ).addOrReplace(
                 new CheckoutFooter(FOOTER)
         ).addOrReplace(
@@ -240,6 +244,8 @@ public class CheckoutPage extends AbstractWebPage {
      * @param cart current cart
      * @param guestInProgress guest checkout in progress (i.e. URL has step)
      * @param sessionSignedIn wicket session is authenticated
+     * @param address address id to edit
+     * @param addressType address type for new addresses
      *
      * @return markup container
      */
@@ -247,7 +253,9 @@ public class CheckoutPage extends AbstractWebPage {
                                        final Customer customer,
                                        final ShoppingCart cart,
                                        final boolean guestInProgress,
-                                       final boolean sessionSignedIn) {
+                                       final boolean sessionSignedIn,
+                                       final String address,
+                                       final String addressType) {
 
         if (!STEP_LOGIN.equals(currentStep)
                 && !guestInProgress
@@ -265,6 +273,10 @@ public class CheckoutPage extends AbstractWebPage {
                 setResponsePage(this.getClass(), parameters);
                 return createShipmentFragment();
             }
+            if (customerNeedsToEnterAddress(customer, cart) ||
+                    StringUtils.isNotBlank(address) || StringUtils.isNotBlank(addressType)) {
+                return createEditAddressFragment(address, addressType);
+            }
             return createAddressFragment();
         } else if (STEP_SHIPMENT.equals(currentStep)) {
 
@@ -275,8 +287,7 @@ public class CheckoutPage extends AbstractWebPage {
             // Need to make sure we execute commands before we recreate order (we may need to choose another SLA)
             executeHttpPostedCommands();
             // For final step we:
-            if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                    && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), getCurrentCustomerShop())) {
+            if (customerNeedsToEnterAddress(customer, cart)) {
                 // Must have an address if it is required
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_ADDR);
@@ -298,6 +309,18 @@ public class CheckoutPage extends AbstractWebPage {
             return createLoginFragment();
         }
     }
+
+    private boolean customerNeedsToEnterAddress(final Customer customer, final ShoppingCart cart) {
+        return (!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
+                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), getCurrentCustomerShop());
+    }
+
+    private boolean customerNeedsToEnterAddress(final Customer customer, final ShoppingCart cart, final String type) {
+        return ((Address.ADDR_TYPE_BILLING.equals(type) && !cart.isBillingAddressNotRequired())
+                || (Address.ADDR_TYPE_SHIPPING.equals(type) && !cart.isDeliveryAddressNotRequired()))
+                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), getCurrentCustomerShop(), type);
+    }
+
 
     private void performOrderSplittingBeforeShipping() {
 
@@ -644,6 +667,65 @@ public class CheckoutPage extends AbstractWebPage {
                 );
     }
 
+
+    /**
+     * Create address edit fragment to facilitate address entry form.
+     *
+     * @return address fragment.
+     */
+    private MarkupContainer createEditAddressFragment(final String addrId, final String addrType) {
+
+        MarkupContainer rez;
+
+        final Shop shop = getCurrentShop();
+        final ShoppingCart cart = getCurrentCart();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
+
+        final Address originalAddress = addressBookFacade.getAddress(customer, getCurrentCustomerShop(), addrId, addrType);
+        final Address address;
+        if (originalAddress.getAddressId() > 0L) {
+            // Make a copy so that we do not mutate the original
+            address = addressBookFacade.copyAddress(customer, getCurrentCustomerShop(), addrId, originalAddress.getAddressType());
+            address.setAddressId(originalAddress.getAddressId());
+        } else {
+            address = originalAddress;
+        }
+
+        final PageParameters parameters = new PageParameters();
+        if (customer.isGuest()) {
+            parameters.set("guest", "1");
+        }
+        parameters.set(STEP, STEP_ADDR);
+
+        rez = new Fragment(CONTENT_VIEW, ADDRESS_EDIT_FRAGMENT, this);
+
+        rez.add(
+                new AddressForm(
+                        ADDRESS_FORM,
+                        new Model<>(address),
+                        addrType,
+                        this.getClass(),
+                        parameters,
+                        this.getClass(),
+                        parameters
+                )
+        );
+
+
+        if (Address.ADDR_TYPE_SHIPPING.equals(address.getAddressType())) {
+
+            info(getLocalizer().getString("selectDeliveryAddress", this));
+
+        } else {
+
+            info(getLocalizer().getString("selectBillingAddress", this));
+
+        }
+
+        return rez;
+    }
+
     /**
      * Create address fragment to manage shipping and billing addresses.
      *
@@ -664,10 +746,20 @@ public class CheckoutPage extends AbstractWebPage {
         final Model<Customer> customerModel = new Model<>(customer);
 
         final ManageAddressesView shippingAddress =
-                new ManageAddressesView(SHIPPING_ADDRESS_VIEW, customerModel, Address.ADDR_TYPE_SHIPPING, true);
+                new ManageAddressesView(SHIPPING_ADDRESS_VIEW, customerModel, Address.ADDR_TYPE_SHIPPING, true) {
+                    @Override
+                    protected String getAddressPageUri() {
+                        return "/checkout";
+                    }
+                };
 
         final ManageAddressesView billingAddress =
-                new ManageAddressesView(BILLING_ADDRESS_VIEW, customerModel, Address.ADDR_TYPE_BILLING, true);
+                new ManageAddressesView(BILLING_ADDRESS_VIEW, customerModel, Address.ADDR_TYPE_BILLING, true) {
+                    @Override
+                    protected String getAddressPageUri() {
+                        return "/checkout";
+                    }
+                };
 
         rez = new Fragment(CONTENT_VIEW, ADDRESS_FRAGMENT, this);
 
@@ -698,7 +790,15 @@ public class CheckoutPage extends AbstractWebPage {
                                 );
                                 persistCartIfNecessary();
 
-                                addFeedbackForAddressSelection();
+                                final Customer customer = customerServiceFacade.getCheckoutCustomer(getCurrentShop(), getCurrentCart());
+                                if (!billingHidden && customerNeedsToEnterAddress(customer, getCurrentCart(), Address.ADDR_TYPE_BILLING)) {
+                                    final PageParameters parameters = new PageParameters();
+                                    parameters.set(STEP, STEP_ADDR);
+                                    parameters.set(WebParametersKeys.ADDRESS_TYPE, Address.ADDR_TYPE_BILLING);
+                                    setResponsePage(CheckoutPage.this.getClass(), parameters);
+                                } else {
+                                    addFeedbackForAddressSelection();
+                                }
                             }
                         }
                 ).setVisible(!forceTwoAddresses)

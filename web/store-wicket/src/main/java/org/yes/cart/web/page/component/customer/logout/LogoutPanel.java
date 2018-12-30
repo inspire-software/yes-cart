@@ -15,15 +15,20 @@
  */
 package org.yes.cart.web.page.component.customer.logout;
 
-import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.util.WicketUtil;
 
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: iazarny@yahoo.com
@@ -35,10 +40,11 @@ public class LogoutPanel  extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String LOGOFF_LINK = "logoff";
-    private static final String LOGOFF_LABEL = "logoffLabel";
-    private static final String LOGOFF_TITLE = "logoffTitle";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
+
+    @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
+    private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
     /**
      * Construct logout panel.
@@ -46,38 +52,28 @@ public class LogoutPanel  extends BaseComponent {
      */
     public LogoutPanel(final String id) {
         super(id);
-    }
 
-    @Override
-    protected void onBeforeRender() {
+        final StatelessForm form = new StatelessForm(LOGOFF_LINK);
 
-        final Link logOff = getWicketSupportFacade().links().newLogOffLink(LOGOFF_LINK,
-                getPage().getPageParameters());
+        final Button submit = new Button("logoffCmd") {
+            @Override
+            public void onSubmit() {
+                final Map<String, Object> cmd = new HashMap<>();
+                cmd.put(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT, getCurrentCart(), cmd);
+                ((AbstractWebPage) getPage()).persistCartIfNecessary();
+                LogoutPanel.this.setResponsePage(Application.get().getHomePage());
+            }
+        };
 
-        logOff.add(new AttributeModifier(
-                HTML_TITLE,
-                getSalutation(LOGOFF_TITLE, getCurrentCart().getCustomerName())));
-        logOff.add(new Label(
-                LOGOFF_LABEL,
-                getLocalizer().getString(LOGOFF_LABEL, this)));
+        submit.setDefaultFormProcessing(false);
 
-        addOrReplace(logOff);
+        form.add(submit);
 
-        super.onBeforeRender();
-    }
-
-    /**
-     * Get localized salutation.
-     * @param salutationKey salutation localization key
-     * @param name customer name
-     * @return localized salutation
-     */
-    private String getSalutation(final String salutationKey, final String name) {
-
-        return WicketUtil.createStringResourceModel(this, salutationKey,
-                Collections.singletonMap("customer", name)).getString();
+        add(form);
 
     }
+
 
     /** {@inheritDoc} */
     @Override

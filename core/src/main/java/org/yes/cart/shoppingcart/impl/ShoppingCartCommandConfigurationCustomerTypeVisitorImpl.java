@@ -23,6 +23,10 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * User: denispavlov
  * Date: 24/01/2017
@@ -42,8 +46,11 @@ public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends Abs
     @Override
     public void visit(final MutableShoppingCart cart, final Object... args) {
 
-        String customerType = determineType(determineCustomer(cart));
+        final Customer customer = determineCustomer(cart);
+        final String customerType = determineType(customer);
+        final String tags = determineTags(customer);
         cart.getOrderInfo().putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_TYPE, customerType);
+        cart.getOrderInfo().putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_TAGS, tags);
         cart.getShoppingContext().setHidePrices(determineShop(cart).isSfHidePricesTypes(customerType));
     }
 
@@ -58,6 +65,17 @@ public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends Abs
         return customer == null ?
                 AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST :
                 (StringUtils.isBlank(customer.getCustomerType()) ? AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR : customer.getCustomerType());
+    }
+
+    /**
+     * Extension hook for customer tags.
+     *
+     * @param customer customer or null (anonymous)
+     *
+     * @return null or string of space separated tags
+     */
+    protected String determineTags(final Customer customer) {
+        return customer == null || StringUtils.isBlank(customer.getTag()) ? null : customer.getTag();
     }
 
 

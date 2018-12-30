@@ -383,6 +383,8 @@ VALUES (11152, 'authorizeNetAimPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (11153, 'authorizeNetAimPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11154, 'authorizeNetAimPaymentGateway', 'restrictToCustomerTags', null, 'Gateway restrictions (Customer tags)', 'Gateway restrictions (Customer tags)');
 
 
 
@@ -554,5 +556,8 @@ VALUES (11272, 'authorizeNetSimPaymentGateway',
 ''
 , 'Payment form style: Font size for the header .', 'Payment form style: Font size for the header.
 Expressed in points, suffixed with “px.”');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11273, 'authorizeNetSimPaymentGateway', 'restrictToCustomerTags', null, 'Gateway restrictions (Customer tags)', 'Gateway restrictions (Customer tags)');
 
 

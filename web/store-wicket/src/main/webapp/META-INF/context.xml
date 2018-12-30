@@ -19,11 +19,14 @@
     <Resource name="jdbc/yespayjndi"
               auth="Container"
               scope="Shareable"
-              type="com.mchange.v2.c3p0.ComboPooledDataSource"
-              factory="org.apache.naming.factory.BeanFactory"
+              type="${db.config.pool.type}"
+              factory="${db.config.pool.factory}"
               user="${db.config.yespay.login}"
+              dataSource.user="${db.config.yespay.login}"
               password="${db.config.yespay.password}"
+              dataSource.password="${db.config.yespay.password}"
               driverClass="${db.config.yespay.driver}"
+              driverClassName="${db.config.yespay.driver}"
               jdbcUrl="${db.config.yespay.url}"
               ${db.config.yespay.custom}
             />
@@ -32,11 +35,14 @@
     <Resource name="jdbc/yesjndi"
               auth="Container"
               scope="Shareable"
-              type="com.mchange.v2.c3p0.ComboPooledDataSource"
-              factory="org.apache.naming.factory.BeanFactory"
+              type="${db.config.pool.type}"
+              factory="${db.config.pool.factory}"
               user="${db.config.yes.login}"
+              dataSource.user="${db.config.yes.login}"
               password="${db.config.yes.password}"
+              dataSource.password="${db.config.yes.password}"
               driverClass="${db.config.yes.driver}"
+              driverClassName="${db.config.yes.driver}"
               jdbcUrl="${db.config.yes.url}"
               ${db.config.yes.custom}
             />

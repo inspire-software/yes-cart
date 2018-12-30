@@ -17,22 +17,21 @@
 package org.yes.cart.web.page;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Application;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.form.HiddenField;
+import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
+import org.yes.cart.web.page.component.customer.auth.OrderVerifyPanel;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
@@ -40,6 +39,7 @@ import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
+import org.yes.cart.web.theme.WicketPagesMounter;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
@@ -53,13 +53,13 @@ import java.util.Collections;
  * Time: 9:51 PM
  */
 @RequireHttps
-@AuthorizeInstantiation("USER")
 public class OrderPage extends AbstractWebPage {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String ORDER_NUM = "orderNum";
     private final static String ORDER_STATE = "orderStatus";
     private final static String ORDER_PANEL = "orderView";
+    private final static String ORDER_VERIFY = "orderVerifyForm";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
@@ -68,6 +68,13 @@ public class OrderPage extends AbstractWebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
     private CheckoutServiceFacade checkoutServiceFacade;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
+    private WicketPagesMounter wicketPagesMounter;
+
+    private IModel<String> customerOrder = Model.of();
+    private IModel<Boolean> showOrder = Model.of(Boolean.FALSE);
+    private IModel<String> orderCheck = Model.of();
+    private IModel<Boolean> showGuestCheck = Model.of(Boolean.FALSE);
 
     /**
      * Construct page.
@@ -77,44 +84,58 @@ public class OrderPage extends AbstractWebPage {
     public OrderPage(final PageParameters params) {
         super(params);
 
-        final String email = getCurrentCart().getCustomerEmail();
-        final Customer customer;
-        if (StringUtils.isNotBlank(email)) {
-            customer = customerServiceFacade.getCustomerByEmail(getCurrentShop(), email);
-        } else {
-            customer = null;
-            // Redirect away from profile!
-            final PageParameters logOutParams = new PageParameters();
-            logOutParams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
-            setResponsePage(Application.get().getHomePage(), logOutParams);
-        }
-
         final String orderGuid = params.get("order").toString();
 
-        CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderGuid);
-        if (customerOrder != null && customerOrder.getCustomer() != null && customer != null
-                && customerOrder.getCustomer().getCustomerId() != customer.getCustomerId()) {
-            customerOrder = null; // DO NOT ALLOW VIEWING ORDERS THAT DO NOT BELONG TO CUSTOMER
+        final String email = getCurrentCart().getCustomerEmail();
+        Customer customer = null;
+        if (StringUtils.isNotBlank(email)) {
+            customer = customerServiceFacade.getCustomerByEmail(getCurrentShop(), email);
+        } // else attempt to view guest order
+
+        CustomerOrder order = checkoutServiceFacade.findByReference(orderGuid);
+
+        if (order != null) {
+
+            final boolean guestOrder = order.getCustomer() == null || order.getCustomer().isGuest();
+
+            if (guestOrder) {
+
+                if (customer != null) {
+                    customerOrder.setObject(null);
+                    showOrder.setObject(Boolean.FALSE); // DO NOT ALLOW LOGGED IN CUSTOMERS VIEW GUEST ORDERS
+                } else {
+                    customerOrder.setObject(order.getOrdernum());
+                    showOrder.setObject(Boolean.FALSE);
+                    showGuestCheck.setObject(Boolean.TRUE);  // NEED TO ASK TO ADDITIONAL VERIFICATION
+                }
+
+            } else if (customer == null) {
+
+                customerOrder.setObject(null);
+                showOrder.setObject(Boolean.FALSE);
+
+                // CUSTOMER NEEDS TO LOGIN TO VIEW THE ORDER
+                setResponsePage(wicketPagesMounter.getPageProviderByUri("/login").get());
+
+            } else if (order.getCustomer().getCustomerId() != customer.getCustomerId()) {
+
+                customerOrder.setObject(null);
+                showOrder.setObject(Boolean.FALSE); // DO NOT ALLOW VIEWING ORDERS THAT DO NOT BELONG TO CUSTOMER
+
+            } else {
+
+                customerOrder.setObject(order.getOrdernum());
+                showOrder.setObject(Boolean.TRUE);
+
+            }
+
         }
 
         add(new FeedbackPanel(FEEDBACK));
-        if (customerOrder != null) {
-            add(new Label(ORDER_NUM,
-                    WicketUtil.createStringResourceModel(this, "orderNoTitle",
-                            Collections.singletonMap("ordernum", customerOrder.getOrdernum()))));
-            add(new Label(ORDER_STATE,
-                    WicketUtil.createStringResourceModel(this, customerOrder.getOrderStatus())));
-            add(new ShoppingCartPaymentVerificationView(ORDER_PANEL, orderGuid, true));
-            add(new ExternalLink("receipt",
-                    getWicketUtil().getHttpServletRequest().getContextPath() +
-                            "/orderreceipt.pdf?ordernum=" + customerOrder.getOrdernum()));
-        } else {
-            add(new Label(ORDER_NUM, ""));
-            add(new Label(ORDER_STATE, ""));
-            add(new Label(ORDER_PANEL, ""));
-            add(new ExternalLink("receipt", "#").setVisible(false));
-            error(getLocalizer().getString("orderNotFound", this));
-        }
+
+        add(new BookmarkablePageLink("historyBtn", wicketPagesMounter.getPageProviderByUri("/orders").get()));
+        add(new OrderVerifyPanel(ORDER_VERIFY, orderCheck).setVisible(showGuestCheck.getObject()));
+
         add(new StandardFooter(FOOTER));
         add(new StandardHeader(HEADER));
         add(new ServerSideJs("serverSideJs"));
@@ -128,18 +149,73 @@ public class OrderPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        final ShoppingCart cart = getCurrentCart();
+        final String orderNum = customerOrder.getObject();
+        final Boolean show = showOrder.getObject();
+        final Boolean showCheck = showGuestCheck.getObject();
+        final String guestEmail = orderCheck.getObject();
 
-        if ((!((AuthenticatedWebSession) getSession()).isSignedIn()
-                || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
-            final PageParameters params = new PageParameters();
-            params.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
-            setResponsePage(Application.get().getHomePage(), params);
+        final boolean auth = isAuthenticated();
+        if (!auth && !showCheck) {
+            forceLogoutRedirect();
+        } else {
+            executeHttpPostedCommands();
         }
 
-        executeHttpPostedCommands();
         super.onBeforeRender();
-        persistCartIfNecessary();
+
+        boolean doShow = show;
+        boolean doShowCheck = !doShow && showCheck;
+
+        if (!doShow && StringUtils.isNotBlank(orderNum) && StringUtils.isNotBlank(guestEmail)) {
+
+            CustomerOrder order = checkoutServiceFacade.findByReference(orderNum);
+            if (guestEmail.equalsIgnoreCase(order.getEmail())) {
+                doShowCheck = false;
+                doShow = true;
+            } else {
+                error(getLocalizer().getString("orderNotFoundGuest", this));
+            }
+
+        }
+
+        if (doShow && StringUtils.isNotBlank(orderNum)) {
+
+            CustomerOrder order = checkoutServiceFacade.findByReference(orderNum);
+
+            addOrReplace(new Label(ORDER_NUM,
+                    WicketUtil.createStringResourceModel(this, "orderNoTitle",
+                            Collections.singletonMap("ordernum", order.getOrdernum()))));
+            addOrReplace(new Label(ORDER_STATE,
+                    WicketUtil.createStringResourceModel(this, order.getOrderStatus())));
+            addOrReplace(new ShoppingCartPaymentVerificationView(ORDER_PANEL, orderNum, true));
+        } else {
+            addOrReplace(new Label(ORDER_NUM, ""));
+            addOrReplace(new Label(ORDER_STATE, ""));
+            addOrReplace(new Label(ORDER_PANEL, ""));
+            addOrReplace(new Label("receipt", "#").setVisible(false));
+            if (!doShowCheck) {
+                error(getLocalizer().getString("orderNotFound", this));
+            }
+        }
+
+        get("historyBtn").setVisible(auth);
+
+        addOrReplace(new StatelessForm("receiptForm") {
+            @Override
+            protected CharSequence getActionUrl() {
+                return getWicketUtil().getHttpServletRequest().getContextPath() + "/orderreceipt.pdf";
+            }
+        }
+                .add(new HiddenField<>("ordernum", Model.of(orderNum)))
+                .add(new HiddenField<>("guestEmail", Model.of(guestEmail)).setVisible(StringUtils.isNotBlank(guestEmail)))
+                .setVisible(doShow));
+
+
+        get(ORDER_VERIFY).setVisible(doShowCheck);
+
+        if (auth) {
+            persistCartIfNecessary();
+        }
     }
 
     /**

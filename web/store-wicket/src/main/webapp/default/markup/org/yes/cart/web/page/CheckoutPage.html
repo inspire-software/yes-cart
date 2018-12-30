@@ -67,6 +67,105 @@
 
     <span wicket:id="footer">[footer]</span>
 
+<wicket:fragment wicket:id="createEditAddressFragment">
+    <div class="row checkout-progress-bar">
+        <ul class="checkout-steps">
+            <li class="col-xs-12 col-sm-6 col-md-3 complete">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=login" class=" disabled" rel="nofollow">
+                        <span class="badge">1</span>
+                        <wicket:message key="loginStep"> [Login Or Registration]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3 active">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=address" rel="nofollow">
+                        <span class="badge">2</span>
+                        <wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=ship" rel="nofollow">
+                        <span class="badge">3</span>
+                        <wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=payment" rel="nofollow">
+                        <span class="badge">4</span>
+                        <wicket:message key="paymentStep"> [Verification and Payment]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container active-step-holder">
+
+        <form wicket:id="addressForm" class="form-horizontal">
+            <div class="col-xs-12 no-margin">
+                <div class="form-group" wicket:id="fields">
+                    <wicket:enclosure child="editor">
+                        <label wicket:id="name" class="control-label col-xs-12 col-sm-3">
+
+                        </label>
+                        <div class="col-xs-12 col-sm-7" wicket:id="editor">
+
+                        </div>
+                    </wicket:enclosure>
+                </div>
+            </div>
+
+            <div class="col-xs-12 address-step-btn">
+                <a wicket:id="cancel" class="btn btn-default" rel="nofollow">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <wicket:message key="cancel">[cancel]</wicket:message>
+                </a>
+                <a wicket:id="addAddress" class="btn btn-primary" rel="nofollow">
+                    <wicket:container wicket:id="addAddressLabel" />
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </div>
+
+
+            <wicket:fragment wicket:id="booleanEditor">
+                <input type="checkbox" wicket:id="edit" class=""/>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="stringEditor">
+                <input type="text"  wicket:id="edit" class="form-control"/>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="secureStringEditor">
+                <p><input type="password"  wicket:id="edit" class="form-control"/></p>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="singleChoiceEditor">
+                <select wicket:id="edit"  class="form-control"></select>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="multipleChoicesEditor">
+                <span wicket:id="edit" class="form-control"></span>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="countryCodeEditor">
+                <select wicket:id="country"  class="form-control"></select>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="stateCodeEditor">
+                <select wicket:id="state"  class="form-control"></select>
+            </wicket:fragment>
+
+        </form>
+    </div>
+
+</wicket:fragment>
+
 <wicket:fragment wicket:id="addressFragment">
     <div class="row checkout-progress-bar">
         <ul class="checkout-steps">
@@ -107,22 +206,23 @@
 
     <div class="container active-step-holder">
 
-        <div class="col-xs-12 no-margin">
-            <wicket:container wicket:id="shippingAddress">
-                [Shipping address]
-            </wicket:container>
+        <div class="col-xs-12 margin-top10">
+            <form wicket:id="billingTheSameForm" class="margin-top10">
+                <input type="checkbox" wicket:id="billingTheSame">
+                <label><wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message></label>
+            </form>
         </div>
+
         <div class="col-xs-12 no-margin">
             <wicket:container wicket:id="billingAddress">
                 [Shipping address]
             </wicket:container>
         </div>
 
-        <div class="col-xs-12 margin-top10">
-            <form wicket:id="billingTheSameForm" class="margin-top10">
-                <input type="checkbox" wicket:id="billingTheSame">
-                <label><wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message></label>
-            </form>
+        <div class="col-xs-12 no-margin">
+            <wicket:container wicket:id="shippingAddress">
+                [Shipping address]
+            </wicket:container>
         </div>
 
         <div class="col-xs-12 address-step-btn">

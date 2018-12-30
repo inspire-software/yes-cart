@@ -17,6 +17,7 @@
 package org.yes.cart.payment.impl;
 
 import com.paypal.ipn.IPNMessage;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -452,7 +453,8 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         }
         payment.setCardHolderName(name.length() > 0 ? name.toString() : null);
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(params, forceProcessing);
+        final boolean prepare = PaymentGateway.AUTH.equals(operation) && MapUtils.isEmpty(map);
+        final CallbackAware.CallbackResult res = prepare ? CallbackResult.PREPARE : getExternalCallbackResult(params, forceProcessing);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

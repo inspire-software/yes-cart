@@ -16,12 +16,14 @@
 
 package org.yes.cart.payment.impl;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.yes.cart.payment.CallbackAware;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayPayPalExpressCheckout;
 import org.yes.cart.payment.dto.*;
 import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
@@ -511,7 +513,8 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
         payment.setTransactionReferenceId(params.get("PAYMENTINFO_0_TRANSACTIONID"));
         payment.setTransactionAuthorizationCode(params.get("PAYERID"));
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(params, forceProcessing);
+        final boolean prepare = PaymentGateway.AUTH.equals(operation) && MapUtils.isEmpty(parametersMap);
+        final CallbackAware.CallbackResult res = prepare ? CallbackResult.PREPARE : getExternalCallbackResult(params, forceProcessing);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
 

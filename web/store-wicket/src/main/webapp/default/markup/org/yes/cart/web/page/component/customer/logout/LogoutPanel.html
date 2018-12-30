@@ -1,9 +1,9 @@
 <html  xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <a wicket:id="logoff" rel="nofollow">
-        <span wicket:id="logoffLabel"/>
-    </a>
+    <form wicket:id="logoff" method="post">
+        <button wicket:id="logoffCmd" type="submit" class="btn btn-link" rel="nofollow"><wicket:message key="logoffLabel">[log off]</wicket:message></button>
+    </form>
 </wicket:panel>
 </body>
 </html>

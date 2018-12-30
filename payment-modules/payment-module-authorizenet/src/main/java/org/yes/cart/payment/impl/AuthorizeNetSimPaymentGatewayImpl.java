@@ -19,6 +19,7 @@ package org.yes.cart.payment.impl;
 import net.authorize.sim.Fingerprint;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -632,7 +633,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         payment.setTransactionReferenceId(params.get("x_trans_id"));
         payment.setTransactionAuthorizationCode(params.get("x_auth_code"));
 
-        final CallbackAware.CallbackResult res = getExternalCallbackResult(params, forceProcessing);
+        final boolean prepare = PaymentGateway.AUTH.equals(operation) && MapUtils.isEmpty(privateCallBackParameters);
+        final CallbackAware.CallbackResult res = prepare ? CallbackResult.PREPARE : getExternalCallbackResult(params, forceProcessing);
 
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());

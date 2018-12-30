@@ -104,8 +104,8 @@
     <entry key="checkoutTitle">Оформление покупки</entry>
     <entry key="selectAddr">Укажите адреса для доставки и счета</entry>
     <entry key="selectPayment">Оплата</entry>
-    <entry key="selectDeliveryAddress">Укажите адреса для доставки</entry>
-    <entry key="selectBillingAddress">Укажите адреса для счета</entry>
+    <entry key="selectDeliveryAddress">Укажите адрес для доставки</entry>
+    <entry key="selectBillingAddress">Укажите адрес для счета</entry>
 
     <!-- ContactPage -->
     <entry key="contact">Контактная информация</entry>
@@ -317,7 +317,10 @@
     <entry key="orderInfo">Заказы</entry>
     <entry key="noOrders">Нет записей в истории заказов.</entry>
     <entry key="orderNotFound">Заказ не найден.</entry>
+    <entry key="orderNotFoundGuest">Заказ не найден.</entry>
     <entry key="orderNoTitle">Заказ ${ordernum}</entry>
+    <entry key="verifyOrderTitle">Подтвердите гостевой адрес электронной почты</entry>
+    <entry key="verifyOrderBtn">Проверить</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">Запрос на новый пароль будет выслан по почте после нажатия кнопки "Сменить пароль"</entry>

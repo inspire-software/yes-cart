@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
@@ -48,11 +49,11 @@ import org.yes.cart.web.theme.WicketPagesMounter;
  */
 public class CreateEditAddressPage extends AbstractWebPage {
 
-    public final static String RETURN_TO_PROFILE = "profile";
-    public final static String RETURN_TO_CHECKOUT = "checkout";
+    public static final String RETURN_TO_PROFILE = "profile";
+    public static final String RETURN_TO_CHECKOUT = "checkout";
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    private final static String ADDRESS_FORM = "addressForm";
+    private static final String ADDRESS_FORM = "addressForm";
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
 
 
@@ -64,6 +65,9 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
     @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
     private WicketPagesMounter wicketPagesMounter;
+
+    private String addrId;
+    private String addrType;
 
     /**
      * Construct page to create / edit customer address.
@@ -85,11 +89,18 @@ public class CreateEditAddressPage extends AbstractWebPage {
                         customerServiceFacade.getCheckoutCustomer(shop, cart) :
                         customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
 
-        final String addrId = params.get(WebParametersKeys.ADDRESS_ID).toString();
+        addrId = params.get(WebParametersKeys.ADDRESS_ID).toString();
+        addrType = params.get(WebParametersKeys.ADDRESS_TYPE).toString();
 
-        final String addrType = params.get(WebParametersKeys.ADDRESS_TYPE).toString();
-
-        final Address address = addressBookFacade.getAddress(customer, getCurrentCustomerShop(), addrId, addrType);
+        final Address originalAddress = addressBookFacade.getAddress(customer, getCurrentCustomerShop(), addrId, addrType);
+        final Address address;
+        if (originalAddress.getAddressId() > 0L) {
+            // Make a copy so that we do not mutate the original
+            address = addressBookFacade.copyAddress(customer, getCurrentCustomerShop(), addrId, originalAddress.getAddressType());
+            address.setAddressId(originalAddress.getAddressId());
+        } else {
+            address = originalAddress;
+        }
 
         final Pair<Class<? extends Page>, PageParameters> successTarget = determineSuccessTarget(isCheckout, customer);
         final Pair<Class<? extends Page>, PageParameters> cancelTarget = determineCancelTarget(isCheckout, customer);
@@ -173,7 +184,26 @@ public class CreateEditAddressPage extends AbstractWebPage {
         executeHttpPostedCommands();
         super.onBeforeRender();
         persistCartIfNecessary();
+        addFeedbackForAddressCreation();
     }
+
+
+    private void addFeedbackForAddressCreation() {
+
+        if (NumberUtils.toLong(addrId) <= 0L) {
+            if (Address.ADDR_TYPE_SHIPPING.equals(addrType)) {
+
+                info(getLocalizer().getString("selectDeliveryAddress", this));
+
+            } else {
+
+                info(getLocalizer().getString("selectBillingAddress", this));
+                
+            }
+        }
+
+    }
+
 
     /**
      * Get page title.
