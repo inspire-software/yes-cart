@@ -364,6 +364,33 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
             assertEquals(1, cntProductCategory);
 
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/productscategories.xml", listener, importedFilesSet));
+            final long prodsCats2 = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTCATEGORY where PRODUCT_ID = " + prodId);
+            rs.next();
+            long cntProductCategory2 = rs.getLong(1);
+            rs.close();
+            assertEquals(2, cntProductCategory2);
+
+            change = 4;
+            System.out.println(String.format("%5d", change) + " product categories in " + prodsCats2 + "millis (~" + (prodsCats2 / change) + " per item)");
+
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/productslinks.xml", listener, importedFilesSet));
+            final long prodsLinks2 = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTASSOCIATION where PRODUCT_ID = " + prodId);
+            rs.next();
+            long cntProductAssociations2 = rs.getLong(1);
+            rs.close();
+            assertEquals(4, cntProductAssociations2);
+
+            change = 4;
+            System.out.println(String.format("%5d", change) + " product associations in " + prodsLinks2 + "millis (~" + (prodsLinks2 / change) + " per item)");
+
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSKUWAREHOUSE  ");
             rs.next();

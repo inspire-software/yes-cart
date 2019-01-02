@@ -486,6 +486,23 @@
         <xsd:attribute type="entityImportModeType" name="import-mode"/>
     </xsd:complexType>
 
+    <xsd:element name="products-categories" type="products-categoriesCodeType"/>
+    <xsd:element name="product-categories" type="product-categoriesCodeType"/>
+
+    <xsd:complexType name="products-categoriesCodeType">
+        <xsd:sequence>
+            <xsd:element type="product-categoriesCodeType" name="product-categories" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-categoriesCodeType">
+        <xsd:sequence>
+            <xsd:element type="product-categoryType" name="product-category" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="product-code"/>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
     <xsd:complexType name="product-linksType">
         <xsd:sequence>
             <xsd:element type="product-linkType" name="product-link" maxOccurs="unbounded" minOccurs="0"/>
@@ -498,6 +515,23 @@
         <xsd:attribute type="xsd:string" name="sku" use="required"/>
         <xsd:attribute type="xsd:int" name="rank"/>
         <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:element name="products-links" type="products-linksCodeType"/>
+    <xsd:element name="product-links" type="product-linksCodeType"/>
+
+    <xsd:complexType name="products-linksCodeType">
+        <xsd:sequence>
+            <xsd:element type="product-linksCodeType" name="product-links" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-linksCodeType">
+        <xsd:sequence>
+            <xsd:element type="product-linkType" name="product-link" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="product-code"/>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
     </xsd:complexType>
 
     <!-- Price -->

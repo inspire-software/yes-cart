@@ -227,6 +227,20 @@
                         </property>
                     </bean>
                 </entry>
+                <entry key="PRODUCT_CATEGORIES">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ProductCategoriesXmlEntityHandler">
+                        <property name="productService" ref="productService"/>
+                        <property name="categoryService" ref="categoryService"/>
+                        <property name="productCategoryService" ref="productCategoryService"/>
+                    </bean>
+                </entry>
+                <entry key="PRODUCT_LINKS">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ProductLinksXmlEntityHandler">
+                        <property name="productService" ref="productService"/>
+                        <property name="productAssociationService" ref="productAssociationService"/>
+                        <property name="associationService" ref="associationService"/>
+                    </bean>
+                </entry>
                 <entry key="SYSTEM">
                     <bean class="org.yes.cart.bulkimport.xml.impl.SystemXmlEntityHandler">
                         <property name="systemService" ref="systemService"/>

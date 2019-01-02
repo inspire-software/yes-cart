@@ -33,6 +33,7 @@ public class ObjectFactory {
     private final static QName _Content_QNAME = new QName("", "content");
     private final static QName _Products_QNAME = new QName("", "products");
     private final static QName _DataGroup_QNAME = new QName("", "data-group");
+    private final static QName _ProductCategories_QNAME = new QName("", "product-categories");
     private final static QName _Systems_QNAME = new QName("", "systems");
     private final static QName _Price_QNAME = new QName("", "price");
     private final static QName _Attribute_QNAME = new QName("", "attribute");
@@ -45,9 +46,12 @@ public class ObjectFactory {
     private final static QName _DataGroups_QNAME = new QName("", "data-groups");
     private final static QName _PriceList_QNAME = new QName("", "price-list");
     private final static QName _Tax_QNAME = new QName("", "tax");
+    private final static QName _ProductsCategories_QNAME = new QName("", "products-categories");
     private final static QName _System_QNAME = new QName("", "system");
     private final static QName _DataDescriptors_QNAME = new QName("", "data-descriptors");
+    private final static QName _ProductsLinks_QNAME = new QName("", "products-links");
     private final static QName _DataDescriptor_QNAME = new QName("", "data-descriptor");
+    private final static QName _ProductLinks_QNAME = new QName("", "product-links");
     private final static QName _Attributes_QNAME = new QName("", "attributes");
     private final static QName _Category_QNAME = new QName("", "category");
 
@@ -163,6 +167,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductCategoriesCodeType }
+     * 
+     */
+    public ProductCategoriesCodeType createProductCategoriesCodeType() {
+        return new ProductCategoriesCodeType();
+    }
+
+    /**
      * Create an instance of {@link SystemsType }
      * 
      */
@@ -235,6 +247,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductsCategoriesCodeType }
+     * 
+     */
+    public ProductsCategoriesCodeType createProductsCategoriesCodeType() {
+        return new ProductsCategoriesCodeType();
+    }
+
+    /**
      * Create an instance of {@link SystemType }
      * 
      */
@@ -251,11 +271,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductsLinksCodeType }
+     * 
+     */
+    public ProductsLinksCodeType createProductsLinksCodeType() {
+        return new ProductsLinksCodeType();
+    }
+
+    /**
      * Create an instance of {@link DataDescriptorType }
      * 
      */
     public DataDescriptorType createDataDescriptorType() {
         return new DataDescriptorType();
+    }
+
+    /**
+     * Create an instance of {@link ProductLinksCodeType }
+     * 
+     */
+    public ProductLinksCodeType createProductLinksCodeType() {
+        return new ProductLinksCodeType();
     }
 
     /**
@@ -700,6 +736,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ProductCategoriesCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "product-categories")
+    public JAXBElement<ProductCategoriesCodeType> createProductCategories(ProductCategoriesCodeType value) {
+        return new JAXBElement<ProductCategoriesCodeType>(_ProductCategories_QNAME, ProductCategoriesCodeType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SystemsType }{@code >}}
      * 
      */
@@ -808,6 +853,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ProductsCategoriesCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "products-categories")
+    public JAXBElement<ProductsCategoriesCodeType> createProductsCategories(ProductsCategoriesCodeType value) {
+        return new JAXBElement<ProductsCategoriesCodeType>(_ProductsCategories_QNAME, ProductsCategoriesCodeType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SystemType }{@code >}}
      * 
      */
@@ -826,12 +880,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ProductsLinksCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "products-links")
+    public JAXBElement<ProductsLinksCodeType> createProductsLinks(ProductsLinksCodeType value) {
+        return new JAXBElement<ProductsLinksCodeType>(_ProductsLinks_QNAME, ProductsLinksCodeType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link DataDescriptorType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "data-descriptor")
     public JAXBElement<DataDescriptorType> createDataDescriptor(DataDescriptorType value) {
         return new JAXBElement<DataDescriptorType>(_DataDescriptor_QNAME, DataDescriptorType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ProductLinksCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "product-links")
+    public JAXBElement<ProductLinksCodeType> createProductLinks(ProductLinksCodeType value) {
+        return new JAXBElement<ProductLinksCodeType>(_ProductLinks_QNAME, ProductLinksCodeType.class, null, value);
     }
 
     /**
