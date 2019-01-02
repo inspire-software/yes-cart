@@ -150,6 +150,11 @@
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkimport.xml.XmlEntityImportHandler">
+                <entry key="ETYPE">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.EtypeXmlEntityHandler">
+                        <property name="etypeService" ref="etypeService"/>
+                    </bean>
+                </entry>
                 <entry key="ATTRIBUTEGROUP">
                     <bean class="org.yes.cart.bulkimport.xml.impl.AttributeGroupXmlEntityHandler">
                         <property name="attributeGroupService" ref="attributeGroupService"/>

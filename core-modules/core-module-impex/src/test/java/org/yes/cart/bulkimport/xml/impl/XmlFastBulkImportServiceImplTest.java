@@ -109,6 +109,26 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
             rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(e.ETYPE_ID) as cnt from TETYPE e");
+            rs.next();
+            long cntEtypesBefore = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/etypes.xml", listener, importedFilesSet));
+            final long eTypes = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(e.ETYPE_ID) as cnt from TETYPE e");
+            rs.next();
+            long cntEtypes = rs.getLong("cnt");
+            rs.close();
+            assertEquals(1L + cntEtypesBefore, cntEtypes);
+
+            change = cntEtypes;
+            System.out.println(String.format("%5d", change) + " e-types in " + eTypes + "millis (~" + (eTypes / change) + " per item)");
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
                     "select count(g.ATTRIBUTEGROUP_ID) as cnt from TATTRIBUTEGROUP g");
             rs.next();
             long cntBeforeProductAttrGroup = rs.getLong("cnt");

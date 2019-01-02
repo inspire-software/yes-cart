@@ -119,6 +119,24 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             long dt;
 
             rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(e.ETYPE_ID) as cnt from TETYPE e");
+            rs.next();
+            long cntEtypeCnt = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/etypes-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/etypes.xml", listener, fileToExport));
+            final long etypes = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntEtypeCnt) + " e-types in " + etypes + "millis (~" + (etypes / cntEtypeCnt) + " per item)");
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("java-type=\"java.lang.String\""));
+
+            validateXmlFile(xml);
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
                     "select count(g.ATTRIBUTEGROUP_ID) as cnt from TATTRIBUTEGROUP g");
             rs.next();
             long cntProductAttrGroup = rs.getLong("cnt");

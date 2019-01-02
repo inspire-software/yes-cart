@@ -83,6 +83,31 @@
         <xsd:attribute type="i18nImportModeType" name="import-mode"/>
     </xsd:complexType>
 
+    <!-- E-types -->
+
+    <xsd:element name="e-types" type="e-typesType"/>
+    <xsd:element name="e-type" type="e-typeType"/>
+
+    <xsd:complexType name="e-typesType">
+        <xsd:sequence>
+            <xsd:element type="e-typeType" name="e-type" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="e-typeType">
+        <xsd:sequence>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="xsd:string" name="java-type" use="required"/>
+        <xsd:attribute type="xsd:string" name="business-type" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
     <!-- Attributes -->
 
     <xsd:element name="attribute-groups" type="attribute-groupsType"/>

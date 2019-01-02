@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<e-types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<e-type guid="String" java-type="java.lang.String" business-type="String"/>
+<e-type guid="URI" java-type="java.lang.String" business-type="URI"/>
+<e-type guid="URL" java-type="java.lang.String" business-type="URL"/>
+<e-type guid="Image" java-type="java.lang.String" business-type="Image"/>
+<e-type guid="CommaSeparatedList" java-type="java.lang.String" business-type="CommaSeparatedList"/>
+<e-type guid="Float" java-type="java.lang.Float" business-type="Float"/>
+<e-type guid="Integer" java-type="java.lang.Integer" business-type="Integer"/>
+<e-type guid="Phone" java-type="java.lang.String" business-type="Phone"/>
+<e-type guid="Boolean" java-type="java.lang.Boolean" business-type="Boolean"/>
+<e-type guid="Date" java-type="java.time.LocalDateTime" business-type="Date"/>
+<e-type guid="EMail" java-type="java.lang.String" business-type="Email"/>
+<e-type guid="HTML" java-type="java.lang.String" business-type="HTML"/>
+<e-type guid="NEW_TYPE" java-type="java.lang.String" business-type="NewType"/>
+</e-types>

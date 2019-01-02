@@ -46,7 +46,9 @@ public class ObjectFactory {
     private final static QName _Product_QNAME = new QName("", "product");
     private final static QName _DataGroups_QNAME = new QName("", "data-groups");
     private final static QName _PriceList_QNAME = new QName("", "price-list");
+    private final static QName _EType_QNAME = new QName("", "e-type");
     private final static QName _Tax_QNAME = new QName("", "tax");
+    private final static QName _ETypes_QNAME = new QName("", "e-types");
     private final static QName _ProductsCategories_QNAME = new QName("", "products-categories");
     private final static QName _System_QNAME = new QName("", "system");
     private final static QName _DataDescriptors_QNAME = new QName("", "data-descriptors");
@@ -249,11 +251,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ETypeType }
+     * 
+     */
+    public ETypeType createETypeType() {
+        return new ETypeType();
+    }
+
+    /**
      * Create an instance of {@link TaxType }
      * 
      */
     public TaxType createTaxType() {
         return new TaxType();
+    }
+
+    /**
+     * Create an instance of {@link ETypesType }
+     * 
+     */
+    public ETypesType createETypesType() {
+        return new ETypesType();
     }
 
     /**
@@ -871,12 +889,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ETypeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "e-type")
+    public JAXBElement<ETypeType> createEType(ETypeType value) {
+        return new JAXBElement<ETypeType>(_EType_QNAME, ETypeType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TaxType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "tax")
     public JAXBElement<TaxType> createTax(TaxType value) {
         return new JAXBElement<TaxType>(_Tax_QNAME, TaxType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ETypesType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "e-types")
+    public JAXBElement<ETypesType> createETypes(ETypesType value) {
+        return new JAXBElement<ETypesType>(_ETypes_QNAME, ETypesType.class, null, value);
     }
 
     /**
