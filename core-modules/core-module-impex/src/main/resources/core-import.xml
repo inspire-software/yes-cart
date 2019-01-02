@@ -277,6 +277,16 @@
                         </property>
                     </bean>
                 </entry>
+                <entry key="COUNTRY">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.CountryXmlEntityHandler">
+                        <property name="countryService" ref="countryService"/>
+                    </bean>
+                </entry>
+                <entry key="COUNTRYSTATE">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.CountryStateXmlEntityHandler">
+                        <property name="stateService" ref="stateService"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

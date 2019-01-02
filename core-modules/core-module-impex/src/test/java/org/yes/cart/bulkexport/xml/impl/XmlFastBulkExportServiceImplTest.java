@@ -406,6 +406,46 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             validateXmlFile(xml);
 
 
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(c.COUNTRY_ID) as cnt from TCOUNTRY c");
+            rs.next();
+            long cntCountryCnt = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/countries-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/countries.xml", listener, fileToExport));
+            final long countries = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntCountryCnt) + " countries in " + countries + "millis (~" + (countries / cntCountryCnt) + " per item)");
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("iso-3166-1-alpha2=\"AU\" iso-3166-1-numeric=\"36\" name=\"Australia\""));
+
+            validateXmlFile(xml);
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(c.STATE_ID) as cnt from TSTATE c");
+            rs.next();
+            long cntCountryStateCnt = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/countrystates-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/countrystates.xml", listener, fileToExport));
+            final long countryStates = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntCountryStateCnt) + " country states in " + countryStates + "millis (~" + (countryStates / cntCountryStateCnt) + " per item)");
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("iso-3166-1-alpha2=\"AU\" region-code=\"AU-AU\" name=\"Australia\""));
+
+            validateXmlFile(xml);
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

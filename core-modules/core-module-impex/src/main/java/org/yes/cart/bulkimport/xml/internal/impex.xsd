@@ -936,5 +936,55 @@
         </xsd:restriction>
     </xsd:simpleType>
 
+    <!-- Locations -->
+
+    <xsd:element name="countries" type="countriesType"/>
+    <xsd:element name="country" type="countryType"/>
+
+    <xsd:complexType name="countriesType">
+        <xsd:sequence>
+            <xsd:element type="countryType" name="country" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="countryType">
+        <xsd:sequence>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="iso-3166-1-alpha2" use="required"/>
+        <xsd:attribute type="xsd:string" name="iso-3166-1-numeric" use="required"/>
+        <xsd:attribute type="xsd:string" name="name" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:element name="country-states" type="country-statesType"/>
+    <xsd:element name="country-state" type="country-stateType"/>
+
+    <xsd:complexType name="country-statesType">
+        <xsd:sequence>
+            <xsd:element type="country-stateType" name="country-state" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="country-stateType">
+        <xsd:sequence>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="id"/>
+        <xsd:attribute type="xsd:string" name="iso-3166-1-alpha2" use="required"/>
+        <xsd:attribute type="xsd:string" name="region-code" use="required"/>
+        <xsd:attribute type="xsd:string" name="name" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
 
 </xsd:schema>

@@ -26,6 +26,7 @@ public class ObjectFactory {
 
     private final static QName _ProductTypes_QNAME = new QName("", "product-types");
     private final static QName _TaxConfigs_QNAME = new QName("", "tax-configs");
+    private final static QName _Country_QNAME = new QName("", "country");
     private final static QName _Skus_QNAME = new QName("", "skus");
     private final static QName _Cms_QNAME = new QName("", "cms");
     private final static QName _Taxes_QNAME = new QName("", "taxes");
@@ -47,10 +48,13 @@ public class ObjectFactory {
     private final static QName _Product_QNAME = new QName("", "product");
     private final static QName _Brands_QNAME = new QName("", "brands");
     private final static QName _DataGroups_QNAME = new QName("", "data-groups");
+    private final static QName _CountryStates_QNAME = new QName("", "country-states");
     private final static QName _PriceList_QNAME = new QName("", "price-list");
     private final static QName _EType_QNAME = new QName("", "e-type");
     private final static QName _Tax_QNAME = new QName("", "tax");
     private final static QName _ETypes_QNAME = new QName("", "e-types");
+    private final static QName _Countries_QNAME = new QName("", "countries");
+    private final static QName _CountryState_QNAME = new QName("", "country-state");
     private final static QName _ProductsCategories_QNAME = new QName("", "products-categories");
     private final static QName _System_QNAME = new QName("", "system");
     private final static QName _DataDescriptors_QNAME = new QName("", "data-descriptors");
@@ -122,6 +126,14 @@ public class ObjectFactory {
      */
     public TaxConfigsType createTaxConfigsType() {
         return new TaxConfigsType();
+    }
+
+    /**
+     * Create an instance of {@link CountryType }
+     * 
+     */
+    public CountryType createCountryType() {
+        return new CountryType();
     }
 
     /**
@@ -261,6 +273,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CountryStatesType }
+     * 
+     */
+    public CountryStatesType createCountryStatesType() {
+        return new CountryStatesType();
+    }
+
+    /**
      * Create an instance of {@link PriceListType }
      * 
      */
@@ -290,6 +310,22 @@ public class ObjectFactory {
      */
     public ETypesType createETypesType() {
         return new ETypesType();
+    }
+
+    /**
+     * Create an instance of {@link CountriesType }
+     * 
+     */
+    public CountriesType createCountriesType() {
+        return new CountriesType();
+    }
+
+    /**
+     * Create an instance of {@link CountryStateType }
+     * 
+     */
+    public CountryStateType createCountryStateType() {
+        return new CountryStateType();
     }
 
     /**
@@ -727,6 +763,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CountryType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "country")
+    public JAXBElement<CountryType> createCountry(CountryType value) {
+        return new JAXBElement<CountryType>(_Country_QNAME, CountryType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SkusType }{@code >}}
      * 
      */
@@ -916,6 +961,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CountryStatesType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "country-states")
+    public JAXBElement<CountryStatesType> createCountryStates(CountryStatesType value) {
+        return new JAXBElement<CountryStatesType>(_CountryStates_QNAME, CountryStatesType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PriceListType }{@code >}}
      * 
      */
@@ -949,6 +1003,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "e-types")
     public JAXBElement<ETypesType> createETypes(ETypesType value) {
         return new JAXBElement<ETypesType>(_ETypes_QNAME, ETypesType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CountriesType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "countries")
+    public JAXBElement<CountriesType> createCountries(CountriesType value) {
+        return new JAXBElement<CountriesType>(_Countries_QNAME, CountriesType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CountryStateType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "country-state")
+    public JAXBElement<CountryStateType> createCountryState(CountryStateType value) {
+        return new JAXBElement<CountryStateType>(_CountryState_QNAME, CountryStateType.class, null, value);
     }
 
     /**

@@ -602,6 +602,52 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(1L + cntBeforeDataGroups, cntDataGroups);
             assertEquals(1L + cntBeforeDataDesc, cntDataDescriptors); // new descriptor added via group
 
+
+
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCOUNTRY  ");
+            rs.next();
+            long cntBeforeCountry = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/countries.xml", listener, importedFilesSet));
+            final long countries = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCOUNTRY  ");
+            rs.next();
+            long cntCountries = rs.getLong(1);
+            rs.close();
+
+            change = cntCountries - cntBeforeCountry;
+            System.out.println(String.format("%5d", change) + " countries in " + countries + "millis (~" + (countries / change) + " per item)");
+
+            assertEquals(1L + cntBeforeCountry, cntCountries);   // 1 new
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSTATE  ");
+            rs.next();
+            long cntBeforeState = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/countrystates.xml", listener, importedFilesSet));
+            final long countryStates = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSTATE  ");
+            rs.next();
+            long cntCountryStates = rs.getLong(1);
+            rs.close();
+
+            change = cntCountryStates - cntBeforeState;
+            System.out.println(String.format("%5d", change) + " country states in " + countryStates + "millis (~" + (countryStates / change) + " per item)");
+
+            assertEquals(1L + cntBeforeState, cntCountryStates);   // 1 new
+
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

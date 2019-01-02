@@ -306,6 +306,22 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="COUNTRY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CountryXmlEntityHandler"/>
+                </entry>
+                <entry key="COUNTRY_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CountryXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="COUNTRYSTATE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CountryStateXmlEntityHandler"/>
+                </entry>
+                <entry key="COUNTRYSTATE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CountryStateXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

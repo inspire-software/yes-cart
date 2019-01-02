@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<country-states xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<country-state iso-3166-1-alpha2="AU" region-code="AU-AU" name="Australia"/>
+<country-state iso-3166-1-alpha2="ZU" region-code="ZU-ZU" name="Zulu">
+    <display-name>
+        <i18n lang="zu">Zulu (zu)</i18n>
+    </display-name>
+</country-state>
+</country-states>
