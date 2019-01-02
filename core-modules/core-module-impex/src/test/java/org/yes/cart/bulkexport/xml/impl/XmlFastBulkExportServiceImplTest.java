@@ -113,6 +113,28 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             Set<String> importedFilesSet = new HashSet<>();
 
             ResultSet rs;
+            String fileToExport;
+            String content;
+            File xml;
+            long dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(g.ATTRIBUTEGROUP_ID) as cnt from TATTRIBUTEGROUP g");
+            rs.next();
+            long cntProductAttrGroup = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/attributegroups-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/attributegroups.xml", listener, fileToExport));
+            final long attrsGroups = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntProductAttrGroup) + " attribute groups in " + attrsGroups + "millis (~" + (attrsGroups / cntProductAttrGroup) + " per item)");
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("code=\"PRODUCT\""));
+
+            validateXmlFile(xml);
 
 
             rs = getConnection().getConnection().createStatement().executeQuery (
@@ -121,14 +143,14 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             long cntProductAttr = rs.getLong("cnt");
             rs.close();
 
-            long dt = System.currentTimeMillis();
-            String fileToExport = "target/attributes-export-" + UUID.randomUUID().toString() + ".xml";
+            dt = System.currentTimeMillis();
+            fileToExport = "target/attributes-export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/attributes.xml", listener, fileToExport));
             final long attrs = System.currentTimeMillis() - dt;
-            System.out.println(String.format("%5d", cntProductAttr) + " attributes  in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
+            System.out.println(String.format("%5d", cntProductAttr) + " attributes in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
 
-            File xml = new File(fileToExport);
-            String content = FileUtils.readFileToString(xml, "UTF-8");
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("group=\"PRODUCT\" etype=\"String\" rank=\"500\">"));
 
             validateXmlFile(xml);

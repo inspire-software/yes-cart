@@ -169,6 +169,14 @@
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkexport.xml.XmlEntityExportHandler">
+                <entry key="ATTRIBUTEGROUP">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.AttributeGroupXmlEntityHandler"/>
+                </entry>
+                <entry key="ATTRIBUTEGROUP_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.AttributeGroupXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
                 <entry key="ATTRIBUTE">
                     <bean class="org.yes.cart.bulkexport.xml.impl.AttributeXmlEntityHandler"/>
                 </entry>

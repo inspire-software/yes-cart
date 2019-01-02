@@ -107,6 +107,38 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             ResultSet rs;
             long dt, change;
 
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(g.ATTRIBUTEGROUP_ID) as cnt from TATTRIBUTEGROUP g");
+            rs.next();
+            long cntBeforeProductAttrGroup = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/attributegroups.xml", listener, importedFilesSet));
+            final long attrGroups = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(g.ATTRIBUTEGROUP_ID) as cnt from TATTRIBUTEGROUP g");
+            rs.next();
+            long cntProductAttrGroup = rs.getLong("cnt");
+            rs.close();
+            assertEquals(1L + cntBeforeProductAttrGroup, cntProductAttrGroup);
+
+            change = cntProductAttrGroup;
+            System.out.println(String.format("%5d", change) + " attribute groups in " + attrGroups + "millis (~" + (attrGroups / change) + " per item)");
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select ATTRIBUTEGROUP_ID, NAME, CODE from TATTRIBUTEGROUP where CODE = 'XML_NEW'");
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            String attrGroupName = rs.getString("NAME");
+            String attrGroupCode = rs.getString("CODE");
+            rs.close();
+            assertEquals("New group", attrGroupName);
+            assertEquals("XML_NEW", attrGroupCode);
+
+
             rs = getConnection().getConnection().createStatement().executeQuery (
                     "select count(a.ATTRIBUTE_ID) as cnt from TATTRIBUTE a, TATTRIBUTEGROUP g where a.ATTRIBUTEGROUP_ID = g.ATTRIBUTEGROUP_ID and g.CODE = 'PRODUCT'");
             rs.next();

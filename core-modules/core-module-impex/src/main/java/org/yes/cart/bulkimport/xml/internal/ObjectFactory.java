@@ -36,6 +36,7 @@ public class ObjectFactory {
     private final static QName _ProductCategories_QNAME = new QName("", "product-categories");
     private final static QName _Systems_QNAME = new QName("", "systems");
     private final static QName _Price_QNAME = new QName("", "price");
+    private final static QName _AttributeGroup_QNAME = new QName("", "attribute-group");
     private final static QName _Attribute_QNAME = new QName("", "attribute");
     private final static QName _Categories_QNAME = new QName("", "categories");
     private final static QName _Stock_QNAME = new QName("", "stock");
@@ -49,6 +50,7 @@ public class ObjectFactory {
     private final static QName _ProductsCategories_QNAME = new QName("", "products-categories");
     private final static QName _System_QNAME = new QName("", "system");
     private final static QName _DataDescriptors_QNAME = new QName("", "data-descriptors");
+    private final static QName _AttributeGroups_QNAME = new QName("", "attribute-groups");
     private final static QName _ProductsLinks_QNAME = new QName("", "products-links");
     private final static QName _DataDescriptor_QNAME = new QName("", "data-descriptor");
     private final static QName _ProductLinks_QNAME = new QName("", "product-links");
@@ -183,6 +185,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AttributeGroupType }
+     * 
+     */
+    public AttributeGroupType createAttributeGroupType() {
+        return new AttributeGroupType();
+    }
+
+    /**
      * Create an instance of {@link AttributeType }
      * 
      */
@@ -268,6 +278,14 @@ public class ObjectFactory {
      */
     public DataDescriptorsType createDataDescriptorsType() {
         return new DataDescriptorsType();
+    }
+
+    /**
+     * Create an instance of {@link AttributeGroupsType }
+     * 
+     */
+    public AttributeGroupsType createAttributeGroupsType() {
+        return new AttributeGroupsType();
     }
 
     /**
@@ -763,6 +781,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AttributeGroupType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "attribute-group")
+    public JAXBElement<AttributeGroupType> createAttributeGroup(AttributeGroupType value) {
+        return new JAXBElement<AttributeGroupType>(_AttributeGroup_QNAME, AttributeGroupType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link AttributeType }{@code >}}
      * 
      */
@@ -877,6 +904,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "data-descriptors")
     public JAXBElement<DataDescriptorsType> createDataDescriptors(DataDescriptorsType value) {
         return new JAXBElement<DataDescriptorsType>(_DataDescriptors_QNAME, DataDescriptorsType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AttributeGroupsType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "attribute-groups")
+    public JAXBElement<AttributeGroupsType> createAttributeGroups(AttributeGroupsType value) {
+        return new JAXBElement<AttributeGroupsType>(_AttributeGroups_QNAME, AttributeGroupsType.class, null, value);
     }
 
     /**
