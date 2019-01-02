@@ -328,6 +328,33 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/brands.xml", listener, importedFilesSet));
+            final long brand = System.currentTimeMillis() - dt;
+
+            change = 3;
+            System.out.println(String.format("%5d", change) + " brands in " + brand + "millis (~" + (brand / change) + " per item)");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select BRAND_ID, DESCRIPTION, NAME from TBRAND where GUID = 'XML_002'");
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            long brandId = rs.getLong("BRAND_ID");
+            String brandDesc = rs.getString("DESCRIPTION");
+            String brandName = rs.getString("NAME");
+            rs.close();
+            assertEquals("xml 002 desc", brandDesc);
+            assertEquals("XML 002", brandName);
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select VAL from TBRANDATTRVALUE where BRAND_ID = '" + brandId + "' and CODE like 'BRAND_IMAGE0'");
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            assertEquals("xml_002_brand.jpeg", rs.getString("VAL"));
+            rs.close();
+
+            
+
+
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCT  ");
             rs.next();
             long cntBeforeProd = rs.getLong(1);

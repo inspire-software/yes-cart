@@ -193,6 +193,14 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="BRAND">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.BrandXmlEntityHandler"/>
+                </entry>
+                <entry key="BRAND_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.BrandXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
                 <entry key="PRODUCT">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ProductXmlEntityHandler"/>
                 </entry>

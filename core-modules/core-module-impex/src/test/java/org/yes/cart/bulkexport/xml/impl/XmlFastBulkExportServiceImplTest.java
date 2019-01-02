@@ -173,6 +173,28 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
             validateXmlFile(xml);
 
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(b.BRAND_ID) as cnt from TBRAND b");
+            rs.next();
+            long cntBrandCnt = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/brands-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/brands.xml", listener, fileToExport));
+            final long brands = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntBrandCnt) + " brands in " + brands + "millis (~" + (brands / cntBrandCnt) + " per item)");
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<name><![CDATA[FutureRobots]]></name>"));
+
+            validateXmlFile(xml);
+
+
+
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCT  ");
             rs.next();
             long cntProd = rs.getLong(1);

@@ -327,6 +327,33 @@
         </xsd:simpleContent>
     </xsd:complexType>
 
+    <!-- Brands -->
+
+    <xsd:element name="brands" type="brandsType"/>
+    <xsd:element name="brand" type="brandType"/>
+
+    <xsd:complexType name="brandsType">
+        <xsd:sequence>
+            <xsd:element type="brandType" name="brand" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="brandType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+
     <!-- Inventory -->
 
 

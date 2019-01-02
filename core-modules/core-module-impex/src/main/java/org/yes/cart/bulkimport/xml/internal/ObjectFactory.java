@@ -41,9 +41,11 @@ public class ObjectFactory {
     private final static QName _Categories_QNAME = new QName("", "categories");
     private final static QName _Stock_QNAME = new QName("", "stock");
     private final static QName _Sku_QNAME = new QName("", "sku");
+    private final static QName _Brand_QNAME = new QName("", "brand");
     private final static QName _TaxConfig_QNAME = new QName("", "tax-config");
     private final static QName _ProductType_QNAME = new QName("", "product-type");
     private final static QName _Product_QNAME = new QName("", "product");
+    private final static QName _Brands_QNAME = new QName("", "brands");
     private final static QName _DataGroups_QNAME = new QName("", "data-groups");
     private final static QName _PriceList_QNAME = new QName("", "price-list");
     private final static QName _EType_QNAME = new QName("", "e-type");
@@ -219,6 +221,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link BrandType }
+     * 
+     */
+    public BrandType createBrandType() {
+        return new BrandType();
+    }
+
+    /**
      * Create an instance of {@link TaxConfigType }
      * 
      */
@@ -232,6 +242,14 @@ public class ObjectFactory {
      */
     public ProductTypeTypeType createProductTypeTypeType() {
         return new ProductTypeTypeType();
+    }
+
+    /**
+     * Create an instance of {@link BrandsType }
+     * 
+     */
+    public BrandsType createBrandsType() {
+        return new BrandsType();
     }
 
     /**
@@ -844,6 +862,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link BrandType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "brand")
+    public JAXBElement<BrandType> createBrand(BrandType value) {
+        return new JAXBElement<BrandType>(_Brand_QNAME, BrandType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TaxConfigType }{@code >}}
      * 
      */
@@ -868,6 +895,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "product")
     public JAXBElement<ProductType> createProduct(ProductType value) {
         return new JAXBElement<ProductType>(_Product_QNAME, ProductType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link BrandsType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "brands")
+    public JAXBElement<BrandsType> createBrands(BrandsType value) {
+        return new JAXBElement<BrandsType>(_Brands_QNAME, BrandsType.class, null, value);
     }
 
     /**

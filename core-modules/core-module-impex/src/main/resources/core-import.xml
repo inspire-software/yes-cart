@@ -211,6 +211,12 @@
                         <property name="taxService" ref="taxService"/>
                     </bean>
                 </entry>
+                <entry key="BRAND">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.BrandXmlEntityHandler">
+                        <property name="brandService" ref="brandService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                    </bean>
+                </entry>
                 <entry key="SKU">
                     <bean class="org.yes.cart.bulkimport.xml.impl.SkuXmlEntityHandler">
                         <property name="productSkuService" ref="productSkuService"/>
