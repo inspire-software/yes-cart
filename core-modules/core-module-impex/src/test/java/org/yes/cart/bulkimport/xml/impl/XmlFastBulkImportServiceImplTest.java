@@ -648,6 +648,28 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TWAREHOUSE  ");
+            rs.next();
+            long cntBeforeFc = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/fulfilmentcentres.xml", listener, importedFilesSet));
+            final long fcs = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TWAREHOUSE  ");
+            rs.next();
+            long cntFcs = rs.getLong(1);
+            rs.close();
+
+            change = cntFcs - cntBeforeFc;
+            System.out.println(String.format("%5d", change) + " fulfilment centres in " + fcs + "millis (~" + (fcs / change) + " per item)");
+
+            assertEquals(1L + cntBeforeFc, cntFcs);   // 1 new
+
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

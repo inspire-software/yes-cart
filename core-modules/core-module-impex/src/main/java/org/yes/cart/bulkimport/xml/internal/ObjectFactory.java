@@ -34,7 +34,9 @@ public class ObjectFactory {
     private final static QName _Content_QNAME = new QName("", "content");
     private final static QName _Products_QNAME = new QName("", "products");
     private final static QName _DataGroup_QNAME = new QName("", "data-group");
+    private final static QName _FulfilmentCentre_QNAME = new QName("", "fulfilment-centre");
     private final static QName _ProductCategories_QNAME = new QName("", "product-categories");
+    private final static QName _FulfilmentCentres_QNAME = new QName("", "fulfilment-centres");
     private final static QName _Systems_QNAME = new QName("", "systems");
     private final static QName _Price_QNAME = new QName("", "price");
     private final static QName _AttributeGroup_QNAME = new QName("", "attribute-group");
@@ -185,11 +187,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link FulfilmentCentreType }
+     * 
+     */
+    public FulfilmentCentreType createFulfilmentCentreType() {
+        return new FulfilmentCentreType();
+    }
+
+    /**
      * Create an instance of {@link ProductCategoriesCodeType }
      * 
      */
     public ProductCategoriesCodeType createProductCategoriesCodeType() {
         return new ProductCategoriesCodeType();
+    }
+
+    /**
+     * Create an instance of {@link FulfilmentCentresType }
+     * 
+     */
+    public FulfilmentCentresType createFulfilmentCentresType() {
+        return new FulfilmentCentresType();
     }
 
     /**
@@ -462,6 +480,22 @@ public class ObjectFactory {
      */
     public CustomAttributeType createCustomAttributeType() {
         return new CustomAttributeType();
+    }
+
+    /**
+     * Create an instance of {@link FulfilmentCentreConfigurationType }
+     * 
+     */
+    public FulfilmentCentreConfigurationType createFulfilmentCentreConfigurationType() {
+        return new FulfilmentCentreConfigurationType();
+    }
+
+    /**
+     * Create an instance of {@link FulfilmentCentreLocationType }
+     * 
+     */
+    public FulfilmentCentreLocationType createFulfilmentCentreLocationType() {
+        return new FulfilmentCentreLocationType();
     }
 
     /**
@@ -835,12 +869,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FulfilmentCentreType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "fulfilment-centre")
+    public JAXBElement<FulfilmentCentreType> createFulfilmentCentre(FulfilmentCentreType value) {
+        return new JAXBElement<FulfilmentCentreType>(_FulfilmentCentre_QNAME, FulfilmentCentreType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ProductCategoriesCodeType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "product-categories")
     public JAXBElement<ProductCategoriesCodeType> createProductCategories(ProductCategoriesCodeType value) {
         return new JAXBElement<ProductCategoriesCodeType>(_ProductCategories_QNAME, ProductCategoriesCodeType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FulfilmentCentresType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "fulfilment-centres")
+    public JAXBElement<FulfilmentCentresType> createFulfilmentCentres(FulfilmentCentresType value) {
+        return new JAXBElement<FulfilmentCentresType>(_FulfilmentCentres_QNAME, FulfilmentCentresType.class, null, value);
     }
 
     /**

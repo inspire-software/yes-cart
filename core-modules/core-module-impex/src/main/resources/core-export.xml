@@ -18,11 +18,8 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/util
-                           http://www.springframework.org/schema/util/spring-util.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- ########################################## bulk import ########################## -->
 
@@ -319,6 +316,14 @@
                 </entry>
                 <entry key="COUNTRYSTATE_PRETTY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.CountryStateXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="FULFILMENTCENTRE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.FulfilmentCentreXmlEntityHandler"/>
+                </entry>
+                <entry key="FULFILMENTCENTRE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.FulfilmentCentreXmlEntityHandler">
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>

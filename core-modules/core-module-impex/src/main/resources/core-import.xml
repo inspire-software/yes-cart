@@ -287,6 +287,11 @@
                         <property name="stateService" ref="stateService"/>
                     </bean>
                 </entry>
+                <entry key="FULFILMENTCENTRE">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.FulfilmentCentreXmlEntityHandler">
+                        <property name="warehouseService" ref="warehouseService"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

@@ -986,5 +986,51 @@
         <xsd:attribute type="entityImportModeType" name="import-mode"/>
     </xsd:complexType>
 
+    <!-- Fulfilment centres -->
+
+    <xsd:element name="fulfilment-centres" type="fulfilment-centresType"/>
+    <xsd:element name="fulfilment-centre" type="fulfilment-centreType"/>
+
+    <xsd:complexType name="fulfilment-centresType">
+        <xsd:sequence>
+            <xsd:element type="fulfilment-centreType" name="fulfilment-centre" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="fulfilment-centreType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="fulfilment-centre-locationType" name="fulfilment-centre-location" minOccurs="0"/>
+            <xsd:element type="fulfilment-centre-configurationType" name="fulfilment-centre-configuration" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="fulfilment-centre-configurationType">
+        <xsd:sequence>
+            <xsd:element type="xsd:int" name="standard-stock-lead-time"/>
+            <xsd:element type="xsd:int" name="backorder-stock-lead-time"/>
+            <xsd:element type="xsd:boolean" name="multiple-shipping-supported"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="fulfilment-centre-locationType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="iso-3166-1-alpha2" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="region-code" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="city" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="postcode" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
 
 </xsd:schema>

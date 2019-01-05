@@ -446,6 +446,27 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(w.WAREHOUSE_ID) as cnt from TWAREHOUSE w");
+            rs.next();
+            long cntFcCnt = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/fulfilmentcentres-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/fulfilmentcentres.xml", listener, fileToExport));
+            final long fcs = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntFcCnt) + " fulfilment centres in " + fcs + "millis (~" + (fcs / cntFcCnt) + " per item)");
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<name><![CDATA[First warehouse]]></name>"));
+
+            validateXmlFile(xml);
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {
