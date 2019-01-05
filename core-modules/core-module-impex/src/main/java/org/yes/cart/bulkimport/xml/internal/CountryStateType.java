@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="updated-timestamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updated-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="iso-3166-1-alpha2" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="region-code" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -57,7 +57,7 @@ public class CountryStateType {
     @XmlElement(name = "updated-by")
     protected String updatedBy;
     @XmlAttribute(name = "id")
-    protected String id;
+    protected Long id;
     @XmlAttribute(name = "iso-3166-1-alpha2", required = true)
     protected String iso31661Alpha2;
     @XmlAttribute(name = "region-code", required = true)
@@ -192,10 +192,10 @@ public class CountryStateType {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -204,10 +204,10 @@ public class CountryStateType {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public void setId(String value) {
+    public void setId(Long value) {
         this.id = value;
     }
 

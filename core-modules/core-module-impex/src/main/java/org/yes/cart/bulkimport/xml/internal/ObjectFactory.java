@@ -29,6 +29,7 @@ public class ObjectFactory {
     private final static QName _Country_QNAME = new QName("", "country");
     private final static QName _Skus_QNAME = new QName("", "skus");
     private final static QName _Cms_QNAME = new QName("", "cms");
+    private final static QName _PriceRule_QNAME = new QName("", "price-rule");
     private final static QName _Taxes_QNAME = new QName("", "taxes");
     private final static QName _Inventory_QNAME = new QName("", "inventory");
     private final static QName _Content_QNAME = new QName("", "content");
@@ -60,6 +61,7 @@ public class ObjectFactory {
     private final static QName _ProductsCategories_QNAME = new QName("", "products-categories");
     private final static QName _System_QNAME = new QName("", "system");
     private final static QName _DataDescriptors_QNAME = new QName("", "data-descriptors");
+    private final static QName _PriceRules_QNAME = new QName("", "price-rules");
     private final static QName _AttributeGroups_QNAME = new QName("", "attribute-groups");
     private final static QName _ProductsLinks_QNAME = new QName("", "products-links");
     private final static QName _DataDescriptor_QNAME = new QName("", "data-descriptor");
@@ -112,6 +114,14 @@ public class ObjectFactory {
      */
     public ContentType createContentType() {
         return new ContentType();
+    }
+
+    /**
+     * Create an instance of {@link PriceRuleType }
+     * 
+     */
+    public PriceRuleType createPriceRuleType() {
+        return new PriceRuleType();
     }
 
     /**
@@ -368,6 +378,14 @@ public class ObjectFactory {
      */
     public DataDescriptorsType createDataDescriptorsType() {
         return new DataDescriptorsType();
+    }
+
+    /**
+     * Create an instance of {@link PriceRulesType }
+     * 
+     */
+    public PriceRulesType createPriceRulesType() {
+        return new PriceRulesType();
     }
 
     /**
@@ -779,6 +797,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link PriceRuleType.Availability }
+     * 
+     */
+    public PriceRuleType.Availability createPriceRuleTypeAvailability() {
+        return new PriceRuleType.Availability();
+    }
+
+    /**
+     * Create an instance of {@link PriceRuleType.PriceRuleConfiguration }
+     * 
+     */
+    public PriceRuleType.PriceRuleConfiguration createPriceRuleTypePriceRuleConfiguration() {
+        return new PriceRuleType.PriceRuleConfiguration();
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ProductTypesType }{@code >}}
      * 
      */
@@ -821,6 +855,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "cms")
     public JAXBElement<CmsType> createCms(CmsType value) {
         return new JAXBElement<CmsType>(_Cms_QNAME, CmsType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PriceRuleType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "price-rule")
+    public JAXBElement<PriceRuleType> createPriceRule(PriceRuleType value) {
+        return new JAXBElement<PriceRuleType>(_PriceRule_QNAME, PriceRuleType.class, null, value);
     }
 
     /**
@@ -1100,6 +1143,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "data-descriptors")
     public JAXBElement<DataDescriptorsType> createDataDescriptors(DataDescriptorsType value) {
         return new JAXBElement<DataDescriptorsType>(_DataDescriptors_QNAME, DataDescriptorsType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PriceRulesType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "price-rules")
+    public JAXBElement<PriceRulesType> createPriceRules(PriceRulesType value) {
+        return new JAXBElement<PriceRulesType>(_PriceRules_QNAME, PriceRulesType.class, null, value);
     }
 
     /**

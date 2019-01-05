@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="updated-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="updated-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sku" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="warehouse" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -65,7 +65,7 @@ public class StockType {
     @XmlElement(name = "updated-by")
     protected String updatedBy;
     @XmlAttribute(name = "id")
-    protected String id;
+    protected Long id;
     @XmlAttribute(name = "guid")
     protected String guid;
     @XmlAttribute(name = "sku", required = true)
@@ -205,10 +205,10 @@ public class StockType {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -217,10 +217,10 @@ public class StockType {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public void setId(String value) {
+    public void setId(Long value) {
         this.id = value;
     }
 

@@ -14,29 +14,18 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * <p>Java class for priceType complex type.
+ * <p>Java class for price-ruleType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="priceType">
+ * &lt;complexType name="price-ruleType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="pricing-policy">
- *           &lt;complexType>
- *             &lt;simpleContent>
- *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                 &lt;attribute name="policy" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                 &lt;attribute name="ref" type="{http://www.w3.org/2001/XMLSchema}string" />
- *               &lt;/extension>
- *             &lt;/simpleContent>
- *           &lt;/complexType>
- *         &lt;/element>
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="tag" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="list-price" type="{http://www.w3.org/2001/XMLSchema}decimal"/>
- *         &lt;element name="sale-price" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
- *         &lt;element name="minimal-price" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="availability">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -45,8 +34,25 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *                   &lt;element name="available-from" type="{}dateTimeType" minOccurs="0"/>
  *                   &lt;element name="available-to" type="{}dateTimeType" minOccurs="0"/>
  *                 &lt;/sequence>
+ *                 &lt;attribute name="disabled" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *               &lt;/restriction>
  *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="price-rule-configuration" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;simpleContent>
+ *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
+ *                 &lt;attribute name="action" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute name="margin-percent" type="{http://www.w3.org/2001/XMLSchema}decimal" />
+ *                 &lt;attribute name="margin-amount" type="{http://www.w3.org/2001/XMLSchema}decimal" />
+ *                 &lt;attribute name="rounding-unit" type="{http://www.w3.org/2001/XMLSchema}decimal" />
+ *                 &lt;attribute name="add-default-tax" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *                 &lt;attribute name="price-tag" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute name="price-ref" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *                 &lt;attribute name="price-policy" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *               &lt;/extension>
+ *             &lt;/simpleContent>
  *           &lt;/complexType>
  *         &lt;/element>
  *         &lt;element name="created-timestamp" type="{}dateTimeType" minOccurs="0"/>
@@ -56,13 +62,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="sku" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="code" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="shop" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="currency" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="quantity" use="required" type="{http://www.w3.org/2001/XMLSchema}decimal" />
- *       &lt;attribute name="offer" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="request" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="generated" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="rank" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="import-mode" type="{}entityImportModeType" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -72,31 +75,28 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "priceType", propOrder = {
-    "pricingPolicy",
+@XmlType(name = "price-ruleType", propOrder = {
+    "name",
+    "description",
     "tag",
-    "listPrice",
-    "salePrice",
-    "minimalPrice",
     "availability",
+    "priceRuleConfiguration",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
     "updatedBy"
 })
-public class PriceType {
+public class PriceRuleType {
 
-    @XmlElement(name = "pricing-policy", required = true)
-    protected PriceType.PricingPolicy pricingPolicy;
-    protected String tag;
-    @XmlElement(name = "list-price", required = true)
-    protected BigDecimal listPrice;
-    @XmlElement(name = "sale-price")
-    protected BigDecimal salePrice;
-    @XmlElement(name = "minimal-price")
-    protected BigDecimal minimalPrice;
     @XmlElement(required = true)
-    protected PriceType.Availability availability;
+    protected String name;
+    @XmlElement(required = true)
+    protected String description;
+    protected String tag;
+    @XmlElement(required = true)
+    protected PriceRuleType.Availability availability;
+    @XmlElement(name = "price-rule-configuration")
+    protected PriceRuleType.PriceRuleConfiguration priceRuleConfiguration;
     @XmlElement(name = "created-timestamp")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -113,45 +113,63 @@ public class PriceType {
     protected Long id;
     @XmlAttribute(name = "guid")
     protected String guid;
-    @XmlAttribute(name = "sku", required = true)
-    protected String sku;
+    @XmlAttribute(name = "code", required = true)
+    protected String code;
     @XmlAttribute(name = "shop", required = true)
     protected String shop;
     @XmlAttribute(name = "currency", required = true)
     protected String currency;
-    @XmlAttribute(name = "quantity", required = true)
-    protected BigDecimal quantity;
-    @XmlAttribute(name = "offer", required = true)
-    protected boolean offer;
-    @XmlAttribute(name = "request", required = true)
-    protected boolean request;
-    @XmlAttribute(name = "generated")
-    protected Boolean generated;
+    @XmlAttribute(name = "rank")
+    protected Integer rank;
     @XmlAttribute(name = "import-mode")
     protected EntityImportModeType importMode;
 
     /**
-     * Gets the value of the pricingPolicy property.
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
-     *     {@link PriceType.PricingPolicy }
+     *     {@link String }
      *     
      */
-    public PriceType.PricingPolicy getPricingPolicy() {
-        return pricingPolicy;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the value of the pricingPolicy property.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
-     *     {@link PriceType.PricingPolicy }
+     *     {@link String }
      *     
      */
-    public void setPricingPolicy(PriceType.PricingPolicy value) {
-        this.pricingPolicy = value;
+    public void setName(String value) {
+        this.name = value;
+    }
+
+    /**
+     * Gets the value of the description property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets the value of the description property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDescription(String value) {
+        this.description = value;
     }
 
     /**
@@ -179,86 +197,14 @@ public class PriceType {
     }
 
     /**
-     * Gets the value of the listPrice property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public BigDecimal getListPrice() {
-        return listPrice;
-    }
-
-    /**
-     * Sets the value of the listPrice property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public void setListPrice(BigDecimal value) {
-        this.listPrice = value;
-    }
-
-    /**
-     * Gets the value of the salePrice property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public BigDecimal getSalePrice() {
-        return salePrice;
-    }
-
-    /**
-     * Sets the value of the salePrice property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public void setSalePrice(BigDecimal value) {
-        this.salePrice = value;
-    }
-
-    /**
-     * Gets the value of the minimalPrice property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public BigDecimal getMinimalPrice() {
-        return minimalPrice;
-    }
-
-    /**
-     * Sets the value of the minimalPrice property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
-     */
-    public void setMinimalPrice(BigDecimal value) {
-        this.minimalPrice = value;
-    }
-
-    /**
      * Gets the value of the availability property.
      * 
      * @return
      *     possible object is
-     *     {@link PriceType.Availability }
+     *     {@link PriceRuleType.Availability }
      *     
      */
-    public PriceType.Availability getAvailability() {
+    public PriceRuleType.Availability getAvailability() {
         return availability;
     }
 
@@ -267,11 +213,35 @@ public class PriceType {
      * 
      * @param value
      *     allowed object is
-     *     {@link PriceType.Availability }
+     *     {@link PriceRuleType.Availability }
      *     
      */
-    public void setAvailability(PriceType.Availability value) {
+    public void setAvailability(PriceRuleType.Availability value) {
         this.availability = value;
+    }
+
+    /**
+     * Gets the value of the priceRuleConfiguration property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PriceRuleType.PriceRuleConfiguration }
+     *     
+     */
+    public PriceRuleType.PriceRuleConfiguration getPriceRuleConfiguration() {
+        return priceRuleConfiguration;
+    }
+
+    /**
+     * Sets the value of the priceRuleConfiguration property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PriceRuleType.PriceRuleConfiguration }
+     *     
+     */
+    public void setPriceRuleConfiguration(PriceRuleType.PriceRuleConfiguration value) {
+        this.priceRuleConfiguration = value;
     }
 
     /**
@@ -419,27 +389,27 @@ public class PriceType {
     }
 
     /**
-     * Gets the value of the sku property.
+     * Gets the value of the code property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getSku() {
-        return sku;
+    public String getCode() {
+        return code;
     }
 
     /**
-     * Sets the value of the sku property.
+     * Sets the value of the code property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setSku(String value) {
-        this.sku = value;
+    public void setCode(String value) {
+        this.code = value;
     }
 
     /**
@@ -491,83 +461,27 @@ public class PriceType {
     }
 
     /**
-     * Gets the value of the quantity property.
+     * Gets the value of the rank property.
      * 
      * @return
      *     possible object is
-     *     {@link BigDecimal }
+     *     {@link Integer }
      *     
      */
-    public BigDecimal getQuantity() {
-        return quantity;
+    public Integer getRank() {
+        return rank;
     }
 
     /**
-     * Sets the value of the quantity property.
+     * Sets the value of the rank property.
      * 
      * @param value
      *     allowed object is
-     *     {@link BigDecimal }
+     *     {@link Integer }
      *     
      */
-    public void setQuantity(BigDecimal value) {
-        this.quantity = value;
-    }
-
-    /**
-     * Gets the value of the offer property.
-     * 
-     */
-    public boolean isOffer() {
-        return offer;
-    }
-
-    /**
-     * Sets the value of the offer property.
-     * 
-     */
-    public void setOffer(boolean value) {
-        this.offer = value;
-    }
-
-    /**
-     * Gets the value of the request property.
-     * 
-     */
-    public boolean isRequest() {
-        return request;
-    }
-
-    /**
-     * Sets the value of the request property.
-     * 
-     */
-    public void setRequest(boolean value) {
-        this.request = value;
-    }
-
-    /**
-     * Gets the value of the generated property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isGenerated() {
-        return generated;
-    }
-
-    /**
-     * Sets the value of the generated property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setGenerated(Boolean value) {
-        this.generated = value;
+    public void setRank(Integer value) {
+        this.rank = value;
     }
 
     /**
@@ -608,6 +522,7 @@ public class PriceType {
      *         &lt;element name="available-from" type="{}dateTimeType" minOccurs="0"/>
      *         &lt;element name="available-to" type="{}dateTimeType" minOccurs="0"/>
      *       &lt;/sequence>
+     *       &lt;attribute name="disabled" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
@@ -630,6 +545,8 @@ public class PriceType {
         @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
         @XmlSchemaType(name = "token")
         protected String availableTo;
+        @XmlAttribute(name = "disabled", required = true)
+        protected boolean disabled;
 
         /**
          * Gets the value of the availableFrom property.
@@ -679,6 +596,22 @@ public class PriceType {
             this.availableTo = value;
         }
 
+        /**
+         * Gets the value of the disabled property.
+         * 
+         */
+        public boolean isDisabled() {
+            return disabled;
+        }
+
+        /**
+         * Sets the value of the disabled property.
+         * 
+         */
+        public void setDisabled(boolean value) {
+            this.disabled = value;
+        }
+
     }
 
 
@@ -691,8 +624,14 @@ public class PriceType {
      * &lt;complexType>
      *   &lt;simpleContent>
      *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
-     *       &lt;attribute name="policy" type="{http://www.w3.org/2001/XMLSchema}string" />
-     *       &lt;attribute name="ref" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="action" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="margin-percent" type="{http://www.w3.org/2001/XMLSchema}decimal" />
+     *       &lt;attribute name="margin-amount" type="{http://www.w3.org/2001/XMLSchema}decimal" />
+     *       &lt;attribute name="rounding-unit" type="{http://www.w3.org/2001/XMLSchema}decimal" />
+     *       &lt;attribute name="add-default-tax" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+     *       &lt;attribute name="price-tag" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="price-ref" type="{http://www.w3.org/2001/XMLSchema}string" />
+     *       &lt;attribute name="price-policy" type="{http://www.w3.org/2001/XMLSchema}string" />
      *     &lt;/extension>
      *   &lt;/simpleContent>
      * &lt;/complexType>
@@ -704,14 +643,26 @@ public class PriceType {
     @XmlType(name = "", propOrder = {
         "value"
     })
-    public static class PricingPolicy {
+    public static class PriceRuleConfiguration {
 
         @XmlValue
         protected String value;
-        @XmlAttribute(name = "policy")
-        protected String policy;
-        @XmlAttribute(name = "ref")
-        protected String ref;
+        @XmlAttribute(name = "action", required = true)
+        protected String action;
+        @XmlAttribute(name = "margin-percent")
+        protected BigDecimal marginPercent;
+        @XmlAttribute(name = "margin-amount")
+        protected BigDecimal marginAmount;
+        @XmlAttribute(name = "rounding-unit")
+        protected BigDecimal roundingUnit;
+        @XmlAttribute(name = "add-default-tax")
+        protected Boolean addDefaultTax;
+        @XmlAttribute(name = "price-tag")
+        protected String priceTag;
+        @XmlAttribute(name = "price-ref")
+        protected String priceRef;
+        @XmlAttribute(name = "price-policy")
+        protected String pricePolicy;
 
         /**
          * Gets the value of the value property.
@@ -738,51 +689,195 @@ public class PriceType {
         }
 
         /**
-         * Gets the value of the policy property.
+         * Gets the value of the action property.
          * 
          * @return
          *     possible object is
          *     {@link String }
          *     
          */
-        public String getPolicy() {
-            return policy;
+        public String getAction() {
+            return action;
         }
 
         /**
-         * Sets the value of the policy property.
+         * Sets the value of the action property.
          * 
          * @param value
          *     allowed object is
          *     {@link String }
          *     
          */
-        public void setPolicy(String value) {
-            this.policy = value;
+        public void setAction(String value) {
+            this.action = value;
         }
 
         /**
-         * Gets the value of the ref property.
+         * Gets the value of the marginPercent property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link BigDecimal }
+         *     
+         */
+        public BigDecimal getMarginPercent() {
+            return marginPercent;
+        }
+
+        /**
+         * Sets the value of the marginPercent property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link BigDecimal }
+         *     
+         */
+        public void setMarginPercent(BigDecimal value) {
+            this.marginPercent = value;
+        }
+
+        /**
+         * Gets the value of the marginAmount property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link BigDecimal }
+         *     
+         */
+        public BigDecimal getMarginAmount() {
+            return marginAmount;
+        }
+
+        /**
+         * Sets the value of the marginAmount property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link BigDecimal }
+         *     
+         */
+        public void setMarginAmount(BigDecimal value) {
+            this.marginAmount = value;
+        }
+
+        /**
+         * Gets the value of the roundingUnit property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link BigDecimal }
+         *     
+         */
+        public BigDecimal getRoundingUnit() {
+            return roundingUnit;
+        }
+
+        /**
+         * Sets the value of the roundingUnit property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link BigDecimal }
+         *     
+         */
+        public void setRoundingUnit(BigDecimal value) {
+            this.roundingUnit = value;
+        }
+
+        /**
+         * Gets the value of the addDefaultTax property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link Boolean }
+         *     
+         */
+        public Boolean isAddDefaultTax() {
+            return addDefaultTax;
+        }
+
+        /**
+         * Sets the value of the addDefaultTax property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link Boolean }
+         *     
+         */
+        public void setAddDefaultTax(Boolean value) {
+            this.addDefaultTax = value;
+        }
+
+        /**
+         * Gets the value of the priceTag property.
          * 
          * @return
          *     possible object is
          *     {@link String }
          *     
          */
-        public String getRef() {
-            return ref;
+        public String getPriceTag() {
+            return priceTag;
         }
 
         /**
-         * Sets the value of the ref property.
+         * Sets the value of the priceTag property.
          * 
          * @param value
          *     allowed object is
          *     {@link String }
          *     
          */
-        public void setRef(String value) {
-            this.ref = value;
+        public void setPriceTag(String value) {
+            this.priceTag = value;
+        }
+
+        /**
+         * Gets the value of the priceRef property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getPriceRef() {
+            return priceRef;
+        }
+
+        /**
+         * Sets the value of the priceRef property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setPriceRef(String value) {
+            this.priceRef = value;
+        }
+
+        /**
+         * Gets the value of the pricePolicy property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getPricePolicy() {
+            return pricePolicy;
+        }
+
+        /**
+         * Sets the value of the pricePolicy property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setPricePolicy(String value) {
+            this.pricePolicy = value;
         }
 
     }

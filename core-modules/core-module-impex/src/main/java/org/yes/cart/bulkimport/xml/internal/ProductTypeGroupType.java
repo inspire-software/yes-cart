@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
  *         &lt;element name="product-type-group-attributes" type="{}product-type-group-attributesType"/>
  *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rank" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="import-mode" type="{}entityImportModeType" />
@@ -48,7 +48,7 @@ public class ProductTypeGroupType {
     @XmlElement(name = "product-type-group-attributes", required = true)
     protected ProductTypeGroupAttributesType productTypeGroupAttributes;
     @XmlAttribute(name = "id")
-    protected String id;
+    protected Long id;
     @XmlAttribute(name = "guid")
     protected String guid;
     @XmlAttribute(name = "rank")
@@ -133,10 +133,10 @@ public class ProductTypeGroupType {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -145,10 +145,10 @@ public class ProductTypeGroupType {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public void setId(String value) {
+    public void setId(Long value) {
         this.id = value;
     }
 

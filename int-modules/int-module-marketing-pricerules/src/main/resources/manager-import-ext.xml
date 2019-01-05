@@ -20,19 +20,26 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="entityClassFactoryMappingPriceRules" class="org.yes.cart.util.spring.LinkedHashMapBean">
-        <constructor-arg ref="entityClassFactoryMapping"/>
+    <bean id="xmlFastBulkImportServiceHandlerMapPriceRules" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg ref="xmlFastBulkImportServiceHandlerMap"/>
         <property name="extension">
-            <map>
-                <entry key="org.yes.cart.domain.entity.SkuPriceRule" value="org.yes.cart.domain.entity.impl.SkuPriceRuleEntity"/>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkimport.xml.XmlEntityImportHandler">
+                <entry key="PRICERULE">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.PriceRuleXmlEntityHandler">
+                        <property name="priceRuleService">
+                            <bean parent="txProxyTemplate">
+                                <property name="target">
+                                    <bean class="org.yes.cart.service.domain.impl.BaseGenericServiceImpl">
+                                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuPriceRuleDao"/>
+                                    </bean>
+                                </property>
+                            </bean>
+                        </property>
+                    </bean>
+                </entry>
             </map>
         </property>
-    </bean>
-
-    <bean id="skuPriceRuleDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-        <constructor-arg><value>org.yes.cart.domain.entity.impl.SkuPriceRuleEntity</value></constructor-arg>
-        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->
@@ -40,7 +47,7 @@
     <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="marketing"/>
         <property name="name" value="int-module-marketing-pricerules"/>
-        <property name="subName" value="dao-ext"/>
+        <property name="subName" value="manager-import-ext"/>
     </bean>
 
 </beans>

@@ -141,7 +141,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="exportXmlExportValueAdapter" class="org.yes.cart.bulkimport.xml.impl.XmlImportValueAdapter">
+    <bean id="importXmlImportValueAdapter" class="org.yes.cart.bulkimport.xml.impl.XmlImportValueAdapter">
         <constructor-arg index="0" ref="extendedConversionService"/>
         <property name="extensions" ref="importXmlImportValueAdapterMap"/>
     </bean>
@@ -299,7 +299,7 @@
     <bean id="xmlFastBulkImportService" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.bulkimport.xml.impl.XmlFastBulkImportServiceImpl">
-                <property name="valueDataAdapter" ref="exportXmlExportValueAdapter"/>
+                <property name="valueDataAdapter" ref="importXmlImportValueAdapter"/>
                 <property name="handlerMap" ref="xmlFastBulkImportServiceHandlerMap"/>
                 <lookup-method name="getSelf" bean="xmlFastBulkImportService"/>
             </bean>

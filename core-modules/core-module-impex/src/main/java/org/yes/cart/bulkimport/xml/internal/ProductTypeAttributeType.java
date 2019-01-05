@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="product-type-attribute-navigation" type="{}product-type-attribute-navigationType" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="attribute" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rank" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -43,7 +43,7 @@ public class ProductTypeAttributeType {
     @XmlElement(name = "product-type-attribute-navigation")
     protected ProductTypeAttributeNavigationType productTypeAttributeNavigation;
     @XmlAttribute(name = "id")
-    protected String id;
+    protected Long id;
     @XmlAttribute(name = "guid")
     protected String guid;
     @XmlAttribute(name = "attribute", required = true)
@@ -86,10 +86,10 @@ public class ProductTypeAttributeType {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -98,10 +98,10 @@ public class ProductTypeAttributeType {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Long }
      *     
      */
-    public void setId(String value) {
+    public void setId(Long value) {
         this.id = value;
     }
 
