@@ -96,9 +96,15 @@ public class ProductCategoriesXmlEntityHandler extends AbstractXmlEntityHandler<
         }
         final ProductCategory pc = this.productCategoryService.getGenericDao().getEntityFactory().getByIface(ProductCategory.class);
         pc.setProduct(domain);
-        final Category ct = this.categoryService.findSingleByCriteria(" where e.guid = ?1", cat.getGuid());
+        Category ct = this.categoryService.findSingleByCriteria(" where e.guid = ?1", cat.getGuid());
         if (ct == null) {
-            throw new IllegalArgumentException("No category with code: " + cat.getGuid());
+            final Category root = this.categoryService.getRootCategory();
+            final Category pcCat = this.categoryService.getGenericDao().getEntityFactory().getByIface(Category.class);
+            pcCat.setGuid(cat.getGuid());
+            pcCat.setName(cat.getGuid());
+            pcCat.setParentId(root.getCategoryId());
+            this.categoryService.create(pcCat);
+            ct = pcCat;
         }
         pc.setCategory(ct);
         processCategoriesSaveBasic(cat, pc);

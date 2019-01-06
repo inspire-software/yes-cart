@@ -23,6 +23,7 @@ import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.util.DateUtils;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ import java.util.Map;
 public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHandler<T, String> {
 
     protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    protected static final String DATE_FORMAT = "yyyy-MM-dd";
 
     private final String rootTag;
     private boolean prettyPrint = false;
@@ -303,6 +305,14 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
         public Tag tagTime(final String name, final LocalDateTime instant) {
             if (instant != null) {
                 tagChars(name, DateUtils.format(instant, TIMESTAMP_FORMAT));
+                this.hasTextOrTag = true;
+            }
+            return this;
+        }
+
+        public Tag tagTime(final String name, final LocalDate instant) {
+            if (instant != null) {
+                tagChars(name, DateUtils.format(instant, DATE_FORMAT));
                 this.hasTextOrTag = true;
             }
             return this;

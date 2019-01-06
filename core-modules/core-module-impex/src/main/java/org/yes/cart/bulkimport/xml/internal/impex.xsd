@@ -30,6 +30,13 @@
         </xsd:restriction>
     </xsd:simpleType>
 
+    <xsd:simpleType name="dateType">
+        <xsd:restriction base="xsd:token">
+            <xsd:pattern
+                    value="\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
     <xsd:simpleType name="dateTimeType">
         <xsd:restriction base="xsd:token">
             <xsd:pattern
@@ -810,8 +817,8 @@
     <xsd:complexType name="tax-regionType">
         <xsd:simpleContent>
             <xsd:extension base="xsd:string">
-                <xsd:attribute type="xsd:string" name="country"/>
-                <xsd:attribute type="xsd:string" name="state"/>
+                <xsd:attribute type="xsd:string" name="iso-3166-1-alpha2"/>
+                <xsd:attribute type="xsd:string" name="region-code"/>
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>
@@ -836,9 +843,9 @@
             <xsd:element type="configurationType" name="configuration" minOccurs="0"/>
             <xsd:element type="product-type-groupsType" name="groups" minOccurs="0"/>
             <xsd:element type="product-type-attributesType" name="attributes" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:long" name="id"/>
@@ -966,9 +973,9 @@
             <xsd:element type="xsd:string" name="name"/>
             <xsd:element type="xsd:string" name="description" minOccurs="0"/>
             <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:long" name="id"/>
@@ -1000,9 +1007,9 @@
         <xsd:sequence>
             <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
             <xsd:element type="data-group-descriptorsType" name="descriptors"/>
-            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:long" name="id"/>
@@ -1029,9 +1036,9 @@
     <xsd:complexType name="data-descriptorType">
         <xsd:sequence>
             <xsd:element type="xsd:string" name="value"/>
-            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:long" name="id"/>
@@ -1069,9 +1076,9 @@
     <xsd:complexType name="countryType">
         <xsd:sequence>
             <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:long" name="id"/>
@@ -1093,9 +1100,9 @@
     <xsd:complexType name="country-stateType">
         <xsd:sequence>
             <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:long" name="id"/>
@@ -1123,9 +1130,9 @@
             <xsd:element type="xsd:string" name="description" minOccurs="0"/>
             <xsd:element type="fulfilment-centre-locationType" name="location" minOccurs="0"/>
             <xsd:element type="fulfilment-centre-configurationType" name="configuration" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:long" name="id"/>
@@ -1150,6 +1157,164 @@
             <xsd:element type="xsd:string" name="postcode" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
+
+
+
+    <!-- Shipping -->
+
+    <xsd:element name="shipping-providers" type="shipping-providersType"/>
+    <xsd:element name="shipping-provider" type="shipping-providerType"/>
+
+    <xsd:complexType name="shipping-providersType">
+        <xsd:sequence>
+            <xsd:element type="shipping-providerType" name="shipping-provider" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-providerType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="i18nsType" name="display-description" minOccurs="0"/>
+            <xsd:element type="shipping-provider-configurationType" name="configuration" minOccurs="0"/>
+            <xsd:element type="shipping-provider-shipping-methodsType" name="shipping-methods" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-provider-configurationType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute type="xsd:boolean" name="worldwide"/>
+                <xsd:attribute type="xsd:boolean" name="country"/>
+                <xsd:attribute type="xsd:boolean" name="state"/>
+                <xsd:attribute type="xsd:boolean" name="local"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-provider-shipping-methodsType">
+        <xsd:sequence>
+            <xsd:element type="shipping-methodType" name="shipping-method" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+
+    <xsd:element name="shipping-methods" type="shipping-methodsType"/>
+    <xsd:element name="shipping-method" type="shipping-methodType"/>
+
+    <xsd:complexType name="shipping-methodsType">
+        <xsd:sequence>
+            <xsd:element type="shipping-methodType" name="shipping-method" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-methodType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="i18nsType" name="display-description" minOccurs="0"/>
+            <xsd:element type="shipping-method-configurationType" name="configuration" minOccurs="0"/>
+            <xsd:element type="shipping-method-exclusionsType" name="exclusions" minOccurs="0"/>
+            <xsd:element type="shipping-method-supportedType" name="supported" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="xsd:string" name="provider"/>
+        <xsd:attribute type="xsd:string" name="external-ref"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-method-configurationType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="script" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="type" use="required"/>
+        <xsd:attribute type="xsd:int" name="min-days"/>
+        <xsd:attribute type="xsd:int" name="max-days"/>
+        <xsd:attribute type="xsd:boolean" name="guaranteed-delivery" use="required"/>
+        <xsd:attribute type="xsd:boolean" name="named-day-delivery" use="required"/>
+        <xsd:attribute type="xsd:boolean" name="billing-address-not-required" use="required"/>
+        <xsd:attribute type="xsd:boolean" name="delivery-address-not-required" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-method-exclusionsType">
+        <xsd:sequence>
+            <xsd:element type="shipping-method-exclusions-customer-typesType" name="customer-types" minOccurs="0"/>
+            <xsd:element type="shipping-method-exclusions-weekdaysType" name="weekdays" minOccurs="0"/>
+            <xsd:element type="shipping-method-exclusions-datesType" name="dates" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-method-exclusions-customer-typesType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="type" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-method-exclusions-weekdaysType">
+        <xsd:sequence>
+            <xsd:element name="weekday" maxOccurs="unbounded">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="MONDAY"/>
+                        <xsd:enumeration value="TUESDAY"/>
+                        <xsd:enumeration value="WEDNESDAY"/>
+                        <xsd:enumeration value="THURSDAY"/>
+                        <xsd:enumeration value="FRIDAY"/>
+                        <xsd:enumeration value="SATURDAY"/>
+                        <xsd:enumeration value="SUNDAY"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-method-exclusions-datesType">
+        <xsd:sequence>
+            <xsd:element type="shipping-method-exclusions-dates-dateType" name="date" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-method-exclusions-dates-dateType">
+        <xsd:sequence>
+            <xsd:element type="dateType" name="from" minOccurs="0"/>
+            <xsd:element type="dateType" name="to" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-method-supportedType">
+        <xsd:sequence>
+            <xsd:element type="shipping-method-supported-fulfilment-centresType" name="fulfilment-centres" minOccurs="0"/>
+            <xsd:element type="shipping-method-supported-payment-gatewaysType" name="payment-gateways" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-method-supported-fulfilment-centresType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="fulfilment-centre" maxOccurs="unbounded" minOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shipping-method-supported-payment-gatewaysType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="payment-gateway" maxOccurs="unbounded" minOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
 
 
 </xsd:schema>

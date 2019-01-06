@@ -27,10 +27,12 @@ public class ObjectFactory {
     private final static QName _ProductTypes_QNAME = new QName("", "product-types");
     private final static QName _TaxConfigs_QNAME = new QName("", "tax-configs");
     private final static QName _Country_QNAME = new QName("", "country");
+    private final static QName _ShippingProviders_QNAME = new QName("", "shipping-providers");
     private final static QName _Skus_QNAME = new QName("", "skus");
     private final static QName _Cms_QNAME = new QName("", "cms");
     private final static QName _PriceRule_QNAME = new QName("", "price-rule");
     private final static QName _Taxes_QNAME = new QName("", "taxes");
+    private final static QName _ShippingMethods_QNAME = new QName("", "shipping-methods");
     private final static QName _Inventory_QNAME = new QName("", "inventory");
     private final static QName _Content_QNAME = new QName("", "content");
     private final static QName _Products_QNAME = new QName("", "products");
@@ -57,10 +59,12 @@ public class ObjectFactory {
     private final static QName _Tax_QNAME = new QName("", "tax");
     private final static QName _ETypes_QNAME = new QName("", "e-types");
     private final static QName _Countries_QNAME = new QName("", "countries");
+    private final static QName _ShippingMethod_QNAME = new QName("", "shipping-method");
     private final static QName _CountryState_QNAME = new QName("", "country-state");
     private final static QName _ProductsCategories_QNAME = new QName("", "products-categories");
     private final static QName _System_QNAME = new QName("", "system");
     private final static QName _DataDescriptors_QNAME = new QName("", "data-descriptors");
+    private final static QName _ShippingProvider_QNAME = new QName("", "shipping-provider");
     private final static QName _PriceRules_QNAME = new QName("", "price-rules");
     private final static QName _AttributeGroups_QNAME = new QName("", "attribute-groups");
     private final static QName _ProductsLinks_QNAME = new QName("", "products-links");
@@ -77,19 +81,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ProductTypeAttributeNavigationRangeListType }
-     * 
-     */
-    public ProductTypeAttributeNavigationRangeListType createProductTypeAttributeNavigationRangeListType() {
-        return new ProductTypeAttributeNavigationRangeListType();
-    }
-
-    /**
      * Create an instance of {@link NavigationByPriceTiersType }
      * 
      */
     public NavigationByPriceTiersType createNavigationByPriceTiersType() {
         return new NavigationByPriceTiersType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListType createProductTypeAttributeNavigationRangeListType() {
+        return new ProductTypeAttributeNavigationRangeListType();
     }
 
     /**
@@ -165,6 +169,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ShippingProvidersType }
+     * 
+     */
+    public ShippingProvidersType createShippingProvidersType() {
+        return new ShippingProvidersType();
+    }
+
+    /**
      * Create an instance of {@link SkusType }
      * 
      */
@@ -186,6 +198,14 @@ public class ObjectFactory {
      */
     public TaxesType createTaxesType() {
         return new TaxesType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingMethodsType }
+     * 
+     */
+    public ShippingMethodsType createShippingMethodsType() {
+        return new ShippingMethodsType();
     }
 
     /**
@@ -365,6 +385,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ShippingMethodType }
+     * 
+     */
+    public ShippingMethodType createShippingMethodType() {
+        return new ShippingMethodType();
+    }
+
+    /**
      * Create an instance of {@link CountryStateType }
      * 
      */
@@ -394,6 +422,14 @@ public class ObjectFactory {
      */
     public DataDescriptorsType createDataDescriptorsType() {
         return new DataDescriptorsType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingProviderType }
+     * 
+     */
+    public ShippingProviderType createShippingProviderType() {
+        return new ShippingProviderType();
     }
 
     /**
@@ -461,11 +497,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ProductTypeAttributeNavigationType }
+     * Create an instance of {@link ShippingMethodExclusionsCustomerTypesType }
      * 
      */
-    public ProductTypeAttributeNavigationType createProductTypeAttributeNavigationType() {
-        return new ProductTypeAttributeNavigationType();
+    public ShippingMethodExclusionsCustomerTypesType createShippingMethodExclusionsCustomerTypesType() {
+        return new ShippingMethodExclusionsCustomerTypesType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingProviderShippingMethodsType }
+     * 
+     */
+    public ShippingProviderShippingMethodsType createShippingProviderShippingMethodsType() {
+        return new ShippingProviderShippingMethodsType();
     }
 
     /**
@@ -474,14 +518,6 @@ public class ObjectFactory {
      */
     public ProductSkuType createProductSkuType() {
         return new ProductSkuType();
-    }
-
-    /**
-     * Create an instance of {@link ProductLinkType }
-     * 
-     */
-    public ProductLinkType createProductLinkType() {
-        return new ProductLinkType();
     }
 
     /**
@@ -509,22 +545,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesType }
-     * 
-     */
-    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesType createProductTypeAttributeNavigationRangeListRangeDisplayValuesType() {
-        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesType();
-    }
-
-    /**
-     * Create an instance of {@link CustomAttributeType }
-     * 
-     */
-    public CustomAttributeType createCustomAttributeType() {
-        return new CustomAttributeType();
-    }
-
-    /**
      * Create an instance of {@link FulfilmentCentreConfigurationType }
      * 
      */
@@ -533,11 +553,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FulfilmentCentreLocationType }
+     * Create an instance of {@link ShippingMethodExclusionsDatesType }
      * 
      */
-    public FulfilmentCentreLocationType createFulfilmentCentreLocationType() {
-        return new FulfilmentCentreLocationType();
+    public ShippingMethodExclusionsDatesType createShippingMethodExclusionsDatesType() {
+        return new ShippingMethodExclusionsDatesType();
     }
 
     /**
@@ -557,22 +577,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NavigationByPriceTiersCurrencyType }
-     * 
-     */
-    public NavigationByPriceTiersCurrencyType createNavigationByPriceTiersCurrencyType() {
-        return new NavigationByPriceTiersCurrencyType();
-    }
-
-    /**
-     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType }
-     * 
-     */
-    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType createProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType() {
-        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType();
-    }
-
-    /**
      * Create an instance of {@link BodyContentType }
      * 
      */
@@ -586,6 +590,14 @@ public class ObjectFactory {
      */
     public SeoType createSeoType() {
         return new SeoType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingMethodSupportedType }
+     * 
+     */
+    public ShippingMethodSupportedType createShippingMethodSupportedType() {
+        return new ShippingMethodSupportedType();
     }
 
     /**
@@ -613,19 +625,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ProductTypeGroupsType }
+     * Create an instance of {@link ShippingMethodExclusionsWeekdaysType }
      * 
      */
-    public ProductTypeGroupsType createProductTypeGroupsType() {
-        return new ProductTypeGroupsType();
-    }
-
-    /**
-     * Create an instance of {@link ProductCategoryType }
-     * 
-     */
-    public ProductCategoryType createProductCategoryType() {
-        return new ProductCategoryType();
+    public ShippingMethodExclusionsWeekdaysType createShippingMethodExclusionsWeekdaysType() {
+        return new ShippingMethodExclusionsWeekdaysType();
     }
 
     /**
@@ -645,19 +649,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DataGroupDescriptorsType }
+     * Create an instance of {@link ShippingMethodSupportedFulfilmentCentresType }
      * 
      */
-    public DataGroupDescriptorsType createDataGroupDescriptorsType() {
-        return new DataGroupDescriptorsType();
-    }
-
-    /**
-     * Create an instance of {@link ProductTypeAttributeType }
-     * 
-     */
-    public ProductTypeAttributeType createProductTypeAttributeType() {
-        return new ProductTypeAttributeType();
+    public ShippingMethodSupportedFulfilmentCentresType createShippingMethodSupportedFulfilmentCentresType() {
+        return new ShippingMethodSupportedFulfilmentCentresType();
     }
 
     /**
@@ -666,22 +662,6 @@ public class ObjectFactory {
      */
     public I18NsType createI18NsType() {
         return new I18NsType();
-    }
-
-    /**
-     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeType }
-     * 
-     */
-    public ProductTypeAttributeNavigationRangeListRangeType createProductTypeAttributeNavigationRangeListRangeType() {
-        return new ProductTypeAttributeNavigationRangeListRangeType();
-    }
-
-    /**
-     * Create an instance of {@link ProductTypeTemplatesType }
-     * 
-     */
-    public ProductTypeTemplatesType createProductTypeTemplatesType() {
-        return new ProductTypeTemplatesType();
     }
 
     /**
@@ -709,11 +689,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NavigationByPriceTiersCurrencyTiersTierType }
+     * Create an instance of {@link ShippingMethodExclusionsType }
      * 
      */
-    public NavigationByPriceTiersCurrencyTiersTierType createNavigationByPriceTiersCurrencyTiersTierType() {
-        return new NavigationByPriceTiersCurrencyTiersTierType();
+    public ShippingMethodExclusionsType createShippingMethodExclusionsType() {
+        return new ShippingMethodExclusionsType();
     }
 
     /**
@@ -733,6 +713,158 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductTypeGroupAttributesType }
+     * 
+     */
+    public ProductTypeGroupAttributesType createProductTypeGroupAttributesType() {
+        return new ProductTypeGroupAttributesType();
+    }
+
+    /**
+     * Create an instance of {@link ContentTemplatesType }
+     * 
+     */
+    public ContentTemplatesType createContentTemplatesType() {
+        return new ContentTemplatesType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationType }
+     * 
+     */
+    public ProductTypeAttributeNavigationType createProductTypeAttributeNavigationType() {
+        return new ProductTypeAttributeNavigationType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingMethodExclusionsDatesDateType }
+     * 
+     */
+    public ShippingMethodExclusionsDatesDateType createShippingMethodExclusionsDatesDateType() {
+        return new ShippingMethodExclusionsDatesDateType();
+    }
+
+    /**
+     * Create an instance of {@link ProductLinkType }
+     * 
+     */
+    public ProductLinkType createProductLinkType() {
+        return new ProductLinkType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesType createProductTypeAttributeNavigationRangeListRangeDisplayValuesType() {
+        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesType();
+    }
+
+    /**
+     * Create an instance of {@link CustomAttributeType }
+     * 
+     */
+    public CustomAttributeType createCustomAttributeType() {
+        return new CustomAttributeType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingMethodSupportedPaymentGatewaysType }
+     * 
+     */
+    public ShippingMethodSupportedPaymentGatewaysType createShippingMethodSupportedPaymentGatewaysType() {
+        return new ShippingMethodSupportedPaymentGatewaysType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingProviderConfigurationType }
+     * 
+     */
+    public ShippingProviderConfigurationType createShippingProviderConfigurationType() {
+        return new ShippingProviderConfigurationType();
+    }
+
+    /**
+     * Create an instance of {@link FulfilmentCentreLocationType }
+     * 
+     */
+    public FulfilmentCentreLocationType createFulfilmentCentreLocationType() {
+        return new FulfilmentCentreLocationType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersCurrencyType }
+     * 
+     */
+    public NavigationByPriceTiersCurrencyType createNavigationByPriceTiersCurrencyType() {
+        return new NavigationByPriceTiersCurrencyType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType createProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType() {
+        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeGroupsType }
+     * 
+     */
+    public ProductTypeGroupsType createProductTypeGroupsType() {
+        return new ProductTypeGroupsType();
+    }
+
+    /**
+     * Create an instance of {@link ProductCategoryType }
+     * 
+     */
+    public ProductCategoryType createProductCategoryType() {
+        return new ProductCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link DataGroupDescriptorsType }
+     * 
+     */
+    public DataGroupDescriptorsType createDataGroupDescriptorsType() {
+        return new DataGroupDescriptorsType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeType }
+     * 
+     */
+    public ProductTypeAttributeType createProductTypeAttributeType() {
+        return new ProductTypeAttributeType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListRangeType createProductTypeAttributeNavigationRangeListRangeType() {
+        return new ProductTypeAttributeNavigationRangeListRangeType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeTemplatesType }
+     * 
+     */
+    public ProductTypeTemplatesType createProductTypeTemplatesType() {
+        return new ProductTypeTemplatesType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersCurrencyTiersTierType }
+     * 
+     */
+    public NavigationByPriceTiersCurrencyTiersTierType createNavigationByPriceTiersCurrencyTiersTierType() {
+        return new NavigationByPriceTiersCurrencyTiersTierType();
+    }
+
+    /**
      * Create an instance of {@link ProductTypeAttributesType }
      * 
      */
@@ -749,14 +881,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ProductTypeGroupAttributesType }
-     * 
-     */
-    public ProductTypeGroupAttributesType createProductTypeGroupAttributesType() {
-        return new ProductTypeGroupAttributesType();
-    }
-
-    /**
      * Create an instance of {@link CategoryTemplatesType }
      * 
      */
@@ -765,19 +889,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ContentTemplatesType }
+     * Create an instance of {@link ShippingMethodConfigurationType }
      * 
      */
-    public ContentTemplatesType createContentTemplatesType() {
-        return new ContentTemplatesType();
-    }
-
-    /**
-     * Create an instance of {@link ProductTypeAttributeNavigationRangeListType.Ranges }
-     * 
-     */
-    public ProductTypeAttributeNavigationRangeListType.Ranges createProductTypeAttributeNavigationRangeListTypeRanges() {
-        return new ProductTypeAttributeNavigationRangeListType.Ranges();
+    public ShippingMethodConfigurationType createShippingMethodConfigurationType() {
+        return new ShippingMethodConfigurationType();
     }
 
     /**
@@ -786,6 +902,14 @@ public class ObjectFactory {
      */
     public NavigationByPriceTiersType.Currencies createNavigationByPriceTiersTypeCurrencies() {
         return new NavigationByPriceTiersType.Currencies();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListType.Ranges }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListType.Ranges createProductTypeAttributeNavigationRangeListTypeRanges() {
+        return new ProductTypeAttributeNavigationRangeListType.Ranges();
     }
 
     /**
@@ -920,6 +1044,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShippingProvidersType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shipping-providers")
+    public JAXBElement<ShippingProvidersType> createShippingProviders(ShippingProvidersType value) {
+        return new JAXBElement<ShippingProvidersType>(_ShippingProviders_QNAME, ShippingProvidersType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SkusType }{@code >}}
      * 
      */
@@ -953,6 +1086,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "taxes")
     public JAXBElement<TaxesType> createTaxes(TaxesType value) {
         return new JAXBElement<TaxesType>(_Taxes_QNAME, TaxesType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShippingMethodsType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shipping-methods")
+    public JAXBElement<ShippingMethodsType> createShippingMethods(ShippingMethodsType value) {
+        return new JAXBElement<ShippingMethodsType>(_ShippingMethods_QNAME, ShippingMethodsType.class, null, value);
     }
 
     /**
@@ -1190,6 +1332,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShippingMethodType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shipping-method")
+    public JAXBElement<ShippingMethodType> createShippingMethod(ShippingMethodType value) {
+        return new JAXBElement<ShippingMethodType>(_ShippingMethod_QNAME, ShippingMethodType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CountryStateType }{@code >}}
      * 
      */
@@ -1223,6 +1374,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "data-descriptors")
     public JAXBElement<DataDescriptorsType> createDataDescriptors(DataDescriptorsType value) {
         return new JAXBElement<DataDescriptorsType>(_DataDescriptors_QNAME, DataDescriptorsType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShippingProviderType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shipping-provider")
+    public JAXBElement<ShippingProviderType> createShippingProvider(ShippingProviderType value) {
+        return new JAXBElement<ShippingProviderType>(_ShippingProvider_QNAME, ShippingProviderType.class, null, value);
     }
 
     /**

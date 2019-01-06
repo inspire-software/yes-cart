@@ -49,8 +49,8 @@ public class TaxConfigXmlEntityHandler extends AbstractXmlEntityHandler<TaxConfi
 
         domain.setProductCode(StringUtils.isNotBlank(xmlType.getSku()) ? xmlType.getSku() : null);
         if (xmlType.getTaxRegion() != null) {
-            domain.setStateCode(StringUtils.isNotBlank(xmlType.getTaxRegion().getState()) ? xmlType.getTaxRegion().getState() : null);
-            domain.setCountryCode(StringUtils.isNotBlank(xmlType.getTaxRegion().getCountry()) ? xmlType.getTaxRegion().getCountry() : null);
+            domain.setStateCode(StringUtils.isNotBlank(xmlType.getTaxRegion().getRegionCode()) ? xmlType.getTaxRegion().getRegionCode() : null);
+            domain.setCountryCode(StringUtils.isNotBlank(xmlType.getTaxRegion().getIso31661Alpha2()) ? xmlType.getTaxRegion().getIso31661Alpha2() : null);
         }
 
         if (domain.getTaxConfigId() == 0L) {

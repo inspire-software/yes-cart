@@ -43,11 +43,11 @@ public class ETypeXmlEntityHandler extends AbstractXmlEntityHandler<Etype> {
                          final XmlValueAdapter xmlValueAdapter,
                          final String fileToExport) {
 
-        return tagDataGroup(null, tuple.getData()).toXml();
+        return tagEType(null, tuple.getData()).toXml();
         
     }
 
-    Tag tagDataGroup(final Tag parent, final Etype type) {
+    Tag tagEType(final Tag parent, final Etype type) {
 
         return tag(parent, "e-type")
                 .attr("id", type.getEtypeId())

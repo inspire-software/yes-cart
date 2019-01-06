@@ -670,6 +670,60 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCARRIER  ");
+            rs.next();
+            long cntBeforeShipProvider = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/shippingproviders.xml", listener, importedFilesSet));
+            final long sps = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCARRIER  ");
+            rs.next();
+            long cntShipProvider = rs.getLong(1);
+            rs.close();
+
+            change = cntShipProvider - cntBeforeShipProvider;
+            System.out.println(String.format("%5d", change) + " shipping provider + methods in " + sps + "millis (~" + (sps / change) + " per item)");
+
+            assertEquals(1L + cntBeforeShipProvider, cntShipProvider);   // 1 new
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select CARRIER_ID, NAME, DESCRIPTION, DISPLAYNAME, WORLDWIDE from TCARRIER where GUID = 'XML_CARRIER'");
+            rs.next();
+            final Long carrierId = rs.getLong("CARRIER_ID");
+            final String carrierName = rs.getString("NAME");
+            final String carrierDisplayName = rs.getString("DISPLAYNAME");
+            final Boolean carrierWorldwide = rs.getBoolean("WORLDWIDE");
+            rs.close();
+
+            assertEquals("XML carrier", carrierName);
+            assertTrue(carrierDisplayName, carrierDisplayName.contains("XML carrier EN"));
+            assertTrue(carrierWorldwide);
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select CARRIER_ID, MAX_DAYS, MIN_DAYS, EXCLUDE_WEEK_DAYS, EXCLUDE_DATES, EXCLUDED_CT, SUPPORTED_PGS, SUPPORTED_FCS from TCARRIERSLA where GUID = 'XML_CARRIERSLA_1'");
+            rs.next();
+            final Long slaCarrierId = rs.getLong("CARRIER_ID");
+            final int slaMax = rs.getInt("MAX_DAYS");
+            final int slaMin = rs.getInt("MIN_DAYS");
+            final String slaExclWeedDays = rs.getString("EXCLUDE_WEEK_DAYS");
+            final String slaExclDates = rs.getString("EXCLUDE_DATES");
+            final String slaExclCT = rs.getString("EXCLUDED_CT");
+            final String slaSupPgs = rs.getString("SUPPORTED_PGS");
+            final String slaSupFcs = rs.getString("SUPPORTED_FCS");
+            rs.close();
+
+            assertEquals(carrierId, slaCarrierId);
+            assertEquals(3, slaMin);
+            assertEquals(10, slaMax);
+            assertEquals("6,7,1", slaExclWeedDays);
+            assertEquals("2019-01-01,2019-02-01:2019-02-03", slaExclDates);
+            assertEquals("B2B,B2E", slaExclCT);
+            assertEquals("WAREHOUSE_1,WAREHOUSE_2", slaSupFcs);
+            assertEquals("testPaymentGatewayLabel,courierPaymentGatewayLabel", slaSupPgs);
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

@@ -227,18 +227,28 @@
                 <entry key="PRODUCT">
                     <bean class="org.yes.cart.bulkimport.xml.impl.ProductXmlEntityHandler">
                         <property name="productService" ref="productService"/>
-                        <property name="categoryService" ref="categoryService"/>
                         <property name="brandService" ref="brandService"/>
                         <property name="productTypeService" ref="productTypeService"/>
-                        <property name="productCategoryService" ref="productCategoryService"/>
-                        <property name="productAssociationService" ref="productAssociationService"/>
-                        <property name="associationService" ref="associationService"/>
                         <property name="attributeService" ref="attributeService"/>
                         <property name="skuXmlEntityImportHandler">
                             <bean class="org.yes.cart.bulkimport.xml.impl.SkuXmlEntityHandler">
                                 <property name="productSkuService" ref="productSkuService"/>
                                 <property name="productService" ref="productService"/>
                                 <property name="attributeService" ref="attributeService"/>
+                            </bean>
+                        </property>
+                        <property name="productCategoriesCodeXmlEntityImportHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.ProductCategoriesXmlEntityHandler">
+                                <property name="productService" ref="productService"/>
+                                <property name="categoryService" ref="categoryService"/>
+                                <property name="productCategoryService" ref="productCategoryService"/>
+                            </bean>
+                        </property>
+                        <property name="productLinksCodeXmlEntityImportHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.ProductLinksXmlEntityHandler">
+                                <property name="productService" ref="productService"/>
+                                <property name="productAssociationService" ref="productAssociationService"/>
+                                <property name="associationService" ref="associationService"/>
                             </bean>
                         </property>
                     </bean>
@@ -290,6 +300,23 @@
                 <entry key="FULFILMENTCENTRE">
                     <bean class="org.yes.cart.bulkimport.xml.impl.FulfilmentCentreXmlEntityHandler">
                         <property name="warehouseService" ref="warehouseService"/>
+                    </bean>
+                </entry>
+                <entry key="SHIPPINGMETHOD">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ShippingMethodXmlEntityHandler">
+                        <property name="carrierSlaService" ref="carrierSlaService"/>
+                        <property name="carrierService" ref="carrierService"/>
+                    </bean>
+                </entry>
+                <entry key="SHIPPINGPROVIDER">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ShippingProviderXmlEntityHandler">
+                        <property name="carrierService" ref="carrierService"/>
+                        <property name="shippingMethodXmlEntityImportHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.ShippingMethodXmlEntityHandler">
+                                <property name="carrierSlaService" ref="carrierSlaService"/>
+                                <property name="carrierService" ref="carrierService"/>
+                            </bean>
+                        </property>
                     </bean>
                 </entry>
             </map>

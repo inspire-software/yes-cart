@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlValue;
  * &lt;complexType name="tax-regionType">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="country" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="state" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="iso-3166-1-alpha2" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="region-code" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -34,10 +34,10 @@ public class TaxRegionType {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(name = "country")
-    protected String country;
-    @XmlAttribute(name = "state")
-    protected String state;
+    @XmlAttribute(name = "iso-3166-1-alpha2")
+    protected String iso31661Alpha2;
+    @XmlAttribute(name = "region-code")
+    protected String regionCode;
 
     /**
      * Gets the value of the value property.
@@ -64,51 +64,51 @@ public class TaxRegionType {
     }
 
     /**
-     * Gets the value of the country property.
+     * Gets the value of the iso31661Alpha2 property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCountry() {
-        return country;
+    public String getIso31661Alpha2() {
+        return iso31661Alpha2;
     }
 
     /**
-     * Sets the value of the country property.
+     * Sets the value of the iso31661Alpha2 property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCountry(String value) {
-        this.country = value;
+    public void setIso31661Alpha2(String value) {
+        this.iso31661Alpha2 = value;
     }
 
     /**
-     * Gets the value of the state property.
+     * Gets the value of the regionCode property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getState() {
-        return state;
+    public String getRegionCode() {
+        return regionCode;
     }
 
     /**
-     * Sets the value of the state property.
+     * Sets the value of the regionCode property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setState(String value) {
-        this.state = value;
+    public void setRegionCode(String value) {
+        this.regionCode = value;
     }
 
 }

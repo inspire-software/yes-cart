@@ -995,5 +995,34 @@ public final class DateUtils {
         return new ArrayList<>(0);
     }
 
+    /**
+     * Convert ISO day of week to {@link Calendar#DAY_OF_WEEK}
+     *
+     * @param dow day of week
+     *
+     * @return {@link Calendar#DAY_OF_WEEK}
+     */
+    public static int fromISOtoCalendarDayOfWeek(final DayOfWeek dow) {
+        if (dow != null) {
+            switch (dow.ordinal()) {
+                case 0:
+                    return Calendar.MONDAY;
+                case 1:
+                    return Calendar.TUESDAY;
+                case 2:
+                    return Calendar.WEDNESDAY;
+                case 3:
+                    return Calendar.THURSDAY;
+                case 4:
+                    return Calendar.FRIDAY;
+                case 5:
+                    return Calendar.SATURDAY;
+                case 6:
+                    return Calendar.SUNDAY;
+            }
+        }
+        return -1;
+    }
+
 
 }

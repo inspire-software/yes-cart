@@ -469,6 +469,28 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(c.CARRIER_ID) as cnt from TCARRIER c");
+            rs.next();
+            long cntSpCnt = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/shippingproviders-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/shippingproviders.xml", listener, fileToExport));
+            final long sps = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntSpCnt) + " shipping providers + methods in " + sps + "millis (~" + (sps / cntSpCnt) + " per item)");
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<name><![CDATA[Test carrier 1]]></name>"));
+            assertTrue(content.contains("<configuration type=\"F\" guaranteed-delivery=\"false\" named-day-delivery=\"false\" billing-address-not-required=\"false\" delivery-address-not-required=\"false\"/>"));
+
+            validateXmlFile(xml);
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

@@ -12,24 +12,28 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * <p>Java class for data-descriptorType complex type.
+ * <p>Java class for shipping-providerType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="data-descriptorType">
+ * &lt;complexType name="shipping-providerType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="value" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="display-description" type="{}i18nsType" minOccurs="0"/>
+ *         &lt;element name="configuration" type="{}shipping-provider-configurationType" minOccurs="0"/>
+ *         &lt;element name="shipping-methods" type="{}shipping-provider-shipping-methodsType" minOccurs="0"/>
  *         &lt;element name="created-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updated-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="updated-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="type" use="required" type="{}data-descriptorTypeType" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="guid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="import-mode" type="{}entityImportModeType" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -39,17 +43,30 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "data-descriptorType", propOrder = {
-    "value",
+@XmlType(name = "shipping-providerType", propOrder = {
+    "name",
+    "displayName",
+    "description",
+    "displayDescription",
+    "configuration",
+    "shippingMethods",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
     "updatedBy"
 })
-public class DataDescriptorType {
+public class ShippingProviderType {
 
     @XmlElement(required = true)
-    protected String value;
+    protected String name;
+    @XmlElement(name = "display-name")
+    protected I18NsType displayName;
+    protected String description;
+    @XmlElement(name = "display-description")
+    protected I18NsType displayDescription;
+    protected ShippingProviderConfigurationType configuration;
+    @XmlElement(name = "shipping-methods")
+    protected ShippingProviderShippingMethodsType shippingMethods;
     @XmlElement(name = "created-timestamp")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -63,36 +80,154 @@ public class DataDescriptorType {
     @XmlElement(name = "updated-by")
     protected String updatedBy;
     @XmlAttribute(name = "id")
-    protected Long id;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "type", required = true)
-    protected DataDescriptorTypeType type;
+    protected String id;
+    @XmlAttribute(name = "guid", required = true)
+    protected String guid;
     @XmlAttribute(name = "import-mode")
     protected EntityImportModeType importMode;
 
     /**
-     * Gets the value of the value property.
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getValue() {
-        return value;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the value of the value property.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setValue(String value) {
-        this.value = value;
+    public void setName(String value) {
+        this.name = value;
+    }
+
+    /**
+     * Gets the value of the displayName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link I18NsType }
+     *     
+     */
+    public I18NsType getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * Sets the value of the displayName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link I18NsType }
+     *     
+     */
+    public void setDisplayName(I18NsType value) {
+        this.displayName = value;
+    }
+
+    /**
+     * Gets the value of the description property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets the value of the description property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDescription(String value) {
+        this.description = value;
+    }
+
+    /**
+     * Gets the value of the displayDescription property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link I18NsType }
+     *     
+     */
+    public I18NsType getDisplayDescription() {
+        return displayDescription;
+    }
+
+    /**
+     * Sets the value of the displayDescription property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link I18NsType }
+     *     
+     */
+    public void setDisplayDescription(I18NsType value) {
+        this.displayDescription = value;
+    }
+
+    /**
+     * Gets the value of the configuration property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ShippingProviderConfigurationType }
+     *     
+     */
+    public ShippingProviderConfigurationType getConfiguration() {
+        return configuration;
+    }
+
+    /**
+     * Sets the value of the configuration property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ShippingProviderConfigurationType }
+     *     
+     */
+    public void setConfiguration(ShippingProviderConfigurationType value) {
+        this.configuration = value;
+    }
+
+    /**
+     * Gets the value of the shippingMethods property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ShippingProviderShippingMethodsType }
+     *     
+     */
+    public ShippingProviderShippingMethodsType getShippingMethods() {
+        return shippingMethods;
+    }
+
+    /**
+     * Sets the value of the shippingMethods property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ShippingProviderShippingMethodsType }
+     *     
+     */
+    public void setShippingMethods(ShippingProviderShippingMethodsType value) {
+        this.shippingMethods = value;
     }
 
     /**
@@ -196,10 +331,10 @@ public class DataDescriptorType {
      * 
      * @return
      *     possible object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -208,59 +343,35 @@ public class DataDescriptorType {
      * 
      * @param value
      *     allowed object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public void setId(Long value) {
+    public void setId(String value) {
         this.id = value;
     }
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the guid property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getName() {
-        return name;
+    public String getGuid() {
+        return guid;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the guid property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DataDescriptorTypeType }
-     *     
-     */
-    public DataDescriptorTypeType getType() {
-        return type;
-    }
-
-    /**
-     * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DataDescriptorTypeType }
-     *     
-     */
-    public void setType(DataDescriptorTypeType value) {
-        this.type = value;
+    public void setGuid(String value) {
+        this.guid = value;
     }
 
     /**

@@ -871,6 +871,15 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
         Set<String> importedFilesSet = new HashSet<>();
 
+        ResultSet rs = null;
+
+        rs = getConnection().getConnection().createStatement().executeQuery(
+                "select count(*) as cnt from TCARRIERSLA");
+        rs.next();
+        int cntBeforeCarriesSlas = rs.getInt("cnt");
+        rs.close();
+
+
         bulkImportService.doImport(createContext("src/test/resources/import/csv/carriernames.xml", listenerCarrier, importedFilesSet));
 
         bulkImportService.doImport(createContext("src/test/resources/import/csv/carrierslanames.xml", listenerCarrierSla, importedFilesSet));
@@ -878,7 +887,6 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         dumpDataBase("impex_fk", "TCARRIER", "TCARRIERSLA");
 
         try {
-            ResultSet rs = null;
 
             // Two carries are imported
             rs = getConnection().getConnection().createStatement().executeQuery(
@@ -895,7 +903,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             int cntCarriesSlas = rs.getInt("cnt");
             rs.close();
-            assertEquals(4, cntCarriesSlas);
+            assertEquals(cntBeforeCarriesSlas, cntCarriesSlas);
 
 
         } catch (Exception e) {

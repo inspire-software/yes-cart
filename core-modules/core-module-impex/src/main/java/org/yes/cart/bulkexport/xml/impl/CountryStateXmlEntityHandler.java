@@ -40,11 +40,11 @@ public class CountryStateXmlEntityHandler extends AbstractXmlEntityHandler<State
                          final XmlValueAdapter xmlValueAdapter,
                          final String fileToExport) {
 
-        return tagDataGroup(null, tuple.getData()).toXml();
+        return tagCountryState(null, tuple.getData()).toXml();
         
     }
 
-    Tag tagDataGroup(final Tag parent, final State state) {
+    Tag tagCountryState(final Tag parent, final State state) {
 
         return tag(parent, "country-state")
                 .attr("id", state.getStateId())

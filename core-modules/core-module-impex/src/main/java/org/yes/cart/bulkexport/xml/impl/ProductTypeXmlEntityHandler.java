@@ -126,8 +126,9 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
 
                                     displays.tag("display")
                                             .tagChars("lang", dv.getLang())
-                                            .tagCdata("value", dv.getValue());
-
+                                            .tagCdata("value", dv.getValue())
+                                        .end();
+                                    
                                 }
 
                                 displays.end();

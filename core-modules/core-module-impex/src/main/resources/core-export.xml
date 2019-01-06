@@ -327,6 +327,22 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="SHIPPINGMETHOD">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShippingMethodXmlEntityHandler"/>
+                </entry>
+                <entry key="SHIPPINGMETHOD_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShippingMethodXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="SHIPPINGPROVIDER">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShippingProviderXmlEntityHandler"/>
+                </entry>
+                <entry key="SHIPPINGPROVIDER_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShippingProviderXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

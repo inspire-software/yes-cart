@@ -40,12 +40,12 @@ public class BrandXmlEntityHandler extends AbstractXmlEntityHandler<Brand> {
                          final XmlValueAdapter xmlValueAdapter,
                          final String fileToExport) {
 
-        return tagCategory(null, tuple.getData()).toXml();
+        return tagBrand(null, tuple.getData()).toXml();
 
     }
 
 
-    Tag tagCategory(final Tag parent, final Brand brand) {
+    Tag tagBrand(final Tag parent, final Brand brand) {
 
         return tag(parent, "brand")
                 .attr("id", brand.getBrandId())

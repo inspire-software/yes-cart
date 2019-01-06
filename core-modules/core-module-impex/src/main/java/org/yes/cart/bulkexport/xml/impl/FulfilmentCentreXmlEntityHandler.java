@@ -40,11 +40,11 @@ public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<W
                          final XmlValueAdapter xmlValueAdapter,
                          final String fileToExport) {
 
-        return tagAttribute(null, tuple.getData()).toXml();
+        return tagFulfilmentCentre(null, tuple.getData()).toXml();
         
     }
 
-    Tag tagAttribute(final Tag parent, final Warehouse fc) {
+    Tag tagFulfilmentCentre(final Tag parent, final Warehouse fc) {
 
         return tag(parent, "fulfilment-centre")
                 .attr("id", fc.getWarehouseId())
