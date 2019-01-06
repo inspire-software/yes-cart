@@ -186,6 +186,9 @@
 
     <xsd:complexType name="categoryType">
         <xsd:sequence>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
             <xsd:element type="baseCategoryType" name="parent" minOccurs="0"/> <!-- TODO: remove minOccurs when we separate out the content -->
             <xsd:element type="baseCategoryType" name="link" minOccurs="0"/>
             <xsd:element name="availability">
@@ -197,9 +200,6 @@
                     <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element type="xsd:string" name="name"/>
-            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
             <xsd:element type="navigationType" name="navigation"/>
             <xsd:element type="categoryTemplatesType" name="templates"/>
             <xsd:element type="seoType" name="seo"/>
@@ -217,9 +217,41 @@
 
     <xsd:complexType name="navigation-by-priceType">
         <xsd:sequence>
-            <xsd:element type="xsd:string" name="price-tiers"/>
+            <xsd:element type="navigation-by-price-tiersType" name="price-navigation" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:boolean" name="enabled"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="navigation-by-price-tiersType">
+        <xsd:sequence>
+            <xsd:element name="currencies">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="currency" type="navigation-by-price-tiers-currencyType" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="navigation-by-price-tiers-currencyType">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="price-tiers" type="navigation-by-price-tiers-currency-tiersType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="navigation-by-price-tiers-currency-tiersType">
+        <xsd:sequence>
+            <xsd:element name="price-tier" type="navigation-by-price-tiers-currency-tiers-tierType" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="navigation-by-price-tiers-currency-tiers-tierType">
+        <xsd:sequence>
+            <xsd:element name="from" type="xsd:decimal"/>
+            <xsd:element name="to" type="xsd:decimal"/>
+        </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="categoryTemplatesType">
@@ -230,7 +262,7 @@
 
     <xsd:complexType name="navigation-by-attributesType">
         <xsd:sequence>
-            <xsd:element type="navigation-product-typeType" name="navigation-product-type" minOccurs="0"/>
+            <xsd:element type="navigation-product-typeType" name="product-type" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:boolean" name="enabled"/>
     </xsd:complexType>
@@ -242,8 +274,8 @@
 
     <xsd:complexType name="navigationType">
         <xsd:sequence>
-            <xsd:element type="navigation-by-attributesType" name="navigation-by-attributes" minOccurs="0"/>
-            <xsd:element type="navigation-by-priceType" name="navigation-by-price" minOccurs="0"/>
+            <xsd:element type="navigation-by-attributesType" name="attributes" minOccurs="0"/>
+            <xsd:element type="navigation-by-priceType" name="price" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -269,6 +301,9 @@
 
     <xsd:complexType name="contentType">
         <xsd:sequence>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
             <xsd:element type="baseContentType" name="parent" minOccurs="0"/>  <!-- TODO: remove minOccurs when we separate out the content -->
             <xsd:element name="availability">
                 <xsd:complexType>
@@ -279,9 +314,6 @@
                     <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element type="xsd:string" name="name"/>
-            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
-            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
             <xsd:element type="contentTemplatesType" name="templates"/>
             <xsd:element type="seoType" name="seo"/>
             <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
@@ -802,8 +834,8 @@
             <xsd:element type="xsd:string" name="description" minOccurs="0"/>
             <xsd:element type="product-typeTemplatesType" name="templates" minOccurs="0"/>
             <xsd:element type="configurationType" name="configuration" minOccurs="0"/>
-            <xsd:element type="product-type-groupsType" name="product-type-groups" minOccurs="0"/>
-            <xsd:element type="product-type-attributesType" name="product-type-attributes" minOccurs="0"/>
+            <xsd:element type="product-type-groupsType" name="groups" minOccurs="0"/>
+            <xsd:element type="product-type-attributesType" name="attributes" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
@@ -832,7 +864,7 @@
 
     <xsd:complexType name="product-type-groupsType">
         <xsd:sequence>
-            <xsd:element type="product-type-groupType" name="product-type-group" maxOccurs="unbounded" minOccurs="0"/>
+            <xsd:element type="product-type-groupType" name="group" maxOccurs="unbounded" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="collectionImportModeType" name="import-mode"/>
     </xsd:complexType>
@@ -842,7 +874,7 @@
         <xsd:sequence>
             <xsd:element type="xsd:string" name="name"/>
             <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
-            <xsd:element type="product-type-group-attributesType" name="product-type-group-attributes"/>
+            <xsd:element type="product-type-group-attributesType" name="group-attributes"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:long" name="id"/>
         <xsd:attribute type="xsd:string" name="guid"/>
@@ -852,20 +884,20 @@
 
     <xsd:complexType name="product-type-group-attributesType">
         <xsd:sequence>
-            <xsd:element type="xsd:string" name="product-type-group-attribute" maxOccurs="unbounded" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="group-attribute" maxOccurs="unbounded" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="product-type-attributesType">
         <xsd:sequence>
-            <xsd:element type="product-type-attributeType" name="product-type-attribute" maxOccurs="unbounded" minOccurs="0"/>
+            <xsd:element type="product-type-attributeType" name="attribute" maxOccurs="unbounded" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="collectionImportModeType" name="import-mode"/>
     </xsd:complexType>
 
     <xsd:complexType name="product-type-attributeType">
         <xsd:sequence>
-            <xsd:element type="product-type-attribute-navigationType" name="product-type-attribute-navigation" minOccurs="0"/>
+            <xsd:element type="product-type-attribute-navigationType" name="navigation" minOccurs="0"/>
         </xsd:sequence>
         <xsd:attribute type="xsd:long" name="id"/>
         <xsd:attribute type="xsd:string" name="guid"/>
@@ -877,13 +909,46 @@
     </xsd:complexType>
 
     <xsd:complexType name="product-type-attribute-navigationType">
-        <xsd:simpleContent>
-            <xsd:extension base="xsd:string">
-                <xsd:attribute type="xsd:string" name="type"/>
-                <xsd:attribute type="xsd:string" name="template"/>
-            </xsd:extension>
-        </xsd:simpleContent>
+        <xsd:sequence>
+            <xsd:element type="product-type-attribute-navigation-range-listType" name="range-list" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="type"/>
+        <xsd:attribute type="xsd:string" name="template"/>
     </xsd:complexType>
+
+    <xsd:complexType name="product-type-attribute-navigation-range-listType">
+        <xsd:sequence>
+            <xsd:element name="ranges">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="range" type="product-type-attribute-navigation-range-list-rangeType" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-type-attribute-navigation-range-list-rangeType">
+        <xsd:sequence>
+            <xsd:element name="from" type="xsd:string"/>
+            <xsd:element name="to" type="xsd:string"/>
+            <xsd:element name="i18n" type="product-type-attribute-navigation-range-list-range-display-valuesType" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-type-attribute-navigation-range-list-range-display-valuesType">
+        <xsd:sequence>
+            <xsd:element name="display" type="product-type-attribute-navigation-range-list-range-display-values-valueType" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-type-attribute-navigation-range-list-range-display-values-valueType">
+        <xsd:sequence>
+            <xsd:element name="lang" type="xsd:string"/>
+            <xsd:element name="value" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
 
     <!-- System preferences -->
 
@@ -934,7 +999,7 @@
     <xsd:complexType name="data-groupType">
         <xsd:sequence>
             <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
-            <xsd:element type="data-group-descriptorsType" name="data-group-descriptors"/>
+            <xsd:element type="data-group-descriptorsType" name="descriptors"/>
             <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>
@@ -1056,8 +1121,8 @@
             <xsd:element type="xsd:string" name="name"/>
             <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
             <xsd:element type="xsd:string" name="description" minOccurs="0"/>
-            <xsd:element type="fulfilment-centre-locationType" name="fulfilment-centre-location" minOccurs="0"/>
-            <xsd:element type="fulfilment-centre-configurationType" name="fulfilment-centre-configuration" minOccurs="0"/>
+            <xsd:element type="fulfilment-centre-locationType" name="location" minOccurs="0"/>
+            <xsd:element type="fulfilment-centre-configurationType" name="configuration" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-timestamp" minOccurs="0"/>

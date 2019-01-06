@@ -21,8 +21,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="fulfilment-centre-location" type="{}fulfilment-centre-locationType" minOccurs="0"/>
- *         &lt;element name="fulfilment-centre-configuration" type="{}fulfilment-centre-configurationType" minOccurs="0"/>
+ *         &lt;element name="location" type="{}fulfilment-centre-locationType" minOccurs="0"/>
+ *         &lt;element name="configuration" type="{}fulfilment-centre-configurationType" minOccurs="0"/>
  *         &lt;element name="created-timestamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updated-timestamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -44,8 +44,8 @@ import javax.xml.bind.annotation.XmlType;
     "name",
     "displayName",
     "description",
-    "fulfilmentCentreLocation",
-    "fulfilmentCentreConfiguration",
+    "location",
+    "configuration",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
@@ -58,10 +58,8 @@ public class FulfilmentCentreType {
     @XmlElement(name = "display-name")
     protected I18NsType displayName;
     protected String description;
-    @XmlElement(name = "fulfilment-centre-location")
-    protected FulfilmentCentreLocationType fulfilmentCentreLocation;
-    @XmlElement(name = "fulfilment-centre-configuration")
-    protected FulfilmentCentreConfigurationType fulfilmentCentreConfiguration;
+    protected FulfilmentCentreLocationType location;
+    protected FulfilmentCentreConfigurationType configuration;
     @XmlElement(name = "created-timestamp")
     protected String createdTimestamp;
     @XmlElement(name = "created-by")
@@ -152,51 +150,51 @@ public class FulfilmentCentreType {
     }
 
     /**
-     * Gets the value of the fulfilmentCentreLocation property.
+     * Gets the value of the location property.
      * 
      * @return
      *     possible object is
      *     {@link FulfilmentCentreLocationType }
      *     
      */
-    public FulfilmentCentreLocationType getFulfilmentCentreLocation() {
-        return fulfilmentCentreLocation;
+    public FulfilmentCentreLocationType getLocation() {
+        return location;
     }
 
     /**
-     * Sets the value of the fulfilmentCentreLocation property.
+     * Sets the value of the location property.
      * 
      * @param value
      *     allowed object is
      *     {@link FulfilmentCentreLocationType }
      *     
      */
-    public void setFulfilmentCentreLocation(FulfilmentCentreLocationType value) {
-        this.fulfilmentCentreLocation = value;
+    public void setLocation(FulfilmentCentreLocationType value) {
+        this.location = value;
     }
 
     /**
-     * Gets the value of the fulfilmentCentreConfiguration property.
+     * Gets the value of the configuration property.
      * 
      * @return
      *     possible object is
      *     {@link FulfilmentCentreConfigurationType }
      *     
      */
-    public FulfilmentCentreConfigurationType getFulfilmentCentreConfiguration() {
-        return fulfilmentCentreConfiguration;
+    public FulfilmentCentreConfigurationType getConfiguration() {
+        return configuration;
     }
 
     /**
-     * Sets the value of the fulfilmentCentreConfiguration property.
+     * Sets the value of the configuration property.
      * 
      * @param value
      *     allowed object is
      *     {@link FulfilmentCentreConfigurationType }
      *     
      */
-    public void setFulfilmentCentreConfiguration(FulfilmentCentreConfigurationType value) {
-        this.fulfilmentCentreConfiguration = value;
+    public void setConfiguration(FulfilmentCentreConfigurationType value) {
+        this.configuration = value;
     }
 
     /**

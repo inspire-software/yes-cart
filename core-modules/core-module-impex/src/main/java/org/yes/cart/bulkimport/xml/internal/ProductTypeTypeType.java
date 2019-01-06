@@ -23,8 +23,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="templates" type="{}product-typeTemplatesType" minOccurs="0"/>
  *         &lt;element name="configuration" type="{}configurationType" minOccurs="0"/>
- *         &lt;element name="product-type-groups" type="{}product-type-groupsType" minOccurs="0"/>
- *         &lt;element name="product-type-attributes" type="{}product-type-attributesType" minOccurs="0"/>
+ *         &lt;element name="groups" type="{}product-type-groupsType" minOccurs="0"/>
+ *         &lt;element name="attributes" type="{}product-type-attributesType" minOccurs="0"/>
  *         &lt;element name="created-timestamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updated-timestamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -47,8 +47,8 @@ import javax.xml.bind.annotation.XmlType;
     "description",
     "templates",
     "configuration",
-    "productTypeGroups",
-    "productTypeAttributes",
+    "groups",
+    "attributes",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
@@ -63,10 +63,8 @@ public class ProductTypeTypeType {
     protected String description;
     protected ProductTypeTemplatesType templates;
     protected ConfigurationType configuration;
-    @XmlElement(name = "product-type-groups")
-    protected ProductTypeGroupsType productTypeGroups;
-    @XmlElement(name = "product-type-attributes")
-    protected ProductTypeAttributesType productTypeAttributes;
+    protected ProductTypeGroupsType groups;
+    protected ProductTypeAttributesType attributes;
     @XmlElement(name = "created-timestamp")
     protected String createdTimestamp;
     @XmlElement(name = "created-by")
@@ -203,51 +201,51 @@ public class ProductTypeTypeType {
     }
 
     /**
-     * Gets the value of the productTypeGroups property.
+     * Gets the value of the groups property.
      * 
      * @return
      *     possible object is
      *     {@link ProductTypeGroupsType }
      *     
      */
-    public ProductTypeGroupsType getProductTypeGroups() {
-        return productTypeGroups;
+    public ProductTypeGroupsType getGroups() {
+        return groups;
     }
 
     /**
-     * Sets the value of the productTypeGroups property.
+     * Sets the value of the groups property.
      * 
      * @param value
      *     allowed object is
      *     {@link ProductTypeGroupsType }
      *     
      */
-    public void setProductTypeGroups(ProductTypeGroupsType value) {
-        this.productTypeGroups = value;
+    public void setGroups(ProductTypeGroupsType value) {
+        this.groups = value;
     }
 
     /**
-     * Gets the value of the productTypeAttributes property.
+     * Gets the value of the attributes property.
      * 
      * @return
      *     possible object is
      *     {@link ProductTypeAttributesType }
      *     
      */
-    public ProductTypeAttributesType getProductTypeAttributes() {
-        return productTypeAttributes;
+    public ProductTypeAttributesType getAttributes() {
+        return attributes;
     }
 
     /**
-     * Sets the value of the productTypeAttributes property.
+     * Sets the value of the attributes property.
      * 
      * @param value
      *     allowed object is
      *     {@link ProductTypeAttributesType }
      *     
      */
-    public void setProductTypeAttributes(ProductTypeAttributesType value) {
-        this.productTypeAttributes = value;
+    public void setAttributes(ProductTypeAttributesType value) {
+        this.attributes = value;
     }
 
     /**

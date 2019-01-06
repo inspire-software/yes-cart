@@ -4,8 +4,8 @@ package org.yes.cart.bulkimport.xml.internal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlValue;
 
 
 /**
@@ -15,12 +15,15 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  * <pre>
  * &lt;complexType name="product-type-attribute-navigationType">
- *   &lt;simpleContent>
- *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="range-list" type="{}product-type-attribute-navigation-range-listType" minOccurs="0"/>
+ *       &lt;/sequence>
  *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="template" type="{http://www.w3.org/2001/XMLSchema}string" />
- *     &lt;/extension>
- *   &lt;/simpleContent>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
  * 
@@ -28,39 +31,39 @@ import javax.xml.bind.annotation.XmlValue;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "product-type-attribute-navigationType", propOrder = {
-    "value"
+    "rangeList"
 })
 public class ProductTypeAttributeNavigationType {
 
-    @XmlValue
-    protected String value;
+    @XmlElement(name = "range-list")
+    protected ProductTypeAttributeNavigationRangeListType rangeList;
     @XmlAttribute(name = "type")
     protected String type;
     @XmlAttribute(name = "template")
     protected String template;
 
     /**
-     * Gets the value of the value property.
+     * Gets the value of the rangeList property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link ProductTypeAttributeNavigationRangeListType }
      *     
      */
-    public String getValue() {
-        return value;
+    public ProductTypeAttributeNavigationRangeListType getRangeList() {
+        return rangeList;
     }
 
     /**
-     * Sets the value of the value property.
+     * Sets the value of the rangeList property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link ProductTypeAttributeNavigationRangeListType }
      *     
      */
-    public void setValue(String value) {
-        this.value = value;
+    public void setRangeList(ProductTypeAttributeNavigationRangeListType value) {
+        this.rangeList = value;
     }
 
     /**

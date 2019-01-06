@@ -4,7 +4,6 @@ package org.yes.cart.bulkimport.xml.internal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -18,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="product-type-attribute-navigation" type="{}product-type-attribute-navigationType" minOccurs="0"/>
+ *         &lt;element name="navigation" type="{}product-type-attribute-navigationType" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -36,12 +35,11 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "product-type-attributeType", propOrder = {
-    "productTypeAttributeNavigation"
+    "navigation"
 })
 public class ProductTypeAttributeType {
 
-    @XmlElement(name = "product-type-attribute-navigation")
-    protected ProductTypeAttributeNavigationType productTypeAttributeNavigation;
+    protected ProductTypeAttributeNavigationType navigation;
     @XmlAttribute(name = "id")
     protected Long id;
     @XmlAttribute(name = "guid")
@@ -58,27 +56,27 @@ public class ProductTypeAttributeType {
     protected EntityImportModeType importMode;
 
     /**
-     * Gets the value of the productTypeAttributeNavigation property.
+     * Gets the value of the navigation property.
      * 
      * @return
      *     possible object is
      *     {@link ProductTypeAttributeNavigationType }
      *     
      */
-    public ProductTypeAttributeNavigationType getProductTypeAttributeNavigation() {
-        return productTypeAttributeNavigation;
+    public ProductTypeAttributeNavigationType getNavigation() {
+        return navigation;
     }
 
     /**
-     * Sets the value of the productTypeAttributeNavigation property.
+     * Sets the value of the navigation property.
      * 
      * @param value
      *     allowed object is
      *     {@link ProductTypeAttributeNavigationType }
      *     
      */
-    public void setProductTypeAttributeNavigation(ProductTypeAttributeNavigationType value) {
-        this.productTypeAttributeNavigation = value;
+    public void setNavigation(ProductTypeAttributeNavigationType value) {
+        this.navigation = value;
     }
 
     /**

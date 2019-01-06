@@ -2,12 +2,12 @@
 <cms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
 <content guid="SHOIP3" rank="0" shop="SHOIP3">
+    <name><![CDATA[SHOIP3]]></name>
+    <description><![CDATA[The root content]]></description>
     <availability disabled="false">
         <available-from>2009-01-01 00:00:00</available-from>
         <available-to>2108-12-28 00:00:00</available-to>
     </availability>
-    <name><![CDATA[SHOIP3]]></name>
-    <description><![CDATA[The root content]]></description>
     <templates>
         <content>content</content>
     </templates>
@@ -16,10 +16,10 @@
     </seo>
 </content>
 <content guid="SHOIP3-LVL1" rank="10" shop="SHOIP3">
-    <parent guid="SHOIP3"/>
-    <availability disabled="false"/>
     <name><![CDATA[Level 1]]></name>
     <description><![CDATA[Level 1 content]]></description>
+    <parent guid="SHOIP3"/>
+    <availability disabled="false"/>
     <templates>
         <content>content</content>
     </templates>

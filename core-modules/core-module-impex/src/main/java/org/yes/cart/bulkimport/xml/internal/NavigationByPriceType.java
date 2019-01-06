@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="price-tiers" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="price-navigation" type="{}navigation-by-price-tiersType" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="enabled" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
@@ -30,37 +30,37 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "navigation-by-priceType", propOrder = {
-    "priceTiers"
+    "priceNavigation"
 })
 public class NavigationByPriceType {
 
-    @XmlElement(name = "price-tiers", required = true)
-    protected String priceTiers;
+    @XmlElement(name = "price-navigation")
+    protected NavigationByPriceTiersType priceNavigation;
     @XmlAttribute(name = "enabled")
     protected Boolean enabled;
 
     /**
-     * Gets the value of the priceTiers property.
+     * Gets the value of the priceNavigation property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link NavigationByPriceTiersType }
      *     
      */
-    public String getPriceTiers() {
-        return priceTiers;
+    public NavigationByPriceTiersType getPriceNavigation() {
+        return priceNavigation;
     }
 
     /**
-     * Sets the value of the priceTiers property.
+     * Sets the value of the priceNavigation property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link NavigationByPriceTiersType }
      *     
      */
-    public void setPriceTiers(String value) {
-        this.priceTiers = value;
+    public void setPriceNavigation(NavigationByPriceTiersType value) {
+        this.priceNavigation = value;
     }
 
     /**

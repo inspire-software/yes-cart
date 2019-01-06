@@ -50,16 +50,16 @@ public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<F
         domain.setName(xmlType.getName());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
         domain.setDescription(xmlType.getDescription());
-        if (xmlType.getFulfilmentCentreLocation() != null) {
-            domain.setCountryCode(xmlType.getFulfilmentCentreLocation().getIso31661Alpha2());
-            domain.setStateCode(xmlType.getFulfilmentCentreLocation().getRegionCode());
-            domain.setCity(xmlType.getFulfilmentCentreLocation().getCity());
-            domain.setPostcode(xmlType.getFulfilmentCentreLocation().getPostcode());
+        if (xmlType.getLocation() != null) {
+            domain.setCountryCode(xmlType.getLocation().getIso31661Alpha2());
+            domain.setStateCode(xmlType.getLocation().getRegionCode());
+            domain.setCity(xmlType.getLocation().getCity());
+            domain.setPostcode(xmlType.getLocation().getPostcode());
         }
-        if (xmlType.getFulfilmentCentreConfiguration() != null) {
-            domain.setDefaultStandardStockLeadTime(xmlType.getFulfilmentCentreConfiguration().getStandardStockLeadTime());
-            domain.setDefaultBackorderStockLeadTime(xmlType.getFulfilmentCentreConfiguration().getBackorderStockLeadTime());
-            domain.setMultipleShippingSupported(xmlType.getFulfilmentCentreConfiguration().isMultipleShippingSupported());
+        if (xmlType.getConfiguration() != null) {
+            domain.setDefaultStandardStockLeadTime(xmlType.getConfiguration().getStandardStockLeadTime());
+            domain.setDefaultBackorderStockLeadTime(xmlType.getConfiguration().getBackorderStockLeadTime());
+            domain.setMultipleShippingSupported(xmlType.getConfiguration().isMultipleShippingSupported());
         }
         if (domain.getWarehouseId() == 0L) {
             this.warehouseService.create(domain);

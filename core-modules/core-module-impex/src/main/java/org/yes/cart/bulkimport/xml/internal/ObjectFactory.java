@@ -77,6 +77,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListType createProductTypeAttributeNavigationRangeListType() {
+        return new ProductTypeAttributeNavigationRangeListType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersType }
+     * 
+     */
+    public NavigationByPriceTiersType createNavigationByPriceTiersType() {
+        return new NavigationByPriceTiersType();
+    }
+
+    /**
      * Create an instance of {@link CategoryType }
      * 
      */
@@ -493,6 +509,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesType createProductTypeAttributeNavigationRangeListRangeDisplayValuesType() {
+        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesType();
+    }
+
+    /**
      * Create an instance of {@link CustomAttributeType }
      * 
      */
@@ -530,6 +554,22 @@ public class ObjectFactory {
      */
     public CustomAttributesType createCustomAttributesType() {
         return new CustomAttributesType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersCurrencyType }
+     * 
+     */
+    public NavigationByPriceTiersCurrencyType createNavigationByPriceTiersCurrencyType() {
+        return new NavigationByPriceTiersCurrencyType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType createProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType() {
+        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType();
     }
 
     /**
@@ -629,6 +669,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListRangeType createProductTypeAttributeNavigationRangeListRangeType() {
+        return new ProductTypeAttributeNavigationRangeListRangeType();
+    }
+
+    /**
      * Create an instance of {@link ProductTypeTemplatesType }
      * 
      */
@@ -658,6 +706,22 @@ public class ObjectFactory {
      */
     public ProductTypeGroupType createProductTypeGroupType() {
         return new ProductTypeGroupType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersCurrencyTiersTierType }
+     * 
+     */
+    public NavigationByPriceTiersCurrencyTiersTierType createNavigationByPriceTiersCurrencyTiersTierType() {
+        return new NavigationByPriceTiersCurrencyTiersTierType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersCurrencyTiersType }
+     * 
+     */
+    public NavigationByPriceTiersCurrencyTiersType createNavigationByPriceTiersCurrencyTiersType() {
+        return new NavigationByPriceTiersCurrencyTiersType();
     }
 
     /**
@@ -706,6 +770,22 @@ public class ObjectFactory {
      */
     public ContentTemplatesType createContentTemplatesType() {
         return new ContentTemplatesType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListType.Ranges }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListType.Ranges createProductTypeAttributeNavigationRangeListTypeRanges() {
+        return new ProductTypeAttributeNavigationRangeListType.Ranges();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersType.Currencies }
+     * 
+     */
+    public NavigationByPriceTiersType.Currencies createNavigationByPriceTiersTypeCurrencies() {
+        return new NavigationByPriceTiersType.Currencies();
     }
 
     /**

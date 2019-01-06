@@ -5,13 +5,13 @@
     <display-name>
         <i18n lang="en">Import Group</i18n>
     </display-name>
-    <data-group-descriptors>
+    <descriptors>
         <data-descriptor name="customer/productandcategorynamesimport.xml" type="WEBINF_XML">
             <value><![CDATA[customer/productandcategorynamesimport.xml]]></value>
         </data-descriptor>
         <data-descriptor name="customer/productskuimport_new.xml" type="WEBINF_XML">
             <value><![CDATA[customer/productskuimport_new.xml]]></value>
         </data-descriptor>
-    </data-group-descriptors>
+    </descriptors>
 </data-group>
 </data-groups>

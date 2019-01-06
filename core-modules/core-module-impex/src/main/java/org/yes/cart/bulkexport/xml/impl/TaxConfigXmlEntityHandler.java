@@ -52,8 +52,8 @@ public class TaxConfigXmlEntityHandler extends AbstractXmlEntityHandler<TaxConfi
                 .attr("tax", taxConfig.getTax().getCode())
                     .tagChars("sku", taxConfig.getProductCode())
                     .tag("tax-region")
-                        .attr("country", taxConfig.getCountryCode())
-                        .attr("state", taxConfig.getStateCode())
+                        .attr("iso-3166-1-alpha2", taxConfig.getCountryCode())
+                        .attr("region-code", taxConfig.getStateCode())
                     .end()
                     .tagTime(taxConfig)
                 .end();

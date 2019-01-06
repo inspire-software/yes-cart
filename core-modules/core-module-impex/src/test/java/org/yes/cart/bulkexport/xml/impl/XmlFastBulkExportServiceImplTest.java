@@ -339,7 +339,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             xml = new File(fileToExport);
             content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains(" guid=\"SHOIP1_EUR_"));
-            assertTrue(content.contains("<tax-region country=\"US\" state=\"US-US\"/>"));
+            assertTrue(content.contains("<tax-region iso-3166-1-alpha2=\"US\" region-code=\"US-US\"/>"));
 
             validateXmlFile(xml);
 
@@ -360,7 +360,9 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("<name>Power supply</name>"));
             assertTrue(content.contains("<description><![CDATA[Robots]]></description>"));
-            assertTrue(content.contains("<product-type-attribute-navigation type=\"R\"><![CDATA[<range-list>"));
+            assertTrue(content.contains("<navigation type=\"R\">"));
+            assertTrue(content.contains("<range-list>"));
+            assertTrue(content.contains("<from>0.10</from>"));
 
             validateXmlFile(xml);
 

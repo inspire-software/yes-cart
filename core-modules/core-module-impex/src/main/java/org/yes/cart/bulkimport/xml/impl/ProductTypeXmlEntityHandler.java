@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.*;
@@ -23,10 +24,18 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.ProductTypeAttr;
+import org.yes.cart.domain.misc.navigation.range.DisplayValue;
+import org.yes.cart.domain.misc.navigation.range.RangeList;
+import org.yes.cart.domain.misc.navigation.range.RangeNode;
+import org.yes.cart.domain.misc.navigation.range.impl.DisplayValueImpl;
+import org.yes.cart.domain.misc.navigation.range.impl.RangeListImpl;
+import org.yes.cart.domain.misc.navigation.range.impl.RangeNodeImpl;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductTypeService;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -88,13 +97,13 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
 
     private void processAttributes(final ProductType domain, final ProductTypeTypeType xmlType) {
 
-        if (xmlType.getProductTypeAttributes() != null) {
-            final CollectionImportModeType collectionMode = xmlType.getProductTypeAttributes().getImportMode() != null ? xmlType.getProductTypeAttributes().getImportMode() : CollectionImportModeType.MERGE;
+        if (xmlType.getAttributes() != null) {
+            final CollectionImportModeType collectionMode = xmlType.getAttributes().getImportMode() != null ? xmlType.getAttributes().getImportMode() : CollectionImportModeType.MERGE;
             if (collectionMode == CollectionImportModeType.REPLACE) {
                 domain.getAttributes().clear();
             }
 
-            for (final ProductTypeAttributeType attr : xmlType.getProductTypeAttributes().getProductTypeAttribute()) {
+            for (final ProductTypeAttributeType attr : xmlType.getAttributes().getAttribute()) {
                 final EntityImportModeType itemMode = attr.getImportMode() != null ? attr.getImportMode() : EntityImportModeType.MERGE;
                 if (itemMode == EntityImportModeType.DELETE) {
                     if (attr.getAttribute() != null) {
@@ -138,10 +147,50 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
         if (attr.isSimilarity() != null) {
             pta.setSimilarity(attr.isSimilarity());
         }
-        if (attr.getProductTypeAttributeNavigation() != null) {
-            pta.setNavigationTemplate(attr.getProductTypeAttributeNavigation().getTemplate());
-            pta.setNavigationType(attr.getProductTypeAttributeNavigation().getType());
-            pta.setRangeNavigation(attr.getProductTypeAttributeNavigation().getValue());
+        if (attr.getNavigation() != null) {
+            pta.setNavigationTemplate(attr.getNavigation().getTemplate());
+            pta.setNavigationType(attr.getNavigation().getType());
+
+            final ProductTypeAttributeNavigationRangeListType rangeList = attr.getNavigation().getRangeList();
+
+            if (rangeList != null && rangeList.getRanges() != null && CollectionUtils.isNotEmpty(rangeList.getRanges().getRange())) {
+
+                final RangeList list = new RangeListImpl();
+                list.setRanges(new ArrayList<>());
+
+                for (final ProductTypeAttributeNavigationRangeListRangeType range : rangeList.getRanges().getRange()) {
+
+                    final RangeNode node = new RangeNodeImpl();
+
+                    node.setFrom(range.getFrom());
+                    node.setTo(range.getTo());
+
+                    if (range.getI18N() != null && CollectionUtils.isNotEmpty(range.getI18N().getDisplay())) {
+
+                        final List<DisplayValue> dvs = new ArrayList<>();
+
+                        for (final ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType i18n : range.getI18N().getDisplay()) {
+
+                            final DisplayValue dv = new DisplayValueImpl();
+                            dv.setLang(i18n.getLang());
+                            dv.setValue(i18n.getValue());
+                            dvs.add(dv);
+
+                        }
+
+                        node.setI18n(dvs);
+
+                    }
+
+                    list.getRanges().add(node);
+
+                }
+
+                pta.setRangeList(list);
+
+            } else {
+                pta.setRangeNavigation(null);
+            }
         }
         pta.setGuid(attr.getGuid());
     }
@@ -159,13 +208,13 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
 
     private void processGroups(final ProductType domain, final ProductTypeTypeType xmlType) {
 
-        if (xmlType.getProductTypeGroups() != null) {
-            final CollectionImportModeType collectionMode = xmlType.getProductTypeGroups().getImportMode() != null ? xmlType.getProductTypeGroups().getImportMode() : CollectionImportModeType.MERGE;
+        if (xmlType.getGroups() != null) {
+            final CollectionImportModeType collectionMode = xmlType.getGroups().getImportMode() != null ? xmlType.getGroups().getImportMode() : CollectionImportModeType.MERGE;
             if (collectionMode == CollectionImportModeType.REPLACE) {
                 domain.getAttributeViewGroup().clear();
             }
 
-            for (final ProductTypeGroupType group : xmlType.getProductTypeGroups().getProductTypeGroup()) {
+            for (final ProductTypeGroupType group : xmlType.getGroups().getGroup()) {
                 final EntityImportModeType itemMode = group.getImportMode() != null ? group.getImportMode() : EntityImportModeType.MERGE;
                 if (itemMode == EntityImportModeType.DELETE) {
                     if (group.getName() != null) {
@@ -200,8 +249,8 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
             ptavg.setRank(group.getRank());
         }
         ptavg.setGuid(group.getGuid());
-        if (group.getProductTypeGroupAttributes() != null) {
-            ptavg.setAttrCodeList(StringUtils.join(group.getProductTypeGroupAttributes().getProductTypeGroupAttribute(), ','));
+        if (group.getGroupAttributes() != null) {
+            ptavg.setAttrCodeList(StringUtils.join(group.getGroupAttributes().getGroupAttribute(), ','));
         }
     }
 

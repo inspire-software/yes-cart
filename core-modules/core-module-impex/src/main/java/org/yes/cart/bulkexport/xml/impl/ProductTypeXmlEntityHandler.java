@@ -24,6 +24,9 @@ import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.ProductTypeAttr;
+import org.yes.cart.domain.misc.navigation.range.DisplayValue;
+import org.yes.cart.domain.misc.navigation.range.RangeList;
+import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.service.async.JobStatusListener;
 
 /**
@@ -68,9 +71,9 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
                     .end();
 
         if (CollectionUtils.isNotEmpty(type.getAttributeViewGroup())) {
-            final Tag group = tag(tag, "product-type-groups");
+            final Tag group = tag(tag, "groups");
             for (final ProdTypeAttributeViewGroup vg : type.getAttributeViewGroup()) {
-                final Tag vgTag = group.tag("product-type-group")
+                final Tag vgTag = group.tag("group")
                         .attr("id", vg.getProdTypeAttributeViewGroupId())
                         .attr("guid", vg.getGuid())
                         .attr("rank", vg.getRank())
@@ -78,9 +81,9 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
                         .tagI18n("display-name", vg.getDisplayName());
                 final String[] attrs = StringUtils.split(vg.getAttrCodeList(), ',');
                 if (attrs != null) {
-                    final Tag attsTag = vgTag.tag("product-type-group-attributes");
+                    final Tag attsTag = vgTag.tag("group-attributes");
                     for (final String attr : attrs) {
-                        attsTag.tagChars("product-type-group-attribute", attr);
+                        attsTag.tagChars("group-attribute", attr);
                     }
                     attsTag.end();
                 }
@@ -90,9 +93,9 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
         }
 
         if (CollectionUtils.isNotEmpty(type.getAttributes())) {
-            final Tag group = tag(tag, "product-type-attributes");
+            final Tag group = tag(tag, "attributes");
             for (final ProductTypeAttr pta : type.getAttributes()) {
-                final Tag ptaTag = group.tag("product-type-attribute")
+                final Tag ptaTag = group.tag("attribute")
                         .attr("id", pta.getProductTypeAttrId())
                         .attr("guid", pta.getGuid())
                         .attr("attribute", pta.getAttribute().getCode())
@@ -100,11 +103,44 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
                         .attr("visible", pta.isVisible())
                         .attr("similarity", pta.isSimilarity());
                 if (pta.isNavigation()) {
-                    tag(ptaTag, "product-type-attribute-navigation")
+                    final Tag nav = tag(ptaTag, "navigation")
                         .attr("type", pta.getNavigationType())
-                        .attr("template", pta.getNavigationTemplate())
-                        .cdata(pta.getRangeNavigation())
-                        .end();
+                        .attr("template", pta.getNavigationTemplate());
+
+                    final RangeList rangeList = pta.getRangeList();
+                    if (rangeList != null && CollectionUtils.isNotEmpty(rangeList.getRanges())) {
+
+                        final Tag ranges = nav.tag("range-list").tag("ranges");
+
+                        for (final RangeNode node : rangeList.getRanges()) {
+
+                            final Tag range = ranges.tag("range")
+                                    .tagChars("from", node.getFrom())
+                                    .tagChars("to", node.getTo());
+
+                            if (CollectionUtils.isNotEmpty(node.getI18n())) {
+
+                                final Tag displays = range.tag("i18n");
+
+                                for (final DisplayValue dv : node.getI18n()) {
+
+                                    displays.tag("display")
+                                            .tagChars("lang", dv.getLang())
+                                            .tagCdata("value", dv.getValue());
+
+                                }
+
+                                displays.end();
+
+                            }
+
+                            range.end();
+
+                        }
+
+                        ranges.end().end();
+                    }
+                        nav.end();
                 }
                 ptaTag.end();
             }

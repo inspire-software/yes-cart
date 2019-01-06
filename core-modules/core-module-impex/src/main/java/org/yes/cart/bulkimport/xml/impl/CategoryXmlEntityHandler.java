@@ -16,15 +16,24 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.CategoryType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
+import org.yes.cart.bulkimport.xml.internal.NavigationByPriceTiersCurrencyTiersTierType;
+import org.yes.cart.bulkimport.xml.internal.NavigationByPriceTiersCurrencyType;
 import org.yes.cart.domain.entity.AttrValueCategory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductType;
+import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
+import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
+import org.yes.cart.domain.misc.navigation.price.impl.PriceTierNodeImpl;
+import org.yes.cart.domain.misc.navigation.price.impl.PriceTierTreeImpl;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductTypeService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -67,10 +76,10 @@ public class CategoryXmlEntityHandler extends AbstractAttributableXmlEntityHandl
         }
         if (xmlType.getNavigation() != null) {
             // attribute navigation
-            if (xmlType.getNavigation().getNavigationByAttributes() != null) {
-                if (xmlType.getNavigation().getNavigationByAttributes().getNavigationProductType() != null) {
-                    if (xmlType.getNavigation().getNavigationByAttributes().getNavigationProductType().getGuid() != null) {
-                        final ProductType type = this.productTypeService.findSingleByCriteria(" where e.guid = ?1", xmlType.getNavigation().getNavigationByAttributes().getNavigationProductType().getGuid());
+            if (xmlType.getNavigation().getAttributes() != null) {
+                if (xmlType.getNavigation().getAttributes().getProductType() != null) {
+                    if (xmlType.getNavigation().getAttributes().getProductType().getGuid() != null) {
+                        final ProductType type = this.productTypeService.findSingleByCriteria(" where e.guid = ?1", xmlType.getNavigation().getAttributes().getProductType().getGuid());
                         if (type != null) {
                             domain.setProductType(type);
                         }
@@ -78,16 +87,48 @@ public class CategoryXmlEntityHandler extends AbstractAttributableXmlEntityHandl
                         domain.setProductType(null);
                     }
                 }
-                domain.setNavigationByAttributes(xmlType.getNavigation().getNavigationByAttributes().isEnabled());
+                domain.setNavigationByAttributes(xmlType.getNavigation().getAttributes().isEnabled());
             }
             // price navigation
-            if (xmlType.getNavigation().getNavigationByPrice() != null) {
-                if (StringUtils.isNotBlank(xmlType.getNavigation().getNavigationByPrice().getPriceTiers())) {
-                    domain.setNavigationByPriceTiers(xmlType.getNavigation().getNavigationByPrice().getPriceTiers());
+            if (xmlType.getNavigation().getPrice() != null) {
+                if (xmlType.getNavigation().getPrice().getPriceNavigation() != null &&
+                        xmlType.getNavigation().getPrice().getPriceNavigation().getCurrencies() != null &&
+                        CollectionUtils.isNotEmpty(xmlType.getNavigation().getPrice().getPriceNavigation().getCurrencies().getCurrency())) {
+
+                    final PriceTierTree tree = new PriceTierTreeImpl();
+
+                    for (final NavigationByPriceTiersCurrencyType currency : xmlType.getNavigation().getPrice().getPriceNavigation().getCurrencies().getCurrency()) {
+
+                        if (currency.getPriceTiers() != null && CollectionUtils.isNotEmpty(currency.getPriceTiers().getPriceTier())) {
+
+                            final List<PriceTierNode> nodes = new ArrayList<>();
+
+                            for (final NavigationByPriceTiersCurrencyTiersTierType tier : currency.getPriceTiers().getPriceTier()) {
+                                final PriceTierNode node = new PriceTierNodeImpl();
+                                node.setFrom(tier.getFrom());
+                                node.setTo(tier.getTo());
+                                nodes.add(node);
+                            }
+
+                            if (!nodes.isEmpty()) {
+
+                                tree.addPriceTierNode(currency.getName(), nodes);
+
+                            }
+
+                        }
+
+                    }
+
+                    if (CollectionUtils.isNotEmpty(tree.getSupportedCurrencies())) {
+                        domain.setNavigationByPriceTree(tree);
+                    } else {
+                        domain.setNavigationByPriceTiers(null);
+                    }
                 } else {
                     domain.setNavigationByPriceTiers(null);
                 }
-                domain.setNavigationByPrice(xmlType.getNavigation().getNavigationByPrice().isEnabled());
+                domain.setNavigationByPrice(xmlType.getNavigation().getPrice().isEnabled());
             }
         }
 

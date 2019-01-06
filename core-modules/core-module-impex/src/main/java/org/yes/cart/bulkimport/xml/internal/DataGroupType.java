@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
- *         &lt;element name="data-group-descriptors" type="{}data-group-descriptorsType"/>
+ *         &lt;element name="descriptors" type="{}data-group-descriptorsType"/>
  *         &lt;element name="created-timestamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updated-timestamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "data-groupType", propOrder = {
     "displayName",
-    "dataGroupDescriptors",
+    "descriptors",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
@@ -50,8 +50,8 @@ public class DataGroupType {
 
     @XmlElement(name = "display-name")
     protected I18NsType displayName;
-    @XmlElement(name = "data-group-descriptors", required = true)
-    protected DataGroupDescriptorsType dataGroupDescriptors;
+    @XmlElement(required = true)
+    protected DataGroupDescriptorsType descriptors;
     @XmlElement(name = "created-timestamp")
     protected String createdTimestamp;
     @XmlElement(name = "created-by")
@@ -96,27 +96,27 @@ public class DataGroupType {
     }
 
     /**
-     * Gets the value of the dataGroupDescriptors property.
+     * Gets the value of the descriptors property.
      * 
      * @return
      *     possible object is
      *     {@link DataGroupDescriptorsType }
      *     
      */
-    public DataGroupDescriptorsType getDataGroupDescriptors() {
-        return dataGroupDescriptors;
+    public DataGroupDescriptorsType getDescriptors() {
+        return descriptors;
     }
 
     /**
-     * Sets the value of the dataGroupDescriptors property.
+     * Sets the value of the descriptors property.
      * 
      * @param value
      *     allowed object is
      *     {@link DataGroupDescriptorsType }
      *     
      */
-    public void setDataGroupDescriptors(DataGroupDescriptorsType value) {
-        this.dataGroupDescriptors = value;
+    public void setDescriptors(DataGroupDescriptorsType value) {
+        this.descriptors = value;
     }
 
     /**

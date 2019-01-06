@@ -19,14 +19,12 @@ package org.yes.cart.bulkimport.xml.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
-import org.yes.cart.bulkimport.xml.internal.*;
+import org.yes.cart.bulkimport.xml.internal.BodyContentType;
+import org.yes.cart.bulkimport.xml.internal.ContentType;
+import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.AttrValueCategory;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.ProductType;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
-import org.yes.cart.service.domain.ProductTypeService;
 import org.yes.cart.service.domain.ShopService;
 
 import java.util.HashMap;

@@ -3,7 +3,6 @@ package org.yes.cart.bulkimport.xml.internal;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -17,8 +16,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="navigation-by-attributes" type="{}navigation-by-attributesType" minOccurs="0"/>
- *         &lt;element name="navigation-by-price" type="{}navigation-by-priceType" minOccurs="0"/>
+ *         &lt;element name="attributes" type="{}navigation-by-attributesType" minOccurs="0"/>
+ *         &lt;element name="price" type="{}navigation-by-priceType" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,62 +28,60 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "navigationType", propOrder = {
-    "navigationByAttributes",
-    "navigationByPrice"
+    "attributes",
+    "price"
 })
 public class NavigationType {
 
-    @XmlElement(name = "navigation-by-attributes")
-    protected NavigationByAttributesType navigationByAttributes;
-    @XmlElement(name = "navigation-by-price")
-    protected NavigationByPriceType navigationByPrice;
+    protected NavigationByAttributesType attributes;
+    protected NavigationByPriceType price;
 
     /**
-     * Gets the value of the navigationByAttributes property.
+     * Gets the value of the attributes property.
      * 
      * @return
      *     possible object is
      *     {@link NavigationByAttributesType }
      *     
      */
-    public NavigationByAttributesType getNavigationByAttributes() {
-        return navigationByAttributes;
+    public NavigationByAttributesType getAttributes() {
+        return attributes;
     }
 
     /**
-     * Sets the value of the navigationByAttributes property.
+     * Sets the value of the attributes property.
      * 
      * @param value
      *     allowed object is
      *     {@link NavigationByAttributesType }
      *     
      */
-    public void setNavigationByAttributes(NavigationByAttributesType value) {
-        this.navigationByAttributes = value;
+    public void setAttributes(NavigationByAttributesType value) {
+        this.attributes = value;
     }
 
     /**
-     * Gets the value of the navigationByPrice property.
+     * Gets the value of the price property.
      * 
      * @return
      *     possible object is
      *     {@link NavigationByPriceType }
      *     
      */
-    public NavigationByPriceType getNavigationByPrice() {
-        return navigationByPrice;
+    public NavigationByPriceType getPrice() {
+        return price;
     }
 
     /**
-     * Sets the value of the navigationByPrice property.
+     * Sets the value of the price property.
      * 
      * @param value
      *     allowed object is
      *     {@link NavigationByPriceType }
      *     
      */
-    public void setNavigationByPrice(NavigationByPriceType value) {
-        this.navigationByPrice = value;
+    public void setPrice(NavigationByPriceType value) {
+        this.price = value;
     }
 
 }

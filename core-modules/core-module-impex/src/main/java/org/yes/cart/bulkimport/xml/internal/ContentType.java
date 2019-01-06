@@ -21,6 +21,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="parent" type="{}baseContentType" minOccurs="0"/>
  *         &lt;element name="availability">
  *           &lt;complexType>
@@ -35,9 +38,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="templates" type="{}contentTemplatesType"/>
  *         &lt;element name="seo" type="{}seoType"/>
  *         &lt;element name="custom-attributes" type="{}custom-attributesType" minOccurs="0"/>
@@ -61,11 +61,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "contentType", propOrder = {
-    "parent",
-    "availability",
     "name",
     "displayName",
     "description",
+    "parent",
+    "availability",
     "templates",
     "seo",
     "customAttributes",
@@ -77,14 +77,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class ContentType {
 
-    protected BaseContentType parent;
-    @XmlElement(required = true)
-    protected ContentType.Availability availability;
     @XmlElement(required = true)
     protected String name;
     @XmlElement(name = "display-name")
     protected I18NsType displayName;
     protected String description;
+    protected BaseContentType parent;
+    @XmlElement(required = true)
+    protected ContentType.Availability availability;
     @XmlElement(required = true)
     protected ContentTemplatesType templates;
     @XmlElement(required = true)
@@ -114,54 +114,6 @@ public class ContentType {
     protected Integer rank;
     @XmlAttribute(name = "import-mode")
     protected EntityImportModeType importMode;
-
-    /**
-     * Gets the value of the parent property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BaseContentType }
-     *     
-     */
-    public BaseContentType getParent() {
-        return parent;
-    }
-
-    /**
-     * Sets the value of the parent property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BaseContentType }
-     *     
-     */
-    public void setParent(BaseContentType value) {
-        this.parent = value;
-    }
-
-    /**
-     * Gets the value of the availability property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ContentType.Availability }
-     *     
-     */
-    public ContentType.Availability getAvailability() {
-        return availability;
-    }
-
-    /**
-     * Sets the value of the availability property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ContentType.Availability }
-     *     
-     */
-    public void setAvailability(ContentType.Availability value) {
-        this.availability = value;
-    }
 
     /**
      * Gets the value of the name property.
@@ -233,6 +185,54 @@ public class ContentType {
      */
     public void setDescription(String value) {
         this.description = value;
+    }
+
+    /**
+     * Gets the value of the parent property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BaseContentType }
+     *     
+     */
+    public BaseContentType getParent() {
+        return parent;
+    }
+
+    /**
+     * Sets the value of the parent property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BaseContentType }
+     *     
+     */
+    public void setParent(BaseContentType value) {
+        this.parent = value;
+    }
+
+    /**
+     * Gets the value of the availability property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ContentType.Availability }
+     *     
+     */
+    public ContentType.Availability getAvailability() {
+        return availability;
+    }
+
+    /**
+     * Sets the value of the availability property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ContentType.Availability }
+     *     
+     */
+    public void setAvailability(ContentType.Availability value) {
+        this.availability = value;
     }
 
     /**

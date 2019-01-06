@@ -70,9 +70,9 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
 
     private void processDataDescriptors(final DataGroup domain, final DataGroupType xmlType) {
 
-        if (xmlType.getDataGroupDescriptors() != null) {
+        if (xmlType.getDescriptors() != null) {
 
-            final CollectionImportModeType collectionMode = xmlType.getDataGroupDescriptors().getImportMode() != null ? xmlType.getDataGroupDescriptors().getImportMode() : CollectionImportModeType.REPLACE;
+            final CollectionImportModeType collectionMode = xmlType.getDescriptors().getImportMode() != null ? xmlType.getDescriptors().getImportMode() : CollectionImportModeType.REPLACE;
             if (collectionMode == CollectionImportModeType.REPLACE) {
                 domain.setDescriptors(null);
             }
@@ -88,7 +88,7 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
             }
 
             int insertIndex = groupDescriptors.size();
-            for (final DataDescriptorType dataDescriptor : xmlType.getDataGroupDescriptors().getDataDescriptor()) {
+            for (final DataDescriptorType dataDescriptor : xmlType.getDescriptors().getDataDescriptor()) {
                 final EntityImportModeType itemMode = dataDescriptor.getImportMode() != null ? dataDescriptor.getImportMode() : EntityImportModeType.MERGE;
                 if (itemMode != EntityImportModeType.DELETE) {
 

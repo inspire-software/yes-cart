@@ -65,7 +65,7 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
                 final String[] descriptors = StringUtils.split(group.getDescriptors(), ',');
                 if (descriptors != null) {
 
-                    final Tag descTag = groupTag.tag("data-group-descriptors");
+                    final Tag descTag = groupTag.tag("descriptors");
 
                     for (final String descriptor : descriptors) {
 

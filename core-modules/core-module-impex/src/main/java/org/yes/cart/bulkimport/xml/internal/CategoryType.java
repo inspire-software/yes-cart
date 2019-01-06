@@ -21,6 +21,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
+ *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="parent" type="{}baseCategoryType" minOccurs="0"/>
  *         &lt;element name="link" type="{}baseCategoryType" minOccurs="0"/>
  *         &lt;element name="availability">
@@ -36,9 +39,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="navigation" type="{}navigationType"/>
  *         &lt;element name="templates" type="{}categoryTemplatesType"/>
  *         &lt;element name="seo" type="{}seoType"/>
@@ -61,12 +61,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "categoryType", propOrder = {
-    "parent",
-    "link",
-    "availability",
     "name",
     "displayName",
     "description",
+    "parent",
+    "link",
+    "availability",
     "navigation",
     "templates",
     "seo",
@@ -78,15 +78,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class CategoryType {
 
-    protected BaseCategoryType parent;
-    protected BaseCategoryType link;
-    @XmlElement(required = true)
-    protected CategoryType.Availability availability;
     @XmlElement(required = true)
     protected String name;
     @XmlElement(name = "display-name")
     protected I18NsType displayName;
     protected String description;
+    protected BaseCategoryType parent;
+    protected BaseCategoryType link;
+    @XmlElement(required = true)
+    protected CategoryType.Availability availability;
     @XmlElement(required = true)
     protected NavigationType navigation;
     @XmlElement(required = true)
@@ -115,78 +115,6 @@ public class CategoryType {
     protected Integer rank;
     @XmlAttribute(name = "import-mode")
     protected EntityImportModeType importMode;
-
-    /**
-     * Gets the value of the parent property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BaseCategoryType }
-     *     
-     */
-    public BaseCategoryType getParent() {
-        return parent;
-    }
-
-    /**
-     * Sets the value of the parent property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BaseCategoryType }
-     *     
-     */
-    public void setParent(BaseCategoryType value) {
-        this.parent = value;
-    }
-
-    /**
-     * Gets the value of the link property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BaseCategoryType }
-     *     
-     */
-    public BaseCategoryType getLink() {
-        return link;
-    }
-
-    /**
-     * Sets the value of the link property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BaseCategoryType }
-     *     
-     */
-    public void setLink(BaseCategoryType value) {
-        this.link = value;
-    }
-
-    /**
-     * Gets the value of the availability property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CategoryType.Availability }
-     *     
-     */
-    public CategoryType.Availability getAvailability() {
-        return availability;
-    }
-
-    /**
-     * Sets the value of the availability property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CategoryType.Availability }
-     *     
-     */
-    public void setAvailability(CategoryType.Availability value) {
-        this.availability = value;
-    }
 
     /**
      * Gets the value of the name property.
@@ -258,6 +186,78 @@ public class CategoryType {
      */
     public void setDescription(String value) {
         this.description = value;
+    }
+
+    /**
+     * Gets the value of the parent property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BaseCategoryType }
+     *     
+     */
+    public BaseCategoryType getParent() {
+        return parent;
+    }
+
+    /**
+     * Sets the value of the parent property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BaseCategoryType }
+     *     
+     */
+    public void setParent(BaseCategoryType value) {
+        this.parent = value;
+    }
+
+    /**
+     * Gets the value of the link property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BaseCategoryType }
+     *     
+     */
+    public BaseCategoryType getLink() {
+        return link;
+    }
+
+    /**
+     * Sets the value of the link property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BaseCategoryType }
+     *     
+     */
+    public void setLink(BaseCategoryType value) {
+        this.link = value;
+    }
+
+    /**
+     * Gets the value of the availability property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link CategoryType.Availability }
+     *     
+     */
+    public CategoryType.Availability getAvailability() {
+        return availability;
+    }
+
+    /**
+     * Sets the value of the availability property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link CategoryType.Availability }
+     *     
+     */
+    public void setAvailability(CategoryType.Availability value) {
+        this.availability = value;
     }
 
     /**

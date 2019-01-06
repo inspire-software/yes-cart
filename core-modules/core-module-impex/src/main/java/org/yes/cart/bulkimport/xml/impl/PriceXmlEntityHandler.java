@@ -17,15 +17,11 @@
 package org.yes.cart.bulkimport.xml.impl;
 
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
-import org.yes.cart.bulkimport.xml.internal.*;
+import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
+import org.yes.cart.bulkimport.xml.internal.PriceType;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.service.domain.SkuWarehouseService;
-import org.yes.cart.service.domain.WarehouseService;
-
-import java.math.BigDecimal;
 
 /**
  * User: denispavlov

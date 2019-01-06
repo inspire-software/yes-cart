@@ -4,12 +4,12 @@
 <fulfilment-centre code="WAREHOUSE_1">
     <name><![CDATA[First warehouse]]></name>
     <description><![CDATA[Warehouse description]]></description>
-    <fulfilment-centre-location/>
-    <fulfilment-centre-configuration>
+    <location/>
+    <configuration>
         <standard-stock-lead-time>1</standard-stock-lead-time>
         <backorder-stock-lead-time>8</backorder-stock-lead-time>
         <multiple-shipping-supported>true</multiple-shipping-supported>
-    </fulfilment-centre-configuration>
+    </configuration>
 </fulfilment-centre>
 <fulfilment-centre code="XML_WAREHOUSE_2">
     <name><![CDATA[Second warehouse XML]]></name>
@@ -17,15 +17,15 @@
         <i18n lang="en">XML warehouse 2</i18n>
     </display-name>
     <description><![CDATA[Warehouse description]]></description>
-    <fulfilment-centre-location>
+    <location>
         <iso-3166-1-alpha2>GB</iso-3166-1-alpha2>
         <region-code>England</region-code>
         <city>London</city>
-    </fulfilment-centre-location>
-    <fulfilment-centre-configuration>
+    </location>
+    <configuration>
         <standard-stock-lead-time>3</standard-stock-lead-time>
         <backorder-stock-lead-time>10</backorder-stock-lead-time>
         <multiple-shipping-supported>true</multiple-shipping-supported>
-    </fulfilment-centre-configuration>
+    </configuration>
 </fulfilment-centre>
 </fulfilment-centres>

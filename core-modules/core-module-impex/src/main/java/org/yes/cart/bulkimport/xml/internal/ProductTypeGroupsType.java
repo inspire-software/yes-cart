@@ -6,7 +6,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -20,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="product-type-group" type="{}product-type-groupType" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="group" type="{}product-type-groupType" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="import-mode" type="{}collectionImportModeType" />
  *     &lt;/restriction>
@@ -32,28 +31,27 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "product-type-groupsType", propOrder = {
-    "productTypeGroup"
+    "group"
 })
 public class ProductTypeGroupsType {
 
-    @XmlElement(name = "product-type-group")
-    protected List<ProductTypeGroupType> productTypeGroup;
+    protected List<ProductTypeGroupType> group;
     @XmlAttribute(name = "import-mode")
     protected CollectionImportModeType importMode;
 
     /**
-     * Gets the value of the productTypeGroup property.
+     * Gets the value of the group property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the productTypeGroup property.
+     * This is why there is not a <CODE>set</CODE> method for the group property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getProductTypeGroup().add(newItem);
+     *    getGroup().add(newItem);
      * </pre>
      * 
      * 
@@ -63,11 +61,11 @@ public class ProductTypeGroupsType {
      * 
      * 
      */
-    public List<ProductTypeGroupType> getProductTypeGroup() {
-        if (productTypeGroup == null) {
-            productTypeGroup = new ArrayList<ProductTypeGroupType>();
+    public List<ProductTypeGroupType> getGroup() {
+        if (group == null) {
+            group = new ArrayList<ProductTypeGroupType>();
         }
-        return this.productTypeGroup;
+        return this.group;
     }
 
     /**

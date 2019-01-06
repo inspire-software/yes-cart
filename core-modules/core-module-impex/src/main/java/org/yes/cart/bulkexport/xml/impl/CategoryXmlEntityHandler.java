@@ -16,10 +16,13 @@
 
 package org.yes.cart.bulkexport.xml.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
+import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CategoryService;
 
@@ -56,6 +59,19 @@ public class CategoryXmlEntityHandler extends AbstractXmlEntityHandler<Category>
                 .attr("guid", category.getGuid())
                 .attr("rank", category.getRank());
 
+        Long productTypeId = null;
+        String productTypeGuid = null;
+        if (category.getProductType() != null) {
+            productTypeId = category.getProductType().getProducttypeId();
+            productTypeGuid = category.getProductType().getGuid();
+        }
+
+            tag
+                .tagCdata("name", category.getName())
+                .tagI18n("display-name", category.getDisplayName())
+                .tagCdata("description", category.getDescription());
+
+
         if (category.getParentId() > 0L) {
             final Category parentCat = this.categoryService.findById(category.getParentId());
             if (parentCat != null) {
@@ -79,37 +95,69 @@ public class CategoryXmlEntityHandler extends AbstractXmlEntityHandler<Category>
             }
         }
 
-        Long productTypeId = null;
-        String productTypeGuid = null;
-        if (category.getProductType() != null) {
-            productTypeId = category.getProductType().getProducttypeId();
-            productTypeGuid = category.getProductType().getGuid();
-        }
 
             tag
                 .tag("availability")
                     .attr("disabled", category.isDisabled())
                     .tagTime("available-from", category.getAvailablefrom())
                     .tagTime("available-to", category.getAvailableto())
-                .end()
-                .tagCdata("name", category.getName())
-                .tagI18n("display-name", category.getDisplayName())
-                .tagCdata("description", category.getDescription())
-                .tag("navigation")
-                    .tag("navigation-by-attributes")
-                        .attr("enabled", category.getNavigationByAttributes())
-                        .tag("navigation-product-type")
+                .end();
+
+            final Tag nav = tag.tag("navigation");
+
+                final Tag attrs = nav
+                    .tag("attributes")
+                        .attr("enabled", category.getNavigationByAttributes());
+
+                if (productTypeGuid != null) {
+                        attrs.tag("product-type")
                             .attr("id", productTypeId)
                             .attr("guid", productTypeGuid)
-                        .end()
-                    .end()
-                    .tag("navigation-by-price")
-                        .attr("enabled", category.getNavigationByPrice())
-                        .tag("price-tiers")
-                            .cdata(category.getNavigationByPriceTiers())
-                        .end()
-                    .end()
-                .end()
+                        .end();
+                }
+
+                attrs.end();
+
+                final Tag price = nav
+                    .tag("price")
+                        .attr("enabled", category.getNavigationByPrice());
+
+                final PriceTierTree catPriceTiers = category.getNavigationByPriceTree();
+                if (catPriceTiers != null && CollectionUtils.isNotEmpty(catPriceTiers.getSupportedCurrencies())) {
+                    final Tag tiers = price.tag("price-navigation");
+
+                    final Tag tierCurrencies = tiers.tag("currencies");
+
+                    for (final String currency : catPriceTiers.getSupportedCurrencies()) {
+
+                        final Tag tierCurrency = tierCurrencies.tag("currency");
+
+                            tierCurrency.tagChars("name", currency);
+                            final Tag tierCurrencyItems = tierCurrency.tag("price-tiers");
+
+                            for (final PriceTierNode node : catPriceTiers.getPriceTierNodes(currency)) {
+
+                                tierCurrencyItems.tag("price-tier")
+                                        .tagNum("from", node.getFrom())
+                                        .tagNum("to", node.getTo())
+                                    .end();
+
+                            }
+
+                            tierCurrencyItems.end();
+
+                        tierCurrency.end();
+
+                    }
+
+                    tierCurrencies.end();
+                    tiers.end();
+                }
+                    price.end();
+
+                nav.end();
+
+            tag
                 .tag("templates")
                     .tagChars("category", category.getUitemplate())
                 .end()

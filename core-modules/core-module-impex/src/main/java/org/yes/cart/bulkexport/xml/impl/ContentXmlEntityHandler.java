@@ -72,18 +72,24 @@ public class ContentXmlEntityHandler extends AbstractXmlEntityHandler<Category> 
         }
         tag.attr("shop", root.getGuid()); // Root content has same GUID as shop code
 
+        final Attributable attributable = new FilteredAttributable(content);
+
+            tag
+                .tagCdata("name", content.getName())
+                .tagI18n("display-name", content.getDisplayName())
+                .tagCdata("description", content.getDescription());
+
+
         if (content.getParentId() > 0L) {
             final Category parentCat = this.contentService.findById(content.getParentId());
             if (parentCat != null) {
                 tag
-                    .tag("parent")
+                        .tag("parent")
                         .attr("id", parentCat.getCategoryId())
                         .attr("guid", parentCat.getGuid())
-                    .end();
+                        .end();
             }
         }
-
-        final Attributable attributable = new FilteredAttributable(content);
 
             tag
                 .tag("availability")
@@ -91,9 +97,6 @@ public class ContentXmlEntityHandler extends AbstractXmlEntityHandler<Category> 
                     .tagTime("available-from", content.getAvailablefrom())
                     .tagTime("available-to", content.getAvailableto())
                 .end()
-                .tagCdata("name", content.getName())
-                .tagI18n("display-name", content.getDisplayName())
-                .tagCdata("description", content.getDescription())
                 .tag("templates")
                     .tagChars("content", content.getUitemplate())
                 .end()

@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
- *         &lt;element name="product-type-group-attributes" type="{}product-type-group-attributesType"/>
+ *         &lt;element name="group-attributes" type="{}product-type-group-attributesType"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "product-type-groupType", propOrder = {
     "name",
     "displayName",
-    "productTypeGroupAttributes"
+    "groupAttributes"
 })
 public class ProductTypeGroupType {
 
@@ -45,8 +45,8 @@ public class ProductTypeGroupType {
     protected String name;
     @XmlElement(name = "display-name")
     protected I18NsType displayName;
-    @XmlElement(name = "product-type-group-attributes", required = true)
-    protected ProductTypeGroupAttributesType productTypeGroupAttributes;
+    @XmlElement(name = "group-attributes", required = true)
+    protected ProductTypeGroupAttributesType groupAttributes;
     @XmlAttribute(name = "id")
     protected Long id;
     @XmlAttribute(name = "guid")
@@ -105,27 +105,27 @@ public class ProductTypeGroupType {
     }
 
     /**
-     * Gets the value of the productTypeGroupAttributes property.
+     * Gets the value of the groupAttributes property.
      * 
      * @return
      *     possible object is
      *     {@link ProductTypeGroupAttributesType }
      *     
      */
-    public ProductTypeGroupAttributesType getProductTypeGroupAttributes() {
-        return productTypeGroupAttributes;
+    public ProductTypeGroupAttributesType getGroupAttributes() {
+        return groupAttributes;
     }
 
     /**
-     * Sets the value of the productTypeGroupAttributes property.
+     * Sets the value of the groupAttributes property.
      * 
      * @param value
      *     allowed object is
      *     {@link ProductTypeGroupAttributesType }
      *     
      */
-    public void setProductTypeGroupAttributes(ProductTypeGroupAttributesType value) {
-        this.productTypeGroupAttributes = value;
+    public void setGroupAttributes(ProductTypeGroupAttributesType value) {
+        this.groupAttributes = value;
     }
 
     /**
