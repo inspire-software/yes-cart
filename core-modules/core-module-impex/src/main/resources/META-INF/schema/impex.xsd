@@ -723,7 +723,7 @@
                     <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element name="price-rule-configuration" minOccurs="0">
+            <xsd:element name="configuration" minOccurs="0">
                 <xsd:complexType>
                     <xsd:simpleContent>
                         <xsd:extension base="xsd:string">
@@ -840,7 +840,7 @@
             <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
             <xsd:element type="xsd:string" name="description" minOccurs="0"/>
             <xsd:element type="product-typeTemplatesType" name="templates" minOccurs="0"/>
-            <xsd:element type="configurationType" name="configuration" minOccurs="0"/>
+            <xsd:element type="product-type-configurationType" name="configuration" minOccurs="0"/>
             <xsd:element type="product-type-groupsType" name="groups" minOccurs="0"/>
             <xsd:element type="product-type-attributesType" name="attributes" minOccurs="0"/>
             <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
@@ -860,7 +860,7 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="configurationType">
+    <xsd:complexType name="product-type-configurationType">
         <xsd:sequence>
             <xsd:element type="xsd:boolean" name="service" minOccurs="0"/>
             <xsd:element type="xsd:boolean" name="shippable" minOccurs="0"/>
@@ -1184,7 +1184,7 @@
             <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
         </xsd:sequence>
-        <xsd:attribute type="xsd:string" name="id"/>
+        <xsd:attribute type="xsd:long" name="id"/>
         <xsd:attribute type="xsd:string" name="guid" use="required"/>
         <xsd:attribute type="entityImportModeType" name="import-mode"/>
     </xsd:complexType>
@@ -1231,7 +1231,7 @@
             <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
         </xsd:sequence>
-        <xsd:attribute type="xsd:string" name="id"/>
+        <xsd:attribute type="xsd:long" name="id"/>
         <xsd:attribute type="xsd:string" name="guid" use="required"/>
         <xsd:attribute type="xsd:string" name="provider"/>
         <xsd:attribute type="xsd:string" name="external-ref"/>
@@ -1302,19 +1302,109 @@
             <xsd:element type="shipping-method-supported-payment-gatewaysType" name="payment-gateways" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <xsd:complexType name="shipping-method-supported-fulfilment-centresType">
         <xsd:sequence>
             <xsd:element type="xsd:string" name="fulfilment-centre" maxOccurs="unbounded" minOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <xsd:complexType name="shipping-method-supported-payment-gatewaysType">
         <xsd:sequence>
             <xsd:element type="xsd:string" name="payment-gateway" maxOccurs="unbounded" minOccurs="1"/>
         </xsd:sequence>
     </xsd:complexType>
 
+    <!-- Promotions -->
 
+    <xsd:element name="promotions" type="promotionsType"/>
+    <xsd:element name="promotion" type="promotionType"/>
+
+    <xsd:complexType name="promotionsType">
+        <xsd:sequence>
+            <xsd:element type="promotionType" name="promotion" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="promotionType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="i18nsType" name="display-description" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="tag" minOccurs="0"/>
+            <xsd:element name="availability">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="dateTimeType" name="available-from" minOccurs="0"/>
+                        <xsd:element type="dateTimeType" name="available-to" minOccurs="0"/>
+                    </xsd:sequence>
+                    <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element type="promotion-configurationType" name="configuration"/>
+            <xsd:element type="promotion-coupons-couponsType" name="coupons" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+        <xsd:attribute type="xsd:string" name="shop" use="required"/>
+        <xsd:attribute type="xsd:string" name="currency" use="required"/>
+        <xsd:attribute type="xsd:int" name="rank"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="promotion-configurationType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute type="xsd:string" name="action" use="required"/>
+                <xsd:attribute type="xsd:string" name="action-context"/>
+                <xsd:attribute type="xsd:string" name="type" use="required"/>
+                <xsd:attribute type="xsd:boolean" name="coupon-triggered" use="required"/>
+                <xsd:attribute type="xsd:boolean" name="can-be-combined" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="promotion-coupons-couponsType">
+        <xsd:sequence>
+            <xsd:element type="promotion-couponType" name="promotion-coupon" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:element name="promotion-coupons" type="promotion-couponsType"/>
+    <xsd:element name="promotion-coupon" type="promotion-couponType"/>
+
+    <xsd:complexType name="promotion-couponsType">
+        <xsd:sequence>
+            <xsd:element type="promotion-couponType" name="promotion-coupon" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="promotion-couponType">
+        <xsd:sequence>
+            <xsd:element type="promotion-coupon-configurationType" name="configuration" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+        <xsd:attribute type="xsd:string" name="promotion"/>
+        <xsd:attribute type="xsd:int" name="usage-count" use="optional"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="promotion-coupon-configurationType">
+        <xsd:attribute type="xsd:int" name="max-limit" use="required"/>
+        <xsd:attribute type="xsd:int" name="customer-limit" use="required"/>
+    </xsd:complexType>
 
 </xsd:schema>

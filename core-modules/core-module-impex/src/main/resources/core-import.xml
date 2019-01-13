@@ -319,6 +319,23 @@
                         </property>
                     </bean>
                 </entry>
+                <entry key="PROMOTIONCOUPON">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.PromotionCouponXmlEntityHandler">
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                        <property name="promotionService" ref="promotionService"/>
+                    </bean>
+                </entry>
+                <entry key="PROMOTION">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.PromotionXmlEntityHandler">
+                        <property name="promotionService" ref="promotionService"/>
+                        <property name="promotionCouponTypeXmlEntityImportHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.PromotionCouponXmlEntityHandler">
+                                <property name="promotionCouponService" ref="promotionCouponService"/>
+                                <property name="promotionService" ref="promotionService"/>
+                            </bean>
+                        </property>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

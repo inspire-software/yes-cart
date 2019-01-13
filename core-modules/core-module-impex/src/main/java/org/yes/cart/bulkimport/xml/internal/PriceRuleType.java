@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="price-rule-configuration" minOccurs="0">
+ *         &lt;element name="configuration" minOccurs="0">
  *           &lt;complexType>
  *             &lt;simpleContent>
  *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
@@ -80,7 +80,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "description",
     "tag",
     "availability",
-    "priceRuleConfiguration",
+    "configuration",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
@@ -95,8 +95,7 @@ public class PriceRuleType {
     protected String tag;
     @XmlElement(required = true)
     protected PriceRuleType.Availability availability;
-    @XmlElement(name = "price-rule-configuration")
-    protected PriceRuleType.PriceRuleConfiguration priceRuleConfiguration;
+    protected PriceRuleType.Configuration configuration;
     @XmlElement(name = "created-timestamp")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -221,27 +220,27 @@ public class PriceRuleType {
     }
 
     /**
-     * Gets the value of the priceRuleConfiguration property.
+     * Gets the value of the configuration property.
      * 
      * @return
      *     possible object is
-     *     {@link PriceRuleType.PriceRuleConfiguration }
+     *     {@link PriceRuleType.Configuration }
      *     
      */
-    public PriceRuleType.PriceRuleConfiguration getPriceRuleConfiguration() {
-        return priceRuleConfiguration;
+    public PriceRuleType.Configuration getConfiguration() {
+        return configuration;
     }
 
     /**
-     * Sets the value of the priceRuleConfiguration property.
+     * Sets the value of the configuration property.
      * 
      * @param value
      *     allowed object is
-     *     {@link PriceRuleType.PriceRuleConfiguration }
+     *     {@link PriceRuleType.Configuration }
      *     
      */
-    public void setPriceRuleConfiguration(PriceRuleType.PriceRuleConfiguration value) {
-        this.priceRuleConfiguration = value;
+    public void setConfiguration(PriceRuleType.Configuration value) {
+        this.configuration = value;
     }
 
     /**
@@ -643,7 +642,7 @@ public class PriceRuleType {
     @XmlType(name = "", propOrder = {
         "value"
     })
-    public static class PriceRuleConfiguration {
+    public static class Configuration {
 
         @XmlValue
         protected String value;

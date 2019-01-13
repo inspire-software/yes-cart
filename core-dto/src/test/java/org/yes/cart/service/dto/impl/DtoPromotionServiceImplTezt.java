@@ -77,7 +77,7 @@ public class DtoPromotionServiceImplTezt extends BaseCoreDBTestCase {
                 null);
 
         assertNotNull(promos);
-        assertEquals(1, promos.size());
+        assertEquals(3, promos.size());
 
         // retrieve non-existent
         promos = dtoPromotionService.findByParameters(

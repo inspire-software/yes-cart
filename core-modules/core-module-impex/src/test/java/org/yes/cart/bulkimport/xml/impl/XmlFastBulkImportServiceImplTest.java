@@ -724,6 +724,62 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("testPaymentGatewayLabel,courierPaymentGatewayLabel", slaSupPgs);
 
 
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPROMOTION  ");
+            rs.next();
+            long cntBeforePromotions = rs.getLong(1);
+            rs.close();
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPROMOTIONCOUPON  ");
+            rs.next();
+            long cntBeforePromotionCoupons = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/promotions.xml", listener, importedFilesSet));
+            final long promos = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPROMOTION  ");
+            rs.next();
+            long cntPromotions = rs.getLong(1);
+            rs.close();
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPROMOTIONCOUPON  ");
+            rs.next();
+            long cntPromotionCoupons = rs.getLong(1);
+            rs.close();
+
+            change = cntPromotions - cntBeforePromotions;
+            System.out.println(String.format("%5d", change) + " promotions + coupons in " + promos + "millis (~" + (promos / change) + " per item)");
+
+            assertEquals(1L + cntBeforePromotions, cntPromotions);   // 1 new
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select PROMOTION_ID, NAME, ENABLED from TPROMOTION where CODE = 'XML_PROMO001'");
+            rs.next();
+            final Long promotionId = rs.getLong("PROMOTION_ID");
+            final String promotionName = rs.getString("NAME");
+            final boolean promotionEnabled = rs.getBoolean("ENABLED");
+            rs.close();
+
+            assertEquals("XML Promo 001", promotionName);
+            assertTrue(promotionEnabled);
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select PROMOTION_ID, USAGE_LIMIT, USAGE_LIMIT_PER_CUSTOMER  from TPROMOTIONCOUPON where CODE = 'XML_PROMO001-003'");
+            rs.next();
+            final Long couponPromotionId = rs.getLong("PROMOTION_ID");
+            final int couponUsage = rs.getInt("USAGE_LIMIT");
+            final int couponUsageCustomer = rs.getInt("USAGE_LIMIT_PER_CUSTOMER");
+            rs.close();
+
+            assertEquals(promotionId, couponPromotionId);
+            assertEquals(10, couponUsageCustomer);
+            assertEquals(100, couponUsage);
+
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

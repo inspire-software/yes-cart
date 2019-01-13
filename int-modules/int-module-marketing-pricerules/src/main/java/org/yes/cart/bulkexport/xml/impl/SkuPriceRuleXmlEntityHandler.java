@@ -61,7 +61,7 @@ public class SkuPriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<SkuPr
                     .tagTime("available-from", priceRule.getEnabledFrom())
                     .tagTime("available-to", priceRule.getEnabledTo())
                 .end()
-                .tag("price-rule-configuration")
+                .tag("configuration")
                     .attr("action", priceRule.getRuleAction())
                     .attr("margin-percent", priceRule.getMarginPercent())
                     .attr("margin-amount", priceRule.getMarginAmount())

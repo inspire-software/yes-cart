@@ -56,16 +56,16 @@ public class PriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<PriceRul
             domain.setEnabledFrom(processLDT(xmlType.getAvailability().getAvailableFrom()));
             domain.setEnabledTo(processLDT(xmlType.getAvailability().getAvailableTo()));
         }
-        if (xmlType.getPriceRuleConfiguration() != null) {
-            domain.setRuleAction(xmlType.getPriceRuleConfiguration().getAction());
-            domain.setEligibilityCondition(xmlType.getPriceRuleConfiguration().getValue());
-            domain.setMarginPercent(xmlType.getPriceRuleConfiguration().getMarginPercent());
-            domain.setMarginAmount(xmlType.getPriceRuleConfiguration().getMarginAmount());
-            domain.setRoundingUnit(xmlType.getPriceRuleConfiguration().getRoundingUnit());
-            domain.setAddDefaultTax(xmlType.getPriceRuleConfiguration().isAddDefaultTax() != null && xmlType.getPriceRuleConfiguration().isAddDefaultTax());
-            domain.setPriceTag(xmlType.getPriceRuleConfiguration().getPriceTag());
-            domain.setPriceRef(xmlType.getPriceRuleConfiguration().getPriceRef());
-            domain.setPricePolicy(xmlType.getPriceRuleConfiguration().getPricePolicy());
+        if (xmlType.getConfiguration() != null) {
+            domain.setRuleAction(xmlType.getConfiguration().getAction());
+            domain.setEligibilityCondition(xmlType.getConfiguration().getValue());
+            domain.setMarginPercent(xmlType.getConfiguration().getMarginPercent());
+            domain.setMarginAmount(xmlType.getConfiguration().getMarginAmount());
+            domain.setRoundingUnit(xmlType.getConfiguration().getRoundingUnit());
+            domain.setAddDefaultTax(xmlType.getConfiguration().isAddDefaultTax() != null && xmlType.getConfiguration().isAddDefaultTax());
+            domain.setPriceTag(xmlType.getConfiguration().getPriceTag());
+            domain.setPriceRef(xmlType.getConfiguration().getPriceRef());
+            domain.setPricePolicy(xmlType.getConfiguration().getPricePolicy());
         }
 
         if (domain.getSkuPriceRuleId() == 0L) {

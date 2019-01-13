@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<promotions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+    <promotion code="XML_PROMO001" shop="SHOIP" currency="EUR" rank="1">
+        <name><![CDATA[XML Promo 001]]></name>
+        <availability disabled="false">
+            <available-from>2011-01-01 00:00:00</available-from>
+            <available-to>2099-12-31 00:00:00</available-to>
+        </availability>
+        <configuration action="F" type="I" coupon-triggered="true" can-be-combined="true"><![CDATA[true]]></configuration>
+        <coupons>
+            <promotion-coupon code="XML_PROMO001-001"/>
+            <promotion-coupon code="XML_PROMO001-002"/>
+            <promotion-coupon code="XML_PROMO001-003">
+                <configuration max-limit="100" customer-limit="10"/>
+            </promotion-coupon>
+        </coupons>
+    </promotion>
+</promotions>

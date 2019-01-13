@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="templates" type="{}product-typeTemplatesType" minOccurs="0"/>
- *         &lt;element name="configuration" type="{}configurationType" minOccurs="0"/>
+ *         &lt;element name="configuration" type="{}product-type-configurationType" minOccurs="0"/>
  *         &lt;element name="groups" type="{}product-type-groupsType" minOccurs="0"/>
  *         &lt;element name="attributes" type="{}product-type-attributesType" minOccurs="0"/>
  *         &lt;element name="created-timestamp" type="{}dateTimeType" minOccurs="0"/>
@@ -65,7 +65,7 @@ public class ProductTypeTypeType {
     protected I18NsType displayName;
     protected String description;
     protected ProductTypeTemplatesType templates;
-    protected ConfigurationType configuration;
+    protected ProductTypeConfigurationType configuration;
     protected ProductTypeGroupsType groups;
     protected ProductTypeAttributesType attributes;
     @XmlElement(name = "created-timestamp")
@@ -188,10 +188,10 @@ public class ProductTypeTypeType {
      * 
      * @return
      *     possible object is
-     *     {@link ConfigurationType }
+     *     {@link ProductTypeConfigurationType }
      *     
      */
-    public ConfigurationType getConfiguration() {
+    public ProductTypeConfigurationType getConfiguration() {
         return configuration;
     }
 
@@ -200,10 +200,10 @@ public class ProductTypeTypeType {
      * 
      * @param value
      *     allowed object is
-     *     {@link ConfigurationType }
+     *     {@link ProductTypeConfigurationType }
      *     
      */
-    public void setConfiguration(ConfigurationType value) {
+    public void setConfiguration(ProductTypeConfigurationType value) {
         this.configuration = value;
     }
 

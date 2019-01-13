@@ -490,6 +490,28 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             validateXmlFile(xml);
 
 
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select count(c.PROMOTION_ID) as cnt from TPROMOTION c");
+            rs.next();
+            long cntPromoCnt = rs.getLong("cnt");
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/promotions-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/promotions.xml", listener, fileToExport));
+            final long promos = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntPromoCnt) + " promotions + coupons in " + promos + "millis (~" + (promos / cntPromoCnt) + " per item)");
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<name><![CDATA[Promo 001]]></name>"));
+            assertTrue(content.contains("<configuration action=\"F\" type=\"I\" coupon-triggered=\"true\" can-be-combined=\"true\"><![CDATA[true]]></configuration>"));
+            assertTrue(content.contains("guid=\"PROMO001-001\" code=\"PROMO001-001\" promotion=\"PROMO001\" usage-count=\"0\">"));
+            assertTrue(content.contains("<configuration max-limit=\"100\" customer-limit=\"1\"/>"));
+
+            validateXmlFile(xml);
+
+
 
             mockery.assertIsSatisfied();
 

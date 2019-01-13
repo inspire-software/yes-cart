@@ -12,12 +12,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * <p>Java class for shipping-providerType complex type.
+ * <p>Java class for promotionType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="shipping-providerType">
+ * &lt;complexType name="promotionType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -25,15 +25,33 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="display-description" type="{}i18nsType" minOccurs="0"/>
- *         &lt;element name="configuration" type="{}shipping-provider-configurationType" minOccurs="0"/>
- *         &lt;element name="shipping-methods" type="{}shipping-provider-shipping-methodsType" minOccurs="0"/>
+ *         &lt;element name="tag" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="availability">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element name="available-from" type="{}dateTimeType" minOccurs="0"/>
+ *                   &lt;element name="available-to" type="{}dateTimeType" minOccurs="0"/>
+ *                 &lt;/sequence>
+ *                 &lt;attribute name="disabled" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="configuration" type="{}promotion-configurationType"/>
+ *         &lt;element name="coupons" type="{}promotion-coupons-couponsType" minOccurs="0"/>
  *         &lt;element name="created-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updated-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="updated-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="guid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="code" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="shop" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="currency" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="rank" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="import-mode" type="{}entityImportModeType" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -43,19 +61,21 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "shipping-providerType", propOrder = {
+@XmlType(name = "promotionType", propOrder = {
     "name",
     "displayName",
     "description",
     "displayDescription",
+    "tag",
+    "availability",
     "configuration",
-    "shippingMethods",
+    "coupons",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
     "updatedBy"
 })
-public class ShippingProviderType {
+public class PromotionType {
 
     @XmlElement(required = true)
     protected String name;
@@ -64,9 +84,12 @@ public class ShippingProviderType {
     protected String description;
     @XmlElement(name = "display-description")
     protected I18NsType displayDescription;
-    protected ShippingProviderConfigurationType configuration;
-    @XmlElement(name = "shipping-methods")
-    protected ShippingProviderShippingMethodsType shippingMethods;
+    protected String tag;
+    @XmlElement(required = true)
+    protected PromotionType.Availability availability;
+    @XmlElement(required = true)
+    protected PromotionConfigurationType configuration;
+    protected PromotionCouponsCouponsType coupons;
     @XmlElement(name = "created-timestamp")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -81,8 +104,16 @@ public class ShippingProviderType {
     protected String updatedBy;
     @XmlAttribute(name = "id")
     protected Long id;
-    @XmlAttribute(name = "guid", required = true)
+    @XmlAttribute(name = "guid")
     protected String guid;
+    @XmlAttribute(name = "code", required = true)
+    protected String code;
+    @XmlAttribute(name = "shop", required = true)
+    protected String shop;
+    @XmlAttribute(name = "currency", required = true)
+    protected String currency;
+    @XmlAttribute(name = "rank")
+    protected Integer rank;
     @XmlAttribute(name = "import-mode")
     protected EntityImportModeType importMode;
 
@@ -183,14 +214,62 @@ public class ShippingProviderType {
     }
 
     /**
+     * Gets the value of the tag property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTag() {
+        return tag;
+    }
+
+    /**
+     * Sets the value of the tag property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTag(String value) {
+        this.tag = value;
+    }
+
+    /**
+     * Gets the value of the availability property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link PromotionType.Availability }
+     *     
+     */
+    public PromotionType.Availability getAvailability() {
+        return availability;
+    }
+
+    /**
+     * Sets the value of the availability property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link PromotionType.Availability }
+     *     
+     */
+    public void setAvailability(PromotionType.Availability value) {
+        this.availability = value;
+    }
+
+    /**
      * Gets the value of the configuration property.
      * 
      * @return
      *     possible object is
-     *     {@link ShippingProviderConfigurationType }
+     *     {@link PromotionConfigurationType }
      *     
      */
-    public ShippingProviderConfigurationType getConfiguration() {
+    public PromotionConfigurationType getConfiguration() {
         return configuration;
     }
 
@@ -199,35 +278,35 @@ public class ShippingProviderType {
      * 
      * @param value
      *     allowed object is
-     *     {@link ShippingProviderConfigurationType }
+     *     {@link PromotionConfigurationType }
      *     
      */
-    public void setConfiguration(ShippingProviderConfigurationType value) {
+    public void setConfiguration(PromotionConfigurationType value) {
         this.configuration = value;
     }
 
     /**
-     * Gets the value of the shippingMethods property.
+     * Gets the value of the coupons property.
      * 
      * @return
      *     possible object is
-     *     {@link ShippingProviderShippingMethodsType }
+     *     {@link PromotionCouponsCouponsType }
      *     
      */
-    public ShippingProviderShippingMethodsType getShippingMethods() {
-        return shippingMethods;
+    public PromotionCouponsCouponsType getCoupons() {
+        return coupons;
     }
 
     /**
-     * Sets the value of the shippingMethods property.
+     * Sets the value of the coupons property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ShippingProviderShippingMethodsType }
+     *     {@link PromotionCouponsCouponsType }
      *     
      */
-    public void setShippingMethods(ShippingProviderShippingMethodsType value) {
-        this.shippingMethods = value;
+    public void setCoupons(PromotionCouponsCouponsType value) {
+        this.coupons = value;
     }
 
     /**
@@ -375,6 +454,102 @@ public class ShippingProviderType {
     }
 
     /**
+     * Gets the value of the code property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * Sets the value of the code property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCode(String value) {
+        this.code = value;
+    }
+
+    /**
+     * Gets the value of the shop property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getShop() {
+        return shop;
+    }
+
+    /**
+     * Sets the value of the shop property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setShop(String value) {
+        this.shop = value;
+    }
+
+    /**
+     * Gets the value of the currency property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCurrency() {
+        return currency;
+    }
+
+    /**
+     * Sets the value of the currency property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCurrency(String value) {
+        this.currency = value;
+    }
+
+    /**
+     * Gets the value of the rank property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getRank() {
+        return rank;
+    }
+
+    /**
+     * Sets the value of the rank property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setRank(Integer value) {
+        this.rank = value;
+    }
+
+    /**
      * Gets the value of the importMode property.
      * 
      * @return
@@ -396,6 +571,112 @@ public class ShippingProviderType {
      */
     public void setImportMode(EntityImportModeType value) {
         this.importMode = value;
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element name="available-from" type="{}dateTimeType" minOccurs="0"/>
+     *         &lt;element name="available-to" type="{}dateTimeType" minOccurs="0"/>
+     *       &lt;/sequence>
+     *       &lt;attribute name="disabled" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "availableFrom",
+        "availableTo"
+    })
+    public static class Availability {
+
+        @XmlElement(name = "available-from")
+        @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+        @XmlSchemaType(name = "token")
+        protected String availableFrom;
+        @XmlElement(name = "available-to")
+        @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+        @XmlSchemaType(name = "token")
+        protected String availableTo;
+        @XmlAttribute(name = "disabled", required = true)
+        protected boolean disabled;
+
+        /**
+         * Gets the value of the availableFrom property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getAvailableFrom() {
+            return availableFrom;
+        }
+
+        /**
+         * Sets the value of the availableFrom property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setAvailableFrom(String value) {
+            this.availableFrom = value;
+        }
+
+        /**
+         * Gets the value of the availableTo property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getAvailableTo() {
+            return availableTo;
+        }
+
+        /**
+         * Sets the value of the availableTo property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setAvailableTo(String value) {
+            this.availableTo = value;
+        }
+
+        /**
+         * Gets the value of the disabled property.
+         * 
+         */
+        public boolean isDisabled() {
+            return disabled;
+        }
+
+        /**
+         * Sets the value of the disabled property.
+         * 
+         */
+        public void setDisabled(boolean value) {
+            this.disabled = value;
+        }
+
     }
 
 }

@@ -12,31 +12,26 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * <p>Java class for shipping-methodType complex type.
+ * <p>Java class for promotion-couponType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="shipping-methodType">
+ * &lt;complexType name="promotion-couponType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="display-description" type="{}i18nsType" minOccurs="0"/>
- *         &lt;element name="configuration" type="{}shipping-method-configurationType" minOccurs="0"/>
- *         &lt;element name="exclusions" type="{}shipping-method-exclusionsType" minOccurs="0"/>
- *         &lt;element name="supported" type="{}shipping-method-supportedType" minOccurs="0"/>
+ *         &lt;element name="configuration" type="{}promotion-coupon-configurationType" minOccurs="0"/>
  *         &lt;element name="created-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updated-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="updated-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="guid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="provider" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="external-ref" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="code" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="promotion" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="usage-count" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="import-mode" type="{}entityImportModeType" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -46,31 +41,16 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "shipping-methodType", propOrder = {
-    "name",
-    "displayName",
-    "description",
-    "displayDescription",
+@XmlType(name = "promotion-couponType", propOrder = {
     "configuration",
-    "exclusions",
-    "supported",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
     "updatedBy"
 })
-public class ShippingMethodType {
+public class PromotionCouponType {
 
-    @XmlElement(required = true)
-    protected String name;
-    @XmlElement(name = "display-name")
-    protected I18NsType displayName;
-    protected String description;
-    @XmlElement(name = "display-description")
-    protected I18NsType displayDescription;
-    protected ShippingMethodConfigurationType configuration;
-    protected ShippingMethodExclusionsType exclusions;
-    protected ShippingMethodSupportedType supported;
+    protected PromotionCouponConfigurationType configuration;
     @XmlElement(name = "created-timestamp")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -85,120 +65,26 @@ public class ShippingMethodType {
     protected String updatedBy;
     @XmlAttribute(name = "id")
     protected Long id;
-    @XmlAttribute(name = "guid", required = true)
+    @XmlAttribute(name = "guid")
     protected String guid;
-    @XmlAttribute(name = "provider")
-    protected String provider;
-    @XmlAttribute(name = "external-ref")
-    protected String externalRef;
+    @XmlAttribute(name = "code", required = true)
+    protected String code;
+    @XmlAttribute(name = "promotion")
+    protected String promotion;
+    @XmlAttribute(name = "usage-count")
+    protected Integer usageCount;
     @XmlAttribute(name = "import-mode")
     protected EntityImportModeType importMode;
-
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the displayName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link I18NsType }
-     *     
-     */
-    public I18NsType getDisplayName() {
-        return displayName;
-    }
-
-    /**
-     * Sets the value of the displayName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link I18NsType }
-     *     
-     */
-    public void setDisplayName(I18NsType value) {
-        this.displayName = value;
-    }
-
-    /**
-     * Gets the value of the description property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Sets the value of the description property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    /**
-     * Gets the value of the displayDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link I18NsType }
-     *     
-     */
-    public I18NsType getDisplayDescription() {
-        return displayDescription;
-    }
-
-    /**
-     * Sets the value of the displayDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link I18NsType }
-     *     
-     */
-    public void setDisplayDescription(I18NsType value) {
-        this.displayDescription = value;
-    }
 
     /**
      * Gets the value of the configuration property.
      * 
      * @return
      *     possible object is
-     *     {@link ShippingMethodConfigurationType }
+     *     {@link PromotionCouponConfigurationType }
      *     
      */
-    public ShippingMethodConfigurationType getConfiguration() {
+    public PromotionCouponConfigurationType getConfiguration() {
         return configuration;
     }
 
@@ -207,59 +93,11 @@ public class ShippingMethodType {
      * 
      * @param value
      *     allowed object is
-     *     {@link ShippingMethodConfigurationType }
+     *     {@link PromotionCouponConfigurationType }
      *     
      */
-    public void setConfiguration(ShippingMethodConfigurationType value) {
+    public void setConfiguration(PromotionCouponConfigurationType value) {
         this.configuration = value;
-    }
-
-    /**
-     * Gets the value of the exclusions property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ShippingMethodExclusionsType }
-     *     
-     */
-    public ShippingMethodExclusionsType getExclusions() {
-        return exclusions;
-    }
-
-    /**
-     * Sets the value of the exclusions property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ShippingMethodExclusionsType }
-     *     
-     */
-    public void setExclusions(ShippingMethodExclusionsType value) {
-        this.exclusions = value;
-    }
-
-    /**
-     * Gets the value of the supported property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ShippingMethodSupportedType }
-     *     
-     */
-    public ShippingMethodSupportedType getSupported() {
-        return supported;
-    }
-
-    /**
-     * Sets the value of the supported property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ShippingMethodSupportedType }
-     *     
-     */
-    public void setSupported(ShippingMethodSupportedType value) {
-        this.supported = value;
     }
 
     /**
@@ -407,51 +245,75 @@ public class ShippingMethodType {
     }
 
     /**
-     * Gets the value of the provider property.
+     * Gets the value of the code property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getProvider() {
-        return provider;
+    public String getCode() {
+        return code;
     }
 
     /**
-     * Sets the value of the provider property.
+     * Sets the value of the code property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setProvider(String value) {
-        this.provider = value;
+    public void setCode(String value) {
+        this.code = value;
     }
 
     /**
-     * Gets the value of the externalRef property.
+     * Gets the value of the promotion property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getExternalRef() {
-        return externalRef;
+    public String getPromotion() {
+        return promotion;
     }
 
     /**
-     * Sets the value of the externalRef property.
+     * Sets the value of the promotion property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setExternalRef(String value) {
-        this.externalRef = value;
+    public void setPromotion(String value) {
+        this.promotion = value;
+    }
+
+    /**
+     * Gets the value of the usageCount property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getUsageCount() {
+        return usageCount;
+    }
+
+    /**
+     * Sets the value of the usageCount property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setUsageCount(Integer value) {
+        this.usageCount = value;
     }
 
     /**

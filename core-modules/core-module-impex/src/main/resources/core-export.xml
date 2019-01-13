@@ -343,6 +343,25 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="PROMOTIONCOUPON">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PromotionCouponXmlEntityHandler"/>
+                </entry>
+                <entry key="PROMOTIONCOUPON_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PromotionCouponXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PROMOTION">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PromotionXmlEntityHandler">
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                    </bean>
+                </entry>
+                <entry key="PROMOTION_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PromotionXmlEntityHandler">
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for configurationType complex type.
+ * <p>Java class for product-type-configurationType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="configurationType">
+ * &lt;complexType name="product-type-configurationType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -29,13 +29,13 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "configurationType", propOrder = {
+@XmlType(name = "product-type-configurationType", propOrder = {
     "service",
     "shippable",
     "digital",
     "downloadable"
 })
-public class ConfigurationType {
+public class ProductTypeConfigurationType {
 
     protected Boolean service;
     protected Boolean shippable;
