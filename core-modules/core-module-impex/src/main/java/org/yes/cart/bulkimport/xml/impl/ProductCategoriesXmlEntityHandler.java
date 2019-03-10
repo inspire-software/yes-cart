@@ -70,7 +70,7 @@ public class ProductCategoriesXmlEntityHandler extends AbstractXmlEntityHandler<
 
         final CollectionImportModeType collectionMode = xmlType.getImportMode() != null ? xmlType.getImportMode() : CollectionImportModeType.MERGE;
         if (collectionMode == CollectionImportModeType.REPLACE) {
-            domain.getAttributes().clear();
+            domain.getProductCategory().clear();
         }
 
         for (final ProductCategoryType cat : xmlType.getProductCategory()) {

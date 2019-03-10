@@ -48,6 +48,7 @@ public class ObjectFactory {
     private final static QName _ProductLinks_QNAME = new QName("", "product-links");
     private final static QName _ProductTypes_QNAME = new QName("", "product-types");
     private final static QName _Skus_QNAME = new QName("", "skus");
+    private final static QName _OrganisationUsers_QNAME = new QName("", "organisation-users");
     private final static QName _Cms_QNAME = new QName("", "cms");
     private final static QName _Inventory_QNAME = new QName("", "inventory");
     private final static QName _Content_QNAME = new QName("", "content");
@@ -61,6 +62,7 @@ public class ObjectFactory {
     private final static QName _Categories_QNAME = new QName("", "categories");
     private final static QName _TaxConfig_QNAME = new QName("", "tax-config");
     private final static QName _ProductType_QNAME = new QName("", "product-type");
+    private final static QName _OrganisationUser_QNAME = new QName("", "organisation-user");
     private final static QName _Product_QNAME = new QName("", "product");
     private final static QName _Brands_QNAME = new QName("", "brands");
     private final static QName _DataGroups_QNAME = new QName("", "data-groups");
@@ -325,6 +327,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrganisationUsersType }
+     * 
+     */
+    public OrganisationUsersType createOrganisationUsersType() {
+        return new OrganisationUsersType();
+    }
+
+    /**
      * Create an instance of {@link CmsType }
      * 
      */
@@ -418,6 +428,14 @@ public class ObjectFactory {
      */
     public ProductTypeTypeType createProductTypeTypeType() {
         return new ProductTypeTypeType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserType }
+     * 
+     */
+    public OrganisationUserType createOrganisationUserType() {
+        return new OrganisationUserType();
     }
 
     /**
@@ -541,6 +559,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrganisationUserRoleType }
+     * 
+     */
+    public OrganisationUserRoleType createOrganisationUserRoleType() {
+        return new OrganisationUserRoleType();
+    }
+
+    /**
      * Create an instance of {@link ShippingProviderShippingMethodsType }
      * 
      */
@@ -637,6 +663,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrganisationUserShopsType }
+     * 
+     */
+    public OrganisationUserShopsType createOrganisationUserShopsType() {
+        return new OrganisationUserShopsType();
+    }
+
+    /**
      * Create an instance of {@link BaseCategoryType }
      * 
      */
@@ -677,6 +711,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrganisationUserRolesType }
+     * 
+     */
+    public OrganisationUserRolesType createOrganisationUserRolesType() {
+        return new OrganisationUserRolesType();
+    }
+
+    /**
      * Create an instance of {@link ProductCategoriesType }
      * 
      */
@@ -698,6 +740,14 @@ public class ObjectFactory {
      */
     public I18NsType createI18NsType() {
         return new I18NsType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserShopType }
+     * 
+     */
+    public OrganisationUserShopType createOrganisationUserShopType() {
+        return new OrganisationUserShopType();
     }
 
     /**
@@ -805,6 +855,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrganisationUserContactDetailsType }
+     * 
+     */
+    public OrganisationUserContactDetailsType createOrganisationUserContactDetailsType() {
+        return new OrganisationUserContactDetailsType();
+    }
+
+    /**
      * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesType }
      * 
      */
@@ -861,6 +919,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrganisationUserCredentialsType }
+     * 
+     */
+    public OrganisationUserCredentialsType createOrganisationUserCredentialsType() {
+        return new OrganisationUserCredentialsType();
+    }
+
+    /**
      * Create an instance of {@link ProductTypeGroupsType }
      * 
      */
@@ -874,6 +940,14 @@ public class ObjectFactory {
      */
     public ProductCategoryType createProductCategoryType() {
         return new ProductCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserPreferencesType }
+     * 
+     */
+    public OrganisationUserPreferencesType createOrganisationUserPreferencesType() {
+        return new OrganisationUserPreferencesType();
     }
 
     /**
@@ -938,6 +1012,14 @@ public class ObjectFactory {
      */
     public BaseContentType createBaseContentType() {
         return new BaseContentType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserOrganisationType }
+     * 
+     */
+    public OrganisationUserOrganisationType createOrganisationUserOrganisationType() {
+        return new OrganisationUserOrganisationType();
     }
 
     /**
@@ -1301,6 +1383,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link OrganisationUsersType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "organisation-users")
+    public JAXBElement<OrganisationUsersType> createOrganisationUsers(OrganisationUsersType value) {
+        return new JAXBElement<OrganisationUsersType>(_OrganisationUsers_QNAME, OrganisationUsersType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CmsType }{@code >}}
      * 
      */
@@ -1415,6 +1506,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "product-type")
     public JAXBElement<ProductTypeTypeType> createProductType(ProductTypeTypeType value) {
         return new JAXBElement<ProductTypeTypeType>(_ProductType_QNAME, ProductTypeTypeType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link OrganisationUserType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "organisation-user")
+    public JAXBElement<OrganisationUserType> createOrganisationUser(OrganisationUserType value) {
+        return new JAXBElement<OrganisationUserType>(_OrganisationUser_QNAME, OrganisationUserType.class, null, value);
     }
 
     /**

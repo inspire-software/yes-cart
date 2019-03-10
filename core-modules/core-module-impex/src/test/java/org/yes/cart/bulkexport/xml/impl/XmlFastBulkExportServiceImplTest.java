@@ -513,6 +513,27 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TMANAGER  ");
+            rs.next();
+            long cntMgrCfg = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/organisationusers-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/organisationusers.xml", listener, fileToExport));
+            final long mgrCfg = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntMgrCfg) + " managers in " + mgrCfg + "millis (~" + (mgrCfg / cntMgrCfg) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("organisation-user id=\"10001\" guid=\"10001\""));
+            assertTrue(content.contains("<company-name-1>ABC</company-name-1>"));
+
+            validateXmlFile(xml);
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

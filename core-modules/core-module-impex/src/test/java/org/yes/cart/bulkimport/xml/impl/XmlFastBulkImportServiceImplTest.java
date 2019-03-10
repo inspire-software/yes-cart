@@ -780,6 +780,30 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TMANAGER  ");
+            rs.next();
+            long cntBeforeOu = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/organisationusers.xml", listener, importedFilesSet));
+            final long ous = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TMANAGER  ");
+            rs.next();
+            long cntOus = rs.getLong(1);
+            rs.close();
+
+            change = cntOus - cntBeforeOu;
+            System.out.println(String.format("%5d", change) + " organisation users + roles in " + ous + "millis (~" + (ous / change) + " per item)");
+
+            assertEquals(2L + cntBeforeOu, cntOus);   // 2 new
+
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {
@@ -790,7 +814,8 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TCATEGORYATTRVALUE",
                     "TPRODTYPEATTRVIEWGROUP",
-                    "TSHOPCATEGORY", "TPROMOTION", "TPROMOTIONCOUPON", "TTAX", "TTAXCONFIG");
+                    "TSHOPCATEGORY", "TPROMOTION", "TPROMOTIONCOUPON", "TTAX", "TTAXCONFIG",
+                    "TMANAGER", "TMANAGERROLE", "TMANAGERSHOP");
         }
 
     }

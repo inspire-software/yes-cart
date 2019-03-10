@@ -362,6 +362,19 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="ORGANISATIONUSER">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.OrganisationUserXmlEntityHandler">
+                        <property name="managerService" ref="managerService"/>
+                        <property name="managerRoleService" ref="managerRoleService"/>
+                    </bean>
+                </entry>
+                <entry key="ORGANISATIONUSER_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.OrganisationUserXmlEntityHandler">
+                        <property name="managerService" ref="managerService"/>
+                        <property name="managerRoleService" ref="managerRoleService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

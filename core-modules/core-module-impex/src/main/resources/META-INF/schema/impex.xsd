@@ -1407,4 +1407,90 @@
         <xsd:attribute type="xsd:int" name="customer-limit" use="required"/>
     </xsd:complexType>
 
+    <!-- Managers -->
+
+    <xsd:element name="organisation-users" type="organisation-usersType"/>
+    <xsd:element name="organisation-user" type="organisation-userType"/>
+
+    <xsd:complexType name="organisation-usersType">
+        <xsd:sequence>
+            <xsd:element type="organisation-userType" name="organisation-user" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="organisation-userType">
+        <xsd:sequence>
+            <xsd:element type="organisation-userCredentialsType" name="credentials"/>
+            <xsd:element type="organisation-userOrganisationType" name="organisation" minOccurs="0"/>
+            <xsd:element type="organisation-userContact-detailsType" name="contact-details" minOccurs="0"/>
+            <xsd:element type="organisation-userPreferencesType" name="preferences" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="organisation-userShopsType">
+        <xsd:sequence>
+            <xsd:element type="organisation-userShopType" name="shop" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="organisation-userRolesType">
+        <xsd:sequence>
+            <xsd:element type="organisation-userRoleType" name="role" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="organisation-userPreferencesType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="dashboard-widgets"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="organisation-userCredentialsType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="email"/>
+            <xsd:element type="xsd:string" name="password" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="password-expiry" minOccurs="0"/>
+            <xsd:element type="xsd:boolean" name="enabled" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="auth-token" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="auth-token-expiry" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="organisation-userContact-detailsType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="salutation" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="firstname" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="middlename" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="lastname" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="organisation-userShopType">
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="organisation-userRoleType">
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="organisation-userOrganisationType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="company-name-1" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="company-name-2" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="company-department" minOccurs="0"/>
+            <xsd:element type="organisation-userShopsType" name="shops" minOccurs="0"/>
+            <xsd:element type="organisation-userRolesType" name="roles" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
 </xsd:schema>

@@ -336,6 +336,13 @@
                         </property>
                     </bean>
                 </entry>
+                <entry key="ORGANISATIONUSER">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.OrganisationUserXmlEntityHandler">
+                        <property name="managerService" ref="managerService"/>
+                        <property name="managerRoleService" ref="managerRoleService"/>
+                        <property name="shopService" ref="shopService"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>
