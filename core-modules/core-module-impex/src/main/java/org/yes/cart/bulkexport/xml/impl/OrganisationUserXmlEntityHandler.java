@@ -36,8 +36,6 @@ import java.util.List;
  */
 public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<Manager> {
 
-    private ManagerService managerService;
-
     private GenericService<ManagerRole> managerRoleService;
 
     public OrganisationUserXmlEntityHandler() {
@@ -86,11 +84,11 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<M
             final List<ManagerRole> roles = managerRoleService.findByCriteria(" where e.email = ?1", manager.getEmail());
 
             if (CollectionUtils.isNotEmpty(roles)) {
-                final Tag shopsTag = orgTag.tag("roles");
+                final Tag rolesTag = orgTag.tag("roles");
                 for (final ManagerRole mr : roles) {
-                    shopsTag.tag("role").attr("code", mr.getCode()).end();
+                    rolesTag.tag("role").attr("code", mr.getCode()).end();
                 }
-                shopsTag.end();
+                rolesTag.end();
             }
 
             orgTag.end();
@@ -108,15 +106,6 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<M
 
         return mTag.tagTime(manager).end();
 
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param managerService Manager service
-     */
-    public void setManagerService(final ManagerService managerService) {
-        this.managerService = managerService;
     }
 
     /**

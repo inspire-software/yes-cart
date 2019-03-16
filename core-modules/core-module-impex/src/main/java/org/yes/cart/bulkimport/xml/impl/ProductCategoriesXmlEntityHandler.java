@@ -128,7 +128,6 @@ public class ProductCategoriesXmlEntityHandler extends AbstractXmlEntityHandler<
                 return;
             }
         }
-
     }
 
     @Override

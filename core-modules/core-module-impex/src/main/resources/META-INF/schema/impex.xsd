@@ -1492,5 +1492,183 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <!-- Addresses -->
+
+    <xsd:element name="addresses" type="addressesType"/>
+    <xsd:element name="address" type="addressType"/>
+
+    <xsd:complexType name="addressesType">
+        <xsd:sequence>
+            <xsd:element type="addressType" name="address" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="addressType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="address-name" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="salutation" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="firstname"/>
+            <xsd:element type="xsd:string" name="middlename" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="lastname"/>
+            <xsd:element type="xsd:string" name="addrline-1"/>
+            <xsd:element type="xsd:string" name="addrline-2" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="city"/>
+            <xsd:element type="xsd:string" name="postcode"/>
+            <xsd:element type="xsd:string" name="country-code"/>
+            <xsd:element type="xsd:string" name="state-code" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="phone-1" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="phone-2" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="mobile-1" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="mobile-2" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="email-1" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="email-2" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="company-name-1" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="company-name-2" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="company-department" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-0" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-1" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-2" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-3" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-4" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-5" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-6" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-7" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-8" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="custom-9" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="address-type" use="required"/>
+        <xsd:attribute type="xsd:boolean" name="default-address" use="required"/>
+        <xsd:attribute type="xsd:string" name="customer-code"/>
+        <xsd:attribute type="xsd:string" name="customer-email"/>
+        <xsd:attribute type="xsd:string" name="shop-code"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <!-- Customer -->
+
+    <xsd:element name="customers" type="customersType"/>
+    <xsd:element name="customer" type="customerType"/>
+
+    <xsd:complexType name="customersType">
+        <xsd:sequence>
+            <xsd:element type="customerType" name="customer" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="customerType">
+        <xsd:sequence>
+            <xsd:element type="customer-credentialsType" name="credentials" minOccurs="0"/>
+            <xsd:element type="customer-organisationType" name="organisation" minOccurs="0"/>
+            <xsd:element type="customer-contact-detailsType" name="contact-details" minOccurs="0"/>
+            <xsd:element type="customer-policiesType" name="policies" minOccurs="0"/>
+            <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
+            <xsd:element type="customer-addressesType" name="customer-addresses" minOccurs="0"/>
+            <xsd:element type="customer-wishlistType" name="customer-wishlist" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-credentialsType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="email"/>
+            <xsd:element type="xsd:string" name="guest-email" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="password"/>
+            <xsd:element type="xsd:string" name="password-expiry" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="auth-token" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="auth-token-expiry" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="public-key" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:boolean" name="guest" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-organisationType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="company-name-1" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="company-name-2" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="company-department" minOccurs="0"/>
+            <xsd:element type="customer-shopsType" name="shops" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-shopsType">
+        <xsd:sequence>
+            <xsd:element type="customer-shopType" name="shop" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-shopType">
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+        <xsd:attribute type="xsd:boolean" name="enabled" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-contact-detailsType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="salutation" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="firstname"/>
+            <xsd:element type="xsd:string" name="middlename" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="lastname"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-policiesType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="tags" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="type" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="pricing-policy" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-addressesType">
+        <xsd:sequence>
+            <xsd:element type="addressType" name="address" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-wishlistType">
+        <xsd:sequence>
+            <xsd:element type="customer-wishlist-itemType" name="wishlist-item" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-wishlist-itemType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="tag"/>
+            <xsd:element type="xsd:decimal" name="quantity"/>
+            <xsd:element type="customer-wishlist-item-priceType" name="price"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="wishlist-type" use="required"/>
+        <xsd:attribute type="xsd:string" name="visibility" use="required"/>
+        <xsd:attribute type="xsd:string" name="sku-code" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-wishlist-item-priceType">
+        <xsd:sequence>
+            <xsd:element type="xsd:decimal" name="list-price"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="currency" use="required"/>
+        <xsd:attribute type="xsd:decimal" name="quantity" use="required"/>
+    </xsd:complexType>
 
 </xsd:schema>

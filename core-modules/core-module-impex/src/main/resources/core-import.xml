@@ -343,6 +343,27 @@
                         <property name="shopService" ref="shopService"/>
                     </bean>
                 </entry>
+                <entry key="ADDRESS">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.AddressXmlEntityHandler">
+                        <property name="addressService" ref="addressService"/>
+                        <property name="customerService" ref="customerService"/>
+                    </bean>
+                </entry>
+                <entry key="CUSTOMER">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.CustomerXmlHandler">
+                        <property name="customerService" ref="customerService"/>
+                        <property name="customerWishListService" ref="customerWishListService"/>
+                        <property name="shopService" ref="shopService"/>
+                        <property name="productSkuService" ref="productSkuService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                        <property name="addressXmlEntityImportHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.AddressXmlEntityHandler">
+                                <property name="addressService" ref="addressService"/>
+                                <property name="customerService" ref="customerService"/>
+                            </bean>
+                        </property>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

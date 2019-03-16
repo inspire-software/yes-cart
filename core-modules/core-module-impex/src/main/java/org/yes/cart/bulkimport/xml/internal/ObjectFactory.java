@@ -27,6 +27,7 @@ public class ObjectFactory {
     private final static QName _TaxConfigs_QNAME = new QName("", "tax-configs");
     private final static QName _Country_QNAME = new QName("", "country");
     private final static QName _ShippingProviders_QNAME = new QName("", "shipping-providers");
+    private final static QName _Addresses_QNAME = new QName("", "addresses");
     private final static QName _PromotionCoupons_QNAME = new QName("", "promotion-coupons");
     private final static QName _PriceRule_QNAME = new QName("", "price-rule");
     private final static QName _Taxes_QNAME = new QName("", "taxes");
@@ -60,12 +61,14 @@ public class ObjectFactory {
     private final static QName _AttributeGroup_QNAME = new QName("", "attribute-group");
     private final static QName _Attribute_QNAME = new QName("", "attribute");
     private final static QName _Categories_QNAME = new QName("", "categories");
+    private final static QName _Customers_QNAME = new QName("", "customers");
     private final static QName _TaxConfig_QNAME = new QName("", "tax-config");
     private final static QName _ProductType_QNAME = new QName("", "product-type");
     private final static QName _OrganisationUser_QNAME = new QName("", "organisation-user");
     private final static QName _Product_QNAME = new QName("", "product");
     private final static QName _Brands_QNAME = new QName("", "brands");
     private final static QName _DataGroups_QNAME = new QName("", "data-groups");
+    private final static QName _Address_QNAME = new QName("", "address");
     private final static QName _CountryStates_QNAME = new QName("", "country-states");
     private final static QName _ShippingMethod_QNAME = new QName("", "shipping-method");
     private final static QName _Promotions_QNAME = new QName("", "promotions");
@@ -78,6 +81,7 @@ public class ObjectFactory {
     private final static QName _PromotionCoupon_QNAME = new QName("", "promotion-coupon");
     private final static QName _Category_QNAME = new QName("", "category");
     private final static QName _Promotion_QNAME = new QName("", "promotion");
+    private final static QName _Customer_QNAME = new QName("", "customer");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.yes.cart.bulkimport.xml.internal
@@ -180,6 +184,14 @@ public class ObjectFactory {
      */
     public ShippingProvidersType createShippingProvidersType() {
         return new ShippingProvidersType();
+    }
+
+    /**
+     * Create an instance of {@link AddressesType }
+     * 
+     */
+    public AddressesType createAddressesType() {
+        return new AddressesType();
     }
 
     /**
@@ -415,6 +427,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomersType }
+     * 
+     */
+    public CustomersType createCustomersType() {
+        return new CustomersType();
+    }
+
+    /**
      * Create an instance of {@link TaxConfigType }
      * 
      */
@@ -452,6 +472,14 @@ public class ObjectFactory {
      */
     public DataGroupsType createDataGroupsType() {
         return new DataGroupsType();
+    }
+
+    /**
+     * Create an instance of {@link AddressType }
+     * 
+     */
+    public AddressType createAddressType() {
+        return new AddressType();
     }
 
     /**
@@ -535,6 +563,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerType }
+     * 
+     */
+    public CustomerType createCustomerType() {
+        return new CustomerType();
+    }
+
+    /**
      * Create an instance of {@link QuantityType }
      * 
      */
@@ -583,6 +619,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerPoliciesType }
+     * 
+     */
+    public CustomerPoliciesType createCustomerPoliciesType() {
+        return new CustomerPoliciesType();
+    }
+
+    /**
      * Create an instance of {@link RateType }
      * 
      */
@@ -599,11 +643,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerContactDetailsType }
+     * 
+     */
+    public CustomerContactDetailsType createCustomerContactDetailsType() {
+        return new CustomerContactDetailsType();
+    }
+
+    /**
      * Create an instance of {@link NavigationProductTypeType }
      * 
      */
     public NavigationProductTypeType createNavigationProductTypeType() {
         return new NavigationProductTypeType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerShopType }
+     * 
+     */
+    public CustomerShopType createCustomerShopType() {
+        return new CustomerShopType();
     }
 
     /**
@@ -759,6 +819,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerWishlistItemType }
+     * 
+     */
+    public CustomerWishlistItemType createCustomerWishlistItemType() {
+        return new CustomerWishlistItemType();
+    }
+
+    /**
      * Create an instance of {@link PromotionCouponConfigurationType }
      * 
      */
@@ -807,11 +875,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerWishlistType }
+     * 
+     */
+    public CustomerWishlistType createCustomerWishlistType() {
+        return new CustomerWishlistType();
+    }
+
+    /**
      * Create an instance of {@link ProductTypeConfigurationType }
      * 
      */
     public ProductTypeConfigurationType createProductTypeConfigurationType() {
         return new ProductTypeConfigurationType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerCredentialsType }
+     * 
+     */
+    public CustomerCredentialsType createCustomerCredentialsType() {
+        return new CustomerCredentialsType();
     }
 
     /**
@@ -847,11 +931,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerWishlistItemPriceType }
+     * 
+     */
+    public CustomerWishlistItemPriceType createCustomerWishlistItemPriceType() {
+        return new CustomerWishlistItemPriceType();
+    }
+
+    /**
      * Create an instance of {@link ProductLinkType }
      * 
      */
     public ProductLinkType createProductLinkType() {
         return new ProductLinkType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerShopsType }
+     * 
+     */
+    public CustomerShopsType createCustomerShopsType() {
+        return new CustomerShopsType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerAddressesType }
+     * 
+     */
+    public CustomerAddressesType createCustomerAddressesType() {
+        return new CustomerAddressesType();
     }
 
     /**
@@ -924,6 +1032,14 @@ public class ObjectFactory {
      */
     public OrganisationUserCredentialsType createOrganisationUserCredentialsType() {
         return new OrganisationUserCredentialsType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerOrganisationType }
+     * 
+     */
+    public CustomerOrganisationType createCustomerOrganisationType() {
+        return new CustomerOrganisationType();
     }
 
     /**
@@ -1191,6 +1307,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "shipping-providers")
     public JAXBElement<ShippingProvidersType> createShippingProviders(ShippingProvidersType value) {
         return new JAXBElement<ShippingProvidersType>(_ShippingProviders_QNAME, ShippingProvidersType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AddressesType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "addresses")
+    public JAXBElement<AddressesType> createAddresses(AddressesType value) {
+        return new JAXBElement<AddressesType>(_Addresses_QNAME, AddressesType.class, null, value);
     }
 
     /**
@@ -1491,6 +1616,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CustomersType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "customers")
+    public JAXBElement<CustomersType> createCustomers(CustomersType value) {
+        return new JAXBElement<CustomersType>(_Customers_QNAME, CustomersType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TaxConfigType }{@code >}}
      * 
      */
@@ -1542,6 +1676,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "data-groups")
     public JAXBElement<DataGroupsType> createDataGroups(DataGroupsType value) {
         return new JAXBElement<DataGroupsType>(_DataGroups_QNAME, DataGroupsType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AddressType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "address")
+    public JAXBElement<AddressType> createAddress(AddressType value) {
+        return new JAXBElement<AddressType>(_Address_QNAME, AddressType.class, null, value);
     }
 
     /**
@@ -1650,6 +1793,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "promotion")
     public JAXBElement<PromotionType> createPromotion(PromotionType value) {
         return new JAXBElement<PromotionType>(_Promotion_QNAME, PromotionType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CustomerType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "customer")
+    public JAXBElement<CustomerType> createCustomer(CustomerType value) {
+        return new JAXBElement<CustomerType>(_Customer_QNAME, CustomerType.class, null, value);
     }
 
 }

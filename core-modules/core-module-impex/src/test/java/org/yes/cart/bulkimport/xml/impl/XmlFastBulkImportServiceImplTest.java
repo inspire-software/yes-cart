@@ -803,6 +803,48 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TADDRESS  ");
+            rs.next();
+            long cntBeforeAddr = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/addresses.xml", listener, importedFilesSet));
+            final long addr = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TADDRESS  ");
+            rs.next();
+            long cntAddr = rs.getLong(1);
+            rs.close();
+
+            change = cntAddr - cntBeforeAddr;
+            System.out.println(String.format("%5d", change) + " addresses in " + addr + "millis (~" + (addr / change) + " per item)");
+
+            assertEquals(3L + cntBeforeAddr, cntAddr);   // 3 new + 1 update
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCUSTOMER  ");
+            rs.next();
+            long cntBeforeCust = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/customers.xml", listener, importedFilesSet));
+            final long cust = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCUSTOMER  ");
+            rs.next();
+            long cntCust = rs.getLong(1);
+            rs.close();
+
+            change = cntCust - cntBeforeCust;
+            System.out.println(String.format("%5d", change) + " customers + addresses + wishlists in " + cust + "millis (~" + (cust / change) + " per item)");
+
+            assertEquals(3L + cntBeforeCust, cntCust);   // 3 new
+
+
+
 
             mockery.assertIsSatisfied();
 
@@ -815,7 +857,9 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TCATEGORYATTRVALUE",
                     "TPRODTYPEATTRVIEWGROUP",
                     "TSHOPCATEGORY", "TPROMOTION", "TPROMOTIONCOUPON", "TTAX", "TTAXCONFIG",
-                    "TMANAGER", "TMANAGERROLE", "TMANAGERSHOP");
+                    "TMANAGER", "TMANAGERROLE", "TMANAGERSHOP",
+                    "TADDRESS",
+                    "TCUSTOMER", "TCUSTOMERWISHLIST" );
         }
 
     }

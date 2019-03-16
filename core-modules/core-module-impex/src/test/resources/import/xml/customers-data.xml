@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customers>
+<customer guid="XML10001">
+    <credentials guest="false">
+        <email>xml-reg@test.com</email>
+        <password>ABC</password>
+        <password-expiry>2099-01-01 00:00:00</password-expiry>
+        <auth-token>T10001</auth-token>
+        <auth-token-expiry>2099-01-01 00:00:00</auth-token-expiry>
+        <public-key>P10001</public-key>
+    </credentials>
+    <organisation>
+        <company-name-1>JJ</company-name-1>
+        <company-name-2>PLC</company-name-2>
+        <company-department>IT</company-department>
+        <shops>
+            <shop code="SHOIP1" enabled="true"/>
+            <shop code="SHOIP2" enabled="false"/>
+        </shops>
+    </organisation>
+    <contact-details>
+        <salutation>Mr</salutation>
+        <firstname>John</firstname>
+        <middlename>Jr.</middlename>
+        <lastname>Doe</lastname>
+    </contact-details>
+    <policies>
+        <tags>TEST1 TEST2</tags>
+        <type>B2C</type>
+        <pricing-policy>P1</pricing-policy>
+    </policies>
+    <customer-addresses>
+        <address address-type="S" default-address="true">
+            <address-name>My Address</address-name>
+            <salutation>Mr</salutation>
+            <firstname>Sherlock</firstname>
+            <middlename>William</middlename>
+            <lastname>Holmes</lastname>
+            <addrline-1>221B</addrline-1>
+            <addrline-2>Baker Str</addrline-2>
+            <city>London</city>
+            <postcode>NW1 6XE</postcode>
+            <country-code>GB</country-code>
+            <state-code>GB</state-code>
+            <phone-1>020 7224 3688</phone-1>
+            <phone-2>020 7224 3689</phone-2>
+            <mobile-1>020 7224 3690</mobile-1>
+            <mobile-2>020 7224 3691</mobile-2>
+            <email-1>s.holmes@sy.gov.uk</email-1>
+            <email-2>s.holmes2@sy.gov.uk</email-2>
+            <company-name-1>S. Holmes, Detective</company-name-1>
+            <company-name-2>PLC</company-name-2>
+            <company-department>Detective</company-department>
+            <custom-0>C0</custom-0>
+            <custom-1>C1</custom-1>
+            <custom-2>C2</custom-2>
+            <custom-3>C3</custom-3>
+            <custom-4>C4</custom-4>
+            <custom-5>C5</custom-5>
+            <custom-6>C6</custom-6>
+            <custom-7>C7</custom-7>
+            <custom-8>C8</custom-8>
+            <custom-9>C9</custom-9>
+        </address>
+    </customer-addresses>
+    <customer-wishlist>
+        <wishlist-item wishlist-type="W" visibility="P" sku-code="BACKORDER-BACK-TO-FLOW1">
+            <tag>MyWishList</tag>
+            <quantity>2.00</quantity>
+            <price currency="GBP" quantity="2.00">
+                <list-price>9.99</list-price>
+            </price>
+        </wishlist-item>
+        <wishlist-item wishlist-type="W" visibility="P" sku-code="BACKORDER-BACK-TO-FLOW2">
+            <tag>MyWishList</tag>
+            <quantity>1.00</quantity>
+            <price currency="USD" quantity="1.00">
+                <list-price>19.99</list-price>
+            </price>
+        </wishlist-item>
+    </customer-wishlist>
+</customer>
+<customer guid="XML10002">
+    <credentials guest="true">
+        <email>10002</email>
+        <guest-email>guest@test.com</guest-email>
+        <password>ZZZ</password>
+    </credentials>
+    <organisation/>
+    <contact-details>
+        <salutation>Mrs</salutation>
+        <firstname>Jane</firstname>
+        <lastname>Smith</lastname>
+    </contact-details>
+    <policies/>
+</customer>
+<customer guid="XML20001">
+    <credentials guest="false">
+        <email>#SHOIP2#</email>
+        <password>ZZZ</password>
+    </credentials>
+    <organisation>
+        <shops>
+            <shop code="SHOIP2" enabled="true"/>
+        </shops>
+    </organisation>
+    <contact-details>
+        <firstname>SHOIP2</firstname>
+        <lastname>SHOIP2</lastname>
+    </contact-details>
+    <policies/>
+    <customer-addresses>
+        <address address-type="B" default-address="true">
+            <salutation>Mr</salutation>
+            <firstname>Bob</firstname>
+            <lastname>Smith</lastname>
+            <addrline-1>Oxford Str</addrline-1>
+            <city>London</city>
+            <postcode>NW1 6XE</postcode>
+            <country-code>GB</country-code>
+        </address>
+    </customer-addresses>
+</customer>
+</customers>

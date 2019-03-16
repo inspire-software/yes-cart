@@ -515,20 +515,68 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TMANAGER  ");
             rs.next();
-            long cntMgrCfg = rs.getLong(1);
+            long cntMgr = rs.getLong(1);
             rs.close();
 
             dt = System.currentTimeMillis();
             fileToExport = "target/organisationusers-export-" + UUID.randomUUID().toString() + ".xml";
             bulkExportService.doExport(createContext("src/test/resources/export/xml/organisationusers.xml", listener, fileToExport));
-            final long mgrCfg = System.currentTimeMillis() - dt;
-            System.out.println(String.format("%5d", cntMgrCfg) + " managers in " + mgrCfg + "millis (~" + (mgrCfg / cntMgrCfg) + " per item)");
+            final long mgr = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntMgr) + " managers in " + mgr + "millis (~" + (mgr / cntMgr) + " per item)");
 
 
             xml = new File(fileToExport);
             content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("organisation-user id=\"10001\" guid=\"10001\""));
             assertTrue(content.contains("<company-name-1>ABC</company-name-1>"));
+
+            validateXmlFile(xml);
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TADDRESS  ");
+            rs.next();
+            long cntAddr = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/addresses-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/addresses.xml", listener, fileToExport));
+            final long addr = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntAddr) + " addresses in " + addr + "millis (~" + (addr / cntAddr) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<address id=\"10101\" guid=\"10101\" address-type=\"S\" default-address=\"true\" customer-code=\"10001\" customer-email=\"reg@test.com\">"));
+            assertTrue(content.contains("<address id=\"20101\" guid=\"20101\" address-type=\"B\" default-address=\"true\" shop-code=\"SHOIP\">"));
+
+            validateXmlFile(xml);
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCUSTOMER  ");
+            rs.next();
+            long cntCust = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/customers-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/customers.xml", listener, fileToExport));
+            final long cust = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntCust) + " customers in " + cust + "millis (~" + (cust / cntCust) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<customer id=\"10001\" guid=\"10001\">"));
+            assertTrue(content.contains("<shop code=\"SHOIP1\" enabled=\"true\"/>"));
+            assertTrue(content.contains("<shop code=\"SHOIP2\" enabled=\"false\"/>"));
+            assertTrue(content.contains("<firstname>John</firstname>"));
+            assertTrue(content.contains("<pricing-policy>P1</pricing-policy>"));
+            assertTrue(content.contains("<address id=\"10101\" guid=\"10101\" address-type=\"S\" default-address=\"true\" customer-code=\"10001\" customer-email=\"reg@test.com\">"));
+            assertTrue(content.contains("<wishlist-item id=\"10101\" guid=\"10101\" wishlist-type=\"W\" visibility=\"P\" sku-code=\"BACKORDER-BACK-TO-FLOW1\">"));
+            assertTrue(content.contains("<price currency=\"GBP\" quantity=\"2.00\">"));
+            assertTrue(content.contains("<list-price>9.99</list-price>"));
 
             validateXmlFile(xml);
 
