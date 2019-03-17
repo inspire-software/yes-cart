@@ -24,6 +24,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _ShopUrls_QNAME = new QName("", "shop-urls");
     private final static QName _TaxConfigs_QNAME = new QName("", "tax-configs");
     private final static QName _Country_QNAME = new QName("", "country");
     private final static QName _ShippingProviders_QNAME = new QName("", "shipping-providers");
@@ -32,6 +33,7 @@ public class ObjectFactory {
     private final static QName _PriceRule_QNAME = new QName("", "price-rule");
     private final static QName _Taxes_QNAME = new QName("", "taxes");
     private final static QName _ShippingMethods_QNAME = new QName("", "shipping-methods");
+    private final static QName _ShopsFulfilmentCentres_QNAME = new QName("", "shops-fulfilment-centres");
     private final static QName _DataGroup_QNAME = new QName("", "data-group");
     private final static QName _Price_QNAME = new QName("", "price");
     private final static QName _Stock_QNAME = new QName("", "stock");
@@ -46,18 +48,25 @@ public class ObjectFactory {
     private final static QName _System_QNAME = new QName("", "system");
     private final static QName _AttributeGroups_QNAME = new QName("", "attribute-groups");
     private final static QName _ProductsLinks_QNAME = new QName("", "products-links");
+    private final static QName _ShopAliases_QNAME = new QName("", "shop-aliases");
     private final static QName _ProductLinks_QNAME = new QName("", "product-links");
+    private final static QName _Shops_QNAME = new QName("", "shops");
     private final static QName _ProductTypes_QNAME = new QName("", "product-types");
     private final static QName _Skus_QNAME = new QName("", "skus");
+    private final static QName _Shop_QNAME = new QName("", "shop");
+    private final static QName _ShopsCategories_QNAME = new QName("", "shops-categories");
     private final static QName _OrganisationUsers_QNAME = new QName("", "organisation-users");
     private final static QName _Cms_QNAME = new QName("", "cms");
     private final static QName _Inventory_QNAME = new QName("", "inventory");
+    private final static QName _ShopsAliases_QNAME = new QName("", "shops-aliases");
+    private final static QName _ShopsCarriers_QNAME = new QName("", "shops-carriers");
     private final static QName _Content_QNAME = new QName("", "content");
     private final static QName _Products_QNAME = new QName("", "products");
     private final static QName _FulfilmentCentre_QNAME = new QName("", "fulfilment-centre");
     private final static QName _ProductCategories_QNAME = new QName("", "product-categories");
     private final static QName _FulfilmentCentres_QNAME = new QName("", "fulfilment-centres");
     private final static QName _Systems_QNAME = new QName("", "systems");
+    private final static QName _ShopCarriers_QNAME = new QName("", "shop-carriers");
     private final static QName _AttributeGroup_QNAME = new QName("", "attribute-group");
     private final static QName _Attribute_QNAME = new QName("", "attribute");
     private final static QName _Categories_QNAME = new QName("", "categories");
@@ -65,6 +74,7 @@ public class ObjectFactory {
     private final static QName _TaxConfig_QNAME = new QName("", "tax-config");
     private final static QName _ProductType_QNAME = new QName("", "product-type");
     private final static QName _OrganisationUser_QNAME = new QName("", "organisation-user");
+    private final static QName _ShopsUrls_QNAME = new QName("", "shops-urls");
     private final static QName _Product_QNAME = new QName("", "product");
     private final static QName _Brands_QNAME = new QName("", "brands");
     private final static QName _DataGroups_QNAME = new QName("", "data-groups");
@@ -80,6 +90,8 @@ public class ObjectFactory {
     private final static QName _Attributes_QNAME = new QName("", "attributes");
     private final static QName _PromotionCoupon_QNAME = new QName("", "promotion-coupon");
     private final static QName _Category_QNAME = new QName("", "category");
+    private final static QName _ShopFulfilmentCentres_QNAME = new QName("", "shop-fulfilment-centres");
+    private final static QName _ShopCategories_QNAME = new QName("", "shop-categories");
     private final static QName _Promotion_QNAME = new QName("", "promotion");
     private final static QName _Customer_QNAME = new QName("", "customer");
 
@@ -163,6 +175,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ShopUrlCodeType }
+     * 
+     */
+    public ShopUrlCodeType createShopUrlCodeType() {
+        return new ShopUrlCodeType();
+    }
+
+    /**
      * Create an instance of {@link TaxConfigsType }
      * 
      */
@@ -216,6 +236,14 @@ public class ObjectFactory {
      */
     public ShippingMethodsType createShippingMethodsType() {
         return new ShippingMethodsType();
+    }
+
+    /**
+     * Create an instance of {@link ShopsFulfilmentCentresCodeType }
+     * 
+     */
+    public ShopsFulfilmentCentresCodeType createShopsFulfilmentCentresCodeType() {
+        return new ShopsFulfilmentCentresCodeType();
     }
 
     /**
@@ -315,11 +343,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ShopAliasesCodeType }
+     * 
+     */
+    public ShopAliasesCodeType createShopAliasesCodeType() {
+        return new ShopAliasesCodeType();
+    }
+
+    /**
      * Create an instance of {@link ProductLinksCodeType }
      * 
      */
     public ProductLinksCodeType createProductLinksCodeType() {
         return new ProductLinksCodeType();
+    }
+
+    /**
+     * Create an instance of {@link ShopsType }
+     * 
+     */
+    public ShopsType createShopsType() {
+        return new ShopsType();
     }
 
     /**
@@ -336,6 +380,22 @@ public class ObjectFactory {
      */
     public SkusType createSkusType() {
         return new SkusType();
+    }
+
+    /**
+     * Create an instance of {@link ShopType }
+     * 
+     */
+    public ShopType createShopType() {
+        return new ShopType();
+    }
+
+    /**
+     * Create an instance of {@link ShopsCategoriesCodeType }
+     * 
+     */
+    public ShopsCategoriesCodeType createShopsCategoriesCodeType() {
+        return new ShopsCategoriesCodeType();
     }
 
     /**
@@ -360,6 +420,22 @@ public class ObjectFactory {
      */
     public InventoryType createInventoryType() {
         return new InventoryType();
+    }
+
+    /**
+     * Create an instance of {@link ShopsAliasesCodeType }
+     * 
+     */
+    public ShopsAliasesCodeType createShopsAliasesCodeType() {
+        return new ShopsAliasesCodeType();
+    }
+
+    /**
+     * Create an instance of {@link ShopsCarriersCodeType }
+     * 
+     */
+    public ShopsCarriersCodeType createShopsCarriersCodeType() {
+        return new ShopsCarriersCodeType();
     }
 
     /**
@@ -400,6 +476,14 @@ public class ObjectFactory {
      */
     public SystemsType createSystemsType() {
         return new SystemsType();
+    }
+
+    /**
+     * Create an instance of {@link ShopCarriersCodeType }
+     * 
+     */
+    public ShopCarriersCodeType createShopCarriersCodeType() {
+        return new ShopCarriersCodeType();
     }
 
     /**
@@ -456,6 +540,14 @@ public class ObjectFactory {
      */
     public OrganisationUserType createOrganisationUserType() {
         return new OrganisationUserType();
+    }
+
+    /**
+     * Create an instance of {@link ShopUrlsCodeType }
+     * 
+     */
+    public ShopUrlsCodeType createShopUrlsCodeType() {
+        return new ShopUrlsCodeType();
     }
 
     /**
@@ -563,6 +655,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ShopFulfilmentCentresCodeType }
+     * 
+     */
+    public ShopFulfilmentCentresCodeType createShopFulfilmentCentresCodeType() {
+        return new ShopFulfilmentCentresCodeType();
+    }
+
+    /**
+     * Create an instance of {@link ShopCategoriesCodeType }
+     * 
+     */
+    public ShopCategoriesCodeType createShopCategoriesCodeType() {
+        return new ShopCategoriesCodeType();
+    }
+
+    /**
      * Create an instance of {@link CustomerType }
      * 
      */
@@ -576,6 +684,14 @@ public class ObjectFactory {
      */
     public QuantityType createQuantityType() {
         return new QuantityType();
+    }
+
+    /**
+     * Create an instance of {@link ShopAvailabilityType }
+     * 
+     */
+    public ShopAvailabilityType createShopAvailabilityType() {
+        return new ShopAvailabilityType();
     }
 
     /**
@@ -675,6 +791,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ShopFulfilmentCentresType }
+     * 
+     */
+    public ShopFulfilmentCentresType createShopFulfilmentCentresType() {
+        return new ShopFulfilmentCentresType();
+    }
+
+    /**
      * Create an instance of {@link ShippingMethodExclusionsDatesType }
      * 
      */
@@ -723,6 +847,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ShopAddressbookType }
+     * 
+     */
+    public ShopAddressbookType createShopAddressbookType() {
+        return new ShopAddressbookType();
+    }
+
+    /**
      * Create an instance of {@link OrganisationUserShopsType }
      * 
      */
@@ -760,6 +892,14 @@ public class ObjectFactory {
      */
     public ShippingMethodExclusionsWeekdaysType createShippingMethodExclusionsWeekdaysType() {
         return new ShippingMethodExclusionsWeekdaysType();
+    }
+
+    /**
+     * Create an instance of {@link ShopCarriersType }
+     * 
+     */
+    public ShopCarriersType createShopCarriersType() {
+        return new ShopCarriersType();
     }
 
     /**
@@ -832,6 +972,14 @@ public class ObjectFactory {
      */
     public PromotionCouponConfigurationType createPromotionCouponConfigurationType() {
         return new PromotionCouponConfigurationType();
+    }
+
+    /**
+     * Create an instance of {@link ShopCarrierType }
+     * 
+     */
+    public ShopCarrierType createShopCarrierType() {
+        return new ShopCarrierType();
     }
 
     /**
@@ -947,6 +1095,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ShopCategoriesType }
+     * 
+     */
+    public ShopCategoriesType createShopCategoriesType() {
+        return new ShopCategoriesType();
+    }
+
+    /**
      * Create an instance of {@link CustomerShopsType }
      * 
      */
@@ -960,6 +1116,14 @@ public class ObjectFactory {
      */
     public CustomerAddressesType createCustomerAddressesType() {
         return new CustomerAddressesType();
+    }
+
+    /**
+     * Create an instance of {@link ShopUrlType }
+     * 
+     */
+    public ShopUrlType createShopUrlType() {
+        return new ShopUrlType();
     }
 
     /**
@@ -995,11 +1159,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ShopUrlsType }
+     * 
+     */
+    public ShopUrlsType createShopUrlsType() {
+        return new ShopUrlsType();
+    }
+
+    /**
+     * Create an instance of {@link ShopAliasType }
+     * 
+     */
+    public ShopAliasType createShopAliasType() {
+        return new ShopAliasType();
+    }
+
+    /**
      * Create an instance of {@link ShippingProviderConfigurationType }
      * 
      */
     public ShippingProviderConfigurationType createShippingProviderConfigurationType() {
         return new ShippingProviderConfigurationType();
+    }
+
+    /**
+     * Create an instance of {@link ShopAliasesType }
+     * 
+     */
+    public ShopAliasesType createShopAliasesType() {
+        return new ShopAliasesType();
     }
 
     /**
@@ -1104,6 +1292,30 @@ public class ObjectFactory {
      */
     public NavigationByPriceTiersCurrencyTiersTierType createNavigationByPriceTiersCurrencyTiersTierType() {
         return new NavigationByPriceTiersCurrencyTiersTierType();
+    }
+
+    /**
+     * Create an instance of {@link ShopCategoryType }
+     * 
+     */
+    public ShopCategoryType createShopCategoryType() {
+        return new ShopCategoryType();
+    }
+
+    /**
+     * Create an instance of {@link ShopPresentationType }
+     * 
+     */
+    public ShopPresentationType createShopPresentationType() {
+        return new ShopPresentationType();
+    }
+
+    /**
+     * Create an instance of {@link ShopFulfilmentCentreType }
+     * 
+     */
+    public ShopFulfilmentCentreType createShopFulfilmentCentreType() {
+        return new ShopFulfilmentCentreType();
     }
 
     /**
@@ -1283,6 +1495,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopUrlCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shop-urls")
+    public JAXBElement<ShopUrlCodeType> createShopUrls(ShopUrlCodeType value) {
+        return new JAXBElement<ShopUrlCodeType>(_ShopUrls_QNAME, ShopUrlCodeType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TaxConfigsType }{@code >}}
      * 
      */
@@ -1352,6 +1573,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "shipping-methods")
     public JAXBElement<ShippingMethodsType> createShippingMethods(ShippingMethodsType value) {
         return new JAXBElement<ShippingMethodsType>(_ShippingMethods_QNAME, ShippingMethodsType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopsFulfilmentCentresCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shops-fulfilment-centres")
+    public JAXBElement<ShopsFulfilmentCentresCodeType> createShopsFulfilmentCentres(ShopsFulfilmentCentresCodeType value) {
+        return new JAXBElement<ShopsFulfilmentCentresCodeType>(_ShopsFulfilmentCentres_QNAME, ShopsFulfilmentCentresCodeType.class, null, value);
     }
 
     /**
@@ -1481,12 +1711,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopAliasesCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shop-aliases")
+    public JAXBElement<ShopAliasesCodeType> createShopAliases(ShopAliasesCodeType value) {
+        return new JAXBElement<ShopAliasesCodeType>(_ShopAliases_QNAME, ShopAliasesCodeType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ProductLinksCodeType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "product-links")
     public JAXBElement<ProductLinksCodeType> createProductLinks(ProductLinksCodeType value) {
         return new JAXBElement<ProductLinksCodeType>(_ProductLinks_QNAME, ProductLinksCodeType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopsType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shops")
+    public JAXBElement<ShopsType> createShops(ShopsType value) {
+        return new JAXBElement<ShopsType>(_Shops_QNAME, ShopsType.class, null, value);
     }
 
     /**
@@ -1505,6 +1753,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "skus")
     public JAXBElement<SkusType> createSkus(SkusType value) {
         return new JAXBElement<SkusType>(_Skus_QNAME, SkusType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shop")
+    public JAXBElement<ShopType> createShop(ShopType value) {
+        return new JAXBElement<ShopType>(_Shop_QNAME, ShopType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopsCategoriesCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shops-categories")
+    public JAXBElement<ShopsCategoriesCodeType> createShopsCategories(ShopsCategoriesCodeType value) {
+        return new JAXBElement<ShopsCategoriesCodeType>(_ShopsCategories_QNAME, ShopsCategoriesCodeType.class, null, value);
     }
 
     /**
@@ -1532,6 +1798,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "inventory")
     public JAXBElement<InventoryType> createInventory(InventoryType value) {
         return new JAXBElement<InventoryType>(_Inventory_QNAME, InventoryType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopsAliasesCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shops-aliases")
+    public JAXBElement<ShopsAliasesCodeType> createShopsAliases(ShopsAliasesCodeType value) {
+        return new JAXBElement<ShopsAliasesCodeType>(_ShopsAliases_QNAME, ShopsAliasesCodeType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopsCarriersCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shops-carriers")
+    public JAXBElement<ShopsCarriersCodeType> createShopsCarriers(ShopsCarriersCodeType value) {
+        return new JAXBElement<ShopsCarriersCodeType>(_ShopsCarriers_QNAME, ShopsCarriersCodeType.class, null, value);
     }
 
     /**
@@ -1586,6 +1870,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "systems")
     public JAXBElement<SystemsType> createSystems(SystemsType value) {
         return new JAXBElement<SystemsType>(_Systems_QNAME, SystemsType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopCarriersCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shop-carriers")
+    public JAXBElement<ShopCarriersCodeType> createShopCarriers(ShopCarriersCodeType value) {
+        return new JAXBElement<ShopCarriersCodeType>(_ShopCarriers_QNAME, ShopCarriersCodeType.class, null, value);
     }
 
     /**
@@ -1649,6 +1942,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "organisation-user")
     public JAXBElement<OrganisationUserType> createOrganisationUser(OrganisationUserType value) {
         return new JAXBElement<OrganisationUserType>(_OrganisationUser_QNAME, OrganisationUserType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopUrlsCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shops-urls")
+    public JAXBElement<ShopUrlsCodeType> createShopsUrls(ShopUrlsCodeType value) {
+        return new JAXBElement<ShopUrlsCodeType>(_ShopsUrls_QNAME, ShopUrlsCodeType.class, null, value);
     }
 
     /**
@@ -1784,6 +2086,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "category")
     public JAXBElement<CategoryType> createCategory(CategoryType value) {
         return new JAXBElement<CategoryType>(_Category_QNAME, CategoryType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopFulfilmentCentresCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shop-fulfilment-centres")
+    public JAXBElement<ShopFulfilmentCentresCodeType> createShopFulfilmentCentres(ShopFulfilmentCentresCodeType value) {
+        return new JAXBElement<ShopFulfilmentCentresCodeType>(_ShopFulfilmentCentres_QNAME, ShopFulfilmentCentresCodeType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ShopCategoriesCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "shop-categories")
+    public JAXBElement<ShopCategoriesCodeType> createShopCategories(ShopCategoriesCodeType value) {
+        return new JAXBElement<ShopCategoriesCodeType>(_ShopCategories_QNAME, ShopCategoriesCodeType.class, null, value);
     }
 
     /**

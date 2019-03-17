@@ -846,20 +846,157 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOPURL  ");
+            rs.next();
+            long cntBeforeShopUrl = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/shopsurls.xml", listener, importedFilesSet));
+            final long shopUrls = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOPURL  ");
+            rs.next();
+            long cntShopUrls = rs.getLong(1);
+            rs.close();
+
+            change = cntShopUrls - cntBeforeShopUrl;
+            System.out.println(String.format("%5d", change) + " shop urls in " + shopUrls + "millis (~" + (shopUrls / change) + " per item)");
+
+            assertEquals(5L + cntBeforeShopUrl, cntShopUrls);   // 5 new (1 add then remove, 1 duplicated)
+
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOPALIAS  ");
+            rs.next();
+            long cntBeforeShopAlias = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/shopsaliases.xml", listener, importedFilesSet));
+            final long shopAliases = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOPALIAS  ");
+            rs.next();
+            long cntShopAliases = rs.getLong(1);
+            rs.close();
+
+            change = cntShopAliases - cntBeforeShopAlias;
+            System.out.println(String.format("%5d", change) + " shop aliases in " + shopAliases + "millis (~" + (shopAliases / change) + " per item)");
+
+            assertEquals(5L + cntBeforeShopAlias, cntShopAliases);   // 5 new (1 add then remove, 1 duplicated)
+
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOPCATEGORY  ");
+            rs.next();
+            long cntBeforeShopCategory = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/shopscategories.xml", listener, importedFilesSet));
+            final long shopCategory = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOPCATEGORY  ");
+            rs.next();
+            long cntShopCategory = rs.getLong(1);
+            rs.close();
+
+            change = cntShopCategory - cntBeforeShopCategory;
+            System.out.println(String.format("%5d", change) + " shop categories in " + shopCategory + "millis (~" + (shopCategory / change) + " per item)");
+
+            assertEquals(9L + cntBeforeShopCategory, cntShopCategory);   // 9 new (1 duplicated)
+
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCARRIERSHOP  ");
+            rs.next();
+            long cntBeforeShopCarrier = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/shopscarriers.xml", listener, importedFilesSet));
+            final long shopCarrier = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCARRIERSHOP  ");
+            rs.next();
+            long cntShopCarrier = rs.getLong(1);
+            rs.close();
+
+            change = cntShopCarrier - cntBeforeShopCarrier;
+            System.out.println(String.format("%5d", change) + " shop carriers in " + shopCarrier + "millis (~" + (shopCarrier / change) + " per item)");
+
+            assertEquals(4L + cntBeforeShopCarrier, cntShopCarrier);   // 4 new (2 same)
+
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOPWAREHOUSE  ");
+            rs.next();
+            long cntBeforeShopCentre = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/shopscentres.xml", listener, importedFilesSet));
+            final long shopCentre = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOPWAREHOUSE  ");
+            rs.next();
+            long cntShopCentre = rs.getLong(1);
+            rs.close();
+
+            change = cntShopCentre - cntBeforeShopCentre;
+            System.out.println(String.format("%5d", change) + " shop fulfilment centres in " + shopCentre + "millis (~" + (shopCentre / change) + " per item)");
+
+            assertEquals(3L + cntBeforeShopCentre, cntShopCentre);   // 3 new (3 same)
+
+
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOP  ");
+            rs.next();
+            long cntBeforeShop = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/shops.xml", listener, importedFilesSet));
+            final long shop = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOP  ");
+            rs.next();
+            long cntShop = rs.getLong(1);
+            rs.close();
+
+            change = cntShop - cntBeforeShop;
+            System.out.println(String.format("%5d", change) + " shop (all) in " + shop + "millis (~" + (shop / change) + " per item)");
+
+            assertEquals(1L + cntBeforeShop, cntShop);   // 1 new full
+
+
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         } finally {
-            dumpDataBase("impex", "TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
+            dumpDataBase("impex",
+                    "TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TCATEGORYATTRVALUE",
                     "TPRODTYPEATTRVIEWGROUP",
-                    "TSHOPCATEGORY", "TPROMOTION", "TPROMOTIONCOUPON", "TTAX", "TTAXCONFIG",
+                    "TPROMOTION", "TPROMOTIONCOUPON", "TTAX", "TTAXCONFIG",
                     "TMANAGER", "TMANAGERROLE", "TMANAGERSHOP",
                     "TADDRESS",
-                    "TCUSTOMER", "TCUSTOMERWISHLIST" );
+                    "TCUSTOMER", "TCUSTOMERWISHLIST", "TCUSTOMERATTRVALUE",
+                    "TSHOP", "TSHOPATTRVALUE", "TSHOPWAREHOUSE", "TSHOPURL", "TSHOPALIAS", "TCARRIERSHOP");
         }
 
     }

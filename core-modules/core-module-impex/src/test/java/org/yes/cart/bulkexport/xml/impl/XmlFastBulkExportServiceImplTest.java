@@ -572,11 +572,40 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(content.contains("<shop code=\"SHOIP1\" enabled=\"true\"/>"));
             assertTrue(content.contains("<shop code=\"SHOIP2\" enabled=\"false\"/>"));
             assertTrue(content.contains("<firstname>John</firstname>"));
-            assertTrue(content.contains("<pricing-policy>P1</pricing-policy>"));
+            assertTrue(content.contains("<pricing-policy>TEST</pricing-policy>"));
             assertTrue(content.contains("<address id=\"10101\" guid=\"10101\" address-type=\"S\" default-address=\"true\" customer-code=\"10001\" customer-email=\"reg@test.com\">"));
             assertTrue(content.contains("<wishlist-item id=\"10101\" guid=\"10101\" wishlist-type=\"W\" visibility=\"P\" sku-code=\"BACKORDER-BACK-TO-FLOW1\">"));
             assertTrue(content.contains("<price currency=\"GBP\" quantity=\"2.00\">"));
             assertTrue(content.contains("<list-price>9.99</list-price>"));
+
+            validateXmlFile(xml);
+
+
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSHOP  ");
+            rs.next();
+            long cntShop = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/shops-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/shops.xml", listener, fileToExport));
+            final long shop = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntShop) + " shops in " + shop + "millis (~" + (shop / cntShop) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<shop id=\"10\" guid=\"SHOIP1\" code=\"SHOIP1\">"));
+            assertTrue(content.contains("<description><![CDATA[Gadget universe shop]]></description>"));
+            assertTrue(content.contains("<shop-url primary=\"false\" domain=\"www.gadget.yescart.org\"/>"));
+            assertTrue(content.contains("<shop-category id=\"140\" guid=\"140\" rank=\"5\"/>"));
+            assertTrue(content.contains("<shop-carrier id=\"1\" guid=\"1_CARRIER\" disabled=\"false\"/>"));
+            assertTrue(content.contains("<shop-fulfilment-centre id=\"1\" guid=\"WAREHOUSE_1\" disabled=\"false\"/>"));
+            assertTrue(content.contains("<address id=\"20101\" guid=\"20101\" address-type=\"B\" default-address=\"true\" shop-code=\"SHOIP\">"));
+            assertTrue(content.contains("<custom-attribute id=\"10\" guid=\"10_CURRENCY\" attribute=\"CURRENCY\">"));
 
             validateXmlFile(xml);
 

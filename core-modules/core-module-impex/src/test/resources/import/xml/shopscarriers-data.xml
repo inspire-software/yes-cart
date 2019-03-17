@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shops-carriers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<shop-carriers shop-code="SHOIP1">
+    <shop-carrier guid="1_CARRIER" disabled="false"/>
+    <shop-carrier guid="2_CARRIER" disabled="true"/>
+</shop-carriers>
+<shop-carriers shop-code="SHOIP2">
+    <shop-carrier guid="1_CARRIER" disabled="false"/>
+    <shop-carrier guid="2_CARRIER" disabled="true"/>
+</shop-carriers>
+<shop-carriers shop-code="SHOIP3">
+    <shop-carrier guid="1_CARRIER" disabled="false"/>
+    <shop-carrier guid="2_CARRIER" disabled="true"/>
+</shop-carriers>
+</shops-carriers>

@@ -42,6 +42,12 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
 
     /** {@inheritDoc} */
     @Override
+    public List<Warehouse> findByShopId(final long shopId, final boolean includeDisabled) {
+        return warehouseService.findByShopId(shopId, includeDisabled);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     @Cacheable(value = "shopService-shopWarehouses")
     public List<Warehouse> getByShopId(final long shopId, final boolean includeDisabled) {
         return warehouseService.getByShopId(shopId, includeDisabled);

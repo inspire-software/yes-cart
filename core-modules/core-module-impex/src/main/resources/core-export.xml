@@ -389,6 +389,21 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="SHOP">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShopXmlEntityHandler">
+                        <property name="carrierService" ref="carrierService"/>
+                        <property name="warehouseService" ref="warehouseService"/>
+                        <property name="customerService" ref="customerService"/>
+                    </bean>
+                </entry>
+                <entry key="SHOP_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShopXmlEntityHandler">
+                        <property name="carrierService" ref="carrierService"/>
+                        <property name="warehouseService" ref="warehouseService"/>
+                        <property name="customerService" ref="customerService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

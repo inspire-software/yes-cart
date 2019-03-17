@@ -1671,4 +1671,212 @@
         <xsd:attribute type="xsd:decimal" name="quantity" use="required"/>
     </xsd:complexType>
 
+    <!-- Shop -->
+
+    <xsd:element name="shops" type="shopsType"/>
+    <xsd:element name="shop" type="shopType"/>
+
+    <xsd:complexType name="shopsType">
+        <xsd:sequence>
+            <xsd:element type="shopType" name="shop" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shopType">
+        <xsd:sequence>
+            <xsd:element type="shop-presentationType" name="presentation" minOccurs="0"/>
+            <xsd:element type="shop-availabilityType" name="availability" minOccurs="0"/>
+            <xsd:element type="shop-urlsType" name="shop-urls" minOccurs="0"/>
+            <xsd:element type="shop-aliasesType" name="shop-aliases" minOccurs="0"/>
+            <xsd:element type="shop-categoriesType" name="shop-categories" minOccurs="0"/>
+            <xsd:element type="shop-carriersType" name="shop-carriers" minOccurs="0"/>
+            <xsd:element type="shop-fulfilment-centresType" name="shop-fulfilment-centres" minOccurs="0"/>
+            <xsd:element type="shop-addressbookType" name="shop-addressbook" minOccurs="0"/>
+            <xsd:element type="seoType" name="seo" minOccurs="0"/>
+            <xsd:element type="custom-attributesType" name="custom-attributes" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+        <xsd:attribute type="xsd:string" name="master-code"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-presentationType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="xsd:string" name="description" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="theme-chain"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-availabilityType">
+        <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-urlsType">
+        <xsd:sequence>
+            <xsd:element type="shop-urlType" name="shop-url" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-urlType">
+        <xsd:attribute type="xsd:boolean" name="primary" use="required"/>
+        <xsd:attribute type="xsd:string" name="domain" use="required"/>
+        <xsd:attribute type="xsd:string" name="theme-chain"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-aliasesType">
+        <xsd:sequence>
+            <xsd:element type="shop-aliasType" name="shop-alias" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-aliasType">
+        <xsd:attribute type="xsd:string" name="name" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-categoriesType">
+        <xsd:sequence>
+            <xsd:element type="shop-categoryType" name="shop-category" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-categoryType">
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="xsd:int" name="rank"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-carriersType">
+        <xsd:sequence>
+            <xsd:element type="shop-carrierType" name="shop-carrier" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-carrierType">
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-fulfilment-centresType">
+        <xsd:sequence>
+            <xsd:element type="shop-fulfilment-centreType" name="shop-fulfilment-centre" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-fulfilment-centreType">
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid" use="required"/>
+        <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-addressbookType">
+        <xsd:sequence>
+            <xsd:element type="customerType" name="customer"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+    <xsd:element name="shops-urls" type="shop-urlsCodeType"/>
+    <xsd:element name="shop-urls" type="shop-urlCodeType"/>
+
+    <xsd:complexType name="shop-urlsCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-urlCodeType" name="shop-urls" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-urlCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-urlType" name="shop-url" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="shop-code"/>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:element name="shops-aliases" type="shops-aliasesCodeType"/>
+    <xsd:element name="shop-aliases" type="shop-aliasesCodeType"/>
+
+    <xsd:complexType name="shops-aliasesCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-aliasesCodeType" name="shop-aliases" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-aliasesCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-aliasType" name="shop-alias" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="shop-code"/>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:element name="shops-categories" type="shops-categoriesCodeType"/>
+    <xsd:element name="shop-categories" type="shop-categoriesCodeType"/>
+
+    <xsd:complexType name="shops-categoriesCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-categoriesCodeType" name="shop-categories" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-categoriesCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-categoryType" name="shop-category" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="shop-code"/>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:element name="shops-carriers" type="shops-carriersCodeType"/>
+    <xsd:element name="shop-carriers" type="shop-carriersCodeType"/>
+
+    <xsd:complexType name="shops-carriersCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-carriersCodeType" name="shop-carriers" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-carriersCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-carrierType" name="shop-carrier" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="shop-code"/>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:element name="shops-fulfilment-centres" type="shops-fulfilment-centresCodeType"/>
+    <xsd:element name="shop-fulfilment-centres" type="shop-fulfilment-centresCodeType"/>
+
+    <xsd:complexType name="shops-fulfilment-centresCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-fulfilment-centresCodeType" name="shop-fulfilment-centres" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="shop-fulfilment-centresCodeType">
+        <xsd:sequence>
+            <xsd:element type="shop-fulfilment-centreType" name="shop-fulfilment-centre" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="shop-code"/>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+
 </xsd:schema>

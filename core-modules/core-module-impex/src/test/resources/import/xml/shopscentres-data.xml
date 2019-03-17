@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shops-fulfilment-centres xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                          xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<shop-fulfilment-centres shop-code="SHOIP1">
+    <shop-fulfilment-centre guid="WAREHOUSE_1" disabled="false"/>
+    <shop-fulfilment-centre guid="WAREHOUSE_2" disabled="true"/>
+</shop-fulfilment-centres>
+<shop-fulfilment-centres shop-code="SHOIP2">
+    <shop-fulfilment-centre guid="WAREHOUSE_1" disabled="false"/>
+    <shop-fulfilment-centre guid="WAREHOUSE_2" disabled="true"/>
+</shop-fulfilment-centres>
+<shop-fulfilment-centres shop-code="SHOIP3">
+    <shop-fulfilment-centre guid="WAREHOUSE_1" disabled="false"/>
+    <shop-fulfilment-centre guid="WAREHOUSE_2" disabled="true"/>
+</shop-fulfilment-centres>
+</shops-fulfilment-centres>

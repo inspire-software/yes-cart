@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shops-categories xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<shop-categories shop-code="SHOIP1">
+    <shop-category guid="140" rank="500"/>
+    <shop-category guid="310" rank="500"/>
+    <shop-category guid="311" rank="500"/>
+    <shop-category guid="312" rank="500"/>
+</shop-categories>
+<shop-categories shop-code="SHOIP2">
+    <shop-category guid="140" rank="500"/>
+    <shop-category guid="141" rank="500"/>
+</shop-categories>
+<shop-categories shop-code="SHOIP5">
+    <shop-category guid="140" rank="500"/>
+    <shop-category guid="141" rank="500"/>
+    <shop-category guid="311" rank="500"/>
+    <shop-category guid="312" rank="500"/>
+</shop-categories>
+</shops-categories>

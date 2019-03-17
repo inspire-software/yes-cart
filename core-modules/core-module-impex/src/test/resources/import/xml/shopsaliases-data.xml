@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shops-aliases xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<shop-aliases shop-code="SHOIP1">
+    <shop-alias name="xmlshop1.1"/>
+    <shop-alias name="xmlshop1.2"/>
+    <shop-alias name="xmlshop1.3"/>
+    <shop-alias name="xmlshop1.3" import-mode="DELETE"/>
+</shop-aliases>
+<shop-aliases shop-code="SHOIP2">
+    <shop-alias name="xmlshop2.1"/>
+    <shop-alias name="xmlshop2.2"/>
+    <shop-alias name="xmlshop2.3"/>
+    <shop-alias name="xmlshop2.3"/>
+</shop-aliases>
+</shops-aliases>

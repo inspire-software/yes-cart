@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shops xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<shop guid="XMLSHOIP1" code="XMLSHOIP1">
+    <presentation>
+        <name>XML shop</name>
+        <theme-chain>gadget</theme-chain>
+    </presentation>
+    <availability disabled="false"/>
+    <shop-urls>
+        <shop-url primary="false" domain="www.xml-test.com"/>
+    </shop-urls>
+    <shop-aliases>
+        <shop-alias name="xmlshop"/>
+    </shop-aliases>
+    <shop-categories>
+        <shop-category guid="140" rank="500"/>
+        <shop-category guid="141" rank="500"/>
+    </shop-categories>
+    <shop-carriers>
+        <shop-carrier guid="1_CARRIER" disabled="false"/>
+        <shop-carrier guid="2_CARRIER" disabled="true"/>
+    </shop-carriers>
+    <shop-fulfilment-centres>
+        <shop-fulfilment-centre guid="WAREHOUSE_1" disabled="false"/>
+        <shop-fulfilment-centre guid="WAREHOUSE_2" disabled="true"/>
+    </shop-fulfilment-centres>
+    <shop-addressbook>
+        <customer>
+            <customer-addresses>
+                <address address-type="B" default-address="true">
+                    <salutation>Mr</salutation>
+                    <firstname>Bob</firstname>
+                    <lastname>Smith</lastname>
+                    <addrline-1>Oxford Str</addrline-1>
+                    <city>London</city>
+                    <postcode>NW1 6XE</postcode>
+                    <country-code>GB</country-code>
+                </address>
+            </customer-addresses>
+        </customer>
+    </shop-addressbook>
+    <custom-attributes>
+        <custom-attribute id="10" guid="10_CURRENCY" attribute="CURRENCY">
+            <custom-value><![CDATA[EUR,UAH,RUB,USD]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="14" guid="10_SUPPORTED_LANGUAGES" attribute="SUPPORTED_LANGUAGES">
+            <custom-value><![CDATA[en,uk,ru]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="12" guid="12_TSHOPATTRVALUE" attribute="SHOP_ADMIN_EMAIL">
+            <custom-value><![CDATA[admin@at-shop-10.com]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="13" guid="11_TSHOPATTRVALUE" attribute="SHOP_MAIL_FROM">
+            <custom-value><![CDATA[noreply@gadget.com]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="9" guid="9_TSHOPATTRVALUE" attribute="SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL">
+            <custom-value><![CDATA[testPaymentGatewayLabel,courierPaymentGatewayLabel,prePaymentGatewayLabel,authInvoicePaymentGatewayLabel]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="15" guid="15_TSHOPATTRVALUE" attribute="SHOP_IMAGE0">
+            <custom-value><![CDATA[shoip1.jpeg]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="16" guid="16_TSHOPATTRVALUE" attribute="COUNTRY_SHIP">
+            <custom-value><![CDATA[GB,UA,US]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="17" guid="17_TSHOPATTRVALUE" attribute="COUNTRY_BILL">
+            <custom-value><![CDATA[GB,US]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="18" guid="18_TSHOPATTRVALUE" attribute="SHOP_CPROFATTRS_VISIBLE_B2C">
+            <custom-value><![CDATA[firstname,middlename,lastname,CUSTOMER_PHONE]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="19" guid="19_TSHOPATTRVALUE" attribute="SHOP_CREGATTRS_B2C">
+            <custom-value><![CDATA[firstname,middlename,lastname,CUSTOMER_PHONE]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="20" guid="20_TSHOPATTRVALUE" attribute="SHOP_CUSTOMER_TYPES">
+            <custom-value><![CDATA[B2C]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="21" guid="21_TSHOPATTRVALUE" attribute="SHOP_CREGATTRS_B2G">
+            <custom-value><![CDATA[firstname,lastname]]></custom-value>
+        </custom-attribute>
+        <custom-attribute id="22" guid="22_TSHOPATTRVALUE" attribute="SHOP_CHECKOUT_ENABLE_GUEST">
+            <custom-value><![CDATA[true]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+</shop>
+</shops>

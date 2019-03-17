@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addresses>
+<addresses xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
 <address guid="10101" address-type="S" default-address="true" customer-code="10001">
     <address-name>My Address</address-name>
     <salutation>Mr</salutation>

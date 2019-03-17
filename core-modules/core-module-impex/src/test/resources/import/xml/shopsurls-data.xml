@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shops-urls xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<shop-urls shop-code="SHOIP1">
+    <shop-url primary="false" domain="www.xml1-test1.com"/>
+    <shop-url primary="false" domain="www.xml1-test2.com"/>
+    <shop-url primary="false" domain="www.xml1-test3.com"/>
+    <shop-url primary="false" domain="www.xml1-test3.com" import-mode="DELETE"/>
+</shop-urls>
+<shop-urls shop-code="SHOIP2">
+    <shop-url primary="false" domain="www.xml2-test1.com"/>
+    <shop-url primary="false" domain="www.xml2-test2.com"/>
+    <shop-url primary="false" domain="www.xml2-test3.com"/>
+    <shop-url primary="false" domain="www.xml2-test3.com"/>
+</shop-urls>
+</shops-urls>
