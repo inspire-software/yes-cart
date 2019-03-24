@@ -29,7 +29,7 @@ import org.yes.cart.service.domain.ProductSkuService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class SkuXmlEntityHandler extends AbstractAttributableXmlEntityHandler<SkuType, ProductSku, ProductSku, AttrValueProductSku> implements XmlEntityImportHandler<SkuType> {
+public class SkuXmlEntityHandler extends AbstractAttributableXmlEntityHandler<SkuType, ProductSku, ProductSku, AttrValueProductSku> implements XmlEntityImportHandler<SkuType, ProductSku> {
 
     private ProductSkuService productSkuService;
     private ProductService productService;

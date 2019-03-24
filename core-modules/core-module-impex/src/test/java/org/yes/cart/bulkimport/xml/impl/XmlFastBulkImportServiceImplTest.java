@@ -973,9 +973,31 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
 
             change = cntShop - cntBeforeShop;
-            System.out.println(String.format("%5d", change) + " shop (all) in " + shop + "millis (~" + (shop / change) + " per item)");
+            System.out.println(String.format("%5d", change) + " shops (all) in " + shop + "millis (~" + (shop / change) + " per item)");
 
             assertEquals(1L + cntBeforeShop, cntShop);   // 1 new full
+
+
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCUSTOMERORDER  ");
+            rs.next();
+            long cntBeforeOrder = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/customerorders.xml", listener, importedFilesSet));
+            final long orders = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCUSTOMERORDER  ");
+            rs.next();
+            long cntOrder = rs.getLong(1);
+            rs.close();
+
+            change = cntOrder - cntBeforeOrder;
+            System.out.println(String.format("%5d", change) + " orders (all) in " + orders + "millis (~" + (orders / change) + " per item)");
+
+            assertEquals(2L + cntBeforeOrder, cntOrder);   // 2 new full
 
 
 
@@ -996,7 +1018,8 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     "TMANAGER", "TMANAGERROLE", "TMANAGERSHOP",
                     "TADDRESS",
                     "TCUSTOMER", "TCUSTOMERWISHLIST", "TCUSTOMERATTRVALUE",
-                    "TSHOP", "TSHOPATTRVALUE", "TSHOPWAREHOUSE", "TSHOPURL", "TSHOPALIAS", "TCARRIERSHOP");
+                    "TSHOP", "TSHOPATTRVALUE", "TSHOPWAREHOUSE", "TSHOPURL", "TSHOPALIAS", "TCARRIERSHOP",
+                    "TCUSTOMERORDER", "TCUSTOMERORDERDET", "TCUSTOMERORDERDELIVERY", "TCUSTOMERORDERDELIVERYDET", "TPROMOTIONCOUPONUSAGE");
         }
 
     }

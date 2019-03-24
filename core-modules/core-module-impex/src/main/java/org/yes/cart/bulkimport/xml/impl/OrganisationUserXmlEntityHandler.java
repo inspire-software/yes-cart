@@ -17,19 +17,17 @@
 package org.yes.cart.bulkimport.xml.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
-import org.yes.cart.bulkimport.xml.XmlImportDescriptor;
 import org.yes.cart.bulkimport.xml.internal.*;
-import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.domain.entity.Manager;
+import org.yes.cart.domain.entity.ManagerRole;
+import org.yes.cart.domain.entity.ManagerShop;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DateUtils;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +36,7 @@ import java.util.Optional;
  * Date: 10/03/2019
  * Time: 17:04
  */
-public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<OrganisationUserType, Manager> implements XmlEntityImportHandler<OrganisationUserType> {
+public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<OrganisationUserType, Manager> implements XmlEntityImportHandler<OrganisationUserType, Manager> {
 
     private ManagerService managerService;
     private GenericService<ManagerRole> managerRoleService;

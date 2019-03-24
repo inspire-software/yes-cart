@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,18 +37,18 @@ import java.util.Optional;
  * Date: 16/03/2019
  * Time: 12:03
  */
-public class CustomerXmlHandler extends AbstractAttributableXmlEntityHandler<CustomerType, Customer, Customer, AttrValueCustomer> implements XmlEntityImportHandler<CustomerType> {
+public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandler<CustomerType, Customer, Customer, AttrValueCustomer> implements XmlEntityImportHandler<CustomerType, Customer> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CustomerXmlHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomerXmlEntityHandler.class);
 
     private CustomerService customerService;
     private CustomerWishListService customerWishListService;
     private ShopService shopService;
     private ProductSkuService productSkuService;
 
-    private XmlEntityImportHandler<AddressType> addressXmlEntityImportHandler;
+    private XmlEntityImportHandler<AddressType, Address> addressXmlEntityImportHandler;
 
-    public CustomerXmlHandler() {
+    public CustomerXmlEntityHandler() {
         super("customer");
     }
 
@@ -98,7 +97,7 @@ public class CustomerXmlHandler extends AbstractAttributableXmlEntityHandler<Cus
 
         if (xmlType.getPolicies() != null) {
 
-            domain.setTag(xmlType.getPolicies().getTags());
+            domain.setTag(processTags(xmlType.getPolicies().getTags(), domain.getTag()));
             domain.setCustomerType(xmlType.getPolicies().getType());
             domain.setPricingPolicy(xmlType.getPolicies().getPricingPolicy());
 
@@ -193,7 +192,7 @@ public class CustomerXmlHandler extends AbstractAttributableXmlEntityHandler<Cus
         wlist.setWlType(wli.getWishlistType());
         wlist.setVisibility(wli.getVisibility());
         wlist.setQuantity(wli.getQuantity());
-        wlist.setTag(wli.getTag());
+        wlist.setTag(processTags(wli.getTags(), wlist.getTag()));
         if (wli.getPrice() != null) {
             wlist.setRegularPriceWhenAdded(wli.getPrice().getListPrice());
             wlist.setRegularPriceCurrencyWhenAdded(wli.getPrice().getCurrency());
@@ -332,7 +331,7 @@ public class CustomerXmlHandler extends AbstractAttributableXmlEntityHandler<Cus
      *
      * @param addressXmlEntityImportHandler Address handler
      */
-    public void setAddressXmlEntityImportHandler(final XmlEntityImportHandler<AddressType> addressXmlEntityImportHandler) {
+    public void setAddressXmlEntityImportHandler(final XmlEntityImportHandler<AddressType, Address> addressXmlEntityImportHandler) {
         this.addressXmlEntityImportHandler = addressXmlEntityImportHandler;
     }
 }

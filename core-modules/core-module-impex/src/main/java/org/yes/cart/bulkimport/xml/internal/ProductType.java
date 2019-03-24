@@ -91,7 +91,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="tags" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="tags" type="{}tagsType" minOccurs="0"/>
  *         &lt;element name="seo" type="{}seoType" minOccurs="0"/>
  *         &lt;element name="custom-attributes" type="{}custom-attributesType" minOccurs="0"/>
  *         &lt;element name="product-categories" type="{}product-categoriesType" minOccurs="0"/>
@@ -158,7 +158,7 @@ public class ProductType {
     @XmlElement(name = "display-name")
     protected I18NsType displayName;
     protected String description;
-    protected String tags;
+    protected TagsType tags;
     protected SeoType seo;
     @XmlElement(name = "custom-attributes")
     protected CustomAttributesType customAttributes;
@@ -436,10 +436,10 @@ public class ProductType {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public String getTags() {
+    public TagsType getTags() {
         return tags;
     }
 
@@ -448,10 +448,10 @@ public class ProductType {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public void setTags(String value) {
+    public void setTags(TagsType value) {
         this.tags = value;
     }
 

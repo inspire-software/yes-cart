@@ -36,7 +36,7 @@ import java.util.List;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ShippingMethodXmlEntityHandler extends AbstractXmlEntityHandler<ShippingMethodType, CarrierSla> implements XmlEntityImportHandler<ShippingMethodType> {
+public class ShippingMethodXmlEntityHandler extends AbstractXmlEntityHandler<ShippingMethodType, CarrierSla> implements XmlEntityImportHandler<ShippingMethodType, CarrierSla> {
 
     private CarrierSlaService carrierSlaService;
     private CarrierService carrierService;

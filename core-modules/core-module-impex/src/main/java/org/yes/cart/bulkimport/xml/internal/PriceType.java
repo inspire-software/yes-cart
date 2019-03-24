@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *             &lt;/simpleContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="tag" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="tags" type="{}tagsType" minOccurs="0"/>
  *         &lt;element name="list-price" type="{http://www.w3.org/2001/XMLSchema}decimal"/>
  *         &lt;element name="sale-price" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
  *         &lt;element name="minimal-price" type="{http://www.w3.org/2001/XMLSchema}decimal" minOccurs="0"/>
@@ -74,7 +74,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "priceType", propOrder = {
     "pricingPolicy",
-    "tag",
+    "tags",
     "listPrice",
     "salePrice",
     "minimalPrice",
@@ -88,7 +88,7 @@ public class PriceType {
 
     @XmlElement(name = "pricing-policy", required = true)
     protected PriceType.PricingPolicy pricingPolicy;
-    protected String tag;
+    protected TagsType tags;
     @XmlElement(name = "list-price", required = true)
     protected BigDecimal listPrice;
     @XmlElement(name = "sale-price")
@@ -155,27 +155,27 @@ public class PriceType {
     }
 
     /**
-     * Gets the value of the tag property.
+     * Gets the value of the tags property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public String getTag() {
-        return tag;
+    public TagsType getTags() {
+        return tags;
     }
 
     /**
-     * Sets the value of the tag property.
+     * Sets the value of the tags property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public void setTag(String value) {
-        this.tag = value;
+    public void setTags(TagsType value) {
+        this.tags = value;
     }
 
     /**

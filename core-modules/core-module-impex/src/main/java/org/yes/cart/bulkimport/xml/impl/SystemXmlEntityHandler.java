@@ -21,6 +21,7 @@ import org.yes.cart.bulkimport.xml.internal.CustomAttributeType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.SystemType;
 import org.yes.cart.domain.entity.System;
+import org.yes.cart.domain.entity.impl.SystemEntity;
 import org.yes.cart.service.domain.SystemService;
 
 /**
@@ -28,7 +29,7 @@ import org.yes.cart.service.domain.SystemService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class SystemXmlEntityHandler extends AbstractXmlEntityHandler<SystemType, System> implements XmlEntityImportHandler<SystemType> {
+public class SystemXmlEntityHandler extends AbstractXmlEntityHandler<SystemType, System> implements XmlEntityImportHandler<SystemType, System> {
 
     private SystemService systemService;
 
@@ -58,7 +59,7 @@ public class SystemXmlEntityHandler extends AbstractXmlEntityHandler<SystemType,
 
     @Override
     protected System getOrCreate(final SystemType xmlType) {
-        return null;
+        return this.systemService.getSystem();
     }
 
     @Override

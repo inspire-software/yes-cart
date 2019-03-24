@@ -36,7 +36,7 @@ import java.util.List;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ShopCarriersXmlEntityHandler extends AbstractXmlEntityHandler<ShopCarriersCodeType, Shop> implements XmlEntityImportHandler<ShopCarriersCodeType> {
+public class ShopCarriersXmlEntityHandler extends AbstractXmlEntityHandler<ShopCarriersCodeType, Shop> implements XmlEntityImportHandler<ShopCarriersCodeType, Shop> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopCarriersXmlEntityHandler.class);
 

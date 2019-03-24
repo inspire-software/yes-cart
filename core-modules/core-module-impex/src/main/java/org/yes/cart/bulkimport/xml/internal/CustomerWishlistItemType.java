@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="tag" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="tags" type="{}tagsType"/>
  *         &lt;element name="quantity" type="{http://www.w3.org/2001/XMLSchema}decimal"/>
  *         &lt;element name="price" type="{}customer-wishlist-item-priceType"/>
  *       &lt;/sequence>
@@ -38,14 +38,14 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "customer-wishlist-itemType", propOrder = {
-    "tag",
+    "tags",
     "quantity",
     "price"
 })
 public class CustomerWishlistItemType {
 
     @XmlElement(required = true)
-    protected String tag;
+    protected TagsType tags;
     @XmlElement(required = true)
     protected BigDecimal quantity;
     @XmlElement(required = true)
@@ -64,27 +64,27 @@ public class CustomerWishlistItemType {
     protected EntityImportModeType importMode;
 
     /**
-     * Gets the value of the tag property.
+     * Gets the value of the tags property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public String getTag() {
-        return tag;
+    public TagsType getTags() {
+        return tags;
     }
 
     /**
-     * Sets the value of the tag property.
+     * Sets the value of the tags property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public void setTag(String value) {
-        this.tag = value;
+    public void setTags(TagsType value) {
+        this.tags = value;
     }
 
     /**

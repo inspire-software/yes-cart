@@ -36,7 +36,7 @@ import java.util.List;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ShopFulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<ShopFulfilmentCentresCodeType, Shop> implements XmlEntityImportHandler<ShopFulfilmentCentresCodeType> {
+public class ShopFulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<ShopFulfilmentCentresCodeType, Shop> implements XmlEntityImportHandler<ShopFulfilmentCentresCodeType, Shop> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopFulfilmentCentreXmlEntityHandler.class);
 

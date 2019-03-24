@@ -29,7 +29,7 @@ import org.yes.cart.service.domain.EtypeService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<AttributeType, Attribute> implements XmlEntityImportHandler<AttributeType> {
+public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<AttributeType, Attribute> implements XmlEntityImportHandler<AttributeType, Attribute> {
 
     private AttributeService attributeService;
     private AttributeGroupService attributeGroupService;

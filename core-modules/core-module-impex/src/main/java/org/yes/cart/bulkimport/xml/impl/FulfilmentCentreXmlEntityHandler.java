@@ -29,7 +29,7 @@ import org.yes.cart.service.domain.WarehouseService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<FulfilmentCentreType, Warehouse> implements XmlEntityImportHandler<FulfilmentCentreType> {
+public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<FulfilmentCentreType, Warehouse> implements XmlEntityImportHandler<FulfilmentCentreType, Warehouse> {
 
     private WarehouseService warehouseService;
     private AttributeGroupService attributeGroupService;

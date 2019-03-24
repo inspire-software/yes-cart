@@ -42,7 +42,7 @@ import java.util.List;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<ProductTypeTypeType, ProductType> implements XmlEntityImportHandler<ProductTypeTypeType> {
+public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<ProductTypeTypeType, ProductType> implements XmlEntityImportHandler<ProductTypeTypeType, ProductType> {
 
     private ProductTypeService productTypeService;
     private AttributeService attributeService;

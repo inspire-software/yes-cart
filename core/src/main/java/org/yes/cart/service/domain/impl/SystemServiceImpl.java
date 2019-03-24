@@ -374,7 +374,11 @@ public class SystemServiceImpl implements SystemService {
     }
 
 
-    private System getSystem() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public System getSystem() {
         final List<System> sys = systemDao.findAll();
         if (sys.isEmpty()) {
             return null;

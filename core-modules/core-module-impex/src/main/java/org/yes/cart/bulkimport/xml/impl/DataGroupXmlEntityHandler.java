@@ -23,6 +23,7 @@ import org.yes.cart.bulkimport.xml.internal.CollectionImportModeType;
 import org.yes.cart.bulkimport.xml.internal.DataDescriptorType;
 import org.yes.cart.bulkimport.xml.internal.DataGroupType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
+import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.domain.entity.DataGroup;
 import org.yes.cart.service.domain.DataGroupService;
 
@@ -34,11 +35,11 @@ import java.util.List;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGroupType, DataGroup> implements XmlEntityImportHandler<DataGroupType> {
+public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGroupType, DataGroup> implements XmlEntityImportHandler<DataGroupType, DataGroup> {
 
     private DataGroupService dataGroupService;
 
-    private XmlEntityImportHandler<DataDescriptorType> descriptorXmlEntityImportHandler;
+    private XmlEntityImportHandler<DataDescriptorType, DataDescriptor> descriptorXmlEntityImportHandler;
 
     public DataGroupXmlEntityHandler() {
         super("data-group");
@@ -159,7 +160,7 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
      *
      * @param descriptorXmlEntityImportHandler data descriptor handler
      */
-    public void setDescriptorXmlEntityImportHandler(final XmlEntityImportHandler<DataDescriptorType> descriptorXmlEntityImportHandler) {
+    public void setDescriptorXmlEntityImportHandler(final XmlEntityImportHandler<DataDescriptorType, DataDescriptor> descriptorXmlEntityImportHandler) {
         this.descriptorXmlEntityImportHandler = descriptorXmlEntityImportHandler;
     }
 }

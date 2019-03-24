@@ -49,7 +49,11 @@
         <i18n lang="ua"><![CDATA[Бендер Згинач Родріґес]]></i18n>
     </display-name>
     <description><![CDATA[Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя).]]></description>
-    <tags>sale newarrival specialpromo</tags>
+    <tags>
+        <tag>sale</tag>
+        <tag>newarrival</tag>
+        <tag>specialpromo</tag>
+    </tags>
     <seo>
         <uri><![CDATA[XML_Бендер-Згинач-Родріґес]]></uri>
         <meta-title><![CDATA[Бендер Згинач Родріґес]]></meta-title>
@@ -102,7 +106,7 @@
         <i18n lang="ua"><![CDATA[Бендер Згинач Родріґес]]></i18n>
     </display-name>
     <description><![CDATA[Bender Bending Rodriguez, designated Bending Unit 22, is a fictional robot character in the animated television series Futurama. He is voiced by John DiMaggio. In the series, Bender plays the role of a comic anti-hero, and is described by Leela as an alcoholic, whore-mongering, chain-smoking gambler.[1] He was built in Mexico and is said to possess a swarthy Latin charm despite not having a Mexican accent. He is also prejudiced against non-robots, often expressing an urge to kill all humans]]></description>
-    <tags>sale</tags>
+    <tags><tag>sale</tag></tags>
     <seo>
         <uri><![CDATA[XML_bender-rodriguez]]></uri>
         <meta-title><![CDATA[Bender Bending Rodriguez, designated Bending Unit 22]]></meta-title>
@@ -155,7 +159,7 @@
         <i18n lang="ua"><![CDATA[Йа-Собот]]></i18n>
     </display-name>
     <description><![CDATA[Think small. BigSmall. Small is beautiful. Good things come in small packages. Small ones are more juicy. However you like to put it, sometimes there's a beauty and economy in reducing the scale of an object and cramming it full of cleverness. Now, the ever-so-clever chaps at Tomy have done just that with the creation of the I-Sobot. The what bot we hear you ask? The I-Sobot is the world's smallest mass produced bi-pedal humanoid robot. But don't be fooled by his size - he has a big personality all of his own. Measuring only 16cm and weighing an amazing 300 grams, he's ready to play straight from the box. Choose from 4 modes where I-Sobot can perform fun and quirky scenes from Western battles to voice command mode that includes 10 words of phrases to say to I-Sobot where he will respond. With 17 Servo motors allowing human like articulation and 200 spoken phrases, you'll never be lonesome again. I-Sobot's distinctive design and ground-breaking functionality has us rather drooling at the mouth, in an ever-so manly way. Splendid.]]></description>
-    <tags>newarrival</tags>
+    <tags><tag>newarrival</tag></tags>
     <seo>
         <uri><![CDATA[XML_i-sobot]]></uri>
         <meta-title><![CDATA[I-Sobot robot]]></meta-title>
@@ -258,7 +262,7 @@
     <inventory-config type="1"/>
     <name><![CDATA[product 1]]></name>
     <description><![CDATA[product 1 for price testing]]></description>
-    <tags>specialpromo</tags>
+    <tags><tag>specialpromo</tag></tags>
     <seo/>
     <custom-attributes>
         <custom-attribute guid="10003_TPRODUCTATTRVALUE" attribute="WEIGHT">

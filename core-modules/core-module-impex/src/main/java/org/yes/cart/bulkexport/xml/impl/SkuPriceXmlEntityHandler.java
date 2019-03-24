@@ -60,7 +60,7 @@ public class SkuPriceXmlEntityHandler extends AbstractXmlEntityHandler<SkuPrice>
                     .attr("policy", price.getPricingPolicy())
                     .attr("ref", price.getPricingPolicy())
                 .end()
-                .tagChars("tag", price.getTag())
+                .tagList("tags", "tag", price.getTag(), ' ')
                 .tagNum("list-price", price.getRegularPrice())
                 .tagNum("sale-price", price.getSalePrice())
                 .tagNum("minimal-price", price.getMinimalPrice())

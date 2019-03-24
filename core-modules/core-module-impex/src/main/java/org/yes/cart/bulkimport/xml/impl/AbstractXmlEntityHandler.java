@@ -16,7 +16,10 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
@@ -29,13 +32,17 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.util.DateUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 05/11/2018
  * Time: 22:23
  */
-public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportHandler<T> {
+public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportHandler<T, E> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractXmlEntityHandler.class);
 
     protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -63,11 +70,16 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
     }
 
     @Override
-    public void handle(final JobStatusListener statusListener, final XmlImportDescriptor xmlImportDescriptor, final ImpExTuple<String, T> tuple, final XmlValueAdapter xmlValueAdapter, final String fileToExport) {
+    public E handle(final JobStatusListener statusListener, final XmlImportDescriptor xmlImportDescriptor, final ImpExTuple<String, T> tuple, final XmlValueAdapter xmlValueAdapter, final String fileToExport) {
 
         final T xmlType = tuple.getData();
 
         final E domain = getOrCreate(xmlType);
+
+        if (domain == null) {
+            LOG.warn("Unable to resolve domain object for {}:{}", xmlType.getClass().getSimpleName(), tuple.getSourceId());
+            return null;
+        }
 
         final boolean isNew = isNew(domain);
 
@@ -78,18 +90,19 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
                 if (!isNew) {
                     delete(domain);
                 }
-                break;
+                return null; // delete mode should not resolve domain object
             case INSERT_ONLY:
                 if (!isNew) {
-                    break;
+                    return domain; // no insert, return existing
                 }
             case UPDATE_ONLY:
                 if (isNew) {
-                    break;
+                    return null; // no update, return nothing
                 }
             case MERGE:
             default:
                 saveOrUpdate(domain, xmlType, mode);
+                return domain; // return updated
 
         }
 
@@ -145,6 +158,71 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
         }
         return model.toString();
     }
+
+    /**
+     * Process tags.
+     *
+     * @param tags      tags block
+     * @param existing  existing tags
+     *
+     * @return updated tags
+     */
+    protected String processTags(final TagsType tags, final String existing) {
+        final CollectionImportModeType mode = tags != null && tags.getImportMode() != null ? tags.getImportMode() : CollectionImportModeType.REPLACE;
+        return processTagsInternal(tags, existing, mode);
+
+    }
+
+
+    private String processTagsInternal(final TagsType tags, final String existing, final CollectionImportModeType mode) {
+
+        if (tags == null) {
+            return existing;
+        }
+
+        final List<String> initial = new ArrayList<>();
+        if ((mode == CollectionImportModeType.MERGE || mode == CollectionImportModeType.DELETE) && StringUtils.isNotBlank(existing)) {
+            final String[] items = StringUtils.split(existing, ' ');
+            for (final String item : items) {
+                initial.add(item.trim());
+            }
+        }
+
+        if (mode == CollectionImportModeType.DELETE) {
+            initial.removeAll(tags.getTag());
+        } else {
+            for (final String tag : tags.getTag()) {
+                if (!initial.contains(tag)) {
+                    initial.add(tag);
+                }
+            }
+        }
+
+        if (initial.isEmpty()) {
+            return null;
+        }
+        return StringUtils.join(initial, ' ');
+    }
+
+    /**
+     * Process codes as CSV
+     *
+     * @param codes     codes
+     * @param delimiter delimiter char
+     *
+     * @return CSV
+     */
+    protected String processCodesCsv(final List<String> codes, final char delimiter) {
+        if (CollectionUtils.isEmpty(codes)) {
+            return null;
+        }
+        final List<String> list = new ArrayList<>(codes.size());
+        for (final String item : codes) {
+            list.add(item.trim());
+        }
+        return StringUtils.join(list, delimiter);
+    }
+
 
     /**
      * Process Local date/time from given XML string.

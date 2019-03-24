@@ -25,7 +25,7 @@ import org.yes.cart.service.async.JobStatusListener;
  * Date: 05/11/2018
  * Time: 21:37
  */
-public interface XmlEntityImportHandler<T> {
+public interface XmlEntityImportHandler<T, E> {
 
     /**
      * JAXB context namespace (e.g. package with POJO)
@@ -53,11 +53,11 @@ public interface XmlEntityImportHandler<T> {
      *
      * @return XML fragment
      */
-    void handle(JobStatusListener statusListener,
-                XmlImportDescriptor xmlImportDescriptor,
-                ImpExTuple<String, T> tuple,
-                XmlValueAdapter xmlValueAdapter,
-                String fileToExport);
+    E handle(JobStatusListener statusListener,
+             XmlImportDescriptor xmlImportDescriptor,
+             ImpExTuple<String, T> tuple,
+             XmlValueAdapter xmlValueAdapter,
+             String fileToExport);
 
 
 }

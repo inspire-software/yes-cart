@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="display-description" type="{}i18nsType" minOccurs="0"/>
- *         &lt;element name="tag" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="tags" type="{}tagsType" minOccurs="0"/>
  *         &lt;element name="availability">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -66,7 +66,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "displayName",
     "description",
     "displayDescription",
-    "tag",
+    "tags",
     "availability",
     "configuration",
     "coupons",
@@ -84,7 +84,7 @@ public class PromotionType {
     protected String description;
     @XmlElement(name = "display-description")
     protected I18NsType displayDescription;
-    protected String tag;
+    protected TagsType tags;
     @XmlElement(required = true)
     protected PromotionType.Availability availability;
     @XmlElement(required = true)
@@ -214,27 +214,27 @@ public class PromotionType {
     }
 
     /**
-     * Gets the value of the tag property.
+     * Gets the value of the tags property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public String getTag() {
-        return tag;
+    public TagsType getTags() {
+        return tags;
     }
 
     /**
-     * Sets the value of the tag property.
+     * Sets the value of the tags property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public void setTag(String value) {
-        this.tag = value;
+    public void setTags(TagsType value) {
+        this.tags = value;
     }
 
     /**

@@ -32,7 +32,7 @@ import java.math.BigDecimal;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockType, SkuWarehouse> implements XmlEntityImportHandler<StockType> {
+public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockType, SkuWarehouse> implements XmlEntityImportHandler<StockType, SkuWarehouse> {
 
     private SkuWarehouseService skuWarehouseService;
     private WarehouseService warehouseService;

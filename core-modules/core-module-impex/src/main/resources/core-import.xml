@@ -350,7 +350,7 @@
                     </bean>
                 </entry>
                 <entry key="CUSTOMER">
-                    <bean class="org.yes.cart.bulkimport.xml.impl.CustomerXmlHandler">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.CustomerXmlEntityHandler">
                         <property name="customerService" ref="customerService"/>
                         <property name="customerWishListService" ref="customerWishListService"/>
                         <property name="shopService" ref="shopService"/>
@@ -407,7 +407,7 @@
                             </bean>
                         </property>
                         <property name="customerXmlEntityImportHandler">
-                            <bean class="org.yes.cart.bulkimport.xml.impl.CustomerXmlHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.CustomerXmlEntityHandler">
                                 <property name="customerService" ref="customerService"/>
                                 <property name="customerWishListService" ref="customerWishListService"/>
                                 <property name="shopService" ref="shopService"/>
@@ -437,6 +437,21 @@
                             <bean class="org.yes.cart.bulkimport.xml.impl.ShopFulfilmentCentreXmlEntityHandler">
                                 <property name="shopService" ref="shopService"/>
                                 <property name="warehouseService" ref="warehouseService"/>
+                            </bean>
+                        </property>
+                    </bean>
+                </entry>
+                <entry key="CUSTOMERORDER">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.CustomerOrderXmlEntityHandler">
+                        <property name="customerOrderService" ref="customerOrderService"/>
+                        <property name="shopService" ref="shopService"/>
+                        <property name="customerService" ref="customerService"/>
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                        <property name="carrierSlaService" ref="carrierSlaService"/>
+                        <property name="addressXmlEntityImportHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.AddressXmlEntityHandler">
+                                <property name="addressService" ref="addressService"/>
+                                <property name="customerService" ref="customerService"/>
                             </bean>
                         </property>
                     </bean>

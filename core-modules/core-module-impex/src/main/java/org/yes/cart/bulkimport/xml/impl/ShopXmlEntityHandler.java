@@ -23,6 +23,7 @@ import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.*;
 import org.yes.cart.domain.entity.AttrValueShop;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 
@@ -33,18 +34,18 @@ import java.util.UUID;
  * Date: 16/03/2019
  * Time: 20:10
  */
-public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<ShopType, Shop, Shop, AttrValueShop> implements XmlEntityImportHandler<ShopType> {
+public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<ShopType, Shop, Shop, AttrValueShop> implements XmlEntityImportHandler<ShopType, Shop> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShopXmlEntityHandler.class);
 
     private ShopService shopService;
 
-    private XmlEntityImportHandler<ShopUrlCodeType> shopUrlXmlEntityImportHandler;
-    private XmlEntityImportHandler<ShopAliasesCodeType> shopAliasesXmlEntityImportHandler;
-    private XmlEntityImportHandler<ShopCategoriesCodeType> shopCategoriesXmlEntityImportHandler;
-    private XmlEntityImportHandler<ShopCarriersCodeType> shopCarriersXmlEntityImportHandler;
-    private XmlEntityImportHandler<ShopFulfilmentCentresCodeType> shopFulfilmentCentresXmlEntityImportHandler;
-    private XmlEntityImportHandler<CustomerType> customerXmlEntityImportHandler;
+    private XmlEntityImportHandler<ShopUrlCodeType, Shop> shopUrlXmlEntityImportHandler;
+    private XmlEntityImportHandler<ShopAliasesCodeType, Shop> shopAliasesXmlEntityImportHandler;
+    private XmlEntityImportHandler<ShopCategoriesCodeType, Shop> shopCategoriesXmlEntityImportHandler;
+    private XmlEntityImportHandler<ShopCarriersCodeType, Shop> shopCarriersXmlEntityImportHandler;
+    private XmlEntityImportHandler<ShopFulfilmentCentresCodeType, Shop> shopFulfilmentCentresXmlEntityImportHandler;
+    private XmlEntityImportHandler<CustomerType, Customer> customerXmlEntityImportHandler;
 
     public ShopXmlEntityHandler() {
         super("shop");
@@ -242,7 +243,7 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
      *
      * @param shopUrlXmlEntityImportHandler handler
      */
-    public void setShopUrlXmlEntityImportHandler(final XmlEntityImportHandler<ShopUrlCodeType> shopUrlXmlEntityImportHandler) {
+    public void setShopUrlXmlEntityImportHandler(final XmlEntityImportHandler<ShopUrlCodeType, Shop> shopUrlXmlEntityImportHandler) {
         this.shopUrlXmlEntityImportHandler = shopUrlXmlEntityImportHandler;
     }
 
@@ -251,7 +252,7 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
      *
      * @param customerXmlEntityImportHandler handler
      */
-    public void setCustomerXmlEntityImportHandler(final XmlEntityImportHandler<CustomerType> customerXmlEntityImportHandler) {
+    public void setCustomerXmlEntityImportHandler(final XmlEntityImportHandler<CustomerType, Customer> customerXmlEntityImportHandler) {
         this.customerXmlEntityImportHandler = customerXmlEntityImportHandler;
     }
 
@@ -260,7 +261,7 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
      *
      * @param shopCategoriesXmlEntityImportHandler handler
      */
-    public void setShopCategoriesXmlEntityImportHandler(final XmlEntityImportHandler<ShopCategoriesCodeType> shopCategoriesXmlEntityImportHandler) {
+    public void setShopCategoriesXmlEntityImportHandler(final XmlEntityImportHandler<ShopCategoriesCodeType, Shop> shopCategoriesXmlEntityImportHandler) {
         this.shopCategoriesXmlEntityImportHandler = shopCategoriesXmlEntityImportHandler;
     }
 
@@ -269,7 +270,7 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
      *
      * @param shopAliasesXmlEntityImportHandler handler
      */
-    public void setShopAliasesXmlEntityImportHandler(final XmlEntityImportHandler<ShopAliasesCodeType> shopAliasesXmlEntityImportHandler) {
+    public void setShopAliasesXmlEntityImportHandler(final XmlEntityImportHandler<ShopAliasesCodeType, Shop> shopAliasesXmlEntityImportHandler) {
         this.shopAliasesXmlEntityImportHandler = shopAliasesXmlEntityImportHandler;
     }
 
@@ -278,7 +279,7 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
      *
      * @param shopCarriersXmlEntityImportHandler handler
      */
-    public void setShopCarriersXmlEntityImportHandler(final XmlEntityImportHandler<ShopCarriersCodeType> shopCarriersXmlEntityImportHandler) {
+    public void setShopCarriersXmlEntityImportHandler(final XmlEntityImportHandler<ShopCarriersCodeType, Shop> shopCarriersXmlEntityImportHandler) {
         this.shopCarriersXmlEntityImportHandler = shopCarriersXmlEntityImportHandler;
     }
 
@@ -287,7 +288,7 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
      *
      * @param shopFulfilmentCentresXmlEntityImportHandler handler
      */
-    public void setShopFulfilmentCentresXmlEntityImportHandler(final XmlEntityImportHandler<ShopFulfilmentCentresCodeType> shopFulfilmentCentresXmlEntityImportHandler) {
+    public void setShopFulfilmentCentresXmlEntityImportHandler(final XmlEntityImportHandler<ShopFulfilmentCentresCodeType, Shop> shopFulfilmentCentresXmlEntityImportHandler) {
         this.shopFulfilmentCentresXmlEntityImportHandler = shopFulfilmentCentresXmlEntityImportHandler;
     }
 }

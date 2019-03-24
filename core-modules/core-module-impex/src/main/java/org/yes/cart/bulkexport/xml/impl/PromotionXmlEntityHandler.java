@@ -62,7 +62,7 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
                 .tagI18n("display-name", promotion.getDisplayName())
                 .tagCdata("description", promotion.getDescription())
                 .tagI18n("display-description", promotion.getDisplayDescription())
-                .tagChars("tag", promotion.getTag())
+                .tagList("tags", "tag", promotion.getTag(), ' ')
                 .tag("availability")
                     .attr("disabled", !promotion.isEnabled())
                     .tagTime("available-from", promotion.getEnabledFrom())

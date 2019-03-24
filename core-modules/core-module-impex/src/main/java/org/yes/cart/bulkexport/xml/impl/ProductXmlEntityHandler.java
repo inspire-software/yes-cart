@@ -90,7 +90,7 @@ public class ProductXmlEntityHandler extends AbstractXmlEntityHandler<Product> {
                 .tagCdata("name", product.getName())
                 .tagI18n("display-name", product.getDisplayName())
                 .tagCdata("description", product.getDescription())
-                .tagChars("tags", product.getTag())
+                .tagList("tags", "tag", product.getTag(), ' ')
                 .tagSeo(product)
                 .tagExt(product);
 

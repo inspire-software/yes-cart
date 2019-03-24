@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="addrline-1" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="addrline-2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="city" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="postcode" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="postcode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="country-code" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="state-code" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="phone-1" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -124,7 +124,6 @@ public class AddressType {
     protected String addrline2;
     @XmlElement(required = true)
     protected String city;
-    @XmlElement(required = true)
     protected String postcode;
     @XmlElement(name = "country-code", required = true)
     protected String countryCode;

@@ -22,6 +22,7 @@ import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.ShippingMethodType;
 import org.yes.cart.bulkimport.xml.internal.ShippingProviderType;
 import org.yes.cart.domain.entity.Carrier;
+import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierService;
 
 /**
@@ -29,11 +30,11 @@ import org.yes.cart.service.domain.CarrierService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ShippingProviderXmlEntityHandler extends AbstractXmlEntityHandler<ShippingProviderType, Carrier> implements XmlEntityImportHandler<ShippingProviderType> {
+public class ShippingProviderXmlEntityHandler extends AbstractXmlEntityHandler<ShippingProviderType, Carrier> implements XmlEntityImportHandler<ShippingProviderType, Carrier> {
 
     private CarrierService carrierService;
 
-    private XmlEntityImportHandler<ShippingMethodType> shippingMethodXmlEntityImportHandler;
+    private XmlEntityImportHandler<ShippingMethodType, CarrierSla> shippingMethodXmlEntityImportHandler;
 
     public ShippingProviderXmlEntityHandler() {
         super("shipping-provider");
@@ -113,7 +114,7 @@ public class ShippingProviderXmlEntityHandler extends AbstractXmlEntityHandler<S
      *
      * @param shippingMethodXmlEntityImportHandler shipping method handler
      */
-    public void setShippingMethodXmlEntityImportHandler(final XmlEntityImportHandler<ShippingMethodType> shippingMethodXmlEntityImportHandler) {
+    public void setShippingMethodXmlEntityImportHandler(final XmlEntityImportHandler<ShippingMethodType, CarrierSla> shippingMethodXmlEntityImportHandler) {
         this.shippingMethodXmlEntityImportHandler = shippingMethodXmlEntityImportHandler;
     }
 

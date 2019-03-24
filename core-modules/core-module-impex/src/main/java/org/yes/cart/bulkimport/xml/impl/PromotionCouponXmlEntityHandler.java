@@ -28,7 +28,7 @@ import org.yes.cart.service.domain.PromotionService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<PromotionCouponType, PromotionCoupon> implements XmlEntityImportHandler<PromotionCouponType> {
+public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<PromotionCouponType, PromotionCoupon> implements XmlEntityImportHandler<PromotionCouponType, PromotionCoupon> {
 
     private PromotionService promotionService;
     private PromotionCouponService promotionCouponService;

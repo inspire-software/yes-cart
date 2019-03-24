@@ -29,7 +29,7 @@ import org.yes.cart.service.domain.TaxService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class TaxConfigXmlEntityHandler extends AbstractXmlEntityHandler<TaxConfigType, TaxConfig> implements XmlEntityImportHandler<TaxConfigType> {
+public class TaxConfigXmlEntityHandler extends AbstractXmlEntityHandler<TaxConfigType, TaxConfig> implements XmlEntityImportHandler<TaxConfigType, TaxConfig> {
 
     private TaxConfigService taxConfigService;
     private TaxService taxService;

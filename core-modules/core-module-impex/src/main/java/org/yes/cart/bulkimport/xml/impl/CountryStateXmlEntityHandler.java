@@ -27,7 +27,7 @@ import org.yes.cart.service.domain.StateService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class CountryStateXmlEntityHandler extends AbstractXmlEntityHandler<CountryStateType, State> implements XmlEntityImportHandler<CountryStateType> {
+public class CountryStateXmlEntityHandler extends AbstractXmlEntityHandler<CountryStateType, State> implements XmlEntityImportHandler<CountryStateType, State> {
 
     private StateService stateService;
 

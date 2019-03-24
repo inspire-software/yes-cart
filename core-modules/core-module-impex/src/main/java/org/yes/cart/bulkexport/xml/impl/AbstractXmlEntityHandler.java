@@ -19,7 +19,9 @@ package org.yes.cart.bulkexport.xml.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkexport.xml.XmlEntityExportHandler;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.DateUtils;
 
 import java.time.Instant;
@@ -150,8 +152,12 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
         }
 
         private Tag i18n(final String value) {
-            for (final Map.Entry<String, String> i18n : new StringI18NModel(value).getAllValues().entrySet()) {
+            if (value.contains(StringI18NModel.SEPARATOR)) {
+                for (final Map.Entry<String, String> i18n : new StringI18NModel(value).getAllValues().entrySet()) {
                     tag("i18n").attr("lang", i18n.getKey()).cdata(i18n.getValue()).end();
+                }
+            } else { // fake value
+                tag("i18n").attr("lang", I18NModel.DEFAULT).cdata(value).end();
             }
             return this;
         }
@@ -166,6 +172,22 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
                             .attr("attribute", attrValue.getAttributeCode())
                                 .tagCdata("custom-value", attrValue.getVal())
                                 .tagI18n("custom-display-value", attrValue.getDisplayVal())
+                            .end();
+
+                }
+                return custom.end();
+            }
+            return this;
+        }
+
+        private Tag ext(final Map<String, Pair<String, String>> attributes) {
+            if (!attributes.isEmpty()) {
+                final Tag custom = tag("custom-attributes");
+                for (final Map.Entry<String, Pair<String, String>> attrValue : attributes.entrySet()) {
+                    custom.tag("custom-attribute")
+                            .attr("attribute", attrValue.getKey())
+                                .tagCdata("custom-value", attrValue.getValue().getFirst())
+                                .tagI18n("custom-display-value", attrValue.getValue().getSecond())
                             .end();
 
                 }
@@ -250,6 +272,20 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
             return this;
         }
 
+        public Tag tagList(final String name, final String itemName, final String value, final char delimiter) {
+            if (StringUtils.isNotBlank(value)) {
+                this.hasTextOrTag = true;
+
+                final String[] values = StringUtils.split(value, delimiter);
+                final Tag list = new Tag(this, name);
+                for (final String item : values) {
+                    list.tagChars(itemName, item.trim());
+                }
+                return list.end();
+            }
+            return this;
+        }
+
         public Tag tagI18n(final String name, final String value) {
             if (value != null) {
                 this.hasTextOrTag = true;
@@ -259,6 +295,14 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
         }
 
         public Tag tagExt(final Attributable value) {
+            if (value != null) {
+                this.hasTextOrTag = true;
+                return ext(value);
+            }
+            return this;
+        }
+
+        public Tag tagExt(final Map<String, Pair<String, String>> value) {
             if (value != null) {
                 this.hasTextOrTag = true;
                 return ext(value);

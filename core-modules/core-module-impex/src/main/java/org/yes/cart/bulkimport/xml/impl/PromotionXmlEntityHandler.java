@@ -22,6 +22,7 @@ import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.PromotionCouponType;
 import org.yes.cart.bulkimport.xml.internal.PromotionType;
 import org.yes.cart.domain.entity.Promotion;
+import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.service.domain.PromotionService;
 
 /**
@@ -29,11 +30,11 @@ import org.yes.cart.service.domain.PromotionService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<PromotionType, Promotion> implements XmlEntityImportHandler<PromotionType> {
+public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<PromotionType, Promotion> implements XmlEntityImportHandler<PromotionType, Promotion> {
 
     private PromotionService promotionService;
 
-    private XmlEntityImportHandler<PromotionCouponType> promotionCouponTypeXmlEntityImportHandler;
+    private XmlEntityImportHandler<PromotionCouponType, PromotionCoupon> promotionCouponTypeXmlEntityImportHandler;
 
     public PromotionXmlEntityHandler() {
         super("promotion");
@@ -48,7 +49,7 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
     @Override
     protected void saveOrUpdate(final Promotion domain, final PromotionType xmlType, final EntityImportModeType mode) {
 
-        domain.setTag(xmlType.getTag());
+        domain.setTag(processTags(xmlType.getTags(), domain.getTag()));
         domain.setName(xmlType.getName());
         domain.setDescription(xmlType.getDescription());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
@@ -130,7 +131,7 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
      *
      * @param promotionCouponTypeXmlEntityImportHandler handler
      */
-    public void setPromotionCouponTypeXmlEntityImportHandler(final XmlEntityImportHandler<PromotionCouponType> promotionCouponTypeXmlEntityImportHandler) {
+    public void setPromotionCouponTypeXmlEntityImportHandler(final XmlEntityImportHandler<PromotionCouponType, PromotionCoupon> promotionCouponTypeXmlEntityImportHandler) {
         this.promotionCouponTypeXmlEntityImportHandler = promotionCouponTypeXmlEntityImportHandler;
     }
 }

@@ -40,7 +40,7 @@ import java.util.List;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class CategoryXmlEntityHandler extends AbstractAttributableXmlEntityHandler<CategoryType, Category, Category, AttrValueCategory> implements XmlEntityImportHandler<CategoryType> {
+public class CategoryXmlEntityHandler extends AbstractAttributableXmlEntityHandler<CategoryType, Category, Category, AttrValueCategory> implements XmlEntityImportHandler<CategoryType, Category> {
 
     private CategoryService categoryService;
     private ProductTypeService productTypeService;

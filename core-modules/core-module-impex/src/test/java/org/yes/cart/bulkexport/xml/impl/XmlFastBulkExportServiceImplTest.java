@@ -611,6 +611,38 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCUSTOMERORDER  ");
+            rs.next();
+            long cntOrders = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            fileToExport = "target/customerorders-export-" + UUID.randomUUID().toString() + ".xml";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/customerorders.xml", listener, fileToExport));
+            final long orders = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", cntOrders) + " customer orders in " + orders + "millis (~" + (orders / cntOrders) + " per item)");
+
+
+            xml = new File(fileToExport);
+            content = FileUtils.readFileToString(xml, "UTF-8");
+            assertTrue(content.contains("<customer-order id=\"10001\" guid=\"5ef4a3eb-d0b4-417e-8ff6-7624a8667fa5\" order-number=\"190323063746-1\" shop-code=\"SHOIP1\">"));
+            assertTrue(content.contains("<payment-gateway>testPaymentGatewayLabel</payment-gateway>"));
+            assertTrue(content.contains("<status>os.in.progress</status>"));
+            assertTrue(content.contains("<email>reg@test.com</email>"));
+            assertTrue(content.contains("<formatted><![CDATA[line1 shipping addr  Vancouver CA ,  John  Doe, 555-55-51  ]]></formatted>"));
+            assertTrue(content.contains("<city>Vancouver</city>"));
+            assertTrue(content.contains("<price>983.94</price>"));
+            assertTrue(content.contains("<code>PROMO001</code>"));
+            assertTrue(content.contains("<code>PROMO001-001</code>"));
+            assertTrue(content.contains("<reference>B2B00001</reference>"));
+            assertTrue(content.contains("<custom-attribute attribute=\"310\">"));
+            assertTrue(content.contains("<custom-value><![CDATA[3100133903]]></custom-value>"));
+            assertTrue(content.contains("<i18n lang=\"xx\"><![CDATA[AUDITEXPORT]]></i18n>"));
+
+            validateXmlFile(xml);
+
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {

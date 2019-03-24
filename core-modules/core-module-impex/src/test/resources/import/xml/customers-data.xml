@@ -26,7 +26,10 @@
         <lastname>Doe</lastname>
     </contact-details>
     <policies>
-        <tags>TEST1 TEST2</tags>
+        <tags>
+            <tag>TEST1</tag>
+            <tag>TEST2</tag>
+        </tags>
         <type>B2C</type>
         <pricing-policy>P1</pricing-policy>
     </policies>
@@ -66,14 +69,14 @@
     </customer-addresses>
     <customer-wishlist>
         <wishlist-item wishlist-type="W" visibility="P" sku-code="BACKORDER-BACK-TO-FLOW1">
-            <tag>MyWishList</tag>
+            <tags><tag>MyWishList</tag></tags>
             <quantity>2.00</quantity>
             <price currency="GBP" quantity="2.00">
                 <list-price>9.99</list-price>
             </price>
         </wishlist-item>
         <wishlist-item wishlist-type="W" visibility="P" sku-code="BACKORDER-BACK-TO-FLOW2">
-            <tag>MyWishList</tag>
+            <tags><tag>MyWishList</tag></tags>
             <quantity>1.00</quantity>
             <price currency="USD" quantity="1.00">
                 <list-price>19.99</list-price>

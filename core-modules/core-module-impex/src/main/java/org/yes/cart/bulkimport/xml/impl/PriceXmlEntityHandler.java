@@ -28,7 +28,7 @@ import org.yes.cart.service.domain.ShopService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, SkuPrice> implements XmlEntityImportHandler<PriceType> {
+public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, SkuPrice> implements XmlEntityImportHandler<PriceType, SkuPrice> {
 
     private PriceService priceService;
     private ShopService shopService;
@@ -58,7 +58,7 @@ public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, S
             domain.setSalefrom(processLDT(xmlType.getAvailability().getAvailableFrom()));
             domain.setSaleto(processLDT(xmlType.getAvailability().getAvailableTo()));
         }
-        domain.setTag(xmlType.getTag());
+        domain.setTag(processTags(xmlType.getTags(), domain.getTag()));
         if (xmlType.getPricingPolicy() != null) {
             domain.setPricingPolicy(xmlType.getPricingPolicy().getPolicy());
             domain.setRef(xmlType.getPricingPolicy().getRef());

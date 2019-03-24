@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customer-orders xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<customer-order order-number="990323063746-1" shop-code="SHOIP1">
+    <configuration>
+        <payment-gateway>testPaymentGatewayLabel</payment-gateway>
+        <cart-guid>XML-d0b4-417e-8ff6-7624a8667fa5</cart-guid>
+        <order-date>2019-02-15 18:47:09</order-date>
+        <locale>en</locale>
+        <guest>false</guest>
+    </configuration>
+    <order-state>
+        <status>os.in.progress</status>
+        <eligible-for-export>NextExport</eligible-for-export>
+        <block-export>false</block-export>
+        <last-export-date>2019-03-21 18:47:09</last-export-date>
+        <last-export-status>Export Success</last-export-status>
+        <last-export-order-status>os.in.progress</last-export-order-status>
+    </order-state>
+    <contact-details customer-code="10001">
+        <email>reg@test.com</email>
+        <salutation>Mr</salutation>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <shipping-address>
+            <formatted><![CDATA[line1 shipping addr  Vancouver CA ,  John  Doe, 555-55-51  ]]></formatted>
+            <address address-type="S" default-address="false">
+                <firstname>John</firstname>
+                <lastname>Doe</lastname>
+                <addrline-1>line1</addrline-1>
+                <addrline-2>shipping addr</addrline-2>
+                <city>Vancouver</city>
+                <country-code>CA</country-code>
+                <phone-1>555-55-51</phone-1>
+            </address>
+        </shipping-address>
+        <billing-address>
+            <formatted><![CDATA[line1 shipping addr  Vancouver CA ,  John  Doe, 555-55-51  ]]></formatted>
+            <address address-type="S" default-address="false">
+                <firstname>John</firstname>
+                <lastname>Doe</lastname>
+                <addrline-1>line1</addrline-1>
+                <addrline-2>shipping addr</addrline-2>
+                <city>Vancouver</city>
+                <country-code>CA</country-code>
+                <phone-1>555-55-51</phone-1>
+            </address>
+        </billing-address>
+        <remarks><![CDATA[Order Message]]></remarks>
+    </contact-details>
+    <amount-due currency="USD">
+        <list-price>983.94</list-price>
+        <price>983.94</price>
+        <price-net>819.90</price-net>
+        <price-gross>983.94</price-gross>
+        <order-promotions applied="true">
+            <promotions>
+                <code>PROMO001</code>
+                <code>PROMO002</code>
+            </promotions>
+            <coupons>
+                <code>PROMO001-001</code>
+            </coupons>
+        </order-promotions>
+    </amount-due>
+    <b2b>
+        <reference>B2B00001</reference>
+        <employee-id>B2BEMP0001</employee-id>
+        <charge-id>CHARGE0001</charge-id>
+        <require-approval>false</require-approval>
+        <approved-by>bob.doe@corp.com</approved-by>
+        <approved-date>2019-03-23 06:37:46</approved-date>
+        <remarks><![CDATA[B2B message]]></remarks>
+    </b2b>
+    <order-items>
+        <order-item>
+            <sku>CC_TEST1</sku>
+            <product-name>cc test 1</product-name>
+            <fulfilment>
+                <ordered-quantity>2.00</ordered-quantity>
+                <supplier-code>WAREHOUSE_1</supplier-code>
+                <delivery-estimated-min>2019-03-18 06:37:46</delivery-estimated-min>
+                <delivery-estimated-max>2019-03-29 06:37:46</delivery-estimated-max>
+                <delivery-guaranteed>2019-03-28 00:00:00</delivery-guaranteed>
+                <remarks><![CDATA[Item delivery remarks]]></remarks>
+            </fulfilment>
+            <item-cost currency="USD">
+                <list-price>190.99</list-price>
+            </item-cost>
+            <item-price currency="USD">
+                <list-price>190.99</list-price>
+                <sale-price>190.99</sale-price>
+                <price>190.99</price>
+                <price-net>159.15</price-net>
+                <price-gross>190.99</price-gross>
+                <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                <item-promotions applied="true" gift="true" fixed-price="true">
+                    <promotions>
+                        <code>PROMO004</code>
+                    </promotions>
+                </item-promotions>
+            </item-price>
+            <b2b>
+                <remarks><![CDATA[Item B2B remarks]]></remarks>
+            </b2b>
+            <custom-attributes>
+                <custom-attribute attribute="ItemCostPrice">
+                    <custom-value><![CDATA[190.99]]></custom-value>
+                    <custom-display-value>
+                        <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                    </custom-display-value>
+                </custom-attribute>
+            </custom-attributes>
+        </order-item>
+        <order-item>
+            <sku>CC_TEST2</sku>
+            <product-name>cc test 2</product-name>
+            <fulfilment>
+                <ordered-quantity>1.00</ordered-quantity>
+                <supplier-code>WAREHOUSE_1</supplier-code>
+            </fulfilment>
+            <item-cost currency="USD">
+                <list-price>290.99</list-price>
+            </item-cost>
+            <item-price currency="USD">
+                <list-price>290.99</list-price>
+                <sale-price>290.99</sale-price>
+                <price>290.99</price>
+                <price-net>242.49</price-net>
+                <price-gross>290.99</price-gross>
+                <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                <item-promotions applied="false" gift="false" fixed-price="false"/>
+            </item-price>
+            <b2b/>
+            <custom-attributes>
+                <custom-attribute attribute="ItemCostPrice">
+                    <custom-value><![CDATA[290.99]]></custom-value>
+                    <custom-display-value>
+                        <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                    </custom-display-value>
+                </custom-attribute>
+            </custom-attributes>
+        </order-item>
+        <order-item>
+            <sku>CC_TEST6</sku>
+            <product-name>cc test 6</product-name>
+            <fulfilment>
+                <ordered-quantity>3.00</ordered-quantity>
+                <supplier-code>WAREHOUSE_1</supplier-code>
+            </fulfilment>
+            <item-cost currency="USD">
+                <list-price>80.99</list-price>
+            </item-cost>
+            <item-price currency="USD">
+                <list-price>80.99</list-price>
+                <sale-price>80.99</sale-price>
+                <price>80.99</price>
+                <price-net>67.49</price-net>
+                <price-gross>80.99</price-gross>
+                <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                <item-promotions applied="false" gift="false" fixed-price="false"/>
+            </item-price>
+            <b2b/>
+            <custom-attributes>
+                <custom-attribute attribute="ItemCostPrice">
+                    <custom-value><![CDATA[80.99]]></custom-value>
+                    <custom-display-value>
+                        <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                    </custom-display-value>
+                </custom-attribute>
+            </custom-attributes>
+        </order-item>
+        <order-item>
+            <sku>CC_TEST5-NOINV</sku>
+            <product-name>cc test 5 no inventory</product-name>
+            <fulfilment>
+                <ordered-quantity>4.00</ordered-quantity>
+                <supplier-code>WAREHOUSE_1</supplier-code>
+            </fulfilment>
+            <item-cost currency="USD">
+                <list-price>17.00</list-price>
+            </item-cost>
+            <item-price currency="USD">
+                <list-price>17.00</list-price>
+                <sale-price>17.00</sale-price>
+                <price>17.00</price>
+                <price-net>14.16</price-net>
+                <price-gross>17.00</price-gross>
+                <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                <item-promotions applied="false" gift="false" fixed-price="false"/>
+            </item-price>
+            <b2b/>
+            <custom-attributes>
+                <custom-attribute attribute="ItemCostPrice">
+                    <custom-value><![CDATA[17.00]]></custom-value>
+                    <custom-display-value>
+                        <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                    </custom-display-value>
+                </custom-attribute>
+            </custom-attributes>
+        </order-item>
+    </order-items>
+    <shipments multiple-shipments="false">
+        <requested-delivery-date>2019-02-23 00:00:00</requested-delivery-date>
+        <deliveries>
+            <delivery delivery-number="990323063746-1-0" delivery-group="D1">
+                <shipping>
+                    <shipping-method>1_CARRIERSLA</shipping-method>
+                    <tracking-reference>TRACK000001</tracking-reference>
+                    <requested-delivery-date>2019-02-23 00:00:00</requested-delivery-date>
+                    <delivery-estimated-min>2019-03-19 06:37:46</delivery-estimated-min>
+                    <delivery-estimated-max>2019-03-30 06:37:46</delivery-estimated-max>
+                    <delivery-guaranteed>2019-03-29 00:00:00</delivery-guaranteed>
+                    <delivery-confirmed>2019-03-29 00:00:00</delivery-confirmed>
+                    <remarks><![CDATA[Delivery remarks]]></remarks>
+                </shipping>
+                <shipping-cost currency="USD">
+                    <list-price>16.77</list-price>
+                    <sale-price>16.77</sale-price>
+                    <price>16.77</price>
+                    <price-net>13.97</price-net>
+                    <price-gross>16.77</price-gross>
+                    <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                    <shipping-promotions applied="true">
+                        <promotions>
+                            <code>PROMO003</code>
+                        </promotions>
+                    </shipping-promotions>
+                </shipping-cost>
+                <delivery-state>
+                    <status>ds.shipment.inprogress</status>
+                    <eligible-for-export>NextExportDel</eligible-for-export>
+                    <block-export>false</block-export>
+                    <last-export-date>2019-03-21 18:47:09</last-export-date>
+                    <last-export-status>Export Delivery Success</last-export-status>
+                    <last-export-delivery-status>ds.shipment.inprogress</last-export-delivery-status>
+                </delivery-state>
+                <delivery-items>
+                    <delivery-item>
+                        <sku>CC_TEST1</sku>
+                        <product-name>cc test 1</product-name>
+                        <fulfilment>
+                            <ordered-quantity>2.00</ordered-quantity>
+                            <delivered-quantity>1.00</delivered-quantity>
+                            <supplier-code>WAREHOUSE_1</supplier-code>
+                            <delivery-estimated-min>2019-03-18 06:37:46</delivery-estimated-min>
+                            <delivery-estimated-max>2019-03-29 06:37:46</delivery-estimated-max>
+                            <delivery-guaranteed>2019-03-28 00:00:00</delivery-guaranteed>
+                            <delivery-confirmed>2019-03-28 11:00:00</delivery-confirmed>
+                            <invoice-number>INV00001</invoice-number>
+                            <invoice-date>2019-04-01</invoice-date>
+                            <remarks><![CDATA[Item delivery remarks]]></remarks>
+                        </fulfilment>
+                        <item-cost currency="USD">
+                            <list-price>190.99</list-price>
+                        </item-cost>
+                        <item-price currency="USD">
+                            <list-price>190.99</list-price>
+                            <sale-price>190.99</sale-price>
+                            <price>190.99</price>
+                            <price-net>159.15</price-net>
+                            <price-gross>190.99</price-gross>
+                            <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                            <item-promotions applied="true" gift="true" fixed-price="true">
+                                <promotions>
+                                    <code>PROMO004</code>
+                                </promotions>
+                            </item-promotions>
+                        </item-price>
+                        <b2b>
+                            <remarks><![CDATA[Item B2B remarks]]></remarks>
+                        </b2b>
+                        <custom-attributes>
+                            <custom-attribute attribute="ItemCostPrice">
+                                <custom-value><![CDATA[190.99]]></custom-value>
+                                <custom-display-value>
+                                    <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                                </custom-display-value>
+                            </custom-attribute>
+                        </custom-attributes>
+                    </delivery-item>
+                    <delivery-item>
+                        <sku>CC_TEST2</sku>
+                        <product-name>cc test 2</product-name>
+                        <fulfilment>
+                            <ordered-quantity>1.00</ordered-quantity>
+                            <supplier-code>WAREHOUSE_1</supplier-code>
+                        </fulfilment>
+                        <item-cost currency="USD">
+                            <list-price>290.99</list-price>
+                        </item-cost>
+                        <item-price currency="USD">
+                            <list-price>290.99</list-price>
+                            <sale-price>290.99</sale-price>
+                            <price>290.99</price>
+                            <price-net>242.49</price-net>
+                            <price-gross>290.99</price-gross>
+                            <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                            <item-promotions applied="false" gift="false" fixed-price="false"/>
+                        </item-price>
+                        <b2b/>
+                        <custom-attributes>
+                            <custom-attribute attribute="ItemCostPrice">
+                                <custom-value><![CDATA[290.99]]></custom-value>
+                                <custom-display-value>
+                                    <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                                </custom-display-value>
+                            </custom-attribute>
+                        </custom-attributes>
+                    </delivery-item>
+                </delivery-items>
+            </delivery>
+            <delivery delivery-number="990323063746-1-1" delivery-group="D2">
+                <shipping>
+                    <shipping-method>1_CARRIERSLA</shipping-method>
+                </shipping>
+                <shipping-cost currency="USD">
+                    <list-price>16.77</list-price>
+                    <sale-price>16.77</sale-price>
+                    <price>16.77</price>
+                    <price-net>13.97</price-net>
+                    <price-gross>16.77</price-gross>
+                    <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                    <shipping-promotions applied="false"/>
+                </shipping-cost>
+                <delivery-state>
+                    <status>ds.wait.date</status>
+                    <block-export>false</block-export>
+                </delivery-state>
+                <delivery-items>
+                    <delivery-item>
+                        <sku>CC_TEST6</sku>
+                        <product-name>cc test 6</product-name>
+                        <fulfilment>
+                            <ordered-quantity>3.00</ordered-quantity>
+                            <supplier-code>WAREHOUSE_1</supplier-code>
+                        </fulfilment>
+                        <item-cost currency="USD">
+                            <list-price>80.99</list-price>
+                        </item-cost>
+                        <item-price currency="USD">
+                            <list-price>80.99</list-price>
+                            <sale-price>80.99</sale-price>
+                            <price>80.99</price>
+                            <price-net>67.49</price-net>
+                            <price-gross>80.99</price-gross>
+                            <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                            <item-promotions applied="false" gift="false" fixed-price="false"/>
+                        </item-price>
+                        <b2b/>
+                        <custom-attributes>
+                            <custom-attribute attribute="ItemCostPrice">
+                                <custom-value><![CDATA[80.99]]></custom-value>
+                                <custom-display-value>
+                                    <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                                </custom-display-value>
+                            </custom-attribute>
+                        </custom-attributes>
+                    </delivery-item>
+                </delivery-items>
+            </delivery>
+            <delivery delivery-number="990323063746-1-2" delivery-group="D3">
+                <shipping>
+                    <shipping-method>1_CARRIERSLA</shipping-method>
+                </shipping>
+                <shipping-cost currency="USD">
+                    <list-price>16.77</list-price>
+                    <sale-price>16.77</sale-price>
+                    <price>16.77</price>
+                    <price-net>13.97</price-net>
+                    <price-gross>16.77</price-gross>
+                    <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                    <shipping-promotions applied="false"/>
+                </shipping-cost>
+                <delivery-state>
+                    <status>ds.wait.inventory</status>
+                    <block-export>false</block-export>
+                </delivery-state>
+                <delivery-items>
+                    <delivery-item>
+                        <sku>CC_TEST5-NOINV</sku>
+                        <product-name>cc test 5 no inventory</product-name>
+                        <fulfilment>
+                            <ordered-quantity>4.00</ordered-quantity>
+                            <supplier-code>WAREHOUSE_1</supplier-code>
+                        </fulfilment>
+                        <item-cost currency="USD">
+                            <list-price>17.00</list-price>
+                        </item-cost>
+                        <item-price currency="USD">
+                            <list-price>17.00</list-price>
+                            <sale-price>17.00</sale-price>
+                            <price>17.00</price>
+                            <price-net>14.16</price-net>
+                            <price-gross>17.00</price-gross>
+                            <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                            <item-promotions applied="false" gift="false" fixed-price="false"/>
+                        </item-price>
+                        <b2b/>
+                        <custom-attributes>
+                            <custom-attribute attribute="ItemCostPrice">
+                                <custom-value><![CDATA[17.00]]></custom-value>
+                                <custom-display-value>
+                                    <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                                </custom-display-value>
+                            </custom-attribute>
+                        </custom-attributes>
+                    </delivery-item>
+                </delivery-items>
+            </delivery>
+        </deliveries>
+    </shipments>
+    <custom-attributes>
+        <custom-attribute attribute="310">
+            <custom-value><![CDATA[3100133903]]></custom-value>
+        </custom-attribute>
+        <custom-attribute attribute="WS310: 2019-03-21 17:03:05">
+            <custom-value><![CDATA[3100133903]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="TDORDER: 2019-03-21 18:47:09">
+            <custom-value><![CDATA[os.in.progress 990323063746-1-0, <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE XGResponse SYSTEM "https://test.com/XMLGate/DTD/XmlGateResponse.dtd"><XGResponse><Success title="XML Message received. OrderNumber = 990323063746-1, MessageID = 973"/></XGResponse>]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="TDXML: XXXX_WH: 2019-03-21 18:47:09">
+            <custom-value><![CDATA[os.in.progress 990323063746-1-0]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="XXCSV: ERROR">
+            <custom-value><![CDATA[2019-03-21 18:53:00: java.lang.RuntimeException: java.io.FileNotFoundException: /home/xxxx/ftp/erp/XXXX_flatcsv_20190321.csv (Permission denied)]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="XXCSV: 2019-03-21 18:56:47">
+            <custom-value><![CDATA[os.in.progress 990323063746-1-0]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="ORDRSP">
+            <custom-value><![CDATA[MsgID=2, 20170622, 004306]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="XXCSV: 2019-03-21 19:43:00">
+            <custom-value><![CDATA[os.in.progress 990323063746-1-0]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="XXCSV: 2017-06-22 01:43:00">
+            <custom-value><![CDATA[os.in.progress 990323063746-1-0]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="DESADV">
+            <custom-value><![CDATA[MsgID=1, 20170622, 131228]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="XXCSV: 2017-06-22 13:43:00">
+            <custom-value><![CDATA[os.completed 990323063746-1-0]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="INVOIC">
+            <custom-value><![CDATA[MsgID=1, 20170622, 213438]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+        <custom-attribute attribute="XXCSV: 2017-06-22 21:43:00">
+            <custom-value><![CDATA[os.completed 990323063746-1-0]]></custom-value>
+            <custom-display-value>
+                <i18n lang="xx"><![CDATA[AUDITEXPORT]]></i18n>
+            </custom-display-value>
+        </custom-attribute>
+    </custom-attributes>
+    <created-timestamp>2019-03-23 06:37:46</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2019-03-23 06:37:46</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</customer-order>
+<customer-order order-number="990323063753-2" shop-code="SHOIP1">
+    <configuration>
+        <payment-gateway>testPaymentGatewayLabel</payment-gateway>
+        <cart-guid>XML-67ff-412d-9613-e8a7cd12cbb1</cart-guid>
+        <order-date>2019-02-16 18:47:09</order-date>
+        <locale>en</locale>
+        <guest>false</guest>
+    </configuration>
+    <order-state>
+        <status>os.in.progress</status>
+        <block-export>false</block-export>
+    </order-state>
+    <contact-details customer-code="10001">
+        <email>reg@test.com</email>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <shipping-address>
+            <formatted><![CDATA[line1 shipping addr  Vancouver CA ,  John  Doe, 555-55-51  ]]></formatted>
+            <address address-type="S" default-address="false">
+                <firstname>John</firstname>
+                <lastname>Doe</lastname>
+                <addrline-1>line1</addrline-1>
+                <addrline-2>shipping addr</addrline-2>
+                <city>Vancouver</city>
+                <country-code>CA</country-code>
+                <phone-1>555-55-51</phone-1>
+            </address>
+        </shipping-address>
+        <billing-address>
+            <formatted><![CDATA[line1 shipping addr  Vancouver CA ,  John  Doe, 555-55-51  ]]></formatted>
+            <address address-type="S" default-address="false">
+                <firstname>John</firstname>
+                <lastname>Doe</lastname>
+                <addrline-1>line1</addrline-1>
+                <addrline-2>shipping addr</addrline-2>
+                <city>Vancouver</city>
+                <country-code>CA</country-code>
+                <phone-1>555-55-51</phone-1>
+            </address>
+        </billing-address>
+    </contact-details>
+    <amount-due currency="USD">
+        <list-price>672.97</list-price>
+        <price>672.97</price>
+        <price-net>560.79</price-net>
+        <price-gross>672.97</price-gross>
+        <order-promotions applied="false"/>
+    </amount-due>
+    <b2b>
+        <require-approval>false</require-approval>
+    </b2b>
+    <order-items>
+        <order-item>
+            <sku>CC_TEST1</sku>
+            <product-name>cc test 1</product-name>
+            <fulfilment>
+                <ordered-quantity>2.00</ordered-quantity>
+                <supplier-code>WAREHOUSE_1</supplier-code>
+            </fulfilment>
+            <item-cost currency="USD">
+                <list-price>190.99</list-price>
+            </item-cost>
+            <item-price currency="USD">
+                <list-price>190.99</list-price>
+                <sale-price>190.99</sale-price>
+                <price>190.99</price>
+                <price-net>159.15</price-net>
+                <price-gross>190.99</price-gross>
+                <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                <item-promotions applied="false" gift="false" fixed-price="false"/>
+            </item-price>
+            <b2b/>
+            <custom-attributes>
+                <custom-attribute attribute="ItemCostPrice">
+                    <custom-value><![CDATA[190.99]]></custom-value>
+                    <custom-display-value>
+                        <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                    </custom-display-value>
+                </custom-attribute>
+            </custom-attributes>
+        </order-item>
+        <order-item>
+            <sku>CC_TEST2</sku>
+            <product-name>cc test 2</product-name>
+            <fulfilment>
+                <ordered-quantity>1.00</ordered-quantity>
+                <supplier-code>WAREHOUSE_1</supplier-code>
+            </fulfilment>
+            <item-cost currency="USD">
+                <list-price>290.99</list-price>
+            </item-cost>
+            <item-price currency="USD">
+                <list-price>290.99</list-price>
+                <sale-price>290.99</sale-price>
+                <price>290.99</price>
+                <price-net>242.49</price-net>
+                <price-gross>290.99</price-gross>
+                <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                <item-promotions applied="false" gift="false" fixed-price="false"/>
+            </item-price>
+            <b2b/>
+            <custom-attributes>
+                <custom-attribute attribute="ItemCostPrice">
+                    <custom-value><![CDATA[290.99]]></custom-value>
+                    <custom-display-value>
+                        <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                    </custom-display-value>
+                </custom-attribute>
+            </custom-attributes>
+        </order-item>
+    </order-items>
+    <shipments multiple-shipments="false">
+        <deliveries>
+            <delivery delivery-number="990323063753-2-0" delivery-group="D1">
+                <shipping>
+                    <shipping-method>1_CARRIERSLA</shipping-method>
+                </shipping>
+                <shipping-cost currency="USD">
+                    <list-price>16.77</list-price>
+                    <sale-price>16.77</sale-price>
+                    <price>16.77</price>
+                    <price-net>13.97</price-net>
+                    <price-gross>16.77</price-gross>
+                    <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                    <shipping-promotions applied="false"/>
+                </shipping-cost>
+                <delivery-state>
+                    <status>ds.shipment.inprogress</status>
+                    <block-export>false</block-export>
+                </delivery-state>
+                <delivery-items>
+                    <delivery-item>
+                        <sku>CC_TEST1</sku>
+                        <product-name>cc test 1</product-name>
+                        <fulfilment>
+                            <ordered-quantity>2.00</ordered-quantity>
+                            <supplier-code>WAREHOUSE_1</supplier-code>
+                        </fulfilment>
+                        <item-cost currency="USD">
+                            <list-price>190.99</list-price>
+                        </item-cost>
+                        <item-price currency="USD">
+                            <list-price>190.99</list-price>
+                            <sale-price>190.99</sale-price>
+                            <price>190.99</price>
+                            <price-net>159.15</price-net>
+                            <price-gross>190.99</price-gross>
+                            <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                            <item-promotions applied="false" gift="false" fixed-price="false"/>
+                        </item-price>
+                        <b2b/>
+                        <custom-attributes>
+                            <custom-attribute attribute="ItemCostPrice">
+                                <custom-value><![CDATA[190.99]]></custom-value>
+                                <custom-display-value>
+                                    <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                                </custom-display-value>
+                            </custom-attribute>
+                        </custom-attributes>
+                    </delivery-item>
+                    <delivery-item>
+                        <sku>CC_TEST2</sku>
+                        <product-name>cc test 2</product-name>
+                        <fulfilment>
+                            <ordered-quantity>1.00</ordered-quantity>
+                            <supplier-code>WAREHOUSE_1</supplier-code>
+                        </fulfilment>
+                        <item-cost currency="USD">
+                            <list-price>290.99</list-price>
+                        </item-cost>
+                        <item-price currency="USD">
+                            <list-price>290.99</list-price>
+                            <sale-price>290.99</sale-price>
+                            <price>290.99</price>
+                            <price-net>242.49</price-net>
+                            <price-gross>290.99</price-gross>
+                            <tax rate="20.00" code="VAT" exclusive-of-price="false"/>
+                            <item-promotions applied="false" gift="false" fixed-price="false"/>
+                        </item-price>
+                        <b2b/>
+                        <custom-attributes>
+                            <custom-attribute attribute="ItemCostPrice">
+                                <custom-value><![CDATA[290.99]]></custom-value>
+                                <custom-display-value>
+                                    <i18n lang="xx"><![CDATA[SUPPLIER]]></i18n>
+                                </custom-display-value>
+                            </custom-attribute>
+                        </custom-attributes>
+                    </delivery-item>
+                </delivery-items>
+            </delivery>
+        </deliveries>
+    </shipments>
+    <created-timestamp>2019-03-23 06:37:53</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2019-03-23 06:37:53</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</customer-order>
+</customer-orders>

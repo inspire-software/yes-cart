@@ -90,7 +90,7 @@ public class CustomerXmlEntityHandler extends AbstractXmlEntityHandler<Customer>
                 .end();
 
         cTag.tag("policies")
-                .tagChars("tags", customer.getTag())
+                .tagList("tags", "tag", customer.getTag(), ' ')
                 .tagChars("type", customer.getCustomerType())
                 .tagChars("pricing-policy", customer.getPricingPolicy())
                 .end();
@@ -123,7 +123,7 @@ public class CustomerXmlEntityHandler extends AbstractXmlEntityHandler<Customer>
                         .attr("wishlist-type", wl.getWlType())
                         .attr("visibility", wl.getVisibility())
                         .attr("sku-code", wl.getSkus().getCode())
-                        .tagChars("tag", wl.getTag())
+                        .tagList("tags", "tag", wl.getTag(), ' ')
                         .tagNum("quantity", wl.getQuantity())
                         .tag("price")
                             .attr("currency", wl.getRegularPriceCurrencyWhenAdded())

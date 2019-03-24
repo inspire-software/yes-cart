@@ -404,6 +404,17 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="CUSTOMERORDER">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerOrderXmlEntityHandler">
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                    </bean>
+                </entry>
+                <entry key="CUSTOMERORDER_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerOrderXmlEntityHandler">
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

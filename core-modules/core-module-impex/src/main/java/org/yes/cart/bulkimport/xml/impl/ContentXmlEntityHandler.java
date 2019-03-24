@@ -35,7 +35,7 @@ import java.util.Map;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ContentXmlEntityHandler extends AbstractAttributableXmlEntityHandler<ContentType, Category, Category, AttrValueCategory> implements XmlEntityImportHandler<ContentType> {
+public class ContentXmlEntityHandler extends AbstractAttributableXmlEntityHandler<ContentType, Category, Category, AttrValueCategory> implements XmlEntityImportHandler<ContentType, Category> {
 
     // This is the limit on AV.val field - do not change unless changing schema
     private static final int CHUNK_SIZE = 4000;

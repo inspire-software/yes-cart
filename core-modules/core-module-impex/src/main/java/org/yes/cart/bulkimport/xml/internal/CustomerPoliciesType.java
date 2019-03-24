@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="tags" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="tags" type="{}tagsType" minOccurs="0"/>
  *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="pricing-policy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class CustomerPoliciesType {
 
-    protected String tags;
+    protected TagsType tags;
     protected String type;
     @XmlElement(name = "pricing-policy")
     protected String pricingPolicy;
@@ -46,10 +46,10 @@ public class CustomerPoliciesType {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public String getTags() {
+    public TagsType getTags() {
         return tags;
     }
 
@@ -58,10 +58,10 @@ public class CustomerPoliciesType {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link TagsType }
      *     
      */
-    public void setTags(String value) {
+    public void setTags(TagsType value) {
         this.tags = value;
     }
 

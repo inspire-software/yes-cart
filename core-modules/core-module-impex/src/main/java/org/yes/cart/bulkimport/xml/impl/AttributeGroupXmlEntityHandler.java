@@ -27,7 +27,7 @@ import org.yes.cart.service.domain.AttributeGroupService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class AttributeGroupXmlEntityHandler extends AbstractXmlEntityHandler<AttributeGroupType, AttributeGroup> implements XmlEntityImportHandler<AttributeGroupType> {
+public class AttributeGroupXmlEntityHandler extends AbstractXmlEntityHandler<AttributeGroupType, AttributeGroup> implements XmlEntityImportHandler<AttributeGroupType, AttributeGroup> {
 
     private AttributeGroupService attributeGroupService;
 

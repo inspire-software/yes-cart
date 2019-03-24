@@ -28,7 +28,7 @@ import org.yes.cart.service.domain.BrandService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class BrandXmlEntityHandler extends AbstractAttributableXmlEntityHandler<BrandType, Brand, Brand, AttrValueBrand> implements XmlEntityImportHandler<BrandType> {
+public class BrandXmlEntityHandler extends AbstractAttributableXmlEntityHandler<BrandType, Brand, Brand, AttrValueBrand> implements XmlEntityImportHandler<BrandType, Brand> {
 
     private BrandService brandService;
 

@@ -55,7 +55,7 @@ public class SkuPriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<SkuPr
                 .attr("rank", priceRule.getRank())
                 .tagCdata("name", priceRule.getName())
                 .tagCdata("description", priceRule.getDescription())
-                .tagChars("tag", priceRule.getTag())
+                .tagList("tags", "tag", priceRule.getTag(), ' ')
                 .tag("availability")
                     .attr("disabled", !priceRule.isEnabled())
                     .tagTime("available-from", priceRule.getEnabledFrom())

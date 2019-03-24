@@ -27,7 +27,7 @@ import org.yes.cart.service.domain.DataDescriptorService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class DataDescriptorXmlEntityHandler extends AbstractXmlEntityHandler<DataDescriptorType, DataDescriptor> implements XmlEntityImportHandler<DataDescriptorType> {
+public class DataDescriptorXmlEntityHandler extends AbstractXmlEntityHandler<DataDescriptorType, DataDescriptor> implements XmlEntityImportHandler<DataDescriptorType, DataDescriptor> {
 
     private DataDescriptorService dataDescriptorService;
 

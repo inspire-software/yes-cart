@@ -32,7 +32,7 @@ import org.yes.cart.service.domain.CustomerService;
  * Date: 16/03/2019
  * Time: 11:20
  */
-public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressType, Address> implements XmlEntityImportHandler<AddressType> {
+public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressType, Address> implements XmlEntityImportHandler<AddressType, Address> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AddressXmlEntityHandler.class);
 

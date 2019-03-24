@@ -22,26 +22,25 @@ import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.ProductCategoriesCodeType;
 import org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType;
 import org.yes.cart.bulkimport.xml.internal.SkuType;
-import org.yes.cart.domain.entity.AttrValueProduct;
-import org.yes.cart.domain.entity.Brand;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductType;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.domain.BrandService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ProductTypeService;
 
 /**
  * User: denispavlov
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandler<org.yes.cart.bulkimport.xml.internal.ProductType, Product, Product, AttrValueProduct> implements XmlEntityImportHandler<org.yes.cart.bulkimport.xml.internal.ProductType> {
+public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandler<org.yes.cart.bulkimport.xml.internal.ProductType, Product, Product, AttrValueProduct> implements XmlEntityImportHandler<org.yes.cart.bulkimport.xml.internal.ProductType, Product> {
 
     private BrandService brandService;
     private ProductTypeService productTypeService;
     private ProductService productService;
 
-    private XmlEntityImportHandler<SkuType> skuXmlEntityImportHandler;
-    private XmlEntityImportHandler<ProductCategoriesCodeType> productCategoriesCodeXmlEntityImportHandler;
-    private XmlEntityImportHandler<ProductLinksCodeType> productLinksCodeXmlEntityImportHandler;
+    private XmlEntityImportHandler<SkuType, ProductSku> skuXmlEntityImportHandler;
+    private XmlEntityImportHandler<ProductCategoriesCodeType, Product> productCategoriesCodeXmlEntityImportHandler;
+    private XmlEntityImportHandler<ProductLinksCodeType, Product> productLinksCodeXmlEntityImportHandler;
 
     public ProductXmlEntityHandler() {
         super("product");
@@ -112,7 +111,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
         domain.setName(xmlType.getName());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
         domain.setDescription(xmlType.getDescription());
-        domain.setTag(xmlType.getTags());
+        domain.setTag(processTags(xmlType.getTags(), domain.getTag()));
         if (domain.getProductId() == 0L) {
             this.productService.create(domain);
         } else {
@@ -232,7 +231,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
      *
      * @param skuXmlEntityImportHandler SKU handler
      */
-    public void setSkuXmlEntityImportHandler(final XmlEntityImportHandler<SkuType> skuXmlEntityImportHandler) {
+    public void setSkuXmlEntityImportHandler(final XmlEntityImportHandler<SkuType, ProductSku> skuXmlEntityImportHandler) {
         this.skuXmlEntityImportHandler = skuXmlEntityImportHandler;
     }
 
@@ -241,7 +240,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
      *
      * @param productCategoriesCodeXmlEntityImportHandler categories handler
      */
-    public void setProductCategoriesCodeXmlEntityImportHandler(final XmlEntityImportHandler<ProductCategoriesCodeType> productCategoriesCodeXmlEntityImportHandler) {
+    public void setProductCategoriesCodeXmlEntityImportHandler(final XmlEntityImportHandler<ProductCategoriesCodeType, Product> productCategoriesCodeXmlEntityImportHandler) {
         this.productCategoriesCodeXmlEntityImportHandler = productCategoriesCodeXmlEntityImportHandler;
     }
 
@@ -250,7 +249,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
      *
      * @param productLinksCodeXmlEntityImportHandler links hadler
      */
-    public void setProductLinksCodeXmlEntityImportHandler(final XmlEntityImportHandler<ProductLinksCodeType> productLinksCodeXmlEntityImportHandler) {
+    public void setProductLinksCodeXmlEntityImportHandler(final XmlEntityImportHandler<ProductLinksCodeType, Product> productLinksCodeXmlEntityImportHandler) {
         this.productLinksCodeXmlEntityImportHandler = productLinksCodeXmlEntityImportHandler;
     }
 }

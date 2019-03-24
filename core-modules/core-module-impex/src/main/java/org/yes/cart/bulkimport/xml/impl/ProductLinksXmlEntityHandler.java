@@ -34,7 +34,7 @@ import java.util.Iterator;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ProductLinksXmlEntityHandler extends AbstractXmlEntityHandler<org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType, Product> implements XmlEntityImportHandler<org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType> {
+public class ProductLinksXmlEntityHandler extends AbstractXmlEntityHandler<org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType, Product> implements XmlEntityImportHandler<org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType, Product> {
 
     private ProductService productService;
     private ProductAssociationService productAssociationService;

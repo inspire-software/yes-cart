@@ -36,12 +36,14 @@ public class ObjectFactory {
     private final static QName _ShopsFulfilmentCentres_QNAME = new QName("", "shops-fulfilment-centres");
     private final static QName _DataGroup_QNAME = new QName("", "data-group");
     private final static QName _Price_QNAME = new QName("", "price");
+    private final static QName _CustomerOrder_QNAME = new QName("", "customer-order");
     private final static QName _Stock_QNAME = new QName("", "stock");
     private final static QName _Sku_QNAME = new QName("", "sku");
     private final static QName _Brand_QNAME = new QName("", "brand");
     private final static QName _PriceList_QNAME = new QName("", "price-list");
     private final static QName _EType_QNAME = new QName("", "e-type");
     private final static QName _Tax_QNAME = new QName("", "tax");
+    private final static QName _CustomerOrders_QNAME = new QName("", "customer-orders");
     private final static QName _ETypes_QNAME = new QName("", "e-types");
     private final static QName _Countries_QNAME = new QName("", "countries");
     private final static QName _CountryState_QNAME = new QName("", "country-state");
@@ -255,6 +257,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerOrderType }
+     * 
+     */
+    public CustomerOrderType createCustomerOrderType() {
+        return new CustomerOrderType();
+    }
+
+    /**
      * Create an instance of {@link StockType }
      * 
      */
@@ -292,6 +302,14 @@ public class ObjectFactory {
      */
     public TaxType createTaxType() {
         return new TaxType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerOrdersType }
+     * 
+     */
+    public CustomerOrdersType createCustomerOrdersType() {
+        return new CustomerOrdersType();
     }
 
     /**
@@ -703,6 +721,382 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrderItemsType }
+     * 
+     */
+    public OrderItemsType createOrderItemsType() {
+        return new OrderItemsType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerContactDetailsType }
+     * 
+     */
+    public CustomerContactDetailsType createCustomerContactDetailsType() {
+        return new CustomerContactDetailsType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationProductTypeType }
+     * 
+     */
+    public NavigationProductTypeType createNavigationProductTypeType() {
+        return new NavigationProductTypeType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingMethodExclusionsDatesType }
+     * 
+     */
+    public ShippingMethodExclusionsDatesType createShippingMethodExclusionsDatesType() {
+        return new ShippingMethodExclusionsDatesType();
+    }
+
+    /**
+     * Create an instance of {@link OrderStateType }
+     * 
+     */
+    public OrderStateType createOrderStateType() {
+        return new OrderStateType();
+    }
+
+    /**
+     * Create an instance of {@link ItemPromotionsType }
+     * 
+     */
+    public ItemPromotionsType createItemPromotionsType() {
+        return new ItemPromotionsType();
+    }
+
+    /**
+     * Create an instance of {@link BodyContentType }
+     * 
+     */
+    public BodyContentType createBodyContentType() {
+        return new BodyContentType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingMethodSupportedType }
+     * 
+     */
+    public ShippingMethodSupportedType createShippingMethodSupportedType() {
+        return new ShippingMethodSupportedType();
+    }
+
+    /**
+     * Create an instance of {@link OrderDeliveryShippingCostType }
+     * 
+     */
+    public OrderDeliveryShippingCostType createOrderDeliveryShippingCostType() {
+        return new OrderDeliveryShippingCostType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingMethodExclusionsWeekdaysType }
+     * 
+     */
+    public ShippingMethodExclusionsWeekdaysType createShippingMethodExclusionsWeekdaysType() {
+        return new ShippingMethodExclusionsWeekdaysType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserRolesType }
+     * 
+     */
+    public OrganisationUserRolesType createOrganisationUserRolesType() {
+        return new OrganisationUserRolesType();
+    }
+
+    /**
+     * Create an instance of {@link ItemCostType }
+     * 
+     */
+    public ItemCostType createItemCostType() {
+        return new ItemCostType();
+    }
+
+    /**
+     * Create an instance of {@link ProductCategoriesType }
+     * 
+     */
+    public ProductCategoriesType createProductCategoriesType() {
+        return new ProductCategoriesType();
+    }
+
+    /**
+     * Create an instance of {@link I18NsType }
+     * 
+     */
+    public I18NsType createI18NsType() {
+        return new I18NsType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserShopType }
+     * 
+     */
+    public OrganisationUserShopType createOrganisationUserShopType() {
+        return new OrganisationUserShopType();
+    }
+
+    /**
+     * Create an instance of {@link OrderAmountDueType }
+     * 
+     */
+    public OrderAmountDueType createOrderAmountDueType() {
+        return new OrderAmountDueType();
+    }
+
+    /**
+     * Create an instance of {@link PromotionCouponConfigurationType }
+     * 
+     */
+    public PromotionCouponConfigurationType createPromotionCouponConfigurationType() {
+        return new PromotionCouponConfigurationType();
+    }
+
+    /**
+     * Create an instance of {@link ShippingMethodExclusionsType }
+     * 
+     */
+    public ShippingMethodExclusionsType createShippingMethodExclusionsType() {
+        return new ShippingMethodExclusionsType();
+    }
+
+    /**
+     * Create an instance of {@link PromotionConfigurationType }
+     * 
+     */
+    public PromotionConfigurationType createPromotionConfigurationType() {
+        return new PromotionConfigurationType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersCurrencyTiersType }
+     * 
+     */
+    public NavigationByPriceTiersCurrencyTiersType createNavigationByPriceTiersCurrencyTiersType() {
+        return new NavigationByPriceTiersCurrencyTiersType();
+    }
+
+    /**
+     * Create an instance of {@link ContentBodyType }
+     * 
+     */
+    public ContentBodyType createContentBodyType() {
+        return new ContentBodyType();
+    }
+
+    /**
+     * Create an instance of {@link DeliveryItemFulfilmentType }
+     * 
+     */
+    public DeliveryItemFulfilmentType createDeliveryItemFulfilmentType() {
+        return new DeliveryItemFulfilmentType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerWishlistType }
+     * 
+     */
+    public CustomerWishlistType createCustomerWishlistType() {
+        return new CustomerWishlistType();
+    }
+
+    /**
+     * Create an instance of {@link OrderDeliveryShippingPromotionsType }
+     * 
+     */
+    public OrderDeliveryShippingPromotionsType createOrderDeliveryShippingPromotionsType() {
+        return new OrderDeliveryShippingPromotionsType();
+    }
+
+    /**
+     * Create an instance of {@link OrderItemB2BType }
+     * 
+     */
+    public OrderItemB2BType createOrderItemB2BType() {
+        return new OrderItemB2BType();
+    }
+
+    /**
+     * Create an instance of {@link OrderItemType }
+     * 
+     */
+    public OrderItemType createOrderItemType() {
+        return new OrderItemType();
+    }
+
+    /**
+     * Create an instance of {@link OrderCouponsCodeType }
+     * 
+     */
+    public OrderCouponsCodeType createOrderCouponsCodeType() {
+        return new OrderCouponsCodeType();
+    }
+
+    /**
+     * Create an instance of {@link OrderDeliveryType }
+     * 
+     */
+    public OrderDeliveryType createOrderDeliveryType() {
+        return new OrderDeliveryType();
+    }
+
+    /**
+     * Create an instance of {@link ShopCategoriesType }
+     * 
+     */
+    public ShopCategoriesType createShopCategoriesType() {
+        return new ShopCategoriesType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerAddressesType }
+     * 
+     */
+    public CustomerAddressesType createCustomerAddressesType() {
+        return new CustomerAddressesType();
+    }
+
+    /**
+     * Create an instance of {@link OrderContactDetailsType }
+     * 
+     */
+    public OrderContactDetailsType createOrderContactDetailsType() {
+        return new OrderContactDetailsType();
+    }
+
+    /**
+     * Create an instance of {@link ShopUrlType }
+     * 
+     */
+    public ShopUrlType createShopUrlType() {
+        return new ShopUrlType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesType createProductTypeAttributeNavigationRangeListRangeDisplayValuesType() {
+        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesType();
+    }
+
+    /**
+     * Create an instance of {@link ShopUrlsType }
+     * 
+     */
+    public ShopUrlsType createShopUrlsType() {
+        return new ShopUrlsType();
+    }
+
+    /**
+     * Create an instance of {@link FulfilmentCentreLocationType }
+     * 
+     */
+    public FulfilmentCentreLocationType createFulfilmentCentreLocationType() {
+        return new FulfilmentCentreLocationType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersCurrencyType }
+     * 
+     */
+    public NavigationByPriceTiersCurrencyType createNavigationByPriceTiersCurrencyType() {
+        return new NavigationByPriceTiersCurrencyType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType }
+     * 
+     */
+    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType createProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType() {
+        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserCredentialsType }
+     * 
+     */
+    public OrganisationUserCredentialsType createOrganisationUserCredentialsType() {
+        return new OrganisationUserCredentialsType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserPreferencesType }
+     * 
+     */
+    public OrganisationUserPreferencesType createOrganisationUserPreferencesType() {
+        return new OrganisationUserPreferencesType();
+    }
+
+    /**
+     * Create an instance of {@link DataGroupDescriptorsType }
+     * 
+     */
+    public DataGroupDescriptorsType createDataGroupDescriptorsType() {
+        return new DataGroupDescriptorsType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeAttributeType }
+     * 
+     */
+    public ProductTypeAttributeType createProductTypeAttributeType() {
+        return new ProductTypeAttributeType();
+    }
+
+    /**
+     * Create an instance of {@link ProductTypeTemplatesType }
+     * 
+     */
+    public ProductTypeTemplatesType createProductTypeTemplatesType() {
+        return new ProductTypeTemplatesType();
+    }
+
+    /**
+     * Create an instance of {@link NavigationByPriceTiersCurrencyTiersTierType }
+     * 
+     */
+    public NavigationByPriceTiersCurrencyTiersTierType createNavigationByPriceTiersCurrencyTiersTierType() {
+        return new NavigationByPriceTiersCurrencyTiersTierType();
+    }
+
+    /**
+     * Create an instance of {@link ShopFulfilmentCentreType }
+     * 
+     */
+    public ShopFulfilmentCentreType createShopFulfilmentCentreType() {
+        return new ShopFulfilmentCentreType();
+    }
+
+    /**
+     * Create an instance of {@link BaseContentType }
+     * 
+     */
+    public BaseContentType createBaseContentType() {
+        return new BaseContentType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserOrganisationType }
+     * 
+     */
+    public OrganisationUserOrganisationType createOrganisationUserOrganisationType() {
+        return new OrganisationUserOrganisationType();
+    }
+
+    /**
+     * Create an instance of {@link OrderOrderPromotionsType }
+     * 
+     */
+    public OrderOrderPromotionsType createOrderOrderPromotionsType() {
+        return new OrderOrderPromotionsType();
+    }
+
+    /**
      * Create an instance of {@link ShippingMethodExclusionsCustomerTypesType }
      * 
      */
@@ -716,6 +1110,14 @@ public class ObjectFactory {
      */
     public OrganisationUserRoleType createOrganisationUserRoleType() {
         return new OrganisationUserRoleType();
+    }
+
+    /**
+     * Create an instance of {@link OrderShipmentsType }
+     * 
+     */
+    public OrderShipmentsType createOrderShipmentsType() {
+        return new OrderShipmentsType();
     }
 
     /**
@@ -751,27 +1153,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DeliveryItemType }
+     * 
+     */
+    public DeliveryItemType createDeliveryItemType() {
+        return new DeliveryItemType();
+    }
+
+    /**
      * Create an instance of {@link NavigationByAttributesType }
      * 
      */
     public NavigationByAttributesType createNavigationByAttributesType() {
         return new NavigationByAttributesType();
-    }
-
-    /**
-     * Create an instance of {@link CustomerContactDetailsType }
-     * 
-     */
-    public CustomerContactDetailsType createCustomerContactDetailsType() {
-        return new CustomerContactDetailsType();
-    }
-
-    /**
-     * Create an instance of {@link NavigationProductTypeType }
-     * 
-     */
-    public NavigationProductTypeType createNavigationProductTypeType() {
-        return new NavigationProductTypeType();
     }
 
     /**
@@ -799,11 +1193,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ShippingMethodExclusionsDatesType }
+     * Create an instance of {@link OrderDeliveryStateType }
      * 
      */
-    public ShippingMethodExclusionsDatesType createShippingMethodExclusionsDatesType() {
-        return new ShippingMethodExclusionsDatesType();
+    public OrderDeliveryStateType createOrderDeliveryStateType() {
+        return new OrderDeliveryStateType();
     }
 
     /**
@@ -823,11 +1217,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BodyContentType }
+     * Create an instance of {@link OrderDeliveryItemsType }
      * 
      */
-    public BodyContentType createBodyContentType() {
-        return new BodyContentType();
+    public OrderDeliveryItemsType createOrderDeliveryItemsType() {
+        return new OrderDeliveryItemsType();
     }
 
     /**
@@ -839,11 +1233,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ShippingMethodSupportedType }
+     * Create an instance of {@link OrderBillingAddressType }
      * 
      */
-    public ShippingMethodSupportedType createShippingMethodSupportedType() {
-        return new ShippingMethodSupportedType();
+    public OrderBillingAddressType createOrderBillingAddressType() {
+        return new OrderBillingAddressType();
+    }
+
+    /**
+     * Create an instance of {@link OrderDeliveriesType }
+     * 
+     */
+    public OrderDeliveriesType createOrderDeliveriesType() {
+        return new OrderDeliveriesType();
     }
 
     /**
@@ -887,14 +1289,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ShippingMethodExclusionsWeekdaysType }
-     * 
-     */
-    public ShippingMethodExclusionsWeekdaysType createShippingMethodExclusionsWeekdaysType() {
-        return new ShippingMethodExclusionsWeekdaysType();
-    }
-
-    /**
      * Create an instance of {@link ShopCarriersType }
      * 
      */
@@ -911,22 +1305,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link OrganisationUserRolesType }
-     * 
-     */
-    public OrganisationUserRolesType createOrganisationUserRolesType() {
-        return new OrganisationUserRolesType();
-    }
-
-    /**
-     * Create an instance of {@link ProductCategoriesType }
-     * 
-     */
-    public ProductCategoriesType createProductCategoriesType() {
-        return new ProductCategoriesType();
-    }
-
-    /**
      * Create an instance of {@link ShippingMethodSupportedFulfilmentCentresType }
      * 
      */
@@ -935,19 +1313,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link I18NsType }
+     * Create an instance of {@link OrderItemFulfilmentType }
      * 
      */
-    public I18NsType createI18NsType() {
-        return new I18NsType();
-    }
-
-    /**
-     * Create an instance of {@link OrganisationUserShopType }
-     * 
-     */
-    public OrganisationUserShopType createOrganisationUserShopType() {
-        return new OrganisationUserShopType();
+    public OrderItemFulfilmentType createOrderItemFulfilmentType() {
+        return new OrderItemFulfilmentType();
     }
 
     /**
@@ -967,14 +1337,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PromotionCouponConfigurationType }
-     * 
-     */
-    public PromotionCouponConfigurationType createPromotionCouponConfigurationType() {
-        return new PromotionCouponConfigurationType();
-    }
-
-    /**
      * Create an instance of {@link ShopCarrierType }
      * 
      */
@@ -991,43 +1353,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ShippingMethodExclusionsType }
+     * Create an instance of {@link OrderB2BType }
      * 
      */
-    public ShippingMethodExclusionsType createShippingMethodExclusionsType() {
-        return new ShippingMethodExclusionsType();
-    }
-
-    /**
-     * Create an instance of {@link PromotionConfigurationType }
-     * 
-     */
-    public PromotionConfigurationType createPromotionConfigurationType() {
-        return new PromotionConfigurationType();
-    }
-
-    /**
-     * Create an instance of {@link NavigationByPriceTiersCurrencyTiersType }
-     * 
-     */
-    public NavigationByPriceTiersCurrencyTiersType createNavigationByPriceTiersCurrencyTiersType() {
-        return new NavigationByPriceTiersCurrencyTiersType();
-    }
-
-    /**
-     * Create an instance of {@link ContentBodyType }
-     * 
-     */
-    public ContentBodyType createContentBodyType() {
-        return new ContentBodyType();
-    }
-
-    /**
-     * Create an instance of {@link CustomerWishlistType }
-     * 
-     */
-    public CustomerWishlistType createCustomerWishlistType() {
-        return new CustomerWishlistType();
+    public OrderB2BType createOrderB2BType() {
+        return new OrderB2BType();
     }
 
     /**
@@ -1055,6 +1385,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TagsType }
+     * 
+     */
+    public TagsType createTagsType() {
+        return new TagsType();
+    }
+
+    /**
      * Create an instance of {@link ContentTemplatesType }
      * 
      */
@@ -1079,6 +1417,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrderPromotionsCodeType }
+     * 
+     */
+    public OrderPromotionsCodeType createOrderPromotionsCodeType() {
+        return new OrderPromotionsCodeType();
+    }
+
+    /**
      * Create an instance of {@link CustomerWishlistItemPriceType }
      * 
      */
@@ -1095,14 +1441,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ShopCategoriesType }
-     * 
-     */
-    public ShopCategoriesType createShopCategoriesType() {
-        return new ShopCategoriesType();
-    }
-
-    /**
      * Create an instance of {@link CustomerShopsType }
      * 
      */
@@ -1111,35 +1449,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CustomerAddressesType }
-     * 
-     */
-    public CustomerAddressesType createCustomerAddressesType() {
-        return new CustomerAddressesType();
-    }
-
-    /**
-     * Create an instance of {@link ShopUrlType }
-     * 
-     */
-    public ShopUrlType createShopUrlType() {
-        return new ShopUrlType();
-    }
-
-    /**
      * Create an instance of {@link OrganisationUserContactDetailsType }
      * 
      */
     public OrganisationUserContactDetailsType createOrganisationUserContactDetailsType() {
         return new OrganisationUserContactDetailsType();
-    }
-
-    /**
-     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesType }
-     * 
-     */
-    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesType createProductTypeAttributeNavigationRangeListRangeDisplayValuesType() {
-        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesType();
     }
 
     /**
@@ -1159,19 +1473,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ShopUrlsType }
-     * 
-     */
-    public ShopUrlsType createShopUrlsType() {
-        return new ShopUrlsType();
-    }
-
-    /**
      * Create an instance of {@link ShopAliasType }
      * 
      */
     public ShopAliasType createShopAliasType() {
         return new ShopAliasType();
+    }
+
+    /**
+     * Create an instance of {@link OrderConfigurationType }
+     * 
+     */
+    public OrderConfigurationType createOrderConfigurationType() {
+        return new OrderConfigurationType();
     }
 
     /**
@@ -1191,35 +1505,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link FulfilmentCentreLocationType }
+     * Create an instance of {@link OrderShippingAddressType }
      * 
      */
-    public FulfilmentCentreLocationType createFulfilmentCentreLocationType() {
-        return new FulfilmentCentreLocationType();
-    }
-
-    /**
-     * Create an instance of {@link NavigationByPriceTiersCurrencyType }
-     * 
-     */
-    public NavigationByPriceTiersCurrencyType createNavigationByPriceTiersCurrencyType() {
-        return new NavigationByPriceTiersCurrencyType();
-    }
-
-    /**
-     * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType }
-     * 
-     */
-    public ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType createProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType() {
-        return new ProductTypeAttributeNavigationRangeListRangeDisplayValuesValueType();
-    }
-
-    /**
-     * Create an instance of {@link OrganisationUserCredentialsType }
-     * 
-     */
-    public OrganisationUserCredentialsType createOrganisationUserCredentialsType() {
-        return new OrganisationUserCredentialsType();
+    public OrderShippingAddressType createOrderShippingAddressType() {
+        return new OrderShippingAddressType();
     }
 
     /**
@@ -1247,51 +1537,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link OrganisationUserPreferencesType }
-     * 
-     */
-    public OrganisationUserPreferencesType createOrganisationUserPreferencesType() {
-        return new OrganisationUserPreferencesType();
-    }
-
-    /**
-     * Create an instance of {@link DataGroupDescriptorsType }
-     * 
-     */
-    public DataGroupDescriptorsType createDataGroupDescriptorsType() {
-        return new DataGroupDescriptorsType();
-    }
-
-    /**
-     * Create an instance of {@link ProductTypeAttributeType }
-     * 
-     */
-    public ProductTypeAttributeType createProductTypeAttributeType() {
-        return new ProductTypeAttributeType();
-    }
-
-    /**
      * Create an instance of {@link ProductTypeAttributeNavigationRangeListRangeType }
      * 
      */
     public ProductTypeAttributeNavigationRangeListRangeType createProductTypeAttributeNavigationRangeListRangeType() {
         return new ProductTypeAttributeNavigationRangeListRangeType();
-    }
-
-    /**
-     * Create an instance of {@link ProductTypeTemplatesType }
-     * 
-     */
-    public ProductTypeTemplatesType createProductTypeTemplatesType() {
-        return new ProductTypeTemplatesType();
-    }
-
-    /**
-     * Create an instance of {@link NavigationByPriceTiersCurrencyTiersTierType }
-     * 
-     */
-    public NavigationByPriceTiersCurrencyTiersTierType createNavigationByPriceTiersCurrencyTiersTierType() {
-        return new NavigationByPriceTiersCurrencyTiersTierType();
     }
 
     /**
@@ -1303,6 +1553,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrderTaxType }
+     * 
+     */
+    public OrderTaxType createOrderTaxType() {
+        return new OrderTaxType();
+    }
+
+    /**
      * Create an instance of {@link ShopPresentationType }
      * 
      */
@@ -1311,11 +1569,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ShopFulfilmentCentreType }
+     * Create an instance of {@link ItemPriceType }
      * 
      */
-    public ShopFulfilmentCentreType createShopFulfilmentCentreType() {
-        return new ShopFulfilmentCentreType();
+    public ItemPriceType createItemPriceType() {
+        return new ItemPriceType();
     }
 
     /**
@@ -1335,22 +1593,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BaseContentType }
-     * 
-     */
-    public BaseContentType createBaseContentType() {
-        return new BaseContentType();
-    }
-
-    /**
-     * Create an instance of {@link OrganisationUserOrganisationType }
-     * 
-     */
-    public OrganisationUserOrganisationType createOrganisationUserOrganisationType() {
-        return new OrganisationUserOrganisationType();
-    }
-
-    /**
      * Create an instance of {@link CategoryTemplatesType }
      * 
      */
@@ -1364,6 +1606,14 @@ public class ObjectFactory {
      */
     public ShippingMethodConfigurationType createShippingMethodConfigurationType() {
         return new ShippingMethodConfigurationType();
+    }
+
+    /**
+     * Create an instance of {@link OrderDeliveryShippingType }
+     * 
+     */
+    public OrderDeliveryShippingType createOrderDeliveryShippingType() {
+        return new OrderDeliveryShippingType();
     }
 
     /**
@@ -1603,6 +1853,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CustomerOrderType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "customer-order")
+    public JAXBElement<CustomerOrderType> createCustomerOrder(CustomerOrderType value) {
+        return new JAXBElement<CustomerOrderType>(_CustomerOrder_QNAME, CustomerOrderType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link StockType }{@code >}}
      * 
      */
@@ -1654,6 +1913,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "tax")
     public JAXBElement<TaxType> createTax(TaxType value) {
         return new JAXBElement<TaxType>(_Tax_QNAME, TaxType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CustomerOrdersType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "customer-orders")
+    public JAXBElement<CustomerOrdersType> createCustomerOrders(CustomerOrdersType value) {
+        return new JAXBElement<CustomerOrdersType>(_CustomerOrders_QNAME, CustomerOrdersType.class, null, value);
     }
 
     /**

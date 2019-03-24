@@ -27,7 +27,7 @@ import org.yes.cart.service.domain.GenericService;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class PriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<PriceRuleType, SkuPriceRule> implements XmlEntityImportHandler<PriceRuleType> {
+public class PriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<PriceRuleType, SkuPriceRule> implements XmlEntityImportHandler<PriceRuleType, SkuPriceRule> {
 
     private GenericService<SkuPriceRule> priceRuleService;
 
@@ -44,7 +44,7 @@ public class PriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<PriceRul
     @Override
     protected void saveOrUpdate(final SkuPriceRule domain, final PriceRuleType xmlType, final EntityImportModeType mode) {
 
-        domain.setTag(xmlType.getTag());
+        domain.setTag(processTags(xmlType.getTags(), domain.getTag()));
         domain.setName(xmlType.getName());
         domain.setDescription(xmlType.getDescription());
         if (xmlType.getRank() != null) {

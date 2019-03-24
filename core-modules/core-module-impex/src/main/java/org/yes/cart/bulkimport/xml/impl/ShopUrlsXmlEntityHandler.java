@@ -32,7 +32,7 @@ import java.util.Iterator;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ShopUrlsXmlEntityHandler extends AbstractXmlEntityHandler<ShopUrlCodeType, Shop> implements XmlEntityImportHandler<ShopUrlCodeType> {
+public class ShopUrlsXmlEntityHandler extends AbstractXmlEntityHandler<ShopUrlCodeType, Shop> implements XmlEntityImportHandler<ShopUrlCodeType, Shop> {
 
     private ShopService shopService;
 
