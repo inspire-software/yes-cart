@@ -20,11 +20,16 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -34,6 +39,8 @@ import java.io.IOException;
 public class ShopRequireLoginFilter extends AbstractFilter implements Filter {
 
     private String loginOrRegistrationUri;
+
+    private List<String> ignorePaths = Collections.emptyList();
 
     /**
      * {@inheritDoc}
@@ -46,6 +53,28 @@ public class ShopRequireLoginFilter extends AbstractFilter implements Filter {
         if (shop.isSfRequireCustomerLogin()) {
             final ShoppingCart cart = ApplicationDirector.getShoppingCart();
             if (cart.getLogonState() != ShoppingCart.LOGGED_IN) {
+
+                /*
+                    RequestURI  -> /yes-shop/resetPasswordCmd/X8kyP9@W
+                    ContextPath -> /yes-shop
+                    ServletPath ->          /resetPasswordCmd/X8kyP9@W
+
+                    RequestURI  -> /resetPasswordCmd/X8kyP9@W
+                    ContextPath ->
+                    ServletPath -> /resetPasswordCmd/X8kyP9@W
+                 */
+
+                final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+                final String requestPath = HttpUtil.decodeUtf8UriParam(httpServletRequest.getRequestURI());
+                final String contextPath = httpServletRequest.getContextPath();
+                final String servletPath = requestPath.substring(contextPath.length());
+
+                for (final String ignoredPath : this.ignorePaths) {
+                    if (servletPath.startsWith(ignoredPath)) {
+                        return request;
+                    }
+                }
+
                 ((HttpServletResponse) response).sendRedirect(
                         ((HttpServletRequest) request).getContextPath() + this.loginOrRegistrationUri);
                 return null;
@@ -72,6 +101,16 @@ public class ShopRequireLoginFilter extends AbstractFilter implements Filter {
             this.loginOrRegistrationUri = filterConfig.getInitParameter("loginOrRegistrationUri");
         } else {
             this.loginOrRegistrationUri = "/login";
+        }
+        if (StringUtils.isNotBlank(filterConfig.getInitParameter("ignorePaths"))) {
+            this.ignorePaths = new ArrayList<>(Arrays.asList(StringUtils.split(filterConfig.getInitParameter("ignorePaths"), ',')));
+        } else {
+            this.ignorePaths = new ArrayList<>(Arrays.asList(
+                    "/login",
+                    "/resetPasswordCmd/",
+                    "/reset/",
+                    "/changepassword"
+            ));
         }
     }
 
