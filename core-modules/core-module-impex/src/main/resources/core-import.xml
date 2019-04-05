@@ -456,6 +456,21 @@
                         </property>
                     </bean>
                 </entry>
+                <entry key="CUSTOMERORDERPAYMENT">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.CustomerOrderPaymentXmlEntityHandler">
+                        <property name="customerOrderPaymentService" ref="customerOrderPaymentService"/>
+                    </bean>
+                </entry>
+                <entry key="PGCALLBACK">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.PaymentGatewayCallbackXmlEntityHandler">
+                        <property name="paymentGatewayCallbackService" ref="paymentGatewayCallbackService"/>
+                    </bean>
+                </entry>
+                <entry key="PGPARAMETER">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.PaymentGatewayParameterXmlEntityHandler">
+                        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

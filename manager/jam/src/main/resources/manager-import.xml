@@ -51,15 +51,11 @@
                 <!-- WebInf XML descriptors -->
                 <bean class="org.yes.cart.bulkimport.service.impl.WebInfXmlImportDataXmlDescriptorReaderImpl">
                     <constructor-arg index="0" value="import-descriptor"/>
-                    <!-- TODO: YC-941
-                    <property name="importDescriptorXStreamProvider" ref="importCsvDescriptorXStreamProvider"/>
-                    -->
+                    <property name="importDescriptorXStreamProvider" ref="importXmlDescriptorXStreamProvider"/>
                 </bean>
                 <!-- Raw XML XML descriptors -->
                 <bean class="org.yes.cart.bulkimport.service.impl.RawXmlImportDataXmlDescriptorReaderImpl">
-                    <!-- TODO: YC-941
-                    <property name="importDescriptorXStreamProvider" ref="importCsvDescriptorXStreamProvider"/>
-                    -->
+                    <property name="importDescriptorXStreamProvider" ref="importXmlDescriptorXStreamProvider"/>
                 </bean>
             </list>
         </constructor-arg>

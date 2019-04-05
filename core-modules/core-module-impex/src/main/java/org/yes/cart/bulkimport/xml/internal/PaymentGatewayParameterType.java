@@ -22,9 +22,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="payment-gateway" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="code" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="value" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="business-type" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="business-type" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="secure" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="created-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -44,6 +45,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "payment-gateway-parameterType", propOrder = {
     "paymentGateway",
+    "code",
     "name",
     "value",
     "businessType",
@@ -58,10 +60,12 @@ public class PaymentGatewayParameterType {
     @XmlElement(name = "payment-gateway", required = true)
     protected String paymentGateway;
     @XmlElement(required = true)
+    protected String code;
+    @XmlElement(required = true)
     protected String name;
     @XmlElement(required = true)
     protected String value;
-    @XmlElement(name = "business-type", required = true)
+    @XmlElement(name = "business-type")
     protected String businessType;
     protected boolean secure;
     @XmlElement(name = "created-timestamp")
@@ -105,6 +109,30 @@ public class PaymentGatewayParameterType {
      */
     public void setPaymentGateway(String value) {
         this.paymentGateway = value;
+    }
+
+    /**
+     * Gets the value of the code property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * Sets the value of the code property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setCode(String value) {
+        this.code = value;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <customer-order-payments xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                          xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
-<customer-order-payment id="1" guid="340ec6b0-4a5e-4b35-ab18-fb4cd39d9332" shop-code="SHOP10">
+<customer-order-payment id="1" guid="340ec6b0-4a5e-4b35-ab18-XXXXXXXXXX" shop-code="SHOP10">
     <card/>
     <order-date>2015-10-29 16:04:13</order-date>
     <order-amount currency="EUR">

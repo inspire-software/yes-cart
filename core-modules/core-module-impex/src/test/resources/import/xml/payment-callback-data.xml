@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <payment-gateway-callbacks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                            xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<payment-gateway-callback id="111111" guid="TEST9999" shop-code="SHOP10">
+    <payment-gateway>DISMISSED_testPaymentGateway</payment-gateway>
+    <request-dump>Request dump data</request-dump>
+    <request-parameters>
+        <request-parameter name="key1">
+            <value>value1</value>
+        </request-parameter>
+    </request-parameters>
+    <created-timestamp>2019-01-12 22:03:46</created-timestamp>
+    <created-by>admin@yes-cart.com</created-by>
+    <updated-timestamp>2019-01-12 22:03:46</updated-timestamp>
+    <updated-by>admin@yes-cart.com</updated-by>
+</payment-gateway-callback>
 <payment-gateway-callback id="1" guid="TEST001" shop-code="SHOP10">
     <payment-gateway>DISMISSED_testPaymentGateway</payment-gateway>
     <request-dump>Request dump data</request-dump>

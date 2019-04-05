@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="order-number" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="order-shipment" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="payment-gateway" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="customer-ip" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="customer-ip" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="transaction" type="{}customer-order-payment-transactionType"/>
  *         &lt;element name="created-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -75,7 +75,7 @@ public class CustomerOrderPaymentType {
     protected String orderShipment;
     @XmlElement(name = "payment-gateway", required = true)
     protected String paymentGateway;
-    @XmlElement(name = "customer-ip", required = true)
+    @XmlElement(name = "customer-ip")
     protected String customerIp;
     @XmlElement(required = true)
     protected CustomerOrderPaymentTransactionType transaction;
