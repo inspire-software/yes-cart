@@ -62,12 +62,30 @@
     </bean>
 
 
+    <bean id="xmlFastBulkPaymentExportService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkexport.xml.impl.XmlFastBulkExportServiceImpl" scope="prototype">
+                <property name="genericDAO" ref="paymentGenericDao"/>
+                <property name="columnLookUpQueryParameterStrategy" ref="exportXmlColumnLookUpQueryStrategy"/>
+                <property name="valueDataAdapter" ref="exportXmlExportValueAdapter"/>
+                <property name="handlerMap" ref="xmlFastBulkExportServiceHandlerMap"/>
+            </bean>
+        </property>
+    </bean>
+
+
+
     <bean id="bulkExportServiceBeanMapExtPayment" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg ref="bulkExportServiceBeanMap">
         </constructor-arg>
         <property name="extension">
             <map>
                 <entry key="CSV-org.yes.cart.payment.persistence.entity.CustomerOrderPayment" value="csvBulkPaymentExportService"/>
+                <entry key="CSV-org.yes.cart.payment.persistence.entity.PaymentGatewayCallback" value="csvBulkPaymentExportService"/>
+                <entry key="CSV-org.yes.cart.payment.persistence.entity.PaymentGatewayParameter" value="csvBulkPaymentExportService"/>
+                <entry key="XML-org.yes.cart.payment.persistence.entity.CustomerOrderPayment" value="xmlFastBulkPaymentExportService"/>
+                <entry key="XML-org.yes.cart.payment.persistence.entity.PaymentGatewayCallback" value="xmlFastBulkPaymentExportService"/>
+                <entry key="XML-org.yes.cart.payment.persistence.entity.PaymentGatewayParameter" value="xmlFastBulkPaymentExportService"/>
             </map>
         </property>
     </bean>

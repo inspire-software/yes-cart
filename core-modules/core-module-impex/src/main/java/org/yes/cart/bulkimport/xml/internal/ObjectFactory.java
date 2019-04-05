@@ -37,9 +37,11 @@ public class ObjectFactory {
     private final static QName _DataGroup_QNAME = new QName("", "data-group");
     private final static QName _Price_QNAME = new QName("", "price");
     private final static QName _CustomerOrder_QNAME = new QName("", "customer-order");
+    private final static QName _PaymentGatewayCallback_QNAME = new QName("", "payment-gateway-callback");
     private final static QName _Stock_QNAME = new QName("", "stock");
     private final static QName _Sku_QNAME = new QName("", "sku");
     private final static QName _Brand_QNAME = new QName("", "brand");
+    private final static QName _PaymentGatewayCallbacks_QNAME = new QName("", "payment-gateway-callbacks");
     private final static QName _PriceList_QNAME = new QName("", "price-list");
     private final static QName _EType_QNAME = new QName("", "e-type");
     private final static QName _Tax_QNAME = new QName("", "tax");
@@ -47,6 +49,7 @@ public class ObjectFactory {
     private final static QName _ETypes_QNAME = new QName("", "e-types");
     private final static QName _Countries_QNAME = new QName("", "countries");
     private final static QName _CountryState_QNAME = new QName("", "country-state");
+    private final static QName _CustomerOrderPayments_QNAME = new QName("", "customer-order-payments");
     private final static QName _System_QNAME = new QName("", "system");
     private final static QName _AttributeGroups_QNAME = new QName("", "attribute-groups");
     private final static QName _ProductsLinks_QNAME = new QName("", "products-links");
@@ -54,9 +57,11 @@ public class ObjectFactory {
     private final static QName _ProductLinks_QNAME = new QName("", "product-links");
     private final static QName _Shops_QNAME = new QName("", "shops");
     private final static QName _ProductTypes_QNAME = new QName("", "product-types");
+    private final static QName _PaymentGatewayParameter_QNAME = new QName("", "payment-gateway-parameter");
     private final static QName _Skus_QNAME = new QName("", "skus");
     private final static QName _Shop_QNAME = new QName("", "shop");
     private final static QName _ShopsCategories_QNAME = new QName("", "shops-categories");
+    private final static QName _PaymentGatewayParameters_QNAME = new QName("", "payment-gateway-parameters");
     private final static QName _OrganisationUsers_QNAME = new QName("", "organisation-users");
     private final static QName _Cms_QNAME = new QName("", "cms");
     private final static QName _Inventory_QNAME = new QName("", "inventory");
@@ -82,6 +87,7 @@ public class ObjectFactory {
     private final static QName _DataGroups_QNAME = new QName("", "data-groups");
     private final static QName _Address_QNAME = new QName("", "address");
     private final static QName _CountryStates_QNAME = new QName("", "country-states");
+    private final static QName _CustomerOrderPayment_QNAME = new QName("", "customer-order-payment");
     private final static QName _ShippingMethod_QNAME = new QName("", "shipping-method");
     private final static QName _Promotions_QNAME = new QName("", "promotions");
     private final static QName _ProductsCategories_QNAME = new QName("", "products-categories");
@@ -265,6 +271,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link PaymentGatewayCallbackType }
+     * 
+     */
+    public PaymentGatewayCallbackType createPaymentGatewayCallbackType() {
+        return new PaymentGatewayCallbackType();
+    }
+
+    /**
      * Create an instance of {@link StockType }
      * 
      */
@@ -278,6 +292,14 @@ public class ObjectFactory {
      */
     public BrandType createBrandType() {
         return new BrandType();
+    }
+
+    /**
+     * Create an instance of {@link PaymentGatewayCallbacksType }
+     * 
+     */
+    public PaymentGatewayCallbacksType createPaymentGatewayCallbacksType() {
+        return new PaymentGatewayCallbacksType();
     }
 
     /**
@@ -337,6 +359,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerOrderPaymentsType }
+     * 
+     */
+    public CustomerOrderPaymentsType createCustomerOrderPaymentsType() {
+        return new CustomerOrderPaymentsType();
+    }
+
+    /**
      * Create an instance of {@link SystemType }
      * 
      */
@@ -393,6 +423,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link PaymentGatewayParameterType }
+     * 
+     */
+    public PaymentGatewayParameterType createPaymentGatewayParameterType() {
+        return new PaymentGatewayParameterType();
+    }
+
+    /**
      * Create an instance of {@link SkusType }
      * 
      */
@@ -414,6 +452,14 @@ public class ObjectFactory {
      */
     public ShopsCategoriesCodeType createShopsCategoriesCodeType() {
         return new ShopsCategoriesCodeType();
+    }
+
+    /**
+     * Create an instance of {@link PaymentGatewayParametersType }
+     * 
+     */
+    public PaymentGatewayParametersType createPaymentGatewayParametersType() {
+        return new PaymentGatewayParametersType();
     }
 
     /**
@@ -598,6 +644,14 @@ public class ObjectFactory {
      */
     public CountryStatesType createCountryStatesType() {
         return new CountryStatesType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerOrderPaymentType }
+     * 
+     */
+    public CustomerOrderPaymentType createCustomerOrderPaymentType() {
+        return new CustomerOrderPaymentType();
     }
 
     /**
@@ -889,6 +943,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerOrderPaymentAmountType }
+     * 
+     */
+    public CustomerOrderPaymentAmountType createCustomerOrderPaymentAmountType() {
+        return new CustomerOrderPaymentAmountType();
+    }
+
+    /**
      * Create an instance of {@link DeliveryItemFulfilmentType }
      * 
      */
@@ -1086,6 +1148,14 @@ public class ObjectFactory {
      */
     public OrganisationUserOrganisationType createOrganisationUserOrganisationType() {
         return new OrganisationUserOrganisationType();
+    }
+
+    /**
+     * Create an instance of {@link PaymentGatewayCallbackRequestParameterType }
+     * 
+     */
+    public PaymentGatewayCallbackRequestParameterType createPaymentGatewayCallbackRequestParameterType() {
+        return new PaymentGatewayCallbackRequestParameterType();
     }
 
     /**
@@ -1385,11 +1455,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CustomerOrderPaymentCardType }
+     * 
+     */
+    public CustomerOrderPaymentCardType createCustomerOrderPaymentCardType() {
+        return new CustomerOrderPaymentCardType();
+    }
+
+    /**
      * Create an instance of {@link TagsType }
      * 
      */
     public TagsType createTagsType() {
         return new TagsType();
+    }
+
+    /**
+     * Create an instance of {@link CustomerOrderPaymentTransactionType }
+     * 
+     */
+    public CustomerOrderPaymentTransactionType createCustomerOrderPaymentTransactionType() {
+        return new CustomerOrderPaymentTransactionType();
     }
 
     /**
@@ -1590,6 +1676,14 @@ public class ObjectFactory {
      */
     public ProductTypeAttributesType createProductTypeAttributesType() {
         return new ProductTypeAttributesType();
+    }
+
+    /**
+     * Create an instance of {@link PaymentGatewayCallbackRequestParametersType }
+     * 
+     */
+    public PaymentGatewayCallbackRequestParametersType createPaymentGatewayCallbackRequestParametersType() {
+        return new PaymentGatewayCallbackRequestParametersType();
     }
 
     /**
@@ -1862,6 +1956,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PaymentGatewayCallbackType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "payment-gateway-callback")
+    public JAXBElement<PaymentGatewayCallbackType> createPaymentGatewayCallback(PaymentGatewayCallbackType value) {
+        return new JAXBElement<PaymentGatewayCallbackType>(_PaymentGatewayCallback_QNAME, PaymentGatewayCallbackType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link StockType }{@code >}}
      * 
      */
@@ -1886,6 +1989,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "brand")
     public JAXBElement<BrandType> createBrand(BrandType value) {
         return new JAXBElement<BrandType>(_Brand_QNAME, BrandType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PaymentGatewayCallbacksType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "payment-gateway-callbacks")
+    public JAXBElement<PaymentGatewayCallbacksType> createPaymentGatewayCallbacks(PaymentGatewayCallbacksType value) {
+        return new JAXBElement<PaymentGatewayCallbacksType>(_PaymentGatewayCallbacks_QNAME, PaymentGatewayCallbacksType.class, null, value);
     }
 
     /**
@@ -1952,6 +2064,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CustomerOrderPaymentsType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "customer-order-payments")
+    public JAXBElement<CustomerOrderPaymentsType> createCustomerOrderPayments(CustomerOrderPaymentsType value) {
+        return new JAXBElement<CustomerOrderPaymentsType>(_CustomerOrderPayments_QNAME, CustomerOrderPaymentsType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SystemType }{@code >}}
      * 
      */
@@ -2015,6 +2136,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PaymentGatewayParameterType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "payment-gateway-parameter")
+    public JAXBElement<PaymentGatewayParameterType> createPaymentGatewayParameter(PaymentGatewayParameterType value) {
+        return new JAXBElement<PaymentGatewayParameterType>(_PaymentGatewayParameter_QNAME, PaymentGatewayParameterType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SkusType }{@code >}}
      * 
      */
@@ -2039,6 +2169,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "shops-categories")
     public JAXBElement<ShopsCategoriesCodeType> createShopsCategories(ShopsCategoriesCodeType value) {
         return new JAXBElement<ShopsCategoriesCodeType>(_ShopsCategories_QNAME, ShopsCategoriesCodeType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PaymentGatewayParametersType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "payment-gateway-parameters")
+    public JAXBElement<PaymentGatewayParametersType> createPaymentGatewayParameters(PaymentGatewayParametersType value) {
+        return new JAXBElement<PaymentGatewayParametersType>(_PaymentGatewayParameters_QNAME, PaymentGatewayParametersType.class, null, value);
     }
 
     /**
@@ -2264,6 +2403,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "country-states")
     public JAXBElement<CountryStatesType> createCountryStates(CountryStatesType value) {
         return new JAXBElement<CountryStatesType>(_CountryStates_QNAME, CountryStatesType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CustomerOrderPaymentType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "customer-order-payment")
+    public JAXBElement<CustomerOrderPaymentType> createCustomerOrderPayment(CustomerOrderPaymentType value) {
+        return new JAXBElement<CustomerOrderPaymentType>(_CustomerOrderPayment_QNAME, CustomerOrderPaymentType.class, null, value);
     }
 
     /**

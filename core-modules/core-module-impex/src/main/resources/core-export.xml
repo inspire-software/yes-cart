@@ -415,6 +415,30 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
+                <entry key="CUSTOMERORDERPAYMENT">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerOrderPaymentXmlEntityHandler"/>
+                </entry>
+                <entry key="CUSTOMERORDERPAYMENT_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerOrderPaymentXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PGCALLBACK">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PaymentGatewayCallbackXmlEntityHandler"/>
+                </entry>
+                <entry key="PGCALLBACK_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PaymentGatewayCallbackXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PGPARAMETER">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PaymentGatewayParameterXmlEntityHandler"/>
+                </entry>
+                <entry key="PGPARAMETER_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PaymentGatewayParameterXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

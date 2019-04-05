@@ -43,6 +43,7 @@
     <bean id="voAssemblerAdaptersRepositoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
+                <entry key="DisplayValue"                       value-ref="voDisplayValue"/>
                 <entry key="DisplayValues"                      value-ref="voDisplayValues"/>
                 <entry key="MapToListPairs"                     value-ref="voMapToListPairs"/>
                 <entry key="CSVToList"                          value-ref="voCSVToList"/>
@@ -67,6 +68,7 @@
     </bean>
 
     <bean id="voDisplayValues" class="org.yes.cart.domain.vo.converter.DisplayValueMapToListMutablePairConverter"/>
+    <bean id="voDisplayValue" class="org.yes.cart.domain.vo.converter.DisplayValueToListMutablePairConverter"/>
     <bean id="voMapToListPairs" class="org.yes.cart.domain.vo.converter.MapToMutablePairListConverter"/>
     <bean id="voCSVToList" class="org.yes.cart.domain.vo.converter.CSVToListConverter"/>
     <bean id="voCSVToListDatesPairs" class="org.yes.cart.domain.vo.converter.CSVToListDatesPairsConverter"/>

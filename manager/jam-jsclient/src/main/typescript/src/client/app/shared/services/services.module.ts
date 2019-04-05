@@ -21,6 +21,7 @@ import {
   AttributeService,
   SystemService,
   ImpexService,
+  DataGroupsService,
   ReportsService,
   } from './index';
 
@@ -55,6 +56,7 @@ export class ServicesModule {
         AttributeService,
         SystemService,
         ImpexService,
+        DataGroupsService,
         ReportsService,
       ]
     };

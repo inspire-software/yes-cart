@@ -2192,4 +2192,134 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <!-- Payments -->
+
+    <xsd:element name="customer-order-payments" type="customer-order-paymentsType"/>
+    <xsd:element name="customer-order-payment" type="customer-order-paymentType"/>
+
+    <xsd:complexType name="customer-order-paymentsType">
+        <xsd:sequence>
+            <xsd:element type="customer-order-paymentType" name="customer-order-payment" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-order-paymentType">
+        <xsd:sequence>
+            <xsd:element type="customer-order-payment-cardType" name="card" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="order-date"/>
+            <xsd:element type="customer-order-payment-amountType" name="order-amount"/>
+            <xsd:element type="xsd:string" name="order-number"/>
+            <xsd:element type="xsd:string" name="order-shipment"/>
+            <xsd:element type="xsd:string" name="payment-gateway"/>
+            <xsd:element type="xsd:string" name="customer-ip" minOccurs="0"/>
+            <xsd:element type="customer-order-payment-transactionType" name="transaction"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="shop-code" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-order-payment-cardType">
+        <xsd:attribute type="xsd:string" name="type"/>
+        <xsd:attribute type="xsd:string" name="holder-name"/>
+        <xsd:attribute type="xsd:string" name="expire-year"/>
+        <xsd:attribute type="xsd:string" name="expire-month"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-order-payment-amountType">
+        <xsd:sequence>
+            <xsd:element type="xsd:decimal" name="amount"/>
+            <xsd:element type="xsd:decimal" name="tax"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="currency"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="customer-order-payment-transactionType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="reference"/>
+            <xsd:element type="xsd:string" name="request-token" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="auth-code" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="operation"/>
+            <xsd:element type="xsd:string" name="operation-result-code" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="operation-result-message" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="payment-processor-result" minOccurs="0"/>
+            <xsd:element type="xsd:boolean" name="batch-settlement"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- Callbacks -->
+
+    <xsd:element name="payment-gateway-callbacks" type="payment-gateway-callbacksType"/>
+    <xsd:element name="payment-gateway-callback" type="payment-gateway-callbackType"/>
+
+    <xsd:complexType name="payment-gateway-callbacksType">
+        <xsd:sequence>
+            <xsd:element type="payment-gateway-callbackType" name="payment-gateway-callback" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="payment-gateway-callbackType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="payment-gateway"/>
+            <xsd:element type="xsd:string" name="request-dump"/>
+            <xsd:element type="payment-gateway-callback-request-parametersType" name="request-parameters"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="xsd:string" name="shop-code" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="payment-gateway-callback-request-parametersType">
+        <xsd:sequence>
+            <xsd:element type="payment-gateway-callback-request-parameterType" name="request-parameter" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="payment-gateway-callback-request-parameterType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="value" maxOccurs="unbounded" minOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="name" use="required"/>
+    </xsd:complexType>
+
+    <!-- PG Parameters -->
+
+    <xsd:element name="payment-gateway-parameters" type="payment-gateway-parametersType"/>
+    <xsd:element name="payment-gateway-parameter" type="payment-gateway-parameterType"/>
+
+    <xsd:complexType name="payment-gateway-parametersType">
+        <xsd:sequence>
+            <xsd:element type="payment-gateway-parameterType" name="payment-gateway-parameter" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="payment-gateway-parameterType">
+        <xsd:sequence>
+            <xsd:element type="xsd:string" name="payment-gateway"/>
+            <xsd:element type="xsd:string" name="code"/>
+            <xsd:element type="xsd:string" name="name"/>
+            <xsd:element type="xsd:string" name="value"/>
+            <xsd:element type="xsd:string" name="business-type" minOccurs="0"/>
+            <xsd:element type="xsd:boolean" name="secure"/>
+            <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
+            <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
+            <xsd:element type="xsd:string" name="updated-by" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:long" name="id"/>
+        <xsd:attribute type="xsd:string" name="guid"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+
 </xsd:schema>

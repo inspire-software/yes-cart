@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<organisation-users>
+<organisation-users xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
     <organisation-user id="10103" guid="10103">
         <credentials>
             <email>test2@test.com</email>

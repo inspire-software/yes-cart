@@ -1,0 +1,69 @@
+<div class="row">
+  <div>
+    <h1 class="page-header">{{ 'PANEL_SYSTEM_DATADESCRIPTORS' | translate }} {{ selectedDataDescriptor ? (' / ' + selectedDataDescriptor.name) : '' }}</h1>
+  </div>
+
+
+  <div class="row data-control">
+
+    <div class="col-xs-12 col-md-5 padding-lr-0" [hidden]="viewMode !== 'descriptors'">
+      <form class="width-100">
+        <div class="input-group">
+          <input class="form-control filter-input" type="text" name="datadescriptorFilter" [(ngModel)]="datadescriptorFilter" autocomplete="off"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilterDataDescriptor()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+              <i class="fa fa-times-circle-o"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-xs-12 {{ viewMode === 'descriptors' ? 'col-md-7' : '' }} padding-lr-0 button-panel">
+
+      <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'descriptors'" class="btn btn-info btn-circle btn-xl">
+        <i class="fa fa-chevron-left"></i>
+      </button>
+
+      <button type="button" (click)="onRowNew()" [disabled]="datadescriptorEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+        <i class="fa fa-plus"></i>
+      </button>
+
+      <button type="button" (click)="onRowEditSelected()" [disabled]="datadescriptorEdit != null || selectedDataDescriptor == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+        <i class="fa fa-edit"></i>
+      </button>
+
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedDataDescriptor == null || (datadescriptorEdit != null && datadescriptorEdit.datadescriptorId === 0)" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+        <i class="fa fa-remove"></i>
+      </button>
+
+      <yc-data-control [changed]="changed"
+                       [valid]="validForSave"
+                       (saveEvent)="onSaveHandler()"
+                       (discardEvent)="onDiscardEventHandler()"
+                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+    </div>
+
+  </div>
+
+
+  <div [hidden]="viewMode !== 'descriptors'" class="{{ loading ? 'loading-data' : '' }}">
+    <yc-datadescriptors [datadescriptors]="datadescriptors" [filter]="datadescriptorFilter" (dataSelected)="onDataDescriptorSelected($event)"></yc-datadescriptors>
+  </div>
+
+  <div [hidden]="viewMode !== 'descriptor'" class="{{ loading ? 'loading-data' : '' }}">
+    <yc-datadescriptor [dataDescriptor]="datadescriptorEdit" (dataChanged)="onDataDescriptorChanged($event)"></yc-datadescriptor>
+  </div>
+
+  <yc-modal #deleteConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+            [valid]="true"
+            (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
+  </yc-modal>
+
+
+</div>

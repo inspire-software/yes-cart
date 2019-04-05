@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ImportManagerComponent, ExportManagerComponent } from './index';
+import { ImportManagerComponent, ExportManagerComponent, ImpexDataGroupsComponent, ImpexDataDescriptorsComponent } from './index';
 
 @NgModule({
   imports: [
@@ -12,6 +12,14 @@ import { ImportManagerComponent, ExportManagerComponent } from './index';
       {
         path: 'impex/export',
         component: ExportManagerComponent
+      },
+      {
+        path: 'impex/datagroups',
+        component: ImpexDataGroupsComponent
+      },
+      {
+        path: 'impex/datadescriptors',
+        component: ImpexDataDescriptorsComponent
       }
     ])
   ],

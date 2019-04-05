@@ -1,0 +1,3388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<payment-gateway-parameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                            xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+    <payment-gateway-parameter id="10100">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[Test Payment Gateway]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10101">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>htmlForm</code>
+        <name>Part of html form (default)</name>
+        <value><![CDATA[<div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Name on card</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+          <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+          <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+          </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10102">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[Test Payment Gateway]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10103">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>htmlForm_en</code>
+        <name>Part of html form (EN)</name>
+        <value><![CDATA[<div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Name on card</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+          <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+          <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+          </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10104">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[Тестовый Платежный Шлюз]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10105">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>htmlForm_ru</code>
+        <name>Часть HTML формы для оплаты (RU)</name>
+        <value><![CDATA[<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Имя на карте</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Номер карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Срок действия</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+          <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Январь</option>
+            <option value="02">02 - Февраль</option>
+            <option value="03">03 - Март</option>
+            <option value="04">04 - Апрель</option>
+            <option value="05">05 - Май</option>
+            <option value="06">06 - Июнь</option>
+            <option value="07">07 - Июль</option>
+            <option value="08">08 - Август</option>
+            <option value="09">09 - Сентябрь</option>
+            <option value="10">10 - Октябрь</option>
+            <option value="11">11 - Ноябрь</option>
+            <option value="12">12 - Декабрь</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+          <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+          </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Код безопасности</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10106">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[Тестовий Платіжний Шлюз]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10107">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>htmlForm_uk</code>
+        <name>Частина HTML форми для оплати (UK)</name>
+        <value><![CDATA[<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Ім'я на картці</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Термін дії</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+          <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+          <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+          </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Код безпеки</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10108">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[Test Payment-Gateway]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10109">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>htmlForm_de</code>
+        <name>Ein Teil der HTML-Formular (DE)</name>
+        <value><![CDATA[<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Name des Kreditkarten Inhabers</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Kartennummer</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Verfallsdatum</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+          <select name="ccExpireMonth" class="form-control">
+              <option value="01">01 - Januar</option>
+              <option value="02">02 - Februar</option>
+              <option value="03">03 - März</option>
+              <option value="04">04 - April</option>
+              <option value="05">05 - Kann</option>
+              <option value="06">06 - Juni</option>
+              <option value="07">07 - Juli</option>
+              <option value="08">08 - August</option>
+              <option value="09">09 - September</option>
+              <option value="10">10 - Oktober</option>
+              <option value="11">11 - November</option>
+              <option value="12">12 - Dezember</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+          <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+          </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Karten-Sicherheitscode</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10150">
+        <payment-gateway>testPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10200">
+        <payment-gateway>courierPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[Payment via courier]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10201">
+        <payment-gateway>courierPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[Payment via courier]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10202">
+        <payment-gateway>courierPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[Оплата курьеру]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10203">
+        <payment-gateway>courierPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[Оплата кур'єру]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10204">
+        <payment-gateway>courierPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[Zahlung per Kurier]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10250">
+        <payment-gateway>courierPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10301" guid="9e0547bb-0673-435c-a9fe-527102e2e064">
+        <payment-gateway>prePaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[Offline Pre-Payment]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-11-29 08:16:01</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-29 08:16:31</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10302" guid="0be926a7-e329-4c04-88bf-b49539b1de96">
+        <payment-gateway>prePaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[Offline Pre-Payment]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-11-29 08:16:01</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-29 08:16:31</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10303" guid="614c311d-440c-4b48-a8df-4830e6c3e4ba">
+        <payment-gateway>prePaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[Предоплата]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-11-29 08:16:01</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-29 08:16:31</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10304" guid="e7f8eb09-22dd-4feb-a363-e68af4b928d8">
+        <payment-gateway>prePaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[Попередня оплата]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-11-29 08:16:01</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-29 08:16:31</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10305" guid="15c18a47-22c6-4265-a842-ee852f91aee9">
+        <payment-gateway>prePaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[Offline Vorauszahlung]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-11-29 08:16:01</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-29 08:16:31</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10350" guid="18eb26f2-0084-422d-9a5f-b255692883a7">
+        <payment-gateway>prePaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-11-29 08:16:01</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-29 08:16:31</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10401" guid="33a1e1f1-27ca-4fd2-878e-dfd945b28408">
+        <payment-gateway>inStorePaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[Payment in store]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-08-17 23:45:44</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-23 16:37:03</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10402" guid="3fa28011-0e4d-48d6-9599-db6ba4fb446a">
+        <payment-gateway>inStorePaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[Payment in store]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-08-17 23:45:44</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-23 16:37:03</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10403" guid="4a45bd68-b46d-46a3-82b5-710b80fc7ef7">
+        <payment-gateway>inStorePaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[Оплата в магазине]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-08-17 23:45:44</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-23 16:37:03</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10404" guid="141076b5-b920-49e6-95a4-517130f7570b">
+        <payment-gateway>inStorePaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[Оплата у магазині]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-08-17 23:45:44</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-23 16:37:03</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10405" guid="d6d06298-c209-4a18-827a-bd8adfecb9eb">
+        <payment-gateway>inStorePaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[Lieferung in store]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-08-17 23:45:44</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-23 16:37:03</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="10450" guid="45ba8f0e-96a5-4b63-a846-74f6967d1a7f">
+        <payment-gateway>inStorePaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[104]]></value>
+        <secure>false</secure>
+        <created-timestamp>2016-08-17 23:45:44</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2016-11-23 16:37:03</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13101">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[LiqPay]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13102">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[LiqPay]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13103">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[LiqPay]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13104">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[LiqPay]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13105">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[LiqPay]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13150">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>LP_MERCHANT_ID</code>
+        <name>Merchant Id</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13151">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>LP_MERCHANT_KEY</code>
+        <name>Merchant signature</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13152">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>LP_RESULT_URL</code>
+        <name>Page URL to show payment result</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=ok]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13153">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>LP_SERVER_URL</code>
+        <name>Call back URL with payment result.</name>
+        <value><![CDATA[http://@domain@/yes-shop/liqpaycallback]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13154">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>LP_POST_URL</code>
+        <name>Form post url</name>
+        <value><![CDATA[https://www.liqpay.com/api/]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13155">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>LP_PAYWAY_URL</code>
+        <name>Payment method - card, liqpay</name>
+        <value><![CDATA[card]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13156">
+        <payment-gateway>liqPayPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13201">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[LiqPay (No Refund)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13202">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[LiqPay (No Refund)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13203">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[LiqPay (Без возвратов)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13204">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[LiqPay (Без повернень)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13205">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[LiqPay (keine Rückerstattung)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13250">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>LP_MERCHANT_ID</code>
+        <name>Merchant Id</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13251">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>LP_MERCHANT_KEY</code>
+        <name>Merchant signature</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13252">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>LP_RESULT_URL</code>
+        <name>Page URL to show payment result</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=ok]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13253">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>LP_SERVER_URL</code>
+        <name>Call back URL with payment result.</name>
+        <value><![CDATA[http://@domain@/yes-shop/liqpaynrcallback]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13254">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>LP_POST_URL</code>
+        <name>Form post url</name>
+        <value><![CDATA[https://www.liqpay.com/api/]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13255">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>LP_PAYWAY_URL</code>
+        <name>Payment method - card, liqpay</name>
+        <value><![CDATA[card]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="13256">
+        <payment-gateway>liqPayNoRefundPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12100" guid="0422da00-a077-4a22-b27d-9fae1f5f0499">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[CyberSource]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:07</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:07</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12101" guid="07d1ecd7-43f4-498b-bdfe-ecf902bd57ff">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>htmlForm</code>
+        <name>Part of html form (default)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="Eurocard">Eurocard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Carte Blanche">Carte Blanche</option>
+            <option value="JCB">JCB</option>
+            <option value="EnRoute">EnRoute</option>
+            <option value="Maestro (UK Domestic), Solo">Maestro (UK Domestic), Solo</option>
+            <option value="Delta">Delta</option>
+            <option value="Visa Electron">Visa Electron</option>
+            <option value="Dankort">Dankort</option>
+            <option value="JAL">JAL</option>
+            <option value="Laser">Laser</option>
+            <option value="Carte Bleue">Carte Bleue</option>
+            <option value="Carta Si">Carta Si</option>
+            <option value="UATP">UATP</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12102" guid="e6d80987-170e-4c68-bd12-7b9563f3fac9">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[CyberSource]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12103" guid="cd4f92a2-98f2-49de-803b-04bff2ab9bbf">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>htmlForm_en</code>
+        <name>Part of html form (EN)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="Eurocard">Eurocard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Carte Blanche">Carte Blanche</option>
+            <option value="JCB">JCB</option>
+            <option value="EnRoute">EnRoute</option>
+            <option value="Maestro (UK Domestic), Solo">Maestro (UK Domestic), Solo</option>
+            <option value="Delta">Delta</option>
+            <option value="Visa Electron">Visa Electron</option>
+            <option value="Dankort">Dankort</option>
+            <option value="JAL">JAL</option>
+            <option value="Laser">Laser</option>
+            <option value="Carte Bleue">Carte Bleue</option>
+            <option value="Carta Si">Carta Si</option>
+            <option value="UATP">UATP</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12104" guid="f7c96161-1731-4469-a893-b2686a078f3d">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[CyberSource]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12105" guid="ee73b1c5-27a5-4411-821c-9de8607462b3">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>htmlForm_ru</code>
+        <name>Часть HTML формы для оплаты (RU)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="Eurocard">Eurocard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Carte Blanche">Carte Blanche</option>
+            <option value="JCB">JCB</option>
+            <option value="EnRoute">EnRoute</option>
+            <option value="Maestro (UK Domestic), Solo">Maestro (UK Domestic), Solo</option>
+            <option value="Delta">Delta</option>
+            <option value="Visa Electron">Visa Electron</option>
+            <option value="Dankort">Dankort</option>
+            <option value="JAL">JAL</option>
+            <option value="Laser">Laser</option>
+            <option value="Carte Bleue">Carte Bleue</option>
+            <option value="Carta Si">Carta Si</option>
+            <option value="UATP">UATP</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Срок действия</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Январь</option>
+            <option value="02">02 - Февраль</option>
+            <option value="03">03 - Март</option>
+            <option value="04">04 - Апрель</option>
+            <option value="05">05 - Май</option>
+            <option value="06">06 - Июнь</option>
+            <option value="07">07 - Июль</option>
+            <option value="08">08 - Август</option>
+            <option value="09">09 - Сентябрь</option>
+            <option value="10">10 - Октябрь</option>
+            <option value="11">11 - Ноябрь</option>
+            <option value="12">12 - Декабрь</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безопасности</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12106" guid="f9f64693-13eb-4a4c-ab32-9f9cf49407b7">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[CyberSource]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12107" guid="16dd802e-a0ef-46ef-90ff-f586240dc9e9">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>htmlForm_uk</code>
+        <name>Частина HTML форми для оплати (UK)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="Eurocard">Eurocard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Carte Blanche">Carte Blanche</option>
+            <option value="JCB">JCB</option>
+            <option value="EnRoute">EnRoute</option>
+            <option value="Maestro (UK Domestic), Solo">Maestro (UK Domestic), Solo</option>
+            <option value="Delta">Delta</option>
+            <option value="Visa Electron">Visa Electron</option>
+            <option value="Dankort">Dankort</option>
+            <option value="JAL">JAL</option>
+            <option value="Laser">Laser</option>
+            <option value="Carte Bleue">Carte Bleue</option>
+            <option value="Carta Si">Carta Si</option>
+            <option value="UATP">UATP</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Термін дії</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безпеки</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12108" guid="205649bb-de99-49d3-8b48-b43f09ac9408">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[CyberSource]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12109" guid="8e9c0710-4266-4bf7-8707-629a5ed3c521">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>htmlForm_de</code>
+        <name>Ein Teil der HTML-Formular (DE)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">PayCard</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="Eurocard">Eurocard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Carte Blanche">Carte Blanche</option>
+            <option value="JCB">JCB</option>
+            <option value="EnRoute">EnRoute</option>
+            <option value="Maestro (UK Domestic), Solo">Maestro (UK Domestic), Solo</option>
+            <option value="Delta">Delta</option>
+            <option value="Visa Electron">Visa Electron</option>
+            <option value="Dankort">Dankort</option>
+            <option value="JAL">JAL</option>
+            <option value="Laser">Laser</option>
+            <option value="Carte Bleue">Carte Bleue</option>
+            <option value="Carta Si">Carta Si</option>
+            <option value="UATP">UATP</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Kartennummer</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Verfallsdatum</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+                <option value="01">01 - Januar</option>
+                <option value="02">02 - Februar</option>
+                <option value="03">03 - März</option>
+                <option value="04">04 - April</option>
+                <option value="05">05 - Kann</option>
+                <option value="06">06 - Juni</option>
+                <option value="07">07 - Juli</option>
+                <option value="08">08 - August</option>
+                <option value="09">09 - September</option>
+                <option value="10">10 - Oktober</option>
+                <option value="11">11 - November</option>
+                <option value="12">12 - Dezember</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Karten-Sicherheitscode</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12150" guid="ddcd24d2-bc21-4731-930c-0265e18d1bf4">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>merchantID</code>
+        <name>Merchand Id</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12151" guid="f1202437-c8d0-4914-a7e8-c2822aa124d4">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>keysDirectory</code>
+        <name>Absolute path to directory with keys</name>
+        <value><![CDATA[/yescart/resources/paymentgateway/cskeys]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12152" guid="204c1693-4782-4526-8efb-4ecd52a8d661">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>targetAPIVersion</code>
+        <name>Cyber source API Version</name>
+        <value><![CDATA[1.28]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12153" guid="2b84fc49-4639-4830-a495-73fb679d3569">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>sendToProduction</code>
+        <name>Send to production</name>
+        <value><![CDATA[false]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12154" guid="a4ce7a9f-5f51-40e0-a09b-eba15890ba21">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>useHttpClient</code>
+        <name>Use apache http client for communication</name>
+        <value><![CDATA[true]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12155" guid="47728b5a-df5a-4fac-80d3-d59b529dd7d3">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>enableLog</code>
+        <name>Enable log</name>
+        <value><![CDATA[true]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12156" guid="9fc13cea-22a7-4a0d-a15a-d1dda266a98a">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>logDirectory</code>
+        <name>Absolute path to log directory</name>
+        <value><![CDATA[/yescart/log]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12157" guid="48a1d8cf-422d-402f-9150-f6dfde5b1c3b">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>logMaximumSize</code>
+        <name>Max size of log file. MB</name>
+        <value><![CDATA[10]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12158" guid="3c29cc94-9420-40ff-a729-e12a9a6121c6">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>proxyHost</code>
+        <name>Proxy host</name>
+        <value/>
+        <secure>true</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12159" guid="3121da26-df24-475d-95c2-e6ddbc6e6a79">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>proxyPort</code>
+        <name>Proxy port</name>
+        <value/>
+        <secure>true</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12160" guid="2df29f37-dc7e-435e-8390-95ce14cfb732">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>proxyUser</code>
+        <name>Proxy user</name>
+        <value/>
+        <secure>true</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12161" guid="0351c274-292a-44d2-afdf-45392e3baa66">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>proxyPassword</code>
+        <name>Proxy password</name>
+        <value><![CDATA[1234]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="12162" guid="33564ca5-546e-4568-97c5-74dd06311b02">
+        <payment-gateway>cyberSourcePaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+        <created-timestamp>2018-02-23 22:23:08</created-timestamp>
+        <created-by>admin@yes-cart.com</created-by>
+        <updated-timestamp>2018-02-23 22:23:08</updated-timestamp>
+        <updated-by>admin@yes-cart.com</updated-by>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11101">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[Authorize.net AIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11102">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>htmlForm</code>
+        <name>Part of html form (default)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11103">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[Authorize.net AIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11104">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>htmlForm_en</code>
+        <name>Part of html form (EN)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11105">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[Authorize.net AIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11106">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>htmlForm_ru</code>
+        <name>Часть HTML формы для оплаты (RU)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Срок действия</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Январь</option>
+            <option value="02">02 - Февраль</option>
+            <option value="03">03 - Март</option>
+            <option value="04">04 - Апрель</option>
+            <option value="05">05 - Май</option>
+            <option value="06">06 - Июнь</option>
+            <option value="07">07 - Июль</option>
+            <option value="08">08 - Август</option>
+            <option value="09">09 - Сентябрь</option>
+            <option value="10">10 - Октябрь</option>
+            <option value="11">11 - Ноябрь</option>
+            <option value="12">12 - Декабрь</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безопасности</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11107">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[Authorize.net AIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11108">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>htmlForm_uk</code>
+        <name>Частина HTML форми для оплати (UK)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Термін дії</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безпеки</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11109">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[Authorize.net AIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11110">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>htmlForm_de</code>
+        <name>Ein Teil der HTML-Formular (DE)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">PayCard</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Kartennummer</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Verfallsdatum</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Januar</option>
+            <option value="02">02 - Februar</option>
+            <option value="03">03 - März</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - Kann</option>
+            <option value="06">06 - Juni</option>
+            <option value="07">07 - Juli</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - Oktober</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - Dezember</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Karten-Sicherheitscode</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11150">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>MERCHANT_ENVIRONMENT</code>
+        <name>Environment name.</name>
+        <value><![CDATA[SANDBOX]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11151">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>API_LOGIN_ID</code>
+        <name>Merchant login.</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11152">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>TRANSACTION_KEY</code>
+        <name>Transaction key</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11153">
+        <payment-gateway>authorizeNetAimPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11201">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[Authorize.net SIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11202">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[Authorize.net SIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11203">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[Authorize.net SIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11204">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[Authorize.net SIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11205">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[Authorize.net SIM]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11250">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>POST_URL</code>
+        <name>Url to post form.</name>
+        <value><![CDATA[https://test.authorize.net/gateway/transact.dll]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11251">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>API_LOGIN_ID</code>
+        <name>Merchant login.</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11252">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>TRANSACTION_KEY</code>
+        <name>Transaction key</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11253">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>MD5_HASH_KEY</code>
+        <name>MD5 hash key</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11254">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>RELAY_RESPONSE_URL</code>
+        <name>Relay response url</name>
+        <value><![CDATA[http://@domain@/yes-shop/anetsimresult]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11255">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>ORDER_RECEIPT_URL</code>
+        <name>SIM/DPM order receipt url</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=ok]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11256">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>TEST_REQUEST</code>
+        <name>SIM test request flag</name>
+        <value><![CDATA[FALSE]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11257">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11258">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>CANCEL_URL</code>
+        <name>Payment form: SIM/DPM order cancel url. SIM only</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=cancel]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11259">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>RETURN_POLICY_URL</code>
+        <name>Payment form: SIM/DPM returns policy url. SIM only</name>
+        <value><![CDATA[http://@domain@/yes-shop/returnspolicy]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11260">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_HEADER_HTML</code>
+        <name>Payment form style: The hosted payment form header.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11261">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_HEADER2_HTML</code>
+        <name>Payment form style: The hosted payment form header2.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11262">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_FOOTER_HTML</code>
+        <name>Payment form style: The hosted payment form footer.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11263">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_FOOTER2_HTML</code>
+        <name>Payment form style: The hosted payment form footer2.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11264">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_BGCOLOR</code>
+        <name>Payment form style: The background color.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11265">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_LINKCOLOR</code>
+        <name>Payment form style: The text color.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11266">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_LOGOURL</code>
+        <name>Payment form style: The URL of the merchant’s logo.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11267">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_BGURL</code>
+        <name>Payment form style: The URL of the merchant’s background image.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11268">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_FONTFAMILY</code>
+        <name>Payment form style: Default font family.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11269">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_FONTSIZE</code>
+        <name>Payment form style: Default font size.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11270">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_SECTION1COLOR</code>
+        <name>Payment form style: The text color for the header.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11271">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_SECTION1FONTFAMILY</code>
+        <name>Payment form style: Font family for the header.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="11272">
+        <payment-gateway>authorizeNetSimPaymentGateway</payment-gateway>
+        <code>STYLE_SECTION1FONTSIZE</code>
+        <name>Payment form style: Font size for the header .</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14101">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[PayPal Payflow]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14102">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>htmlForm</code>
+        <name>Part of html form (default)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Name on card</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14103">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[PayPal Payflow]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14104">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>htmlForm_en</code>
+        <name>Part of html form (EN)</name>
+        <value><![CDATA[
+<div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Name on card</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14105">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[PayPal Payflow]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14106">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>htmlForm_ru</code>
+        <name>Часть HTML формы для оплаты (RU)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Имя на карте</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Срок действия</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Январь</option>
+            <option value="02">02 - Февраль</option>
+            <option value="03">03 - Март</option>
+            <option value="04">04 - Апрель</option>
+            <option value="05">05 - Май</option>
+            <option value="06">06 - Июнь</option>
+            <option value="07">07 - Июль</option>
+            <option value="08">08 - Август</option>
+            <option value="09">09 - Сентябрь</option>
+            <option value="10">10 - Октябрь</option>
+            <option value="11">11 - Ноябрь</option>
+            <option value="12">12 - Декабрь</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безопасности</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14107">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[PayPal Payflow]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14108">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>htmlForm_uk</code>
+        <name>Частина HTML форми для оплати (UK)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Ім'я на картці</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Термін дії</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безпеки</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14109">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[PayPal Payflow]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14110">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>htmlForm_de</code>
+        <name>Ein Teil der HTML-Formular (DE)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Name des Kreditkarten Inhabers</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">PayCard</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Kartennummer</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Verfallsdatum</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+                <option value="01">01 - Januar</option>
+                <option value="02">02 - Februar</option>
+                <option value="03">03 - März</option>
+                <option value="04">04 - April</option>
+                <option value="05">05 - Kann</option>
+                <option value="06">06 - Juni</option>
+                <option value="07">07 - Juli</option>
+                <option value="08">08 - August</option>
+                <option value="09">09 - September</option>
+                <option value="10">10 - Oktober</option>
+                <option value="11">11 - November</option>
+                <option value="12">12 - Dezember</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Karten-Sicherheitscode</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14150">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>HOST</code>
+        <name>Payment gateway host</name>
+        <value><![CDATA[pilot-payflowpro.paypal.com]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14151">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>PORT</code>
+        <name>Payment gateway port</name>
+        <value><![CDATA[443]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14152">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>TIMEOUT</code>
+        <name>Call timeout in seconds</name>
+        <value><![CDATA[55]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14153">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>LOG_FILENAME</code>
+        <name>Log filename</name>
+        <value><![CDATA[/yescart/log/payflow.log]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14154">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>LOG_LEVEL</code>
+        <name>Log level</name>
+        <value><![CDATA[SEVERITY_DEBUG]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14155">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>LOG_SIZESIZE</code>
+        <name>Log size in bytes</name>
+        <value><![CDATA[1000000]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14156">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>LOG_ENABLED</code>
+        <name>Is Log enabled</name>
+        <value><![CDATA[true]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14157">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>PROXY_HOST</code>
+        <name>Proxy host</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14158">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>PROXY_PORT</code>
+        <name>Proxy port</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14159">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>PROXY_USER</code>
+        <name>Proxy user</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14160">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>PROXY_PASSWORD</code>
+        <name>Proxy password</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14161">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>PROXY_ENABLED</code>
+        <name>Is proxy enabled</name>
+        <value><![CDATA[false]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14162">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>USER_NAME</code>
+        <name>Payment gateway user name</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14163">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>USER_PASSWORD</code>
+        <name>Payment gateway user password</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14164">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>VENDOR</code>
+        <name>Vendor</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14165">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>PARTNER</code>
+        <name>Partner</name>
+        <value><![CDATA[PayPal]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14166">
+        <payment-gateway>payflowPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14201">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[PayPal NVP]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14202">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>htmlForm</code>
+        <name>Part of html form (default)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14203">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[PayPal NVP]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14204">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>htmlForm_en</code>
+        <name>Part of html form (EN)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - January</option>
+            <option value="02">02 - February</option>
+            <option value="03">03 - March</option>
+            <option value="04">04 - April</option>
+            <option value="05">05 - May</option>
+            <option value="06">06 - June</option>
+            <option value="07">07 - July</option>
+            <option value="08">08 - August</option>
+            <option value="09">09 - September</option>
+            <option value="10">10 - October</option>
+            <option value="11">11 - November</option>
+            <option value="12">12 - December</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14205">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[PayPal NVP]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14206">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>htmlForm_ru</code>
+        <name>Часть HTML формы для оплаты (RU)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Срок действия</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Январь</option>
+            <option value="02">02 - Февраль</option>
+            <option value="03">03 - Март</option>
+            <option value="04">04 - Апрель</option>
+            <option value="05">05 - Май</option>
+            <option value="06">06 - Июнь</option>
+            <option value="07">07 - Июль</option>
+            <option value="08">08 - Август</option>
+            <option value="09">09 - Сентябрь</option>
+            <option value="10">10 - Октябрь</option>
+            <option value="11">11 - Ноябрь</option>
+            <option value="12">12 - Декабрь</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безопасности</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14207">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[PayPal NVP]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14208">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>htmlForm_uk</code>
+        <name>Частина HTML форми для оплати (UK)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Термін дії</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безпеки</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14209">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[PayPal NVP]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14210">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>htmlForm_de</code>
+        <name>Ein Teil der HTML-Formular (DE)</name>
+        <value><![CDATA[
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">PayCard</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Kartennummer</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Verfallsdatum</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+                <option value="01">01 - Januar</option>
+                <option value="02">02 - Februar</option>
+                <option value="03">03 - März</option>
+                <option value="04">04 - April</option>
+                <option value="05">05 - Kann</option>
+                <option value="06">06 - Juni</option>
+                <option value="07">07 - Juli</option>
+                <option value="08">08 - August</option>
+                <option value="09">09 - September</option>
+                <option value="10">10 - Oktober</option>
+                <option value="11">11 - November</option>
+                <option value="12">12 - Dezember</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Karten-Sicherheitscode</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
+]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14250">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>API_USER_NAME</code>
+        <name>Api user name</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14251">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>API_USER_PASSWORD</code>
+        <name>Api user password</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14252">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>SIGNATURE</code>
+        <name>Signature</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14253">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>ENVIRONMENT</code>
+        <name>Environment</name>
+        <value><![CDATA[sandbox]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14254">
+        <payment-gateway>payPalProPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14301">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[PayPal Express]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14302">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[PayPal Express]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14303">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[PayPal Express]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14304">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[PayPal Express]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14305">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[PayPal Express]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14350">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>API_USER_NAME</code>
+        <name>Api user name</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14351">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>API_USER_PASSWORD</code>
+        <name>Api user password</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14352">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>SIGNATURE</code>
+        <name>Signature</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14353">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>RETURNURL</code>
+        <name>Return url</name>
+        <value><![CDATA[http://@domain@/yes-shop/paypallreturn]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14354">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>CANCELURL</code>
+        <name>Cancel url</name>
+        <value><![CDATA[http://@domain@/yes-shop]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14355">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>PP_EC_API_URL</code>
+        <name>Api call url</name>
+        <value><![CDATA[https://api-3t.sandbox.paypal.com/nvp]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14356">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>PP_EC_PAYPAL_URL</code>
+        <name>Paypal url to perform payment</name>
+        <value><![CDATA[https://www.sandbox.paypal.com/cgi-bin/webscr]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14357">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>PP_SUBMIT_BTN</code>
+        <name>Paypal submit button</name>
+        <value><![CDATA[<input type="image" name="Paypal checkout" alt="Fast checkout with paypal"  src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif">]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="14358">
+        <payment-gateway>payPalExpressPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15101">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[PostFinance]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15102">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[PostFinance]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15103">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[PostFinance]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15104">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[PostFinance]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15105">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[PostFinance]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15150">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_POST_URL</code>
+        <name>Form action</name>
+        <value><![CDATA[https://e-payment.postfinance.ch/ncol/test/orderstandard.asp]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15151">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_HOME</code>
+        <name>(Absolute) URL of your home page</name>
+        <value><![CDATA[http://@domain@/yes-shop/]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15152">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_CATALOG</code>
+        <name>(Absolute) URL of your catalogue</name>
+        <value><![CDATA[http://@domain@/yes-shop/]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15153">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_ACCEPT</code>
+        <name>URL for accepted payment</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=ok]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15154">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_DECLINE</code>
+        <name>URL for declined payment</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=declined]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15155">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_EXCEPTION</code>
+        <name>URL for error during payment</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=exception]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15156">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_CANCEL</code>
+        <name>URL for cancelled payment</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=cancel]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15157">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_PSPID</code>
+        <name>Your affiliation name</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15158">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_SHA_IN</code>
+        <name>SHA-IN signature</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15159">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_SHA_OUT</code>
+        <name>SHA-OUT signature</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15160">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_TITLE</code>
+        <name>Style: Title and header of the page</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15161">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_BGCOLOR</code>
+        <name>Style: Background colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15162">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_TXTCOLOR</code>
+        <name>Style: Text colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15163">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_TBLBGCOLOR</code>
+        <name>Style: Table background colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15164">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_TBLTXTCOLOR</code>
+        <name>Style: Table text colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15165">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_BUTTONBGCOLOR</code>
+        <name>Style: Button background colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15166">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_BUTTONTXTCOLOR</code>
+        <name>Style: Button text colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15167">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_FONTTYPE</code>
+        <name>Style: Font family</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15168">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_LOGO</code>
+        <name>Style: Logo</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15169">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_STYLE_TP</code>
+        <name>Style: URL of the merchant’s dynamic template page</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15170">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_PM</code>
+        <name>Payment: Payment method</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15171">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_BRAND</code>
+        <name>Payment: Credit card brand</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15172">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_WIN3DS</code>
+        <name>Payment: 3-D secure</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15173">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_PMLIST</code>
+        <name>Payment: List of selected payment methods.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15174">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_EXCLPMLIST</code>
+        <name>Payment: List of excluded payment methods.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15175">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>PF_PMLISTTYPE</code>
+        <name>Payment: Layout of the payment methods.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15176">
+        <payment-gateway>postFinancePaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15201">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>name</code>
+        <name>Gateway name (default)</name>
+        <value><![CDATA[PostFinance (Manual Capture)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15202">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>name_en</code>
+        <name>Gateway name (EN)</name>
+        <value><![CDATA[PostFinance (Manual Capture)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15203">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>name_ru</code>
+        <name>Название платежного шлюза (RU)</name>
+        <value><![CDATA[PostFinance (Ручная авторизация)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15204">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>name_uk</code>
+        <name>Назва платіжного шлюзу (UK)</name>
+        <value><![CDATA[PostFinance (Ручна авторизація)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15205">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>name_de</code>
+        <name>Gateway-Namen (DE)</name>
+        <value><![CDATA[PostFinance (Manuell Datenerfassung)]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15250">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_POST_URL</code>
+        <name>Form action</name>
+        <value><![CDATA[https://e-payment.postfinance.ch/ncol/test/orderstandard.asp]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15251">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_HOME</code>
+        <name>(Absolute) URL of your home page</name>
+        <value><![CDATA[http://@domain@/yes-shop/]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15252">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_CATALOG</code>
+        <name>(Absolute) URL of your catalogue</name>
+        <value><![CDATA[http://@domain@/yes-shop/]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15253">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_ACCEPT</code>
+        <name>URL for accepted payment</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=ok]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15254">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_DECLINE</code>
+        <name>URL for declined payment</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=declined]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15255">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_EXCEPTION</code>
+        <name>URL for error during payment</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=exception]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15256">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_RESULT_URL_CANCEL</code>
+        <name>URL for cancelled payment</name>
+        <value><![CDATA[http://@domain@/yes-shop/paymentresult?hint=cancel]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15257">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_PSPID</code>
+        <name>Your affiliation name</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15258">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_SHA_IN</code>
+        <name>SHA-IN signature</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15259">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_SHA_OUT</code>
+        <name>SHA-OUT signature</name>
+        <value><![CDATA[!!!PROVIDE VALUE!!!]]></value>
+        <business-type>SecureString</business-type>
+        <secure>true</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15260">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_TITLE</code>
+        <name>Style: Title and header of the page</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15261">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_BGCOLOR</code>
+        <name>Style: Background colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15262">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_TXTCOLOR</code>
+        <name>Style: Text colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15263">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_TBLBGCOLOR</code>
+        <name>Style: Table background colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15264">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_TBLTXTCOLOR</code>
+        <name>Style: Table text colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15265">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_BUTTONBGCOLOR</code>
+        <name>Style: Button background colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15266">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_BUTTONTXTCOLOR</code>
+        <name>Style: Button text colour</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15267">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_FONTTYPE</code>
+        <name>Style: Font family</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15268">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_LOGO</code>
+        <name>Style: Logo</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15269">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_STYLE_TP</code>
+        <name>Style: URL of the merchant’s dynamic template page</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15270">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_PM</code>
+        <name>Payment: Payment method</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15271">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_BRAND</code>
+        <name>Payment: Credit card brand</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15272">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_WIN3DS</code>
+        <name>Payment: 3-D secure</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15273">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_PMLIST</code>
+        <name>Payment: List of selected payment methods.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15274">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_EXCLPMLIST</code>
+        <name>Payment: List of excluded payment methods.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15275">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>PF_PMLISTTYPE</code>
+        <name>Payment: Layout of the payment methods.</name>
+        <value/>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+    <payment-gateway-parameter id="15276">
+        <payment-gateway>postFinanceManualPaymentGateway</payment-gateway>
+        <code>priority</code>
+        <name>Gateway priority</name>
+        <value><![CDATA[100]]></value>
+        <secure>false</secure>
+    </payment-gateway-parameter>
+</payment-gateway-parameters>

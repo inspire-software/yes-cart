@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="payment-gateway" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="payment-gateway" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="cart-guid" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="order-date" type="{}dateTimeType"/>
  *         &lt;element name="locale" type="{http://www.w3.org/2001/XMLSchema}string"/>
@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 })
 public class OrderConfigurationType {
 
-    @XmlElement(name = "payment-gateway", required = true)
+    @XmlElement(name = "payment-gateway")
     protected String paymentGateway;
     @XmlElement(name = "cart-guid", required = true)
     protected String cartGuid;

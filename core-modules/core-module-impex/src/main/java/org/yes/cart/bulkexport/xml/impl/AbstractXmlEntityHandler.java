@@ -338,6 +338,26 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
             return this;
         }
 
+        public Tag tagTime(final org.yes.cart.payment.persistence.entity.Auditable auditable) {
+            if (auditable.getCreatedTimestamp() != null) {
+                tagChars("created-timestamp", DateUtils.format(auditable.getCreatedTimestamp(), TIMESTAMP_FORMAT));
+                this.hasTextOrTag = true;
+            }
+            if (auditable.getCreatedBy() != null) {
+                tagChars("created-by", auditable.getCreatedBy());
+                this.hasTextOrTag = true;
+            }
+            if (auditable.getUpdatedTimestamp() != null) {
+                tagChars("updated-timestamp", DateUtils.format(auditable.getUpdatedTimestamp(), TIMESTAMP_FORMAT));
+                this.hasTextOrTag = true;
+            }
+            if (auditable.getUpdatedBy() != null) {
+                tagChars("updated-by", auditable.getUpdatedBy());
+                this.hasTextOrTag = true;
+            }
+            return this;
+        }
+
         public Tag tagTime(final String name, final Instant instant) {
             if (instant != null) {
                 tagChars(name, DateUtils.format(instant, TIMESTAMP_FORMAT));
