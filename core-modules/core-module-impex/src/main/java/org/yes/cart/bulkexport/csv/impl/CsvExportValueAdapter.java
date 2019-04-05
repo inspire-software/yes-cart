@@ -18,9 +18,9 @@ package org.yes.cart.bulkexport.csv.impl;
 
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkcommon.model.impl.AbstractExtensibleValueAdapter;
 
 /**
@@ -28,7 +28,7 @@ import org.yes.cart.bulkcommon.model.impl.AbstractExtensibleValueAdapter;
  * Date: 12-08-11
  * Time: 1:04 PM
  */
-public class CsvExportValueAdapter extends AbstractExtensibleValueAdapter implements ValueAdapter {
+public class CsvExportValueAdapter extends AbstractExtensibleValueAdapter<CsvValueAdapter> implements CsvValueAdapter {
 
     private final GenericConversionService extendedConversionService;
 
@@ -37,15 +37,15 @@ public class CsvExportValueAdapter extends AbstractExtensibleValueAdapter implem
     }
 
     @Override
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final CsvImpExColumn csvImpExColumn, final CsvImpExTuple tuple) {
 
         if (requiredType == null) {
             return rawValue;
         }
 
-        final ValueAdapter specific = getTypeSpecific(impExColumn.getDataType());
+        final CsvValueAdapter specific = getTypeSpecific(csvImpExColumn.getDataType());
         if (specific != null) {
-            return specific.fromRaw(rawValue, requiredType, impExColumn, tuple);
+            return specific.fromRaw(rawValue, requiredType, csvImpExColumn, tuple);
         }
 
         return this.extendedConversionService.convert(rawValue,

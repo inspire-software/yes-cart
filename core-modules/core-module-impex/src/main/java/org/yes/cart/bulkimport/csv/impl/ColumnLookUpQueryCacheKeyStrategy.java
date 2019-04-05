@@ -16,13 +16,13 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkcommon.model.ValueAdapter;
-import org.yes.cart.bulkcommon.service.support.LookUpQuery;
-import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategy;
-import org.yes.cart.bulkimport.model.ImportColumn;
-import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.model.ImportTuple;
-import org.yes.cart.bulkimport.service.support.EntityCacheKeyStrategy;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
+import org.yes.cart.bulkcommon.service.support.query.LookUpQuery;
+import org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategy;
+import org.yes.cart.bulkimport.csv.CsvImportColumn;
+import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
+import org.yes.cart.bulkimport.csv.CsvImportTuple;
+import org.yes.cart.bulkimport.service.support.csv.EntityCacheKeyStrategy;
 import org.yes.cart.dao.GenericDAO;
 
 /**
@@ -32,10 +32,10 @@ import org.yes.cart.dao.GenericDAO;
  */
 public class ColumnLookUpQueryCacheKeyStrategy implements EntityCacheKeyStrategy {
 
-    private final LookUpQueryParameterStrategy hsqlStrategy;
+    private final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> hsqlStrategy;
     private final GenericDAO<Object, Long> genericDAO;
 
-    public ColumnLookUpQueryCacheKeyStrategy(final LookUpQueryParameterStrategy hsqlStrategy,
+    public ColumnLookUpQueryCacheKeyStrategy(final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> hsqlStrategy,
                                              final GenericDAO<Object, Long> genericDAO) {
         this.hsqlStrategy = hsqlStrategy;
         this.genericDAO = genericDAO;
@@ -43,11 +43,11 @@ public class ColumnLookUpQueryCacheKeyStrategy implements EntityCacheKeyStrategy
 
     /** {@inheritDoc} */
     @Override
-    public String keyFor(final ImportDescriptor descriptor,
-                         final ImportColumn column,
+    public String keyFor(final CsvImportDescriptor descriptor,
+                         final CsvImportColumn column,
                          final Object masterObject,
-                         final ImportTuple tuple,
-                         final ValueAdapter adapter) {
+                         final CsvImportTuple tuple,
+                         final CsvValueAdapter adapter) {
 
         final LookUpQuery query = hsqlStrategy.getQuery(descriptor, masterObject, tuple, adapter, column.getLookupQuery());
 

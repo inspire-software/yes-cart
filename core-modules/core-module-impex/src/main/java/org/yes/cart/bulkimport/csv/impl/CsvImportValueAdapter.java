@@ -18,9 +18,10 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
+import org.yes.cart.bulkcommon.model.ImpExValues;
 import org.yes.cart.bulkcommon.model.impl.AbstractExtensibleValueAdapter;
 
 import java.math.BigDecimal;
@@ -36,20 +37,20 @@ import java.util.Map;
  * Date: 12-08-11
  * Time: 1:04 PM
  */
-public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter implements ValueAdapter {
+public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter<CsvValueAdapter> implements CsvValueAdapter {
 
     private final GenericConversionService extendedConversionService;
 
     private static final Map<String, Class> MAPPING = new HashMap<String, Class>() {{
-        put(ImpExColumn.STRING,    String.class);
-        put(ImpExColumn.BOOLEAN,   Boolean.class);
-        put(ImpExColumn.INT,       Integer.class);
-        put(ImpExColumn.LONG,      Long.class);
-        put(ImpExColumn.DECIMAL,   BigDecimal.class);
-        put(ImpExColumn.DATE,      LocalDate.class);
-        put(ImpExColumn.DATETIME,  LocalDateTime.class);
-        put(ImpExColumn.ZONEDTIME, ZonedDateTime.class);
-        put(ImpExColumn.INSTANT,   Instant.class);
+        put(ImpExValues.STRING,    String.class);
+        put(ImpExValues.BOOLEAN,   Boolean.class);
+        put(ImpExValues.INT,       Integer.class);
+        put(ImpExValues.LONG,      Long.class);
+        put(ImpExValues.DECIMAL,   BigDecimal.class);
+        put(ImpExValues.DATE,      LocalDate.class);
+        put(ImpExValues.DATETIME,  LocalDateTime.class);
+        put(ImpExValues.ZONEDTIME, ZonedDateTime.class);
+        put(ImpExValues.INSTANT,   Instant.class);
     }};
 
     public CsvImportValueAdapter(final GenericConversionService extendedConversionService) {
@@ -57,14 +58,14 @@ public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter implem
     }
 
     @Override
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final CsvImpExColumn csvImpExColumn, final CsvImpExTuple tuple) {
         if (requiredType == null) {
             return rawValue;
         }
 
-        final ValueAdapter specific = getTypeSpecific(requiredType);
+        final CsvValueAdapter specific = getTypeSpecific(requiredType);
         if (specific != null) {
-            return specific.fromRaw(rawValue, requiredType, impExColumn, tuple);
+            return specific.fromRaw(rawValue, requiredType, csvImpExColumn, tuple);
         }
         if (!MAPPING.containsKey(requiredType)) {
             return rawValue;

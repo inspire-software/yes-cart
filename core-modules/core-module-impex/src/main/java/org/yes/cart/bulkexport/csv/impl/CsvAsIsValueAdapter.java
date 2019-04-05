@@ -16,22 +16,22 @@
 
 package org.yes.cart.bulkexport.csv.impl;
 
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 
 /**
  * User: denispavlov
  * Date: 26/11/2015
  * Time: 13:17
  */
-public class CsvAsIsValueAdapter implements ValueAdapter {
+public class CsvAsIsValueAdapter implements CsvValueAdapter {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final CsvImpExColumn csvImpExColumn, final CsvImpExTuple tuple) {
         return rawValue;
     }
 }

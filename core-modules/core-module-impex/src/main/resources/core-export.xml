@@ -18,76 +18,85 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/util
-                           http://www.springframework.org/schema/util/spring-util.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- ########################################## bulk import ########################## -->
 
-    <bean id="exportDescriptorXStreamProvider" class="org.yes.cart.bulkexport.stream.xml.CsvExportDescriptorXStreamProvider"/>
+    <!-- ########################################## CSV ########################## -->
 
-    <util:map id="exportLookUpQueryParameterStrategyValueProviders"
-              key-type="java.lang.String"
-              value-type="org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategyValueProvider">
-        <entry key="{GUID}">
-            <bean class="org.yes.cart.bulkcommon.service.support.impl.GUIDLookUpQueryParameterStrategyValueProviderImpl"/>
-        </entry>
-        <entry key="{masterObject}">
-            <bean class="org.yes.cart.bulkcommon.service.support.impl.MasterObjectLookUpQueryParameterStrategyValueProviderImpl"/>
-        </entry>
-        <entry key="{masterObjectId}">
-            <bean class="org.yes.cart.bulkcommon.service.support.impl.MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl"/>
-        </entry>
-        <entry key="{contextShop}">
-            <bean class="org.yes.cart.bulkcommon.service.support.impl.ContextShopLookUpQueryParameterStrategyValueProviderImpl">
-                <constructor-arg index="0" ref="shopService"/>
-            </bean>
-        </entry>
-        <entry key="{contextShopId}">
-            <bean class="org.yes.cart.bulkcommon.service.support.impl.ContextShopIdLookUpQueryParameterStrategyValueProviderImpl">
-                <constructor-arg index="0" ref="shopService"/>
-            </bean>
-        </entry>
-        <entry key="{contextShopCode}">
-            <bean class="org.yes.cart.bulkcommon.service.support.impl.ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl"/>
-        </entry>
-        <entry key="{NOW}">
-            <bean class="org.yes.cart.bulkcommon.service.support.impl.NowLookUpQueryParameterStrategyValueProviderImpl"/>
-        </entry>
-    </util:map>
+    <bean id="exportCsvDescriptorXStreamProvider" class="org.yes.cart.bulkexport.csv.impl.CsvExportDescriptorXStreamProvider"/>
 
-    <bean id="exportCsvColumnLookUpQueryStrategy" class="org.yes.cart.bulkcommon.service.support.impl.ImpExColumnLookUpQueryStrategy">
-        <property name="providers" ref="exportLookUpQueryParameterStrategyValueProviders"/>
+    <bean id="exportCsvLookUpQueryParameterStrategyValueProviders" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategyValueProvider">
+                <entry key="{GUID}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.GUIDLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{masterObject}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.MasterObjectLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{masterObjectId}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{contextShop}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopLookUpQueryParameterStrategyValueProviderImpl">
+                        <constructor-arg index="0" ref="shopService"/>
+                    </bean>
+                </entry>
+                <entry key="{contextShopId}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopIdLookUpQueryParameterStrategyValueProviderImpl">
+                        <constructor-arg index="0" ref="shopService"/>
+                    </bean>
+                </entry>
+                <entry key="{contextShopCode}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{NOW}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.NowLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="exportCsvColumnLookUpQueryStrategy" class="org.yes.cart.bulkcommon.service.support.common.impl.ImpExColumnLookUpQueryStrategy">
+        <property name="providers" ref="exportCsvLookUpQueryParameterStrategyValueProviders"/>
         <property name="defaultProvider">
-            <bean class="org.yes.cart.bulkcommon.service.support.impl.ColumnValueLookUpQueryParameterStrategyValueProviderImpl"/>
+            <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ColumnValueLookUpQueryParameterStrategyValueProviderImpl"/>
         </property>
+    </bean>
+
+    <bean id="exportCsvExportValueAdapterMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkcommon.csv.CsvValueAdapter">
+                <entry key="DATE">
+                    <bean class="org.yes.cart.bulkexport.csv.impl.CsvDateValueAdapterImpl"/>
+                </entry>
+                <entry key="AVC">
+                    <bean class="org.yes.cart.bulkexport.csv.impl.CsvAttributeValueByCodeValueAdapterImpl"/>
+                </entry>
+                <entry key="PRICE">
+                    <bean class="org.yes.cart.bulkexport.csv.impl.CsvProductPriceValueAdapterImpl">
+                        <constructor-arg index="0" ref="priceService"/>
+                        <constructor-arg index="1" ref="shopService"/>
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
     </bean>
 
     <bean id="exportCsvExportValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvExportValueAdapter">
         <constructor-arg index="0" ref="extendedConversionService"/>
-    </bean>
-
-    <bean id="exportCsvDatePatternValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvDateValueAdapterImpl">
-        <property name="extensibleValueAdapter" ref="exportCsvExportValueAdapter"/>
-    </bean>
-
-    <bean id="exportCsvAttributeValueByCodeValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvAttributeValueByCodeValueAdapterImpl">
-        <property name="extensibleValueAdapter" ref="exportCsvExportValueAdapter"/>
-    </bean>
-
-    <bean id="exportCsvProductPriceValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvProductPriceValueAdapterImpl">
-        <constructor-arg index="0" ref="priceService"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <property name="extensibleValueAdapter" ref="exportCsvExportValueAdapter"/>
+        <property name="extensions" ref="exportCsvExportValueAdapterMap"/>
     </bean>
 
     <bean id="exportCsvLanguageValueAdapter"  class="org.yes.cart.bulkexport.csv.impl.CsvAsIsValueAdapter"/>
 
     <bean id="csvBulkExportService" parent="txProxyTemplate">
         <property name="target">
-            <bean  class="org.yes.cart.bulkexport.csv.impl.CsvBulkExportServiceImpl" scope="prototype">
+            <bean  class="org.yes.cart.bulkexport.csv.impl.CsvBulkExportServiceImpl">
                 <constructor-arg index="0" ref="exportFederationFacade"/>
                 <property name="genericDAO" ref="genericDao"/>
                 <property name="columnLookUpQueryParameterStrategy" ref="exportCsvColumnLookUpQueryStrategy"/>
@@ -96,6 +105,356 @@
             </bean>
         </property>
     </bean>
+
+    <!-- ########################################## XML ########################## -->
+
+    <bean id="exportXmlDescriptorXStreamProvider" class="org.yes.cart.bulkexport.xml.impl.XmlExportDescriptorXStreamProvider"/>
+
+    <bean id="exportXmlLookUpQueryParameterStrategyValueProviders" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategyValueProvider">
+                <entry key="{GUID}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.GUIDLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{masterObject}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.MasterObjectLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{masterObjectId}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{contextShop}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopLookUpQueryParameterStrategyValueProviderImpl">
+                        <constructor-arg index="0" ref="shopService"/>
+                    </bean>
+                </entry>
+                <entry key="{contextShopId}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopIdLookUpQueryParameterStrategyValueProviderImpl">
+                        <constructor-arg index="0" ref="shopService"/>
+                    </bean>
+                </entry>
+                <entry key="{contextShopCode}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+                <entry key="{NOW}">
+                    <bean class="org.yes.cart.bulkcommon.service.support.common.impl.NowLookUpQueryParameterStrategyValueProviderImpl"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="exportXmlColumnLookUpQueryStrategy" class="org.yes.cart.bulkcommon.service.support.common.impl.ImpExColumnLookUpQueryStrategy">
+        <property name="providers" ref="exportXmlLookUpQueryParameterStrategyValueProviders"/>
+        <!--<property name="defaultProvider">-->
+            <!--&lt;!&ndash;<bean class="org.yes.cart.bulkcommon.service.support.csv.impl.ColumnValueLookUpQueryParameterStrategyValueProviderImpl"/>&ndash;&gt;-->
+        <!--</property>-->
+    </bean>
+
+    <bean id="exportXmlExportValueAdapterMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkcommon.xml.XmlValueAdapter"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="exportXmlExportValueAdapter" class="org.yes.cart.bulkexport.xml.impl.XmlExportValueAdapter">
+        <constructor-arg index="0" ref="extendedConversionService"/>
+        <property name="extensions" ref="exportXmlExportValueAdapterMap"/>
+    </bean>
+
+    <bean id="xmlFastBulkExportServiceHandlerMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String"
+                 value-type="org.yes.cart.bulkexport.xml.XmlEntityExportHandler">
+                <entry key="ETYPE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ETypeXmlEntityHandler"/>
+                </entry>
+                <entry key="ETYPE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ETypeXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="ATTRIBUTEGROUP">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.AttributeGroupXmlEntityHandler"/>
+                </entry>
+                <entry key="ATTRIBUTEGROUP_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.AttributeGroupXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="ATTRIBUTE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.AttributeXmlEntityHandler"/>
+                </entry>
+                <entry key="ATTRIBUTE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.AttributeXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="BRAND">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.BrandXmlEntityHandler"/>
+                </entry>
+                <entry key="BRAND_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.BrandXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PRODUCT">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductXmlEntityHandler"/>
+                </entry>
+                <entry key="PRODUCT_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="SKU">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductSkuXmlEntityHandler"/>
+                </entry>
+                <entry key="SKU_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductSkuXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="CATEGORY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CategoryXmlEntityHandler">
+                        <constructor-arg ref="categoryService"/>
+                    </bean>
+                </entry>
+                <entry key="CATEGORY_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CategoryXmlEntityHandler">
+                        <constructor-arg ref="categoryService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="CONTENT">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentXmlEntityHandler">
+                        <constructor-arg ref="contentService"/>
+                    </bean>
+                </entry>
+                <entry key="CONTENT_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentXmlEntityHandler">
+                        <constructor-arg ref="contentService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="INVENTORY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SkuWarehouseXmlEntityHandler"/>
+                </entry>
+                <entry key="INVENTORY_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SkuWarehouseXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PRICE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SkuPriceXmlEntityHandler"/>
+                </entry>
+                <entry key="PRICE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SkuPriceXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="TAX">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.TaxXmlEntityHandler"/>
+                </entry>
+                <entry key="TAX_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.TaxXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="TAXCONFIG">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.TaxConfigXmlEntityHandler"/>
+                </entry>
+                <entry key="TAXCONFIG_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.TaxConfigXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PRODUCTTYPE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductTypeXmlEntityHandler"/>
+                </entry>
+                <entry key="PRODUCTTYPE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductTypeXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="SYSTEM">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SystemXmlEntityHandler"/>
+                </entry>
+                <entry key="SYSTEM_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SystemXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="DATADESCRIPTOR">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.DataDescriptorXmlEntityHandler"/>
+                </entry>
+                <entry key="DATADESCRIPTOR_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.DataDescriptorXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="DATAGROUP">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.DataGroupXmlEntityHandler">
+                        <property name="dataDescriptorService" ref="dataDescriptorService"/>
+                    </bean>
+                </entry>
+                <entry key="DATAGROUP_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.DataGroupXmlEntityHandler">
+                        <property name="dataDescriptorService" ref="dataDescriptorService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="COUNTRY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CountryXmlEntityHandler"/>
+                </entry>
+                <entry key="COUNTRY_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CountryXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="COUNTRYSTATE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CountryStateXmlEntityHandler"/>
+                </entry>
+                <entry key="COUNTRYSTATE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CountryStateXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="FULFILMENTCENTRE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.FulfilmentCentreXmlEntityHandler"/>
+                </entry>
+                <entry key="FULFILMENTCENTRE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.FulfilmentCentreXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="SHIPPINGMETHOD">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShippingMethodXmlEntityHandler"/>
+                </entry>
+                <entry key="SHIPPINGMETHOD_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShippingMethodXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="SHIPPINGPROVIDER">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShippingProviderXmlEntityHandler"/>
+                </entry>
+                <entry key="SHIPPINGPROVIDER_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShippingProviderXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PROMOTIONCOUPON">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PromotionCouponXmlEntityHandler"/>
+                </entry>
+                <entry key="PROMOTIONCOUPON_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PromotionCouponXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PROMOTION">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PromotionXmlEntityHandler">
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                    </bean>
+                </entry>
+                <entry key="PROMOTION_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PromotionXmlEntityHandler">
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="ORGANISATIONUSER">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.OrganisationUserXmlEntityHandler">
+                        <property name="managerRoleService" ref="managerRoleService"/>
+                    </bean>
+                </entry>
+                <entry key="ORGANISATIONUSER_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.OrganisationUserXmlEntityHandler">
+                        <property name="managerRoleService" ref="managerRoleService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="CUSTOMER">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerXmlEntityHandler"/>
+                </entry>
+                <entry key="CUSTOMER_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="ADDRESS">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.AddressXmlEntityHandler"/>
+                </entry>
+                <entry key="ADDRESS_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.AddressXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="SHOP">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShopXmlEntityHandler">
+                        <property name="carrierService" ref="carrierService"/>
+                        <property name="warehouseService" ref="warehouseService"/>
+                        <property name="customerService" ref="customerService"/>
+                    </bean>
+                </entry>
+                <entry key="SHOP_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ShopXmlEntityHandler">
+                        <property name="carrierService" ref="carrierService"/>
+                        <property name="warehouseService" ref="warehouseService"/>
+                        <property name="customerService" ref="customerService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="CUSTOMERORDER">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerOrderXmlEntityHandler">
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                    </bean>
+                </entry>
+                <entry key="CUSTOMERORDER_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerOrderXmlEntityHandler">
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="CUSTOMERORDERPAYMENT">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerOrderPaymentXmlEntityHandler"/>
+                </entry>
+                <entry key="CUSTOMERORDERPAYMENT_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.CustomerOrderPaymentXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PGCALLBACK">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PaymentGatewayCallbackXmlEntityHandler"/>
+                </entry>
+                <entry key="PGCALLBACK_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PaymentGatewayCallbackXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="PGPARAMETER">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PaymentGatewayParameterXmlEntityHandler"/>
+                </entry>
+                <entry key="PGPARAMETER_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.PaymentGatewayParameterXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="xmlFastBulkExportService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkexport.xml.impl.XmlFastBulkExportServiceImpl" scope="prototype">
+                <property name="genericDAO" ref="genericDao"/>
+                <property name="columnLookUpQueryParameterStrategy" ref="exportXmlColumnLookUpQueryStrategy"/>
+                <property name="valueDataAdapter" ref="exportXmlExportValueAdapter"/>
+                <property name="handlerMap" ref="xmlFastBulkExportServiceHandlerMap"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- ########################################## IMAGE ########################## -->
 
     <bean id="productImageExportDomainObjectStrategy" class="org.yes.cart.bulkexport.image.impl.ProductImageExportDomainObjectStrategyImpl">
         <constructor-arg index="0" ref="exportFederationFacade"/>
@@ -115,6 +474,18 @@
                 </constructor-arg>
             </bean>
         </property>
+    </bean>
+
+    <!-- ########################################## Main ########################## -->
+
+    <bean id="bulkExportServiceBeanMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map>
+                <entry key="CSV-IMAGE"                              value="imagesBulkExportService"/>
+                <entry key="CSV"                                    value="csvBulkExportService"/>
+                <entry key="XML"                                    value="xmlFastBulkExportService"/>
+            </map>
+        </constructor-arg>
     </bean>
 
     <!-- ################################ Register module  ####################################################### -->

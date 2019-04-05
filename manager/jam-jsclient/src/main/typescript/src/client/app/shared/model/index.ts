@@ -21,3 +21,4 @@ export * from './customer.model';
 export * from './address.model';
 export * from './reports.model';
 export * from './validation.model';
+export * from './impex.model';

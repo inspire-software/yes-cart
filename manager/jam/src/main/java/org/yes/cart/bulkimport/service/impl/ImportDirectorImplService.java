@@ -21,6 +21,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
 import org.yes.cart.bulkcommon.service.ImportDirectorService;
@@ -51,6 +54,7 @@ import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.util.DateUtils;
+import org.yes.cart.util.log.Markers;
 import org.yes.cart.utils.impl.ZipUtils;
 
 import java.io.File;
@@ -65,7 +69,7 @@ import java.util.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ImportDirectorImplService extends SingletonJobRunner implements ImportDirectorService {
+public class ImportDirectorImplService extends SingletonJobRunner implements ImportDirectorService, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
 
@@ -85,18 +89,24 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private final FederationFacade federationFacade;
 
+    private final Map<String, String> bulkImportServiceBeanMap;
+
+    private ApplicationContext applicationContext;
+
 
     /**
      * Construct the import director
-     *  @param pathToArchiveDirectory  path to archive folder.
-     * @param pathToImportDirectory   path to use.
-     * @param dataDescriptorResolver  descriptor resolver
-     * @param executor                async executor
-     * @param nodeService             node service
-     * @param asyncContextFactory     async context factory
-     * @param systemService           system service
-     * @param zipUtils                zip algorithm
-     * @param federationFacade        data federation service
+     *
+     * @param pathToArchiveDirectory   path to archive folder.
+     * @param pathToImportDirectory    path to use.
+     * @param dataDescriptorResolver   descriptor resolver
+     * @param executor                 async executor
+     * @param nodeService              node service
+     * @param asyncContextFactory      async context factory
+     * @param systemService            system service
+     * @param zipUtils                 zip algorithm
+     * @param federationFacade         data federation service
+     * @param bulkImportServiceBeanMap map of import services
      */
     public ImportDirectorImplService(final String pathToArchiveDirectory,
                                      final String pathToImportDirectory,
@@ -106,7 +116,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                                      final AsyncContextFactory asyncContextFactory,
                                      final SystemService systemService,
                                      final ZipUtils zipUtils,
-                                     final FederationFacade federationFacade) {
+                                     final FederationFacade federationFacade,
+                                     final Map<String, String> bulkImportServiceBeanMap) {
         super(executor);
         this.pathToArchiveDirectory = pathToArchiveDirectory;
         this.pathToImportDirectory = pathToImportDirectory;
@@ -116,6 +127,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         this.systemService = systemService;
         this.zipUtils = zipUtils;
         this.federationFacade = federationFacade;
+        this.bulkImportServiceBeanMap = bulkImportServiceBeanMap;
     }
 
 
@@ -283,10 +295,24 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                 put(JobContextKeys.IMPORT_DESCRIPTOR_NAME, descriptor);
             }});
 
-            if ("IMAGE".equals(descriptorObject.getEntityType())) {
-                getNewBulkImportImagesService().doImport(dataJob);
+
+            final String entityType = descriptorObject.getEntityType();
+            final String impExService = descriptorObject.getContext().getImpExService();
+
+            final String specific = impExService + '-' + entityType;
+
+            final String specificServiceBean = this.bulkImportServiceBeanMap.get(specific);
+            if (specificServiceBean != null) {
+                this.applicationContext.getBean(specificServiceBean, ImportService.class).doImport(dataJob);
             } else {
-                getNewBulkImportService().doImport(dataJob);
+                final String generalServiceBean = this.bulkImportServiceBeanMap.get(impExService);
+                if (generalServiceBean != null) {
+                    this.applicationContext.getBean(generalServiceBean, ImportService.class).doImport(dataJob);
+                } else {
+                    LOG.error(Markers.alert(), "Unknown import service {} for entity {}",
+                            descriptorObject.getContext().getImpExService(),
+                            descriptorObject.getEntityType());
+                }
             }
         }
     }
@@ -378,16 +404,14 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     }
 
     /**
-     * @return IoC prototype instance
+     * Spring IoC.
+     *
+     * @param applicationContext application context.
+     *
+     * @throws BeansException exception
      */
-    public ImportService getNewBulkImportService() {
-        return null;
-    }
-
-    /**
-     * @return IoC prototype instance
-     */
-    public ImportService getNewBulkImportImagesService() {
-        return null;
+    @Override
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

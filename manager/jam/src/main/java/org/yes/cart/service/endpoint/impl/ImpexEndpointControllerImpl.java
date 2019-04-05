@@ -23,10 +23,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.bulkcommon.service.ExportDirectorService;
 import org.yes.cart.bulkcommon.service.ImportDirectorService;
+import org.yes.cart.domain.vo.VoDataDescriptor;
+import org.yes.cart.domain.vo.VoDataGroup;
 import org.yes.cart.domain.vo.VoDataGroupInfo;
 import org.yes.cart.domain.vo.VoJobStatus;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.endpoint.ImpexEndpointController;
+import org.yes.cart.service.vo.VoDataGroupService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +45,15 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
 
     private final ImportDirectorService importDirectorService;
     private final ExportDirectorService exportDirectorService;
+    private final VoDataGroupService voDataGroupService;
 
     @Autowired
     public ImpexEndpointControllerImpl(final ImportDirectorService importDirectorService,
-                                       final ExportDirectorService exportDirectorService) {
+                                       final ExportDirectorService exportDirectorService,
+                                       final VoDataGroupService voDataGroupService) {
         this.importDirectorService = importDirectorService;
         this.exportDirectorService = exportDirectorService;
+        this.voDataGroupService = voDataGroupService;
     }
 
     @Override
@@ -111,4 +117,53 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
         return vo;
     }
 
+    @Override
+    public @ResponseBody List<VoDataGroup> getAllDataGroups() throws Exception {
+        return voDataGroupService.getAllDataGroups();
+    }
+
+    @Override
+    public @ResponseBody VoDataGroup getDataGroupById(@PathVariable("id") final long id) throws Exception {
+        return voDataGroupService.getDataGroupById(id);
+    }
+
+    @Override
+    public @ResponseBody VoDataGroup createDataGroup(@RequestBody final VoDataGroup vo) throws Exception {
+        return voDataGroupService.createDataGroup(vo);
+    }
+
+    @Override
+    public @ResponseBody VoDataGroup updateDataGroup(@RequestBody final VoDataGroup vo) throws Exception {
+        return voDataGroupService.updateDataGroup(vo);
+    }
+
+    @Override
+    public @ResponseBody void removeDataGroup(@PathVariable("id") final long id) throws Exception {
+        voDataGroupService.removeDataGroup(id);
+    }
+
+    @Override
+    public @ResponseBody List<VoDataDescriptor> getAllDataDescriptors() throws Exception {
+        return voDataGroupService.getAllDataDescriptors();
+    }
+
+    @Override
+    public @ResponseBody VoDataDescriptor getDataDescriptorById(@PathVariable("id") final long id) throws Exception {
+        return voDataGroupService.getDataDescriptorById(id);
+    }
+
+    @Override
+    public @ResponseBody VoDataDescriptor createDataDescriptor(@RequestBody final VoDataDescriptor vo) throws Exception {
+        return voDataGroupService.createDataDescriptor(vo);
+    }
+
+    @Override
+    public @ResponseBody VoDataDescriptor updateDataDescriptor(@RequestBody final VoDataDescriptor vo) throws Exception {
+        return voDataGroupService.updateDataDescriptor(vo);
+    }
+
+    @Override
+    public @ResponseBody void removeDataDescriptor(@PathVariable("id") final long id) throws Exception {
+        voDataGroupService.removeDataDescriptor(id);
+    }
 }

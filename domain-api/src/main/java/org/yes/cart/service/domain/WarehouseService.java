@@ -29,6 +29,15 @@ import java.util.Map;
  */
 public interface WarehouseService extends GenericService<Warehouse> {
 
+    /**
+     * Find warehouses, that assigned to given shop id.
+     *
+     * @param shopId given shop id
+     * @param includeDisabled true to include disabled links
+     * @return list of assigned warehouses
+     */
+    List<Warehouse> findByShopId(long shopId, boolean includeDisabled);
+
 
     /**
      * Find warehouses, that assigned to given shop id.

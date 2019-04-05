@@ -353,6 +353,18 @@ public interface CustomerOrderPayment extends Auditable {
     void setCardIssueNumber(String cardIssueNumber);
 
     /**
+     * @return cart type
+     */
+    String getCardType();
+
+    /**
+     * Set cart type.
+     *
+     * @param cardType type
+     */
+    void setCardType(String cardType);
+
+    /**
      * Get ip address of shopper.
      *
      * @return IP address

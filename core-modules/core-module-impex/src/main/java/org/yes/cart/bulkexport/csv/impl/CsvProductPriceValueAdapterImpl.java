@@ -18,10 +18,9 @@ package org.yes.cart.bulkexport.csv.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
@@ -35,7 +34,7 @@ import java.math.BigDecimal;
  * Date: 30/11/2015
  * Time: 22:23
  */
-public class CsvProductPriceValueAdapterImpl implements ValueAdapter {
+public class CsvProductPriceValueAdapterImpl implements CsvValueAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(CsvProductPriceValueAdapterImpl.class);
 
@@ -52,8 +51,8 @@ public class CsvProductPriceValueAdapterImpl implements ValueAdapter {
      * {@inheritDoc}
      */
     @Override
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
-        final String shopCode = impExColumn.getParentDescriptor().getContext().getShopCode();
+    public Object fromRaw(final Object rawValue, final String requiredType, final CsvImpExColumn csvImpExColumn, final CsvImpExTuple tuple) {
+        final String shopCode = csvImpExColumn.getParentDescriptor().getContext().getShopCode();
         final Shop shop = shopCode != null ? shopService.getShopByCode(shopCode) : null;
         if (shop != null) {
             final Long fallbackId;
@@ -62,7 +61,7 @@ public class CsvProductPriceValueAdapterImpl implements ValueAdapter {
             } else {
                 fallbackId = null;
             }
-            final String currency = impExColumn.getContext();
+            final String currency = csvImpExColumn.getContext();
             SkuPrice price = null;
             if (rawValue instanceof Long) {
                 // product ID
@@ -81,15 +80,6 @@ public class CsvProductPriceValueAdapterImpl implements ValueAdapter {
             LOG.warn("Unable to determine price since export descriptor does not specify valid shop code");
         }
         return null;
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param extensibleValueAdapter extend
-     */
-    public void setExtensibleValueAdapter(ExtensibleValueAdapter extensibleValueAdapter) {
-        extensibleValueAdapter.extend(this, "PRICE");
     }
 
 }

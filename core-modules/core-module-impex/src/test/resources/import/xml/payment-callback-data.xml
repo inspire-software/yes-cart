@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<payment-gateway-callbacks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<payment-gateway-callback id="111111" guid="TEST9999" shop-code="SHOP10">
+    <payment-gateway>DISMISSED_testPaymentGateway</payment-gateway>
+    <request-dump>Request dump data</request-dump>
+    <request-parameters>
+        <request-parameter name="key1">
+            <value>value1</value>
+        </request-parameter>
+    </request-parameters>
+    <created-timestamp>2019-01-12 22:03:46</created-timestamp>
+    <created-by>admin@yes-cart.com</created-by>
+    <updated-timestamp>2019-01-12 22:03:46</updated-timestamp>
+    <updated-by>admin@yes-cart.com</updated-by>
+</payment-gateway-callback>
+<payment-gateway-callback id="1" guid="TEST001" shop-code="SHOP10">
+    <payment-gateway>DISMISSED_testPaymentGateway</payment-gateway>
+    <request-dump>Request dump data</request-dump>
+    <request-parameters>
+        <request-parameter name="key1">
+            <value>value1</value>
+        </request-parameter>
+    </request-parameters>
+    <created-timestamp>2019-01-12 22:03:46</created-timestamp>
+    <created-by>admin@yes-cart.com</created-by>
+    <updated-timestamp>2019-01-12 22:03:46</updated-timestamp>
+    <updated-by>admin@yes-cart.com</updated-by>
+</payment-gateway-callback>
+<payment-gateway-callback id="2" guid="TEST001" shop-code="SHOP10">
+    <payment-gateway>DISMISSED_testPaymentGateway</payment-gateway>
+    <request-dump>Request dump data</request-dump>
+    <request-parameters>
+        <request-parameter name="key1">
+            <value>value1</value>
+        </request-parameter>
+    </request-parameters>
+    <created-timestamp>2019-01-12 22:03:51</created-timestamp>
+    <created-by>admin@yes-cart.com</created-by>
+    <updated-timestamp>2019-01-12 22:03:51</updated-timestamp>
+    <updated-by>admin@yes-cart.com</updated-by>
+</payment-gateway-callback>
+<payment-gateway-callback id="3" guid="TEST001" shop-code="SHOP10">
+    <payment-gateway>DISMISSED_testPaymentGateway</payment-gateway>
+    <request-dump>Request dump data</request-dump>
+    <request-parameters>
+        <request-parameter name="key1">
+            <value>value1</value>
+        </request-parameter>
+    </request-parameters>
+    <created-timestamp>2019-01-12 22:03:41</created-timestamp>
+    <created-by>admin@yes-cart.com</created-by>
+    <updated-timestamp>2019-01-12 22:03:41</updated-timestamp>
+    <updated-by>admin@yes-cart.com</updated-by>
+</payment-gateway-callback>
+<payment-gateway-callback id="4" guid="TEST001" shop-code="SHOP10">
+    <payment-gateway>testPaymentGateway</payment-gateway>
+    <request-dump>Request dump data</request-dump>
+    <request-parameters>
+        <request-parameter name="key1">
+            <value>value1</value>
+        </request-parameter>
+    </request-parameters>
+</payment-gateway-callback>
+<payment-gateway-callback id="5" guid="TEST001" shop-code="SHOP10">
+    <payment-gateway>testPaymentGateway</payment-gateway>
+    <request-dump>Request dump data</request-dump>
+    <request-parameters>
+        <request-parameter name="key1">
+            <value>value1</value>
+        </request-parameter>
+    </request-parameters>
+</payment-gateway-callback>
+<payment-gateway-callback id="6" guid="2110d98b-c3ed-4427-ad04-bf7f578c0bd2" shop-code="SHOP10">
+    <payment-gateway>postFinancePaymentGatewayLabel</payment-gateway>
+    <request-dump>
+Parameters
+AAVCheck=NO
+ACCEPTANCE=399972
+BRAND=MasterCard
+CARDNO=XXXXXXXXXXXX2813
+CCCTY=CH
+CN=Ulrike Kähler
+CVCCheck=OK
+ECI=5
+ED=0219
+IP=77.58.220.214
+IPCTY=CH
+NCERROR=0
+PAYID=3632900733
+PM=CreditCard
+SHASIGN=59D3F2F68E042CDA054C0BA099DBBF79252CF41A
+STATUS=9
+TRXDATE=07/25/17
+VC=NO
+amount=130.55
+currency=CHF
+orderID=170725182502-55
+
+Attributes
+CharacterEncodingFilter.FILTERED=true
+ShoppingCart=org.yes.cart.shoppingcart.impl.ShoppingCartImpl@57b63ae9
+org.springframework.web.context.request.RequestContextListener.REQUEST_ATTRIBUTES=org.apache.catalina.connector.Request@9c12250
+org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER=org.springframework.web.context.request.async.WebAsyncManager@2a296119
+
+Headers
+accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+accept-encoding=gzip, deflate
+accept-language=en-us
+connection=keep-alive
+content-length=330
+content-type=application/x-www-form-urlencoded
+cookie=__utma=1.1924053283.1490046699.1499094199.1499097115.6; __utmz=1.1490046699.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); yc=b69194bd-87b4-4cbc-afe4-8090b2c4325b; yccookiepolicy=accepted; YCJAM_UI_TABLE_PAGE_SIZE=25
+host=localhost:8080
+origin=file://
+user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.73.11 (KHTML, like Gecko) Version/7.0.1 Safari/537.73.11
+
+CookiesYCJAM_UI_TABLE_PAGE_SIZE=25
+__utma=1.1924053283.1490046699.1499094199.1499097115.6
+__utmz=1.1490046699.1.1.utmcsr
+yc=b69194bd-87b4-4cbc-afe4-8090b2c4325b
+yccookiepolicy=accepted
+    </request-dump>
+    <request-parameters>
+        <request-parameter name="amount">
+            <value>130.55</value>
+        </request-parameter>
+        <request-parameter name="CVCCheck">
+            <value>OK</value>
+        </request-parameter>
+        <request-parameter name="PAYID">
+            <value>3632900733</value>
+        </request-parameter>
+        <request-parameter name="orderID">
+            <value>170725182502-55</value>
+        </request-parameter>
+        <request-parameter name="CCCTY">
+            <value>CH</value>
+        </request-parameter>
+        <request-parameter name="IP">
+            <value>77.58.220.214</value>
+        </request-parameter>
+        <request-parameter name="ECI">
+            <value>5</value>
+        </request-parameter>
+        <request-parameter name="CN">
+            <value>Ulrike Kähler</value>
+        </request-parameter>
+        <request-parameter name="IPCTY">
+            <value>CH</value>
+        </request-parameter>
+        <request-parameter name="VC">
+            <value>NO</value>
+        </request-parameter>
+        <request-parameter name="BRAND">
+            <value>MasterCard</value>
+        </request-parameter>
+        <request-parameter name="AAVCheck">
+            <value>NO</value>
+        </request-parameter>
+        <request-parameter name="STATUS">
+            <value>9</value>
+        </request-parameter>
+        <request-parameter name="SHASIGN">
+            <value>59D3F2F68E042CDA054C0BA099DBBF79252CF41A</value>
+        </request-parameter>
+        <request-parameter name="TRXDATE">
+            <value>07/25/17</value>
+        </request-parameter>
+        <request-parameter name="ACCEPTANCE">
+            <value>399972</value>
+        </request-parameter>
+        <request-parameter name="currency">
+            <value>CHF</value>
+        </request-parameter>
+        <request-parameter name="PM">
+            <value>CreditCard</value>
+        </request-parameter>
+        <request-parameter name="NCERROR">
+            <value>0</value>
+        </request-parameter>
+        <request-parameter name="CARDNO">
+            <value>XXXXXXXXXXXX2813</value>
+        </request-parameter>
+        <request-parameter name="ED">
+            <value>0219</value>
+        </request-parameter>
+    </request-parameters>
+    <created-timestamp>2017-08-06 21:10:21</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2017-08-06 21:10:21</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</payment-gateway-callback>
+<payment-gateway-callback id="7" guid="4a2811fa-ff64-49fd-b9f5-2921155e3c78" shop-code="SHOP10">
+    <payment-gateway>authorizeNetSimPaymentGatewayLabel</payment-gateway>
+    <request-dump>
+Parameters
+
+Attributes
+CharacterEncodingFilter.FILTERED=true
+ShoppingCart=org.yes.cart.shoppingcart.impl.ShoppingCartImpl@408b6695
+YC_APP_MULTIWEBAPP_RESOLVER=[theme chain = [/ycdemolive/markup/, /ycdemo/markup/, /default/markup/]]
+org.springframework.web.context.request.RequestContextListener.REQUEST_ATTRIBUTES=org.apache.catalina.connector.Request@37858dfa
+org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER=org.springframework.web.context.request.async.WebAsyncManager@6dd216d7
+
+Headers
+accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+accept-encoding=gzip, deflate
+accept-language=en-us
+connection=keep-alive
+cookie=__utma=1.1924053283.1490046699.1511913817.1511951993.24; __utmz=1.1490046699.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _ga=GA1.1.1924053283.1490046699; Idea-2fad5001=52376448-e68f-48f8-8265-79ffbc6eb842; LoggedIn=AVJrlX4_ejhiB0YCxBmJbmZG185PXQV4; yc=7a483b95-6c04-425b-87ac-d4861d6a7556; yccookiepolicy=accepted
+host=localhost:8080
+user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.73.11 (KHTML, like Gecko) Version/7.0.1 Safari/537.73.11
+
+CookiesIdea-2fad5001=52376448-e68f-48f8-8265-79ffbc6eb842
+LoggedIn=AVJrlX4_ejhiB0YCxBmJbmZG185PXQV4
+__utma=1.1924053283.1490046699.1511913817.1511951993.24
+__utmz=1.1490046699.1.1.utmcsr
+_ga=GA1.1.1924053283.1490046699
+yc=7a483b95-6c04-425b-87ac-d4861d6a7556
+yccookiepolicy=accepted
+    </request-dump>
+    <request-parameters/>
+    <created-timestamp>2018-03-14 16:28:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2018-03-14 16:28:11</updated-timestamp>
+    <updated-by>anonymous</updated-by>
+</payment-gateway-callback>
+<payment-gateway-callback id="8" guid="4fabf40c-3915-4ae5-bf03-d84ff6906421" shop-code="SHOP10">
+    <payment-gateway>DISMISSED_authorizeNetSimPaymentGatewayLabel</payment-gateway>
+    <request-dump>
+Parameters
+
+Attributes
+CharacterEncodingFilter.FILTERED=true
+ShoppingCart=org.yes.cart.shoppingcart.impl.ShoppingCartImpl@408b6695
+org.springframework.web.context.request.RequestContextListener.REQUEST_ATTRIBUTES=org.apache.catalina.connector.Request@37858dfa
+org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER=org.springframework.web.context.request.async.WebAsyncManager@7657b2cf
+
+Headers
+accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+accept-encoding=gzip, deflate
+accept-language=en-us
+cache-control=max-age=0
+connection=keep-alive
+cookie=__utma=1.1924053283.1490046699.1511913817.1511951993.24; __utmz=1.1490046699.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); _ga=GA1.1.1924053283.1490046699; Idea-2fad5001=52376448-e68f-48f8-8265-79ffbc6eb842; JSESSIONID=1B7DD92E8F5F67DF5C1B3C3B78A5225E; LoggedIn=AVJrlX4_ejhiB0YCxBmJbmZG185PXQV4; yc=7a483b95-6c04-425b-87ac-d4861d6a7556; yccookiepolicy=accepted
+host=localhost:8080
+user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.73.11 (KHTML, like Gecko) Version/7.0.1 Safari/537.73.11
+
+CookiesIdea-2fad5001=52376448-e68f-48f8-8265-79ffbc6eb842
+JSESSIONID=1B7DD92E8F5F67DF5C1B3C3B78A5225E
+LoggedIn=AVJrlX4_ejhiB0YCxBmJbmZG185PXQV4
+__utma=1.1924053283.1490046699.1511913817.1511951993.24
+__utmz=1.1490046699.1.1.utmcsr
+_ga=GA1.1.1924053283.1490046699
+yc=7a483b95-6c04-425b-87ac-d4861d6a7556
+yccookiepolicy=accepted
+    </request-dump>
+    <request-parameters/>
+    <created-timestamp>2018-03-14 16:30:11</created-timestamp>
+    <created-by>anonymous</created-by>
+    <updated-timestamp>2019-01-12 22:03:33</updated-timestamp>
+    <updated-by>admin@yes-cart.com</updated-by>
+</payment-gateway-callback>
+</payment-gateway-callbacks>

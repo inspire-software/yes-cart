@@ -875,6 +875,22 @@
        </constructor-arg>
     </bean>
 
+    <bean id="managerRoleService" parent="txProxyTemplate">
+       <property name="target">
+           <bean class="org.yes.cart.service.domain.impl.BaseGenericServiceImpl">
+               <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="managerRoleDao"/>
+           </bean>
+       </property>
+    </bean>
+
+    <bean id="roleService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.BaseGenericServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="roleDao"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="skuWarehouseService" class="org.yes.cart.service.domain.impl.SkuWarehouseServiceCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">

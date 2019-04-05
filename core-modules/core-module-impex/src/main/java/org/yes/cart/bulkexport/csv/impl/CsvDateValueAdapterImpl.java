@@ -19,10 +19,9 @@ package org.yes.cart.bulkexport.csv.impl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.util.DateUtils;
 
 import java.time.Instant;
@@ -35,7 +34,7 @@ import java.time.ZonedDateTime;
  * Date: 10/11/2017
  * Time: 22:52
  */
-public class CsvDateValueAdapterImpl implements ValueAdapter {
+public class CsvDateValueAdapterImpl implements CsvValueAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(CsvDateValueAdapterImpl.class);
 
@@ -43,9 +42,9 @@ public class CsvDateValueAdapterImpl implements ValueAdapter {
      * {@inheritDoc}
      */
     @Override
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final CsvImpExColumn csvImpExColumn, final CsvImpExTuple tuple) {
 
-        final String pattern = impExColumn.getContext();
+        final String pattern = csvImpExColumn.getContext();
 
         if (rawValue != null) {
             if (StringUtils.isNotBlank(pattern)) {
@@ -67,15 +66,6 @@ public class CsvDateValueAdapterImpl implements ValueAdapter {
         return null;
 
 
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param extensibleValueAdapter extend
-     */
-    public void setExtensibleValueAdapter(ExtensibleValueAdapter extensibleValueAdapter) {
-        extensibleValueAdapter.extend(this, "DATE");
     }
 
 }

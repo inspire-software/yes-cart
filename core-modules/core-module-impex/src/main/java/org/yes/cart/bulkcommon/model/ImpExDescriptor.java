@@ -16,14 +16,12 @@
 
 package org.yes.cart.bulkcommon.model;
 
-import java.util.Collection;
-
 /**
  * User: denispavlov
  * Date: 26/11/2015
  * Time: 08:00
  */
-public interface ImpExDescriptor<C extends ImpExContext, T extends ImpExColumn> {
+public interface ImpExDescriptor<C extends ImpExContext> {
 
     /**
      * Get export context if one provided or null.
@@ -45,28 +43,5 @@ public interface ImpExDescriptor<C extends ImpExContext, T extends ImpExColumn> 
      * @return entity interface
      */
     Class getEntityTypeClass();
-
-    /**
-     * Get the collection of export columns.
-     *
-     * @return collection of export columns
-     */
-    Collection<T> getColumns();
-
-
-    /**
-     * @param columnName column name
-     * @return get column by name
-     */
-    T getColumn(String columnName);
-
-    /**
-     * Get the collection of export columns filtered by given field type.
-     *
-     * @param fieldType Field type constant discriminator.
-     * @return collection of export columns
-     */
-    Collection<T> getColumns(String fieldType);
-
 
 }

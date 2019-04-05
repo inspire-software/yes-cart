@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.xml.ProductTypeRangeListXStreamProvider;
@@ -254,7 +255,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
 
     @Override
     public RangeList getRangeList() {
-        if (rangeListCache == null && getRangeNavigation() != null) {
+        if (rangeListCache == null && StringUtils.isNotBlank(getRangeNavigation())) {
             rangeListCache = (RangeList) xStreamProvider.fromXML(getRangeNavigation());
         }
         return rangeListCache;

@@ -53,11 +53,17 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
 
     /** {@inheritDoc} */
     @Override
-    public List<Warehouse> getByShopId(final long shopId, boolean includeDisabled) {
+    public List<Warehouse> findByShopId(final long shopId, boolean includeDisabled) {
         if (includeDisabled) {
             return new ArrayList<>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId));
         }
         return new ArrayList<>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP.DISABLED", shopId, Boolean.FALSE));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Warehouse> getByShopId(final long shopId, boolean includeDisabled) {
+        return findByShopId(shopId, includeDisabled);
     }
 
     /** {@inheritDoc} */

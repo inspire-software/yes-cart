@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shipping-providers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<shipping-provider guid="XML_CARRIER">
+    <name><![CDATA[XML carrier]]></name>
+    <display-name>
+        <i18n lang="en">XML carrier EN</i18n>
+    </display-name>
+    <description><![CDATA[XML carrier desc]]></description>
+    <display-description>
+        <i18n lang="en">XML carrier desc EN</i18n>
+    </display-description>
+    <configuration worldwide="true" country="true" state="true" local="true"/>
+    <shipping-methods>
+        <shipping-method guid="XML_CARRIERSLA_1">
+            <name><![CDATA[XML carrier SLA 1]]></name>
+            <configuration type="F" min-days="3" max-days="10" guaranteed-delivery="true" named-day-delivery="true" billing-address-not-required="true" delivery-address-not-required="true"/>
+            <exclusions>
+                <customer-types>
+                    <type>B2B</type>
+                    <type>B2E</type>
+                </customer-types>
+                <weekdays>
+                    <weekday>FRIDAY</weekday>
+                    <weekday>SATURDAY</weekday>
+                    <weekday>SUNDAY</weekday>
+                </weekdays>
+                <dates>
+                    <date>
+                        <from>2019-01-01</from>
+                    </date>
+                    <date>
+                        <from>2019-02-01</from>
+                        <to>2019-02-03</to>
+                    </date>
+                </dates>
+            </exclusions>
+            <supported>
+                <fulfilment-centres>
+                    <fulfilment-centre>WAREHOUSE_1</fulfilment-centre>
+                    <fulfilment-centre>WAREHOUSE_2</fulfilment-centre>
+                </fulfilment-centres>
+                <payment-gateways>
+                    <payment-gateway>testPaymentGatewayLabel</payment-gateway>
+                    <payment-gateway>courierPaymentGatewayLabel</payment-gateway>
+                </payment-gateways>
+            </supported>
+        </shipping-method>
+        <shipping-method guid="XML_CARRIERSLA_2">
+            <name><![CDATA[12]]></name>
+            <configuration type="F" guaranteed-delivery="false" named-day-delivery="false" billing-address-not-required="false" delivery-address-not-required="false"/>
+        </shipping-method>
+    </shipping-methods>
+</shipping-provider>
+</shipping-providers>

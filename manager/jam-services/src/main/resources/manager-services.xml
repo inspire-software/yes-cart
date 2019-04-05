@@ -259,6 +259,12 @@
         <constructor-arg index="2" ref="voAssemblySupport"/>
     </bean>
 
+    <bean id="voDataGroupService" class="org.yes.cart.service.vo.impl.VoDataGroupServiceImpl">
+        <constructor-arg index="0" ref="dataGroupService"/>
+        <constructor-arg index="1" ref="dataDescriptorService"/>
+        <constructor-arg index="2" ref="voAssemblySupport"/>
+    </bean>
+
     <bean id="defaultUiOrderFlowCancelAction" class="org.yes.cart.service.order.impl.CancelOrderAction">
         <constructor-arg index="0" ref="dtoCustomerOrderService"/>
     </bean>

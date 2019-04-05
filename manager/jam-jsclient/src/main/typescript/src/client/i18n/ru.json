@@ -181,6 +181,8 @@
   "PANEL_SYSTEM_ATTR": "Атрибуты",
   "PANEL_SYSTEM_IMPORT": "Импорт",
   "PANEL_SYSTEM_EXPORT": "Экспорт",
+  "PANEL_SYSTEM_DATAGROUPS": "Группы данных",
+  "PANEL_SYSTEM_DATADESCRIPTORS": "Обработчики данных",
   "PANEL_SYSTEM_INDEX": "Поисковый индекс",
   "PANEL_SYSTEM_PG": "Платежные шлюзы",
   "PANEL_PG_CALLBACK": "Необработанные подтверждения",
@@ -733,6 +735,12 @@
   "IMPEX_STATUS_STARTED": "Текущий статус: запущена",
   "IMPEX_STATUS_INPROGRESS": "Текущий статус: выполняется",
   "IMPEX_STATUS_FINISHED": "Текущий статус: завершена",
+
+  "DATAGROUP_TYPE": "Тип",
+  "DATAGROUP_QUALIFIER": "Спецификация",
+  "DATAGROUP_DESCRIPTORS": "Обработчики",
+  "DATADESCRIPTOR_TYPE": "Тип",
+  "DATADESCRIPTOR_VALUE": "Конфигурация",
 
   "DASHBOARD_VIEW_DETAILS": "Подробно",
   "DASHBOARD_ORDERS_DETAILS": "Управление заказами",

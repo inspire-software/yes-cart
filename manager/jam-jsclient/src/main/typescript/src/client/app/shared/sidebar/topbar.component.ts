@@ -63,7 +63,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
       }
     }, this.delayedAlertsMs);
     this.delayedAlerts.delay(3000);
-    var _pollingRefresh = function() {
+    let _pollingRefresh = function() {
       if (!that.continuePolling) {
         that.continuePolling = true; // enable polling if user interaction detected
         LogUtil.debug('TopbarComponent user interaction detected, continue polling');

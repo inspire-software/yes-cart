@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<organisation-users xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+    <organisation-user id="10103" guid="10103">
+        <credentials>
+            <email>test2@test.com</email>
+            <password>test</password>
+            <enabled>true</enabled>
+        </credentials>
+        <organisation>
+            <company-name-1>ABC</company-name-1>
+            <company-name-2>DEF</company-name-2>
+            <company-department>HJK</company-department>
+            <shops>
+                <shop code="SHOIP1"/>
+                <shop code="SHOIP2"/>
+            </shops>
+            <roles>
+                <role code="ROLE_SMADMIN"/>
+                <role code="ROLE_OTHER"/>
+            </roles>
+        </organisation>
+        <contact-details>
+            <salutation>Mr</salutation>
+            <firstname>John</firstname>
+            <lastname>Doe</lastname>
+        </contact-details>
+        <preferences>
+            <dashboard-widgets>a,b,c</dashboard-widgets>
+        </preferences>
+    </organisation-user>
+    <organisation-user id="10103" guid="10103">
+        <credentials>
+            <email>test3@test.com</email>
+            <password>test</password>
+            <enabled>true</enabled>
+        </credentials>
+        <organisation>
+            <company-name-1>ABC</company-name-1>
+            <company-name-2>DEF</company-name-2>
+            <company-department>HJK</company-department>
+            <shops>
+                <shop code="SHOIP1"/>
+                <shop code="SHOIP2"/>
+            </shops>
+            <roles>
+                <role code="ROLE_SMADMIN"/>
+                <role code="ROLE_OTHER"/>
+            </roles>
+        </organisation>
+        <contact-details>
+            <salutation>Mr</salutation>
+            <firstname>John</firstname>
+            <lastname>Doe</lastname>
+        </contact-details>
+        <preferences>
+            <dashboard-widgets>a,b,c</dashboard-widgets>
+        </preferences>
+    </organisation-user>
+</organisation-users>

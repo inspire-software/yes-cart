@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taxes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<tax guid="SHOIP1_EUR_XML_VAT" code="XML_VAT" shop="SHOIP1" currency="EUR">
+    <rate gross="false">20.00</rate>
+</tax>
+<tax guid="SHOIP1_EUR_XML_VAT (UA)" code="XML_VAT (UA)" shop="SHOIP1" currency="EUR">
+    <rate gross="false">10.00</rate>
+</tax>
+<tax guid="SHOIP1_EUR_XML_VAT (US-US)" code="XML_VAT (US-US)" shop="SHOIP1" currency="EUR">
+    <rate gross="false">10.00</rate>
+</tax>
+<tax guid="SHOIP1_EUR_XML_VAT (CC_TEST1 UA)" code="XML_VAT (CC_TEST1 UA)" shop="SHOIP1" currency="EUR">
+    <rate gross="false">5.00</rate>
+</tax>
+<tax guid="SHOIP1_EUR_XML_VAT (CC_TEST1 US-US)" code="XML_VAT (CC_TEST1 US-US)" shop="SHOIP1" currency="EUR">
+    <rate gross="false">5.00</rate>
+</tax>
+<tax guid="SHOIP1_EUR_XML_VAT (CC_TEST1)" code="XML_VAT (CC_TEST1)" shop="SHOIP1" currency="EUR">
+    <rate gross="false">5.00</rate>
+</tax>
+<tax guid="SHOIP1_USD_XML_VAT" code="XML_VAT" shop="SHOIP1" currency="USD">
+    <rate gross="false">20.00</rate>
+</tax>
+<tax guid="SHOIP1_UAH_XML_VAT" code="XML_VAT" shop="SHOIP1" currency="UAH">
+    <rate gross="false">20.00</rate>
+</tax>
+</taxes>

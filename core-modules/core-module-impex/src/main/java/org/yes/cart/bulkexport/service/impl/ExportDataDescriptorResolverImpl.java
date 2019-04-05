@@ -19,15 +19,14 @@ package org.yes.cart.bulkexport.service.impl;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.bulkcommon.service.DataDescriptorReader;
 import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
-import org.yes.cart.bulkcommon.service.DataDescriptorTuplizer;
 import org.yes.cart.bulkexport.model.ExportDescriptor;
 import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.domain.entity.DataGroup;
 import org.yes.cart.service.domain.DataDescriptorService;
 import org.yes.cart.service.domain.DataGroupService;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,12 +43,14 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
     private final DataGroupService dataGroupService;
     private final DataDescriptorService dataDescriptorService;
 
-    private final List<DataDescriptorTuplizer<ExportDescriptor>> tuplizers = new ArrayList<>();
+    private final List<DataDescriptorReader<ExportDescriptor>> readers;
 
     public ExportDataDescriptorResolverImpl(final DataGroupService dataGroupService,
-                                            final DataDescriptorService dataDescriptorService) {
+                                            final DataDescriptorService dataDescriptorService,
+                                            final List<DataDescriptorReader<ExportDescriptor>> readers) {
         this.dataGroupService = dataGroupService;
         this.dataDescriptorService = dataDescriptorService;
+        this.readers = readers;
     }
 
     /**
@@ -61,11 +62,11 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
         final DataDescriptor dataDescriptor = dataDescriptorService.findByName(name);
 
         if (dataDescriptor != null) {
-            for (final DataDescriptorTuplizer<ExportDescriptor> tuplizer : this.tuplizers) {
+            for (final DataDescriptorReader<ExportDescriptor> reader : this.readers) {
 
-                if (tuplizer.supports(dataDescriptor)) {
+                if (reader.supports(dataDescriptor)) {
 
-                    return tuplizer.toDescriptorObject(dataDescriptor);
+                    return reader.toDescriptorObject(dataDescriptor);
 
                 }
 
@@ -119,19 +120,4 @@ public class ExportDataDescriptorResolverImpl implements DataDescriptorResolver<
         return dataGroupService.findByType(DataGroup.TYPE_EXPORT);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void register(final DataDescriptorTuplizer<ExportDescriptor> exportDescriptorDataDescriptorTuplizer) {
-        for (final DataDescriptorTuplizer<ExportDescriptor> tuplizer : this.tuplizers) {
-            if (exportDescriptorDataDescriptorTuplizer.equals(tuplizer)) {
-                return; // already registered
-            }
-        }
-
-        this.tuplizers.add(exportDescriptorDataDescriptorTuplizer);
-
-        LOG.info("Registered data export descriptor tuplizer: {}", exportDescriptorDataDescriptorTuplizer);
-    }
 }

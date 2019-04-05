@@ -16,29 +16,29 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 
 /**
  * User: denispavlov
  * Date: 12-08-11
  * Time: 1:28 PM
  */
-public class CsvPlainStringValueAdapter implements ValueAdapter {
+public class CsvPlainStringValueAdapter implements CsvValueAdapter {
 
     /**
      * Simple string value pass through.
      *
      * @param rawValue raw value
      * @param requiredType required data type
-     * @param impExColumn impex column
+     * @param csvImpExColumn impex column
      * @param tuple current tuple
      *
      * @return string value
      */
     @Override
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final CsvImpExColumn csvImpExColumn, final CsvImpExTuple tuple) {
         if (rawValue != null) {
             return String.valueOf(rawValue);
         }

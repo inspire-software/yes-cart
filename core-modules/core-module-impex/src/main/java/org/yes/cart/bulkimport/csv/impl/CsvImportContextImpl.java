@@ -16,17 +16,25 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkimport.model.ImportContext;
+import org.yes.cart.bulkimport.csv.CsvImportContext;
 
 /**
  * User: denispavlov
  * Date: 11/06/2015
  * Time: 07:59
  */
-public class CsvImportContextImpl implements ImportContext {
+public class CsvImportContextImpl implements CsvImportContext {
 
     private String shopCode;
     private String shopCodeColumn;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getImpExService() {
+        return "CSV";
+    }
 
     /**
      * {@inheritDoc}

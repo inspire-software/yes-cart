@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products-links xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<product-links product-code="XML_BENDER-ua">
+    <product-link association="cross" sku="XML_CC_TEST10"/>
+    <product-link association="new-assoc" sku="XML_CC_TEST10"/>
+</product-links>
+</products-links>

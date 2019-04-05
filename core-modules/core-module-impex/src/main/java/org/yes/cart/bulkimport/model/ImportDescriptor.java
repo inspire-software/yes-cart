@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.model;
 
+import org.yes.cart.bulkcommon.model.ImpExContext;
 import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 
 /**
@@ -23,47 +24,7 @@ import org.yes.cart.bulkcommon.model.ImpExDescriptor;
  * Date: 08-May-2011
  * Time: 11:12:54
  */
-public interface ImportDescriptor extends ImpExDescriptor<ImportContext, ImportColumn> {
-
-    enum ImportMode { MERGE, DELETE, INSERT_ONLY, UPDATE_ONLY }
-
-    /**
-     * Get import mode for given descriptor.
-     *
-     * @return import mode
-     */
-    ImportMode getMode();
-
-    /**
-     * Get import context if one provided or null.
-     *
-     * @return import context
-     */
-    @Override
-    ImportContext getContext();
-
-    /**
-     * Get import mode for given descriptor.
-     *
-     * @return import mode
-     */
-    String getModeName();
-
-    /**
-     * Get fully qualified entity interface. For example - org.yes.cart.domain.entity.Brand
-     *
-     * @return fully qualified entity interface
-     */
-    @Override
-    String getEntityType();
-
-    /**
-     * Get entity interface. For example - org.yes.cart.domain.entity.Brand
-     *
-     * @return entity interface
-     */
-    @Override
-    Class getEntityTypeClass();
+public interface ImportDescriptor<C extends ImpExContext> extends ImpExDescriptor<C> {
 
     /**
      * Get the import file description.
@@ -85,29 +46,5 @@ public interface ImportDescriptor extends ImpExDescriptor<ImportContext, ImportC
      * @param importDirectory import directory to use.
      */
     void setImportDirectory(String importDirectory);
-
-    /**
-     * Get select sql, which used to look up objects that are to
-     * be modified (if they exist).
-     * @return        select sql
-     */
-    String getSelectSql();
-
-    /**
-     * Get insert sql, which used instead of hibernate object save to
-     * speed up bulk import.
-     *
-     * @return        insert sql
-     */
-    String getInsertSql();
-
-    /**
-     * Get delete sql, which used instead of hibernate object delete to
-     * speed up bulk import.
-     *
-     * @return        delete sql
-     */
-    String getDeleteSql();
-
 
 }

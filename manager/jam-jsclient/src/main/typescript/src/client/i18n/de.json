@@ -181,6 +181,8 @@
   "PANEL_SYSTEM_ATTR": "Attribute",
   "PANEL_SYSTEM_IMPORT": "Import",
   "PANEL_SYSTEM_EXPORT": "Export",
+  "PANEL_SYSTEM_DATAGROUPS": "Datengruppen",
+  "PANEL_SYSTEM_DATADESCRIPTORS": "Datenbeschreibungen",
   "PANEL_SYSTEM_INDEX": "Suchindex",
   "PANEL_SYSTEM_PG": "Bezahlungs Gateways",
   "PANEL_PG_CALLBACK": "Fehlerhafte Bestätigungen",
@@ -733,6 +735,12 @@
   "IMPEX_STATUS_STARTED": "Aktueller Status: gestartet",
   "IMPEX_STATUS_INPROGRESS": "Aktueller Status: in Bearbeitung",
   "IMPEX_STATUS_FINISHED": "Aktueller Status: fertiggestellt",
+
+  "DATAGROUP_TYPE": "Type",
+  "DATAGROUP_QUALIFIER": "Qualifikation",
+  "DATAGROUP_DESCRIPTORS": "Deskriptoren",
+  "DATADESCRIPTOR_TYPE": "Type",
+  "DATADESCRIPTOR_VALUE": "Konfiguration",
 
   "DASHBOARD_VIEW_DETAILS": "Details anzeigen",
   "DASHBOARD_ORDERS_DETAILS": "Bestellungen verwalten",

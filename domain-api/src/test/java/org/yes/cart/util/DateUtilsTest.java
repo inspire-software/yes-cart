@@ -389,11 +389,26 @@ public class DateUtilsTest {
         assertEquals(1, dow.size());
         assertTrue(dow.contains(DayOfWeek.SUNDAY));
 
-        dow = DateUtils.fromCalendarDaysOfWeekToISO(Arrays.asList(Calendar.MONDAY,Calendar.WEDNESDAY, Calendar.SUNDAY));
+        dow = DateUtils.fromCalendarDaysOfWeekToISO(Arrays.asList(Calendar.MONDAY, Calendar.WEDNESDAY, Calendar.SUNDAY));
         assertNotNull(dow);
         assertEquals(3, dow.size());
         assertTrue(dow.contains(DayOfWeek.MONDAY));
         assertTrue(dow.contains(DayOfWeek.WEDNESDAY));
         assertTrue(dow.contains(DayOfWeek.SUNDAY));
     }
+
+    @Test
+    public void fromISOtoCalendarDayOfWeek() throws Exception {
+
+        assertEquals(-1, DateUtils.fromISOtoCalendarDayOfWeek(null));
+        assertEquals(Calendar.MONDAY, DateUtils.fromISOtoCalendarDayOfWeek(DayOfWeek.MONDAY));
+        assertEquals(Calendar.TUESDAY, DateUtils.fromISOtoCalendarDayOfWeek(DayOfWeek.TUESDAY));
+        assertEquals(Calendar.WEDNESDAY, DateUtils.fromISOtoCalendarDayOfWeek(DayOfWeek.WEDNESDAY));
+        assertEquals(Calendar.THURSDAY, DateUtils.fromISOtoCalendarDayOfWeek(DayOfWeek.THURSDAY));
+        assertEquals(Calendar.FRIDAY, DateUtils.fromISOtoCalendarDayOfWeek(DayOfWeek.FRIDAY));
+        assertEquals(Calendar.SATURDAY, DateUtils.fromISOtoCalendarDayOfWeek(DayOfWeek.SATURDAY));
+        assertEquals(Calendar.SUNDAY, DateUtils.fromISOtoCalendarDayOfWeek(DayOfWeek.SUNDAY));
+
+    }
+
 }

@@ -47,12 +47,12 @@ public interface LocationEndpointController {
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/country", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCountry createCountry(@RequestBody VoCountry voCategory)  throws Exception;
+    VoCountry createCountry(@RequestBody VoCountry voCountry)  throws Exception;
 
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/country", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCountry updateCountry(@RequestBody VoCountry voCategory)  throws Exception;
+    VoCountry updateCountry(@RequestBody VoCountry voCountry)  throws Exception;
 
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/country/{id}", method = RequestMethod.DELETE)

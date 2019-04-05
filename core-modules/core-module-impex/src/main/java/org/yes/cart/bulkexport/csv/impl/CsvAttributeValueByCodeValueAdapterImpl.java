@@ -17,10 +17,9 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.yes.cart.bulkcommon.model.ExtensibleValueAdapter;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.domain.entity.AttrValue;
 
 import java.util.Collection;
@@ -30,15 +29,15 @@ import java.util.Collection;
  * Date: 30/11/2015
  * Time: 22:16
  */
-public class CsvAttributeValueByCodeValueAdapterImpl implements ValueAdapter {
+public class CsvAttributeValueByCodeValueAdapterImpl implements CsvValueAdapter {
 
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn, final ImpExTuple tuple) {
-        final String code = impExColumn.getContext();
+    public Object fromRaw(final Object rawValue, final String requiredType, final CsvImpExColumn csvImpExColumn, final CsvImpExTuple tuple) {
+        final String code = csvImpExColumn.getContext();
         final Collection<AttrValue> values = (Collection<AttrValue>) rawValue;
         if (CollectionUtils.isNotEmpty(values)) {
             for (final AttrValue av : values) {
@@ -48,15 +47,6 @@ public class CsvAttributeValueByCodeValueAdapterImpl implements ValueAdapter {
             }
         }
         return null;
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param extensibleValueAdapter extend
-     */
-    public void setExtensibleValueAdapter(ExtensibleValueAdapter extensibleValueAdapter) {
-        extensibleValueAdapter.extend(this, "AVC");
     }
 
 }

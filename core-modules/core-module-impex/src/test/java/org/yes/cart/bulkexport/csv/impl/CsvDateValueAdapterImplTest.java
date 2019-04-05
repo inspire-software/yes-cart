@@ -20,8 +20,8 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.bulkcommon.model.ImpExColumn;
-import org.yes.cart.bulkcommon.model.ImpExTuple;
+import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
+import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
 import org.yes.cart.util.DateUtils;
 
 import static org.junit.Assert.assertEquals;
@@ -38,11 +38,11 @@ public class CsvDateValueAdapterImplTest {
     @Test
     public void fromRaw() throws Exception {
 
-        final ImpExColumn ldColumn = this.mockery.mock(ImpExColumn.class, "ldColumn");
-        final ImpExColumn ldtColumn = this.mockery.mock(ImpExColumn.class, "ldtColumn");
-        final ImpExColumn zdtColumn = this.mockery.mock(ImpExColumn.class, "zdtColumn");
-        final ImpExColumn iColumn = this.mockery.mock(ImpExColumn.class, "iColumn");
-        final ImpExTuple tuple = this.mockery.mock(ImpExTuple.class, "tuple");
+        final CsvImpExColumn ldColumn = this.mockery.mock(CsvImpExColumn.class, "ldColumn");
+        final CsvImpExColumn ldtColumn = this.mockery.mock(CsvImpExColumn.class, "ldtColumn");
+        final CsvImpExColumn zdtColumn = this.mockery.mock(CsvImpExColumn.class, "zdtColumn");
+        final CsvImpExColumn iColumn = this.mockery.mock(CsvImpExColumn.class, "iColumn");
+        final CsvImpExTuple tuple = this.mockery.mock(CsvImpExTuple.class, "tuple");
 
         final CsvDateValueAdapterImpl adapter = new CsvDateValueAdapterImpl();
 

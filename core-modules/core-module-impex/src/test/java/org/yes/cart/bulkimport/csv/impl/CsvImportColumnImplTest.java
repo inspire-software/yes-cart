@@ -17,7 +17,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.junit.Test;
-import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 
 import java.util.Map;
 import java.util.Properties;
@@ -37,7 +37,7 @@ public class CsvImportColumnImplTest {
     @Test
     public void testGetValue() {
 
-        final ValueAdapter adapter = (rawValue, requiredType, impExColumn, tuple) -> rawValue;
+        final CsvValueAdapter adapter = (rawValue, requiredType, impExColumn, tuple) -> rawValue;
 
         String reExpKey = "((\\D?\\S{4,}){1,}).*-?.*";
         String reExpValue = ".*-.*\\s{1,}((\\D?\\S{4,}){1,})\\s{0,}.*";

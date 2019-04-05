@@ -18,6 +18,7 @@ package org.yes.cart.service.domain;
 
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueSystem;
+import org.yes.cart.domain.entity.System;
 
 import java.util.Map;
 
@@ -159,6 +160,13 @@ public interface SystemService {
      * @param value attribute value
      */
     void updateAttributeValue(String key, String value);
+
+    /**
+     * Get system entry.
+     *
+     * @return system
+     */
+    System getSystem();
 
     /**
      * Get generic dao

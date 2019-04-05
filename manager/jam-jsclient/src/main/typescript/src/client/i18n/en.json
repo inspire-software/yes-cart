@@ -181,6 +181,8 @@
   "PANEL_SYSTEM_ATTR": "Attributes",
   "PANEL_SYSTEM_IMPORT": "Import",
   "PANEL_SYSTEM_EXPORT": "Export",
+  "PANEL_SYSTEM_DATAGROUPS": "Data groups",
+  "PANEL_SYSTEM_DATADESCRIPTORS": "Data descriptors",
   "PANEL_SYSTEM_INDEX": "Search Indexes",
   "PANEL_SYSTEM_PG": "Payment Gateways",
   "PANEL_PG_CALLBACK": "Unprocessed Callbacks",
@@ -733,6 +735,12 @@
   "IMPEX_STATUS_STARTED": "Current status: started",
   "IMPEX_STATUS_INPROGRESS": "Current status: in progress",
   "IMPEX_STATUS_FINISHED": "Current status: finished",
+
+  "DATAGROUP_TYPE": "Type",
+  "DATAGROUP_QUALIFIER": "Qualifier",
+  "DATAGROUP_DESCRIPTORS": "Descriptors",
+  "DATADESCRIPTOR_TYPE": "Type",
+  "DATADESCRIPTOR_VALUE": "Configuration",
 
   "DASHBOARD_VIEW_DETAILS": "View Details",
   "DASHBOARD_ORDERS_DETAILS": "Manage orders",

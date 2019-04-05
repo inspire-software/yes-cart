@@ -20,6 +20,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
 import org.yes.cart.bulkcommon.service.ExportDirectorService;
@@ -33,6 +36,7 @@ import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.entity.DataGroup;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
@@ -45,7 +49,7 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.service.async.AsyncContextFactory;
+import org.yes.cart.util.log.Markers;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +62,7 @@ import java.util.*;
  * Date: 27/11/2015
  * Time: 11:56
  */
-public class ExportDirectorImplService extends SingletonJobRunner implements ExportDirectorService {
+public class ExportDirectorImplService extends SingletonJobRunner implements ExportDirectorService, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExportDirectorImplService.class);
 
@@ -74,15 +78,21 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
 
     private final FederationFacade federationFacade;
 
+    private final Map<String, String> bulkExportServiceBeanMap;
+
+    private ApplicationContext applicationContext;
+
     /**
      * Construct export director
-     *  @param pathToExportDirectory   path to use.
-     * @param dataDescriptorResolver  descriptor resolver
-     * @param executor                async executor
-     * @param nodeService             node service
-     * @param asyncContextFactory     async context factory
-     * @param systemService           system service
-     * @param federationFacade        data federation service
+     *
+     * @param pathToExportDirectory    path to use.
+     * @param dataDescriptorResolver   descriptor resolver
+     * @param executor                 async executor
+     * @param nodeService              node service
+     * @param asyncContextFactory      async context factory
+     * @param systemService            system service
+     * @param federationFacade         data federation service
+     * @param bulkExportServiceBeanMap map of export services
      */
     public ExportDirectorImplService(final String pathToExportDirectory,
                                      final DataDescriptorResolver<ExportDescriptor> dataDescriptorResolver,
@@ -90,7 +100,8 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
                                      final NodeService nodeService,
                                      final AsyncContextFactory asyncContextFactory,
                                      final SystemService systemService,
-                                     final FederationFacade federationFacade) {
+                                     final FederationFacade federationFacade,
+                                     final Map<String, String> bulkExportServiceBeanMap) {
         super(executor);
         this.pathToExportDirectory = pathToExportDirectory;
         this.nodeService = nodeService;
@@ -98,6 +109,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
         this.systemService = systemService;
         this.dataDescriptorResolver = dataDescriptorResolver;
         this.federationFacade = federationFacade;
+        this.bulkExportServiceBeanMap = bulkExportServiceBeanMap;
     }
 
 
@@ -218,12 +230,23 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
                 put(JobContextKeys.EXPORT_FILE, exportFile);
             }});
 
-            if ("IMAGE".equals(descriptorObject.getEntityType())) {
-                getNewBulkExportImagesService().doExport(dataJob);
-            } else if ("org.yes.cart.payment.persistence.entity.CustomerOrderPayment".equals(descriptorObject.getEntityType())) {
-                getNewBulkPaymentExportService().doExport(dataJob);
+            final String entityType = descriptorObject.getEntityType();
+            final String impExService = descriptorObject.getContext().getImpExService();
+
+            final String specific = impExService + '-' + entityType;
+
+            final String specificServiceBean = this.bulkExportServiceBeanMap.get(specific);
+            if (specificServiceBean != null) {
+                this.applicationContext.getBean(specificServiceBean, ExportService.class).doExport(dataJob);
             } else {
-                getNewBulkExportService().doExport(dataJob);
+                final String generalServiceBean = this.bulkExportServiceBeanMap.get(impExService);
+                if (generalServiceBean != null) {
+                    this.applicationContext.getBean(generalServiceBean, ExportService.class).doExport(dataJob);
+                } else {
+                    LOG.error(Markers.alert(), "Unknown export service {} for entity {}",
+                            descriptorObject.getContext().getImpExService(),
+                            descriptorObject.getEntityType());
+                }
             }
         }
     }
@@ -292,27 +315,15 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
         return pathToExportDirectory;
     }
 
-
     /**
-     * @return IoC prototype instance
+     * Spring IoC.
+     *
+     * @param applicationContext application context.
+     *
+     * @throws BeansException exception
      */
-    public ExportService getNewBulkExportService() {
-        return null;
+    @Override
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
-
-    /**
-     * @return IoC prototype instance
-     */
-    public ExportService getNewBulkPaymentExportService() {
-        return null;
-    }
-
-    /**
-     * @return IoC prototype instance
-     */
-    public ExportService getNewBulkExportImagesService() {
-        return null;
-    }
-
-
 }

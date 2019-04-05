@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<brands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<brand guid="XML_001">
+    <name><![CDATA[XML 001]]></name>
+    <description><![CDATA[xml 001 desc]]></description>
+</brand>
+<brand guid="FutureRobots">
+    <name><![CDATA[FutureRobots]]></name>
+    <description><![CDATA[Unknown]]></description>
+</brand>
+<brand guid="XML_002">
+    <name><![CDATA[XML 002]]></name>
+    <description><![CDATA[xml 002 desc]]></description>
+    <custom-attributes>
+        <custom-attribute attribute="BRAND_IMAGE0">
+            <custom-value><![CDATA[xml_002_brand.jpeg]]></custom-value>
+        </custom-attribute>
+    </custom-attributes>
+</brand>
+</brands>

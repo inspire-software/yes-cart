@@ -18,9 +18,9 @@ package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.io.FileUtils;
 import org.yes.cart.bulkcommon.service.ImportService;
+import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
-import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.service.impl.AbstractImportService;
+import org.yes.cart.bulkimport.service.impl.ImportFileUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
@@ -39,7 +39,7 @@ import java.util.Set;
  * Date: 12/12/11
  * Time: 10:35 AM
  */
-public class ImagesBulkImportServiceImpl extends AbstractImportService implements ImportService {
+public class ImagesBulkImportServiceImpl implements ImportService {
 
     private final ImageService imageService;
 
@@ -55,7 +55,6 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
     public ImagesBulkImportServiceImpl(final FederationFacade federationFacade,
                                        final ImageService imageService,
                                        final ImageImportDomainObjectStrategy[] strategies) {
-        super(federationFacade);
         this.imageService = imageService;
         this.strategies = strategies;
     }
@@ -70,7 +69,7 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
         final Set<String> importedFiles = context.getAttribute(JobContextKeys.IMPORT_FILE_SET);
         final String fileName = context.getAttribute(JobContextKeys.IMPORT_FILE);
         final String imageVaultRootDirectory = context.getAttribute(JobContextKeys.IMAGE_VAULT_PATH);
-        final ImportDescriptor importDescriptor = context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR);
+        final CsvImportDescriptor importDescriptor = context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR);
         final String imageImportDescriptorName = context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_NAME);
 
         final String regExp = importDescriptor.getImportFileDescriptor().getFileNameMask();
@@ -81,7 +80,7 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
                 imageImportDescriptorName,
                 regExp);
         statusListener.notifyMessage(info);
-        File[] files = getFilesToImport(importDescriptor, fileName);
+        File[] files = ImportFileUtils.getFilesToImport(importDescriptor, fileName);
         if (files != null) {
             info = MessageFormat.format(
                     "\nINFO found {0} images to import",
@@ -112,7 +111,7 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
      * @param imageVaultRootDirectory path to image vault
      */
     private void doImport(final File file,
-                          final ImportDescriptor importDescriptor,
+                          final CsvImportDescriptor importDescriptor,
                           final JobStatusListener statusListener,
                           final Set<String> importedFiles,
                           final String imageVaultRootDirectory) {

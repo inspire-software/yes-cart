@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<attribute-groups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<attribute-group code="SYSTEM" name="System settings.">
+    <description><![CDATA[System wide settings]]></description>
+</attribute-group>
+<attribute-group code="SHOP" name="Shop settings.">
+    <description><![CDATA[Shop settings.]]></description>
+</attribute-group>
+<attribute-group code="CATEGORY" name="Category settings.">
+    <description><![CDATA[Category settings.]]></description>
+</attribute-group>
+<attribute-group code="PRODUCT" name="Product settings.">
+    <description><![CDATA[Product settings]]></description>
+</attribute-group>
+<attribute-group code="BRAND" name="Brand settings.">
+    <description><![CDATA[Brand settings.]]></description>
+</attribute-group>
+<attribute-group code="CUSTOMER" name="Customer settings.">
+    <description><![CDATA[Customer settings.]]></description>
+</attribute-group>
+<attribute-group code="XML_NEW" name="New group"/>
+</attribute-groups>

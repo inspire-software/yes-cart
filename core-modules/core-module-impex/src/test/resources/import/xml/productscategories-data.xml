@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products-categories xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+<product-categories product-code="XML_CC_TEST10">
+    <product-category guid="XML_104" rank="400"/>
+    <product-category guid="XML_105" rank="400"/>
+</product-categories>
+<product-categories product-code="XML_BENDER-ua">
+    <product-category guid="XML_104" rank="999"/>
+    <product-category guid="XML_105" rank="999"/>
+</product-categories>
+</products-categories>
