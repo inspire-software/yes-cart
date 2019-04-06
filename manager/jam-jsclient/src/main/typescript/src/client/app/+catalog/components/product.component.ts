@@ -141,9 +141,10 @@ export class ProductComponent implements OnInit, OnDestroy {
       'productTypeName': ['', YcValidators.requiredNonBlankTrimmed],
       'description': [''],
       'featured': [''],
-      'minOrderQuantity': ['', YcValidators.positiveWholeNumber],
-      'maxOrderQuantity': ['', YcValidators.positiveWholeNumber],
-      'stepOrderQuantity': ['', YcValidators.positiveWholeNumber],
+      'minOrderQuantity': ['', YcValidators.positiveNumber],
+      'maxOrderQuantity': ['', YcValidators.positiveNumber],
+      'stepOrderQuantity': ['', YcValidators.positiveNumber
+      ],
       'uri': ['', validUri],
       'uitemplate': [''],
       'uisearchtemplate': [''],
