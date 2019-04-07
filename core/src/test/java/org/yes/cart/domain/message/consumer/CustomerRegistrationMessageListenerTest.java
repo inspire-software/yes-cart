@@ -117,8 +117,11 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         registrationMessage.setShopMailFrom("noreply@shop.com");
         registrationMessage.setShopName("Gadget universe");
         registrationMessage.setShopUrl(new HashSet<>());
-        registrationMessage.getShopUrl().add("www.somegadget.com");
-        registrationMessage.getShopUrl().add("somegadget.com");
+        registrationMessage.getShopUrl().add("http://www.somegadget.com");
+        registrationMessage.getShopUrl().add("http://somegadget.com");
+        registrationMessage.setShopSecureUrl(new HashSet<>());
+        registrationMessage.getShopSecureUrl().add("https://www.somegadget.com");
+        registrationMessage.getShopSecureUrl().add("https://somegadget.com");
         registrationMessage.setMailTemplatePathChain(templateChain);
         registrationMessage.setTemplateName("customerChangePassword");
         registrationMessage.setLocale("en");

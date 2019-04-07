@@ -111,6 +111,7 @@ public class ContactFormAspect extends BaseNotificationAspect {
         registrationMessage.setShopCode(shop.getCode());
         registrationMessage.setShopName(shop.getName());
         registrationMessage.setShopUrl(transformShopUrls(shop));
+        registrationMessage.setShopSecureUrl(transformShopSecureUrls(shop));
 
         registrationMessage.setAdditionalData(registrationData);
 
@@ -145,6 +146,12 @@ public class ContactFormAspect extends BaseNotificationAspect {
     private Set<String> transformShopUrls(final Shop shop) {
         final Set<String> rez = new HashSet<>();
         rez.add(shop.getDefaultShopUrl());
+        return rez;
+    }
+
+    private Set<String> transformShopSecureUrls(final Shop shop) {
+        final Set<String> rez = new HashSet<>();
+        rez.add(shop.getDefaultShopSecureUrl());
         return rez;
     }
 

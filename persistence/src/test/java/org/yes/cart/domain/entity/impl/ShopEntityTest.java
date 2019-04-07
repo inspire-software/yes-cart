@@ -58,6 +58,7 @@ public class ShopEntityTest {
         shopEntity.setShopUrl(new HashSet<>(Arrays.asList(u1, u2, u3)));
 
         assertEquals("http://www.u2.com", shopEntity.getDefaultShopUrl());
+        assertEquals("https://www.u2.com", shopEntity.getDefaultShopSecureUrl());
 
         context.assertIsSatisfied();
 

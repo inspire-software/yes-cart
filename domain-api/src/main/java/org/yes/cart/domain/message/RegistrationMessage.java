@@ -183,9 +183,23 @@ public interface RegistrationMessage extends Serializable {
     /**
      * Set shop urls.
      *
-     * @param shopUrl shop urls.
+     * @param shopUrl shop HTTP urls.
      */
     void setShopUrl(Set<String> shopUrl);
+
+    /**
+     * Get shop urls.
+     *
+     * @return shop urls.
+     */
+    Set<String> getShopSecureUrl();
+
+    /**
+     * Set shop urls.
+     *
+     * @param shopSecureUrl shop HTTPS urls.
+     */
+    void setShopSecureUrl(Set<String> shopSecureUrl);
 
     /**
      * Get first name.
