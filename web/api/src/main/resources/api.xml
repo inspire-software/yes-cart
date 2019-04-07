@@ -100,7 +100,7 @@
     <bean id="storedAttributesConverter" class="org.yes.cart.domain.dto.adapter.impl.StoredAttributesConverter"/>
 
     <bean id="apiSupportFacade" class="org.yes.cart.web.service.apisupport.impl.ApiSupportFacadeImpl">
-        <constructor-arg index="0" ref="groovyContentServiceTemplateSupport"/>
+        <constructor-arg index="0" ref="contentServiceTemplateSupport"/>
         <constructor-arg index="1" ref="runtimeConstants"/>
     </bean>
 

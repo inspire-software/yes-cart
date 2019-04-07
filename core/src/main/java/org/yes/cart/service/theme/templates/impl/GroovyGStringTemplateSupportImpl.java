@@ -14,14 +14,14 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain.impl;
+package org.yes.cart.service.theme.templates.impl;
 
 import groovy.text.GStringTemplateEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.yes.cart.service.domain.TemplateSupport;
+import org.yes.cart.service.theme.templates.TemplateSupport;
 import org.yes.cart.util.log.Markers;
 
 import java.io.Serializable;

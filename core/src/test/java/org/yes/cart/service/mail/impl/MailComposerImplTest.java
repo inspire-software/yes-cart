@@ -29,9 +29,9 @@ import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.MailPart;
 import org.yes.cart.domain.entity.impl.MailEntity;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.impl.GroovyGStringTemplateSupportImpl;
-import org.yes.cart.service.mail.MailComposerTemplateSupport;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
+import org.yes.cart.service.theme.templates.TemplateProcessor;
+import org.yes.cart.service.theme.templates.impl.GroovyGStringTemplateSupportImpl;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -78,7 +78,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal(includeFunc + template)), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         Map<String, Object> model = new HashMap<>();
         model.put("name", "Bender");
@@ -112,7 +112,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal(includeFunc + template)), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         MailComposerImpl mailComposer = new MailComposerImpl(provider, templates);
         String result = mailComposer.processTemplate(chain, shopCode, locale, fileName, ext, createModel());
@@ -144,7 +144,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal(includeFunc + template)), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         MailComposerImpl mailComposer = new MailComposerImpl(provider, templates);
         String result = mailComposer.processTemplate(chain, shopCode, locale, fileName, ext, createModel());
@@ -162,7 +162,7 @@ public class MailComposerImplTest {
             allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         //'cid:identifier1234' "cid:id" 'cid:ident' "cid:identifier5678"
@@ -185,7 +185,7 @@ public class MailComposerImplTest {
             allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
@@ -219,7 +219,7 @@ public class MailComposerImplTest {
             allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
@@ -262,7 +262,7 @@ public class MailComposerImplTest {
             allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
 
         // of course you would use DI in any real-world cases
@@ -298,7 +298,7 @@ public class MailComposerImplTest {
             allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
 
         // of course you would use DI in any real-world cases
@@ -333,7 +333,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(any(String.class)), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
@@ -422,7 +422,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal(includeFunc + template)), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         Map<String, Object> model = new HashMap<>();
         model.put("root", new Pair("hi", "there"));
@@ -462,7 +462,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal(includeFunc + htmlTemplate)), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         MailComposerImpl mailComposer = new MailComposerImpl(provider, templates);
 
@@ -499,7 +499,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal(includeFunc + textTemplate)), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         // of course you would use DI in any real-world cases
         MailComposerImpl mailComposer = new MailComposerImpl(provider, templates);
@@ -533,7 +533,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal(includeFunc + htmlTemplate)), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         // of course you would use DI in any real-world cases
         MailComposerImpl mailComposer = new MailComposerImpl(provider, templates);
@@ -554,7 +554,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(any(String.class)), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
@@ -613,7 +613,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         // of course you would use DI in any real-world cases
 
@@ -668,7 +668,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         // of course you would use DI in any real-world cases
 
@@ -728,7 +728,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         final MailComposerImpl composer = new MailComposerImpl(null, templates);
 
@@ -755,7 +755,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         final MailComposerImpl composer = new MailComposerImpl(null, templates);
 
@@ -816,7 +816,7 @@ public class MailComposerImplTest {
 
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         MailComposerImpl mailComposer = new MailComposerImpl(provider, templates);
         String result = mailComposer.processTemplate(chain, shopCode, locale, fileName, ext, createModel());
@@ -840,7 +840,7 @@ public class MailComposerImplTest {
             allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
         }});
 
-        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+        final TemplateProcessor templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
 
         // of course you would use DI in any real-world cases
 

@@ -1,4 +1,20 @@
-package org.yes.cart.service.mail.impl;
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package org.yes.cart.service.theme.templates.impl;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -6,8 +22,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.yes.cart.service.domain.TemplateSupport;
-import org.yes.cart.service.domain.impl.GroovySimpleTemplateSupportImpl;
+import org.yes.cart.service.theme.templates.TemplateSupport;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -20,7 +35,7 @@ import static org.junit.Assert.*;
  * Date: 25/02/2018
  * Time: 16:42
  */
-public class MailComposerTemplateSupportGroovyImplTest {
+public class TemplateProcessorGroovyImplTest {
 
     final Mockery context = new JUnit4Mockery();
 
@@ -39,7 +54,7 @@ public class MailComposerTemplateSupportGroovyImplTest {
         }});
 
         final TemplateSupport templates = new GroovySimpleTemplateSupportImpl(cacheManager);
-        final MailComposerTemplateSupportGroovyImpl support = new MailComposerTemplateSupportGroovyImpl(templates);
+        final TemplateProcessorGroovyImpl support = new TemplateProcessorGroovyImpl(templates);
 
         final String out = support.processTemplate("${name} is awesome!", "en", new HashMap<String, Object>() {{
             put("name", "YC");
@@ -63,7 +78,7 @@ public class MailComposerTemplateSupportGroovyImplTest {
         }});
 
         final TemplateSupport templates = new GroovySimpleTemplateSupportImpl(cacheManager);
-        final MailComposerTemplateSupportGroovyImpl support = new MailComposerTemplateSupportGroovyImpl(templates);
+        final TemplateProcessorGroovyImpl support = new TemplateProcessorGroovyImpl(templates);
 
         final String out = support.processTemplate("${context.name} is awesome!", "en", new HashMap<String, Object>() {{
             put("name", "YC");
@@ -96,7 +111,7 @@ public class MailComposerTemplateSupportGroovyImplTest {
         }});
 
         final TemplateSupport templates = new GroovySimpleTemplateSupportImpl(cacheManager);
-        final MailComposerTemplateSupportGroovyImpl support = new MailComposerTemplateSupportGroovyImpl(templates);
+        final TemplateProcessorGroovyImpl support = new TemplateProcessorGroovyImpl(templates);
 
         support.registerFunction("isAwesome", params -> {
             assertEquals("YC", params[0]);
@@ -117,7 +132,7 @@ public class MailComposerTemplateSupportGroovyImplTest {
     @Test
     public void lazyLoad() throws Exception {
 
-        final MailComposerTemplateSupportGroovyImpl support = new MailComposerTemplateSupportGroovyImpl(null);
+        final TemplateProcessorGroovyImpl support = new TemplateProcessorGroovyImpl(null);
 
         final Locale locale = support.lazyLoad("en");
         assertNotNull(locale);

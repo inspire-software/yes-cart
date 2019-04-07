@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.service.apisupport.impl;
 
-import org.yes.cart.service.domain.ContentServiceTemplateSupport;
+import org.yes.cart.service.theme.templates.TemplateProcessor;
 import org.yes.cart.utils.RuntimeConstants;
 import org.yes.cart.web.service.apisupport.ApiSupportFacade;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -28,9 +28,9 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
  */
 public class ApiSupportFacadeImpl implements ApiSupportFacade {
 
-    private final ContentServiceTemplateSupport templateSupport;
+    private final TemplateProcessor templateSupport;
 
-    public ApiSupportFacadeImpl(final ContentServiceTemplateSupport templateSupport,
+    public ApiSupportFacadeImpl(final TemplateProcessor templateSupport,
                                 final RuntimeConstants runtimeConstants) {
         this.templateSupport = templateSupport;
 

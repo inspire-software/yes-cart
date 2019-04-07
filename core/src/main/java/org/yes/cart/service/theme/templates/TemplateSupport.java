@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain;
+package org.yes.cart.service.theme.templates;
 
 import java.util.Map;
 

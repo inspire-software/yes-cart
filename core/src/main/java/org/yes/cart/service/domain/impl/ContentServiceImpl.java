@@ -26,7 +26,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ContentService;
-import org.yes.cart.service.domain.ContentServiceTemplateSupport;
+import org.yes.cart.service.theme.templates.TemplateProcessor;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.TimeContext;
 import org.yes.cart.utils.HQLUtils;
@@ -49,7 +49,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
 
     private final GenericDAO<Shop, Long> shopDao;
 
-    private final ContentServiceTemplateSupport templateSupport;
+    private final TemplateProcessor templateSupport;
 
     /**
      * Construct service to manage categories
@@ -63,7 +63,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             final GenericDAO<Category, Long> categoryDao,
             final GenericDAO<ShopCategory, Long> shopCategoryDao,
             final GenericDAO<Shop, Long> shopDao,
-            final ContentServiceTemplateSupport templateSupport) {
+            final TemplateProcessor templateSupport) {
         super(categoryDao);
         this.categoryDao = categoryDao;
         this.shopCategoryDao = shopCategoryDao;

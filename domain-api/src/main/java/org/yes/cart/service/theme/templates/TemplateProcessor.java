@@ -14,22 +14,33 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain;
+package org.yes.cart.service.theme.templates;
 
 import java.util.Map;
 
 /**
  * User: denispavlov
- * Date: 25/04/2014
- * Time: 12:58
+ * Date: 01/03/2019
+ * Time: 07:12
  */
-public interface ContentServiceTemplateSupport {
+public interface TemplateProcessor {
 
     interface FunctionProvider {
 
-        Object doAction(Object ... params);
+        Object doAction(Object... params);
 
     }
+
+    /**
+     * Check if this template support is compatible with template.
+     *
+     * @param template template
+     * @param locale locale
+     * @param context variables to evaluate in template
+     *
+     * @return processed dynamic content
+     */
+    boolean supports(String template, String locale, Map<String, Object> context);
 
     /**
      * Process template by evaluating dynamic content with respect to given context.
@@ -41,7 +52,7 @@ public interface ContentServiceTemplateSupport {
      *
      * @return processed dynamic content
      */
-    String processTemplate(String template, final String locale, Map<String, Object> context);
+    String processTemplate(String template, String locale, Map<String, Object> context);
 
     /**
      * Mechanism of extending the existing template engine functionality.

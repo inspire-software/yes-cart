@@ -14,19 +14,19 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain.impl;
+package org.yes.cart.service.mail.impl;
 
 import org.yes.cart.service.theme.templates.TemplateSupport;
-import org.yes.cart.service.theme.templates.impl.TemplateProcessorGroovyImpl;
+import org.yes.cart.service.theme.templates.impl.TemplateProcessortThymeleafImpl;
 
 /**
  * User: denispavlov
- * Date: 25/04/2014
- * Time: 13:00
+ * Date: 17/02/2019
+ * Time: 20:11
  */
-public class ContentServiceTemplateSupportGroovyImpl extends TemplateProcessorGroovyImpl {
+public class MailComposerTemplateSupportThymeleafImpl extends TemplateProcessortThymeleafImpl {
 
-    public ContentServiceTemplateSupportGroovyImpl(final TemplateSupport templateSupport) {
+    public MailComposerTemplateSupportThymeleafImpl(final TemplateSupport templateSupport) {
         super(templateSupport);
     }
 

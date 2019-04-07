@@ -111,6 +111,9 @@
         <!-- Groovy support -->
         <groovy-all.version>2.4.15</groovy-all.version>
 
+        <!-- Thymeleaf -->
+        <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
+
         <!-- Storefront global versions -->
         <wicket.version>7.9.0</wicket.version>
         <jetty.version>6.1.4</jetty.version>

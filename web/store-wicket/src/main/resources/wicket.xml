@@ -322,7 +322,7 @@
                 <constructor-arg index="0" ref="wicketUtil"/>
             </bean>
         </constructor-arg>
-        <constructor-arg index="2" ref="groovyContentServiceTemplateSupport"/>
+        <constructor-arg index="2" ref="contentServiceTemplateSupport"/>
         <constructor-arg index="3" ref="wicketUtil"/>
     </bean>
 

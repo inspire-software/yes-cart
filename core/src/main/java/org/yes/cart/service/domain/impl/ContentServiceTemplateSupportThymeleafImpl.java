@@ -17,17 +17,18 @@
 package org.yes.cart.service.domain.impl;
 
 import org.yes.cart.service.theme.templates.TemplateSupport;
-import org.yes.cart.service.theme.templates.impl.TemplateProcessorGroovyImpl;
+import org.yes.cart.service.theme.templates.impl.TemplateProcessortThymeleafImpl;
 
 /**
  * User: denispavlov
- * Date: 25/04/2014
- * Time: 13:00
+ * Date: 01/03/2019
+ * Time: 07:30
  */
-public class ContentServiceTemplateSupportGroovyImpl extends TemplateProcessorGroovyImpl {
+public class ContentServiceTemplateSupportThymeleafImpl extends TemplateProcessortThymeleafImpl {
 
-    public ContentServiceTemplateSupportGroovyImpl(final TemplateSupport templateSupport) {
+    public ContentServiceTemplateSupportThymeleafImpl(final TemplateSupport templateSupport) {
         super(templateSupport);
     }
-
+    
 }
+

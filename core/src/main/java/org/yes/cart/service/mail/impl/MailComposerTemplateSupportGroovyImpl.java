@@ -16,84 +16,18 @@
 
 package org.yes.cart.service.mail.impl;
 
-import org.yes.cart.service.domain.TemplateSupport;
-import org.yes.cart.service.mail.MailComposerTemplateSupport;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import org.yes.cart.service.theme.templates.TemplateSupport;
+import org.yes.cart.service.theme.templates.impl.TemplateProcessorGroovyImpl;
 
 /**
  * User: denispavlov
  * Date: 26/02/2016
  * Time: 13:00
  */
-public class MailComposerTemplateSupportGroovyImpl implements MailComposerTemplateSupport {
-
-    private final Map<String, FunctionProvider> functions = new HashMap<>();
-    private final Map<String, FunctionProvider> functionsCtx = new HashMap<>();
-    private final Map<String, Locale> localeCache = new ConcurrentHashMap<>();
-
-    private final TemplateSupport templateSupport;
+public class MailComposerTemplateSupportGroovyImpl extends TemplateProcessorGroovyImpl {
 
     public MailComposerTemplateSupportGroovyImpl(final TemplateSupport templateSupport) {
-        this.templateSupport = templateSupport;
+        super(templateSupport);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String processTemplate(final String template, final String locale, final Map<String, Object> context) {
-
-        final StringBuilder templateWithFuncs = new StringBuilder();
-        appendCustomFunctions(templateWithFuncs);
-        templateWithFuncs.append(template);
-
-        // Add context as variable to allow smuggling in object into template
-        final Map<String, Object> fullContext = new HashMap<>(context);
-        fullContext.put("locale", locale);
-        fullContext.put("localeObject", lazyLoad(locale));
-        fullContext.putAll(functionsCtx);
-        fullContext.put("context", fullContext);
-
-        return this.templateSupport.get(templateWithFuncs.toString()).make(fullContext);
-
-    }
-
-    Locale lazyLoad(final String lang) {
-        if (lang == null) {
-            return null;
-        }
-        return this.localeCache.computeIfAbsent(lang, Locale::new);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void registerFunction(final String name, final FunctionProvider functionProvider) {
-
-        functions.put(name, functionProvider);
-        functionsCtx.put("func_" + name, functionProvider);
-
-    }
-
-    private void appendCustomFunctions(final StringBuilder templateWithFuncs) {
-
-        templateWithFuncs.append("<% \n");
-
-        for (final Map.Entry<String, FunctionProvider> function : functions.entrySet()) {
-
-            templateWithFuncs
-                    .append("def ").append(function.getKey()).append(" = {\n")
-                    .append("   func_").append(function.getKey()).append(".doAction(it, locale, context)\n")
-                    .append("}\n");
-
-        }
-
-        templateWithFuncs.append(" %>");
-
-    }
+    
 }

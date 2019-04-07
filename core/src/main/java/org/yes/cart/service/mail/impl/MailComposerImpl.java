@@ -27,8 +27,8 @@ import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.MailPart;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.service.mail.MailComposerTemplateSupport;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
+import org.yes.cart.service.theme.templates.TemplateProcessor;
 import org.yes.cart.util.MimeTypesUtils;
 
 import javax.mail.MessagingException;
@@ -68,7 +68,7 @@ public class MailComposerImpl implements MailComposer {
 
     private Pattern resourcePattern;
 
-    private final MailComposerTemplateSupport templateSupport;
+    private final TemplateProcessor templateSupport;
 
     private final MailTemplateResourcesProvider mailTemplateResourcesProvider;
 
@@ -79,7 +79,7 @@ public class MailComposerImpl implements MailComposer {
      * @param mailTemplateResourcesProvider mail resources provider
      */
     public MailComposerImpl(final MailTemplateResourcesProvider mailTemplateResourcesProvider,
-                            final MailComposerTemplateSupport templateSupport) throws ClassNotFoundException {
+                            final TemplateProcessor templateSupport) throws ClassNotFoundException {
         this.mailTemplateResourcesProvider = mailTemplateResourcesProvider;
         final ClassLoader classLoader = this.getClass().getClassLoader();
         classLoader.loadClass(DecimalFormat.class.getName());

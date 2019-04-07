@@ -17,7 +17,7 @@
 package org.yes.cart.web.service.apisupport.impl;
 
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.ContentServiceTemplateSupport;
+import org.yes.cart.service.theme.templates.TemplateProcessor;
 import org.yes.cart.web.application.ApplicationDirector;
 
 /**
@@ -25,7 +25,7 @@ import org.yes.cart.web.application.ApplicationDirector;
  * Date: 25/08/2014
  * Time: 00:54
  */
-public class ApiUrlTemplateFunctionProviderImpl implements ContentServiceTemplateSupport.FunctionProvider {
+public class ApiUrlTemplateFunctionProviderImpl implements TemplateProcessor.FunctionProvider {
 
     private final String contextPath;
     private final String paramName;
