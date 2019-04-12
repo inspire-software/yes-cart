@@ -31,7 +31,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.report.ReportDescriptor;
 import org.yes.cart.report.ReportGenerator;
-import org.yes.cart.report.ReportParameter;
+import org.yes.cart.report.impl.ReportDescriptors;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssemblyException;
@@ -612,15 +612,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     }
 
     private ReportDescriptor createReceiptDescriptor() {
-        final ReportDescriptor receipt = new ReportDescriptor();
-        receipt.setReportId("reportDelivery");
-        receipt.setXslfoBase("client/order/delivery");
-        final ReportParameter param1 = new ReportParameter();
-        param1.setParameterId("orderNumber");
-        param1.setBusinesstype("String");
-        param1.setMandatory(true);
-        receipt.setParameters(Collections.singletonList(param1));
-        return receipt;
+        return ReportDescriptors.reportDelivery();
     }
 
     /** {@inheritDoc} */

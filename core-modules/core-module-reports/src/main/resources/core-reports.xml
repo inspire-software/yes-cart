@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ################################# order flow state manager  ########################################## -->
+
+    <bean id="reportObjectStreamFactoryAliasesMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String" value-type="java.lang.Class"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="reportObjectStreamFactoryOmitFieldMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.Class" value-type="java.lang.String[]"/>
+        </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:core-reports-ext.xml"/>
+
+    <bean id="reportObjectStreamFactory" class="org.yes.cart.report.impl.ReportObjectStreamFactoryImpl">
+        <property name="aliasesMap" ref="reportObjectStreamFactoryAliasesMapping"/>
+        <property name="omitFieldsMap" ref="reportObjectStreamFactoryOmitFieldMapping"/>
+    </bean>
+
+
+    <bean id="reportGenerator" class="org.yes.cart.report.impl.ReportGeneratorImpl">
+        <constructor-arg index="0" ref="themeService"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2" ref="contentService"/>
+        <constructor-arg index="3" ref="systemService"/>
+        <constructor-arg index="4" ref="imageService"/>
+        <constructor-arg index="5" ref="reportObjectStreamFactory"/>
+    </bean>
+
+    <!-- ################################ Reports module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="reports"/>
+        <property name="name" value="core-module-reports"/>
+        <property name="subName" value="core-reports"/>
+    </bean>
+
+</beans>

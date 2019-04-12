@@ -19,6 +19,7 @@ package org.yes.cart.report.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.report.ReportDescriptor;
+import org.yes.cart.report.ReportObjectStreamFactory;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ShopService;
@@ -38,16 +39,20 @@ import java.util.Map;
  * Date: 26/10/2015
  * Time: 21:13
  */
-public class WebReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator {
+public class ReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WebReportGeneratorImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReportGeneratorImpl.class);
 
-    public WebReportGeneratorImpl(final ThemeService themeService,
-                                  final ShopService shopService,
-                                  final ContentService contentService,
-                                  final SystemService systemService,
-                                  final ImageService imageService) {
+    private final ReportObjectStreamFactory reportObjectStreamFactory;
+
+    public ReportGeneratorImpl(final ThemeService themeService,
+                               final ShopService shopService,
+                               final ContentService contentService,
+                               final SystemService systemService,
+                               final ImageService imageService,
+                               final ReportObjectStreamFactory reportObjectStreamFactory) {
         super(themeService, shopService, contentService, systemService, imageService);
+        this.reportObjectStreamFactory = reportObjectStreamFactory;
     }
 
     /**
@@ -78,7 +83,7 @@ public class WebReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator
 
         try {
 
-            os = ReportObjectStreamFactory.getObjectOutputStream(new OutputStreamWriter(bytesOut));
+            os = reportObjectStreamFactory.getObjectOutputStream(new OutputStreamWriter(bytesOut));
 
             for (Object obj : rez) {
                 os.writeObject(obj);

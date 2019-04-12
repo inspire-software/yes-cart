@@ -36,6 +36,7 @@
     <import resource="classpath:payment-api.xml"/>
     <import resource="classpath:core-payments.xml"/>
     <import resource="classpath:core-orderstate.xml"/>
+    <import resource="classpath:core-reports.xml"/>
 
     <!-- ################################## Category , Product and Sku image services begin ######################## -->
 
@@ -91,18 +92,6 @@
 
 
     <!-- ############################ Category , Product and Sku image services end ############################### -->
-
-    <!-- ############################ Reports for web start ####################################################### -->
-
-    <bean id="reportGenerator" class="org.yes.cart.report.impl.WebReportGeneratorImpl">
-        <constructor-arg index="0" ref="themeService"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <constructor-arg index="2" ref="contentService"/>
-        <constructor-arg index="3" ref="systemService"/>
-        <constructor-arg index="4" ref="imageService"/>
-    </bean>
-
-    <!-- ############################ Reports for web start end ################################################### -->
 
     <!-- ############################ Facades for web start ####################################################### -->
 

@@ -25,6 +25,7 @@
 
     <!-- #################################  reporting configuration ######################################-->
 
+    <import resource="classpath:core-reports.xml"/>
 
     <bean id="reportDelivery" class="org.yes.cart.report.ReportDescriptor">
         <property name="reportId" value="reportDelivery"/>
@@ -110,15 +111,7 @@
         </entry>
     </util:map>
 
-
-    <bean id="reportGenerator" class="org.yes.cart.report.impl.AdminReportGeneratorImpl">
-        <constructor-arg index="0" ref="themeService"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <constructor-arg index="2" ref="contentService"/>
-        <constructor-arg index="3" ref="systemService"/>
-        <constructor-arg index="4" ref="imageService"/>
-    </bean>
-
+    
     <bean id="reportService" class="org.yes.cart.report.impl.ReportServiceImpl">
         <constructor-arg index="0" ref="reportDescriptors"/>
         <constructor-arg index="1" ref="reportWorkers"/>

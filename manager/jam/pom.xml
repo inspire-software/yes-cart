@@ -81,6 +81,16 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
+            <artifactId>int-module-reports-domain-mapping</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>int-module-reports-dto-mapping</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
             <artifactId>core-module-impex</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

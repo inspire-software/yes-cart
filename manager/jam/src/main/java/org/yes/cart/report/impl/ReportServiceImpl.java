@@ -47,7 +47,8 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * Construct report service.
-     *  @param reportDescriptors list of configured reports.
+     *
+     * @param reportDescriptors list of configured reports.
      * @param reportWorkers     report workers
      * @param reportGenerator   report generator
      * @param fileManager       file manager
