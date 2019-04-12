@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomerOrderServiceImpl.class);
 
+    private final OrderNumberGenerator orderNumberGenerator;
+
     private final OrderAssembler orderAssembler;
 
     private final DeliveryAssembler deliveryAssembler;
@@ -60,24 +63,27 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     /**
      * Construct order service.
-     *  @param customerOrderDao customer order dao.
+     *
+     * @param customerOrderDao customer order dao.
      * @param customerDao customer dao to use
      * @param customerOrderDeliveryDao to get deliveries, awiting for inventory
+     * @param orderNumberGenerator   order number generator
      * @param orderAssembler order assembler
      * @param deliveryAssembler delivery assembler
      * @param orderSplittingStrategy order splitting strategy
      * @param cartContentsValidator cart contents validator
      */
-    public CustomerOrderServiceImpl(
-            final GenericDAO<CustomerOrder, Long> customerOrderDao,
-            final GenericDAO<Customer, Long> customerDao,
-            final GenericDAO<Object, Long> genericDao,
-            final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao,
-            final OrderAssembler orderAssembler,
-            final DeliveryAssembler deliveryAssembler,
-            final OrderSplittingStrategy orderSplittingStrategy,
-            final CartContentsValidator cartContentsValidator) {
+    public CustomerOrderServiceImpl(final GenericDAO<CustomerOrder, Long> customerOrderDao,
+                                    final GenericDAO<Customer, Long> customerDao,
+                                    final GenericDAO<Object, Long> genericDao,
+                                    final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao,
+                                    final OrderNumberGenerator orderNumberGenerator,
+                                    final OrderAssembler orderAssembler,
+                                    final DeliveryAssembler deliveryAssembler,
+                                    final OrderSplittingStrategy orderSplittingStrategy,
+                                    final CartContentsValidator cartContentsValidator) {
         super(customerOrderDao);
+        this.orderNumberGenerator = orderNumberGenerator;
         this.orderAssembler = orderAssembler;
         this.deliveryAssembler = deliveryAssembler;
         this.customerDao = customerDao;
@@ -266,15 +272,28 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
         if (customerOrderToDelete != null) {
 
-            if (!CustomerOrder.ORDER_STATUS_NONE.equals(customerOrderToDelete.getOrderStatus())) {
+            final boolean orderIsProcessedByPg = !CustomerOrder.ORDER_STATUS_NONE.equals(customerOrderToDelete.getOrderStatus());
+            final boolean orderHasPgSet = StringUtils.isNotBlank(customerOrderToDelete.getPgLabel());
 
-                // Order is not in ORDER_STATUS_NONE but the cart had not been cleaned
-                // This can only happen if they did not click come back to site from the external payment site
-                // Meanwhile the callback happened and updated the order
+            if (orderIsProcessedByPg || orderHasPgSet) {
 
-                LOG.warn("Order {} with {} cart guid has {} order status instead of 1 - ORDER_STATUS_NONE",
-                    customerOrderToDelete.getCustomerorderId(), shoppingCart.getGuid(), customerOrderToDelete.getOrderStatus()
-                );
+                if (orderIsProcessedByPg) {
+                    // Order is not in ORDER_STATUS_NONE but the cart had not been cleaned
+                    // This can only happen if they did not click come back to site from the external payment site
+                    // Meanwhile the callback happened and updated the order
+
+                    LOG.warn("Order {} with {} cart guid has {} order status instead of 1 - ORDER_STATUS_NONE, keeping the order",
+                            customerOrderToDelete.getCustomerorderId(), shoppingCart.getGuid(), customerOrderToDelete.getOrderStatus()
+                    );
+                } else /* if (orderHasPgSet) */ {
+                    // If we have an order that is os.none but we have PGLabel it may indicate that
+                    // customer is on an external payment form and came back to re-check in which case
+                    // we need to retain the order reference which was sent to external PG
+
+                    LOG.warn("Order {} with {} cart guid has {} order status and PG {}, keeping the order",
+                            customerOrderToDelete.getCustomerorderId(), shoppingCart.getGuid(), customerOrderToDelete.getOrderStatus(), customerOrderToDelete.getPgLabel()
+                    );
+                }
 
                 // detach order as it is being processed (rehash the GUID and reset cartGuid)
                 customerOrderToDelete.setGuid(UUID.randomUUID().toString());
@@ -299,7 +318,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
         }
 
-        final CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        final String orderNumber = orderNumberGenerator.getNextOrderNumber();
+        final CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, orderNumber);
         deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, onePhysicalDelivery);
         return create(customerOrder);
 

@@ -829,10 +829,11 @@
                 <constructor-arg index="1"  ref="customerDao"/>
                 <constructor-arg index="2"  ref="genericDao"/>
                 <constructor-arg index="3"  ref="customerOrderDeliveryDao"/>
-                <constructor-arg index="4"  ref="orderAssembler"/>
-                <constructor-arg index="5"  ref="deliveryAssembler"/>
-                <constructor-arg index="6"  ref="orderSplittingStrategy"/>
-                <constructor-arg index="7"  ref="cartContentsValidator"/>
+                <constructor-arg index="4" ref="orderNumberGenerator"/>
+                <constructor-arg index="5"  ref="orderAssembler"/>
+                <constructor-arg index="6"  ref="deliveryAssembler"/>
+                <constructor-arg index="7"  ref="orderSplittingStrategy"/>
+                <constructor-arg index="8"  ref="cartContentsValidator"/>
             </bean>
         </property>
     </bean>
@@ -1439,17 +1440,16 @@
     <bean id="orderAssembler" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.service.order.impl.OrderAssemblerImpl">
-                <constructor-arg index="0" ref="orderNumberGenerator"/>
-                <constructor-arg index="1" ref="genericDao"/>
-                <constructor-arg index="2" ref="customerService"/>
-                <constructor-arg index="3" ref="shopService"/>
-                <constructor-arg index="4" ref="productService"/>
-                <constructor-arg index="5" ref="productSkuService"/>
-                <constructor-arg index="6" ref="priceResolver"/>
-                <constructor-arg index="7" ref="orderAddressFormatter"/>
-                <constructor-arg index="8" ref="promotionCouponService"/>
-                <constructor-arg index="9" ref="addressService"/>
-                <constructor-arg index="10" ref="attributeService"/>
+                <constructor-arg index="0" ref="genericDao"/>
+                <constructor-arg index="1" ref="customerService"/>
+                <constructor-arg index="2" ref="shopService"/>
+                <constructor-arg index="3" ref="productService"/>
+                <constructor-arg index="4" ref="productSkuService"/>
+                <constructor-arg index="5" ref="priceResolver"/>
+                <constructor-arg index="6" ref="orderAddressFormatter"/>
+                <constructor-arg index="7" ref="promotionCouponService"/>
+                <constructor-arg index="8" ref="addressService"/>
+                <constructor-arg index="9" ref="attributeService"/>
             </bean>
         </property>
     </bean>

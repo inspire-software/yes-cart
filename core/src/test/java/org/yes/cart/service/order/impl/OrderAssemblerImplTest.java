@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -60,7 +61,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
         setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
 
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);
         assertNotNull(customerOrder);

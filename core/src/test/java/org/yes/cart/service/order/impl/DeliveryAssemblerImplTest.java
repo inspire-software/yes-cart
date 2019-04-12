@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -61,7 +62,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart1(customer.getEmail());
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(1, dgroups.size());
@@ -76,7 +77,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         // if sku is out of stock then we cannot create order
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         try {
             deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
             fail("Must not allow creating orders with unavailable SKU");
@@ -91,7 +92,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         //Standard and back order with inventory. Only one delivery must be planned
         ShoppingCart shoppingCart = getShoppingCart3(customer.getEmail());
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(1, dgroups.size());
@@ -105,7 +106,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart4(customer.getEmail());
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(1, dgroups.size());
@@ -120,7 +121,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart4(customer.getEmail());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(2, dgroups.size());
@@ -145,7 +146,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart5(customer.getEmail());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(2, dgroups.size());
@@ -169,7 +170,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart6(customer.getEmail());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(2, dgroups.size());
@@ -197,7 +198,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         // 4 deliveries must be planned, because of pre order will wait
         ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
         assertEquals(5, dgroups.size());
@@ -229,7 +230,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         assertNotNull("Customer can not be null", shoppingCart.getCustomerEmail());
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         customerOrder = customerOrderService.create(customerOrder);

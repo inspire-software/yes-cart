@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -31,6 +32,7 @@ import org.yes.cart.shoppingcart.*;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -67,7 +69,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
         setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
 
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, UUID.randomUUID().toString());
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);
 
@@ -195,7 +197,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
         setOffer(shoppingCart, "CC_TEST1", new BigDecimal("150.00"));
 
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);
 
@@ -322,7 +324,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
         setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
 
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);
@@ -469,7 +471,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
         setOffer(shoppingCart, "CC_TEST1", new BigDecimal("150.00"));
 
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);

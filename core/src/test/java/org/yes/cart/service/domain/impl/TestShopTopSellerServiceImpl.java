@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -72,11 +73,11 @@ public class TestShopTopSellerServiceImpl extends BaseCoreDBTestCase {
         }};
         Customer customer = createCustomer();
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrderService.create(customerOrder);
         Customer customer2 = createCustomer2();
         ShoppingCart shoppingCart2 = getShoppingCart2(customer2.getEmail(), false);
-        CustomerOrder customerOrder2 = orderAssembler.assembleCustomerOrder(shoppingCart2);
+        CustomerOrder customerOrder2 = orderAssembler.assembleCustomerOrder(shoppingCart2, RandomStringUtils.random(10));
         customerOrderService.create(customerOrder2);
         shopTopSellerService.updateTopSellers(10);
         List<ShopTopSeller> allTopSellers = shopTopSellerService.findAll();

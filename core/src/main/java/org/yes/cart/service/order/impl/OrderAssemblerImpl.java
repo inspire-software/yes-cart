@@ -49,7 +49,6 @@ import java.util.Map;
  */
 public class OrderAssemblerImpl implements OrderAssembler {
 
-    private final OrderNumberGenerator orderNumberGenerator;
     private final EntityFactory entityFactory;
     private final ShopService shopService;
     private final ProductService productService;
@@ -63,7 +62,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
     /**
      * Create order assembler.
-     *  @param orderNumberGenerator   order number generator
+     *
      * @param genericDAO             generic DAO
      * @param customerService        customer service
      * @param shopService            shop service
@@ -75,8 +74,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param addressService         address service
      * @param attributeService       attribute service
      */
-    public OrderAssemblerImpl(final OrderNumberGenerator orderNumberGenerator,
-                              final GenericDAO genericDAO,
+    public OrderAssemblerImpl(final GenericDAO genericDAO,
                               final CustomerService customerService,
                               final ShopService shopService,
                               final ProductService productService,
@@ -91,7 +89,6 @@ public class OrderAssemblerImpl implements OrderAssembler {
         this.promotionCouponService = promotionCouponService;
         this.attributeService = attributeService;
         this.entityFactory = genericDAO.getEntityFactory();
-        this.orderNumberGenerator = orderNumberGenerator;
         this.customerService = customerService;
         this.addressService = addressService;
         this.shopService = shopService;
@@ -103,23 +100,26 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * Create and fill {@link CustomerOrder} from   from {@link ShoppingCart}.
      *
      * @param shoppingCart given shopping cart
+     * @param orderNumber order number
+     *
      * @return not persisted but filled with data order
      */
     @Override
-    public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart) throws OrderAssemblyException {
-        return assembleCustomerOrder(shoppingCart, false);
+    public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart, final String orderNumber) throws OrderAssemblyException {
+        return assembleCustomerOrder(shoppingCart, orderNumber, false);
     }
 
     /**
      * Create and fill {@link CustomerOrder} from   from {@link ShoppingCart}.
      *
      * @param shoppingCart given shopping cart
+     * @param orderNumber order number
      * @param temp         if set to true then order number is not generated and coupon usage is not created
      *
      * @return not persisted but filled with data order
      */
     @Override
-    public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart, final boolean temp) throws OrderAssemblyException {
+    public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart, final String orderNumber, final boolean temp) throws OrderAssemblyException {
 
         final Total cartTotal = shoppingCart.getTotal();
 
@@ -158,10 +158,9 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         fillOrderDetails(customerOrder, shoppingCart, temp);
 
-        if (!temp) {
-            customerOrder.setOrdernum(orderNumberGenerator.getNextOrderNumber());
-            fillCoupons(customerOrder, shoppingCart);
-        }
+        customerOrder.setOrdernum(orderNumber);
+
+        fillCoupons(customerOrder, shoppingCart, temp);
 
         return customerOrder;
     }
@@ -196,10 +195,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
      *
      * @param customerOrder order to fill
      * @param shoppingCart  cart
+     * @param temp temporary flag
      */
-    private void fillCoupons(final CustomerOrder customerOrder, final ShoppingCart shoppingCart) throws OrderAssemblyException {
+    private void fillCoupons(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final boolean temp) throws OrderAssemblyException {
 
-        if (!shoppingCart.getCoupons().isEmpty()) {
+        if (!temp && !shoppingCart.getCoupons().isEmpty()) {
 
             final List<String> appliedCouponCodes = shoppingCart.getAppliedCoupons();
 

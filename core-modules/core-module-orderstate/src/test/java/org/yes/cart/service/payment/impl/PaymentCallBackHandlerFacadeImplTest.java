@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.payment.impl;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -79,7 +80,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     public void testHandlePaymentCallbackEnoughStock() throws Exception {
         Customer customer = createCustomer();
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         customerOrder.setPgLabel("testExtFormPaymentGatewayLabel");
         customerOrder = customerOrderService.create(customerOrder);
@@ -116,7 +117,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
 
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         customerOrder.setPgLabel("testExtFormPaymentGatewayLabel");
         customerOrder = customerOrderService.create(customerOrder);

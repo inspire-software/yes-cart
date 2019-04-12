@@ -33,18 +33,22 @@ public interface OrderAssembler {
      * Create and fill {@link CustomerOrder} from given {@link ShoppingCart}.
      *
      * @param shoppingCart given shopping cart
+     * @param orderNumber order number
+     *
      * @return order
      */
-    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart) throws OrderAssemblyException;
+    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart, String orderNumber) throws OrderAssemblyException;
 
     /**
      * Create and fill {@link CustomerOrder} from given {@link ShoppingCart}.
      *
      * @param shoppingCart given shopping cart
+     * @param orderNumber order number
      * @param temp         if set to true then order number is not generated and coupon usage is not created
+     *
      * @return order
      */
-    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart, boolean temp) throws OrderAssemblyException;
+    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart, String orderNumber, boolean temp) throws OrderAssemblyException;
 
 
 }

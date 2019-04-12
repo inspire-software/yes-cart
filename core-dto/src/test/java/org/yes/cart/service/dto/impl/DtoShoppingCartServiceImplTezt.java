@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -30,13 +31,9 @@ import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.service.order.OrderDisassembler;
 import org.yes.cart.service.order.impl.DeliveryAssemblerImpl;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
-import static java.util.Collections.singletonMap;
 import static org.junit.Assert.*;
 
 /**
@@ -72,7 +69,7 @@ public class DtoShoppingCartServiceImplTezt extends BaseCoreDBTestCase {
 
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
 
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);
 
