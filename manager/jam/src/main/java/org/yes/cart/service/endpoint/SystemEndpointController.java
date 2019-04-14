@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 
 import java.util.List;
@@ -76,6 +77,17 @@ public interface SystemEndpointController {
 
 
     /**
+     * Map of supported queries by node.
+     *
+     * @return map of supported queries
+     */
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/query/supported", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<MutablePair<String, List<String>>> supportedQueries() throws Exception;
+
+
+    /**
      * Execute sql and return result.
      * DML operation also allowed, in this case result has quantity of affected rows.
      *
@@ -88,7 +100,7 @@ public interface SystemEndpointController {
     @RequestMapping(value = "/query/{node}/{type}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<Object[]> runQuery(@RequestBody String query, @PathVariable("type") String type, @PathVariable("node") String node) throws Exception;
-    
+
 
     /**
      * Get cache information.

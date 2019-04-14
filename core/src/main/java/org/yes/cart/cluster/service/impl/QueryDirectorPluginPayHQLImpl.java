@@ -17,11 +17,8 @@ package org.yes.cart.cluster.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.cluster.service.QueryDirectorPlugin;
-import org.yes.cart.dao.GenericFTSCapableDAO;
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.PaymentModuleGenericService;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.utils.impl.ObjectUtil;
 
 import java.util.Collections;
@@ -34,12 +31,14 @@ import java.util.List;
  */
 public class QueryDirectorPluginPayHQLImpl implements QueryDirectorPlugin {
 
+    private static final List<String> SUPPORTS = Collections.singletonList("hql-pay");
+
     private PaymentModuleGenericService paymentModuleService;
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final String type) {
-        return "hql-pay".equalsIgnoreCase(type);
+    public List<String> supports() {
+        return SUPPORTS;
     }
 
     /** {@inheritDoc} */

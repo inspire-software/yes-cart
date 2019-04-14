@@ -406,6 +406,46 @@ public class ClusterServiceImpl implements ClusterService {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, List<String>> supportedQueries(final AsyncContext context) {
+
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                determineAllSfTargets(),
+                "QueryDirector.supportedQueries",
+                null,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, List<String>> info = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
+
+            for (final Message response : message.getResponses()) {
+
+                if (response.getPayload() instanceof List) {
+                    info.put(response.getSource(), (List<String>) response.getPayload());
+                }
+
+            }
+
+        }
+
+        final String admin = nodeService.getCurrentNodeId();
+        List<String> adminRez = localQueryDirector.supportedQueries();
+        info.put(admin, adminRez);
+
+        return info;
+
+    }
+
+
     /**
      * {@inheritDoc}
      */

@@ -145,6 +145,14 @@ public interface ClusterService {
 
 
     /**
+     * Map of supported queries by node.
+     *
+     * @return map of supported queries
+     */
+    Map<String, List<String>> supportedQueries(AsyncContext context);
+
+
+    /**
      * Execute query and return result.
      *
      * @param context web service context

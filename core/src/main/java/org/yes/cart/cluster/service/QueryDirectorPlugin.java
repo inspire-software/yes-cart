@@ -10,13 +10,11 @@ import java.util.List;
 public interface QueryDirectorPlugin {
 
     /**
-     * Check if this plugin supports query of given type.
+     * List of supported types.
      *
-     * @param type type
-     *
-     * @return true if supports, false otherwise
+     * @return list of supported types (usually one)
      */
-    boolean supports(String type);
+    List<String> supports();
 
     /**
      * Execute query and return a result.

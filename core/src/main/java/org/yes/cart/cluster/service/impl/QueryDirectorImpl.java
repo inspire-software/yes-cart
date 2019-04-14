@@ -18,6 +18,7 @@ package org.yes.cart.cluster.service.impl;
 import org.yes.cart.cluster.service.QueryDirector;
 import org.yes.cart.cluster.service.QueryDirectorPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,9 +36,20 @@ public class QueryDirectorImpl implements QueryDirector {
 
     /** {@inheritDoc} */
     @Override
-    public List<Object[]> runQuery(final String type, final String query) {
+    public List<String> supportedQueries() {
+        final List<String> types = new ArrayList<>();
         for (final QueryDirectorPlugin plugin : this.plugins) {
-            if (plugin.supports(type)) {
+            types.addAll(plugin.supports());
+        }
+        return types;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Object[]> runQuery(final String type, final String query) {
+        final String lcType = type.toLowerCase();
+        for (final QueryDirectorPlugin plugin : this.plugins) {
+            if (plugin.supports().contains(lcType)) {
                 return plugin.runQuery(query);
             }
         }

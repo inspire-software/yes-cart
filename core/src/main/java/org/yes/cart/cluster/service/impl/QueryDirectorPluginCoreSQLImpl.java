@@ -32,12 +32,14 @@ import java.util.List;
  */
 public class QueryDirectorPluginCoreSQLImpl implements QueryDirectorPlugin {
 
+    private static final List<String> SUPPORTS = Collections.singletonList("sql-core");
+
     private ProductService productService;
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final String type) {
-        return "sql".equalsIgnoreCase(type) || "sql-core".equalsIgnoreCase(type);
+    public List<String> supports() {
+        return SUPPORTS;
     }
 
     /** {@inheritDoc} */

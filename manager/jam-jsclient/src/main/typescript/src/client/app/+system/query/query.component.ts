@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit } from '@angular/core';
-import { ClusterNodeVO } from './../../shared/model/index';
+import { ClusterNodeVO, Pair } from './../../shared/model/index';
 import { SystemService } from './../../shared/services/index';
 import { LogUtil } from './../../shared/log/index';
 
@@ -29,9 +29,11 @@ export class QueryComponent implements OnInit {
   private static tabs:Array<QueryTabData> = [ { query: '', qtype: 'sql-core', result: '', resultQuery: '' } ];
 
   private cluster:Array<ClusterNodeVO> = [];
+  private supportedQueries:Array<Pair<string, Array<string>>> = [];
 
   private selectedNode:string = null;
   private selectedTabType:string = 'sql-core';
+  private selectedNodeQueries:Array<string> = [];
 
   private selectedTab:number = 0;
 
@@ -138,6 +140,7 @@ export class QueryComponent implements OnInit {
   private getClusterInfo() {
     LogUtil.debug('QueryComponent get cluster');
 
+    this.loading = true;
     let _sub:any = this._systemService.getClusterInfo().subscribe(cluster => {
 
       LogUtil.debug('QueryComponent cluster', cluster);
@@ -145,9 +148,38 @@ export class QueryComponent implements OnInit {
       this.selectedNode = this.cluster[0].id;
       _sub.unsubscribe();
 
+      let _sub2:any = this._systemService.supportedQueries().subscribe(supportedQueries => {
+
+        LogUtil.debug('QueryComponent supportedQueries', supportedQueries);
+
+        this.supportedQueries = supportedQueries;
+        this.onSelectedNodeChange(this.selectedNode);
+
+        this.loading = false;
+        _sub2.unsubscribe();
+
+      })
+
     });
 
   }
+
+  private onSelectedNodeChange(ev:any) {
+
+    LogUtil.debug('QueryComponent onSelectedNodeChange', this.selectedNode);
+
+    let idx = this.supportedQueries.findIndex(pair => {
+      return pair.first == this.selectedNode;
+    });
+
+    if (idx != -1) {
+      this.selectedNodeQueries = this.supportedQueries[idx].second;
+    } else {
+      this.selectedNodeQueries = [];
+    }
+
+  }
+
 
 }
 

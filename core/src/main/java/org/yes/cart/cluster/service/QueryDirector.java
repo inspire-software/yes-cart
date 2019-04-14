@@ -26,6 +26,13 @@ import java.util.List;
 public interface QueryDirector {
 
     /**
+     * List of supported queries.
+     *
+     * @return list of supported queries
+     */
+    List<String> supportedQueries();
+
+    /**
      * Execute query and return a result.
      *
      * @param type type of execute.

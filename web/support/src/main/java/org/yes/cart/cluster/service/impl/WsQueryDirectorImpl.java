@@ -47,12 +47,22 @@ public class WsQueryDirectorImpl extends QueryDirectorImpl implements QueryDirec
      */
     public void setNodeService(final NodeService nodeService) {
 
+        nodeService.subscribe("QueryDirector.supportedQueries", message -> {
+            try {
+                return new ArrayList<String>((List) WsQueryDirectorImpl.this.supportedQueries());
+            } catch (Exception e) {
+                final String msg = "Can not retrieve list of supported queries. Error : " + e.getMessage();
+                LOG.warn(msg);
+                return new ArrayList<>(Collections.singletonList(e.getMessage()));
+            }
+        });
+
         nodeService.subscribe("QueryDirector.runQuery", message -> {
             try {
                 final Pair<String, String> typeAndQuery = (Pair<String, String>) message.getPayload();
                 return new ArrayList<Serializable[]>((List) WsQueryDirectorImpl.this.runQuery(typeAndQuery.getFirst(), typeAndQuery.getSecond()));
             } catch (Exception e) {
-                final String msg = "Cant parse SQL query : " + message.getPayload() + " Error : " + e.getMessage();
+                final String msg = "Can not parse query: " + message.getPayload() + ". Error : " + e.getMessage();
                 LOG.warn(msg);
                 return new ArrayList<>(Collections.singletonList(new Serializable[]{e.getMessage()}));
             }

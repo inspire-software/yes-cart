@@ -26,6 +26,8 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.dto.impl.ConfigurationDTO;
 import org.yes.cart.domain.dto.impl.ModuleDTO;
+import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.model.AsyncContext;
@@ -109,6 +111,20 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
         return getClusterInfo();
     }
 
+
+    /** {@inheritDoc} */
+    @Override
+    public @ResponseBody
+    List<MutablePair<String, List<String>>> supportedQueries() throws Exception{
+        final Map<String, Object> param = new HashMap<>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_CONNECTOR_QUERY_TIMEOUT_MS);
+        final Map<String, List<String>> res = clusterService.supportedQueries(createCtx(param));
+        final List<MutablePair<String, List<String>>> out = new ArrayList<>();
+        for (final Map.Entry<String, List<String>> resItem : res.entrySet()) {
+            out.add(MutablePair.of(resItem.getKey(), resItem.getValue()));
+        }
+        return out;
+    }
 
     /** {@inheritDoc} */
     @Override

@@ -218,9 +218,20 @@ export class SystemService {
   }
 
 
+  /**
+   * Retrieve supported queries per node.
+   * @returns {Observable<R>}
+   */
+  supportedQueries() {
+
+    return this.http.get(this._serviceBaseUrl + '/query/supported/')
+      .map(res => <Pair<string, Array<string>>[]> this.json(res))
+      .catch(this.handleError);
+  }
+
 
   /**
-   * Reindex all products.
+   * Run query of specified type against node.
    * @param node node
    * @param typ query type
    * @param query query

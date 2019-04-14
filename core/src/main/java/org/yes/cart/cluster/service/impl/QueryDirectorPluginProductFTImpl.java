@@ -33,13 +33,15 @@ import java.util.List;
  */
 public class QueryDirectorPluginProductFTImpl implements QueryDirectorPlugin {
 
+    private static final List<String> SUPPORTS = Collections.singletonList("ft-product");
+
     private ProductService productService;
     private NodeService nodeService;
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final String type) {
-        return "ft".equalsIgnoreCase(type) || "ft-product".equalsIgnoreCase(type);
+    public List<String> supports() {
+        return SUPPORTS;
     }
 
     /** {@inheritDoc} */

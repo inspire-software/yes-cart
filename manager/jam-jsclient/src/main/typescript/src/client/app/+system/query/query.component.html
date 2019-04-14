@@ -7,7 +7,7 @@
     <div class="text-right data-control">
 
       <form class="pull-left">
-        <select class="filter-input" type="text" name="selectedNode" [(ngModel)]="selectedNode">
+        <select class="filter-input" type="text" name="selectedNode" [(ngModel)]="selectedNode"  (ngModelChange)="onSelectedNodeChange($event)">
           <option *ngFor="let node of cluster" [value]="node.id">{{ node.id }}</option>
         </select>
       </form>
@@ -17,10 +17,7 @@
       </button>
 
       <select class="filter-input" type="text" name="selectedTabType" [(ngModel)]="selectedTabType">
-        <option value="sql-core">{{ 'QUERY_sql-core' | translate }}</option>
-        <option value="hql-core">{{ 'QUERY_hql-core' | translate }}</option>
-        <option value="hql-pay">{{ 'QUERY_hql-pay' | translate }}</option>
-        <option value="ft-product">{{ 'QUERY_ft-product' | translate }}</option>
+        <option *ngFor="let selectedNodeQuery of selectedNodeQueries" value="{{selectedNodeQuery}}">{{ ('QUERY_' + selectedNodeQuery) | translate }}</option>
       </select>
 
       <button type="button" (click)="onNewTabHandler()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUERYTABADD' | translate }}">

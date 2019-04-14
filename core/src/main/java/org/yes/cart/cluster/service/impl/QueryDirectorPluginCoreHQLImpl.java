@@ -32,12 +32,14 @@ import java.util.List;
  */
 public class QueryDirectorPluginCoreHQLImpl implements QueryDirectorPlugin {
 
+    private static final List<String> SUPPORTS = Collections.singletonList("hql-core");
+
     private ProductService productService;
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final String type) {
-        return "hql".equalsIgnoreCase(type) || "hql-core".equalsIgnoreCase(type);
+    public List<String> supports() {
+        return SUPPORTS;
     }
 
     /** {@inheritDoc} */
