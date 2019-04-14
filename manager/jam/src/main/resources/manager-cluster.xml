@@ -24,6 +24,54 @@
 
     <import resource="classpath:manager-cluster-${cluster.config.protocol}.xml"/>
 
+    <bean id="queryDirectorPlugins" class="org.yes.cart.util.spring.ArrayListBean">
+        <constructor-arg>
+            <list>
+                <bean parent="txProxyTemplate">
+                    <property name="target">
+                        <bean class="org.yes.cart.cluster.service.impl.QueryDirectorPluginCoreSQLImpl">
+                            <property name="productService" ref="productService"/>
+                        </bean>
+                    </property>
+                    <property name="transactionAttributes">
+                        <props>
+                            <prop key="runQuery">PROPAGATION_REQUIRED,-Throwable</prop>
+                            <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                        </props>
+                    </property>
+                </bean>
+                <bean parent="txProxyTemplate">
+                    <property name="target">
+                        <bean class="org.yes.cart.cluster.service.impl.QueryDirectorPluginCoreHQLImpl">
+                            <property name="productService" ref="productService"/>
+                        </bean>
+                    </property>
+                    <property name="transactionAttributes">
+                        <props>
+                            <prop key="runQuery">PROPAGATION_REQUIRED,-Throwable</prop>
+                            <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                        </props>
+                    </property>
+                </bean>
+                <bean parent="txProxyTemplate">
+                    <property name="target">
+                        <bean class="org.yes.cart.cluster.service.impl.QueryDirectorPluginPayHQLImpl">
+                            <property name="paymentModuleGenericService" ref="customerOrderPaymentService"/>
+                        </bean>
+                    </property>
+                    <property name="transactionAttributes">
+                        <props>
+                            <prop key="runQuery">PROPAGATION_REQUIRED,-Throwable</prop>
+                            <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                        </props>
+                    </property>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:manager-cluster-ext.xml"/>
+
     <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
         <constructor-arg>
             <map>
@@ -37,28 +85,22 @@
         </constructor-arg>
     </bean>
 
-    <bean id="localBackdoorService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.cluster.service.impl.LocalBackdoorServiceImpl">
-                <property name="productService" ref="productService"/>
-                <property name="configurationListeners">
-                    <list>
-                        <ref bean="shopInventoryConfiguration"/>
-                        <ref bean="shopPricingConfiguration"/>
-                        <ref bean="shopCartConfiguration"/>
-                        <ref bean="warehouseInventoryConfiguration"/>
-                    </list>
-                </property>
-            </bean>
+    <bean id="localWarmUpService" class="org.yes.cart.cluster.service.impl.LocalWarmUpServiceImpl"/>
+
+    <bean id="localClusterUtilsService" class="org.yes.cart.cluster.service.impl.LocalClusterUtilsServiceImpl">
+        <property name="warmUpService" ref="localWarmUpService"/>
+        <property name="configurationListeners">
+            <list>
+                <ref bean="shopInventoryConfiguration"/>
+                <ref bean="shopPricingConfiguration"/>
+                <ref bean="shopCartConfiguration"/>
+                <ref bean="warehouseInventoryConfiguration"/>
+            </list>
         </property>
-        <property name="transactionAttributes">
-            <props>
-                <prop key="sqlQuery">PROPAGATION_REQUIRED,-Throwable</prop>
-                <prop key="hsqlQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                <prop key="ftQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
-            </props>
-        </property>
+    </bean>
+
+    <bean id="localQueryDirector" class="org.yes.cart.cluster.service.impl.LocalQueryDirectorImpl">
+        <constructor-arg ref="queryDirectorPlugins"/>
     </bean>
 
     <bean id="localCacheDirector" class="org.yes.cart.cluster.service.impl.LocalCacheDirectorImpl">

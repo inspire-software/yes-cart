@@ -69,7 +69,7 @@ public class VoDashboardWidgetPluginCacheMonitoring extends AbstractVoDashboardW
         final List<MutablePair<String, Integer>> data = new ArrayList<>();
         try {
             final Map<String, Object> param = new HashMap<>();
-            param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+            param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS);
             Map<String, List<CacheInfoDTO>> caches = clusterService.getCacheInfo(createCtx(param));
             for (final String node : caches.keySet()) {
 

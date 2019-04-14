@@ -64,7 +64,7 @@ public class CacheEvictionQueueProcessorImpl implements Runnable, DisposableBean
                 try {
                     SecurityContextHolder.getContext().setAuthentication(new RunAsUserAuthentication(item.getUser(), "", Collections.EMPTY_LIST));
                     final Map<String, Object> params = new HashMap<>();
-                    params.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+                    params.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS);
                     final AsyncContext threadContext = asyncContextFactory.getInstance(params);
 
                     final List<Node> cluster = nodeService.getSfNodes();

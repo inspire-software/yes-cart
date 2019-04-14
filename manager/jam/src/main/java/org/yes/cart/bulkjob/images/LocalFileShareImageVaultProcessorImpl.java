@@ -130,10 +130,10 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
                 if (reindex && reattached > 0) {
 
                     try {
-                        final AsyncContext cacheCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
+                        final AsyncContext cacheCtx = createCtx(AttributeNamesKeys.System.SYSTEM_CONNECTOR_TIMEOUT_MS);
                         clusterService.evictAllCache(cacheCtx);
 
-                        final AsyncContext reindexCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
+                        final AsyncContext reindexCtx = createCtx(AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
                         Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
                         final String indexToken = reindexService.reindexAllProducts(reindexCtx);
                         while (true) {

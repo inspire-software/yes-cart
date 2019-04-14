@@ -425,6 +425,10 @@
 
   "QUERY_NO_RESULTS": "Запит {{query}} не дав ніяких результатів",
   "QUERY_RESULTS": "Результати за запитом {{query}}:",
+  "QUERY_sql-core": "SQL: Основна",
+  "QUERY_hql-core": "HQL: Основна",
+  "QUERY_hql-pay": "HQL: Платежі",
+  "QUERY_ft-product": "FT: Товари",
 
   "PG_ENABLED": "Активний",
   "PG_FEATURE_AUTH": "Режим AUTH",

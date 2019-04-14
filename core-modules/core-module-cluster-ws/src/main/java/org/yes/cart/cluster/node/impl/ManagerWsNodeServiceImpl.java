@@ -151,7 +151,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
 
     private WsClientFactory<WebServiceInboundChannel> getWebServiceInboundChannel(final AsyncContext context,
-                                                                                  final String backdoorUrl,
+                                                                                  final String connectorUrl,
                                                                                   final String timeoutKey) {
 
 
@@ -163,7 +163,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
         final int timeout = NumberUtils.toInt(getConfiguration().get(timeoutKey), 1000);
 
-        return wsClientAbstractFactory.getFactory(WebServiceInboundChannel.class, userName, pwd, hashed, backdoorUrl, timeout);
+        return wsClientAbstractFactory.getFactory(WebServiceInboundChannel.class, userName, pwd, hashed, connectorUrl, timeout);
 
     }
 

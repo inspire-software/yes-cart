@@ -52,7 +52,7 @@ public class NodeConfigurationXStreamProviderTest {
         assertEquals("SFW", yes0.getNodeType());
         assertEquals("DEFAULT", yes0.getNodeConfig());
         assertFalse(yes0.isFtIndexDisabled());
-        assertEquals("http://localhost:8080/services/backdoor", yes0.getChannel());
+        assertEquals("http://localhost:8080/services/connector", yes0.getChannel());
 
         final Node yes1 = cluster.get(1);
         assertEquals("TESTCLUSTER.YES1", yes1.getId());
@@ -61,7 +61,7 @@ public class NodeConfigurationXStreamProviderTest {
         assertEquals("API", yes1.getNodeType());
         assertEquals("DEFAULT", yes1.getNodeConfig());
         assertTrue(yes1.isFtIndexDisabled());
-        assertEquals("http://localhost:8081/yes-api/services/backdoor", yes1.getChannel());
+        assertEquals("http://localhost:8081/yes-api/services/connector", yes1.getChannel());
 
         final Node admin = cluster.get(2);
         assertEquals("TESTCLUSTER.JAM", admin.getId());

@@ -44,20 +44,23 @@ public class ClusterServiceImpl implements ClusterService {
     private static final Logger LOG = LoggerFactory.getLogger(ClusterServiceImpl.class);
 
     private final NodeService nodeService;
-    private final BackdoorService localBackdoorService;
+    private final ClusterUtilsService localClusterUtilsService;
+    private final QueryDirector localQueryDirector;
     private final CacheDirector localCacheDirector;
     private final CacheEvictionQueue cacheEvictionQueue;
     private final AlertDirector localAlertDirector;
     private final ModuleDirector localModuleDirector;
 
     public ClusterServiceImpl(final NodeService nodeService,
-                              final BackdoorService localBackdoorService,
+                              final ClusterUtilsService localClusterUtilsService,
+                              final QueryDirector localQueryDirector,
                               final CacheDirector localCacheDirector,
                               final CacheEvictionQueue cacheEvictionQueue,
                               final AlertDirector localAlertDirector,
                               final ModuleDirector localModuleDirector) {
         this.nodeService = nodeService;
-        this.localBackdoorService = localBackdoorService;
+        this.localClusterUtilsService = localClusterUtilsService;
+        this.localQueryDirector = localQueryDirector;
         this.localCacheDirector = localCacheDirector;
         this.cacheEvictionQueue = cacheEvictionQueue;
         this.localAlertDirector = localAlertDirector;
@@ -72,7 +75,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         final Message message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
-                "BackdoorService.ping",
+                "ClusterUtilsService.ping",
                 null,
                 context
         );
@@ -227,7 +230,7 @@ public class ClusterServiceImpl implements ClusterService {
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 targets,
-                "BackdoorService.getProductReindexingState",
+                "ReindexDirector.getProductReindexingState",
                 null,
                 context
         );
@@ -270,7 +273,7 @@ public class ClusterServiceImpl implements ClusterService {
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 targets,
-                "BackdoorService.getProductSkuReindexingState",
+                "ReindexDirector.getProductSkuReindexingState",
                 shopId,
                 context
         );
@@ -301,7 +304,7 @@ public class ClusterServiceImpl implements ClusterService {
                 nodeService.getCurrentNodeId(),
                 determineIndexCapableTargets(),
                 (shopId != null && shopId > 0L) ?
-                        "BackdoorService.reindexShopProducts" : "BackdoorService.reindexAllProducts",
+                        "ReindexDirector.reindexShopProducts" : "ReindexDirector.reindexAllProducts",
                 shopId,
                 context
         );
@@ -322,7 +325,7 @@ public class ClusterServiceImpl implements ClusterService {
                 nodeService.getCurrentNodeId(),
                 determineIndexCapableTargets(),
                 (shopId != null && shopId > 0L) ?
-                        "BackdoorService.reindexShopProductsSku" : "BackdoorService.reindexAllProductsSku",
+                        "ReindexDirector.reindexShopProductsSku" : "ReindexDirector.reindexAllProductsSku",
                 shopId,
                 context
         );
@@ -340,7 +343,7 @@ public class ClusterServiceImpl implements ClusterService {
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 determineIndexCapableTargets(),
-                "BackdoorService.reindexProduct",
+                "ReindexDirector.reindexProduct",
                 productPk,
                 context
         );
@@ -358,7 +361,7 @@ public class ClusterServiceImpl implements ClusterService {
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 determineIndexCapableTargets(),
-                "BackdoorService.reindexProductSku",
+                "ReindexDirector.reindexProductSku",
                 productPk,
                 context
         );
@@ -376,7 +379,7 @@ public class ClusterServiceImpl implements ClusterService {
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 determineIndexCapableTargets(),
-                "BackdoorService.reindexProductSkuCode",
+                "ReindexDirector.reindexProductSkuCode",
                 productSkuCode,
                 context
         );
@@ -394,7 +397,7 @@ public class ClusterServiceImpl implements ClusterService {
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 determineIndexCapableTargets(),
-                "BackdoorService.reindexProducts",
+                "ReindexDirector.reindexProducts",
                 productPks,
                 context
         );
@@ -407,13 +410,13 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public List<Object[]> sqlQuery(final AsyncContext context, final String query, final String node) {
+    public List<Object[]> runQuery(final AsyncContext context, final String type, final String query, final String node) {
 
         if (nodeService.getCurrentNodeId().equals(node)) {
             try {
-                return localBackdoorService.sqlQuery(query);
+                return localQueryDirector.runQuery(type, query);
             } catch (Exception e) {
-                final String msg = "Cant parse SQL query : " + query + " Error : " + e.getMessage();
+                final String msg = "Cant parse " + type + " query : " + query + " Error : " + e.getMessage();
                 LOG.warn(msg);
                 return new ArrayList<>(Collections.singletonList(new Object[]{e.getMessage()}));
             }
@@ -422,70 +425,8 @@ public class ClusterServiceImpl implements ClusterService {
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 Collections.singletonList(node),
-                "BackdoorService.sqlQuery",
-                query,
-                context
-        );
-
-        nodeService.broadcast(message);
-
-        if (CollectionUtils.isNotEmpty(message.getResponses())) {
-
-            return (List<Object[]>) message.getResponses().get(0).getPayload();
-
-        }
-
-        return Collections.emptyList();
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Object[]> hsqlQuery(final AsyncContext context, final String query, final String node) {
-
-        if (nodeService.getCurrentNodeId().equals(node)) {
-            try {
-                return localBackdoorService.hsqlQuery(query);
-            } catch (Exception e) {
-                final String msg = "Cant parse HQL query : " + query + " Error : " + e.getMessage();
-                LOG.warn(msg);
-                return new ArrayList<>(Collections.singletonList(new Object[]{e.getMessage()}));
-            }
-        }
-
-        final RspMessage message = new ContextRspMessageImpl(
-                nodeService.getCurrentNodeId(),
-                Collections.singletonList(node),
-                "BackdoorService.hsqlQuery",
-                query,
-                context
-        );
-
-        nodeService.broadcast(message);
-
-        if (CollectionUtils.isNotEmpty(message.getResponses())) {
-
-            return (List<Object[]>) message.getResponses().get(0).getPayload();
-
-        }
-
-        return Collections.emptyList();
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Object[]> ftQuery(final AsyncContext context, final String query, final String node) {
-
-        final RspMessage message = new ContextRspMessageImpl(
-                nodeService.getCurrentNodeId(),
-                Collections.singletonList(node),
-                "BackdoorService.ftQuery",
-                query,
+                "QueryDirector.runQuery",
+                new Pair<>(type, query),
                 context
         );
 
@@ -511,14 +452,14 @@ public class ClusterServiceImpl implements ClusterService {
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 determineAllSfTargets(),
-                "BackdoorService.reloadConfigurations",
+                "ClusterUtilsService.reloadConfigurations",
                 null,
                 context
         );
 
         nodeService.broadcast(message);
 
-        localBackdoorService.reloadConfigurations();
+        localClusterUtilsService.reloadConfigurations();
 
     }
 

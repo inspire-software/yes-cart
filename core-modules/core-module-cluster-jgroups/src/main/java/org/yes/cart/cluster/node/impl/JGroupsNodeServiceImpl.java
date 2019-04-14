@@ -91,28 +91,28 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
                 systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.IMPORT_JOB_TIMEOUT_MS, "60000")
         );
         all.put(
-                AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS,
-                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS, "60000")
+                AttributeNamesKeys.System.SYSTEM_CONNECTOR_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_CONNECTOR_TIMEOUT_MS, "60000")
         );
         all.put(
-                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS,
-                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS, "60000")
+                AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS, "60000")
         );
         all.put(
-                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS,
-                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS, "60000")
+                AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS, "60000")
         );
         all.put(
-                AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS,
-                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS, "60000")
+                AttributeNamesKeys.System.SYSTEM_CONNECTOR_QUERY_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_CONNECTOR_QUERY_TIMEOUT_MS, "60000")
         );
         all.put(
-                AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS,
-                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS, "60000")
+                AttributeNamesKeys.System.SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS, "60000")
         );
         all.put(
-                AttributeNamesKeys.System.SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS,
-                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS, "60000")
+                AttributeNamesKeys.System.SYSTEM_CONNECTOR_IMAGE_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_CONNECTOR_IMAGE_TIMEOUT_MS, "60000")
         );
         return all;
     }

@@ -425,6 +425,10 @@
 
   "QUERY_NO_RESULTS": "Query {{query}} did not return any results",
   "QUERY_RESULTS": "Results for query {{query}}:",
+  "QUERY_sql-core": "SQL: Core",
+  "QUERY_hql-core": "HQL: Core",
+  "QUERY_hql-pay": "HQL: Payment",
+  "QUERY_ft-product": "FT: Product",
 
   "PG_ENABLED": "Enabled",
   "PG_FEATURE_AUTH": "AUTH mode",

@@ -20,7 +20,69 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="warmUpService" class="org.yes.cart.cluster.service.impl.WarmUpServiceImpl">
+    <bean id="queryDirectorPlugins" class="org.yes.cart.util.spring.ArrayListBean">
+        <constructor-arg>
+            <list>
+                <bean parent="txProxyTemplate">
+                    <property name="target">
+                        <bean class="org.yes.cart.cluster.service.impl.QueryDirectorPluginCoreSQLImpl">
+                            <property name="productService" ref="productService"/>
+                        </bean>
+                    </property>
+                    <property name="transactionAttributes">
+                        <props>
+                            <prop key="runQuery">PROPAGATION_REQUIRED,-Throwable</prop>
+                            <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                        </props>
+                    </property>
+                </bean>
+                <bean parent="txProxyTemplate">
+                    <property name="target">
+                        <bean class="org.yes.cart.cluster.service.impl.QueryDirectorPluginCoreHQLImpl">
+                            <property name="productService" ref="productService"/>
+                        </bean>
+                    </property>
+                    <property name="transactionAttributes">
+                        <props>
+                            <prop key="runQuery">PROPAGATION_REQUIRED,-Throwable</prop>
+                            <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                        </props>
+                    </property>
+                </bean>
+                <bean parent="txProxyTemplate">
+                    <property name="target">
+                        <bean class="org.yes.cart.cluster.service.impl.QueryDirectorPluginProductFTImpl">
+                            <property name="productService" ref="productService"/>
+                            <property name="nodeService" ref="nodeService"/>
+                        </bean>
+                    </property>
+                    <property name="transactionAttributes">
+                        <props>
+                            <prop key="runQuery">PROPAGATION_REQUIRED,-Throwable</prop>
+                            <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                        </props>
+                    </property>
+                </bean>
+                <bean parent="txProxyTemplate">
+                    <property name="target">
+                        <bean class="org.yes.cart.cluster.service.impl.QueryDirectorPluginPayHQLImpl">
+                            <property name="paymentModuleGenericService" ref="customerOrderPaymentService"/>
+                        </bean>
+                    </property>
+                    <property name="transactionAttributes">
+                        <props>
+                            <prop key="runQuery">PROPAGATION_REQUIRED,-Throwable</prop>
+                            <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+                        </props>
+                    </property>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <import resource="classpath*:websupport-cluster-listeners-ext.xml"/>
+
+    <bean id="warmUpService" class="org.yes.cart.cluster.service.impl.WsWarmUpServiceImpl">
         <constructor-arg index="0" ref="languageService"/>
         <constructor-arg index="1" ref="productTypeService"/>
         <constructor-arg index="2" ref="productTypeAttrService"/>
@@ -33,7 +95,7 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
-    <bean id="backDoorProductCacheHelper" class="org.yes.cart.cache.impl.CacheBundleHelperImpl">
+    <bean id="reindexDirectorProductCacheHelper" class="org.yes.cart.cache.impl.CacheBundleHelperImpl">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="caches">
             <set>
@@ -52,32 +114,28 @@
         </property>
     </bean>
 
-    <bean id="backDoor" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.cluster.service.impl.BackdoorServiceImpl">
-                <property name="productService" ref="productService"/>
-                <property name="productIndexCaches" ref="backDoorProductCacheHelper"/>
-                <property name="systemService" ref="systemService"/>
-                <property name="warmUpService" ref="warmUpService"/>
-                <property name="nodeService" ref="nodeService"/>
-                <property name="configurationListeners">
-                    <list>
-                        <ref bean="shopInventoryConfiguration"/>
-                        <ref bean="shopPricingConfiguration"/>
-                        <ref bean="shopCartConfiguration"/>
-                        <ref bean="warehouseInventoryConfiguration"/>
-                    </list>
-                </property>
-                <lookup-method name="getSelf" bean="backDoor"/>
-            </bean>
-        </property>
-        <property name="transactionAttributes">
-            <props>
-                <prop key="sqlQuery">PROPAGATION_REQUIRED,-Throwable</prop>
-                <prop key="hsqlQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                <prop key="ftQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
-            </props>
+    <bean id="reindexDirector" class="org.yes.cart.cluster.service.impl.WsReindexDirectorImpl">
+        <property name="productService" ref="productService"/>
+        <property name="productIndexCaches" ref="reindexDirectorProductCacheHelper"/>
+        <property name="systemService" ref="systemService"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="queryDirector" class="org.yes.cart.cluster.service.impl.WsQueryDirectorImpl">
+        <constructor-arg ref="queryDirectorPlugins"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="clusterUtilsService" class="org.yes.cart.cluster.service.impl.WsClusterUtilsServiceImpl">
+        <property name="warmUpService" ref="warmUpService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="configurationListeners">
+            <list>
+                <ref bean="shopInventoryConfiguration"/>
+                <ref bean="shopPricingConfiguration"/>
+                <ref bean="shopCartConfiguration"/>
+                <ref bean="warehouseInventoryConfiguration"/>
+            </list>
         </property>
     </bean>
 

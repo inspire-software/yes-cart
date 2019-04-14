@@ -425,6 +425,10 @@
 
   "QUERY_NO_RESULTS": "Запрос {{query}} не дал никаких результатов",
   "QUERY_RESULTS": "Результаты по запросу {{query}}:",
+  "QUERY_sql-core": "SQL: Основная",
+  "QUERY_hql-core": "HQL: Основная",
+  "QUERY_hql-pay": "HQL: Платежи",
+  "QUERY_ft-product": "FT: Товары",
 
   "PG_ENABLED": "Активный",
   "PG_FEATURE_AUTH": "Режим AUTH",

@@ -17,9 +17,10 @@
       </button>
 
       <select class="filter-input" type="text" name="selectedTabType" [(ngModel)]="selectedTabType">
-        <option value="SQL">SQL</option>
-        <option value="HQL">HQL</option>
-        <option value="FT">FT</option>
+        <option value="sql-core">{{ 'QUERY_sql-core' | translate }}</option>
+        <option value="hql-core">{{ 'QUERY_hql-core' | translate }}</option>
+        <option value="hql-pay">{{ 'QUERY_hql-pay' | translate }}</option>
+        <option value="ft-product">{{ 'QUERY_ft-product' | translate }}</option>
       </select>
 
       <button type="button" (click)="onNewTabHandler()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUERYTABADD' | translate }}">
@@ -41,7 +42,7 @@
       <tabset>
         <tab *ngFor="let tab of tabs; let i = index" (select)="tabSelected(i)">
           <ng-template tabHeading>
-            {{ ((i+1) + ' ' + tab.qtype) }}
+            {{ (i+1) }} {{ ('QUERY_' + tab.qtype) | translate }}
             <a (click)="onTabDeleteTab(tab)" [hidden]="tab.running" class="js-click" title="{{ 'MODAL_BUTTON_QUERYTABREMOVE' | translate }}">
               <i class="fa fa-remove"></i>
             </a>

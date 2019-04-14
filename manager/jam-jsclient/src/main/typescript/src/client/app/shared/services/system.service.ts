@@ -231,9 +231,7 @@ export class SystemService {
     let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
-    let path = (typ == 'HQL') ? '/hquery/' : ((typ == 'FT') ? '/ftquery/' : '/dbquery/');
-
-    return this.http.post(this._serviceBaseUrl + path + node + '/', query, options)
+    return this.http.post(this._serviceBaseUrl + '/query/' + node + '/' + typ, query, options)
       .map(res => <Array<Array<string>>> this.json(res))
       .catch(this.handleError);
   }

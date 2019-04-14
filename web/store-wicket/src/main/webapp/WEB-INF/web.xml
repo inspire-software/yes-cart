@@ -87,7 +87,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>services/backdoor</param-value>
+            <param-value>services/connector</param-value>
         </init-param>
     </filter>
 
@@ -100,7 +100,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>services/backdoor</param-value>
+            <param-value>services/connector</param-value>
         </init-param>
     </filter>
 
@@ -113,7 +113,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>(services/backdoor)|(imgvault/)|(filevault/)|(wicket/resource/)</param-value>
+            <param-value>(services/connector)|(imgvault/)|(filevault/)|(wicket/resource/)</param-value>
         </init-param>
     </filter>
 
@@ -126,7 +126,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>(services/backdoor)|(imgvault/)|(filevault/)|(wicket/resource/)|(login)|(registration)</param-value>
+            <param-value>(services/connector)|(imgvault/)|(filevault/)|(wicket/resource/)|(login)|(registration)</param-value>
         </init-param>
         <init-param>
             <param-name>loginOrRegistrationUri</param-name>

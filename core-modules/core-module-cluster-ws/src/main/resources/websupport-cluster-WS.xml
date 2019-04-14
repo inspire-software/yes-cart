@@ -38,7 +38,7 @@
     </bean>
 
 
-    <jaxws:endpoint id="backDoorWs" implementor="#websupportWebServiceInboundChannel" address="/backdoor">
+    <jaxws:endpoint id="serviceConnectorWs" implementor="#websupportWebServiceInboundChannel" address="/connector">
         <jaxws:properties>
             <entry key="ws-security.validate.token">
                 <value>false</value>
@@ -60,7 +60,7 @@
     </bean>
 
     <!-- Standalone definition of authentication manager that is not linked to Spring security -->
-    <bean id="backDoorAuthenticationManager" class="org.springframework.security.authentication.ProviderManager">
+    <bean id="serviceConnectorAuthenticationManager" class="org.springframework.security.authentication.ProviderManager">
         <constructor-arg index="0">
             <bean class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
                 <!--<property name="passwordEncoder" ref="passwordHashHelper"/> Encoding is done on the client end to prevent plain text passwords -->
@@ -74,10 +74,9 @@
             <map>
                 <entry key="action" value="UsernameToken"/>
                 <entry key="passwordType" value="PasswordText"/>
-                <!--                <entry key="passwordCallbackClass" value="org.yes.cart.web.service.ws.impl.BackdoorCallback"/>-->
             </map>
         </constructor-arg>
-        <property name="authenticationManager" ref="backDoorAuthenticationManager"/>
+        <property name="authenticationManager" ref="serviceConnectorAuthenticationManager"/>
     </bean>
 
     <bean id="wsLoggingInInterceptor" class="org.apache.cxf.interceptor.Slf4JLoggingInInterceptor">

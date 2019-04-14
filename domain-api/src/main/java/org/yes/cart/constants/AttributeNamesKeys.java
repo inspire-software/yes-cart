@@ -86,29 +86,29 @@ public interface AttributeNamesKeys {
          */
         String JOB_PRODUCT_OBSOLETE_BATCH_SIZE = "JOB_PROD_OBS_BATCH_SIZE";
         /**
-         * Timeout for backdoor WS call.
+         * Timeout for Connector WS call.
          */
-        String SYSTEM_BACKDOOR_TIMEOUT_MS = "SYSTEM_BACKDOOR_TIMEOUT_MS";
+        String SYSTEM_CONNECTOR_TIMEOUT_MS = "SYSTEM_CONNECTOR_TIMEOUT_MS";
         /**
-         * Timeout for backdoor WS call.
+         * Timeout for Connector WS call.
          */
-        String SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS = "SYSTEM_BACKDOOR_PRODB_IDX_TIMEOUT_MS";
+        String SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS = "SYSTEM_CONNECTOR_PRODB_IDX_TIMEOUT_MS";
         /**
-         * Timeout for backdoor WS call.
+         * Timeout for Connector WS call.
          */
-        String SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS = "SYSTEM_BACKDOOR_PRODS_IDX_TIMEOUT_MS";
+        String SYSTEM_CONNECTOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS = "SYSTEM_CONNECTOR_PRODS_IDX_TIMEOUT_MS";
         /**
-         * Timeout for backdoor WS call.
+         * Timeout for Connector WS call.
          */
-        String SYSTEM_BACKDOOR_SQL_TIMEOUT_MS = "SYSTEM_BACKDOOR_SQL_TIMEOUT_MS";
+        String SYSTEM_CONNECTOR_QUERY_TIMEOUT_MS = "SYSTEM_CONNECTOR_QUERY_TIMEOUT_MS";
         /**
-         * Timeout for backdoor WS call.
+         * Timeout for Connector WS call.
          */
-        String SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS = "SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS";
+        String SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS = "SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS";
         /**
-         * Timeout for backdoor WS call.
+         * Timeout for Connector WS call.
          */
-        String SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS = "SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS";
+        String SYSTEM_CONNECTOR_IMAGE_TIMEOUT_MS = "SYSTEM_CONNECTOR_IMAGE_TIMEOUT_MS";
         /**
          * Default (failover) directory for resources.
          */

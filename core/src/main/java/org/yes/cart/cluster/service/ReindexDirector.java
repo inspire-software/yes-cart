@@ -16,29 +16,12 @@
 
 package org.yes.cart.cluster.service;
 
-import java.util.List;
-
 /**
- * Back door administrative service.
- * Need to have ability:
- *
- * 1. reindex product on demand on storefront side instead of management side.
- *
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 1/28/12
- * Time: 9:50 AM
+ * User: denispavlov
+ * Date: 13/04/2019
+ * Time: 16:27
  */
-public interface BackdoorService {
-
-    /**
-     * @return true if service is online
-     */
-    boolean ping();
-
-    /**
-     * Preload main caches.
-     */
-    void warmUp();
+public interface ReindexDirector {
 
     /**
      * @return re-indexing state (0th - [RUNNIG|DONE], 1st - count)
@@ -102,38 +85,5 @@ public interface BackdoorService {
      * @param productPks product PKs to reindex
      */
     void reindexProducts(long[] productPks);
-
-
-    /**
-     * Execute sql and return result.
-     * DML operating also allowed, in this case result has quantity of affected rows.
-     *
-     * @param query query ot execute.
-     * @return list of rows
-     */
-    List<Object[]> sqlQuery(String query);
-
-    /**
-     * Execute hsql and return result.
-     *
-     * @param query query ot execute.
-     *
-     * @return list of rows
-     */
-    List<Object[]> hsqlQuery(String query);
-
-    /**
-     * Execute ft query and return result.
-     *
-     * @param query query ot execute.
-     *
-     * @return list of rows
-     */
-    List<Object[]> ftQuery(String query);
-
-    /**
-     * Reload system configurations.
-     */
-    void reloadConfigurations();
 
 }

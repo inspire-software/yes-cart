@@ -82,7 +82,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>services/backdoor</param-value>
+            <param-value>services/connector</param-value>
         </init-param>
     </filter>
 
@@ -95,7 +95,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>services/backdoor</param-value>
+            <param-value>services/connector</param-value>
         </init-param>
     </filter>
 
@@ -108,7 +108,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>(services/backdoor)|(imgvault/)|(filevault/)</param-value>
+            <param-value>(services/connector)|(imgvault/)|(filevault/)</param-value>
         </init-param>
     </filter>
 
@@ -121,7 +121,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>(services/backdoor)|(imgvault/)|(filevault/)</param-value>
+            <param-value>(services/connector)|(imgvault/)|(filevault/)</param-value>
         </init-param>
     </filter>
 

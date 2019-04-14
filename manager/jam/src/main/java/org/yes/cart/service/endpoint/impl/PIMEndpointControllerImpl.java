@@ -182,14 +182,14 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
     private JobContext createJobContext() {
 
         final Map<String, Object> param = new HashMap<>();
-        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
         param.put(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE, new HashMap<String, Boolean>());
         param.putAll(createAuthCtx().getAttributes());
 
         // Max char of report to UI since it will get huge and simply will crash the UI, not to mention traffic cost.
         final int logSize = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE), 100);
         // Timeout - just in case runnable crashes and we need to unlock through timeout.
-        final int timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS), 100);
+        final int timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS), 100);
 
         return new JobContextImpl(true, new JobStatusListenerImpl(logSize, timeout), param);
     }

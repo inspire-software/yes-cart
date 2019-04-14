@@ -33,7 +33,7 @@ import java.util.List;
  * Date: 13-10-17
  * Time: 7:01 PM
  */
-public class WarmUpServiceImpl implements WarmUpService {
+public class WsWarmUpServiceImpl implements WarmUpService {
 
     private final LanguageService languageService;
 
@@ -49,15 +49,15 @@ public class WarmUpServiceImpl implements WarmUpService {
     private final PromotionService promotionService;
     private final PromotionConditionParser promotionConditionParser;
 
-    public WarmUpServiceImpl(final LanguageService languageService,
-                             final ProductTypeService productTypeService,
-                             final ProductTypeAttrService productTypeAttrService,
-                             final ProductService productService,
-                             final AttributeService attributeService,
-                             final ShopService shopService,
-                             final AddressBookFacade addressBookFacade,
-                             final PromotionService promotionService,
-                             final PromotionConditionParser promotionConditionParser) {
+    public WsWarmUpServiceImpl(final LanguageService languageService,
+                               final ProductTypeService productTypeService,
+                               final ProductTypeAttrService productTypeAttrService,
+                               final ProductService productService,
+                               final AttributeService attributeService,
+                               final ShopService shopService,
+                               final AddressBookFacade addressBookFacade,
+                               final PromotionService promotionService,
+                               final PromotionConditionParser promotionConditionParser) {
         this.languageService = languageService;
         this.productTypeService = productTypeService;
         this.productTypeAttrService = productTypeAttrService;
@@ -140,7 +140,7 @@ public class WarmUpServiceImpl implements WarmUpService {
     public void setNodeService(final NodeService nodeService) {
 
         nodeService.subscribe("WarmUpService.warmUp", message -> {
-            WarmUpServiceImpl.this.warmUp();
+            WsWarmUpServiceImpl.this.warmUp();
             return "OK";
         });
 

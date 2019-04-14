@@ -56,7 +56,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
      * Construct reindexer.
      *
      * @param executor task executor
-     * @param clusterService remote backdoor service.
+     * @param clusterService remote connector service.
      * @param nodeService node service
      */
     public ReindexServiceImpl(final TaskExecutor executor,
@@ -219,13 +219,13 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
     /** {@inheritDoc} */
     @Override
     public String reindexAllProducts(final AsyncContext context) {
-        return doJob(createJobContext(context, 0L, AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
+        return doJob(createJobContext(context, 0L, AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
     }
 
     /** {@inheritDoc} */
     @Override
     public String reindexShopProducts(final AsyncContext context, final long shopPk) {
-        return doJob(createJobContext(context, shopPk, AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
+        return doJob(createJobContext(context, shopPk, AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
     }
 
     private JobContext createJobContext(final AsyncContext ctx, final long shopId, final String timeoutKey) {
@@ -241,7 +241,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
         // Max char of report to UI since it will get huge and simply will crash the UI, not to mention traffic cost.
         final int logSize = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE), 100);
         // Timeout - just in case runnable crashes and we need to unlock through timeout.
-        final int timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS), 100);
+        final int timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS), 100);
 
         return new JobContextImpl(true, new JobStatusListenerImpl(logSize, timeout), param);
     }

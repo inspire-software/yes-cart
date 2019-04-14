@@ -425,6 +425,10 @@
 
   "QUERY_NO_RESULTS": "Die Query {{query}} zeigt keine Resultate an",
   "QUERY_RESULTS": "Resultate für Query {{query}}:",
+  "QUERY_sql-core": "SQL: Main",
+  "QUERY_hql-core": "HQL: Main",
+  "QUERY_hql-pay": "HQL: Zahlung",
+  "QUERY_ft-product": "FT: Produkt",
 
   "PG_ENABLED": "Aktiviert",
   "PG_FEATURE_AUTH": "AUTH Modus",

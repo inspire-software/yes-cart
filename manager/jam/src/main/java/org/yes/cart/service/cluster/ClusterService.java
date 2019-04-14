@@ -145,38 +145,16 @@ public interface ClusterService {
 
 
     /**
-     * Execute sql and return result.
-     * DML operating also allowed, in this case result has quantity of affected rows.
+     * Execute query and return result.
      *
      * @param context web service context
-     * @param query query ot execute.
+     * @param type type of query.
+     * @param query query to execute.
      * @param node node (0..n) on which to run the query
      *
      * @return list of rows
      */
-    List<Object[]> sqlQuery(AsyncContext context, String query, String node);
-
-    /**
-     * Execute hsql and return result.
-     *
-     * @param context web service context
-     * @param query query ot execute.
-     * @param node node (0..n) on which to run the query
-     *
-     * @return list of rows
-     */
-    List<Object[]> hsqlQuery(AsyncContext context, String query, String node);
-
-    /**
-     * Execute ft query and return result.
-     *
-     * @param context web service context
-     * @param query query ot execute.
-     * @param node node (0..n) on which to run the query
-     *
-     * @return list of rows
-     */
-    List<Object[]> ftQuery(AsyncContext context, String query, String node);
+    List<Object[]> runQuery(AsyncContext context, String type, String query, String node);
 
     /**
      * Reload system configurations.

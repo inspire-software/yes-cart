@@ -26,12 +26,12 @@ import { LogUtil } from './../../shared/log/index';
 
 export class QueryComponent implements OnInit {
 
-  private static tabs:Array<QueryTabData> = [ { query: '', qtype: 'SQL', result: '', resultQuery: '' } ];
+  private static tabs:Array<QueryTabData> = [ { query: '', qtype: 'sql-core', result: '', resultQuery: '' } ];
 
   private cluster:Array<ClusterNodeVO> = [];
 
   private selectedNode:string = null;
-  private selectedTabType:string = 'SQL';
+  private selectedTabType:string = 'sql-core';
 
   private selectedTab:number = 0;
 
@@ -66,7 +66,7 @@ export class QueryComponent implements OnInit {
 
   protected onNewTabHandler() {
 
-    let qtype = this.selectedTabType ? this.selectedTabType : 'SQL';
+    let qtype = this.selectedTabType ? this.selectedTabType : 'sql-core';
     this.tabs.push({ query: '', qtype: qtype, result: '', resultQuery: '' });
     if (this.tabs.length == 1) {
       this.selectedTab = 0;

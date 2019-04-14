@@ -35,7 +35,7 @@
         </property>
         <property name="reloadClusterTopics">
             <set>
-                <value>BackdoorService.ping</value>
+                <value>ClusterUtilsService.ping</value>
                 <value>CacheDirector.evictAllCache</value>
             </set>
         </property>

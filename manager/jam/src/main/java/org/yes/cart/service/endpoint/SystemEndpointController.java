@@ -85,35 +85,10 @@ public interface SystemEndpointController {
      * @return list of rows
      */
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/dbquery/{node}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/query/{node}/{type}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<Object[]> sqlQuery(@RequestBody String query, @PathVariable("node") String node) throws Exception;
-
-    /**
-     * Execute hsql and return result.
-     *
-     * @param query query ot execute.
-     * @param node node on which to run query
-     *
-     * @return list of rows
-     */
-    @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/hquery/{node}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<Object[]> hsqlQuery(@RequestBody String query, @PathVariable("node") String node) throws Exception;
-
-    /**
-     * Execute ft query and return result.
-     *
-     * @param query query ot execute.
-     * @param node node on which to run query
-     *
-     * @return list of rows
-     */
-    @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/ftquery/{node}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<Object[]> ftQuery(@RequestBody String query, @PathVariable("node") String node) throws Exception;
+    List<Object[]> runQuery(@RequestBody String query, @PathVariable("type") String type, @PathVariable("node") String node) throws Exception;
+    
 
     /**
      * Get cache information.
