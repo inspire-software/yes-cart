@@ -15,6 +15,7 @@
  */
 package org.yes.cart.cluster.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.service.QueryDirectorPlugin;
 import org.yes.cart.dao.GenericFTSCapableDAO;
@@ -48,7 +49,10 @@ public class QueryDirectorPluginProductFTImpl implements QueryDirectorPlugin {
     @Override
     public List<Object[]> runQuery(final String query) {
         if (!isLuceneIndexDisabled()) {
-            return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().fullTextSearchRaw(query));
+            if (StringUtils.isNotBlank(query)) {
+                return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().fullTextSearchRaw(query));
+            }
+            return Collections.emptyList();
         }
         return new ArrayList<>(Collections.singletonList(new String[] { "FT is disabled on this node ..." }));
     }
