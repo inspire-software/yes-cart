@@ -40,6 +40,7 @@
   "MODAL_ERROR_MESSAGE_AUTH403": "Sie sind nicht berechtigt diese Daten zu sehen und/oder zu updaten. Klicken Sie auf 'Ignorieren', um fortzufahren. Wenn Sie den Lade-Indikator sehen, ignorieren Sie ihn bitte oder klicken Sie auf 'Aktualisieren', um ihn erneut zu laden.",
   "MODAL_ERROR_MESSAGE_AUTH404": "Server Fehler: Servicepfad nicht gefunden",
   "MODAL_ERROR_MESSAGE_UNIQUE": "Eine Datenbeschränkungsverletzung ist aufgetreten. (e.g. CODE, GUID, URI, Daten-Relationen)",
+  "MODAL_ERROR_MESSAGE_CONNECTION_ERROR": "Anfrage kann nicht erfüllt werden. Dies kann durch den Verlust der Internetverbindung (oder eine instabile Verbindung) verursacht werden. Klicken Sie auf 'Ignorieren' und versuchen Sie es erneut.",
   "MODAL_ERROR_MESSAGE": "Folgender Fehler ist aufgetreten",
   "MODAL_CONFIRM_TITLE": "Sind Sie sicher?",
   "MODAL_CONFIRM_MSG": "Bitte bestätigen Sie dass Sie weiterfahren möchten",
