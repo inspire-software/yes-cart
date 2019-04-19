@@ -135,7 +135,7 @@ export class ExportManagerComponent implements OnInit {
       if (this.selectedFile != null) {
 
         let nocache = '&nocache=' + Math.random();
-        window.open('/yes-manager/service/filemanager/download?fileName=' + encodeURI(this.selectedFile.first) + nocache,  '_blank', 'width=300,height=100');
+        window.open(Config.CONTEXT_PATH + '/service/filemanager/download?fileName=' + encodeURI(this.selectedFile.first) + nocache,  '_blank', 'width=300,height=100');
 
       }
     }

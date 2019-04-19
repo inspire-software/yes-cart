@@ -39,9 +39,9 @@ For standalone Tomcat build:
 3. Make changes to JS files
    - npm will auto compile and update "dist/dev"
 4. navigate to "yes-cart/manager/jam" and run "mvn validate -Pnodejs" when you are ready to preview changes
-   - this is a special profile task to copy "dist/dev" to "target/yes-manager"
+   - this is a special profile task to copy "dist/dev" to "target/cp"
 NOTE: step 4 copies th files, however because all files are plain JS sometimes browser caches them and does not
-      update. In this case you need to navigate to /yes-manager/resources/index.html to refresh the app.
+      update. In this case you need to navigate to /cp/resources/index.html to refresh the app.
 
 
 ## Well know problems

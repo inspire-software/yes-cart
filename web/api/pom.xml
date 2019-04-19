@@ -22,7 +22,7 @@
         <artifactId>web</artifactId>
         <version>3.6.0-SNAPSHOT</version>
     </parent>
-    <artifactId>yes-api</artifactId>
+    <artifactId>rest-api</artifactId>
     <packaging>war</packaging>
     <name>Yes cart web: REST API</name>
     <dependencies>
@@ -450,7 +450,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/yes-api</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.api.war.name}</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <directory>${basedir}/../../theme/mail/src/main/resources</directory>

@@ -93,7 +93,7 @@ public class SearchController {
     private BookmarkMixin bookmarkMixin;
 
     /**
-     * Interface: PUT /yes-api/rest/search
+     * Interface: PUT /api/rest/search
      * <p>
      * <p>
      * Perform a product search.

@@ -24,6 +24,7 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.endpoint.ManagementEndpointController;
 import org.yes.cart.service.vo.VoManagementService;
 
+import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,12 +38,15 @@ public class ManagementEndpointControllerImpl implements ManagementEndpointContr
 
     private final VoManagementService voManagementService;
     private final SystemService systemPreferencesService;
+    private final ServletContext servletContext;
 
     @Autowired
     public ManagementEndpointControllerImpl(final VoManagementService voManagementService,
-                                            final SystemService systemPreferencesService) {
+                                            final SystemService systemPreferencesService,
+                                            final ServletContext servletContext) {
         this.voManagementService = voManagementService;
         this.systemPreferencesService = systemPreferencesService;
+        this.servletContext = servletContext;
     }
 
     @Override
@@ -70,6 +74,8 @@ public class ManagementEndpointControllerImpl implements ManagementEndpointContr
         vals.put("SYSTEM_PANEL_HELP_DOCS", systemPreferencesService.getAttributeValue("SYSTEM_PANEL_HELP_DOCS"));
         vals.put("SYSTEM_PANEL_HELP_COPYRIGHT", systemPreferencesService.getAttributeValue("SYSTEM_PANEL_HELP_COPYRIGHT"));
         vals.put("SYSTEM_PANEL_LABEL", systemPreferencesService.getSystemEnvironmentLabel());
+        vals.put("CONTEXT_PATH", servletContext.getContextPath());
+
         return vals;
     }
 }

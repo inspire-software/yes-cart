@@ -82,7 +82,7 @@ export class FileSelectComponent implements OnInit, OnDestroy {
 
     let that = this;
 
-    let myWindow = window.open('/yes-manager/resources/assets/uploader/uploader.html', 'UPLOAD', 'width=300,height=100');
+    let myWindow = window.open(Config.CONTEXT_PATH + '/resources/assets/uploader/uploader.html', 'UPLOAD', 'width=300,height=100');
     myWindow.onbeforeunload = function() {
       that.onRefresh();
     };

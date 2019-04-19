@@ -18,7 +18,7 @@
                   xsi:noNamespaceSchemaLocation="file:../../../../../domain-api/src/main/resources/META-INF/schema/cluster-configuration.xsd">
     <node>
         <cluster-id>TESTCLUSTER</cluster-id>
-        <node-id>YES0</node-id>
+        <node-id>SF0</node-id>
         <node-type>SFW</node-type>
         <node-config>DEFAULT</node-config>
         <lucene-index-disabled>false</lucene-index-disabled>
@@ -26,11 +26,11 @@
     </node>
     <node>
         <cluster-id>TESTCLUSTER</cluster-id>
-        <node-id>YES1</node-id>
+        <node-id>SF1</node-id>
         <node-type>API</node-type>
         <node-config>DEFAULT</node-config>
         <lucene-index-disabled>true</lucene-index-disabled>
-        <channel>http://localhost:8081/yes-api/services/connector</channel>
+        <channel>http://localhost:8081/api/services/connector</channel>
     </node>
     <node>
         <cluster-id>TESTCLUSTER</cluster-id>

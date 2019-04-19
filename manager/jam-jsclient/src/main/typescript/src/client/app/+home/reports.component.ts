@@ -18,6 +18,8 @@ import { ReportDescriptorVO, ReportRequestVO, ReportRequestParameterVO, Pair } f
 import { ReportsService, I18nEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { LogUtil } from './../shared/log/index';
+import { Config } from './../shared/config/env.config';
+
 
 @Component({
   selector: 'yc-reports',
@@ -190,7 +192,7 @@ export class ReportsComponent implements OnInit {
       if (this.selectedFile != null) {
 
         let nocache = '&nocache=' + Math.random();
-        window.open('/yes-manager/service/filemanager/download?fileName=' + encodeURI(this.selectedFile.first) + nocache, '_blank', 'width=300,height=100');
+        window.open(Config.CONTEXT_PATH + '/service/filemanager/download?fileName=' + encodeURI(this.selectedFile.first) + nocache, '_blank', 'width=300,height=100');
 
       }
     }

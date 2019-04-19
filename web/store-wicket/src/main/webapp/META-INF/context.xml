@@ -14,7 +14,7 @@
   ~    limitations under the License.
   -->
 
-<Context path="${webapp.yes.context.path}" crossContext="true" >
+<Context path="${webapp.sf.context.path}" crossContext="true" >
 
     <Resource name="jdbc/yespayjndi"
               auth="Container"
@@ -66,14 +66,14 @@
            <!--userRoleTable="TMANAGERROLE"-->
            <!--roleNameCol="code"/>-->
 
-    <Parameter name="NODE_ID" value="${cluster.config.yes.node_id}" override="false"/>
+    <Parameter name="NODE_ID" value="${cluster.config.sf.node_id}" override="false"/>
     <Parameter name="NODE_TYPE" value="SFW" override="false"/>
-    <Parameter name="NODE_CONFIG" value="${cluster.config.yes.node_config}" override="false"/>
+    <Parameter name="NODE_CONFIG" value="${cluster.config.sf.node_config}" override="false"/>
     <Parameter name="CLUSTER_ID" value="${cluster.config.cluster_id}" override="false"/>
     <Parameter name="VERSION" value="${project.version}" override="false"/>
     <Parameter name="BUILD_NO" value="${buildNumber}" override="false"/>
-    <Parameter name="LUCENE_INDEX_DISABLED" value="${cluster.config.yes.lucene_index_disabled}" override="false"/>
-    <Parameter name="CHANNEL_URI" value="${cluster.config.yes.ws.channel_uri}" override="false"/>
+    <Parameter name="LUCENE_INDEX_DISABLED" value="${cluster.config.sf.lucene_index_disabled}" override="false"/>
+    <Parameter name="CHANNEL_URI" value="${cluster.config.sf.ws.channel_uri}" override="false"/>
 
 </Context>
 

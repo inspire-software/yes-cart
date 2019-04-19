@@ -183,6 +183,12 @@ export class ManagementService {
             Config.UI_LABEL = valLabel;
           }
         }
+        if (vals.hasOwnProperty('CONTEXT_PATH')) {
+          let valCtx = vals['CONTEXT_PATH'];
+          if (valCtx != null) {
+            Config.CONTEXT_PATH = valCtx;
+          }
+        }
         return vals;
       })
       .catch(this.handleError);

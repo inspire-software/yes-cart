@@ -18,7 +18,7 @@
                   xsi:noNamespaceSchemaLocation="file:../../../../../domain-api/src/main/resources/META-INF/schema/cluster-configuration.xsd">
     <node>
         <cluster-id>TEST</cluster-id>
-        <node-id>YES1</node-id>
+        <node-id>SF1</node-id>
         <node-type>API</node-type>
         <node-config>DEFAULT</node-config>
         <version>0.0.0</version>

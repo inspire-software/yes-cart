@@ -6,6 +6,7 @@ export interface EnvConfig {
   DEBUG_ON?: boolean;
   SUPPORTED_LANGS?:string;
   DEFAULT_LANG?:string;
+  CONTEXT_PATH?:string;
 
   UI_INPUT_DELAY?: number;
   UI_ALERTCHECK_DELAY?: number;

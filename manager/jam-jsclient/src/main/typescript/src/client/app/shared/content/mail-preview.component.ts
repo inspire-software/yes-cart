@@ -72,7 +72,7 @@ export class MailPreviewComponent implements OnInit, OnDestroy {
   onSelectClick(customerorder: CustomerOrderInfoVO) {
     LogUtil.debug('MailPreviewComponent onSelectClick', customerorder);
     this.selectedCustomerOrder = customerorder;
-    window.open('/yes-manager/service/content/mail/' + this.selectedShop + '/' + this.selectedTemplate + '?order=' + customerorder.ordernum, 'PREVIEW', 'width=800,height=500');
+    window.open(Config.CONTEXT_PATH + '/service/content/mail/' + this.selectedShop + '/' + this.selectedTemplate + '?order=' + customerorder.ordernum, 'PREVIEW', 'width=800,height=500');
   }
 
   protected onFilterChange() {

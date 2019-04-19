@@ -431,7 +431,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/${webapp.yes.war.name}</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.sf.war.name}</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <directory>${basedir}/../../theme/mail/src/main/resources</directory>
@@ -470,7 +470,7 @@
             <filter>${basedir}/../../env/maven/${env}/config-web-filters.properties</filter>
         </filters>
 
-        <finalName>${webapp.yes.war.name}</finalName>
+        <finalName>${webapp.sf.war.name}</finalName>
 
         <resources>
             <resource>

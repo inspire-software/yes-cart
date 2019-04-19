@@ -96,7 +96,7 @@ export class SeedConfig {
    * @type {string}
    */
   /* APP_BASE = argv['base'] || '/'; */
-  APP_BASE = argv['base'] || '/yes-manager/resources/'; // #YC# Must be specified here because other properties concat using it
+  APP_BASE = argv['base'] || '/cp/resources/'; // #YC# Must be specified here because other properties concat using it
 
   /**
    * The base path of node modules.

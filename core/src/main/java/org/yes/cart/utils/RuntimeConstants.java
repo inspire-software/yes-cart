@@ -25,8 +25,8 @@ package org.yes.cart.utils;
  */
 public interface RuntimeConstants {
 
-    String WEBAPP_SF_CONTEXT_PATH = "webapp.yes.context.path";
-    String WEBAPP_SF_WAR_NAME = "webapp.yes.war.name";
+    String WEBAPP_SF_CONTEXT_PATH = "webapp.sf.context.path";
+    String WEBAPP_SF_WAR_NAME = "webapp.sf.war.name";
     String WEBAPP_API_CONTEXT_PATH = "webapp.api.context.path";
     String WEBAPP_API_WAR_NAME = "webapp.api.war.name";
     String WEBAPP_ADMIN_CONTEXT_PATH = "webapp.admin.context.path";

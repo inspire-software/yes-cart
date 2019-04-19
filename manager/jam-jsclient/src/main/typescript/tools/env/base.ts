@@ -6,6 +6,7 @@ const BaseConfig: EnvConfig = {
   DEBUG_ON: false,
   SUPPORTED_LANGS: '(uk|ru|en|de)',
   DEFAULT_LANG: 'en',
+  CONTEXT_PATH: '/cp',
   UI_INPUT_DELAY: 300,
   UI_ALERTCHECK_DELAY: 120000,
   UI_BULKSERVICE_DELAY: 15000,

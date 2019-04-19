@@ -99,7 +99,7 @@ public class CartController {
 
 
     /**
-     * Interface: GET /yes-api/rest/cart
+     * Interface: GET /api/rest/cart
      * <p>
      * <p>
      * Display current cart.
@@ -408,7 +408,7 @@ public class CartController {
 
 
     /**
-     * Interface: PUT /yes-api/rest/cart
+     * Interface: PUT /api/rest/cart
      * <p>
      * <p>
      * Display current cart.
@@ -625,7 +625,7 @@ public class CartController {
 
 
     /**
-     * Interface: PUT /yes-api/rest/cart
+     * Interface: PUT /api/rest/cart
      * <p>
      * <p>
      * Display current cart.
@@ -879,7 +879,7 @@ public class CartController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/cart/options/shipping
+     * Interface: GET /api/rest/cart/options/shipping
      * <p>
      * <p>
      * Display shipping methods available.
@@ -955,7 +955,7 @@ public class CartController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/cart/options/shipping
+     * Interface: GET /api/rest/cart/options/shipping
      * <p>
      * <p>
      * Display shipping methods available.
@@ -1014,7 +1014,7 @@ public class CartController {
     }
 
     /**
-     * Interface: PUT /yes-api/rest/cart/options/shipping
+     * Interface: PUT /api/rest/cart/options/shipping
      * <p>
      * <p>
      * Set shipping method.
@@ -1365,7 +1365,7 @@ public class CartController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/cart/options/address/{type}
+     * Interface: GET /api/rest/cart/options/address/{type}
      * <p>
      * <p>
      * Display customer address book.
@@ -1434,7 +1434,7 @@ public class CartController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/cart/options/address/{type}
+     * Interface: GET /api/rest/cart/options/address/{type}
      * <p>
      * <p>
      * Display customer address book.
@@ -1500,7 +1500,7 @@ public class CartController {
 
 
     /**
-     * Interface: PUT /yes-api/rest/cart/options/address/{type}
+     * Interface: PUT /api/rest/cart/options/address/{type}
      * <p>
      * <p>
      * Set shipping method.
@@ -1788,7 +1788,7 @@ public class CartController {
 
 
     /**
-     * Interface: GET /yes-api/rest/cart/options/payment
+     * Interface: GET /api/rest/cart/options/payment
      * <p>
      * <p>
      * Display payment gateways available.
@@ -1840,7 +1840,7 @@ public class CartController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/cart/options/payment
+     * Interface: GET /api/rest/cart/options/payment
      * <p>
      * <p>
      * Display payment gateways available.
@@ -1894,7 +1894,7 @@ public class CartController {
 
 
     /**
-     * Interface: PUT /yes-api/rest/cart/options/payment
+     * Interface: PUT /api/rest/cart/options/payment
      * <p>
      * <p>
      * Set payment option for current cart.
@@ -2130,7 +2130,7 @@ public class CartController {
 
 
     /**
-     * Interface: GET /yes-api/rest/cart/validate
+     * Interface: GET /api/rest/cart/validate
      * <p>
      * <p>
      * Display cart validation result.

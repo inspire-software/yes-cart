@@ -88,7 +88,7 @@ public class CategoryController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/category/menu
+     * Interface: GET /api/rest/category/menu
      * <p>
      * <p>
      * Display top category menu. uitemplate is taken from the object without failover.
@@ -172,7 +172,7 @@ public class CategoryController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/category/menu
+     * Interface: GET /api/rest/category/menu
      * <p>
      * <p>
      * Display top category menu. uitemplate is taken from the object without failover.
@@ -270,7 +270,7 @@ public class CategoryController {
 
 
     /**
-     * Interface: GET /yes-api/rest/category/view/{id}
+     * Interface: GET /api/rest/category/view/{id}
      * <p>
      * <p>
      * Display category. uitemplate is is correctly resolved using central view resolver.
@@ -462,7 +462,7 @@ public class CategoryController {
 
 
     /**
-     * Interface: GET /yes-api/rest/category/menu/{id}
+     * Interface: GET /api/rest/category/menu/{id}
      * <p>
      * <p>
      * Display category menu. uitemplate is taken from the object without failover.
@@ -551,7 +551,7 @@ public class CategoryController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/category/menu/{id}
+     * Interface: GET /api/rest/category/menu/{id}
      * <p>
      * <p>
      * Display category menu. uitemplate is taken from the object without failover.

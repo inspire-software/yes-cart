@@ -87,8 +87,8 @@ public class JGroupsNodeServiceImplTest {
         final ServletContext ctx2 = context.mock(ServletContext.class, "ctx2");
         final ServletContext ctx3 = context.mock(ServletContext.class, "ctx3");
 
-        setExpectations(ctx1, new NodeImpl(false, "YES0", "SFW", "DEFAULT", "YCTEST", "0.0.0", "ABC", false));
-        setExpectations(ctx2, new NodeImpl(false, "YES1", "API", "DEFAULT", "YCTEST", "0.0.0", "ABC", true));
+        setExpectations(ctx1, new NodeImpl(false, "SF0", "SFW", "DEFAULT", "YCTEST", "0.0.0", "ABC", false));
+        setExpectations(ctx2, new NodeImpl(false, "SF1", "API", "DEFAULT", "YCTEST", "0.0.0", "ABC", true));
         setExpectations(ctx3, new NodeImpl(false, "JAM", "ADM", "DEFAULT", "YCTEST", "0.0.0", "ABC", true));
 
         ns1.setServletContext(ctx1);
@@ -119,13 +119,13 @@ public class JGroupsNodeServiceImplTest {
         assertEquals(3, ns3cluster.size());
 
 
-        ns1.broadcast(new BasicMessageImpl("YES0", Arrays.asList("JAM"), "subj", "message1"));
+        ns1.broadcast(new BasicMessageImpl("SF0", Arrays.asList("JAM"), "subj", "message1"));
         Thread.sleep(200L);
 
-        ns2.broadcast(new BasicMessageImpl("YES1", Arrays.asList("JAM"), "subj", "message2"));
+        ns2.broadcast(new BasicMessageImpl("SF1", Arrays.asList("JAM"), "subj", "message2"));
         Thread.sleep(200L);
 
-        ns3.broadcast(new BasicMessageImpl("JAM", Arrays.asList("YES0", "YES1"), "subj", "message2"));
+        ns3.broadcast(new BasicMessageImpl("JAM", Arrays.asList("SF0", "SF1"), "subj", "message2"));
         Thread.sleep(200L);
 
         context.assertIsSatisfied();

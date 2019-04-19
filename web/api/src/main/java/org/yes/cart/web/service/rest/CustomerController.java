@@ -89,7 +89,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/summary
+     * Interface: GET /api/rest/customer/summary
      * <p>
      * <p>
      * Display customer profile information.
@@ -183,7 +183,7 @@ public class CustomerController {
     }
 
     /**
-     * Interface: PUT /yes-api/rest/customer/summary
+     * Interface: PUT /api/rest/customer/summary
      * <p>
      * <p>
      * Display customer profile information.
@@ -472,7 +472,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/addressbook/{type}
+     * Interface: GET /api/rest/customer/addressbook/{type}
      * <p>
      * <p>
      * Display customer address book.
@@ -542,7 +542,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/addressbook/{type}
+     * Interface: GET /api/rest/customer/addressbook/{type}
      * <p>
      * <p>
      * Display customer address book.
@@ -619,7 +619,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/addressbook/{type}/options/countries
+     * Interface: GET /api/rest/customer/addressbook/{type}/options/countries
      * <p>
      * <p>
      * Display country options for address book.
@@ -682,7 +682,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/addressbook/{type}/options/countries
+     * Interface: GET /api/rest/customer/addressbook/{type}/options/countries
      * <p>
      * <p>
      * Display country options for address book.
@@ -753,7 +753,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/addressbook/{type}/options/country/{code}
+     * Interface: GET /api/rest/customer/addressbook/{type}/options/country/{code}
      * <p>
      * <p>
      * Display country options for address book.
@@ -812,7 +812,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/addressbook/{type}/options/country/{code}
+     * Interface: GET /api/rest/customer/addressbook/{type}/options/country/{code}
      * <p>
      * <p>
      * Display country options for address book.
@@ -920,7 +920,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: PUT /yes-api/rest/customer/addressbook/{type}
+     * Interface: PUT /api/rest/customer/addressbook/{type}
      * <p>
      * <p>
      * Display customer address book.
@@ -1033,7 +1033,7 @@ public class CustomerController {
     }
 
     /**
-     * Interface: PUT /yes-api/rest/customer/addressbook/{type}
+     * Interface: PUT /api/rest/customer/addressbook/{type}
      * <p>
      * <p>
      * Display customer address book.
@@ -1224,7 +1224,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/wishlist/{type}
+     * Interface: GET /api/rest/customer/wishlist/{type}
      * <p>
      * <p>
      * Display customer default wishlist.
@@ -1328,7 +1328,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/wishlist/{type}/{tag}
+     * Interface: GET /api/rest/customer/wishlist/{type}/{tag}
      * <p>
      * <p>
      * Display customer wishlist by tag.
@@ -1436,7 +1436,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/wishlist/{type}
+     * Interface: GET /api/rest/customer/wishlist/{type}
      * <p>
      * <p>
      * Display customer default wishlist.
@@ -1535,7 +1535,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /yes-api/rest/customer/wishlist/{type}/{tag}
+     * Interface: GET /api/rest/customer/wishlist/{type}/{tag}
      * <p>
      * <p>
      * Display customer wishlist by tag.

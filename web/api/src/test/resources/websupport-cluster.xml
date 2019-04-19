@@ -31,8 +31,8 @@
     <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
         <constructor-arg>
             <map>
-                <entry key="webapp.yes.context.path" value="${webapp.yes.context.path}"/>
-                <entry key="webapp.yes.war.name" value="${webapp.yes.war.name}"/>
+                <entry key="webapp.sf.context.path" value="${webapp.sf.context.path}"/>
+                <entry key="webapp.sf.war.name" value="${webapp.sf.war.name}"/>
                 <entry key="webapp.api.context.path" value="${webapp.api.context.path}"/>
                 <entry key="webapp.api.war.name" value="${webapp.api.war.name}"/>
                 <entry key="webapp.admin.context.path" value="${webapp.admin.context.path}"/>

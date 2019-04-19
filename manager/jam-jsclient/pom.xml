@@ -78,7 +78,7 @@
 
                     When running JAM via IDE (e.g. Intellij) you will need to run extra tasks from command line to update
                     the javascript that was recompiled by npm. "mvn validate -Pnodejs" this copies "dist/dev" to
-                    "jam/target/yes-manager/resources"
+                    "jam/target/cp/resources"
             -->
 
             <plugin>

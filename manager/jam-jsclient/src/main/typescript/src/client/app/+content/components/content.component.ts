@@ -25,6 +25,8 @@ import { ContentMinSelectComponent } from './../../shared/content/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
 import { LogUtil } from './../../shared/log/index';
 import { LRUCache } from './../../shared/model/internal/cache.model';
+import { Config } from './../../shared/config/env.config';
+
 
 @Component({
   selector: 'yc-content',
@@ -310,7 +312,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     };
 
     let id = 'cms' + Math.random();
-    let myWindow = window.open('/yes-manager/resources/assets/editor/tinymce/editor.html?lang=' + body.lang + '&id=' + id, 'CMS', 'width=1024,height=660');
+    let myWindow = window.open(Config.CONTEXT_PATH + '/resources/assets/editor/tinymce/editor.html?lang=' + body.lang + '&id=' + id, 'CMS', 'width=1024,height=660');
 
     LogUtil.debug('ContentComponent onCMSEdit', msg);
 

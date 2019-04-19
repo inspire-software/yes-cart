@@ -41,7 +41,7 @@ public class NodeController {
 
 
     /**
-     * Interface: GET /yes-api/rest/node
+     * Interface: GET /api/rest/node
      * <p>
      * <p>
      * Node interface returns basic node information.
@@ -63,14 +63,14 @@ public class NodeController {
      * <pre><code>
      * {
      *    "shopCode" : "SHOP10",
-     *    "nodeId" : "YES1"
+     *    "nodeId" : "SF1"
      * }
      * </code></pre>
      *     </td></tr>
      *     <tr><td>XML example</td><td>
      * <pre><code>
      * &lt;node&gt;
-     *    &lt;node-id&gt;YES1&lt;/node-id&gt;
+     *    &lt;node-id&gt;SF1&lt;/node-id&gt;
      *    &lt;shop-code&gt;SHOP10&lt;/shop-code&gt;
      * &lt;/node&gt;
      * </code></pre>

@@ -63,9 +63,9 @@
             Webapps config META-INF context.xml path are specified in config-cluster.properties
             These are finalNames defaults. Must be here as finalNames does not support filters files.
          -->
-        <webapp.yes.war.name>ROOT</webapp.yes.war.name>
-        <webapp.api.war.name>yes-api</webapp.api.war.name>
-        <webapp.admin.war.name>yes-manager</webapp.admin.war.name>
+        <webapp.sf.war.name>ROOT</webapp.sf.war.name>
+        <webapp.api.war.name>api</webapp.api.war.name>
+        <webapp.admin.war.name>cp</webapp.admin.war.name>
 
         <!-- Core frameworks globals versions -->
         <hibernate.core.version>5.2.17.Final</hibernate.core.version>
@@ -650,7 +650,7 @@
                                 <echo>Marketing price rules integration  (use -Ppricerules)             : ${marketing.pricerules}</echo>
                                 <echo> </echo>
                                 <echo>Web Apps</echo>
-                                <echo>Storefront: ${webapp.yes.war.name}.war</echo>
+                                <echo>Storefront: ${webapp.sf.war.name}.war</echo>
                                 <echo>REST API  : ${webapp.api.war.name}.war</echo>
                                 <echo>ADMIN     : ${webapp.admin.war.name}.war</echo>
                                 <echo> </echo>

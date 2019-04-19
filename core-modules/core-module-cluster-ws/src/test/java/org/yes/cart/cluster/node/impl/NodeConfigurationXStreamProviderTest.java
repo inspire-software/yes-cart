@@ -45,23 +45,23 @@ public class NodeConfigurationXStreamProviderTest {
         assertNotNull(cluster);
         assertEquals(3, cluster.size());
 
-        final Node yes0 = cluster.get(0);
-        assertEquals("TESTCLUSTER.YES0", yes0.getId());
-        assertEquals("TESTCLUSTER", yes0.getClusterId());
-        assertEquals("YES0", yes0.getNodeId());
-        assertEquals("SFW", yes0.getNodeType());
-        assertEquals("DEFAULT", yes0.getNodeConfig());
-        assertFalse(yes0.isFtIndexDisabled());
-        assertEquals("http://localhost:8080/services/connector", yes0.getChannel());
+        final Node node0 = cluster.get(0);
+        assertEquals("TESTCLUSTER.SF0", node0.getId());
+        assertEquals("TESTCLUSTER", node0.getClusterId());
+        assertEquals("SF0", node0.getNodeId());
+        assertEquals("SFW", node0.getNodeType());
+        assertEquals("DEFAULT", node0.getNodeConfig());
+        assertFalse(node0.isFtIndexDisabled());
+        assertEquals("http://localhost:8080/services/connector", node0.getChannel());
 
-        final Node yes1 = cluster.get(1);
-        assertEquals("TESTCLUSTER.YES1", yes1.getId());
-        assertEquals("TESTCLUSTER", yes1.getClusterId());
-        assertEquals("YES1", yes1.getNodeId());
-        assertEquals("API", yes1.getNodeType());
-        assertEquals("DEFAULT", yes1.getNodeConfig());
-        assertTrue(yes1.isFtIndexDisabled());
-        assertEquals("http://localhost:8081/yes-api/services/connector", yes1.getChannel());
+        final Node node1 = cluster.get(1);
+        assertEquals("TESTCLUSTER.SF1", node1.getId());
+        assertEquals("TESTCLUSTER", node1.getClusterId());
+        assertEquals("SF1", node1.getNodeId());
+        assertEquals("API", node1.getNodeType());
+        assertEquals("DEFAULT", node1.getNodeConfig());
+        assertTrue(node1.isFtIndexDisabled());
+        assertEquals("http://localhost:8081/api/services/connector", node1.getChannel());
 
         final Node admin = cluster.get(2);
         assertEquals("TESTCLUSTER.JAM", admin.getId());

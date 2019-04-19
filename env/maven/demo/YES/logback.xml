@@ -16,7 +16,7 @@
   -->
 <configuration>
 
-    <contextName>${cluster.config.yes.node_id}</contextName>
+    <contextName>${cluster.config.sf.node_id}</contextName>
 
     <jmxConfigurator />
 

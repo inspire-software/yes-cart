@@ -84,7 +84,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: GET /yes-api/rest/auth/check
+     * Interface: GET /api/rest/auth/check
      * <p>
      * <p>
      * Check interface that allows to check authentication state of user. The token for the authenticated cart is
@@ -183,7 +183,7 @@ public class AuthenticationController {
     }
 
     /**
-     * Interface: PUT /yes-api/rest/auth/login
+     * Interface: PUT /api/rest/auth/login
      * <p>
      * <p>
      * Login interface that allows to authenticate user cart. The token for the authenticated cart is
@@ -298,7 +298,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: GET /yes-api/rest/auth/logout
+     * Interface: GET /api/rest/auth/logout
      * <p>
      * <p>
      * Logout interface that allows to de-authenticate user cart. The token for the authenticated cart is
@@ -377,7 +377,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: GET /yes-api/rest/auth/register
+     * Interface: GET /api/rest/auth/register
      * <p>
      * <p>
      * Interface to list all attributes required for registration.
@@ -567,7 +567,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: PUT /yes-api/rest/auth/register
+     * Interface: PUT /api/rest/auth/register
      * <p>
      * <p>
      * Register interface that allows to register user. The token for the authenticated cart is
@@ -761,7 +761,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: PUT /yes-api/rest/auth/guest
+     * Interface: PUT /api/rest/auth/guest
      * <p>
      * <p>
      * Guest interface that allows create guest user. The token for the authenticated cart is
@@ -951,7 +951,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: POST /yes-api/rest/auth/resetpassword
+     * Interface: POST /api/rest/auth/resetpassword
      * <p>
      * <p>
      * Reset password interface that allows to request password to be reset and reset it.
@@ -1060,7 +1060,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: POST /yes-api/rest/auth/deleteaccount
+     * Interface: POST /api/rest/auth/deleteaccount
      * <p>
      * <p>
      * Delete account of currently logged in user.
@@ -1165,7 +1165,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: POST /yes-api/rest/auth/signupnewsletter
+     * Interface: POST /api/rest/auth/signupnewsletter
      * <p>
      * <p>
      * Sign up for newsletter interface sends email request to shop administrator with provided
@@ -1272,7 +1272,7 @@ public class AuthenticationController {
     }
 
     /**
-     * Interface: POST /yes-api/rest/auth/contactus
+     * Interface: POST /api/rest/auth/contactus
      * <p>
      * <p>
      * Contact Us interface sends email request to shop administrator with provided

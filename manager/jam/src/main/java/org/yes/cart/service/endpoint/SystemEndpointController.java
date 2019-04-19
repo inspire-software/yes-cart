@@ -36,7 +36,7 @@ public interface SystemEndpointController {
     /**
      * All registered nodes in this cluster.
      *
-     * E.g. if we have JAM, YES0, YES1 and YES2 nodes
+     * E.g. if we have JAM, SF0, SF1 and SF2 nodes
      * this methods should return four nodes.
      *
      * @return node objects

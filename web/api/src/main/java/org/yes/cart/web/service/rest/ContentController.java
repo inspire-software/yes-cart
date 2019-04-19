@@ -99,7 +99,7 @@ public class ContentController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/content/view/{id}
+     * Interface: GET /api/rest/content/view/{id}
      * <p>
      * <p>
      * Display content. uitemplate is is correctly resolved using central view resolver.
@@ -216,7 +216,7 @@ public class ContentController {
 
 
     /**
-     * Interface: PUT /yes-api/rest/content/view/{id}
+     * Interface: PUT /api/rest/content/view/{id}
      * <p>
      * <p>
      * Display dynamic content. uitemplate is is correctly resolved using central view resolver.
@@ -304,7 +304,7 @@ public class ContentController {
     }
 
     /**
-     * Interface: PUT /yes-api/rest/content/view/{id}
+     * Interface: PUT /api/rest/content/view/{id}
      * <p>
      * <p>
      * Display dynamic content. uitemplate is is correctly resolved using central view resolver.
@@ -426,7 +426,7 @@ public class ContentController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/content/menu/{id}
+     * Interface: GET /api/rest/content/menu/{id}
      * <p>
      * <p>
      * Display content menu. uitemplate is taken from the object without failover.
@@ -505,7 +505,7 @@ public class ContentController {
     }
 
     /**
-     * Interface: GET /yes-api/rest/content/menu/{id}
+     * Interface: GET /api/rest/content/menu/{id}
      * <p>
      * <p>
      * Display content menu. uitemplate is taken from the object without failover.

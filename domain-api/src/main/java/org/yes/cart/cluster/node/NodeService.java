@@ -50,10 +50,10 @@ public interface NodeService {
      * Current node identification. This should be set in the
      * Context.xml for Admin:
      *   <Parameter name="NODE_ID" value="JAM" override="false"/>
-     * For storefront context per instance YES[d], where d is node index from 0..n:
-     *   <Parameter name="NODE_ID" value="YES0" override="false"/>
-     *   <Parameter name="NODE_ID" value="YES1" override="false"/>
-     *   <Parameter name="NODE_ID" value="YES2" override="false"/>
+     * For storefront context per instance SF[d], where d is node index from 0..n:
+     *   <Parameter name="NODE_ID" value="SF0" override="false"/>
+     *   <Parameter name="NODE_ID" value="SF1" override="false"/>
+     *   <Parameter name="NODE_ID" value="SF2" override="false"/>
      *   ...
      *
      * @return current node identifier
@@ -70,7 +70,7 @@ public interface NodeService {
     /**
      * All registered nodes in this cluster.
      *
-     * E.g. if we have JAM, YES0, YES1 and YES2 nodes
+     * E.g. if we have JAM, SF0, SF1 and SF2 nodes
      * this methods should return four nodes.
      *
      * @return node objects
@@ -108,11 +108,11 @@ public interface NodeService {
     /**
      * YesCart storefront nodes excluding this one if this node is YeS.
      *
-     * E.g. if we have JAM, YES0, YES1 and YES2 nodes
-     * and current node is JAM then nodes returned are YES0, YES1 and YES2 nodes.
-     * and current node is YES0 then nodes returned are YES1 and YES2 nodes.
-     * and current node is YES1 then nodes returned are YES0 and YES2 nodes.
-     * and current node is YES2 then nodes returned are YES0 and YES1 nodes.
+     * E.g. if we have JAM, SF0, SF1 and SF2 nodes
+     * and current node is JAM then nodes returned are SF0, SF1 and SF2 nodes.
+     * and current node is SF0 then nodes returned are SF1 and SF2 nodes.
+     * and current node is SF1 then nodes returned are SF0 and SF2 nodes.
+     * and current node is SF2 then nodes returned are SF0 and SF1 nodes.
      *
      * @return YeS nodes
      */

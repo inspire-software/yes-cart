@@ -437,7 +437,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/yes-manager</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <directory>${basedir}/../../theme/mail/src/main/resources</directory>
@@ -455,7 +455,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/yes-manager/resources/node_modules</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}/resources/node_modules</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <filtering>false</filtering>
@@ -471,7 +471,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/yes-manager/resources</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}/resources</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <filtering>false</filtering>
@@ -506,7 +506,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/yes-manager/resources</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}/resources</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <filtering>false</filtering>

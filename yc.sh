@@ -234,7 +234,7 @@ build_demo() {
 
     "$MVN" clean install -PbuildDemo,mysql,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
 
-    cp $YC_HOME/manager/jam/target/yes-manager.war $YC_HOME/
+    cp $YC_HOME/manager/jam/target/cp.war $YC_HOME/
     cp $YC_HOME/web/store-wicket/target/ROOT.war $YC_HOME/
 
 }
@@ -354,8 +354,8 @@ start_aws() {
     chown tomcat:tomcat /etc/tomcat7/server.xml
 
 
-    cp /home/ec2-user/yes-cart/manager/jam/target/yes-manager.war /usr/share/tomcat7/webapps/
-    cp /home/ec2-user/yes-cart/web/api/target/yes-api.war /usr/share/tomcat7/webapps/
+    cp /home/ec2-user/yes-cart/manager/jam/target/cp.war /usr/share/tomcat7/webapps/
+    cp /home/ec2-user/yes-cart/web/api/target/api.war /usr/share/tomcat7/webapps/
     cp /home/ec2-user/yes-cart/web/store-wicket/target/ROOT.war /usr/share/tomcat7/webapps/
 
     mkdir -p /var/lib/tomcat7-ycdemo/import/SHOP10/config
@@ -391,7 +391,7 @@ EOF
     service tomcat7 start
 
     echo " Yes-Cart is available on "
-    echo " http://$ycdemohost:8080/yes-manager/ "
+    echo " http://$ycdemohost:8080/cp/ "
     echo " http://$ycdemohost:8080/ "
 
     exit
