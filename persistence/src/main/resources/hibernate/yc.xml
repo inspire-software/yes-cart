@@ -1247,7 +1247,7 @@
             <column name="BARCODE" length="128"/>
         </property>
 
-        <bag name="attributes" inverse="false" lazy="false" cascade="all-delete-orphan">
+        <bag name="attributes" inverse="true" lazy="false" cascade="all,delete-orphan">
             <key>
                 <column name="SKU_ID" not-null="true"/>
             </key>
