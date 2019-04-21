@@ -586,7 +586,7 @@
             </resource>
             <resource>
                 <filtering>true</filtering>
-                <directory>${basedir}/../../env/maven/${env}/JAM</directory>
+                <directory>${basedir}/../../env/maven/${env}/ADM</directory>
                 <includes>
                     <include>logback.xml</include>
                     <include>logging.properties</include>

@@ -502,7 +502,7 @@
             </resource>
             <resource>
                 <filtering>true</filtering>
-                <directory>${basedir}/../../env/maven/${env}/YES</directory>
+                <directory>${basedir}/../../env/maven/${env}/SF</directory>
                 <includes>
                     <include>logback.xml</include>
                     <include>logging.properties</include>

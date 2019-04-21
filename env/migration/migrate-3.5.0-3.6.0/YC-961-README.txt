@@ -22,6 +22,12 @@ Additional refactoring:
 * cluster.config.yes.lucene_index_disabled placeholder is renamed to cluster.config.sf.lucene_index_disabled
 * cluster.config.yes.ws.channel_uri placeholder is renamed to cluster.config.sf.ws.channel_uri
 
+Config changes:
+
+Directories for webapp specific files changed:
+* YES -> SF
+* JAM -> ADM
+
 DEV:
 ====
 
@@ -41,6 +47,8 @@ cluster.config.yes.ws.channel_uri -> cluster.config.sf.ws.channel_uri
 YES0 -> SF0
 YES1 -> SF1
 YES2 -> SF2
+Config dir YES -> SF
+Config dir JAM -> ADM
 
 PRODUCTION:
 ===========
