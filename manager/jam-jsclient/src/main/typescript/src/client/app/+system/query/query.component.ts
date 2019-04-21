@@ -158,7 +158,7 @@ export class QueryComponent implements OnInit {
         this.loading = false;
         _sub2.unsubscribe();
 
-      })
+      });
 
     });
 
