@@ -76,17 +76,6 @@ public abstract class AbstractCentralView extends BaseComponent {
         return navigationContext;
     }
 
-    /**
-     * Get category.
-     * @return {@link Category}
-     */
-    public Category getCategory() {
-        if (category == null) {
-            category = categoryServiceFacade.getCategory(categoryId, getCurrentCustomerShopId());
-        }
-        return category;
-    }
-
 
     /**
      * Get page title.
@@ -120,13 +109,7 @@ public abstract class AbstractCentralView extends BaseComponent {
      *
      * @return main seo object for given page
      */
-    protected Seoable getSeoObject() {
-        final Category cat = getCategory();
-        if (cat != null) {
-            return new CategorySeoableDecoratorImpl(cat, getPage().getLocale().getLanguage());
-        }
-        return null;
-    }
+    protected abstract Seoable getSeoObject();
 
 
     /**

@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -28,9 +30,11 @@ import java.math.BigDecimal;
  * Date: 11/07/2017
  * Time: 14:21
  */
-public class InventoryResolverDefaultImpl implements InventoryResolver {
+public class InventoryResolverDefaultImpl implements InventoryResolver, Configuration {
 
     private final SkuWarehouseService skuWarehouseService;
+
+    private ConfigurationContext cfgContext;
 
     public InventoryResolverDefaultImpl(final SkuWarehouseService skuWarehouseService) {
         this.skuWarehouseService = skuWarehouseService;
@@ -65,4 +69,15 @@ public class InventoryResolverDefaultImpl implements InventoryResolver {
     public SkuWarehouse findByWarehouseSku(final Warehouse warehouse, final String productSkuCode) {
         return skuWarehouseService.findByWarehouseSku(warehouse, productSkuCode);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
+    }
+
 }

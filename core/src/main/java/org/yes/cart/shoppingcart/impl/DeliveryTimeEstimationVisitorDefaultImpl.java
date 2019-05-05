@@ -21,6 +21,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -44,7 +46,7 @@ import java.util.*;
  * Date: 07/02/2017
  * Time: 07:36
  */
-public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEstimationVisitor {
+public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEstimationVisitor, Configuration {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeliveryTimeEstimationVisitorDefaultImpl.class);
 
@@ -52,6 +54,8 @@ public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEst
 
     private final WarehouseService warehouseService;
     private final CarrierSlaService carrierSlaService;
+
+    private ConfigurationContext cfgContext;
 
     public DeliveryTimeEstimationVisitorDefaultImpl(final WarehouseService warehouseService,
                                                     final CarrierSlaService carrierSlaService) {
@@ -502,4 +506,15 @@ public class DeliveryTimeEstimationVisitorDefaultImpl implements DeliveryTimeEst
     }
 
 
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
+    }
+
+    
 }

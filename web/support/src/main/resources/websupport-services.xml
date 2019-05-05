@@ -90,6 +90,13 @@
         <constructor-arg index="0" ref="cacheManager"/>
     </bean>
 
+    <bean id="contentImageService" class="org.yes.cart.web.support.service.impl.ContentImageServiceImpl">
+        <constructor-arg index="0" ref="cacheManager"/>
+    </bean>
+
+    <bean id="contentFileService" class="org.yes.cart.web.support.service.impl.ContentFileServiceImpl">
+        <constructor-arg index="0" ref="cacheManager"/>
+    </bean>
 
     <!-- ############################ Category , Product and Sku image services end ############################### -->
 

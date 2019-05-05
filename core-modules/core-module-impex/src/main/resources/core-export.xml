@@ -225,13 +225,24 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
-                <entry key="CONTENT">
-                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentXmlEntityHandler">
+                <entry key="CONTENT_CMS1">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms1XmlEntityHandler">
+                        <constructor-arg ref="categoryService"/>
+                    </bean>
+                </entry>
+                <entry key="CONTENT_CMS1_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms1XmlEntityHandler">
+                        <constructor-arg ref="categoryService"/>
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="CONTENT_CMS3">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms3XmlEntityHandler">
                         <constructor-arg ref="contentService"/>
                     </bean>
                 </entry>
-                <entry key="CONTENT_PRETTY">
-                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentXmlEntityHandler">
+                <entry key="CONTENT_CMS3_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms3XmlEntityHandler">
                         <constructor-arg ref="contentService"/>
                         <property name="prettyPrint" value="true"/>
                     </bean>

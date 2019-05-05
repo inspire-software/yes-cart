@@ -40,6 +40,8 @@ public interface DaoServiceBeanKeys {
 
     String CATEGORY_DAO = "categoryDao";
 
+    String CONTENT_DAO = "contentDao";
+
     String PRODUCT_DAO = "productDao";
 
     String PRODUCT_SKU_DAO = "productSkuDao";

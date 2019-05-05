@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.domain.TaxService;
 import org.yes.cart.shoppingcart.TaxProvider;
@@ -27,10 +29,12 @@ import java.math.BigDecimal;
  * Date: 04/11/2014
  * Time: 17:49
  */
-public class TaxProviderDefaultImpl implements TaxProvider {
+public class TaxProviderDefaultImpl implements TaxProvider, Configuration {
 
     private final TaxService taxService;
     private final TaxConfigService taxConfigService;
+
+    private ConfigurationContext cfgContext;
 
     private static class TaxImpl implements Tax {
 
@@ -109,4 +113,16 @@ public class TaxProviderDefaultImpl implements TaxProvider {
         final org.yes.cart.domain.entity.Tax tax = taxService.getById(taxId);
         return new TaxImpl(tax.getTaxRate(), tax.getCode(), tax.getExclusiveOfPrice());
     }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
+    }
+
 }

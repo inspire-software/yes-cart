@@ -16,17 +16,19 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.service.domain.ContentService;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -34,29 +36,49 @@ import static org.junit.Assert.*;
  * User: Denis Pavlov
  * Date: 15-June-2013
  */
+@RunWith(Parameterized.class)
 public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
+    @Parameterized.Parameters(name = "{0}")
+    public static Collection<String> data() {
+        return Arrays.asList("contentServiceCMS1", "contentServiceCMS3");
+    }
 
 
     private ContentService contentService;
+
+    private String cmsMode;
+
+    public ContentServiceImplTest(final String cmsMode) {
+        this.cmsMode = cmsMode;
+    }
 
     @Override
     @Before
     public void setUp() {
         contentService = (ContentService) ctx().getBean(ServiceSpringKeys.CONTENT_SERVICE);
+        final ContentService mode = (ContentService) ctx().getBean(cmsMode);
+        ((ConfigurationRegistry) contentService).register("CMS", mode);
         super.setUp();
+    }
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        ((ConfigurationRegistry) contentService).register("CMS", null);
+        super.tearDown();
     }
 
     @Test
     public void testGetRootContent() {
-        Category rootContent = contentService.getRootContent(20L); //SHOIP2
+        Content rootContent = contentService.getRootContent(20L); //SHOIP2
         assertNotNull(rootContent);
         assertEquals(rootContent.getGuid(), "SHOIP2");
     }
 
     @Test
     public void testGetRootContentCreate() {
-        Category rootContent = contentService.getRootContent(30L); //SHOIP3
+        Content rootContent = contentService.getRootContent(30L); //SHOIP3
         assertNull(rootContent);
         contentService.createRootContent(30L);
         rootContent = contentService.getRootContent(30L); //SHOIP3
@@ -86,27 +108,27 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetUIVariationTestNoFailover() {
-        Category category = contentService.findById(10106L);
-        assertNotNull(category);
-        assertNull(category.getUitemplate());
+        Content content = contentService.findById(10106L);
+        assertNotNull(content);
+        assertNull(content.getUitemplate());
         String uiVariation = contentService.getContentTemplate(10106L);
         assertNull(uiVariation);
     }
 
     @Test
     public void testGetUIVariationTestExists() {
-        Category category = contentService.findById(10107L);
-        assertNotNull(category);
-        assertEquals("content", category.getUitemplate());
+        Content content = contentService.findById(10107L);
+        assertNotNull(content);
+        assertEquals("content", content.getUitemplate());
         String uiVariation = contentService.getContentTemplate(10107L);
-        assertEquals(category.getUitemplate(), uiVariation);
+        assertEquals(content.getUitemplate(), uiVariation);
     }
 
     @Test
     public void testGetUIVariationTestFailover() {
-        Category category = contentService.findById(10108L);
-        assertNotNull(category);
-        assertNull(category.getUitemplate());
+        Content content = contentService.findById(10108L);
+        assertNotNull(content);
+        assertNull(content.getUitemplate());
         String uiVariation = contentService.getContentTemplate(10108L);
         assertEquals("content", uiVariation);
     }
@@ -116,15 +138,15 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
     public void testGetChildCategoriesRecursiveTest() {
         Set<Long> contentIds = new HashSet<>();
         contentIds.addAll(Arrays.asList(10105L, 10106L, 10107L, 10108L, 10109L));
-        Set<Category> contents = contentService.getChildContentRecursive(10105L);
-        for (Category content : contents) {
-            assertTrue(contentIds.contains(content.getCategoryId()));
+        Set<Content> contents = contentService.getChildContentRecursive(10105L);
+        for (Content content : contents) {
+            assertTrue(contentIds.contains(content.getContentId()));
         }
     }
 
     @Test
     public void testGetChildCategoriesRecursiveNullTest() {
-        Set<Category> contents = contentService.getChildContentRecursive(0L);
+        Set<Content> contents = contentService.getChildContentRecursive(0L);
         assertTrue(contents.isEmpty());
     }
 

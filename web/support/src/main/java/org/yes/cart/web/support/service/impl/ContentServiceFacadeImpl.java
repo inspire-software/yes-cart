@@ -21,10 +21,10 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CategoryRankDisplayNameComparator;
+import org.yes.cart.service.domain.ContentRankDisplayNameComparator;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtils;
@@ -54,7 +54,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
      * {@inheritDoc}
      */
     @Override
-    public Category getContent(final long contentId, final long shopId) {
+    public Content getContent(final long contentId, final long shopId) {
         if (contentId > 0L && shopService.getShopContentIds(shopId).contains(contentId)) {
             return contentService.getById(contentId);
         }
@@ -65,7 +65,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
      * {@inheritDoc}
      */
     @Override
-    public Category getContent(final String contentUri, final long shopId) {
+    public Content getContent(final String contentUri, final long shopId) {
 
         if (StringUtils.isBlank(contentUri)) {
             return null;
@@ -185,12 +185,12 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
      * {@inheritDoc}
      */
     @Override
-    @Cacheable(value = "categoryService-currentCategoryMenu")
-    public List<Category> getCurrentContentMenu(final long currentContentId, final long shopId, final String locale) {
+    @Cacheable(value = "contentService-currentContentMenu")
+    public List<Content> getCurrentContentMenu(final long currentContentId, final long shopId, final String locale) {
 
         if (currentContentId > 0L && shopService.getShopContentIds(shopId).contains(currentContentId)) {
 
-            Category content = contentService.getById(currentContentId);
+            Content content = contentService.getById(currentContentId);
             final LocalDateTime now = now();
 
             while (content != null && !content.isRoot() &&  !CentralViewLabel.INCLUDE.equals(content.getUitemplate())) {
@@ -203,10 +203,10 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
 
             }
 
-            final List<Category> categories = new ArrayList<>(contentService.getChildContent(currentContentId));
+            final List<Content> categories = new ArrayList<>(contentService.getChildContent(currentContentId));
             categories.removeIf(cat -> CentralViewLabel.INCLUDE.equals(cat.getUitemplate()));
 
-            categories.sort(new CategoryRankDisplayNameComparator(locale));
+            categories.sort(new ContentRankDisplayNameComparator(locale));
 
             return categories;
 

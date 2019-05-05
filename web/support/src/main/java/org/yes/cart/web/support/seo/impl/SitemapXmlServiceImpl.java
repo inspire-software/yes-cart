@@ -215,7 +215,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         writer.write("<!-- Content -->\n");
 
-        final Category root = contentService.getRootContent(shop.getShopId());
+        final Content root = contentService.getRootContent(shop.getShopId());
         if (root != null) {
 
             appendContent(writer, root, false, urlBase, languages, now);
@@ -227,7 +227,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
 
-    private void appendContent(final OutputStreamWriter writer, final Category content, final boolean childInclude, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
+    private void appendContent(final OutputStreamWriter writer, final Content content, final boolean childInclude, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
         if (DomainApiUtils.isObjectAvailableNow(!content.isDisabled(), content.getAvailablefrom(), content.getAvailableto(), now)) {
 
@@ -240,7 +240,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
             }
 
-            for (final Category contentItem : contentService.getChildContent(content.getCategoryId())) {
+            for (final Content contentItem : contentService.getChildContent(content.getContentId())) {
 
                 appendContent(writer, contentItem, include, urlBase, languages, now);
 
@@ -251,8 +251,8 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
 
-    private void appendContentLoc(final OutputStreamWriter writer, final Category category, final List<String> languages, final String urlBase) throws IOException {
-        appendLoc(writer, seoUrl(category.getSeo(), category.getCategoryId(), urlBase, WebParametersKeys.CONTENT_ID), languages);
+    private void appendContentLoc(final OutputStreamWriter writer, final Content content, final List<String> languages, final String urlBase) throws IOException {
+        appendLoc(writer, seoUrl(content.getSeo(), content.getContentId(), urlBase, WebParametersKeys.CONTENT_ID), languages);
     }
 
 

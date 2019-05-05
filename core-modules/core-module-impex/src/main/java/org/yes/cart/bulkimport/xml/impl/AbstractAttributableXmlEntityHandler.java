@@ -26,6 +26,7 @@ import org.yes.cart.service.domain.AttributeService;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 /**
  * User: denispavlov
@@ -33,6 +34,8 @@ import java.util.Iterator;
  * Time: 14:43
  */
 public abstract class AbstractAttributableXmlEntityHandler<T, E, M extends Attributable, C extends AttrValue> extends AbstractXmlEntityHandler<T, E> {
+
+    private static final Pattern INDEX_VAL = Pattern.compile("(.*)_(IMAGE|FILE|SYSFILE)(\\d+)");
 
     private AttributeService attributeService;
 
@@ -89,9 +92,16 @@ public abstract class AbstractAttributableXmlEntityHandler<T, E, M extends Attri
 
     }
 
+    private boolean shouldSaveIndexedVal(final CustomAttributeType attr) {
+        return INDEX_VAL.matcher(attr.getAttribute()).matches();
+    }
+
     private void updateExtSaveBasic(final CustomAttributeType attr, final C av) {
         av.setVal(attr.getCustomValue());
         av.setDisplayVal(processI18n(attr.getCustomDisplayValue(), av.getDisplayVal()));
+        if (shouldSaveIndexedVal(attr)) {
+            av.setIndexedVal(attr.getCustomValue());
+        }
     }
 
     private void updateExtRemove(final Collection<C> existing, final CustomAttributeType attr) {

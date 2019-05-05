@@ -21,6 +21,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.PriceNavigation;
@@ -100,12 +101,11 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                       final long shopId,
                                       final long customerShopId,
                                       final long categoryId,
-                                      final PageParameters pageParameters,
-                                      final Set<Long> shopCategoryIds) {
+                                      final PageParameters pageParameters) {
 
         final List<Crumb> crumbs = new ArrayList<>();
         final boolean isContent = pageParameters.getNamedKeys().contains(WebParametersKeys.CONTENT_ID);
-        crumbs.addAll(getCategoriesCrumbs(shopId, customerShopId, categoryId, shopCategoryIds, isContent));
+        crumbs.addAll(getCategoriesCrumbs(shopId, customerShopId, categoryId, isContent));
         crumbs.addAll(getFilteredNavigationCrumbs(locale, pageParameters));
         return crumbs;
     }
@@ -120,13 +120,14 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     private List<Crumb> getCategoriesCrumbs(final long shopId,
                                             final long customerShopId,
                                             final long categoryId,
-                                            final Set<Long> shopCategoryIds,
                                             final boolean isContent) {
         final List<Crumb> crumbs = new ArrayList<>();
         if (categoryId > 0) {
             if (isContent) {
-                fillContent(crumbs, shopId, categoryId, shopCategoryIds, now());
+                final Set<Long> contentIds = shopService.getShopContentIds(shopId);
+                fillContent(crumbs, shopId, categoryId, contentIds, now());
             } else {
+                final Set<Long> shopCategoryIds = shopService.getShopCategoriesIds(customerShopId);
                 fillCategories(crumbs, customerShopId, categoryId, shopCategoryIds, now());
             }
         }
@@ -139,34 +140,34 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      *
      * @param categoriesCrumbs the crumbs list
      * @param shopId           the current shop id
-     * @param categoryId       the current category id
+     * @param contentId        the current content id
      * @param now              for availability check
      */
     private boolean fillContent(final List<Crumb> categoriesCrumbs,
                                 final long shopId,
-                                final long categoryId,
-                                final Set<Long> shopCategoryIds,
+                                final long contentId,
+                                final Set<Long> contentIds,
                                 final LocalDateTime now) {
-        if (categoryId > 0L && shopCategoryIds.contains(categoryId)) {
-            final Category category = contentService.getById(categoryId);
-            if (!category.isRoot() && !CentralViewLabel.INCLUDE.equals(category.getUitemplate())) {
+        if (contentId > 0L && contentIds.contains(contentId)) {
+            final Content content = contentService.getById(contentId);
+            if (!content.isRoot() && !CentralViewLabel.INCLUDE.equals(content.getUitemplate())) {
 
-                if (!DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+                if (!DomainApiUtils.isObjectAvailableNow(!content.isDisabled(), content.getAvailablefrom(), content.getAvailableto(), now)) {
                     return false; // Not available
                 }
 
                 boolean parentAvailable = true;
 
-                final long parentId = category.getParentId();
+                final long parentId = content.getParentId();
                 if (parentId > 0L) {
-                    parentAvailable = fillContent(categoriesCrumbs, shopId, parentId, shopCategoryIds, now);
+                    parentAvailable = fillContent(categoriesCrumbs, shopId, parentId, contentIds, now);
                 }
 
                 if (parentAvailable) {
                     categoriesCrumbs.add(
-                            new Crumb("category", String.valueOf(categoryId), category.getName(),
-                                    category.getDisplayName(), getContentLinkParameters(categoryId),
-                                    getRemoveContentLinkParameters(category, shopCategoryIds)
+                            new Crumb("content", String.valueOf(contentId), content.getName(),
+                                    content.getDisplayName(), getContentLinkParameters(contentId),
+                                    getRemoveContentLinkParameters(content)
                             )
                     );
                 }
@@ -272,16 +273,14 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      * Get {@link PageParameters}, that point to parent, if any, of given category.
      *
      *
-     * @param category given category
+     * @param content given category
      *
      * @return page parameter for point to parent.
      */
-    private PageParameters getRemoveContentLinkParameters(final Category category, final Set<Long> shopCategoryIds) {
-        if (shopCategoryIds.contains(category.getParentId())) {
-            final Category parent = contentService.getById(category.getParentId());
-            if (parent != null && !parent.isRoot() && !CentralViewLabel.INCLUDE.equals(parent.getUitemplate())) {
-                return getCategoryLinkParameters(parent.getCategoryId());
-            }
+    private PageParameters getRemoveContentLinkParameters(final Content content) {
+        final Content parent = contentService.getById(content.getParentId());
+        if (parent != null && !parent.isRoot() && !CentralViewLabel.INCLUDE.equals(parent.getUitemplate())) {
+            return getCategoryLinkParameters(parent.getContentId());
         }
         return new PageParameters();
     }

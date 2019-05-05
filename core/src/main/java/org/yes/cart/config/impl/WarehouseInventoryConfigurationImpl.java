@@ -39,7 +39,7 @@ public class WarehouseInventoryConfigurationImpl extends AbstractWarehouseConfig
 
         final InventoryResolver inventoryResolver = determineConfiguration(properties, warehouse.getCode() + ".inventoryResolver", InventoryResolver.class);
 
-        customise(warehouse.getCode(), warehouse.getCode(), InventoryResolver.class, inventoryResolver);
+        customise(warehouse.getCode(), warehouse.getCode(), "inventoryResolver", InventoryResolver.class, inventoryResolver);
     }
 
     /** {@inheritDoc} */

@@ -128,6 +128,53 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
 
 
     @Test
+    public void testContentJson() throws Exception {
+
+        mockMvc.perform(get("/content/menu/SHOIP1_menu_item_1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("menu item 1")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+        mockMvc.perform(get("/content/view/SHOIP1_menu_item_1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("Menu Item Content")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+    }
+
+    @Test
+    public void testContentXML() throws Exception {
+
+        mockMvc.perform(get("/content/menu/SHOIP1_menu_item_1")
+                .contentType(MediaType.APPLICATION_XML)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("menu item 1")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+        mockMvc.perform(get("/content/view/SHOIP1_menu_item_1")
+                .contentType(MediaType.APPLICATION_XML)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("Menu Item Content")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+    }
+
+
+    @Test
     public void testProductJson() throws Exception {
 
         reindex();

@@ -18,8 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.config.Configuration;
-import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.shoppingcart.TaxProvider;
 
@@ -32,14 +30,12 @@ import java.util.Map;
  * Time: 18:39
  */
 public class TaxProviderImpl
-        implements TaxProvider, ConfigurationRegistry<String, TaxProvider>, Configuration {
+        implements TaxProvider, ConfigurationRegistry<String, TaxProvider> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TaxProviderImpl.class);
 
     private final TaxProvider defaultTaxProvider;
     private final Map<String, TaxProvider> customTaxProviders = new HashMap<>();
-
-    private ConfigurationContext cfgContext;
 
     public TaxProviderImpl(final TaxProvider defaultTaxProvider) {
         this.defaultTaxProvider = defaultTaxProvider;
@@ -62,7 +58,7 @@ public class TaxProviderImpl
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final Object configuration) {
+    public boolean supports(final String cfgProperty, final Object configuration) {
         return configuration instanceof TaxProvider ||
                 (configuration instanceof Class && TaxProvider.class.isAssignableFrom((Class<?>) configuration));
     }
@@ -79,15 +75,5 @@ public class TaxProviderImpl
             customTaxProviders.remove(shopCode);
         }
 
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public ConfigurationContext getCfgContext() {
-        return cfgContext;
-    }
-
-    public void setCfgContext(final ConfigurationContext cfgContext) {
-        this.cfgContext = cfgContext;
     }
 }

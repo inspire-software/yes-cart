@@ -473,6 +473,29 @@
     </class>
 
 
+    <class name="org.yes.cart.domain.entity.impl.AttrValueEntityContent" table="TCONTENTATTRVALUE">
+        <id name="attrvalueId" type="long">
+            <column name="ATTRVALUE_ID" not-null="true"/>
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="val" column="VAL" type="string" length="4000"/>
+        <property name="indexedVal" column="INDEXVAL" type="string" length="255" index="AV_CONTENT_VAL"/>
+        <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
+        <many-to-one name="content" class="org.yes.cart.domain.entity.impl.ContentEntity"  not-null="true" column="CONTENT_ID" foreign-key="FK_AV_CONTENT_CONTENTID"/>
+        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true" index="AV_CONTENT_CODE"/>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="AVCONTENT_GUID" not-null="true"/>
+
+    </class>
 
 
     <!-- ############################## common part #################################### -->
@@ -1027,6 +1050,63 @@
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="CATEGORY_GUID" not-null="true"/>
+    </class>
+
+
+    <class name="org.yes.cart.domain.entity.impl.ContentEntity" table="TCONTENT">
+        <comment>Content, self related table.</comment>
+        <id name="contentId" column="CONTENT_ID" type="long">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="parentId" column="PARENT_ID" type="long"/>
+        <property name="rank" type="int" not-null="false">
+            <column name="RANK">
+                <comment>
+                    What the default order of child content in parent ?
+                </comment>
+            </column>
+        </property>
+
+        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
+        <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
+        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="uitemplate" type="string" length="255">
+            <column name="UITEMPLATE">
+                <comment>point to a products in list template. Can be used parent template if it not set. In case of
+                    no templates at all, store product in list template will be used
+                </comment>
+            </column>
+        </property>
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="CN_DISABLED"/>
+        <property name="availablefrom" column="AVAILABLEFROM" type="java.time.LocalDateTime"/>
+        <property name="availableto" column="AVAILABLETO" type="java.time.LocalDateTime"/>
+
+
+        <bag name="attributes" inverse="true" lazy="false" cascade="all">
+            <key column="CONTENT_ID" not-null="true" on-delete="cascade"/>
+            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.AttrValueEntityContent" />
+        </bag>
+
+        <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
+            <property name="uri" type="string" column="URI" length="255" not-null="false" unique-key="CONTENT_URI"/>
+            <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
+            <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
+            <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
+            <property name="displayTitle" type="string" column="DISPLAY_TITLE" length="4000" not-null="false"/>
+            <property name="displayMetakeywords" type="string" column="DISPLAY_METAKEYWORDS" length="4000" not-null="false"/>
+            <property name="displayMetadescription" type="string" column="DISPLAY_METADESCRIPTION" length="4000" not-null="false"/>
+        </component>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="CONTENT_GUID" not-null="true"/>
     </class>
 
     <class name="org.yes.cart.domain.entity.impl.BrandEntity" table="TBRAND">
@@ -2787,9 +2867,21 @@
        ]]>
     </query>
 
-    <query name="ROOTCONTENT.BY.SHOP.ID">
+    <query name="CMS1.ROOTCONTENT.BY.SHOP.ID">
         <![CDATA[
        select c from CategoryEntity c, ShopEntity s WHERE c.guid = s.code AND c.parentId = 0 AND s.shopId = ?1
+       ]]>
+    </query>
+
+    <query name="CMS3.ROOTCONTENT.BY.SHOP.ID">
+        <![CDATA[
+       select c from ContentEntity c, ShopEntity s WHERE c.guid = s.code AND c.parentId = 0 AND s.shopId = ?1
+       ]]>
+    </query>
+
+    <query name="CMS3.CONTENT.PARENT.ALL">
+        <![CDATA[
+       select l.contentId, l.parentId from ContentEntity l
        ]]>
     </query>
 
@@ -2813,10 +2905,22 @@
     </query>
 
 
-    <query name="CONTENTBODY.BY.CONTENTID">
+    <query name="CMS1.CONTENTBODY.BY.CONTENTID">
         <![CDATA[
        select av.val from CategoryEntity c, AttrValueEntityCategory av
        where c.categoryId = av.category.categoryId and c.categoryId = ?1 and av.attributeCode like ?2
+       and (c.disabled = ?4)
+       and (c.availablefrom < ?3 OR c.availablefrom IS NULL)
+       and (c.availableto > ?3 OR c.availableto IS NULL)
+       order by av.attributeCode
+       ]]>
+    </query>
+
+
+    <query name="CMS3.CONTENTBODY.BY.CONTENTID">
+        <![CDATA[
+       select av.val from ContentEntity c, AttrValueEntityContent av
+       where c.contentId = av.content.contentId and c.contentId = ?1 and av.attributeCode like ?2
        and (c.disabled = ?4)
        and (c.availablefrom < ?3 OR c.availablefrom IS NULL)
        and (c.availableto > ?3 OR c.availableto IS NULL)
@@ -2829,6 +2933,114 @@
        select a from AttributeEntity a where a.code like ?1 order by a.code asc
        ]]>
     </query>
+
+
+    <query cacheable="true" name="CMS1.CONTENT.BY.PARENTID.WITHOUT.DATE.FILTERING">
+        <![CDATA[
+       select c from CategoryEntity c where c.parentId = ?1 and c.categoryId <> c.parentId
+       ]]>
+    </query>
+
+    <query cacheable="true" name="CMS3.CONTENT.BY.PARENTID.WITHOUT.DATE.FILTERING">
+        <![CDATA[
+       select c from ContentEntity c where c.parentId = ?1 and c.contentId <> c.parentId
+       ]]>
+    </query>
+
+    <query name="CMS1.CONTENT.BY.CODE.NAME.URI">
+        <![CDATA[
+       select c from CategoryEntity c
+        where (?1 is null or lower(c.guid) like ?1) OR (?2 is null or lower(c.name) like ?2) OR (?3 is null or lower(c.seoInternal.uri) like ?3)
+       ]]>
+    </query>
+
+    <query name="CMS3.CONTENT.BY.CODE.NAME.URI">
+        <![CDATA[
+       select c from ContentEntity c
+        where (?1 is null or lower(c.guid) like ?1) OR (?2 is null or lower(c.name) like ?2) OR (?3 is null or lower(c.seoInternal.uri) like ?3)
+       ]]>
+    </query>
+
+    <query name="CMS1.CONTENT.BY.URI">
+        <![CDATA[
+       select c from CategoryEntity c
+        where (lower(c.seoInternal.uri) like ?1)
+       ]]>
+    </query>
+
+    <query name="CMS3.CONTENT.BY.URI">
+        <![CDATA[
+       select c from ContentEntity c
+        where (lower(c.seoInternal.uri) like ?1)
+       ]]>
+    </query>
+
+
+    <query name="CMS1.CONTENT.ID.BY.SEO.URI">
+        <![CDATA[
+                  select c.categoryId from CategoryEntity c  where c.seoInternal.uri = ?1
+       ]]>
+    </query>
+
+    <query name="CMS3.CONTENT.ID.BY.SEO.URI">
+        <![CDATA[
+                  select c.contentId from ContentEntity c  where c.seoInternal.uri = ?1
+       ]]>
+    </query>
+
+    <query name="CMS1.SEO.URI.BY.CONTENT.ID">
+        <![CDATA[
+                  select c.seoInternal.uri, c.categoryId from CategoryEntity c  where c.categoryId = ?1
+       ]]>
+    </query>
+
+    <query name="CMS3.SEO.URI.BY.CONTENT.ID">
+        <![CDATA[
+                  select c.seoInternal.uri, c.contentId from ContentEntity c  where c.contentId = ?1
+       ]]>
+    </query>
+
+
+    <query name="CMS1.CONTENT.ID.BY.GUID">
+        <![CDATA[
+                  select c.categoryId from CategoryEntity c  where c.guid = ?1
+       ]]>
+    </query>
+
+    <query name="CMS3.CONTENT.ID.BY.GUID">
+        <![CDATA[
+                  select c.contentId from ContentEntity c  where c.guid = ?1
+       ]]>
+    </query>
+
+
+    <query name="CMS1.CONTENT.BY.SEO.URI">
+        <![CDATA[
+                  select c from CategoryEntity c  where c.seoInternal.uri = ?1
+       ]]>
+    </query>
+
+    
+    <query name="CMS3.CONTENT.BY.SEO.URI">
+        <![CDATA[
+                  select c from ContentEntity c  where c.seoInternal.uri = ?1
+       ]]>
+    </query>
+
+
+    <query name="CMS1.CONTENT.BY.GUID">
+        <![CDATA[
+                  select c from CategoryEntity c  where c.guid = ?1
+       ]]>
+    </query>
+
+    <query name="CMS3.CONTENT.BY.GUID">
+        <![CDATA[
+                  select c from ContentEntity c  where c.guid = ?1
+       ]]>
+    </query>
+
+
 
     <query name="PRODUCTS.ALL.FOR.INDEX">
         <![CDATA[
@@ -3602,6 +3814,13 @@
     <query name="CATEGORY.URI.AND.GUID.BY.MEDIAFILE.NAME">
         <![CDATA[
             select a.category.seoInternal.uri, a.category.guid from AttrValueEntityCategory a
+            where a.attributeCode like ?2 and a.indexedVal = ?1
+        ]]>
+    </query>
+
+    <query name="CONTENT.URI.AND.GUID.BY.MEDIAFILE.NAME">
+        <![CDATA[
+            select a.content.seoInternal.uri, a.content.guid from AttrValueEntityContent a
             where a.attributeCode like ?2 and a.indexedVal = ?1
         ]]>
     </query>

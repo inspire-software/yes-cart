@@ -19,6 +19,7 @@ package org.yes.cart.web.theme.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
@@ -214,13 +215,13 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
             final long shopId = ApplicationDirector.getShoppingCart().getShoppingContext().getShopId();
             final Set<Long> catIds = shopService.getShopContentIds(shopId);
             if (catIds.contains(contentId)) {
-                Category content = contentService.getById(contentId);
+                Content content = contentService.getById(contentId);
                 final LocalDateTime now = now();
 
                 while (content != null && !content.isRoot() &&  !CentralViewLabel.INCLUDE.equals(content.getUitemplate())) {
 
                     if (!DomainApiUtils.isObjectAvailableNow(!content.isDisabled(), content.getAvailablefrom(), content.getAvailableto(), now)) {
-                        LOG.warn("Attempted to access content {} in shop {} but {} content is not available", contentId, shopId, content.getCategoryId());
+                        LOG.warn("Attempted to access content {} in shop {} but {} content is not available", contentId, shopId, content.getContentId());
                         return false; // not available
                     }
 

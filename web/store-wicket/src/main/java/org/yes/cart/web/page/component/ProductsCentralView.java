@@ -24,6 +24,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Seoable;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
@@ -36,6 +38,7 @@ import org.yes.cart.web.page.component.product.ProductInListView;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.entity.decorator.impl.CategorySeoableDecoratorImpl;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.util.List;
@@ -74,6 +77,8 @@ public class ProductsCentralView extends AbstractCentralView {
 
     @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
     protected ProductServiceFacade productServiceFacade;
+
+    private transient Category category;
 
     /**
      * Construct panel.
@@ -197,5 +202,30 @@ public class ProductsCentralView extends AbstractCentralView {
         return new Pair<>(null, false);
     }
 
+
+    /**
+     * Get category.
+     * @return {@link Category}
+     */
+    public Category getContent() {
+        if (category == null) {
+            category = categoryServiceFacade.getCategory(getCategoryId(), getCurrentCustomerShopId());
+        }
+        return category;
+    }
+
+
+    /**
+     * Hook for subclasses to utilise Seo mechanism
+     *
+     * @return main seo object for given page
+     */
+    protected Seoable getSeoObject() {
+        final Category cat = getContent();
+        if (cat != null) {
+            return new CategorySeoableDecoratorImpl(cat, getPage().getLocale().getLanguage());
+        }
+        return null;
+    }
 
 }

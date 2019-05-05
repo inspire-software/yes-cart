@@ -196,6 +196,9 @@
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
 
+    <cache name="contentService-currentContentMenu" maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="contentService-rootContent" maxElementsInMemory="10" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 

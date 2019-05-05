@@ -24,7 +24,7 @@ import org.yes.cart.bulkimport.xml.internal.ContentType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.AttrValueCategory;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.service.domain.ContentService;
+import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 
 import java.util.HashMap;
@@ -35,29 +35,29 @@ import java.util.Map;
  * Date: 05/11/2018
  * Time: 22:23
  */
-public class ContentXmlEntityHandler extends AbstractAttributableXmlEntityHandler<ContentType, Category, Category, AttrValueCategory> implements XmlEntityImportHandler<ContentType, Category> {
+public class ContentCms1XmlEntityHandler extends AbstractAttributableXmlEntityHandler<ContentType, Category, Category, AttrValueCategory> implements XmlEntityImportHandler<ContentType, Category> {
 
     // This is the limit on AV.val field - do not change unless changing schema
     private static final int CHUNK_SIZE = 4000;
 
-    private ContentService contentService;
+    private CategoryService categoryService;
     private ShopService shopService;
 
-    public ContentXmlEntityHandler() {
+    public ContentCms1XmlEntityHandler() {
         super("content");
     }
 
     @Override
     protected void delete(final Category category) {
-        this.contentService.delete(category);
-        this.contentService.getGenericDao().flush();
+        this.categoryService.delete(category);
+        this.categoryService.getGenericDao().flush();
     }
 
     @Override
     protected void saveOrUpdate(final Category domain, final ContentType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getParent() != null) {
-            final Category parent = this.contentService.findSingleByCriteria(" where e.guid = ?1", xmlType.getParent().getGuid());
+            final Category parent = this.categoryService.findSingleByCriteria(" where e.guid = ?1", xmlType.getParent().getGuid());
             if (parent != null) {
                 if (domain.getParentId() != parent.getCategoryId()) {
                     domain.setParentId(parent.getCategoryId());
@@ -96,7 +96,7 @@ public class ContentXmlEntityHandler extends AbstractAttributableXmlEntityHandle
                         if (chunks.containsKey(chunkIndex)) {
                             chunks.get(chunkIndex).setVal(chunkValue);
                         } else {
-                            final AttrValueCategory avc = this.contentService.getGenericDao().getEntityFactory().getByIface(AttrValueCategory.class);
+                            final AttrValueCategory avc = this.categoryService.getGenericDao().getEntityFactory().getByIface(AttrValueCategory.class);
                             avc.setCategory(domain);
                             avc.setAttributeCode("CONTENT_BODY_" + lang + "_" + chunkIndex);
                             avc.setVal(chunkValue);
@@ -127,21 +127,21 @@ public class ContentXmlEntityHandler extends AbstractAttributableXmlEntityHandle
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
         domain.setDescription(xmlType.getDescription());
         if (domain.getCategoryId() == 0L) {
-            this.contentService.create(domain);
+            this.categoryService.create(domain);
         } else {
-            this.contentService.update(domain);
+            this.categoryService.update(domain);
         }
-        this.contentService.getGenericDao().flush();
-        this.contentService.getGenericDao().evict(domain);
+        this.categoryService.getGenericDao().flush();
+        this.categoryService.getGenericDao().evict(domain);
     }
 
     @Override
     protected Category getOrCreate(final ContentType xmlType) {
-        Category category = this.contentService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
+        Category category = this.categoryService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (category != null) {
             return category;
         }
-        category = this.contentService.getGenericDao().getEntityFactory().getByIface(Category.class);
+        category = this.categoryService.getGenericDao().getEntityFactory().getByIface(Category.class);
         category.setGuid(xmlType.getGuid());
         return category;
     }
@@ -169,10 +169,10 @@ public class ContentXmlEntityHandler extends AbstractAttributableXmlEntityHandle
     /**
      * Spring IoC.
      *
-     * @param contentService category service
+     * @param categoryService category service
      */
-    public void setContentService(final ContentService contentService) {
-        this.contentService = contentService;
+    public void setCategoryService(final CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     /**

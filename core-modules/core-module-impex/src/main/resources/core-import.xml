@@ -180,8 +180,15 @@
                         <property name="attributeService" ref="attributeService"/>
                     </bean>
                 </entry>
-                <entry key="CONTENT">
-                    <bean class="org.yes.cart.bulkimport.xml.impl.ContentXmlEntityHandler">
+                <entry key="CONTENT_CMS1">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ContentCms1XmlEntityHandler">
+                        <property name="categoryService" ref="categoryService"/>
+                        <property name="shopService" ref="shopService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                    </bean>
+                </entry>
+                <entry key="CONTENT_CMS3">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ContentCms3XmlEntityHandler">
                         <property name="contentService" ref="contentService"/>
                         <property name="shopService" ref="shopService"/>
                         <property name="attributeService" ref="attributeService"/>
@@ -501,6 +508,12 @@
         <constructor-arg index="2" ref="attributeService"/>
     </bean>
 
+    <bean id="contentImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ContentImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="importFederationFacade"/>
+        <constructor-arg index="1" ref="contentService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+    </bean>
+
     <bean id="brandImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.BrandImageImportDomainObjectStrategyImpl">
         <constructor-arg index="0" ref="importFederationFacade"/>
         <constructor-arg index="1" ref="brandService"/>
@@ -535,6 +548,7 @@
                         <ref bean="productImageImportDomainObjectStrategy"/>
                         <ref bean="productSkuImageImportDomainObjectStrategy"/>
                         <ref bean="categoryImageImportDomainObjectStrategy"/>
+                        <ref bean="contentImageImportDomainObjectStrategy"/>
                         <ref bean="brandImageImportDomainObjectStrategy"/>
                         <ref bean="shopImageImportDomainObjectStrategy"/>
                     </array>

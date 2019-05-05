@@ -18,8 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.config.Configuration;
-import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
@@ -37,14 +35,13 @@ import java.util.Map;
  * Time: 07:36
  */
 public class DeliveryTimeEstimationVisitorImpl 
-        implements DeliveryTimeEstimationVisitor, ConfigurationRegistry<String, DeliveryTimeEstimationVisitor>, Configuration {
+        implements DeliveryTimeEstimationVisitor, ConfigurationRegistry<String, DeliveryTimeEstimationVisitor> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeliveryTimeEstimationVisitorImpl.class);
 
     private final ShopService shopService;
     private final DeliveryTimeEstimationVisitor defaultDeliveryTimeEstimationVisitor;
     private final Map<String, DeliveryTimeEstimationVisitor> customDeliveryTimeEstimationVisitors = new HashMap<>();
-    private ConfigurationContext cfgContext;
 
     public DeliveryTimeEstimationVisitorImpl(final ShopService shopService,
                                              final DeliveryTimeEstimationVisitor deliveryTimeEstimationVisitor) {
@@ -95,7 +92,7 @@ public class DeliveryTimeEstimationVisitorImpl
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final Object configuration) {
+    public boolean supports(final String cfgProperty, final Object configuration) {
         return configuration instanceof DeliveryTimeEstimationVisitor ||
                 (configuration instanceof Class && DeliveryTimeEstimationVisitor.class.isAssignableFrom((Class<?>) configuration));
     }
@@ -112,15 +109,5 @@ public class DeliveryTimeEstimationVisitorImpl
             customDeliveryTimeEstimationVisitors.remove(shopCode);
         }
 
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public ConfigurationContext getCfgContext() {
-        return cfgContext;
-    }
-
-    public void setCfgContext(final ConfigurationContext cfgContext) {
-        this.cfgContext = cfgContext;
     }
 }

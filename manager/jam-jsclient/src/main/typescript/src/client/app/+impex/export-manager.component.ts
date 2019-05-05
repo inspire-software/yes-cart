@@ -97,9 +97,16 @@ export class ExportManagerComponent implements OnInit {
     LogUtil.debug('ExportManagerComponent onGroupConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.selectedGroup != null) {
+        let safeName = this.selectedGroup.name.replace(/[/\\?%*:|"<>\s]/g, '-');
+        let safeExt = '.out';
+        if (this.selectedGroup.name.toLowerCase().includes('csv')) {
+          safeExt = '.csv';
+        } else if (this.selectedGroup.name.toLowerCase().includes('xml')) {
+          safeExt = '.xml';
+        }
         this.tabs.push({
           group: this.selectedGroup,
-          file: this.selectedGroup.name + '.csv',
+          file: safeName + safeExt,
           status : { token: null, state: 'UNDEFINED', completion: null, report: null },
           running : false
         });

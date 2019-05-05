@@ -23,7 +23,6 @@ import org.yes.cart.service.federation.ShopFederationStrategy;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -51,16 +50,10 @@ public class CategoryUiFederationFilterImpl implements FederationFilter {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
         final Set<Long> manageableCategoryIds = new HashSet<>();
         for (final Long shopId : manageableShopIds) {
-            manageableCategoryIds.addAll(shopService.getShopAllCategoriesIds(shopId));
+            manageableCategoryIds.addAll(shopService.getShopCategoriesIds(shopId));
         }
 
-        final Iterator<CategoryDTO> categoryIt = list.iterator();
-        while (categoryIt.hasNext()) {
-            final CategoryDTO category = categoryIt.next();
-            if (!manageableCategoryIds.contains(category.getCategoryId())) {
-                categoryIt.remove();
-            }
-        }
+        list.removeIf(category -> !manageableCategoryIds.contains(((CategoryDTO) category).getCategoryId()));
     }
 
     /**
@@ -72,7 +65,7 @@ public class CategoryUiFederationFilterImpl implements FederationFilter {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
         final Set<Long> manageableCategoryIds = new HashSet<>();
         for (final Long shopId : manageableShopIds) {
-            manageableCategoryIds.addAll(shopService.getShopAllCategoriesIds(shopId));
+            manageableCategoryIds.addAll(shopService.getShopCategoriesIds(shopId));
         }
 
         return manageableCategoryIds.contains(object);

@@ -46,7 +46,7 @@ export class DataGroupComponent implements OnInit, OnDestroy {
 
     this.dataGroupForm = fb.group({
       'name': [''],
-      'qualifier': ['', YcValidators.nonBlankTrimmed255],
+      'qualifier': ['', YcValidators.validCode36],
       'type': ['', Validators.required],
       'descriptors': ['', Validators.required],
     });

@@ -19,7 +19,7 @@ package org.yes.cart.service.mail.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
@@ -98,7 +98,7 @@ public class MailTemplateResourcesProviderShopContentImpl implements MailTemplat
 
         if (contentId != null) {
 
-            final Category content = contentService.getById(contentId);
+            final Content content = contentService.getById(contentId);
 
             final byte[] localeSpecificImage = getImageAsBytes(content, AttributeNamesKeys.Category.CATEGORY_IMAGE + "_" + locale, contentFullUri);
             if (localeSpecificImage != null && localeSpecificImage.length > 0) {
@@ -116,7 +116,7 @@ public class MailTemplateResourcesProviderShopContentImpl implements MailTemplat
 
     }
 
-    private byte[] getImageAsBytes(final Category content, final String imageAttribute, final String contentFullUri) throws IOException {
+    private byte[] getImageAsBytes(final Content content, final String imageAttribute, final String contentFullUri) throws IOException {
         final String imageValue = content.getAttributeValueByCode(imageAttribute);
         if (StringUtils.isNotBlank(imageValue)) {
 

@@ -18,12 +18,14 @@ package org.yes.cart.web.page.component;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.entity.Seoable;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.entity.decorator.impl.ContentSeoableDecoratorImpl;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
 /**
@@ -33,7 +35,7 @@ import org.yes.cart.web.support.service.ContentServiceFacade;
  */
 public class ContentCentralView extends AbstractCentralView {
 
-    private transient Category category;
+    private transient Content content;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
     protected ContentServiceFacade contentServiceFacade;
@@ -63,24 +65,42 @@ public class ContentCentralView extends AbstractCentralView {
             contentBody = "";
         }
         add(new Label("contentBody", contentBody).setEscapeModelStrings(false));
+
         super.onBeforeRender();
     }
 
-    @Override
-    public Category getCategory() {
-        if (category == null) {
-            category = contentServiceFacade.getContent(getCategoryId(), getCurrentShopId());
+    public Content getContent() {
+        if (content == null) {
+            content = contentServiceFacade.getContent(getCategoryId(), getCurrentShopId());
         }
-        return category;
+        return content;
     }
+
+
+
+    /**
+     * Hook for subclasses to utilise Seo mechanism
+     *
+     * @return main seo object for given page
+     */
+    protected Seoable getSeoObject() {
+        final Content cn = getContent();
+        if (cn != null) {
+            return new ContentSeoableDecoratorImpl(cn, getPage().getLocale().getLanguage());
+        }
+        return null;
+    }
+
 
     @Override
     protected String getRelCanonical(final Seo seo, final String language) {
 
-        final String uri = getBookmarkService().saveBookmarkForContent(String.valueOf(getCategory().getCategoryId()));
+        final String uri = getBookmarkService().saveBookmarkForContent(String.valueOf(getContent().getContentId()));
 
         return getWicketUtil().getHttpServletRequest().getContextPath() + "/"
                 + WebParametersKeys.CONTENT_ID + "/" + uri + "/" + ShoppingCartCommand.CMD_CHANGELOCALE + "/" + language;
 
     }
+
+
 }

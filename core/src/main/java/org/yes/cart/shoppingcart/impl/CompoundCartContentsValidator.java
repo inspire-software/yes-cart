@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.shoppingcart.CartContentsValidator;
 import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -27,9 +29,11 @@ import java.util.List;
  * Date: 15/11/2017
  * Time: 13:59
  */
-public class CompoundCartContentsValidator extends AbstractCartContentsValidatorImpl implements CartContentsValidator {
+public class CompoundCartContentsValidator extends AbstractCartContentsValidatorImpl implements CartContentsValidator, Configuration {
 
     private final CartContentsValidator[] validators;
+
+    private ConfigurationContext cfgContext;
 
     public CompoundCartContentsValidator(final List<CartContentsValidator> validators) {
         this.validators = validators.toArray(new CartContentsValidator[validators.size()]);
@@ -55,6 +59,16 @@ public class CompoundCartContentsValidator extends AbstractCartContentsValidator
         }
 
         return rez;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
     }
 
 }

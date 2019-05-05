@@ -36,6 +36,7 @@
                 <entry key="org.yes.cart.domain.ro.SkuPriceRO" value="org.yes.cart.domain.ro.SkuPriceRO"/>
                 <entry key="org.yes.cart.domain.ro.AttrValueAndAttributeRO" value="org.yes.cart.domain.ro.AttrValueAndAttributeRO"/>
                 <entry key="org.yes.cart.domain.ro.AttrValueCategoryRO" value="org.yes.cart.domain.ro.AttrValueCategoryRO"/>
+                <entry key="org.yes.cart.domain.ro.AttrValueContentRO" value="org.yes.cart.domain.ro.AttrValueContentRO"/>
                 <entry key="org.yes.cart.domain.ro.AttrValueCustomerRO" value="org.yes.cart.domain.ro.AttrValueCustomerRO"/>
                 <entry key="org.yes.cart.domain.ro.CustomerRO" value="org.yes.cart.domain.ro.CustomerRO"/>
                 <entry key="org.yes.cart.domain.ro.AttrValueProductRO" value="org.yes.cart.domain.ro.AttrValueProductRO"/>

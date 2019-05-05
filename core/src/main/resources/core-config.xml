@@ -55,6 +55,10 @@
         <constructor-arg index="1" ref="warehouseService"/>
     </bean>
 
+    <bean id="cmsConfiguration" class="org.yes.cart.config.impl.CMSConfigurationImpl">
+        <constructor-arg index="0" ref="systemService"/>
+    </bean>
+
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">

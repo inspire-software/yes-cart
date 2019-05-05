@@ -122,21 +122,22 @@ public abstract class AbstractConfigurationImpl
      * Call to register of the configuration.
      *
      * @param ref reference, e.g. code
-     * @param key shop key
+     * @param key object key, e.g. shop code, mnemonic
+     * @param cfgProperty configuration property
      * @param configurationType configuration type
      * @param configuration configuration to set
      */
-    protected void customise(final String ref, final Object key, final Class configurationType, final Object configuration) {
+    protected void customise(final String ref, final Object key, final String cfgProperty, final Class configurationType, final Object configuration) {
 
         final Map<String, ConfigurationRegistry> registries = this.applicationContext.getBeansOfType(ConfigurationRegistry.class);
         for (final ConfigurationRegistry registry : registries.values()) {
-            if (registry.supports(configurationType)) {
+            if (registry.supports(cfgProperty, configurationType)) {
                 registry.register(key, configuration);
                 if (configuration instanceof Configuration) {
                     final ConfigurationContext ctx = ((Configuration) configuration).getCfgContext();
                     this.active.add(new ActiveConfigurationImpl(ctx.getName(), ctx.getCfgInterface(), ref));
                 }
-                LOG.debug("Custom shop configurations for {} ... registering {}", ref, configuration);
+                LOG.debug("Custom configurations for {}/{}/{} ... registering {}", ref, key, configurationType, configuration);
             }
         }
 

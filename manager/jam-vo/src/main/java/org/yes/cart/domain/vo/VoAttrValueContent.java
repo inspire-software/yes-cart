@@ -25,7 +25,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 @Dto
 public class VoAttrValueContent extends VoAttrValue {
 
-    @DtoField(value = "categoryId", readOnly = true)
+    @DtoField(value = "contentId", readOnly = true)
     private long contentId;
 
     public long getContentId() {

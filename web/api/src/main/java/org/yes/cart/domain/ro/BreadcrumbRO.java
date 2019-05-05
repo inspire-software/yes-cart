@@ -38,8 +38,8 @@ public class BreadcrumbRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    @DtoField(value = "categoryId", readOnly = true)
-    private long categoryId;
+    @DtoField(value = "id", readOnly = true)
+    private long targetId;
 
     @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo", readOnly = true)
     private String uri;
@@ -50,13 +50,13 @@ public class BreadcrumbRO implements Serializable {
     @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayNames;
 
-    public long getCategoryId() {
-        return categoryId;
+    public long getTargetId() {
+        return targetId;
     }
 
-    @XmlAttribute(name = "category-id")
-    public void setCategoryId(final long categoryId) {
-        this.categoryId = categoryId;
+    @XmlAttribute(name = "target-id")
+    public void setTargetId(final long targetId) {
+        this.targetId = targetId;
     }
 
     public String getUri() {

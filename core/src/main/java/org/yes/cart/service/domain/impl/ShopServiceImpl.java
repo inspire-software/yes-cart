@@ -179,7 +179,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      */
     @Override
     public Set<Long> getShopContentIds(final long shopId) {
-        return shopCategoryRelationshipSupport.getShopContentIds(shopId);
+        return contentService.getShopContentIds(shopId);
     }
 
     /**
@@ -465,8 +465,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     @Override
     public Shop create(final Shop instance) {
         final Shop shop = super.create(instance);
-        final Category category = contentService.getRootContent(shop.getShopId());
-        if (category == null) {
+        final Content cn = contentService.getRootContent(shop.getShopId());
+        if (cn == null) {
             contentService.createRootContent(shop.getShopId());
         }
         return shop;

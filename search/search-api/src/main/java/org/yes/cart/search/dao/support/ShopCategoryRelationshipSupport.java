@@ -56,14 +56,6 @@ public interface ShopCategoryRelationshipSupport {
     Set<Long> getShopCategoriesIds(long shopId);
 
     /**
-     * Get all content including child content, that belong to given shop.
-     *
-     * @param shopId given shop
-     * @return linear representation of category tree
-     */
-    Set<Long> getShopContentIds(long shopId);
-
-    /**
      * Get category by id.
      *
      * @param categoryId given category id

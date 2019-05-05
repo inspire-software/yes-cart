@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.domain.entity.Seoable;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -83,5 +84,8 @@ public class EmptyCentralView extends AbstractCentralView {
         return content;
     }
 
-
+    @Override
+    protected Seoable getSeoObject() {
+        return null;
+    }
 }

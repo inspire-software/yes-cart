@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ImageService;
@@ -109,7 +109,7 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
 
             final Long contentObjId = contentService.findContentIdBySeoUri(curi);
             if (contentObjId != null && contentObjId > 0L) {
-                final Category contentObj = contentService.getById(contentObjId);
+                final Content contentObj = contentService.getById(contentObjId);
                 if (contentObj != null) {
                     final byte[] localeSpecificImage = getImageAsBytes(contentObj, AttributeNamesKeys.Category.CATEGORY_IMAGE + "_" + language, curi);
                     if (localeSpecificImage != null && localeSpecificImage.length > 0) {
@@ -144,7 +144,7 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
 
     }
 
-    private byte[] getImageAsBytes(final Category content, final String imageAttribute, final String contentFullUri) throws IOException {
+    private byte[] getImageAsBytes(final Content content, final String imageAttribute, final String contentFullUri) throws IOException {
         final String imageValue = content.getAttributeValueByCode(imageAttribute);
         if (StringUtils.isNotBlank(imageValue)) {
 

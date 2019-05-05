@@ -20,7 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
-import org.yes.cart.domain.entity.AttrValueCategory;
+import org.yes.cart.domain.entity.AttrValueContent;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 import org.yes.cart.domain.ro.xml.impl.LocalDateTimeAdapter;
 
@@ -44,8 +44,8 @@ public class ContentRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    @DtoField(value = "categoryId", readOnly = true)
-    private long categoryId;
+    @DtoField(value = "contentId", readOnly = true)
+    private long contentId;
 
     @DtoField(value = "parentId", readOnly = true)
     private long parentId;
@@ -98,14 +98,14 @@ public class ContentRO implements Serializable {
 
     @DtoCollection(
             value = "attributes",
-            dtoBeanKey = "org.yes.cart.domain.ro.AttrValueCategoryRO",
-            entityGenericType = AttrValueCategory.class,
+            dtoBeanKey = "org.yes.cart.domain.ro.AttrValueContentRO",
+            entityGenericType = AttrValueContent.class,
             entityCollectionClass = HashSet.class,
             dtoCollectionClass = HashSet.class,
             dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
-    private Set<AttrValueCategoryRO> attributes;
+    private Set<AttrValueContentRO> attributes;
 
     private String contentBody;
 
@@ -120,13 +120,13 @@ public class ContentRO implements Serializable {
         this.contentBody = contentBody;
     }
 
-    @XmlAttribute(name = "category-id")
-    public long getCategoryId() {
-        return categoryId;
+    @XmlAttribute(name = "content-id")
+    public long getContentId() {
+        return contentId;
     }
 
-    public void setCategoryId(final long categoryId) {
-        this.categoryId = categoryId;
+    public void setContentId(final long contentId) {
+        this.contentId = contentId;
     }
 
     @XmlAttribute(name = "parent-id")
@@ -228,11 +228,11 @@ public class ContentRO implements Serializable {
 
     @XmlElementWrapper(name = "attribute-values")
     @XmlElement(name = "attribute-value")
-    public Set<AttrValueCategoryRO> getAttributes() {
+    public Set<AttrValueContentRO> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(final Set<AttrValueCategoryRO> attributes) {
+    public void setAttributes(final Set<AttrValueContentRO> attributes) {
         this.attributes = attributes;
     }
 

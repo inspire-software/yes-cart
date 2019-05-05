@@ -26,11 +26,12 @@ public interface ConfigurationRegistry<K, C> {
     /**
      * Check if this configuration is supported.
      *
+     * @param cfgProperty configuration property
      * @param configuration configuration object
      *
      * @return true is supports this configuration
      */
-    boolean supports(Object configuration);
+    boolean supports(String cfgProperty, Object configuration);
 
     /**
      * Register shop specific configuration with given registry.

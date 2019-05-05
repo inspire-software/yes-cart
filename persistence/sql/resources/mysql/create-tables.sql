@@ -241,6 +241,51 @@
         primary key (ATTRVALUE_ID)
     );
 
+
+    create table TCONTENT (
+        CONTENT_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        PARENT_ID bigint,
+        RANK integer,
+        NAME varchar(255) not null,
+        DISPLAYNAME longtext,
+        DESCRIPTION longtext,
+        UITEMPLATE varchar(255),
+        DISABLED bit default 0,
+        AVAILABLEFROM datetime,
+        AVAILABLETO datetime,
+        URI varchar(255) unique,
+        TITLE varchar(255),
+        METAKEYWORDS varchar(255),
+        METADESCRIPTION varchar(255),
+        DISPLAY_TITLE longtext,
+        DISPLAY_METAKEYWORDS longtext,
+        DISPLAY_METADESCRIPTION longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CONTENT_ID)
+    );
+
+    create table TCONTENTATTRVALUE (
+        ATTRVALUE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        VAL longtext,
+        INDEXVAL varchar(255),
+        DISPLAYVAL longtext,
+        CONTENT_ID bigint not null,
+        CODE varchar(255) not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (ATTRVALUE_ID)
+    );
+
+
     create table TCOUNTRY (
         COUNTRY_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
@@ -1346,6 +1391,20 @@
 
     create index AV_CATEGORY_CODE on TCATEGORYATTRVALUE (CODE);
     create index AV_CATEGORY_VAL on TCATEGORYATTRVALUE (INDEXVAL);
+
+
+    create index CN_DISABLED on TCONTENT (DISABLED);
+
+
+    alter table TCONTENTATTRVALUE
+        add index FK_AV_CONTENT_CONTENTID (CONTENT_ID),
+        add constraint FK_AV_CONTENT_CONTENTID
+        foreign key (CONTENT_ID)
+        references TCONTENT
+        on delete cascade;
+
+    create index AV_CONTENT_CODE on TCONTENTATTRVALUE (CODE);
+    create index AV_CONTENT_VAL on TCONTENTATTRVALUE (INDEXVAL);
 
 
     alter table TCUSTOMERATTRVALUE

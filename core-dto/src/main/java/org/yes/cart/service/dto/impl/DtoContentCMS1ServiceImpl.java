@@ -20,18 +20,23 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.dto.AttrValueCategoryDTO;
+import org.yes.cart.domain.dto.AttrValueContentDTO;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
-import org.yes.cart.domain.dto.CategoryDTO;
+import org.yes.cart.domain.dto.ContentDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
-import org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl;
-import org.yes.cart.domain.dto.impl.CategoryDTOImpl;
+import org.yes.cart.domain.dto.impl.AttrValueContentDTOImpl;
+import org.yes.cart.domain.dto.impl.ContentDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
+import org.yes.cart.domain.entity.impl.AttrValueEntityContentCategoryAdapter;
+import org.yes.cart.domain.entity.impl.ContentCategoryAdapter;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -48,14 +53,12 @@ import java.util.regex.Pattern;
  * User: Denis Pavlov
  * Date: 15-June-2013
  */
-public class DtoContentServiceImpl
-        extends AbstractDtoServiceImpl<CategoryDTO, CategoryDTOImpl, Category>
-        implements DtoContentService {
+public class DtoContentCMS1ServiceImpl
+        extends AbstractDtoServiceImpl<ContentDTO, ContentDTOImpl, Content>
+        implements DtoContentService, Configuration {
 
-    private static final CategoryRankNameComparator CATEGORY_RANK_NAME_COMPARATOR = new CategoryRankNameComparator();
+    private static final ContentRankNameComparator CONTENT_RANK_NAME_COMPARATOR = new ContentRankNameComparator();
     private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
-
-    private final GenericService<ProductType> productTypeService;
 
     private final GenericService<Attribute> attributeService;
     private final DtoAttributeService dtoAttributeService;
@@ -67,28 +70,28 @@ public class DtoContentServiceImpl
     private final FileService fileService;
     private final SystemService systemService;
 
+    private ConfigurationContext cfgContext;
+
     /**
      * Construct base remote service.
      *
      * @param dtoFactory             {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param categoryGenericService category     {@link org.yes.cart.service.domain.GenericService}
+     * @param contentGenericService  content     {@link org.yes.cart.service.domain.GenericService}
      * @param imageService           {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
      * @param fileService {@link FileService} to manipulate related files
      * @param systemService          system service
      */
-    public DtoContentServiceImpl(final DtoFactory dtoFactory,
-                                 final GenericService<Category> categoryGenericService,
-                                 final GenericService<ProductType> productTypeService,
-                                 final DtoAttributeService dtoAttributeService,
-                                 final GenericDAO<AttrValueEntityCategory, Long> attrValueEntityCategoryDao,
-                                 final ImageService imageService,
-                                 final FileService fileService,
-                                 final AdaptersRepository adaptersRepository,
-                                 final SystemService systemService) {
-        super(dtoFactory, categoryGenericService, adaptersRepository);
+    public DtoContentCMS1ServiceImpl(final DtoFactory dtoFactory,
+                                     final GenericService<Content> contentGenericService,
+                                     final DtoAttributeService dtoAttributeService,
+                                     final GenericDAO<AttrValueEntityCategory, Long> attrValueEntityCategoryDao,
+                                     final ImageService imageService,
+                                     final FileService fileService,
+                                     final AdaptersRepository adaptersRepository,
+                                     final SystemService systemService) {
+        super(dtoFactory, contentGenericService, adaptersRepository);
 
 
-        this.productTypeService = productTypeService;
         this.attrValueEntityCategoryDao = attrValueEntityCategoryDao;
         this.dtoAttributeService = dtoAttributeService;
         this.systemService = systemService;
@@ -97,8 +100,8 @@ public class DtoContentServiceImpl
 
 
         this.attrValueAssembler = DTOAssembler.newAssembler(
-                dtoFactory.getImplClass(AttrValueCategoryDTO.class),
-                attributeService.getGenericDao().getEntityFactory().getImplClass(AttrValueCategory.class));
+                dtoFactory.getImplClass(AttrValueContentDTO.class),
+                AttrValueEntityContentCategoryAdapter.class);
 
         this.imageService = imageService;
         this.fileService = fileService;
@@ -110,7 +113,7 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<CategoryDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<ContentDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnsupportedOperationException("Use getAllFromRoot()");
     }
 
@@ -126,12 +129,12 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<CategoryDTO> getAllWithAvailabilityFilter(final long shopId, final boolean withAvailabilityFiltering)
+    public List<ContentDTO> getAllWithAvailabilityFilter(final long shopId, final boolean withAvailabilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ContentService contentService = (ContentService) service;
-        Category root = contentService.getRootContent(shopId);
+        Content root = contentService.getRootContent(shopId);
         if (root != null) {
-            CategoryDTO rootDTO = getById(root.getCategoryId());
+            ContentDTO rootDTO = getById(root.getContentId());
             loadBranch(rootDTO, withAvailabilityFiltering, Integer.MAX_VALUE, Collections.emptyList());
             return Collections.singletonList(rootDTO);
         }
@@ -139,23 +142,23 @@ public class DtoContentServiceImpl
     }
 
 
-    private List<CategoryDTO> loadBranch(final CategoryDTO rootDTO,
-                                         final boolean withAvailabilityFiltering,
-                                         final int expandLevel,
-                                         final List<Long> expandNodes)
+    private List<ContentDTO> loadBranch(final ContentDTO rootDTO,
+                                        final boolean withAvailabilityFiltering,
+                                        final int expandLevel,
+                                        final List<Long> expandNodes)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (rootDTO != null) {
             final ContentService contentService = (ContentService) service;
-            final List<Category> childContent = new ArrayList<>(contentService.findChildContentWithAvailability(
-                    rootDTO.getCategoryId(),
+            final List<Content> childContent = new ArrayList<>(contentService.findChildContentWithAvailability(
+                    rootDTO.getContentId(),
                     withAvailabilityFiltering));
-            childContent.sort(CATEGORY_RANK_NAME_COMPARATOR);
-            final List<CategoryDTO> childCategoriesDTO = new ArrayList<>(childContent.size());
+            childContent.sort(CONTENT_RANK_NAME_COMPARATOR);
+            final List<ContentDTO> childCategoriesDTO = new ArrayList<>(childContent.size());
             fillDTOs(childContent, childCategoriesDTO);
             rootDTO.setChildren(childCategoriesDTO);
             if (expandLevel > 1 || !expandNodes.isEmpty()) {
-                for (CategoryDTO dto : childCategoriesDTO) {
-                    if (expandLevel > 1 || expandNodes.contains(dto.getCategoryId())) {
+                for (ContentDTO dto : childCategoriesDTO) {
+                    if (expandLevel > 1 || expandNodes.contains(dto.getContentId())) {
                         dto.setChildren(loadBranch(dto, withAvailabilityFiltering, expandLevel - 1, expandNodes));
                     }
                 }
@@ -169,23 +172,23 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<CategoryDTO> getBranchById(final long shopId, final long categoryId, final List<Long> expand)
+    public List<ContentDTO> getBranchById(final long shopId, final long contentId, final List<Long> expand)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return getBranchByIdWithAvailabilityFilter(shopId, categoryId, false, expand);
+        return getBranchByIdWithAvailabilityFilter(shopId, contentId, false, expand);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<CategoryDTO> getBranchByIdWithAvailabilityFilter(final long shopId, final long contentId, final boolean withAvailabilityFiltering, final List<Long> expand)
+    public List<ContentDTO> getBranchByIdWithAvailabilityFilter(final long shopId, final long contentId, final boolean withAvailabilityFiltering, final List<Long> expand)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<CategoryDTO> branch = new ArrayList<>();
+        final List<ContentDTO> branch = new ArrayList<>();
         ContentService contentService = (ContentService) service;
-        final Category branchRoot = contentId > 0L ? contentService.getById(contentId) : contentService.getRootContent(shopId);
+        final Content branchRoot = contentId > 0L ? contentService.getById(contentId) : contentService.getRootContent(shopId);
         if (branchRoot != null) {
-            CategoryDTO rootDTO = getById(branchRoot.getCategoryId());
+            ContentDTO rootDTO = getById(branchRoot.getContentId());
             if (rootDTO != null) {
                 loadBranch(rootDTO, withAvailabilityFiltering, 1, expand != null ? expand : Collections.emptyList());
             }
@@ -198,14 +201,14 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     @Override
-    protected void assemblyPostProcess(final CategoryDTO dto, final Category entity) {
+    protected void assemblyPostProcess(final ContentDTO dto, final Content entity) {
         dto.setParentName(getParentName(entity));
         super.assemblyPostProcess(dto, entity);
     }
 
-    protected String getParentName(final Category entity) {
-        if (entity.getParentId() > 0L && entity.getParentId() != entity.getCategoryId()) {
-            final Category parent = ((ContentService)getService()).getById(entity.getParentId());
+    protected String getParentName(final Content entity) {
+        if (entity.getParentId() > 0L && entity.getParentId() != entity.getContentId()) {
+            final Content parent = ((ContentService)getService()).getById(entity.getParentId());
             if (parent != null) {
                 final String oneUp = getParentName(parent);
                 if (oneUp != null) {
@@ -221,7 +224,7 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     @Override
-    protected void createPostProcess(final CategoryDTO dto, final Category entity) {
+    protected void createPostProcess(final ContentDTO dto, final Content entity) {
         bindDictionaryData(dto, entity);
         ensureBlankUriIsNull(entity);
         super.createPostProcess(dto, entity);
@@ -231,7 +234,7 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     @Override
-    protected void updatePostProcess(final CategoryDTO dto, final Category entity) {
+    protected void updatePostProcess(final ContentDTO dto, final Content entity) {
         bindDictionaryData(dto, entity);
         ensureBlankUriIsNull(entity);
         super.updatePostProcess(dto, entity);
@@ -245,24 +248,20 @@ public class DtoContentServiceImpl
     }
 
     /**
-     * Bind data from dictionaries to category.
+     * Bind data from dictionaries to content.
      *
-     * @param instance category dto to collect data from
-     * @param category category to set dictionary data to.
+     * @param instance content dto to collect data from
+     * @param content content to set dictionary data to.
      */
-    private void bindDictionaryData(final CategoryDTO instance, final Category category) {
-        if (instance.getProductTypeId() != null && instance.getProductTypeId() > 0) {
-            category.setProductType(productTypeService.findById(instance.getProductTypeId()));
-        } else {
-            category.setProductType(null);
-        }
+    private void bindDictionaryData(final ContentDTO instance, final Content content) {
+        // Nothing
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<CategoryDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<ContentDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return getAllWithAvailabilityFilter(shopId, false);
     }
 
@@ -276,11 +275,11 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<CategoryDTO> findBy(final long shopId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<ContentDTO> findBy(final long shopId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         ContentService contentService = (ContentService) service;
 
-        final List<CategoryDTO> contentDTO = new ArrayList<>(pageSize);
+        final List<ContentDTO> contentDTO = new ArrayList<>(pageSize);
 
         if (StringUtils.isNotBlank(filter)) {
             final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
@@ -297,22 +296,22 @@ public class DtoContentServiceImpl
 
                 } else if ("^".equals(parentOrUri.getFirst())) {
 
-                    final List<Category> parents = contentService.findBy(shopId, parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
+                    final List<Content> parents = contentService.findBy(shopId, parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
 
                     if (!parents.isEmpty()) {
 
                         final Set<Long> dedup = new HashSet<>();
-                        final List<Category> parentsWithChildren = new ArrayList<>();
-                        for (final Category parent : parents) {
+                        final List<Content> parentsWithChildren = new ArrayList<>();
+                        for (final Content parent : parents) {
 
-                            if (!dedup.contains(parent.getCategoryId())) {
+                            if (!dedup.contains(parent.getContentId())) {
                                 parentsWithChildren.add(parent);
-                                dedup.add(parent.getCategoryId());
+                                dedup.add(parent.getContentId());
                             }
-                            for (final Category child : contentService.findChildContentWithAvailability(parent.getCategoryId(), false)) {
-                                if (!dedup.contains(child.getCategoryId())) {
+                            for (final Content child : contentService.findChildContentWithAvailability(parent.getContentId(), false)) {
+                                if (!dedup.contains(child.getContentId())) {
                                     parentsWithChildren.add(child);
-                                    dedup.add(child.getCategoryId());
+                                    dedup.add(child.getContentId());
                                 }
                             }
 
@@ -365,8 +364,8 @@ public class DtoContentServiceImpl
      * @return dto interface.
      */
     @Override
-    public Class<CategoryDTO> getDtoIFace() {
-        return CategoryDTO.class;
+    public Class<ContentDTO> getDtoIFace() {
+        return ContentDTO.class;
     }
 
     /**
@@ -375,8 +374,8 @@ public class DtoContentServiceImpl
      * @return dto implementation class.
      */
     @Override
-    public Class<CategoryDTOImpl> getDtoImpl() {
-        return CategoryDTOImpl.class;
+    public Class<ContentDTOImpl> getDtoImpl() {
+        return ContentDTOImpl.class;
     }
 
     /**
@@ -385,8 +384,8 @@ public class DtoContentServiceImpl
      * @return entity interface.
      */
     @Override
-    public Class<Category> getEntityIFace() {
-        return Category.class;
+    public Class<Content> getEntityIFace() {
+        return Content.class;
     }
 
     /**
@@ -394,9 +393,9 @@ public class DtoContentServiceImpl
      */
     @Override
     public List<? extends AttrValueDTO> getEntityContentAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<AttrValueCategoryDTO> result = new ArrayList<>();
-        final CategoryDTO categoryDTO = getById(entityPk);
-        if (categoryDTO != null) {
+        final List<AttrValueContentDTO> result = new ArrayList<>();
+        final ContentDTO contentDTO = getById(entityPk);
+        if (contentDTO != null) {
             final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                     AttributeGroupNames.CATEGORY, Collections.EMPTY_LIST);
             final Map<String, AttributeDTO> contentAttrsDTOs = new HashMap<>();
@@ -422,7 +421,7 @@ public class DtoContentServiceImpl
             for (final AttributeDTO attributeDTO : contentAttrsDTOs.values()) {
                 final Map<String, String> content = new HashMap<>();
 
-                for (AttrValueCategoryDTO attributeValueDTO : categoryDTO.getAttributes()) {
+                for (AttrValueContentDTO attributeValueDTO : contentDTO.getAttributes()) {
                     final Matcher matcher = CONTENT_BODY_PART.matcher(attributeValueDTO.getAttributeDTO().getCode());
                     if (matcher.find()) {
                         final String locale = matcher.group(1);
@@ -441,9 +440,9 @@ public class DtoContentServiceImpl
                     parts.append(content.get(partNo));
                 }
 
-                AttrValueCategoryDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCategoryDTO.class);
+                AttrValueContentDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueContentDTO.class);
                 attrValueCategoryDTO.setAttributeDTO(attributeDTO);
-                attrValueCategoryDTO.setCategoryId(entityPk);
+                attrValueCategoryDTO.setContentId(entityPk);
                 attrValueCategoryDTO.setVal(parts.toString());
 
                 result.add(attrValueCategoryDTO);
@@ -462,17 +461,17 @@ public class DtoContentServiceImpl
     @Override
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<AttrValueCategoryDTO> result = new ArrayList<>();
-        final CategoryDTO categoryDTO = getById(entityPk);
-        if (categoryDTO != null) {
-            result.addAll(categoryDTO.getAttributes());
+        final List<AttrValueContentDTO> result = new ArrayList<>();
+        final ContentDTO contentDTO = getById(entityPk);
+        if (contentDTO != null) {
+            result.addAll(contentDTO.getAttributes());
             final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
                     AttributeGroupNames.CATEGORY,
                     getCodes(result));
             for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-                AttrValueCategoryDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCategoryDTO.class);
+                AttrValueContentDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueContentDTO.class);
                 attrValueCategoryDTO.setAttributeDTO(attributeDTO);
-                attrValueCategoryDTO.setCategoryId(entityPk);
+                attrValueCategoryDTO.setContentId(entityPk);
                 result.add(attrValueCategoryDTO);
             }
             result.sort(ATTR_VALUE_DTO_COMPARATOR);
@@ -505,18 +504,11 @@ public class DtoContentServiceImpl
         if (matcher.find()) {
             final String locale = matcher.group(1);
             final String keyStart = "CONTENT_BODY_" + locale;
-            final String keyLike = keyStart + "_%";
             final String val = attrValueDTO.getVal();
-            final List<Object> bodyAttrs = attrValueEntityCategoryDao
-                    .findQueryObjectByNamedQuery("CONTENTBODY.ATTRIBUTES", keyLike);
-            if (val.length() > bodyAttrs.size() * CHUNK_SIZE) {
-                throw new IllegalArgumentException("There are " + bodyAttrs.size() + " body parts attributes for "
-                        + keyLike + " which limits content to " + bodyAttrs.size() * CHUNK_SIZE
-                        + " characters. Your input (" + val.length() + ") exceeds this limit. Add more body attributes.");
-            }
 
-            final Category content = service.findById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId());
-            final Iterator<AttrValueCategory> itOld = content.getAttributes().iterator();
+            final Content content = service.findById(((AttrValueContentDTO) attrValueDTO).getContentId());
+            final Category category = ((ContentCategoryAdapter) content).getCategory();
+            final Iterator<AttrValueCategory> itOld = category.getAttributes().iterator();
             while (itOld.hasNext()) {
                 final AttrValueCategory old = itOld.next();
                 if (old.getAttributeCode().startsWith(keyStart)) {
@@ -525,14 +517,13 @@ public class DtoContentServiceImpl
                 }
             }
             int pos = 0;
-            int chunkCount = 0;
+            int chunkCount = 1;
             String part;
             do {
                 part = pos + CHUNK_SIZE > val.length() ? val.substring(pos) : val.substring(pos, pos + CHUNK_SIZE);
-                Attribute atr = (Attribute) bodyAttrs.get(chunkCount);
                 AttrValueCategory valueEntityCategory = getPersistenceEntityFactory().getByIface(AttrValueCategory.class);
-                valueEntityCategory.setAttributeCode(atr.getCode());
-                valueEntityCategory.setCategory(content);
+                valueEntityCategory.setAttributeCode(keyStart + '_' + chunkCount);
+                valueEntityCategory.setCategory(category);
                 valueEntityCategory.setVal(part);
                 attrValueEntityCategoryDao.create((AttrValueEntityCategory) valueEntityCategory);
                 chunkCount++;
@@ -541,7 +532,7 @@ public class DtoContentServiceImpl
 
         } else {
             final AttrValueEntityCategory valueEntityCategory = attrValueEntityCategoryDao.findById(attrValueDTO.getAttrvalueId());
-            attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
+            attrValueAssembler.assembleEntity(attrValueDTO, new AttrValueEntityContentCategoryAdapter(valueEntityCategory), getAdaptersRepository(), dtoFactory);
             attrValueEntityCategoryDao.update(valueEntityCategory);
         }
         return attrValueDTO;
@@ -582,9 +573,9 @@ public class DtoContentServiceImpl
 
         final Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
         final boolean multivalue = atr.isAllowduplicate();
-        final Category category = service.findById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId());
+        final Content content = service.findById(((AttrValueContentDTO) attrValueDTO).getContentId());
         if (!multivalue) {
-            for (final AttrValueCategory avp : category.getAttributes()) {
+            for (final AttrValueContent avp : content.getAttributes()) {
                 if (avp.getAttributeCode().equals(atr.getCode())) {
                     // this is a duplicate, so need to update
                     attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
@@ -594,9 +585,9 @@ public class DtoContentServiceImpl
         }
 
         AttrValueCategory valueEntityCategory = getPersistenceEntityFactory().getByIface(AttrValueCategory.class);
-        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
+        attrValueAssembler.assembleEntity(attrValueDTO, new AttrValueEntityContentCategoryAdapter(valueEntityCategory), getAdaptersRepository(), dtoFactory);
         valueEntityCategory.setAttributeCode(atr.getCode());
-        valueEntityCategory.setCategory(category);
+        valueEntityCategory.setCategory(((ContentCategoryAdapter) content).getCategory());
         valueEntityCategory = attrValueEntityCategoryDao.create((AttrValueEntityCategory) valueEntityCategory);
         attrValueDTO.setAttrvalueId(valueEntityCategory.getAttrvalueId());
         return attrValueDTO;
@@ -618,8 +609,59 @@ public class DtoContentServiceImpl
      */
     @Override
     public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
-        final AttrValueCategoryDTO dto = new AttrValueCategoryDTOImpl();
-        dto.setCategoryId(entityPk);
+        final AttrValueContentDTO dto = new AttrValueContentDTOImpl();
+        dto.setContentId(entityPk);
         return dto;
     }
+
+    @Override
+    public EntityFactory getPersistenceEntityFactory() {
+
+        final EntityFactory base = super.getPersistenceEntityFactory();
+
+        return new EntityFactory() {
+            @Override
+            public <T> T getByIface(final Class interfaceClass) {
+                return (T) getByKey(interfaceClass.getName());
+            }
+
+            @Override
+            public <T> T getByKey(final String entityBeanKey) {
+                if (entityBeanKey.equals(Content.class.getCanonicalName())) {
+                    return (T) new ContentCategoryAdapter(base.getByIface(Category.class));
+                } else if (entityBeanKey.equals(AttrValueContent.class.getCanonicalName())) {
+                    return (T) new AttrValueEntityContentCategoryAdapter(base.getByIface(AttrValueContent.class));
+                }
+                return base.getByKey(entityBeanKey);
+            }
+
+            @Override
+            public Class getImplClass(final Class interfaceClass) {
+                final String ifaceName = interfaceClass.getCanonicalName();
+                return getImplClass(ifaceName);
+            }
+
+            @Override
+            public Class getImplClass(final String entityBeanKey) {
+                if (entityBeanKey.equals(Content.class.getCanonicalName())) {
+                    return ContentCategoryAdapter.class;
+                } else if (entityBeanKey.equals(AttrValueContent.class.getCanonicalName())) {
+                    return AttrValueEntityContentCategoryAdapter.class;
+                }
+                return base.getImplClass(entityBeanKey);
+            }
+        };
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
+    }
+
+
 }

@@ -18,8 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.config.Configuration;
-import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.shoppingcart.CartContentsValidator;
 import org.yes.cart.shoppingcart.CartValidityModel;
@@ -34,14 +32,12 @@ import java.util.Map;
  * Time: 13:59
  */
 public class DefaultCartContentsValidator extends AbstractCartContentsValidatorImpl
-        implements CartContentsValidator, ConfigurationRegistry<String, CartContentsValidator>, Configuration {
+        implements CartContentsValidator, ConfigurationRegistry<String, CartContentsValidator> {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultCartContentsValidator.class);
 
     private final CartContentsValidator defaultValidator;
     private final Map<String, CartContentsValidator> customValidators = new HashMap<>();
-
-    private ConfigurationContext cfgContext;
 
     public DefaultCartContentsValidator(final CartContentsValidator defaultValidator) {
         this.defaultValidator = defaultValidator;
@@ -68,7 +64,7 @@ public class DefaultCartContentsValidator extends AbstractCartContentsValidatorI
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final Object configuration) {
+    public boolean supports(final String cfgProperty, final Object configuration) {
         return configuration instanceof CartContentsValidator ||
                 (configuration instanceof Class && CartContentsValidator.class.isAssignableFrom((Class<?>) configuration));
 
@@ -86,15 +82,5 @@ public class DefaultCartContentsValidator extends AbstractCartContentsValidatorI
             customValidators.remove(shopCode);
         }
 
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public ConfigurationContext getCfgContext() {
-        return cfgContext;
-    }
-
-    public void setCfgContext(final ConfigurationContext cfgContext) {
-        this.cfgContext = cfgContext;
     }
 }

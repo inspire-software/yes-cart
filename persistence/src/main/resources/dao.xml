@@ -108,6 +108,7 @@
                 <entry key="org.yes.cart.domain.entity.AttrValueSystem" value="org.yes.cart.domain.entity.impl.AttrValueEntitySystem"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueProductSku" value="org.yes.cart.domain.entity.impl.AttrValueEntityProductSku"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueCategory" value="org.yes.cart.domain.entity.impl.AttrValueEntityCategory"/>
+                <entry key="org.yes.cart.domain.entity.AttrValueContent" value="org.yes.cart.domain.entity.impl.AttrValueEntityContent"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueCustomer" value="org.yes.cart.domain.entity.impl.AttrValueEntityCustomer"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueBrand" value="org.yes.cart.domain.entity.impl.AttrValueEntityBrand"/>
 
@@ -130,6 +131,7 @@
                 <entry key="org.yes.cart.domain.entity.CarrierSla" value="org.yes.cart.domain.entity.impl.CarrierSlaEntity"/>
                 <entry key="org.yes.cart.domain.entity.CarrierShop" value="org.yes.cart.domain.entity.impl.CarrierShopEntity"/>
                 <entry key="org.yes.cart.domain.entity.Category" value="org.yes.cart.domain.entity.impl.CategoryEntity"/>
+                <entry key="org.yes.cart.domain.entity.Content" value="org.yes.cart.domain.entity.impl.ContentEntity"/>
                 <entry key="org.yes.cart.domain.entity.Country" value="org.yes.cart.domain.entity.impl.CountryEntity"/>
                 <entry key="org.yes.cart.domain.entity.State" value="org.yes.cart.domain.entity.impl.StateEntity"/>
 
@@ -215,6 +217,12 @@
 
     <bean id="attrValueEntityCategoryDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityCategory</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="attrValueEntityContentDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.AttrValueEntityContent</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
@@ -317,6 +325,12 @@
 
     <bean  id="categoryDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.CategoryEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean  id="contentDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ContentEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

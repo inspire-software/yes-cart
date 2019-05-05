@@ -90,7 +90,7 @@ public class BreadCrumbsView extends BaseComponent {
         if (crumbs == null) {
 
             crumbs = breadCrumbsBuilder.getBreadCrumbs(getLocale().getLanguage(),
-                    shopId, customerShopId, categoryId, getPage().getPageParameters(), shopService.getShopAllCategoriesIds(customerShopId));
+                    shopId, customerShopId, categoryId, getPage().getPageParameters());
 
         }
         return crumbs;

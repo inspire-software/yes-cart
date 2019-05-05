@@ -40,7 +40,7 @@ public class ShopCartConfigurationImpl extends AbstractShopConfigurationImpl {
 
         final CartContentsValidator validator = determineConfiguration(properties, shop.getCode() + ".cartContentsValidator", CartContentsValidator.class);
 
-        customise(shop.getCode(), shop.getCode(), CartContentsValidator.class, validator);
+        customise(shop.getCode(), shop.getCode(), "cartContentsValidator", CartContentsValidator.class, validator);
     }
 
     /** {@inheritDoc} */

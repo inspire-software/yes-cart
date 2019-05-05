@@ -70,15 +70,6 @@ public class ShopCategoryRelationshipSupportCachedImpl implements ShopCategoryRe
      * {@inheritDoc}
      */
     @Override
-    @Cacheable(value = "shopService-shopContentIds")
-    public Set<Long> getShopContentIds(final long shopId) {
-        return support.getShopContentIds(shopId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     @Cacheable(value = "categoryService-byId")
     public Category getCategoryById(final long categoryId) {
         return support.getCategoryById(categoryId);

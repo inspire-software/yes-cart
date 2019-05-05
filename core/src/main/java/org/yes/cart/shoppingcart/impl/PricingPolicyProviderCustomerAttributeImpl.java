@@ -18,6 +18,8 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
@@ -30,12 +32,14 @@ import org.yes.cart.shoppingcart.PricingPolicyProvider;
  * Date: 07/06/2016
  * Time: 18:39
  */
-public class PricingPolicyProviderCustomerAttributeImpl implements PricingPolicyProvider {
+public class PricingPolicyProviderCustomerAttributeImpl implements PricingPolicyProvider, Configuration {
 
     private static final PricingPolicy DEFAULT = new PricingPolicyImpl(null, PricingPolicy.Type.DEFAULT);
 
     private final CustomerService customerService;
     private final ShopService shopService;
+
+    private ConfigurationContext cfgContext;
 
     public PricingPolicyProviderCustomerAttributeImpl(final CustomerService customerService,
                                                       final ShopService shopService) {
@@ -109,6 +113,16 @@ public class PricingPolicyProviderCustomerAttributeImpl implements PricingPolicy
 
         }
         return DEFAULT;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
     }
 
 }

@@ -18,8 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.config.Configuration;
-import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
@@ -36,14 +34,12 @@ import java.util.Map;
  * Time: 14:00
  */
 public class ProductAvailabilityStrategyImpl
-        implements ProductAvailabilityStrategy, ConfigurationRegistry<Long, ProductAvailabilityStrategy>, Configuration {
+        implements ProductAvailabilityStrategy, ConfigurationRegistry<Long, ProductAvailabilityStrategy> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductAvailabilityStrategyImpl.class);
 
     private final ProductAvailabilityStrategy defaultAvailabilityStrategy;
     private final Map<Long, ProductAvailabilityStrategy> customAvailabilityStrategies = new HashMap<>();
-
-    private ConfigurationContext cfgContext;
 
     public ProductAvailabilityStrategyImpl(final ProductAvailabilityStrategy defaultAvailabilityStrategy) {
         this.defaultAvailabilityStrategy = defaultAvailabilityStrategy;
@@ -84,7 +80,7 @@ public class ProductAvailabilityStrategyImpl
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final Object configuration) {
+    public boolean supports(final String cfgProperty, final Object configuration) {
         return configuration instanceof ProductAvailabilityStrategy ||
                 (configuration instanceof Class && ProductAvailabilityStrategy.class.isAssignableFrom((Class<?>) configuration));
     }
@@ -101,15 +97,5 @@ public class ProductAvailabilityStrategyImpl
             customAvailabilityStrategies.remove(shopCode);
         }
 
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public ConfigurationContext getCfgContext() {
-        return cfgContext;
-    }
-
-    public void setCfgContext(final ConfigurationContext cfgContext) {
-        this.cfgContext = cfgContext;
     }
 }

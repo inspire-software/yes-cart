@@ -59,7 +59,7 @@ export class ImpexService {
     let body = fileName;
     let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/impex/import/' + group + '/', body, options)
+    return this.http.post(this._serviceBaseUrl + '/impex/import?group=' + encodeURIComponent(group), body, options)
       .map(res => <string> res.text())
       .catch(this.handleError);
   }
@@ -69,7 +69,7 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   getImportStatus(token:string) {
-    return this.http.get(this._serviceBaseUrl + '/impex/import/status?token=' + encodeURI(token))
+    return this.http.get(this._serviceBaseUrl + '/impex/import/status?token=' + encodeURIComponent(token))
       .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
@@ -82,7 +82,7 @@ export class ImpexService {
     let body = fileName;
     let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/impex/export/' + group + '/', body, options)
+    return this.http.post(this._serviceBaseUrl + '/impex/export?group=' + encodeURIComponent(group), body, options)
       .map(res => <string> res.text())
       .catch(this.handleError);
   }
@@ -93,7 +93,7 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   getExportStatus(token:string) {
-    return this.http.get(this._serviceBaseUrl + '/impex/export/status?token=' + encodeURI(token))
+    return this.http.get(this._serviceBaseUrl + '/impex/export/status?token=' + encodeURIComponent(token))
       .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
@@ -120,7 +120,7 @@ export class ImpexService {
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/filemanager/delete?fileName=' + encodeURI(fileName), options)
+    return this.http.delete(this._serviceBaseUrl + '/filemanager/delete?fileName=' + encodeURIComponent(fileName), options)
       .catch(this.handleError);
   }
 

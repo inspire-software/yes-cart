@@ -28,7 +28,7 @@ import java.util.List;
 @Dto
 public class VoContent {
 
-    @DtoField(value = "categoryId", readOnly = true)
+    @DtoField(value = "contentId", readOnly = true)
     private long contentId;
 
     @DtoField(value = "parentId")

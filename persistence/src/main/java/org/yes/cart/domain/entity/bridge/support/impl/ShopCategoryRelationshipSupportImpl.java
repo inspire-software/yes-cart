@@ -143,26 +143,6 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Set<Long> getShopContentIds(final long shopId) {
-
-        final Set<Long> result = new HashSet<>();
-
-        final Map<Long, Set<Long>> map = proxy().getAllCategoriesIdsMap();
-
-        final Category category = categoryDao.findSingleByNamedQuery("ROOTCONTENT.BY.SHOP.ID", shopId);
-
-        if (category != null) {
-            appendChildren(result, category.getCategoryId(), map);
-        }
-
-        return Collections.unmodifiableSet(result);
-
-    }
-
     private void appendChildren(final Set<Long> result, final long currentId, final Map<Long, Set<Long>> map) {
 
         result.add(currentId);

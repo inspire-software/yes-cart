@@ -22,7 +22,7 @@ import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ContentService;
 
@@ -36,13 +36,13 @@ import java.util.Map;
  * Date: 26/10/2018
  * Time: 08:08
  */
-public class ContentXmlEntityHandler extends AbstractXmlEntityHandler<Category> {
+public class ContentCms3XmlEntityHandler extends AbstractXmlEntityHandler<Content> {
 
     private static final String CONTENT_ATTR_PREFIX = "CONTENT_BODY_";
 
     private final ContentService contentService;
 
-    public ContentXmlEntityHandler(final ContentService contentService) {
+    public ContentCms3XmlEntityHandler(final ContentService contentService) {
         super("cms");
         this.contentService = contentService;
     }
@@ -50,7 +50,7 @@ public class ContentXmlEntityHandler extends AbstractXmlEntityHandler<Category> 
     @Override
     public String handle(final JobStatusListener statusListener,
                          final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Category> tuple,
+                         final ImpExTuple<String, Content> tuple,
                          final XmlValueAdapter xmlValueAdapter,
                          final String fileToExport) {
 
@@ -59,14 +59,14 @@ public class ContentXmlEntityHandler extends AbstractXmlEntityHandler<Category> 
     }
 
 
-    Tag tagCategory(final Tag parent, final Category content) {
+    Tag tagCategory(final Tag parent, final Content content) {
 
         final Tag tag = tag(parent, "content")
-                .attr("id", content.getCategoryId())
+                .attr("id", content.getContentId())
                 .attr("guid", content.getGuid())
                 .attr("rank", content.getRank());
 
-        Category root = content;
+        Content root = content;
         while (!root.isRoot()) {
             root = this.contentService.getById(root.getParentId());
         }
@@ -81,11 +81,11 @@ public class ContentXmlEntityHandler extends AbstractXmlEntityHandler<Category> 
 
 
         if (content.getParentId() > 0L) {
-            final Category parentCat = this.contentService.findById(content.getParentId());
+            final Content parentCat = this.contentService.findById(content.getParentId());
             if (parentCat != null) {
                 tag
                         .tag("parent")
-                        .attr("id", parentCat.getCategoryId())
+                        .attr("id", parentCat.getContentId())
                         .attr("guid", parentCat.getGuid())
                         .end();
             }
@@ -136,10 +136,10 @@ public class ContentXmlEntityHandler extends AbstractXmlEntityHandler<Category> 
 
     private static class FilteredAttributable implements Attributable {
 
-        private final Category content;
+        private final Content content;
 
 
-        private FilteredAttributable(final Category content) {
+        private FilteredAttributable(final Content content) {
             this.content = content;
         }
 

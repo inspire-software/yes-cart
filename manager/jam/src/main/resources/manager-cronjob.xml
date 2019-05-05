@@ -285,6 +285,7 @@
                 <constructor-arg index="2">
                     <array>
                         <ref bean="categoryImageNameStrategy"/>
+                        <ref bean="contentImageNameStrategy"/>
                         <ref bean="brandImageNameStrategy"/>
                         <ref bean="productImageNameStrategy"/>
                         <ref bean="shopImageNameStrategy"/>
@@ -295,6 +296,13 @@
                         <bean id="imageVaultProcessorCategoryImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.CategoryImageImportDomainObjectStrategyImpl">
                             <constructor-arg index="0" ref="importFederationFacade"/>
                             <constructor-arg index="1" ref="categoryService"/>
+                            <constructor-arg index="2" ref="attributeService"/>
+                            <property name="insertOnly" value="true"/>
+                        </bean>
+
+                        <bean id="imageVaultProcessorContentImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ContentImageImportDomainObjectStrategyImpl">
+                            <constructor-arg index="0" ref="importFederationFacade"/>
+                            <constructor-arg index="1" ref="contentService"/>
                             <constructor-arg index="2" ref="attributeService"/>
                             <property name="insertOnly" value="true"/>
                         </bean>

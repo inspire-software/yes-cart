@@ -45,7 +45,6 @@ public interface BreadCrumbsBuilder {
      * @param customerShopId        current shop id
      * @param categoryId            current category id
      * @param pageParameters        current query string
-     * @param shopCategoryIds       all categoryIds, that belong to shop
      *
      * @return list of crumbs
      */
@@ -53,8 +52,7 @@ public interface BreadCrumbsBuilder {
                                long shopId,
                                long customerShopId,
                                long categoryId,
-                               PageParameters pageParameters,
-                               Set<Long> shopCategoryIds);
+                               PageParameters pageParameters);
 
 
 

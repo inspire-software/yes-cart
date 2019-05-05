@@ -16,11 +16,14 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIteratorCallback;
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.service.domain.ContentService;
 
 import java.util.List;
@@ -32,12 +35,16 @@ import java.util.Set;
  * Date: 28/01/2017
  * Time: 16:22
  */
-public class ContentServiceCachedImpl implements ContentService {
+public class ContentServiceCachedImpl implements ContentService, ConfigurationRegistry<String, ContentService> {
 
-    private final ContentService contentService;
+    private static final Logger LOG = LoggerFactory.getLogger(ContentServiceCachedImpl.class);
+
+    private ContentService contentService;
+    private final ContentService fallback;
 
     public ContentServiceCachedImpl(final ContentService contentService) {
         this.contentService = contentService;
+        this.fallback = contentService;
     }
 
 
@@ -46,7 +53,7 @@ public class ContentServiceCachedImpl implements ContentService {
      */
     @Override
     @Cacheable(value = "contentService-rootContent")
-    public Category getRootContent(final long shopId) {
+    public Content getRootContent(final long shopId) {
         return contentService.getRootContent(shopId);
     }
 
@@ -55,9 +62,19 @@ public class ContentServiceCachedImpl implements ContentService {
      */
     @Override
     @CacheEvict(value = "contentService-rootContent")
-    public Category createRootContent(final long shopId) {
+    public Content createRootContent(final long shopId) {
         return contentService.createRootContent(shopId);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Cacheable(value = "shopService-shopContentIds")
+    public Set<Long> getShopContentIds(final long shopId) {
+        return contentService.getShopContentIds(shopId);
+    }
+
 
     /**
      * {@inheritDoc}
@@ -125,7 +142,7 @@ public class ContentServiceCachedImpl implements ContentService {
      */
     @Override
     @Cacheable(value = "contentService-childContent")
-    public List<Category> getChildContent(final long contentId) {
+    public List<Content> getChildContent(final long contentId) {
         return contentService.getChildContent(contentId);
     }
 
@@ -133,7 +150,7 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
-    public List<Category> findChildContentWithAvailability(final long contentId, final boolean withAvailability) {
+    public List<Content> findChildContentWithAvailability(final long contentId, final boolean withAvailability) {
         return contentService.findChildContentWithAvailability(contentId, withAvailability);
     }
 
@@ -142,7 +159,7 @@ public class ContentServiceCachedImpl implements ContentService {
      */
     @Override
     @Cacheable(value = "contentService-childContentRecursive")
-    public Set<Category> getChildContentRecursive(final long contentId) {
+    public Set<Content> getChildContentRecursive(final long contentId) {
         return contentService.getChildContentRecursive(contentId);
     }
 
@@ -150,7 +167,7 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
-    public List<Category> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
+    public List<Content> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
         return contentService.findBy(shopId, code, name, uri, page, pageSize);
     }
 
@@ -161,7 +178,7 @@ public class ContentServiceCachedImpl implements ContentService {
      */
     @Override
     @Cacheable(value = "contentService-byId")
-    public Category getById(final long categoryId) {
+    public Content getById(final long categoryId) {
         return contentService.getById(categoryId);
     }
 
@@ -193,6 +210,14 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
+    public Content findContentIdBySeoUriOrGuid(final String seoUriOrGuid) {
+        return contentService.findContentIdBySeoUriOrGuid(seoUriOrGuid);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     @Cacheable(value = "contentService-contentHasSubcontent")
     public boolean isContentHasSubcontent(final long topContentId, final long subContentId) {
         return contentService.isContentHasSubcontent(topContentId, subContentId);
@@ -202,7 +227,7 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
-    public List<Category> findAll() {
+    public List<Content> findAll() {
         return contentService.findAll();
     }
 
@@ -210,7 +235,7 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
-    public void findAllIterator(final ResultsIteratorCallback<Category> callback) {
+    public void findAllIterator(final ResultsIteratorCallback<Content> callback) {
         contentService.findAllIterator(callback);
     }
 
@@ -218,7 +243,7 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
-    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Category> callback) {
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Content> callback) {
         contentService.findByCriteriaIterator(eCriteria, parameters, callback);
     }
 
@@ -226,7 +251,7 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
-    public Category findById(final long pk) {
+    public Content findById(final long pk) {
         return contentService.findById(pk);
     }
 
@@ -236,7 +261,7 @@ public class ContentServiceCachedImpl implements ContentService {
     @Override
     @CacheEvict(value = {
             "contentService-rootContent",
-            "categoryService-currentCategoryMenu",
+            "contentService-currentContentMenu",
             "breadCrumbBuilder-breadCrumbs",
             "contentService-contentAttributeRecursive",
             "contentService-contentAttributesRecursive",
@@ -248,7 +273,7 @@ public class ContentServiceCachedImpl implements ContentService {
             "shopService-shopAllCategoriesIds"
 
     },allEntries = true)
-    public Category create(final Category instance) {
+    public Content create(final Content instance) {
         return contentService.create(instance);
     }
 
@@ -258,7 +283,7 @@ public class ContentServiceCachedImpl implements ContentService {
     @Override
     @CacheEvict(value = {
             "contentService-rootContent",
-            "categoryService-currentCategoryMenu",
+            "contentService-currentContentMenu",
             "breadCrumbBuilder-breadCrumbs",
             "contentService-contentTemplate",
             "contentService-contentBody" ,
@@ -271,7 +296,7 @@ public class ContentServiceCachedImpl implements ContentService {
             "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds"
     }, allEntries = true)
-    public Category update(final Category instance) {
+    public Content update(final Content instance) {
         return contentService.update(instance);
     }
 
@@ -281,7 +306,7 @@ public class ContentServiceCachedImpl implements ContentService {
     @Override
     @CacheEvict(value ={
             "contentService-rootContent",
-            "categoryService-currentCategoryMenu",
+            "contentService-currentContentMenu",
             "breadCrumbBuilder-breadCrumbs",
             "contentService-contentTemplate",
             "contentService-contentBody" ,
@@ -294,7 +319,7 @@ public class ContentServiceCachedImpl implements ContentService {
             "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds"
     }, allEntries = true)
-    public void delete(final Category instance) {
+    public void delete(final Content instance) {
         contentService.delete(instance);
     }
 
@@ -302,7 +327,7 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
-    public List<Category> findByCriteria(final String eCriteria, final Object... parameters) {
+    public List<Content> findByCriteria(final String eCriteria, final Object... parameters) {
         return contentService.findByCriteria(eCriteria, parameters);
     }
 
@@ -318,7 +343,7 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
-    public Category findSingleByCriteria(final String eCriteria, final Object... parameters) {
+    public Content findSingleByCriteria(final String eCriteria, final Object... parameters) {
         return contentService.findSingleByCriteria(eCriteria, parameters);
     }
 
@@ -326,7 +351,31 @@ public class ContentServiceCachedImpl implements ContentService {
      * {@inheritDoc}
      */
     @Override
-    public GenericDAO<Category, Long> getGenericDao() {
+    public GenericDAO<Content, Long> getGenericDao() {
         return contentService.getGenericDao();
     }
+
+
+    @Override
+    public boolean supports(final String cfgProperty, final Object configuration) {
+        return configuration instanceof ContentService ||
+                (configuration instanceof Class && ContentService.class.isAssignableFrom((Class<?>) configuration));
+
+    }
+
+    @Override
+    public void register(final String key, final ContentService contentService) {
+
+        if (contentService != null) {
+            LOG.debug("Custom CMS settings registering service {}", contentService.getClass());
+            this.contentService = contentService;
+        } else {
+            LOG.debug("Custom CMS settings registering DEFAULT service {}", fallback.getClass());
+            this.contentService = fallback;
+        }
+
+
+    }
+
+
 }

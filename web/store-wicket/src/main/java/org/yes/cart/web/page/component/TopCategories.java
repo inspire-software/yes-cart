@@ -25,6 +25,8 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
+import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -72,16 +74,16 @@ public class TopCategories extends BaseComponent {
         final long contentShopId = getCurrentShopId();
         final long browsingShopId = getCurrentCustomerShopId();
         final String lang = getLocale().getLanguage();
-        final List<Category> categories;
+        final List<Identifiable> categories;
         final long currentCategoryId;
         final boolean viewingCategory;
         if (contentId > 0L) { // content menu
-            final List<Category> contentMenu = contentServiceFacade.getCurrentContentMenu(contentId, contentShopId, lang);
+            final List<Identifiable> contentMenu = (List) contentServiceFacade.getCurrentContentMenu(contentId, contentShopId, lang);
             if (CollectionUtils.isEmpty(contentMenu)) {
                 // if this content does not have sub content, display parent's menu
-                final Category content = contentServiceFacade.getContent(contentId, contentShopId);
+                final Content content = contentServiceFacade.getContent(contentId, contentShopId);
                 if (content != null) {
-                    categories = contentServiceFacade.getCurrentContentMenu(content.getParentId(), contentShopId, lang);
+                    categories = (List) contentServiceFacade.getCurrentContentMenu(content.getParentId(), contentShopId, lang);
                 } else {
                     categories = contentMenu;
                 }
@@ -91,19 +93,19 @@ public class TopCategories extends BaseComponent {
             currentCategoryId = contentId;
             viewingCategory = false;
         } else { // sub categories or top categories
-            final List<Category> categoryMenu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, browsingShopId, lang);
+            final List<Identifiable> categoryMenu = (List) categoryServiceFacade.getCurrentCategoryMenu(categoryId, browsingShopId, lang);
             if (CollectionUtils.isEmpty(categoryMenu)) {
                 // if this content does not have sub content, display parent's menu
                 final Category category = categoryServiceFacade.getCategory(categoryId, browsingShopId);
                 if (category != null) {
                     final Long parentId = categoryServiceFacade.getCategoryParentId(categoryId, browsingShopId);
                     if (parentId != null) {
-                        categories = categoryServiceFacade.getCurrentCategoryMenu(parentId, browsingShopId, lang);
+                        categories = (List) categoryServiceFacade.getCurrentCategoryMenu(parentId, browsingShopId, lang);
                     } else {
-                        categories = categoryServiceFacade.getCurrentCategoryMenu(0L, browsingShopId, lang);
+                        categories = (List) categoryServiceFacade.getCurrentCategoryMenu(0L, browsingShopId, lang);
                     }
                 } else {
-                    categories = categoryServiceFacade.getCurrentCategoryMenu(0L, browsingShopId, lang);
+                    categories = (List) categoryServiceFacade.getCurrentCategoryMenu(0L, browsingShopId, lang);
                 }
             } else {
                 categories = categoryMenu;
@@ -114,32 +116,34 @@ public class TopCategories extends BaseComponent {
 
 
         add(
-                new ListView<Category>(CATEGORY_LIST, categories) {
+                new ListView<Identifiable>(CATEGORY_LIST, categories) {
 
                     @Override
-                    protected void populateItem(final ListItem<Category> categoryListItem) {
+                    protected void populateItem(final ListItem<Identifiable> categoryListItem) {
 
                         final String selectedLocale = getLocale().getLanguage();
-                        final Category category = categoryListItem.getModelObject();
-                        final I18NModel nameModel = getI18NSupport().getFailoverModel(category.getDisplayName(), category.getName());
+                        final Identifiable category = categoryListItem.getModelObject();
+                        final String displayName = category instanceof Category ? ((Category) category).getDisplayName() : ((Content) category).getDisplayName();
+                        final String name = category instanceof Category ? ((Category) category).getName() : ((Content) category).getName();
+                        final I18NModel nameModel = getI18NSupport().getFailoverModel(displayName, name);
 
                         final Link link;
                         if (viewingCategory) {
-                            link = getWicketSupportFacade().links().newCategoryLink(CATEGORY_NAME_LINK, category.getCategoryId());
+                            link = getWicketSupportFacade().links().newCategoryLink(CATEGORY_NAME_LINK, category.getId());
                         } else {
-                            link = getWicketSupportFacade().links().newContentLink(CATEGORY_NAME_LINK, category.getCategoryId());
+                            link = getWicketSupportFacade().links().newContentLink(CATEGORY_NAME_LINK, category.getId());
                         }
 
                         link
                                 .add(new Label(CATEGORY_NAME, nameModel.getValue(selectedLocale)).setEscapeModelStrings(false))
                                 .add(new AttributeModifier("class",
-                                        category.getCategoryId() == currentCategoryId ? "active-category" : ""
+                                        category.getId() == currentCategoryId ? "active-category" : ""
                                 ));
 
                         categoryListItem.add(link);
 
                         categoryListItem.add(new AttributeModifier("class",
-                                category.getCategoryId() == currentCategoryId ? "list-group-item active-item" : "list-group-item"
+                                category.getId() == currentCategoryId ? "list-group-item active-item" : "list-group-item"
                         ));
 
                     }

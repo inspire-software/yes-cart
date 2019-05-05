@@ -84,23 +84,6 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
      */
     void setLinkToId(Long linkToId);
 
-
-    /**
-     * Get category rank inside parent category.
-     *
-     * @return category rank.
-     */
-    @Override
-    int getRank();
-
-    /**
-     * Set category rank.
-     *
-     * @param rank category rank
-     */
-    @Override
-    void setRank(int rank);
-
     /**
      * Default product type in category.
      * Set it, to allow filtered navigation by attributes.
@@ -117,22 +100,6 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
     void setProductType(ProductType productType);
 
     /**
-     * Get category name.
-     *
-     * @return category name.
-     */
-    @Override
-    String getName();
-
-    /**
-     * Set category name.
-     *
-     * @param name category name.
-     */
-    @Override
-    void setName(String name);
-
-    /**
      * display name.
      *
      * @return display name.
@@ -145,22 +112,6 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
      * @param name display name
      */
     void setDisplayName(String name);
-
-    /**
-     * Get category description.
-     *
-     * @return category description.
-     */
-    @Override
-    String getDescription();
-
-    /**
-     * Set description
-     *
-     * @param description description
-     */
-    @Override
-    void setDescription(String description);
 
     /**
      * Get category UI template variation.
@@ -219,7 +170,7 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
     void setAvailableto(LocalDateTime availableto);
 
     /**
-     * Get all caterory attributes.
+     * Get all category attributes.
      *
      * @return collection of category attributes.
      */

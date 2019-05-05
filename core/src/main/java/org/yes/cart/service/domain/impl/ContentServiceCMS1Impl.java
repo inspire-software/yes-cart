@@ -16,15 +16,20 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.ShopCategory;
+import org.yes.cart.domain.entity.Content;
+import org.yes.cart.domain.entity.impl.ContentCategoryAdapter;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.theme.templates.TemplateProcessor;
 import org.yes.cart.util.DomainApiUtils;
@@ -39,35 +44,33 @@ import java.util.*;
  * User: Denis Pavlov
  * Date: 15-June-2013
  */
-public class ContentServiceImpl extends BaseGenericServiceImpl<Category> implements ContentService {
+public class ContentServiceCMS1Impl implements ContentService, Configuration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ContentServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ContentServiceCMS1Impl.class);
 
     private final GenericDAO<Category, Long> categoryDao;
 
-    private final GenericDAO<ShopCategory, Long> shopCategoryDao;
+    private final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport;
 
-    private final GenericDAO<Shop, Long> shopDao;
+    private final BaseGenericServiceImpl<Category> categoryService;
 
     private final TemplateProcessor templateSupport;
 
+    private ConfigurationContext cfgContext;
+
     /**
-     * Construct service to manage categories
+     * Construct service to manage content
      *
-     * @param categoryDao     category dao to use
-     * @param shopCategoryDao shop category dao to use
-     * @param shopDao         shop dao
-     * @param templateSupport template support
+     * @param categoryDao                     category dao to use
+     * @param shopCategoryRelationshipSupport category relationship support
+     * @param templateSupport                 template support
      */
-    public ContentServiceImpl(
-            final GenericDAO<Category, Long> categoryDao,
-            final GenericDAO<ShopCategory, Long> shopCategoryDao,
-            final GenericDAO<Shop, Long> shopDao,
-            final TemplateProcessor templateSupport) {
-        super(categoryDao);
+    public ContentServiceCMS1Impl(final GenericDAO<Category, Long> categoryDao,
+                                  final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport,
+                                  final TemplateProcessor templateSupport) {
         this.categoryDao = categoryDao;
-        this.shopCategoryDao = shopCategoryDao;
-        this.shopDao = shopDao;
+        this.shopCategoryRelationshipSupport = shopCategoryRelationshipSupport;
+        this.categoryService = new BaseGenericServiceImpl<>(categoryDao);
         this.templateSupport = templateSupport;
 
         this.templateSupport.registerFunction("include", params -> {
@@ -97,18 +100,22 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     @Override
-    public Category getRootContent(final long shopId) {
+    public Content getRootContent(final long shopId) {
         if (shopId <= 0) {
             throw new IllegalArgumentException("Shop must not be null or transient");
         }
-        return categoryDao.findSingleByNamedQuery("ROOTCONTENT.BY.SHOP.ID", shopId);
+        final Category category = categoryDao.findSingleByNamedQuery("CMS1.ROOTCONTENT.BY.SHOP.ID", shopId);
+        if (category != null) {
+            return new ContentCategoryAdapter(category);
+        }
+        return null;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Category createRootContent(final long shopId) {
+    public Content createRootContent(final long shopId) {
         final List<Object> shops = categoryDao.findQueryObjectByNamedQuery("SHOPCODE.BY.SHOP.ID", shopId);
         if (shops != null && shops.size() == 1) {
             return createContentRootForShop((String) shops.get(0));
@@ -116,7 +123,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         throw new IllegalArgumentException("Unidentified shop id");
     }
 
-    private Category createContentRootForShop(final String shopcode) {
+    private Content createContentRootForShop(final String shopcode) {
         final LocalDateTime now = now();
         final Category root = categoryDao.getEntityFactory().getByIface(Category.class);
         root.setGuid(shopcode);
@@ -130,15 +137,49 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         root.setNavigationByPriceTiers("");
         root.setNavigationByAttributes(false);
         categoryDao.saveOrUpdate(root);
-        return root;
+        return new ContentCategoryAdapter(root);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    public Set<Long> getShopContentIds(final long shopId) {
+
+        final Set<Long> result = new HashSet<>();
+
+        final Map<Long, Set<Long>> map = shopCategoryRelationshipSupport.getAllCategoriesIdsMap();
+
+        final Category category = categoryDao.findSingleByNamedQuery("CMS1.ROOTCONTENT.BY.SHOP.ID", shopId);
+
+        if (category != null) {
+            appendChildren(result, category.getCategoryId(), map);
+        }
+
+        return Collections.unmodifiableSet(result);
+
+    }
+
+    private void appendChildren(final Set<Long> result, final long currentId, final Map<Long, Set<Long>> map) {
+
+        result.add(currentId);
+
+        final Set<Long> immediateChildren = map.get(currentId);
+        if (CollectionUtils.isNotEmpty(immediateChildren)) {
+            for (final Long child : immediateChildren) {
+                appendChildren(result, child, map);
+            }
+        }
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getContentTemplate(final long contentId) {
-        final Category content = proxy().findById(contentId);
+        final Content content = proxy().findById(contentId);
         if (content != null && !content.isRoot()) {
             if (StringUtils.isBlank(content.getUitemplate())) {
                 return proxy().getContentTemplate(content.getParentId());
@@ -155,7 +196,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     @Override
     public String getContentBody(final long contentId, final String locale) {
         final String attributeKey = "CONTENT_BODY_" + locale + "_%";
-        final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, now(), Boolean.FALSE);
+        final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CMS1.CONTENTBODY.BY.CONTENTID", contentId, attributeKey, now(), Boolean.FALSE);
         if (bodyList != null && bodyList.size() > 0) {
             final StringBuilder content = new StringBuilder();
             for (final Object bodyPart : bodyList) {
@@ -224,7 +265,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     @Override
     public String getContentAttributeRecursive(final String locale, final long contentId, final String attributeName, final String defaultValue) {
 
-        final Category content = proxy().getById(contentId);
+        final Content content = proxy().getById(contentId);
 
         if (content == null || attributeName == null || content.isRoot()) {
             return defaultValue;
@@ -252,7 +293,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     @Override
     public String[] getContentAttributeRecursive(final String locale, final long contentId, final String[] attributeNames) {
 
-        final Category content;
+        final Content content;
 
         if (contentId > 0L && attributeNames != null && attributeNames.length > 0) {
             content = proxy().getById(contentId);
@@ -286,7 +327,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     @Override
-    public List<Category> getChildContent(final long contentId) {
+    public List<Content> getChildContent(final long contentId) {
         return findChildContentWithAvailability(contentId, true);
     }
 
@@ -294,10 +335,10 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     @Override
-    public List<Category> findChildContentWithAvailability(final long contentId, final boolean withAvailability) {
+    public List<Content> findChildContentWithAvailability(final long contentId, final boolean withAvailability) {
 
         final List<Category> cats = new ArrayList<>(categoryDao.findByNamedQuery(
-                "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
+                "CMS1.CONTENT.BY.PARENTID.WITHOUT.DATE.FILTERING",
                 contentId
         ));
         if (withAvailability) {
@@ -306,7 +347,11 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             cats.removeIf(cat -> !DomainApiUtils.isObjectAvailableNow(!cat.isDisabled(), cat.getAvailablefrom(), cat.getAvailableto(), now));
 
         }
-        return cats;
+        final List<Content> cnt = new ArrayList<>();
+        for (final Category cat : cats) {
+            cnt.add(new ContentCategoryAdapter(cat));
+        }
+        return cnt;
 
     }
 
@@ -315,10 +360,10 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     @Override
-    public Set<Category> getChildContentRecursive(final long contentId) {
-        final Category thisCon = proxy().getById(contentId);
+    public Set<Content> getChildContentRecursive(final long contentId) {
+        final Content thisCon = proxy().getById(contentId);
         if (thisCon != null) {
-            final Set<Category> all = new HashSet<>();
+            final Set<Content> all = new HashSet<>();
             all.add(thisCon);
             loadChildContentRecursiveInternal(all, thisCon);
             return all;
@@ -327,10 +372,10 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     }
 
 
-    private void loadChildContentRecursiveInternal(final Set<Category> result, final Category category) {
-        List<Category> categories = proxy().getChildContent(category.getCategoryId());
+    private void loadChildContentRecursiveInternal(final Set<Content> result, final Content category) {
+        List<Content> categories = proxy().getChildContent(category.getContentId());
         result.addAll(categories);
-        for (Category subCategory : categories) {
+        for (Content subCategory : categories) {
             loadChildContentRecursiveInternal(result, subCategory);
         }
     }
@@ -340,37 +385,47 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     @Override
-    public List<Category> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
+    public List<Content> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
 
         final String codeP = HQLUtils.criteriaIlikeAnywhere(code);
         final String nameP = HQLUtils.criteriaIlikeAnywhere(name);
         final String uriP = HQLUtils.criteriaIlikeAnywhere(uri);
 
-        final Category root = proxy().getRootContent(shopId);
-        List<Category> cats;
+        final Content root = proxy().getRootContent(shopId);
+        List<Content> cns;
         if ((codeP != null || nameP != null) && uriP != null) {
-            cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
+            final List<Category> cnCats = categoryDao.findRangeByNamedQuery("CMS1.CONTENT.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
+            final List<Content> cnt = new ArrayList<>();
+            for (final Category cat : cnCats) {
+                cnt.add(new ContentCategoryAdapter(cat));
+            }
+            cns = cnt;
         } else if (codeP == null && nameP == null && uriP != null) {
-            cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.URI", page * pageSize, pageSize, uriP);
+            final List<Category> cnCats = categoryDao.findRangeByNamedQuery("CMS1.CONTENT.BY.URI", page * pageSize, pageSize, uriP);
+            final List<Content> cnt = new ArrayList<>();
+            for (final Category cat : cnCats) {
+                cnt.add(new ContentCategoryAdapter(cat));
+            }
+            cns = cnt;
         } else {
-            cats = findChildContentWithAvailability(root.getCategoryId(), false);
+            cns = findChildContentWithAvailability(root.getContentId(), false);
         }
 
-        final Iterator<Category> catsIt = cats.iterator();
+        final Iterator<Content> catsIt = cns.iterator();
         while (catsIt.hasNext()) {
-            Category category = catsIt.next();
-            if (category.isRoot() && category.getCategoryId() != root.getCategoryId()) {
+            Content content = catsIt.next();
+            if (content.isRoot()) {
                 catsIt.remove();
             } else {
-                final long currentCatId = category.getCategoryId();
-                while (category.getParentId() != root.getCategoryId()) {
-                    if (category.isRoot()) {
+                final long currentCatId = content.getContentId();
+                while (content.getParentId() != root.getContentId()) {
+                    if (content.isRoot()) {
                         // if this is root and not shop root matches then this is not this shop's content
                         catsIt.remove();
                         break;
                     }
-                    category = proxy().findById(category.getParentId());
-                    if (category == null) {
+                    content = proxy().findById(content.getParentId());
+                    if (content == null) {
                         // could have happened if import created some reassignments and we loose path to root
                         catsIt.remove();
                         LOG.warn("Found orphan content {}", currentCatId);
@@ -379,7 +434,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
                 }
             }
         }
-        return cats;
+        return cns;
     }
 
 
@@ -388,8 +443,12 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc} Just to cache
      */
     @Override
-    public Category getById(final long pk) {
-        return getGenericDao().findById(pk);
+    public Content getById(final long pk) {
+        final Category cat = categoryDao.findById(pk);
+        if (cat != null) {
+            return new ContentCategoryAdapter(cat);
+        }
+        return null;
     }
 
     /**
@@ -397,7 +456,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @Override
     public Long findContentIdBySeoUri(final String seoUri) {
-        List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.SEO.URI", seoUri);
+        List<Object> list = categoryDao.findQueryObjectByNamedQuery("CMS1.CONTENT.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
             final Object id = list.get(0);
             if (id instanceof Long) {
@@ -412,7 +471,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @Override
     public Long findContentIdByGUID(final String guid) {
-        List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.GUID", guid);
+        List<Object> list = categoryDao.findQueryObjectByNamedQuery("CMS1.CONTENT.ID.BY.GUID", guid);
         if (list != null && !list.isEmpty()) {
             final Object id = list.get(0);
             if (id instanceof Long) {
@@ -427,7 +486,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @Override
     public String findSeoUriByContentId(final Long contentId) {
-        List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", contentId);
+        List<Object> list = categoryDao.findQueryObjectByNamedQuery("CMS1.SEO.URI.BY.CONTENT.ID", contentId);
         if (list != null && !list.isEmpty()) {
             final Object[] uriAndId = (Object[]) list.get(0);
             if (uriAndId[0] instanceof String) {
@@ -442,29 +501,45 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     @Override
+    public Content findContentIdBySeoUriOrGuid(final String seoUriOrGuid) {
+
+        Category content = categoryDao.findSingleByNamedQuery("CMS1.CONTENT.BY.SEO.URI", seoUriOrGuid);
+        if (content == null) {
+            content = categoryDao.findSingleByNamedQuery("CMS1.CONTENT.BY.GUID", seoUriOrGuid);
+        }
+        if (content == null) {
+            return null;
+        }
+        return new ContentCategoryAdapter(content);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isContentHasSubcontent(final long topContentId, final long subContentId) {
-        final Category start = proxy().getById(subContentId);
+        final Content start = proxy().getById(subContentId);
         if (start != null) {
             if (subContentId == topContentId) {
                 return true;
             } else {
-                final List<Category> list = new ArrayList<>();
+                final List<Content> list = new ArrayList<>();
                 list.add(start);
                 addParent(list, topContentId);
-                return list.get(list.size() - 1).getCategoryId() == topContentId;
+                return list.get(list.size() - 1).getContentId() == topContentId;
             }
         }
         return false;
     }
 
-    private void addParent(final List<Category> categoryChain, final long categoryIdStopAt) {
-        final Category cat = categoryChain.get(categoryChain.size() - 1);
+    private void addParent(final List<Content> contentChain, final long contentIdStopAt) {
+        final Content cat = contentChain.get(contentChain.size() - 1);
         if (!cat.isRoot()) {
-            final Category parent = proxy().getById(cat.getParentId());
+            final Content parent = proxy().getById(cat.getParentId());
             if (parent != null) {
-                categoryChain.add(parent);
-                if (parent.getCategoryId() != categoryIdStopAt) {
-                    addParent(categoryChain, categoryIdStopAt);
+                contentChain.add(parent);
+                if (parent.getContentId() != contentIdStopAt) {
+                    addParent(contentChain, contentIdStopAt);
                 }
             }
         }
@@ -487,5 +562,129 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         return null;
     }
 
+
+    @Override
+    public List<Content> findAll() {
+
+        final List<Category> all = this.categoryService.findAll();
+        final List<Content> cnt = new ArrayList<>();
+        for (final Category cat : all) {
+            cnt.add(new ContentCategoryAdapter(cat));
+        }
+        return cnt;
+
+    }
+
+    @Override
+    public void findAllIterator(final ResultsIteratorCallback<Content> callback) {
+
+        this.categoryService.findAllIterator(entity -> callback.withNext(new ContentCategoryAdapter(entity)));
+
+    }
+
+    @Override
+    public void findByCriteriaIterator(final String eCriteria, final Object[] parameters, final ResultsIteratorCallback<Content> callback) {
+
+        this.categoryService.findByCriteriaIterator(eCriteria, parameters, entity -> callback.withNext(new ContentCategoryAdapter(entity)));
+
+    }
+
+    @Override
+    public Content findById(final long pk) {
+
+        final Category cat = this.categoryService.findById(pk);
+        if (cat != null) {
+            return new ContentCategoryAdapter(cat);
+        }
+        return null;
+
+    }
+
+    @Override
+    public Content create(final Content instance) {
+
+        if (instance instanceof ContentCategoryAdapter) {
+
+            return new ContentCategoryAdapter(this.categoryService.create(((ContentCategoryAdapter) instance).getCategory()));
+
+        }
+
+        throw new UnsupportedOperationException("CMS1 accepts only ContentCategoryAdapter objects");
+
+    }
+
+    @Override
+    public Content update(final Content instance) {
+
+        if (instance instanceof ContentCategoryAdapter) {
+
+            return new ContentCategoryAdapter(this.categoryService.update(((ContentCategoryAdapter) instance).getCategory()));
+
+        }
+
+        throw new UnsupportedOperationException("CMS1 accepts only ContentCategoryAdapter objects");
+
+    }
+
+    @Override
+    public void delete(final Content instance) {
+
+        if (instance instanceof ContentCategoryAdapter) {
+
+            this.categoryService.delete(((ContentCategoryAdapter) instance).getCategory());
+
+        } else {
+
+            throw new UnsupportedOperationException("CMS1 accepts only ContentCategoryAdapter objects");
+
+        }
+
+    }
+
+    @Override
+    public List<Content> findByCriteria(final String eCriteria, final Object... parameters) {
+
+        final List<Category> all = this.categoryService.findByCriteria(eCriteria, parameters);
+        final List<Content> cnt = new ArrayList<>();
+        for (final Category cat : all) {
+            cnt.add(new ContentCategoryAdapter(cat));
+        }
+        return cnt;
+
+    }
+
+    @Override
+    public int findCountByCriteria(final String eCriteria, final Object... parameters) {
+
+        return this.categoryService.findCountByCriteria(eCriteria, parameters);
+
+    }
+
+    @Override
+    public Content findSingleByCriteria(final String eCriteria, final Object... parameters) {
+
+        final Category cat = this.categoryService.findSingleByCriteria(eCriteria, parameters);
+        if (cat != null) {
+            return new ContentCategoryAdapter(cat);
+        }
+        return null;
+
+    }
+
+    @Override
+    public GenericDAO<Content, Long> getGenericDao() {
+        return (GenericDAO) this.categoryDao; // Hack, other layers should not be using this
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
+    }
 
 }

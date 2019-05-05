@@ -18,9 +18,12 @@ package org.yes.cart.web.support.entity.decorator.impl;
 
 
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.impl.ContentCategoryAdapter;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.shoppingcart.CartItem;
@@ -38,24 +41,30 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
 
     private final ImageService imageService;
     private final AttributableImageService categoryImageService;
+    private final AttributableImageService contentImageService;
     private final AttributableImageService productImageService;
     private final AttributableImageService skuImageService;
     private final CategoryService categoryService;
+    private final ContentService contentService;
     private final ProductService productService;
     private final I18NWebSupport i18NWebSupport;
 
     public DecoratorFacadeImpl(final ImageService imageService,
                                final AttributableImageService categoryImageService,
+                               final AttributableImageService contentImageService,
                                final AttributableImageService productImageService,
                                final AttributableImageService skuImageService,
                                final CategoryService categoryService,
+                               final ContentService contentService,
                                final ProductService productService,
                                final I18NWebSupport i18NWebSupport) {
         this.imageService = imageService;
         this.categoryImageService = categoryImageService;
+        this.contentImageService = contentImageService;
         this.productImageService = productImageService;
         this.skuImageService = skuImageService;
         this.categoryService = categoryService;
+        this.contentService = contentService;
         this.productService = productService;
         this.i18NWebSupport = i18NWebSupport;
     }
@@ -74,6 +83,10 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
             return (T) decorate((ProductSku) object, servletContextPath);
         } else if (object instanceof Category) {
             return (T) decorate((Category) object, servletContextPath);
+        } else if (object instanceof ContentCategoryAdapter) {
+            return (T) decorate(((ContentCategoryAdapter) object).getCategory(), servletContextPath);
+        } else if (object instanceof Content) {
+            return (T) decorate((Content) object, servletContextPath);
         } else if (object instanceof CartItem) {
             return (T) decorate((CartItem) object, servletContextPath);
         }
@@ -88,6 +101,19 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
                 categoryImageService,
                 categoryService,
                 category,
+                servletContextPath,
+                i18NWebSupport);
+
+    }
+
+    private ContentDecorator decorate(final Content content,
+                                      final String servletContextPath) {
+
+        return new ContentDecoratorImpl(
+                imageService,
+                contentImageService,
+                contentService,
+                content,
                 servletContextPath,
                 i18NWebSupport);
 

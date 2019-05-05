@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.support.service;
 
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.misc.Pair;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public interface ContentServiceFacade {
      *
      * @return category or null
      */
-    Category getContent(long contentId, long shopId);
+    Content getContent(long contentId, long shopId);
 
 
     /**
@@ -63,7 +63,7 @@ public interface ContentServiceFacade {
      *
      * @return category or null
      */
-    Category getContent(String contentUri, long shopId);
+    Content getContent(String contentUri, long shopId);
 
 
 
@@ -159,7 +159,7 @@ public interface ContentServiceFacade {
      *
      * @return list of sub categories (or top shop categories)
      */
-    List<Category> getCurrentContentMenu(final long currentContentId, long shopId, String locale);
+    List<Content> getCurrentContentMenu(final long currentContentId, long shopId, String locale);
 
 
     /**

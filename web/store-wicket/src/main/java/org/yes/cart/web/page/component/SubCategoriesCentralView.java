@@ -23,6 +23,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.entity.Seoable;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -30,6 +31,7 @@ import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
+import org.yes.cart.web.support.entity.decorator.impl.CategorySeoableDecoratorImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,8 @@ public class SubCategoriesCentralView extends AbstractCentralView {
     private static final String CATEGORY_VIEW = "categoryView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
+
+    private transient Category category;
 
     /**
      * Construct panel.
@@ -150,6 +154,31 @@ public class SubCategoriesCentralView extends AbstractCentralView {
         }
 
         return super.getRelCanonical(seo, language);
+    }
+
+    /**
+     * Get category.
+     * @return {@link Category}
+     */
+    public Category getContent() {
+        if (category == null) {
+            category = categoryServiceFacade.getCategory(getCategoryId(), getCurrentCustomerShopId());
+        }
+        return category;
+    }
+
+
+    /**
+     * Hook for subclasses to utilise Seo mechanism
+     *
+     * @return main seo object for given page
+     */
+    protected Seoable getSeoObject() {
+        final Category cat = getContent();
+        if (cat != null) {
+            return new CategorySeoableDecoratorImpl(cat, getPage().getLocale().getLanguage());
+        }
+        return null;
     }
 
 }

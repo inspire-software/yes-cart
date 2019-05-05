@@ -18,8 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.config.Configuration;
-import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 
@@ -32,14 +30,12 @@ import java.util.Map;
  * Time: 18:39
  */
 public class PricingPolicyProviderImpl
-        implements PricingPolicyProvider, ConfigurationRegistry<String, PricingPolicyProvider>, Configuration {
+        implements PricingPolicyProvider, ConfigurationRegistry<String, PricingPolicyProvider> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PricingPolicyProviderImpl.class);
 
     private final PricingPolicyProvider defaultPricingPolicyProvider;
     private final Map<String, PricingPolicyProvider> customPricingPolicyProviders = new HashMap<>();
-
-    private ConfigurationContext cfgContext;
 
     public PricingPolicyProviderImpl(final PricingPolicyProvider defaultPricingPolicyProvider) {
         this.defaultPricingPolicyProvider = defaultPricingPolicyProvider;
@@ -65,7 +61,7 @@ public class PricingPolicyProviderImpl
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final Object configuration) {
+    public boolean supports(final String cfgProperty, final Object configuration) {
         return configuration instanceof PricingPolicyProvider ||
                 (configuration instanceof Class && PricingPolicyProvider.class.isAssignableFrom((Class<?>) configuration));
     }
@@ -82,15 +78,5 @@ public class PricingPolicyProviderImpl
             customPricingPolicyProviders.remove(shopCode);
         }
 
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public ConfigurationContext getCfgContext() {
-        return cfgContext;
-    }
-
-    public void setCfgContext(final ConfigurationContext cfgContext) {
-        this.cfgContext = cfgContext;
     }
 }

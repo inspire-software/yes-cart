@@ -299,25 +299,54 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
             dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/xml/content.xml", listener, importedFilesSet));
-            final long cont = System.currentTimeMillis() - dt;
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/content_cms1.xml", listener, importedFilesSet));
+            final long cnt1 = System.currentTimeMillis() - dt;
 
             change = 2;
-            System.out.println(String.format("%5d", change) + " CMS content in " + cont + "millis (~" + (cont / change) + " per item)");
+            System.out.println(String.format("%5d", change) + " CMS/1 content in " + cnt1 + "millis (~" + (cnt1 / change) + " per item)");
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select CATEGORY_ID,PARENT_ID, PRODUCTTYPE_ID, DESCRIPTION, NAME, URI from TCATEGORY where GUID = 'SHOIP3-LVL1'");
             rs.next();
             assertFalse(rs.isAfterLast());
-            String conDesc = rs.getString("DESCRIPTION");
-            String conName = rs.getString("NAME");
-            long conParentId = rs.getLong("PARENT_ID");
-            long conId = rs.getLong("CATEGORY_ID");
+            String cnDesc1 = rs.getString("DESCRIPTION");
+            String cnName1 = rs.getString("NAME");
+            long cnParentId1 = rs.getLong("PARENT_ID");
+            long cnId1 = rs.getLong("CATEGORY_ID");
             rs.close();
-            assertEquals("Level 1 content", conDesc);
-            assertTrue(conParentId > 0L);
-            assertEquals("Level 1", conName);
+            assertEquals("Level 1 content", cnDesc1);
+            assertTrue(cnParentId1 > 0L);
+            assertEquals("Level 1", cnName1);
 
-            rs = getConnection().getConnection().createStatement().executeQuery ("select VAL from TCATEGORYATTRVALUE where CATEGORY_ID = '" + conId + "' and CODE like 'CONTENT_BODY_en_%' order by CODE");
+            rs = getConnection().getConnection().createStatement().executeQuery ("select VAL from TCATEGORYATTRVALUE where CATEGORY_ID = '" + cnId1 + "' and CODE like 'CONTENT_BODY_en_%' order by CODE");
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            assertTrue(rs.getString("VAL").startsWith("EN:\nLorem ipsum dolor sit amet"));
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            assertTrue(rs.getString("VAL").startsWith("m id est laborum.\n"));
+            rs.close();
+
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/content_cms3.xml", listener, importedFilesSet));
+            final long cnt3 = System.currentTimeMillis() - dt;
+
+            change = 2;
+            System.out.println(String.format("%5d", change) + " CMS/3 content in " + cnt3 + "millis (~" + (cnt3 / change) + " per item)");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select CONTENT_ID,PARENT_ID, DESCRIPTION, NAME, URI from TCONTENT where GUID = 'SHOIP3-LVL1'");
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            String cnDesc3 = rs.getString("DESCRIPTION");
+            String cnName3 = rs.getString("NAME");
+            long cnParentId3 = rs.getLong("PARENT_ID");
+            long cnId3 = rs.getLong("CONTENT_ID");
+            rs.close();
+            assertEquals("Level 1 content", cnDesc3);
+            assertTrue(cnParentId3 > 0L);
+            assertEquals("Level 1", cnName3);
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select VAL from TCONTENTATTRVALUE where CONTENT_ID = '" + cnId3 + "' and CODE like 'CONTENT_BODY_en_%' order by CODE");
             rs.next();
             assertFalse(rs.isAfterLast());
             assertTrue(rs.getString("VAL").startsWith("EN:\nLorem ipsum dolor sit amet"));

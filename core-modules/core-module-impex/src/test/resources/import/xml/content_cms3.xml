@@ -17,13 +17,13 @@
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="file:../../../../../../../domain-api/src/main/resources/META-INF/schema/import-descriptor-xml.xsd">
 
-    <entity-type>org.yes.cart.domain.entity.Category</entity-type>
+    <entity-type>org.yes.cart.domain.entity.Content</entity-type>
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>content-data.xml</file-name-mask>
+        <file-name-mask>content_cms3-data.xml</file-name-mask>
     </import-file-descriptor>
 
-    <xml-handler>CONTENT</xml-handler>
+    <xml-handler>CONTENT_CMS3</xml-handler>
 
 </import-descriptor>

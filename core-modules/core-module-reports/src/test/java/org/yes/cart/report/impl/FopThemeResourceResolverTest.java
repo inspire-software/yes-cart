@@ -5,7 +5,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ImageService;
@@ -35,7 +35,7 @@ public class FopThemeResourceResolverTest {
     private ServletContext servletContext;
     private SystemService systemService;
     private ImageService imageService;
-    private Category category;
+    private Content content;
 
     @Before
     public void setUp() {
@@ -46,7 +46,7 @@ public class FopThemeResourceResolverTest {
         servletContext = context.mock(ServletContext.class, "servletContext");
         systemService = context.mock(SystemService.class, "systemService");
         imageService = context.mock(ImageService.class, "imageService");
-        category = context.mock(Category.class, "category");
+        content = context.mock(Content.class, "content");
     }
 
     @Test
@@ -75,8 +75,8 @@ public class FopThemeResourceResolverTest {
             allowing(shop).getCode(); will(returnValue("SHOP10"));
             oneOf(contentService).getContentBody("SHOP10_report_fop-config.image.png", "en"); will(returnValue(null));
             oneOf(contentService).findContentIdBySeoUri("SHOP10_report_fop-config.image.png"); will(returnValue(123L));
-            oneOf(contentService).getById(123L); will(returnValue(category));
-            oneOf(category).getAttributeValueByCode("CATEGORY_IMAGE0_en"); will(returnValue("imageValue"));
+            oneOf(contentService).getById(123L); will(returnValue(content));
+            oneOf(content).getAttributeValueByCode("CATEGORY_IMAGE0_en"); will(returnValue("imageValue"));
             oneOf(systemService).getImageRepositoryDirectory(); will(returnValue("imageVaultPath"));
             oneOf(imageService).isImageInRepository("imageValue", "SHOP10_report_fop-config.image.png", "/imgvault/category/", "imageVaultPath"); will(returnValue(true));
             oneOf(imageService).imageToByteArray("imageValue", "SHOP10_report_fop-config.image.png", "/imgvault/category/", "imageVaultPath"); will(returnValue(new byte[1]));
@@ -98,9 +98,9 @@ public class FopThemeResourceResolverTest {
             allowing(shop).getCode(); will(returnValue("SHOP10"));
             oneOf(contentService).getContentBody("SHOP10_report_fop-config.image.png", "en"); will(returnValue(null));
             oneOf(contentService).findContentIdBySeoUri("SHOP10_report_fop-config.image.png"); will(returnValue(123L));
-            oneOf(contentService).getById(123L); will(returnValue(category));
-            oneOf(category).getAttributeValueByCode("CATEGORY_IMAGE0"); will(returnValue("imageValue"));
-            oneOf(category).getAttributeValueByCode("CATEGORY_IMAGE0_en"); will(returnValue(null));
+            oneOf(contentService).getById(123L); will(returnValue(content));
+            oneOf(content).getAttributeValueByCode("CATEGORY_IMAGE0"); will(returnValue("imageValue"));
+            oneOf(content).getAttributeValueByCode("CATEGORY_IMAGE0_en"); will(returnValue(null));
             oneOf(systemService).getImageRepositoryDirectory(); will(returnValue("imageVaultPath"));
             oneOf(imageService).isImageInRepository("imageValue", "SHOP10_report_fop-config.image.png", "/imgvault/category/", "imageVaultPath"); will(returnValue(true));
             oneOf(imageService).imageToByteArray("imageValue", "SHOP10_report_fop-config.image.png", "/imgvault/category/", "imageVaultPath"); will(returnValue(new byte[1]));
@@ -141,9 +141,9 @@ public class FopThemeResourceResolverTest {
             allowing(shop).getCode(); will(returnValue("SHOP10"));
             oneOf(contentService).getContentBody("SHOP10_report_fop-config.xml", "en"); will(returnValue(null));
             oneOf(contentService).findContentIdBySeoUri("SHOP10_report_fop-config.xml"); will(returnValue(123L));
-            oneOf(contentService).getById(123L); will(returnValue(category));
-            oneOf(category).getAttributeValueByCode("CATEGORY_IMAGE0"); will(returnValue(null));
-            oneOf(category).getAttributeValueByCode("CATEGORY_IMAGE0_en"); will(returnValue(null));
+            oneOf(contentService).getById(123L); will(returnValue(content));
+            oneOf(content).getAttributeValueByCode("CATEGORY_IMAGE0"); will(returnValue(null));
+            oneOf(content).getAttributeValueByCode("CATEGORY_IMAGE0_en"); will(returnValue(null));
             oneOf(themeService).getReportsTemplateChainByShopId(123L); will(returnValue(Arrays.asList("theme1/reports/", "default/reports/")));
             oneOf(servletContext).getResourceAsStream("theme1/reports/fop-config.xml"); will(returnValue(null));
             oneOf(servletContext).getResourceAsStream("default/reports/fop-config.xml"); will(returnValue(new ByteArrayInputStream(new byte[0])));
@@ -167,9 +167,9 @@ public class FopThemeResourceResolverTest {
             allowing(shop).getCode(); will(returnValue("SHOP10"));
             oneOf(contentService).getContentBody("SHOP10_report_fop-config.content.xml", "en"); will(returnValue(null));
             oneOf(contentService).findContentIdBySeoUri("SHOP10_report_fop-config.content.xml"); will(returnValue(123L));
-            oneOf(contentService).getById(123L); will(returnValue(category));
-            oneOf(category).getAttributeValueByCode("CATEGORY_IMAGE0"); will(returnValue(null));
-            oneOf(category).getAttributeValueByCode("CATEGORY_IMAGE0_en"); will(returnValue(null));
+            oneOf(contentService).getById(123L); will(returnValue(content));
+            oneOf(content).getAttributeValueByCode("CATEGORY_IMAGE0"); will(returnValue(null));
+            oneOf(content).getAttributeValueByCode("CATEGORY_IMAGE0_en"); will(returnValue(null));
             oneOf(themeService).getReportsTemplateChainByShopId(123L); will(returnValue(Arrays.asList("theme1/reports/", "default/reports/")));
             oneOf(servletContext).getResourceAsStream("theme1/reports/fop-config.file.xml"); will(returnValue(null));
             oneOf(servletContext).getResourceAsStream("default/reports/fop-config.file.xml"); will(returnValue(new ByteArrayInputStream(new byte[0])));

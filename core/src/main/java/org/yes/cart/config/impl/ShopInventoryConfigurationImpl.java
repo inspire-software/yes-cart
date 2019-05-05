@@ -42,10 +42,10 @@ public class ShopInventoryConfigurationImpl extends AbstractShopConfigurationImp
 
         final ProductAvailabilityStrategy pas = determineConfiguration(properties, shop.getCode() + ".productAvailabilityStrategy", ProductAvailabilityStrategy.class);
 
-        customise(shop.getCode(), shop.getShopId(), ProductAvailabilityStrategy.class, pas);
+        customise(shop.getCode(), shop.getShopId(), "productAvailabilityStrategy", ProductAvailabilityStrategy.class, pas);
         if (CollectionUtils.isNotEmpty(subs)) {
             for (final Shop sub : subs) {
-                customise(sub.getCode(), sub.getShopId(), ProductAvailabilityStrategy.class, pas);
+                customise(sub.getCode(), sub.getShopId(), "productAvailabilityStrategy", ProductAvailabilityStrategy.class, pas);
             }
         }
     }
@@ -54,7 +54,7 @@ public class ShopInventoryConfigurationImpl extends AbstractShopConfigurationImp
 
         final DeliveryTimeEstimationVisitor dtev = determineConfiguration(properties, shop.getCode() + ".deliveryTimeEstimationVisitor", DeliveryTimeEstimationVisitor.class);
 
-        customise(shop.getCode(), shop.getCode(), DeliveryTimeEstimationVisitor.class, dtev);
+        customise(shop.getCode(), shop.getCode(), "deliveryTimeEstimationVisitor", DeliveryTimeEstimationVisitor.class, dtev);
         
     }
 

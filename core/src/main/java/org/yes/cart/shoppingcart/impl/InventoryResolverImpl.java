@@ -18,8 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.config.Configuration;
-import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
@@ -35,14 +33,12 @@ import java.util.Map;
  * Time: 14:16
  */
 public class InventoryResolverImpl
-        implements InventoryResolver, ConfigurationRegistry<String, InventoryResolver>, Configuration {
+        implements InventoryResolver, ConfigurationRegistry<String, InventoryResolver> {
 
     private static final Logger LOG = LoggerFactory.getLogger(InventoryResolverImpl.class);
 
     private final InventoryResolver defaultInventoryResolver;
     private final Map<String, InventoryResolver> customInventoryResolvers = new HashMap<>();
-
-    private ConfigurationContext cfgContext;
 
     public InventoryResolverImpl(final InventoryResolver defaultInventoryResolver) {
         this.defaultInventoryResolver = defaultInventoryResolver;
@@ -96,7 +92,7 @@ public class InventoryResolverImpl
 
     /** {@inheritDoc} */
     @Override
-    public boolean supports(final Object configuration) {
+    public boolean supports(final String cfgProperty, final Object configuration) {
         return configuration instanceof InventoryResolver ||
                 (configuration instanceof Class && InventoryResolver.class.isAssignableFrom((Class<?>) configuration));
     }
@@ -113,15 +109,5 @@ public class InventoryResolverImpl
             customInventoryResolvers.remove(warehouseCode);
         }
 
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public ConfigurationContext getCfgContext() {
-        return cfgContext;
-    }
-
-    public void setCfgContext(final ConfigurationContext cfgContext) {
-        this.cfgContext = cfgContext;
     }
 }

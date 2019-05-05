@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
@@ -38,10 +40,12 @@ import java.util.Map;
  * Date: 13-04-06
  * Time: 1:20 PM
  */
-public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabilityStrategy {
+public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabilityStrategy, Configuration {
 
     private final WarehouseService warehouseService;
     private final SkuWarehouseService skuWarehouseService;
+
+    private ConfigurationContext cfgContext;
 
     public ProductAvailabilityStrategyDefaultImpl(final WarehouseService warehouseService,
                                                   final SkuWarehouseService skuWarehouseService) {
@@ -119,6 +123,17 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
 
     private LocalDateTime now() {
         return TimeContext.getLocalDateTime();
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
     }
 
 }
