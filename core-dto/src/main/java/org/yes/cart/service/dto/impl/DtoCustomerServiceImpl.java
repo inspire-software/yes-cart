@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -594,6 +595,30 @@ public class DtoCustomerServiceImpl
         final AttrValueCustomerDTO dto = new AttrValueCustomerDTOImpl();
         dto.setCustomerId(entityPk);
         return dto;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getImageRepositoryUrlPattern() {
+        return Constants.CUSTOMER_IMAGE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getFileRepositoryUrlPattern() {
+        return Constants.CUSTOMER_FILE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSysFileRepositoryUrlPattern() {
+        return Constants.CUSTOMER_SYSFILE_REPOSITORY_URL_PATTERN;
     }
 
 }

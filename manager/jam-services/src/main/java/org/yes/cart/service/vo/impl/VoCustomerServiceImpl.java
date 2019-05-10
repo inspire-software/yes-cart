@@ -22,7 +22,6 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -75,9 +74,6 @@ public class VoCustomerServiceImpl implements VoCustomerService {
                 new VoAttributesCRUDTemplate<VoAttrValueCustomer, AttrValueCustomerDTO>(
                         VoAttrValueCustomer.class,
                         AttrValueCustomerDTO.class,
-                        Constants.CUSTOMER_IMAGE_REPOSITORY_URL_PATTERN,
-                        Constants.CUSTOMER_FILE_REPOSITORY_URL_PATTERN,
-                        Constants.CUSTOMER_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoCustomerService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

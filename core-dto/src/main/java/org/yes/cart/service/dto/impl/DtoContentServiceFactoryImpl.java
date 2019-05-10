@@ -162,6 +162,21 @@ public class DtoContentServiceFactoryImpl implements DtoContentService, Configur
     }
 
     @Override
+    public String getImageRepositoryUrlPattern() {
+        return active.getImageRepositoryUrlPattern();
+    }
+
+    @Override
+    public String getFileRepositoryUrlPattern() {
+        return active.getFileRepositoryUrlPattern();
+    }
+
+    @Override
+    public String getSysFileRepositoryUrlPattern() {
+        return active.getSysFileRepositoryUrlPattern();
+    }
+
+    @Override
     public boolean supports(final String cfgProperty, final Object configuration) {
         return configuration instanceof DtoContentService ||
                 (configuration instanceof Class && DtoContentService.class.isAssignableFrom((Class<?>) configuration));

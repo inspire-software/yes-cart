@@ -579,4 +579,29 @@ public class DtoCategoryServiceImpl
         dto.setCategoryId(entityPk);
         return dto;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getImageRepositoryUrlPattern() {
+        return Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getFileRepositoryUrlPattern() {
+        return Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSysFileRepositoryUrlPattern() {
+        return Constants.CATEGORY_SYSFILE_REPOSITORY_URL_PATTERN;
+    }
+
 }

@@ -99,5 +99,26 @@ public interface GenericAttrValueService {
      */
     AttrValueDTO getNewAttribute(long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException;
 
+    /**
+     * Pattern for repository that maps attributes path
+     *
+     * @return repository
+     */
+    String getImageRepositoryUrlPattern();
+
+    /**
+     * Pattern for repository that maps attributes path
+     *
+     * @return repository
+     */
+    String getFileRepositoryUrlPattern();
+
+    /**
+     * Pattern for repository that maps attributes path
+     *
+     * @return repository
+     */
+    String getSysFileRepositoryUrlPattern();
+
 
 }

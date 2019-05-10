@@ -549,10 +549,10 @@ public class DtoContentCMS3ServiceImpl
         final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityContent.getAttributeCode());
         if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             imageService.deleteImage(valueEntityContent.getVal(),
-                    Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+                    Constants.CONTENT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
         } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
             fileService.deleteFile(valueEntityContent.getVal(),
-                    Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+                    Constants.CONTENT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }
 
         attrValueEntityContentDao.delete(valueEntityContent);
@@ -611,6 +611,31 @@ public class DtoContentCMS3ServiceImpl
         return dto;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getImageRepositoryUrlPattern() {
+        return Constants.CONTENT_IMAGE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getFileRepositoryUrlPattern() {
+        return Constants.CONTENT_FILE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSysFileRepositoryUrlPattern() {
+        return Constants.CONTENT_SYSFILE_REPOSITORY_URL_PATTERN;
+    }
+
+
     /** {@inheritDoc} */
     @Override
     public ConfigurationContext getCfgContext() {
@@ -620,6 +645,5 @@ public class DtoContentCMS3ServiceImpl
     public void setCfgContext(final ConfigurationContext cfgContext) {
         this.cfgContext = cfgContext;
     }
-
 
 }

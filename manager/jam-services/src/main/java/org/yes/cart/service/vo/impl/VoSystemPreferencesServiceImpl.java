@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueSystemDTO;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
@@ -68,9 +67,6 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
                 new VoAttributesCRUDTemplate<VoAttrValueSystem, AttrValueSystemDTO>(
                         VoAttrValueSystem.class,
                         AttrValueSystemDTO.class,
-                        Constants.SYSTEM_IMAGE_REPOSITORY_URL_PATTERN,
-                        Constants.SYSTEM_FILE_REPOSITORY_URL_PATTERN,
-                        Constants.SYSTEM_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoSystemService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

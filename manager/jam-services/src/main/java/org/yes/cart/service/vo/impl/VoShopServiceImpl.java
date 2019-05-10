@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopAliasDTO;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -124,9 +123,6 @@ public class VoShopServiceImpl implements VoShopService {
                 new VoAttributesCRUDTemplate<VoAttrValueShop, AttrValueShopDTO>(
                         VoAttrValueShop.class,
                         AttrValueShopDTO.class,
-                        Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN,
-                        Constants.SHOP_FILE_REPOSITORY_URL_PATTERN,
-                        Constants.SHOP_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoShopService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

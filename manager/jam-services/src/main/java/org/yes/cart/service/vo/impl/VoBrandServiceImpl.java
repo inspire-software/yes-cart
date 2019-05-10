@@ -17,7 +17,6 @@
 package org.yes.cart.service.vo.impl;
 
 import org.springframework.security.access.AccessDeniedException;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueBrandDTO;
 import org.yes.cart.domain.dto.BrandDTO;
 import org.yes.cart.domain.misc.MutablePair;
@@ -66,9 +65,6 @@ public class VoBrandServiceImpl implements VoBrandService {
                 new VoAttributesCRUDTemplate<VoAttrValueBrand, AttrValueBrandDTO>(
                         VoAttrValueBrand.class,
                         AttrValueBrandDTO.class,
-                        Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN,
-                        Constants.BRAND_FILE_REPOSITORY_URL_PATTERN,
-                        Constants.BRAND_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoBrandService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

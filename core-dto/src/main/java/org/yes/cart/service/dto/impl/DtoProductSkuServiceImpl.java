@@ -559,4 +559,30 @@ public class DtoProductSkuServiceImpl
         dto.setSkuId(entityPk);
         return dto;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getImageRepositoryUrlPattern() {
+        return Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getFileRepositoryUrlPattern() {
+        return Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSysFileRepositoryUrlPattern() {
+        return Constants.PRODUCT_SYSFILE_REPOSITORY_URL_PATTERN;
+    }
+
+
 }

@@ -386,4 +386,29 @@ public class DtoShopServiceImpl
         return dto;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getImageRepositoryUrlPattern() {
+        return Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getFileRepositoryUrlPattern() {
+        return Constants.SHOP_FILE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSysFileRepositoryUrlPattern() {
+        return Constants.SHOP_SYSFILE_REPOSITORY_URL_PATTERN;
+    }
+
+
 }

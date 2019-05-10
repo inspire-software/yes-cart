@@ -18,7 +18,6 @@ package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
@@ -66,9 +65,6 @@ public class VoContentServiceImpl implements VoContentService {
                 new VoAttributesCRUDTemplate<VoAttrValueContent, AttrValueContentDTO>(
                         VoAttrValueContent.class,
                         AttrValueContentDTO.class,
-                        Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN,
-                        Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN,
-                        Constants.CATEGORY_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoContentService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

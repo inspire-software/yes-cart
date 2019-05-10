@@ -20,6 +20,7 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttrValueSystemDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
@@ -178,5 +179,30 @@ public class DtoSystemServiceImpl implements DtoSystemService {
         dto.setSystemId(entityPk);
         return dto;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getImageRepositoryUrlPattern() {
+        return Constants.SYSTEM_IMAGE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getFileRepositoryUrlPattern() {
+        return Constants.SYSTEM_FILE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSysFileRepositoryUrlPattern() {
+        return Constants.SYSTEM_SYSFILE_REPOSITORY_URL_PATTERN;
+    }
+
 
 }

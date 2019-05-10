@@ -45,9 +45,6 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
 
     private final Class<V> voClass;
     private final Class<D> dtoClass;
-    private final String imageStoragePrefix;
-    private final String fileStoragePrefix;
-    private final String sysfileStoragePrefix;
     private final GenericAttrValueService genericAttrValueService;
     private final DtoAttributeService dtoAttributeService;
     private final VoAssemblySupport voAssemblySupport;
@@ -55,18 +52,12 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
 
     protected VoAttributesCRUDTemplate(final Class<V> voClass,
                                        final Class<D> dtoClass,
-                                       final String imageStoragePrefix,
-                                       final String fileStoragePrefix,
-                                       final String sysfileStoragePrefix,
                                        final GenericAttrValueService genericAttrValueService,
                                        final DtoAttributeService dtoAttributeService,
                                        final VoAssemblySupport voAssemblySupport,
                                        final VoIOSupport voIOSupport) {
         this.voClass = voClass;
         this.dtoClass = dtoClass;
-        this.imageStoragePrefix = imageStoragePrefix;
-        this.fileStoragePrefix = fileStoragePrefix;
-        this.sysfileStoragePrefix = sysfileStoragePrefix;
         this.genericAttrValueService = genericAttrValueService;
         this.dtoAttributeService = dtoAttributeService;
         this.voAssemblySupport = voAssemblySupport;
@@ -122,7 +113,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
             } else if (next.getAttrvalueId() > 0L && Etype.IMAGE_BUSINESS_TYPE.equals(next.getAttribute().getEtypeName())) {
                 if (StringUtils.isNotBlank(next.getVal())) {
                     next.setValBase64Data(
-                            voIOSupport.getImageAsBase64(next.getVal(), imageObjectCode, imageStoragePrefix)
+                            voIOSupport.getImageAsBase64(next.getVal(), imageObjectCode, this.genericAttrValueService.getImageRepositoryUrlPattern())
                     );
                     // TODO: SEO data for image
                 }
@@ -233,7 +224,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                     boolean shouldIndex = false;
                     if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
                         final String existingImage = voIOSupport.
-                                getImageAsBase64(dto.getVal(), objectCode, this.imageStoragePrefix);
+                                getImageAsBase64(dto.getVal(), objectCode, this.genericAttrValueService.getImageRepositoryUrlPattern());
                         if (existingImage == null || !existingImage.equals(item.getFirst().getValBase64Data())) {
                             String formattedFilename = item.getFirst().getVal();
                             formattedFilename = voIOSupport.
@@ -242,7 +233,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                             objectCode,
                                             dto.getAttributeDTO().getCode(),
                                             item.getFirst().getValBase64Data(),
-                                            this.imageStoragePrefix
+                                            this.genericAttrValueService.getImageRepositoryUrlPattern()
                                     );
                             item.getFirst().setVal(formattedFilename);
                             shouldIndex = true;
@@ -256,7 +247,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                         objectCode,
                                         dto.getAttributeDTO().getCode(),
                                         item.getFirst().getValBase64Data(),
-                                        this.fileStoragePrefix
+                                        this.genericAttrValueService.getFileRepositoryUrlPattern()
                                 );
                         item.getFirst().setVal(formattedFilename);
                         shouldIndex = true;
@@ -268,7 +259,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                         objectCode,
                                         dto.getAttributeDTO().getCode(),
                                         item.getFirst().getValBase64Data(),
-                                        this.sysfileStoragePrefix
+                                        this.genericAttrValueService.getSysFileRepositoryUrlPattern()
                                 );
                         item.getFirst().setVal(formattedFilename);
                         shouldIndex = true;
@@ -304,7 +295,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                     objectCode,
                                     dto.getAttributeDTO().getCode(),
                                     item.getFirst().getValBase64Data(),
-                                    this.imageStoragePrefix
+                                    this.genericAttrValueService.getImageRepositoryUrlPattern()
                             );
                     item.getFirst().setVal(formattedFilename);
                     shouldIndex = true;
@@ -317,7 +308,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                     objectCode,
                                     dto.getAttributeDTO().getCode(),
                                     item.getFirst().getValBase64Data(),
-                                    this.fileStoragePrefix
+                                    this.genericAttrValueService.getFileRepositoryUrlPattern()
                             );
                     item.getFirst().setVal(formattedFilename);
                     shouldIndex = true;
@@ -329,7 +320,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                     objectCode,
                                     dto.getAttributeDTO().getCode(),
                                     item.getFirst().getValBase64Data(),
-                                    this.sysfileStoragePrefix
+                                    this.genericAttrValueService.getSysFileRepositoryUrlPattern()
                             );
                     item.getFirst().setVal(formattedFilename);
                     shouldIndex = true;

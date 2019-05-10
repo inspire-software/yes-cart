@@ -18,7 +18,6 @@ package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.access.AccessDeniedException;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
@@ -30,7 +29,10 @@ import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoProductService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -82,9 +84,6 @@ public class VoProductServiceImpl implements VoProductService {
                 new VoAttributesCRUDTemplate<VoAttrValueProduct, AttrValueProductDTO>(
                         VoAttrValueProduct.class,
                         AttrValueProductDTO.class,
-                        Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN,
-                        Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN,
-                        Constants.PRODUCT_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoProductService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,
@@ -117,9 +116,6 @@ public class VoProductServiceImpl implements VoProductService {
                 new VoAttributesCRUDTemplate<VoAttrValueProductSku, AttrValueProductSkuDTO>(
                         VoAttrValueProductSku.class,
                         AttrValueProductSkuDTO.class,
-                        Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN,
-                        Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN,
-                        Constants.PRODUCT_SYSFILE_REPOSITORY_URL_PATTERN,
                         this.dtoProductSkuService,
                         this.dtoAttributeService,
                         this.voAssemblySupport,

@@ -264,4 +264,29 @@ public class DtoBrandServiceImpl
         dto.setBrandId(entityPk);
         return dto;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getImageRepositoryUrlPattern() {
+        return Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getFileRepositoryUrlPattern() {
+        return Constants.BRAND_FILE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getSysFileRepositoryUrlPattern() {
+        return Constants.BRAND_SYSFILE_REPOSITORY_URL_PATTERN;
+    }
+
 }
