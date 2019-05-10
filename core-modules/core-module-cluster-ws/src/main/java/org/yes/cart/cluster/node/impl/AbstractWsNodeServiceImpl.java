@@ -294,7 +294,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
 
         if (log.isInfoEnabled()) {
 
-            log.info("== WS statistics ==============================================");
+            log.info("== WS configurations ===========================================");
             log.info("");
             log.info("Node: {}", node);
 

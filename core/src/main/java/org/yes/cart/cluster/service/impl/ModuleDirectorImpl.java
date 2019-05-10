@@ -25,6 +25,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.io.Resource;
 import org.yes.cart.cluster.service.ModuleDirector;
 import org.yes.cart.config.ActiveConfiguration;
 import org.yes.cart.config.ActiveConfigurationDetector;
@@ -34,6 +35,8 @@ import org.yes.cart.domain.dto.impl.ConfigurationDTO;
 import org.yes.cart.domain.dto.impl.ModuleDTO;
 import org.yes.cart.env.Module;
 
+import java.time.LocalDate;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -46,6 +49,9 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
     private static final Logger LOG = LoggerFactory.getLogger(ModuleDirectorImpl.class);
 
     private ApplicationContext applicationContext;
+
+    private String projectVersion;
+    private String buildNumber;
 
     @Override
     public List<ModuleDTO> getModules() {
@@ -136,9 +142,25 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
 
         if (LOG.isInfoEnabled()) {
 
+            LOG.info("");
+            LOG.info("==========================================================================================================");
+            LOG.info("|                                                                                                         ");
+            LOG.info("| __     _______                           ______                                                         ");
+            LOG.info("| \\ \\   / / ____|                         |  ____| v.{} (build: {})                                     ", this.projectVersion, this.buildNumber);
+            LOG.info("|  \\ \\_/ | |   ______ _ __  _   _ _ __ ___| |__   ___ ___  _ __ ___  _ __ ___   ___ _ __ ___ ___        ");
+            LOG.info("|   \\   /| |  |______| '_ \\| | | | '__/ _ |  __| / __/ _ \\| '_ ` _ \\| '_ ` _ \\ / _ | '__/ __/ _ \\   ");
+            LOG.info("|    | | | |____     | |_) | |_| | | |  __| |___| (_| (_) | | | | | | | | | | |  __| | | (_|  __/         ");
+            LOG.info("|    |_|  \\_____|    | .__/ \\__,_|_|  \\___|______\\___\\___/|_| |_| |_|_| |_| |_|\\___|_|  \\___\\___| ");
+            LOG.info("|                    | |                                                                                  ");
+            LOG.info("|                    |_|  Copyright {} http://www.yes-cart.org                                            ", LocalDate.now().getYear());
+            LOG.info("|                                                                                                         ");
+            LOG.info("==========================================================================================================");
+            LOG.info("");
+
             final List<ModuleDTO> modules = getModules();
 
-            LOG.info("== Module statistics ===========================================");
+            LOG.info("");
+            LOG.info("== Modules ===============================================================================================");
             LOG.info("");
 
             final Set<ModuleDTO> sortedModules = new TreeSet<>((a, b) -> a.getLoaded().compareTo(b.getLoaded()));
@@ -149,12 +171,13 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
             }
 
             LOG.info("");
-            LOG.info("================================================================");
+            LOG.info("==========================================================================================================");
             LOG.info("");
 
             final List<ConfigurationDTO> config = getConfigurations();
 
-            LOG.info("== Configurations ==============================================");
+            LOG.info("");
+            LOG.info("== Configurations ========================================================================================");
             LOG.info("");
 
             final Set<ConfigurationDTO> sortedConfig = new TreeSet<>((a, b) -> {
@@ -176,10 +199,21 @@ public class ModuleDirectorImpl implements ModuleDirector, ApplicationContextAwa
             }
 
             LOG.info("");
-            LOG.info("================================================================");
+            LOG.info("==========================================================================================================");
             LOG.info("");
 
         }
 
     }
+
+    public void setConfig(final Resource config) throws IOException {
+
+        final Properties properties = new Properties();
+        properties.load(config.getInputStream());
+
+        this.projectVersion = properties.getProperty("build.version", "");
+        this.buildNumber = properties.getProperty("build.number", "");
+
+    }
+
 }

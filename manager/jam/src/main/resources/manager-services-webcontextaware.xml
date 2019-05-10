@@ -20,7 +20,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="localModuleDirector" class="org.yes.cart.cluster.service.impl.LocalModuleDirectorImpl"/>
+    <bean id="localModuleDirector" class="org.yes.cart.cluster.service.impl.LocalModuleDirectorImpl">
+        <property name="config" value="classpath:yc-config.properties"/>
+    </bean>
 
     <bean id="clusterService" class="org.yes.cart.service.cluster.impl.ClusterServiceImpl">
         <constructor-arg index="0" ref="nodeService"/>
