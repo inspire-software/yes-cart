@@ -1400,7 +1400,7 @@
         add index FK_AV_CONTENT_CONTENTID (CONTENT_ID),
         add constraint FK_AV_CONTENT_CONTENTID
         foreign key (CONTENT_ID)
-        references TCONTENT
+        references TCONTENT (CONTENT_ID)
         on delete cascade;
 
     create index AV_CONTENT_CODE on TCONTENTATTRVALUE (CODE);
