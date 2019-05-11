@@ -67,10 +67,12 @@ public class ContentCms1XmlEntityHandler extends AbstractXmlEntityHandler<Catego
                 .attr("rank", content.getRank());
 
         Category root = content;
-        while (!root.isRoot()) {
+        while (root != null && !root.isRoot()) {
             root = this.categoryService.getById(root.getParentId());
         }
-        tag.attr("shop", root.getGuid()); // Root content has same GUID as shop code
+        if (root != null) {
+            tag.attr("shop", root.getGuid()); // Root content has same GUID as shop code
+        }
 
         final Attributable attributable = new FilteredAttributable(content);
 
