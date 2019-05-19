@@ -39,7 +39,7 @@ import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
 import java.io.OutputStream;

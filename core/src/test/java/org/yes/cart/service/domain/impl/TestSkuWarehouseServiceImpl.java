@@ -27,7 +27,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

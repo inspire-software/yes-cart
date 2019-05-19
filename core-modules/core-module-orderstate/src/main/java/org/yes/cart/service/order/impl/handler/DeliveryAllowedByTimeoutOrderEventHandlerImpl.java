@@ -28,7 +28,7 @@ import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

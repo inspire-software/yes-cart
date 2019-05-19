@@ -47,7 +47,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 import java.util.Collections;
 import java.util.HashMap;

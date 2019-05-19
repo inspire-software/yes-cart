@@ -38,7 +38,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.impl.CustomerTypeAdapter;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;

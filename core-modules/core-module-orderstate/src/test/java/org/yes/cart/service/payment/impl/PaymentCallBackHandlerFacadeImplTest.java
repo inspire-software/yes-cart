@@ -37,7 +37,7 @@ import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.service.order.impl.DeliveryAssemblerImpl;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Arrays;

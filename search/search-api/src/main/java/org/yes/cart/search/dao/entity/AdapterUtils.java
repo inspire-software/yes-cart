@@ -30,7 +30,7 @@ import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.io.IOException;
 import java.time.Instant;

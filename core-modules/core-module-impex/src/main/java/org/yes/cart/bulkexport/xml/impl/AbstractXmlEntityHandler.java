@@ -22,7 +22,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.io.OutputStreamWriter;
 import java.time.Instant;

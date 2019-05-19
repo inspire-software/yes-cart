@@ -40,7 +40,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -48,7 +48,7 @@ import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.theme.WicketPagesMounter;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 import java.util.*;
 

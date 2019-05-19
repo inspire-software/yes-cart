@@ -43,8 +43,8 @@ import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.io.IOException;
 import java.io.StringReader;

@@ -51,7 +51,7 @@ import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.support.util.ProductSortingUtils;
+import org.yes.cart.web.support.utils.ProductSortingUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

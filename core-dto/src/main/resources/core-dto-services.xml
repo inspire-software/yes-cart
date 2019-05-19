@@ -559,7 +559,7 @@
     </bean>
 
 
-    <bean id="dtoInterfaceToClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="dtoInterfaceToClassFactoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO" value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>
@@ -706,7 +706,7 @@
 
     <bean id="i18nStringConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NStringConverter"/>
 
-    <bean id="dtoAssemblerAdaptersRepositoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="dtoAssemblerAdaptersRepositoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="bigDecimalToFloat"                  value-ref="bigDecimalToFloat"/>

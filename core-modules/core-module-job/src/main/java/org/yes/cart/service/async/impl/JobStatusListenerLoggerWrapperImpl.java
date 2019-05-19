@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
-import org.yes.cart.util.MessageFormatUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.MessageFormatUtils;
+import org.yes.cart.utils.log.Markers;
 
 /**
  * User: denispavlov

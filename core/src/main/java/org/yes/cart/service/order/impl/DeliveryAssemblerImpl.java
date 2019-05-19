@@ -30,8 +30,8 @@ import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

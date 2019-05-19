@@ -25,7 +25,7 @@ import org.yes.cart.domain.vo.VoReportRequest;
 import org.yes.cart.domain.vo.VoReportRequestParameter;
 import org.yes.cart.remote.service.FileManager;
 import org.yes.cart.report.*;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;

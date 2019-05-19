@@ -35,12 +35,12 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
-import org.yes.cart.web.support.util.HttpUtil;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.support.utils.HttpUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;

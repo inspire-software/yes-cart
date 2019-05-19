@@ -30,7 +30,7 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 import org.yes.cart.shoppingcart.support.tokendriven.CartUpdateProcessor;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.ShopCodeContext;
 
 /**
  * User: denispavlov

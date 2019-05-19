@@ -22,7 +22,7 @@ import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

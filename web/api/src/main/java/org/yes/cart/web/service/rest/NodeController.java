@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.ro.NodeRO;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.ShopCodeContext;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.node.Node;
 

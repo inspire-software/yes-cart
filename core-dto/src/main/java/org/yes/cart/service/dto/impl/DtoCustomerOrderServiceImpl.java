@@ -50,7 +50,7 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.payment.PaymentModulesManager;
-import org.yes.cart.util.MessageFormatUtils;
+import org.yes.cart.utils.MessageFormatUtils;
 import org.yes.cart.utils.HQLUtils;
 
 import java.text.MessageFormat;

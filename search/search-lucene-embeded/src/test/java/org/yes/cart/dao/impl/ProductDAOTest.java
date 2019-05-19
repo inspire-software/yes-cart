@@ -31,7 +31,7 @@ import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.search.query.SearchQueryBuilder;
 import org.yes.cart.search.query.impl.ProductShopInStockSearchQueryBuilder;
 import org.yes.cart.search.query.impl.ProductSkuCodeSearchQueryBuilder;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.math.BigDecimal;
 import java.util.Arrays;

@@ -25,7 +25,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.io.File;
 

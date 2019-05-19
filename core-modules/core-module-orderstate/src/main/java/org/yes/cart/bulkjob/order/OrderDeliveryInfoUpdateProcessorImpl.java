@@ -28,7 +28,7 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.order.impl.handler.delivery.OrderDeliveryStatusUpdate;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.util.ArrayList;
 import java.util.Collections;

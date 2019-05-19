@@ -26,7 +26,7 @@ import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.order.OrderDisassembler;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.util.*;
 

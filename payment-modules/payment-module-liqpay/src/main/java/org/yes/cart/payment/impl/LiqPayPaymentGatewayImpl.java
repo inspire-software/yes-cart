@@ -31,8 +31,8 @@ import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
-import org.yes.cart.util.HttpParamsUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.HttpParamsUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

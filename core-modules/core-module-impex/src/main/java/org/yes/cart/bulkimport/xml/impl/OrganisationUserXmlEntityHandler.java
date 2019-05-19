@@ -27,7 +27,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.util.List;
 import java.util.Optional;

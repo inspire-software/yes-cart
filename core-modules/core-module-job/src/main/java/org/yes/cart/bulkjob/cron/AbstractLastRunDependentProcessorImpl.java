@@ -17,7 +17,7 @@
 package org.yes.cart.bulkjob.cron;
 
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.Instant;
 

@@ -30,7 +30,7 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.*;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.List;

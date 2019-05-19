@@ -22,7 +22,7 @@ import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.util.HashMap;
 import java.util.Map;

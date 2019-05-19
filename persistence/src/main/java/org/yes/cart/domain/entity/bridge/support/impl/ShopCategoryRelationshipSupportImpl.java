@@ -26,7 +26,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.util.*;
 

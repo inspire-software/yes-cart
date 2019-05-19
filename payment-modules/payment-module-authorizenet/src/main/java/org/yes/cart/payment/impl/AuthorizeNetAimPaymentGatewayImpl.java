@@ -23,7 +23,7 @@ import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 
 /**

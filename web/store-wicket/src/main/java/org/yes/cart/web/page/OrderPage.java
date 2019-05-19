@@ -40,7 +40,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.theme.WicketPagesMounter;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 import java.util.Collections;
 

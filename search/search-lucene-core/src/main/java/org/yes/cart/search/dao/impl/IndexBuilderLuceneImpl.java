@@ -34,7 +34,7 @@ import org.yes.cart.search.dao.LuceneIndexProvider;
 import org.yes.cart.search.dao.entity.AdapterUtils;
 import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
 import org.yes.cart.search.query.impl.LuceneSearchUtil;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.io.IOException;
 import java.io.Serializable;

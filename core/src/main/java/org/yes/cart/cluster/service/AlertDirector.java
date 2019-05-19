@@ -16,7 +16,7 @@
 package org.yes.cart.cluster.service;
 
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.ShopCodeContext;
 
 import java.util.List;
 

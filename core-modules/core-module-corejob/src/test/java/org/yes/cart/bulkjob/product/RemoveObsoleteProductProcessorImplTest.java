@@ -29,7 +29,7 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.*;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import static org.junit.Assert.*;
 

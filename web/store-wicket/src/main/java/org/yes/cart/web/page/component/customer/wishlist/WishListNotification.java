@@ -4,7 +4,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 import java.util.Collections;
 

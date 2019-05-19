@@ -25,7 +25,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 

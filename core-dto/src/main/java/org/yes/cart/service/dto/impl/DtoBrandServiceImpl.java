@@ -44,10 +44,9 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoBrandService;
 import org.yes.cart.utils.HQLUtils;
-import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,7 +58,7 @@ public class DtoBrandServiceImpl
         extends AbstractDtoServiceImpl<BrandDTO, BrandDTOImpl, Brand>
         implements DtoBrandService {
 
-    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+    private static final AttrValueDTOComparator ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparator();
 
     private final Assembler attrValueAssembler;
     private final DtoAttributeService dtoAttributeService;

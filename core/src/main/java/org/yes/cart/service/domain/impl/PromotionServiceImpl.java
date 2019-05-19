@@ -19,7 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionService;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.time.LocalDateTime;

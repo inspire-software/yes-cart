@@ -22,7 +22,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.payment.service.impl.BasePaymentModuleDBTestCase;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

@@ -41,10 +41,9 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoShopService;
-import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public class DtoShopServiceImpl
         extends AbstractDtoServiceImpl<ShopDTO, ShopDTOImpl, Shop>
         implements DtoShopService {
 
-    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+    private static final AttrValueDTOComparator ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparator();
 
     private final CustomerService customerService;
 

@@ -26,8 +26,8 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.ZonedDateTime;
 import java.util.*;

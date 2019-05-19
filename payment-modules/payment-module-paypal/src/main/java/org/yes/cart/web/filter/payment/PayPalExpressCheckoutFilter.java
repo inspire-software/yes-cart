@@ -30,11 +30,11 @@ import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.HttpParamsUtils;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.HttpParamsUtils;
+import org.yes.cart.utils.ShopCodeContext;
+import org.yes.cart.utils.log.Markers;
 import org.yes.cart.web.support.request.IPResolver;
-import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.support.utils.HttpUtil;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;

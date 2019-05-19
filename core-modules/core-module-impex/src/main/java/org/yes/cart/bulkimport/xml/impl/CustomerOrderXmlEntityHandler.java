@@ -25,7 +25,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.*;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 /**
  * User: denispavlov

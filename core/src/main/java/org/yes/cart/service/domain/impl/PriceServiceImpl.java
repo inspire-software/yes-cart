@@ -21,11 +21,11 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl;
+import org.yes.cart.service.domain.SkuPriceQuantityComparator;
 import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DomainApiUtils;
+import org.yes.cart.utils.MoneyUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -132,7 +132,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
         return rez.getSecond();
     }
 
-    private static final Comparator<SkuPrice> SORT_PRICE_BY_QUANTITY = new SkuPriceQuantityComparatorImpl();
+    private static final Comparator<SkuPrice> SORT_PRICE_BY_QUANTITY = new SkuPriceQuantityComparator();
 
     /**
      * {@inheritDoc}

@@ -20,6 +20,7 @@ import org.yes.cart.service.media.impl.BrandMediaFileNameStrategyImpl;
 import org.yes.cart.service.media.impl.CategoryMediaFileNameStrategyImpl;
 import org.yes.cart.service.media.impl.ProductMediaFileNameStrategyImpl;
 import org.yes.cart.service.media.impl.ShopMediaFileNameStrategyImpl;
+import org.yes.cart.service.misc.impl.ExtendedConversionService;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -236,7 +237,7 @@ public interface ServiceSpringKeys {
     String FT_QUERY_FACTORY = "ftQueryFactory";
 
     /**
-     * {@link org.yes.cart.utils.impl.ExtendedConversionService} bean key
+     * {@link ExtendedConversionService} bean key
      */
     String CONVERSION_SERVICE = "extendedConversionService";
 

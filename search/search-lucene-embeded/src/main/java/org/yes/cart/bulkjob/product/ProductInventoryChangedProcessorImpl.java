@@ -30,7 +30,7 @@ import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.Instant;
 import java.util.List;

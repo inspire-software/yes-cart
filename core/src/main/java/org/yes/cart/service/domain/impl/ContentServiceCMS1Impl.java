@@ -32,8 +32,8 @@ import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.theme.templates.TemplateProcessor;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DomainApiUtils;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.time.LocalDateTime;

@@ -35,7 +35,7 @@ import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
-import org.yes.cart.search.util.SearchUtil;
+import org.yes.cart.search.utils.SearchUtil;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;

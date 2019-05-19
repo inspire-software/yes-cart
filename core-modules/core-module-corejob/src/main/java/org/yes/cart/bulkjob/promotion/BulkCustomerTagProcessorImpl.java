@@ -34,7 +34,7 @@ import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.util.ArrayList;
 import java.util.List;

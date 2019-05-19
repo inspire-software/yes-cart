@@ -27,7 +27,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.ConfigurablePaymentGateway;
 import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
-import org.yes.cart.util.HttpParamsUtils;
+import org.yes.cart.utils.HttpParamsUtils;
 
 import java.math.BigDecimal;
 import java.util.Collection;

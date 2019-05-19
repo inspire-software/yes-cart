@@ -29,7 +29,7 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.InventoryResolver;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

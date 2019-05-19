@@ -20,7 +20,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="ycpProhibitedFields" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="ycpProhibitedFields" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map key-type="java.lang.String" value-type="java.lang.String">
                 <entry key="CustomerOrderPaymentEntity">

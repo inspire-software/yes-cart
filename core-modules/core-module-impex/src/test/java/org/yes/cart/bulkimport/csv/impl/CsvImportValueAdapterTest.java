@@ -2,8 +2,8 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.junit.Test;
 import org.yes.cart.bulkcommon.model.ImpExValues;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.utils.impl.ExtendedConversionService;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.service.misc.impl.ExtendedConversionService;
 
 import java.math.BigDecimal;
 import java.time.Instant;

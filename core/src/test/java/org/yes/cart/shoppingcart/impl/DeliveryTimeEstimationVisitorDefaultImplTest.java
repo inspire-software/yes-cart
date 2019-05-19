@@ -28,7 +28,7 @@ import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.MutableOrderInfo;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Arrays;

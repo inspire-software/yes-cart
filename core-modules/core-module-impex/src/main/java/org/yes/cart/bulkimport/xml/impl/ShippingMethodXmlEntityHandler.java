@@ -26,7 +26,7 @@ import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.CarrierSlaService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;

@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.service.theme.templates.TemplateSupport;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.io.Serializable;
 import java.util.Map;

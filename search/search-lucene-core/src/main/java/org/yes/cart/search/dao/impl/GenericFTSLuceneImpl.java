@@ -37,7 +37,7 @@ import org.yes.cart.search.dao.GenericFTS;
 import org.yes.cart.search.dao.LuceneIndexProvider;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.query.impl.AsIsAnalyzer;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.util.*;
 

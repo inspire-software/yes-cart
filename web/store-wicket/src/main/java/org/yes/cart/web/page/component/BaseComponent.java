@@ -28,7 +28,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 
 public class BaseComponent extends Panel {

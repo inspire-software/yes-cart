@@ -26,7 +26,7 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.util.List;
 

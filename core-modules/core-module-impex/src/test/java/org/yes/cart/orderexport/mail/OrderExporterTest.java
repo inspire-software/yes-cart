@@ -25,7 +25,7 @@ import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
 import java.util.UUID;

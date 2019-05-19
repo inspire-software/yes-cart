@@ -28,9 +28,9 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.InventoryResolver;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DomainApiUtils;
+import org.yes.cart.utils.MoneyUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

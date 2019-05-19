@@ -35,7 +35,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCategoryService;
-import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.util.*;
 
@@ -49,7 +49,7 @@ public class DtoCategoryServiceImpl
         implements DtoCategoryService {
 
     private static final CategoryRankNameComparator CATEGORY_RANK_NAME_COMPARATOR = new CategoryRankNameComparator();
-    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+    private static final AttrValueDTOComparator ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparator();
 
     private final GenericService<Shop> shopGenericService;
     private final GenericService<ShopCategory> shopCategoryGenericService;

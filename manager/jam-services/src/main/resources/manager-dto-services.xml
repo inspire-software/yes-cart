@@ -21,7 +21,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="voKeyToClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="voKeyToClassFactoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="VoAttribute" value="org.yes.cart.domain.vo.VoAttribute"/>
@@ -40,7 +40,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="voAssemblerAdaptersRepositoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="voAssemblerAdaptersRepositoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="DisplayValue"                       value-ref="voDisplayValue"/>

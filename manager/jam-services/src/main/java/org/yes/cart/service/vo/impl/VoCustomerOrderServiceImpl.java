@@ -33,7 +33,7 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.order.OrderFlow;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoCustomerOrderService;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.util.*;
 

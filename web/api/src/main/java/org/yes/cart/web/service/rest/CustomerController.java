@@ -33,10 +33,10 @@ import org.yes.cart.domain.ro.*;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.RegExUtils;
-import org.yes.cart.util.TimeContext;
-import org.yes.cart.utils.impl.CustomerOrderComparator;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.RegExUtils;
+import org.yes.cart.utils.TimeContext;
+import org.yes.cart.service.domain.CustomerOrderComparator;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
@@ -47,7 +47,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * User: denispavlov

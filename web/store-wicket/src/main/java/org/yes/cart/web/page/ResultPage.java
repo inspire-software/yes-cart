@@ -34,7 +34,7 @@ import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.ContentServiceFacade;
-import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.support.utils.HttpUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;

@@ -21,7 +21,7 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopTopSeller;
 import org.yes.cart.service.domain.ShopTopSellerService;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

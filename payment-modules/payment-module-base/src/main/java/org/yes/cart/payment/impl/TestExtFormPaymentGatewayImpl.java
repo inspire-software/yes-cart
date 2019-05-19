@@ -31,7 +31,7 @@ import org.yes.cart.payment.dto.impl.BasicCallbackInfoImpl;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
-import org.yes.cart.util.HttpParamsUtils;
+import org.yes.cart.utils.HttpParamsUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

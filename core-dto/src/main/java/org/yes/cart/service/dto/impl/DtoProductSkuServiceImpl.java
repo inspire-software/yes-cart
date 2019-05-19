@@ -20,7 +20,6 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -39,9 +38,9 @@ import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.service.dto.DtoProductSkuService;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.HQLUtils;
-import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.util.*;
 
@@ -54,7 +53,7 @@ public class DtoProductSkuServiceImpl
         extends AbstractDtoServiceImpl<ProductSkuDTO, ProductSkuDTOImpl, ProductSku>
         implements DtoProductSkuService {
 
-    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+    private static final AttrValueDTOComparator ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparator();
 
     private DtoProductService dtoProductService;
     private final DtoAttributeService dtoAttributeService;

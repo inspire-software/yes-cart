@@ -27,7 +27,7 @@
 
     <bean id="importCsvDescriptorXStreamProvider" class="org.yes.cart.bulkimport.csv.impl.CsvImportDescriptorXStreamProvider"/>
 
-    <bean id="importLookUpQueryParameterStrategyValueProviders" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="importLookUpQueryParameterStrategyValueProviders" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategyValueProvider">
@@ -92,7 +92,7 @@
     </bean>
 
 
-    <bean id="importCsvImportValueAdapterMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="importCsvImportValueAdapterMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkcommon.csv.CsvValueAdapter"/>
@@ -134,7 +134,7 @@
     <bean id="importXmlDescriptorXStreamProvider" class="org.yes.cart.bulkimport.xml.impl.XmlImportDescriptorXStreamProvider"/>
 
 
-    <bean id="importXmlImportValueAdapterMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="importXmlImportValueAdapterMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkcommon.xml.XmlValueAdapter"/>
@@ -146,7 +146,7 @@
         <property name="extensions" ref="importXmlImportValueAdapterMap"/>
     </bean>
 
-    <bean id="xmlFastBulkImportServiceHandlerMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="xmlFastBulkImportServiceHandlerMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map key-type="java.lang.String"
                  value-type="org.yes.cart.bulkimport.xml.XmlEntityImportHandler">
@@ -566,7 +566,7 @@
 
     <!-- ########################################## Main ########################## -->
 
-    <bean id="bulkImportServiceBeanMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="bulkImportServiceBeanMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="CSV-IMAGE"                              value="imagesBulkImportService"/>

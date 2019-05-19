@@ -28,7 +28,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.service.dto.DtoProductSkuService;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

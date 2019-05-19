@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DomainApiUtils;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.time.LocalDateTime;

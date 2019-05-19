@@ -29,7 +29,7 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.util.ProductSortingUtils;
+import org.yes.cart.web.support.utils.ProductSortingUtils;
 
 import java.util.List;
 

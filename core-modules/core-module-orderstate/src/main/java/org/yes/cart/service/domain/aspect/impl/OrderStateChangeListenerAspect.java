@@ -32,7 +32,7 @@ import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.io.Serializable;
 import java.util.HashMap;

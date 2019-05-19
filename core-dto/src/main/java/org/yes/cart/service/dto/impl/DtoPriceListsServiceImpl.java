@@ -36,7 +36,7 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.dto.DtoPriceListsService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.service.dto.DtoShopService;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.HQLUtils;
 
 import java.time.LocalDateTime;

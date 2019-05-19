@@ -27,8 +27,8 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ContentRankDisplayNameComparator;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DomainApiUtils;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 

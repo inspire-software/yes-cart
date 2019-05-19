@@ -26,8 +26,8 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DomainApiUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.List;

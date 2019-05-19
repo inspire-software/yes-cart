@@ -28,7 +28,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.RegExUtils;
+import org.yes.cart.utils.RegExUtils;
 
 import java.util.List;
 import java.util.Map;

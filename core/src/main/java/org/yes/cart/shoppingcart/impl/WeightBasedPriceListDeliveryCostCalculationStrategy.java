@@ -30,7 +30,7 @@ import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

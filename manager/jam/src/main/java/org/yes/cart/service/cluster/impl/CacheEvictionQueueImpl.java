@@ -25,7 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.cluster.service.CacheEvictionQueue;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.util.Collection;
 import java.util.Collections;

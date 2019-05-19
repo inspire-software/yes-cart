@@ -31,7 +31,7 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.PriceResolver;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

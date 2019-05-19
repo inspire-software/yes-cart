@@ -22,7 +22,7 @@
 
     <!-- #################################  order/payment related actions ######################################-->
 
-    <bean id="paymentNotificationAspectAuthoriseShopperTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectAuthoriseShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="Ok" value="payment"/>
@@ -30,7 +30,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="paymentNotificationAspectAuthoriseAdminTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectAuthoriseAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="Ok" value="adm-payment"/>
@@ -41,13 +41,13 @@
         </constructor-arg>
     </bean>
 
-    <bean id="paymentNotificationAspectCancelShopperTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectCancelShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map/>
         </constructor-arg>
     </bean>
 
-    <bean id="paymentNotificationAspectCancelAdminTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectCancelAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="Ok" value="adm-refund"/>
@@ -58,7 +58,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="paymentNotificationAspectShipmentShopperTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectShipmentShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="Ok" value="shipment-complete"/>
@@ -66,7 +66,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="paymentNotificationAspectShipmentAdminTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="paymentNotificationAspectShipmentAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="Ok" value="adm-payment-shipped"/>
@@ -77,7 +77,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="orderStateChangeAspectShopperTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="orderStateChangeAspectShopperTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="evt.pending-os.waiting" value="order-new"/>
@@ -107,7 +107,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="orderStateChangeAspectAdminTemplates" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="orderStateChangeAspectAdminTemplates" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/>

@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.support.utils.HttpUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

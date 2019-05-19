@@ -27,7 +27,7 @@ import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

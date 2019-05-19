@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.search.query.impl.LuceneSearchUtil;
-import org.yes.cart.search.util.SearchUtil;
+import org.yes.cart.search.utils.SearchUtil;
 
 import java.time.Instant;
 import java.util.Arrays;

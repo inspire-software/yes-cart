@@ -23,7 +23,7 @@ import org.apache.lucene.search.Query;
 import org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
-import org.yes.cart.search.util.SearchUtil;
+import org.yes.cart.search.utils.SearchUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;

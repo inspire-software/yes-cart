@@ -26,7 +26,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.component.customer.wishlist.WishListItemAddPage;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 /**
  * User: denispavlov

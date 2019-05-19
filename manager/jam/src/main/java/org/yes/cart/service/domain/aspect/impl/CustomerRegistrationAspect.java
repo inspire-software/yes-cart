@@ -40,7 +40,7 @@ import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.PassPhraseGenerator;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.io.Serializable;
 import java.time.Instant;

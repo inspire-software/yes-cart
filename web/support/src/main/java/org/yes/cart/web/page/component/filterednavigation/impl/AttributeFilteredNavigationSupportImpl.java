@@ -37,10 +37,10 @@ import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
-import org.yes.cart.search.util.SearchUtil;
+import org.yes.cart.search.utils.SearchUtil;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
 
 import java.util.*;

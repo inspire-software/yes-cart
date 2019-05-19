@@ -36,8 +36,8 @@ import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
-import org.yes.cart.util.HttpParamsUtils;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.HttpParamsUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

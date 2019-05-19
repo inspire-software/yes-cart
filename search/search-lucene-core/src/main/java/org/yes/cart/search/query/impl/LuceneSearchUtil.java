@@ -24,7 +24,7 @@ import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.ru.RussianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.TermToBytesRefAttribute;
-import org.yes.cart.search.util.SearchUtil;
+import org.yes.cart.search.utils.SearchUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;

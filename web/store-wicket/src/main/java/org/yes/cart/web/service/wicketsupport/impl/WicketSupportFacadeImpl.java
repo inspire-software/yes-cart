@@ -21,7 +21,7 @@ import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 /**
  * User: denispavlov

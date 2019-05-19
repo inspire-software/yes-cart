@@ -33,7 +33,7 @@ import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.cluster.node.*;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import javax.servlet.ServletContext;
 import java.io.Serializable;

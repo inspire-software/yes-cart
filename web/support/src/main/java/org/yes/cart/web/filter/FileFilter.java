@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.service.domain.FileService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.media.MediaFileNameStrategy;
-import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.support.utils.HttpUtil;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.Filter;

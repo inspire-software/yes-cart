@@ -27,8 +27,8 @@ import org.yes.cart.service.order.OrderSplittingStrategy;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DomainApiUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.*;

@@ -30,9 +30,9 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.HttpParamsUtils;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.HttpParamsUtils;
+import org.yes.cart.utils.MoneyUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

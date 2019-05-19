@@ -27,7 +27,7 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.support.service.AttributableFileService;
-import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.support.utils.HttpUtil;
 
 import java.util.*;
 

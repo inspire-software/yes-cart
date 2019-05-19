@@ -46,7 +46,7 @@
         </property>
     </bean>
 
-    <bean id="webCronScheduleTriggers" class="org.yes.cart.util.spring.ArrayListBean">
+    <bean id="webCronScheduleTriggers" class="org.yes.cart.utils.spring.ArrayListBean">
         <constructor-arg>
             <list/>
         </constructor-arg>
@@ -54,7 +54,7 @@
 
 
     <!-- Extension for cron triggers example that should be put in "websupport-cronjob-ext.xml":
-        <bean id="extensionSample" class="org.yes.cart.util.spring.ArrayListBean">
+        <bean id="extensionSample" class="org.yes.cart.utils.spring.ArrayListBean">
             <constructor-arg ref="webCronScheduleTriggers"/>
             <property name="extension">
                 <list>

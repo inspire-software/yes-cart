@@ -20,7 +20,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.cluster.service.AlertDirector;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

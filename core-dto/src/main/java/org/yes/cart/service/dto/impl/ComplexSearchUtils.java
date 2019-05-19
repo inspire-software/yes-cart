@@ -18,7 +18,7 @@ package org.yes.cart.service.dto.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

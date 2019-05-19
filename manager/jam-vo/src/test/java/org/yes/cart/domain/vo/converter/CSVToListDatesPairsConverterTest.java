@@ -18,7 +18,7 @@ package org.yes.cart.domain.vo.converter;
 
 import org.junit.Test;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.util.List;

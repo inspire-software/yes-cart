@@ -6,7 +6,7 @@ import org.yes.cart.bulkcommon.service.DataDescriptorReader;
 import org.yes.cart.bulkexport.model.ExportDescriptor;
 import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.stream.xml.XStreamProvider;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

@@ -28,7 +28,7 @@ import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
-import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.support.utils.HttpUtil;
 
 import java.util.*;
 

@@ -24,7 +24,7 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoFileService;
 import org.yes.cart.service.dto.DtoImageService;
 import org.yes.cart.service.vo.VoIOSupport;
-import org.yes.cart.util.MimeTypesUtils;
+import org.yes.cart.utils.MimeTypesUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

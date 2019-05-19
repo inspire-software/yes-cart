@@ -29,7 +29,7 @@ import org.hibernate.collection.internal.PersistentBag;
 import org.hibernate.collection.internal.PersistentList;
 import org.hibernate.collection.internal.PersistentSet;
 import org.yes.cart.report.ReportObjectStreamFactory;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;

@@ -34,8 +34,8 @@ import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

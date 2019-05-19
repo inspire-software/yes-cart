@@ -32,9 +32,9 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 import org.yes.cart.utils.HQLUtils;
-import org.yes.cart.utils.impl.AttributeRankComparator;
+import org.yes.cart.service.domain.AttributeRankComparator;
 
 import java.util.*;
 

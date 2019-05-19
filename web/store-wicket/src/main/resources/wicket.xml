@@ -21,7 +21,7 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="wicketUtil" class="org.yes.cart.web.util.WicketUtil">
+    <bean id="wicketUtil" class="org.yes.cart.web.utils.WicketUtil">
         <constructor-arg index="0" ref="commandConfig"/>
     </bean>
 
@@ -48,7 +48,7 @@
         <lookup-method name="getNewInstance" bean="wicketMultiMarkupCache"/>
     </bean>
 
-    <bean id="wicketBreadCrumbsMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="wicketBreadCrumbsMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="brand">
@@ -91,7 +91,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketPagesMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="wicketPagesMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="/">
@@ -198,7 +198,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketPagesEncoderEnabledUrls" class="org.yes.cart.util.spring.ArrayListBean">
+    <bean id="wicketPagesEncoderEnabledUrls" class="org.yes.cart.utils.spring.ArrayListBean">
         <constructor-arg>
             <list>
                 <value>/</value>
@@ -209,7 +209,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketResourceMounterEnabledPatterns" class="org.yes.cart.util.spring.ArrayListBean">
+    <bean id="wicketResourceMounterEnabledPatterns" class="org.yes.cart.utils.spring.ArrayListBean">
         <constructor-arg>
             <list>
                 <!-- Custom fonts support -->
@@ -235,7 +235,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketResourcesMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="wicketResourcesMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="sitemap.xml" value-ref="sitemapXmlResource"/>
@@ -245,7 +245,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketRendererPanelMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="wicketRendererPanelMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map key-type="java.lang.String" value-type="java.lang.Class">
                 <entry key="subcats"        value="org.yes.cart.web.page.component.SubCategoriesCentralView"/>
@@ -262,7 +262,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="wicketCategoryTypeMap" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="wicketCategoryTypeMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map key-type="java.lang.Class" value-type="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl.CategoryType">
                 <entry key="org.yes.cart.web.page.component.EmptyCentralView"           value="CATEGORY"/>

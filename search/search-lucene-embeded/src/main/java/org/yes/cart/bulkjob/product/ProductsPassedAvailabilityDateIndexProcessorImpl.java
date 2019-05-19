@@ -28,7 +28,7 @@ import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.List;

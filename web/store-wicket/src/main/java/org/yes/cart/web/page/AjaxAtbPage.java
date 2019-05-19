@@ -13,7 +13,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.component.cart.SmallShoppingCartView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

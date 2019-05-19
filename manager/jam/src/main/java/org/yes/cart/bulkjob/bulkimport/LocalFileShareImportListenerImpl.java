@@ -38,9 +38,9 @@ import org.yes.cart.service.cluster.ReindexService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.ShopCodeContext;
+import org.yes.cart.utils.log.Markers;
 
 import java.io.File;
 import java.io.FileInputStream;

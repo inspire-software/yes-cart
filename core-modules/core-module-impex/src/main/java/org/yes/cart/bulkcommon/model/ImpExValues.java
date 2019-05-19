@@ -16,6 +16,8 @@
 
 package org.yes.cart.bulkcommon.model;
 
+import org.yes.cart.utils.DateUtils;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -44,19 +46,19 @@ public interface ImpExValues {
      */
     String DECIMAL = "DECIMAL";
     /**
-     * Date value. Format: "yyyy-MM-dd" {@link org.yes.cart.util.DateUtils#ldParseSDT(String)}
+     * Date value. Format: "yyyy-MM-dd" {@link DateUtils#ldParseSDT(String)}
      */
     String DATE = "DATE";
     /**
-     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#ldtParseSDT(String)}
+     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link DateUtils#ldtParseSDT(String)}
      */
     String DATETIME = "DATETIME";
     /**
-     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#zdtParseSDT(String)}
+     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link DateUtils#zdtParseSDT(String)}
      */
     String ZONEDTIME = "ZONEDTIME";
     /**
-     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link org.yes.cart.util.DateUtils#iParseSDT(String)}
+     * Date value. Format: "yyyy-MM-dd HH:mm:ss" {@link DateUtils#iParseSDT(String)}
      */
     String INSTANT = "INSTANT";
 

@@ -42,7 +42,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.lang.System;

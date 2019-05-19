@@ -28,7 +28,7 @@ import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.*;

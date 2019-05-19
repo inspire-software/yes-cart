@@ -43,7 +43,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoContentService;
-import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -58,7 +58,7 @@ public class DtoContentCMS1ServiceImpl
         implements DtoContentService, Configuration {
 
     private static final ContentRankNameComparator CONTENT_RANK_NAME_COMPARATOR = new ContentRankNameComparator();
-    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+    private static final AttrValueDTOComparator ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparator();
 
     private final GenericService<Attribute> attributeService;
     private final DtoAttributeService dtoAttributeService;

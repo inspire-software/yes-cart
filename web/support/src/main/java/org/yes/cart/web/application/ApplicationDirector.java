@@ -18,7 +18,7 @@ package org.yes.cart.web.application;
 
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShoppingCartContext;
+import org.yes.cart.utils.ShoppingCartContext;
 
 import java.util.List;
 

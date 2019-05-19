@@ -28,7 +28,7 @@ import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.JavaMailSenderFactory;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package org.yes.cart.domain.ro.xml.impl;
 
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;

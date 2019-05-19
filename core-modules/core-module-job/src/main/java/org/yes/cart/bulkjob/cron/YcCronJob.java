@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.yes.cart.cluster.node.NodeService;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 /**
  * Generic job contained to run Runnable jobs.

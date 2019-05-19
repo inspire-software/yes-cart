@@ -33,7 +33,7 @@ import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 

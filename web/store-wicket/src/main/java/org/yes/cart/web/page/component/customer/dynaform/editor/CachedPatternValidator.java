@@ -17,7 +17,7 @@
 package org.yes.cart.web.page.component.customer.dynaform.editor;
 
 import org.apache.wicket.validation.validator.PatternValidator;
-import org.yes.cart.util.RegExUtils;
+import org.yes.cart.utils.RegExUtils;
 
 /**
  * User: denispavlov

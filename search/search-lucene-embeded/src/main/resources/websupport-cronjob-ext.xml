@@ -22,7 +22,7 @@
 
     <import resource="core-index-cronjob.xml"/>
 
-    <bean id="ftCronExtension" class="org.yes.cart.util.spring.ArrayListBean">
+    <bean id="ftCronExtension" class="org.yes.cart.utils.spring.ArrayListBean">
         <constructor-arg ref="webCronScheduleTriggers"/>
         <property name="extension">
             <list>

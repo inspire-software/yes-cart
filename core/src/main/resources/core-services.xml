@@ -1165,7 +1165,7 @@
         <constructor-arg index="0" ref="promotionCouponService"/>
     </bean>
 
-    <bean id="promotionContextFactoryActionsMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="promotionContextFactoryActionsMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="O">
@@ -1217,7 +1217,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="promotionCouponContextActionsMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="promotionCouponContextActionsMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="P" value-ref="promoActionOrderDiscount"/>
@@ -1329,7 +1329,7 @@
 
     <!-- ############################# ExtendedConversionService ################################# -->
 
-    <bean id="extendedConversionService" class="org.yes.cart.utils.impl.ExtendedConversionService"/>
+    <bean id="extendedConversionService" class="org.yes.cart.service.misc.impl.ExtendedConversionService"/>
 
     <!-- ########################################### Mail ######################################## -->
 

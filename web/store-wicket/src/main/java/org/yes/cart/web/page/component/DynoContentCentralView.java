@@ -24,7 +24,7 @@ import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.entity.Seoable;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.impl.ContentSeoableDecoratorImpl;

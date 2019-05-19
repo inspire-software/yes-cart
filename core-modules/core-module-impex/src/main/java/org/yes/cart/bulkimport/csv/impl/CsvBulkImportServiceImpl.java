@@ -41,7 +41,7 @@ import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.util.MessageFormatUtils;
+import org.yes.cart.utils.MessageFormatUtils;
 
 import java.beans.PropertyDescriptor;
 import java.io.File;

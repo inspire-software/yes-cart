@@ -39,9 +39,9 @@ import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.MessageFormatUtils;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.MessageFormatUtils;
+import org.yes.cart.utils.MoneyUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -36,7 +36,7 @@ import org.yes.cart.service.order.impl.CustomerTypeAdapter;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.RegExUtils;
+import org.yes.cart.utils.RegExUtils;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.support.service.AddressBookFacade;

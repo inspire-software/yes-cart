@@ -19,8 +19,8 @@ package org.yes.cart.service.order.impl;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.order.OrderNumberGenerator;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;

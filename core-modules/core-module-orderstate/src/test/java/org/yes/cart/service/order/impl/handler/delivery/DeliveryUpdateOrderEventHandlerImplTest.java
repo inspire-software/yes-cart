@@ -30,7 +30,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.order.impl.handler.AbstractEventHandlerImplTest;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

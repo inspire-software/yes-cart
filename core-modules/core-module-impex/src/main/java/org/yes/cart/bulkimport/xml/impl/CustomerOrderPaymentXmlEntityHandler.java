@@ -23,7 +23,7 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 /**
  * User: denispavlov

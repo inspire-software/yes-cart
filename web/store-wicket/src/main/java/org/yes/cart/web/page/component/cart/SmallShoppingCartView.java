@@ -23,7 +23,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.service.misc.PluralFormService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;

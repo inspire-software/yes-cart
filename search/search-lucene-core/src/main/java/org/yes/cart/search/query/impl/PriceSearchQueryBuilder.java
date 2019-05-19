@@ -23,7 +23,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.PriceNavigation;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
-import org.yes.cart.search.util.SearchUtil;
+import org.yes.cart.search.utils.SearchUtil;
 
 import java.math.BigDecimal;
 import java.util.Collection;

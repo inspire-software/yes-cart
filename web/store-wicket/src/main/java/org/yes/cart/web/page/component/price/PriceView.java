@@ -26,12 +26,12 @@ import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.entity.PromotionModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

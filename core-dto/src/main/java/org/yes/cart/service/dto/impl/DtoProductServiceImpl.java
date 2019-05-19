@@ -20,7 +20,6 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -40,9 +39,9 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.*;
 import org.yes.cart.service.misc.LanguageService;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.HQLUtils;
-import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -62,7 +61,7 @@ public class DtoProductServiceImpl
         extends AbstractDtoServiceImpl<ProductDTO, ProductDTOImpl, Product>
         implements DtoProductService {
 
-    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+    private static final AttrValueDTOComparator ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparator();
 
     private final ProductService productService;
     private final DtoFactory dtoFactory;

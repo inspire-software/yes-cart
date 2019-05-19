@@ -1034,7 +1034,7 @@
 
     <!-- ###################### Config  ################################################################################################################## -->
 
-    <bean id="evictionConfig" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="evictionConfig" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <util:map>
                 <entry key="AttributeEntity"           value-ref="AttributeCUD"/>

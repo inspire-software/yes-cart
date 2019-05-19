@@ -31,7 +31,7 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPromotionService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
 import java.time.Instant;

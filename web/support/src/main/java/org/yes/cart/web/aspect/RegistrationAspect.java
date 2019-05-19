@@ -42,7 +42,7 @@ import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import java.io.Serializable;

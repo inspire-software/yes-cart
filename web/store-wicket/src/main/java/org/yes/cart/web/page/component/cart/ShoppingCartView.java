@@ -32,7 +32,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;

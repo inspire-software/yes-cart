@@ -41,9 +41,9 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.HQLUtils;
-import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -59,7 +59,7 @@ public class DtoCustomerServiceImpl
         extends AbstractDtoServiceImpl<CustomerDTO, CustomerDTOImpl, Customer>
         implements DtoCustomerService {
 
-    private static final AttrValueDTOComparatorImpl ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparatorImpl();
+    private static final AttrValueDTOComparator ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparator();
 
     private final CustomerRemoveService customerRemoveService;
 

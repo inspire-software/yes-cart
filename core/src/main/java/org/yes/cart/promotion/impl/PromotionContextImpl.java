@@ -24,7 +24,7 @@ import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.*;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.Instant;
 import java.util.*;

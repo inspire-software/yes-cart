@@ -24,7 +24,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionCondition;
 import org.yes.cart.promotion.PromotionConditionParser;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.log.Markers;
 
 /**
  * Groovy backed promotion parser. promotion.getEligibilityCondition() is assumed to be

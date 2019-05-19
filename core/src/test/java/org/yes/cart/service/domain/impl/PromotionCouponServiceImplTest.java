@@ -22,7 +22,7 @@ import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.domain.PromotionService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.util.List;
 

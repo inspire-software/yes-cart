@@ -38,7 +38,7 @@ import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.stream.xml.XStreamProvider;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

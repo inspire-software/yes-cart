@@ -75,7 +75,7 @@
 
 
 
-    <bean id="bulkExportServiceBeanMapExtPayment" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="bulkExportServiceBeanMapExtPayment" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg ref="bulkExportServiceBeanMap">
         </constructor-arg>
         <property name="extension">

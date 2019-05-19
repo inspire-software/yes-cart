@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
 import org.yes.cart.service.locator.ServiceLocator;
-import org.yes.cart.util.MessageFormatUtils;
+import org.yes.cart.utils.MessageFormatUtils;
 
 import java.text.MessageFormat;
 import java.util.HashMap;

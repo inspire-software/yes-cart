@@ -6,7 +6,7 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.DtoCustomerOrderPaymentService;
 import org.yes.cart.payment.service.impl.PaymentModuleGenericServiceImpl;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.HQLUtils;
 
 import java.time.Instant;

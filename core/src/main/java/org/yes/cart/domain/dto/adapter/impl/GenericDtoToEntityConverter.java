@@ -18,7 +18,7 @@ package org.yes.cart.domain.dto.adapter.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.EntityRetriever;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.util.MessageFormatUtils;
+import org.yes.cart.utils.MessageFormatUtils;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

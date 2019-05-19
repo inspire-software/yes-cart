@@ -248,7 +248,7 @@
 
     <!-- ############################# Federation Facades ######################### -->
 
-    <bean id="importFederationFacadeFilters" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="importFederationFacadeFilters" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="org.yes.cart.domain.entity.Category"            value-ref="categoryImpexFederationFilter"/>
@@ -270,7 +270,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="exportFederationFacadeFilters" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="exportFederationFacadeFilters" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
                 <entry key="org.yes.cart.domain.entity.Category"            value-ref="categoryImpexFederationFilter"/>

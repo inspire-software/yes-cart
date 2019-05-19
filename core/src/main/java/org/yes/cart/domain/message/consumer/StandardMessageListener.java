@@ -27,8 +27,8 @@ import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.util.MessageFormatUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.MessageFormatUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.util.HashMap;
 import java.util.List;

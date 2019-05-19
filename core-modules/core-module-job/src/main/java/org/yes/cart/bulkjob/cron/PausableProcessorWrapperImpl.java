@@ -22,7 +22,7 @@ import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.spring.WrappingBean;
+import org.yes.cart.utils.spring.WrappingBean;
 
 /**
  * User: denispavlov

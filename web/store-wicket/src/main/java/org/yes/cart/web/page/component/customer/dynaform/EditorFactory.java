@@ -28,7 +28,7 @@ import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.utils.impl.ExtendedConversionService;
+import org.yes.cart.service.misc.impl.ExtendedConversionService;
 import org.yes.cart.web.page.component.customer.dynaform.editor.*;
 
 import java.io.Serializable;

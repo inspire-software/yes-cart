@@ -43,7 +43,7 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CentralViewResolver;
-import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.support.utils.HttpUtil;
 import org.yes.cart.web.theme.WicketCentralViewProvider;
 
 import java.util.List;

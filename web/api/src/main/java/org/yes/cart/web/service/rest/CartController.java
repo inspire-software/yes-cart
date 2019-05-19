@@ -39,7 +39,7 @@ import org.yes.cart.service.order.*;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.support.CommandConfig;
-import org.yes.cart.util.MessageFormatUtils;
+import org.yes.cart.utils.MessageFormatUtils;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;

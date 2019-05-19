@@ -33,7 +33,7 @@ import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.math.BigDecimal;

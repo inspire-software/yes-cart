@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvImpExTuple;
 import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.Instant;
 import java.time.LocalDate;

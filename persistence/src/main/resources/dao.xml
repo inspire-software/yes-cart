@@ -92,7 +92,7 @@
         </property>
     </bean>
 
-    <bean id="entityClassFactoryMapping" class="org.yes.cart.util.spring.LinkedHashMapBean">
+    <bean id="entityClassFactoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
 

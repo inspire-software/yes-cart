@@ -18,7 +18,7 @@ package org.yes.cart.web.application;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.DefaultMarkupCacheKeyProvider;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.ShopCodeContext;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

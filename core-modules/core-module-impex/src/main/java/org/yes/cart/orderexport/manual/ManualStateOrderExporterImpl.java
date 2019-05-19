@@ -34,8 +34,8 @@ import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.orderexport.OrderExporter;
 import org.yes.cart.orderexport.impl.ExportResultImpl;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.io.IOException;
 import java.io.StringReader;

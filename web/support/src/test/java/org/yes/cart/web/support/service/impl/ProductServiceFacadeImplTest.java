@@ -27,7 +27,7 @@ import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.ShoppingCartCalculator;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.math.BigDecimal;

@@ -24,7 +24,7 @@ import org.yes.cart.bulkcommon.service.ExportDirectorService;
 import org.yes.cart.bulkcommon.service.ImportDirectorService;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.remote.service.FileManager;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.impl.ZipByteArrayUtils;
 
 import java.io.File;

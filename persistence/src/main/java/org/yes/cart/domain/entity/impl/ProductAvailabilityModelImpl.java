@@ -18,7 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.*;

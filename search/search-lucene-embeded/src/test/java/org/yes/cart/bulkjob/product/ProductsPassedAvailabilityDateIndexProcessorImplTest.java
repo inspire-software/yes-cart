@@ -27,7 +27,7 @@ import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;

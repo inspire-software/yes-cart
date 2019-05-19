@@ -29,7 +29,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
 import org.yes.cart.service.theme.templates.TemplateProcessor;
-import org.yes.cart.util.MimeTypesUtils;
+import org.yes.cart.utils.MimeTypesUtils;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

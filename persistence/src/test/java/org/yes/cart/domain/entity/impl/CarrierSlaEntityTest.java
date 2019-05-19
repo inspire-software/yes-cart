@@ -17,7 +17,7 @@
 package org.yes.cart.domain.entity.impl;
 
 import org.junit.Test;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.LocalDate;
 import java.util.Map;

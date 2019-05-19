@@ -27,7 +27,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

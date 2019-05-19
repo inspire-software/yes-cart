@@ -30,7 +30,7 @@ import org.yes.cart.service.domain.ProductCategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -19,7 +19,7 @@ package org.yes.cart.promotion.impl.action;
 import org.yes.cart.promotion.PromotionCondition;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.Map;

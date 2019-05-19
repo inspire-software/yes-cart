@@ -16,8 +16,8 @@
 
 package org.yes.cart.web.filter;
 
-import org.yes.cart.search.util.SearchUtil;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.search.utils.SearchUtil;
+import org.yes.cart.utils.TimeContext;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;

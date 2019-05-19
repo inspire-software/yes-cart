@@ -23,8 +23,8 @@ import org.springframework.util.CollectionUtils;
 import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;

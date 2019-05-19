@@ -19,7 +19,7 @@ package org.yes.cart.bulkcommon.service.support.common.impl;
 import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.service.support.query.LookUpQueryParameterStrategyValueProvider;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 /**
  * User: denispavlov

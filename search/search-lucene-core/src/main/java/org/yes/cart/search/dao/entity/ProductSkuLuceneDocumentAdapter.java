@@ -32,10 +32,10 @@ import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.LuceneDocumentAdapter;
 import org.yes.cart.search.dao.support.NavigatableAttributesSupport;
-import org.yes.cart.search.util.SearchUtil;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.TimeContext;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.search.utils.SearchUtil;
+import org.yes.cart.utils.DomainApiUtils;
+import org.yes.cart.utils.TimeContext;
+import org.yes.cart.utils.log.Markers;
 
 import java.time.LocalDateTime;
 import java.util.*;

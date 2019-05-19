@@ -25,8 +25,8 @@ import org.yes.cart.promotion.PromotionApplicationStrategy;
 import org.yes.cart.promotion.PromotionCondition;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.MoneyUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.math.BigDecimal;
 import java.util.*;

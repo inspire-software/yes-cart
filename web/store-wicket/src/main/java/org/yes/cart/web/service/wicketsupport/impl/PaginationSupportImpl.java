@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 import java.util.List;
 

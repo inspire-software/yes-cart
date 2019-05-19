@@ -52,7 +52,7 @@ import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.order.PlaceOrderDisabledException;
 import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.MessageFormatUtils;
+import org.yes.cart.utils.MessageFormatUtils;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.AddressForm;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;

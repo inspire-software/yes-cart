@@ -26,7 +26,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.time.Instant;
 

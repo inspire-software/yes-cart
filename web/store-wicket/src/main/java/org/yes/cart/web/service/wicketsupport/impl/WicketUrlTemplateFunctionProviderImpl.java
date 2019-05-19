@@ -17,7 +17,7 @@
 package org.yes.cart.web.service.wicketsupport.impl;
 
 import org.yes.cart.service.theme.templates.TemplateProcessor;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 /**
  * User: denispavlov

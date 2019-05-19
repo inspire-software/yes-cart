@@ -31,7 +31,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartShippingCostContainerImpl;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.web.support.service.ShippingServiceFacade;
 
 import java.math.BigDecimal;

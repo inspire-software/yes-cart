@@ -26,7 +26,7 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.CustomerWishListService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.DateUtils;
+import org.yes.cart.utils.DateUtils;
 
 import java.util.Iterator;
 import java.util.Optional;

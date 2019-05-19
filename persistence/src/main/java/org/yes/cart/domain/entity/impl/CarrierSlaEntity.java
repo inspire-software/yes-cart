@@ -22,8 +22,8 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Carrier;
-import org.yes.cart.util.DateUtils;
-import org.yes.cart.util.log.Markers;
+import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.time.Instant;
 import java.time.LocalDate;

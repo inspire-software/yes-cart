@@ -24,7 +24,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.IPResolver;
 import org.yes.cart.web.support.request.impl.HttpServletRequestWrapper;

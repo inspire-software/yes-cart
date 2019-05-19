@@ -23,7 +23,7 @@
     <turboFilter class="org.yes.cart.utils.log.AlertTurboFilter"/>
 
     <appender name="DEFAULT" class="ch.qos.logback.classic.sift.SiftingAppender">
-        <discriminator class="org.yes.cart.util.log.ShopCodeAndLevelLogDiscriminator"/>
+        <discriminator class="org.yes.cart.utils.log.ShopCodeAndLevelLogDiscriminator"/>
         <sift>
             <appender name="DEFAULT-${shopCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
@@ -44,7 +44,7 @@
     </appender>
 
     <appender name="SHOPPAY" class="ch.qos.logback.classic.sift.SiftingAppender">
-        <discriminator class="org.yes.cart.util.log.ShopCodeLogDiscriminator"/>
+        <discriminator class="org.yes.cart.utils.log.ShopCodeLogDiscriminator"/>
         <sift>
             <appender name="SHOPPAY-${shopCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
@@ -145,7 +145,7 @@
     </appender>
 
     <appender name="FTQ" class="ch.qos.logback.classic.sift.SiftingAppender">
-        <discriminator class="org.yes.cart.util.log.ShopCodeLogDiscriminator"/>
+        <discriminator class="org.yes.cart.utils.log.ShopCodeLogDiscriminator"/>
         <sift>
             <appender name="FTQ-${shopCode}" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->

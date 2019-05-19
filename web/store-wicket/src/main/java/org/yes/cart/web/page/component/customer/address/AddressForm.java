@@ -42,7 +42,6 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.customer.dynaform.EditorFactory;
@@ -53,7 +52,7 @@ import org.yes.cart.web.page.component.util.StateRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AddressBookFacade;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.utils.WicketUtil;
 
 import java.util.HashMap;
 import java.util.List;

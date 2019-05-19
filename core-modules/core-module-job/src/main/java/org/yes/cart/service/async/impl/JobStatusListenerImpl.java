@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
-import org.yes.cart.util.ExceptionUtil;
-import org.yes.cart.util.MessageFormatUtils;
+import org.yes.cart.utils.ExceptionUtil;
+import org.yes.cart.utils.MessageFormatUtils;
 
 import java.util.UUID;
 

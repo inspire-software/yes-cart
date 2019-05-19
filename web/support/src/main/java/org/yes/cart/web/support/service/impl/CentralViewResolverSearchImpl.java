@@ -26,7 +26,7 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
-import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.support.utils.HttpUtil;
 
 import java.util.Map;
 import java.util.Set;

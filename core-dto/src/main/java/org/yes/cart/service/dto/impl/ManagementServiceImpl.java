@@ -37,7 +37,7 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.ManagementService;
-import org.yes.cart.util.RegExUtils;
+import org.yes.cart.utils.RegExUtils;
 import org.yes.cart.utils.HQLUtils;
 
 import java.io.UnsupportedEncodingException;

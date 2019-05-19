@@ -24,7 +24,7 @@
 
     <import resource="classpath:manager-cluster-${cluster.config.protocol}.xml"/>
 
-    <bean id="queryDirectorPlugins" class="org.yes.cart.util.spring.ArrayListBean">
+    <bean id="queryDirectorPlugins" class="org.yes.cart.utils.spring.ArrayListBean">
         <constructor-arg>
             <list>
                 <bean parent="txProxyTemplate">

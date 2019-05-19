@@ -23,11 +23,10 @@ import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.promotion.PromotionCouponCodeGenerator;
 import org.yes.cart.service.domain.PromotionCouponService;
-import org.yes.cart.util.TimeContext;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * User: denispavlov

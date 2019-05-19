@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.service.misc.LanguageService;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.ShopCodeContext;
 import org.yes.cart.web.theme.WicketPagesMounter;
 import org.yes.cart.web.theme.WicketResourceMounter;
 

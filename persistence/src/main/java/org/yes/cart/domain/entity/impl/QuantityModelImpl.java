@@ -17,7 +17,7 @@
 package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.QuantityModel;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
