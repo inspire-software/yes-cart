@@ -38,11 +38,6 @@
         <property name="serviceLocator" ref="serviceLocator"/>
     </bean>
     -->
-    <!-- JNP locator, if used by a payment gateway should be registered as follows
-    <bean id="jnpInstantiationPaymentService" class="org.yes.cart.service.locator.impl.JnpInstantiationStrategyImpl">
-        <property name="serviceLocator" ref="serviceLocator"/>
-    </bean>
-    -->
 
     <!-- ################################## payment manager ################################# -->
 
