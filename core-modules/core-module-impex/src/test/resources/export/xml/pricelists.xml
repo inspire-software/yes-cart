@@ -28,7 +28,7 @@
         <file-name>target/inventory_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select sp from SkuPriceEntity sp</select-sql>
+    <select-cmd>select sp from SkuPriceEntity sp</select-cmd>
 
     <xml-handler>PRICE_PRETTY</xml-handler>
 

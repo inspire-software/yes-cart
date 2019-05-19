@@ -32,12 +32,12 @@ import org.yes.cart.dao.GenericDAO;
  */
 public class ColumnLookUpQueryCacheKeyStrategy implements EntityCacheKeyStrategy {
 
-    private final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> hsqlStrategy;
+    private final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> lookUpStrategy;
     private final GenericDAO<Object, Long> genericDAO;
 
-    public ColumnLookUpQueryCacheKeyStrategy(final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> hsqlStrategy,
+    public ColumnLookUpQueryCacheKeyStrategy(final LookUpQueryParameterStrategy<CsvImportDescriptor, CsvImportTuple, CsvValueAdapter> lookUpStrategy,
                                              final GenericDAO<Object, Long> genericDAO) {
-        this.hsqlStrategy = hsqlStrategy;
+        this.lookUpStrategy = lookUpStrategy;
         this.genericDAO = genericDAO;
     }
 
@@ -49,7 +49,7 @@ public class ColumnLookUpQueryCacheKeyStrategy implements EntityCacheKeyStrategy
                          final CsvImportTuple tuple,
                          final CsvValueAdapter adapter) {
 
-        final LookUpQuery query = hsqlStrategy.getQuery(descriptor, masterObject, tuple, adapter, column.getLookupQuery());
+        final LookUpQuery query = lookUpStrategy.getQuery(descriptor, masterObject, tuple, adapter, column.getLookupQuery());
 
         final StringBuilder sb = new StringBuilder();
         sb.append(column.getName()).append('_').append(column.getColumnIndex()).append('_').append(query.getQueryString());

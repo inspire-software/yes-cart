@@ -56,27 +56,27 @@ public interface CsvImportDescriptor
     CsvImportFile getImportFileDescriptor();
 
     /**
-     * Get select sql, which used to look up objects that are to
+     * Get select command, which used to look up objects that are to
      * be modified (if they exist).
-     * @return        select sql
+     * @return        select command
      */
-    String getSelectSql();
+    String getSelectCmd();
 
     /**
-     * Get insert sql, which used instead of hibernate object save to
+     * Get insert command, which used instead of hibernate object save to
      * speed up bulk import.
      *
-     * @return        insert sql
+     * @return        insert command
      */
-    String getInsertSql();
+    String getInsertCmd();
 
     /**
-     * Get delete sql, which used instead of hibernate object delete to
+     * Get delete command, which used instead of hibernate object delete to
      * speed up bulk import.
      *
-     * @return        delete sql
+     * @return        delete command
      */
-    String getDeleteSql();
+    String getDeleteCmd();
 
     /**
      * Get the collection of export columns.

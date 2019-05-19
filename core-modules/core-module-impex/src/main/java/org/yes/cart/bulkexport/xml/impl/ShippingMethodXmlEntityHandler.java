@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.util.DateUtils;
 
+import java.io.OutputStreamWriter;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,14 +44,16 @@ public class ShippingMethodXmlEntityHandler extends AbstractXmlEntityHandler<Car
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, CarrierSla> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, CarrierSla> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagShippingMethod(null, tuple.getData()).toXml();
-        
+        handleInternal(tagShippingMethod(null, tuple.getData()), writer, entityCount);
+
     }
 
     Tag tagShippingMethod(final Tag parent, final CarrierSla shippingMethod) {

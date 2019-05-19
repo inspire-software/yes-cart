@@ -107,14 +107,6 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
      * {@inheritDoc}
      */
     @Override
-    public T findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
-        return delegate.findSingleByNamedQueryCached(namedQueryName, parameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
         return delegate.findByQuery(hsqlQuery, parameters);
     }
@@ -165,14 +157,6 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     @Override
     public List<T> findByNamedQueryForUpdate(final String namedQueryName, final int timeout, final Object... parameters) {
         return delegate.findByNamedQueryForUpdate(namedQueryName, timeout, parameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<T> findByNamedQueryCached(final String namedQueryName, final Object... parameters) {
-        return delegate.findByNamedQueryCached(namedQueryName, parameters);
     }
 
     /**

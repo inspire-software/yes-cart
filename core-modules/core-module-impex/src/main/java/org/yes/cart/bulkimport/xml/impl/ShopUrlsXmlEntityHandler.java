@@ -23,6 +23,7 @@ import org.yes.cart.bulkimport.xml.internal.ShopUrlCodeType;
 import org.yes.cart.bulkimport.xml.internal.ShopUrlType;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopUrl;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ShopService;
 
 import java.util.Iterator;
@@ -41,12 +42,12 @@ public class ShopUrlsXmlEntityHandler extends AbstractXmlEntityHandler<ShopUrlCo
     }
 
     @Override
-    protected void delete(final Shop shop) {
+    protected void delete(final JobStatusListener statusListener, final Shop shop) {
         throw new UnsupportedOperationException("Shop delete mode is not supported");
     }
 
     @Override
-    protected void saveOrUpdate(final Shop domain, final ShopUrlCodeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Shop domain, final ShopUrlCodeType xmlType, final EntityImportModeType mode) {
 
         if (domain != null) {
             processUrls(domain, xmlType);
@@ -116,7 +117,7 @@ public class ShopUrlsXmlEntityHandler extends AbstractXmlEntityHandler<ShopUrlCo
     }
 
     @Override
-    protected Shop getOrCreate(final ShopUrlCodeType xmlType) {
+    protected Shop getOrCreate(final JobStatusListener statusListener, final ShopUrlCodeType xmlType) {
         Shop shop = this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getShopCode());
         if (shop != null) {
             return shop;

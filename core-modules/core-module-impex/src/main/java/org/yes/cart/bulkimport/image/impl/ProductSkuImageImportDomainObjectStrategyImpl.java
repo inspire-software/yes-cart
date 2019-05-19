@@ -30,7 +30,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -65,8 +64,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
         final ProductSku productSku = productSkuService.findProductSkuBySkuCode(code);
 
         if (productSku == null) {
-            final String warn = MessageFormat.format("product sku with code {0} not found.", code);
-            statusListener.notifyWarning(warn);
+            statusListener.notifyWarning("product sku with code {} not found.", code);
             return false;
         }
 
@@ -84,8 +82,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
                 }
             }
             if (attribute == null) {
-                final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
-                statusListener.notifyWarning(warn);
+                statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
                 return false;
             }
             imageAttributeValue = productSkuService.getGenericDao().getEntityFactory().getByIface(AttrValueProductSku.class);
@@ -97,18 +94,16 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        final String info = MessageFormat.format("file {0} attached as {1} to product sku {2}",
+        statusListener.notifyMessage("file {} attached as {} to product sku {}",
                 fileName,
                 attributeCode,
                 productSku.getCode());
-        statusListener.notifyMessage(info);
 
         try {
             productSkuService.update(productSku);
             return true;
         } catch (DataIntegrityViolationException e) {
-            final String err = MessageFormat.format("image {0} for product sku with code {1} could not be added (db error).", fileName, productSku.getCode());
-            statusListener.notifyError(err, e);
+            statusListener.notifyError("image {} for product sku with code {} could not be added (db error).", e, fileName, productSku.getCode());
             return false;
         }
     }

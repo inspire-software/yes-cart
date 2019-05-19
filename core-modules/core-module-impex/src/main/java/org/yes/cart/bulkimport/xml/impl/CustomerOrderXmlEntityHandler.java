@@ -23,8 +23,8 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.*;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.*;
-import org.yes.cart.service.order.CouponCodeInvalidException;
 import org.yes.cart.util.DateUtils;
 
 /**
@@ -47,13 +47,13 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
     }
 
     @Override
-    protected void delete(final CustomerOrder customerOrder) {
+    protected void delete(final JobStatusListener statusListener, final CustomerOrder customerOrder) {
         this.customerOrderService.delete(customerOrder);
         this.customerOrderService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final CustomerOrder domain, final CustomerOrderType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final CustomerOrder domain, final CustomerOrderType xmlType, final EntityImportModeType mode) {
 
         // Order state is updatable
         processOrderState(domain, xmlType);
@@ -82,7 +82,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
     }
 
     @Override
-    protected CustomerOrder getOrCreate(final CustomerOrderType xmlType) {
+    protected CustomerOrder getOrCreate(final JobStatusListener statusListener, final CustomerOrderType xmlType) {
         CustomerOrder customerOrder = this.customerOrderService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (customerOrder != null) {
             return customerOrder;
@@ -99,7 +99,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         customerOrder.setLocale(xmlType.getConfiguration().getLocale());
         customerOrder.setOrderIp(xmlType.getConfiguration().getIp());
 
-        processContactDetails(xmlType, customerOrder);
+        processContactDetails(statusListener, xmlType, customerOrder);
 
         processOrderAmount(xmlType, customerOrder);
 
@@ -389,7 +389,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         }
     }
 
-    private void processContactDetails(final CustomerOrderType xmlType, final CustomerOrder customerOrder) {
+    private void processContactDetails(final JobStatusListener statusListener, final CustomerOrderType xmlType, final CustomerOrder customerOrder) {
 
         if (xmlType.getContactDetails() == null) {
             return;
@@ -405,11 +405,11 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         customerOrder.setLastname(xmlType.getContactDetails().getLastname());
         if (xmlType.getContactDetails().getShippingAddress() != null) {
             customerOrder.setShippingAddress(xmlType.getContactDetails().getShippingAddress().getFormatted());
-            customerOrder.setShippingAddressDetails(importStaticAddress(xmlType.getContactDetails().getShippingAddress().getAddress()));
+            customerOrder.setShippingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getShippingAddress().getAddress()));
         }
         if (xmlType.getContactDetails().getBillingAddress() != null) {
             customerOrder.setBillingAddress(xmlType.getContactDetails().getBillingAddress().getFormatted());
-            customerOrder.setBillingAddressDetails(importStaticAddress(xmlType.getContactDetails().getBillingAddress().getAddress()));
+            customerOrder.setBillingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getBillingAddress().getAddress()));
         }
         customerOrder.setOrderMessage(xmlType.getContactDetails().getRemarks());
     }
@@ -428,11 +428,11 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         return null;
     }
 
-    private Address importStaticAddress(final AddressType xmlAddressType) {
+    private Address importStaticAddress(final JobStatusListener statusListener, final AddressType xmlAddressType) {
         if (xmlAddressType == null) {
             return null;
         }
-        return addressXmlEntityImportHandler.handle(null, null, (ImpExTuple) new XmlImportTupleImpl(xmlAddressType.getGuid(), xmlAddressType), null, null);
+        return addressXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlAddressType.getGuid(), xmlAddressType), null, null);
     }
 
     @Override

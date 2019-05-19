@@ -24,6 +24,7 @@ import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.DateUtils;
 
+import java.io.OutputStreamWriter;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,7 +35,7 @@ import java.util.Map;
  * Date: 26/10/2018
  * Time: 08:28
  */
-public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHandler<T, String> {
+public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHandler<T> {
 
     protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
     protected static final String DATE_FORMAT = "yyyy-MM-dd";
@@ -445,6 +446,39 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
                         toAppendTo.append(c);
                 }
             }
+        }
+    }
+
+    /**
+     * Convenience method to count entities.
+     *
+     * @param entityCount count map
+     * @param entity      entity to count
+     */
+    protected void count(final Map<String, Integer> entityCount, final String entity) {
+        if (entityCount.containsKey(entity)) {
+            entityCount.put(entity, entityCount.get(entity) + 1);
+        } else {
+            entityCount.put(entity, 1);
+        }
+    }
+
+    /**
+     * Convenience method to write a non-empty tag and count it.
+     *
+     * @param tag         tag to output
+     * @param writer      writer to output tag to
+     * @param entityCount entity counter
+     *
+     * @throws Exception in case of write errors
+     */
+    protected void handleInternal(final Tag tag,
+                                  final OutputStreamWriter writer,
+                                  final Map<String, Integer> entityCount) throws Exception {
+        final String xmlChunk = tag.toXml();
+        if (xmlChunk != null) {
+            writer.write(xmlChunk);
+            count(entityCount, tag.name);
         }
     }
 

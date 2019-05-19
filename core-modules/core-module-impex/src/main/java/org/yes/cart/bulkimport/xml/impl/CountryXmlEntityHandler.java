@@ -20,6 +20,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.CountryType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.Country;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CountryService;
 
 /**
@@ -36,13 +37,13 @@ public class CountryXmlEntityHandler extends AbstractXmlEntityHandler<CountryTyp
     }
 
     @Override
-    protected void delete(final Country country) {
+    protected void delete(final JobStatusListener statusListener, final Country country) {
         this.countryService.delete(country);
         this.countryService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Country domain, final CountryType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Country domain, final CountryType xmlType, final EntityImportModeType mode) {
         domain.setIsoCode(xmlType.getIso31661Numeric());
         domain.setName(xmlType.getName());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
@@ -56,7 +57,7 @@ public class CountryXmlEntityHandler extends AbstractXmlEntityHandler<CountryTyp
     }
 
     @Override
-    protected Country getOrCreate(final CountryType xmlType) {
+    protected Country getOrCreate(final JobStatusListener statusListener, final CountryType xmlType) {
         Country country = this.countryService.findSingleByCriteria(" where e.countryCode = ?1", xmlType.getIso31661Alpha2());
         if (country != null) {
             return country;

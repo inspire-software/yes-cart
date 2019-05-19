@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.MessageFormat;
 import java.util.Set;
 
 /**
@@ -72,17 +71,13 @@ public abstract class AbstractImportService<ID extends ImportDescriptor> impleme
 
             final File[] filesToImport = ImportFileUtils.getFilesToImport(importDescriptor, fileName);
             if (filesToImport == null) {
-                final String msgWarn = MessageFormat.format(
-                        "no files with mask {0} to import",
+                statusListener.notifyWarning("no files with mask {} to import",
                         importDescriptor.getImportFileDescriptor().getFileNameMask());
-                statusListener.notifyWarning(msgWarn);
             } else {
-                final String msgInfo = MessageFormat.format(
-                        "Import descriptor {0} has {1} file(s) with mask {2} to import",
+                statusListener.notifyMessage("Import descriptor {} has {} file(s) with mask {} to import",
                         importDescriptorName,
                         filesToImport.length,
                         importDescriptor.getImportFileDescriptor().getFileNameMask());
-                statusListener.notifyMessage(msgInfo);
                 return doImport(statusListener, filesToImport, importDescriptorName, importDescriptor, importedFiles);
             }
         } catch (Exception e) {
@@ -115,8 +110,7 @@ public abstract class AbstractImportService<ID extends ImportDescriptor> impleme
         final int total = filesToImport.length;
         int count = 1;
         for (File fileToImport : filesToImport) {
-            final String msgInfo = MessageFormat.format("Importing file {0} of {1}: {2}", count++, total, fileToImport.getAbsolutePath());
-            statusListener.notifyMessage(msgInfo);
+            statusListener.notifyMessage("Importing file {} of {}: {}", count++, total, fileToImport.getAbsolutePath());
 
             final BulkImportResult status = doImport(statusListener, fileToImport, importDescriptorName, importDescriptor);
             if (status != BulkImportResult.OK) {
@@ -154,28 +148,23 @@ public abstract class AbstractImportService<ID extends ImportDescriptor> impleme
             failed = false;
 
         } catch (FileNotFoundException e) {
-            final String msgErr = MessageFormat.format(
-                    "can not find the file : {0} {1}",
-                    fileToImport.getAbsolutePath(),
-                    e.getMessage());
-            statusListener.notifyError(msgErr, e);
+            statusListener.notifyError("can not find the file : {} {}", e, fileToImport.getAbsolutePath(), e.getMessage());
         } catch (UnsupportedEncodingException e) {
-            final String msgErr = MessageFormat.format(
-                    "wrong file encoding in xml descriptor : {0} {1}",
+            statusListener.notifyError("wrong file encoding in xml descriptor : {} {}",
+                    e,
                     importDescriptor.getImportFileDescriptor().getFileEncoding(),
                     e.getMessage());
-            statusListener.notifyError(msgErr, e);
 
         } catch (IOException e) {
-            final String msgErr = MessageFormat.format("io exception : {0} {1}",
+            statusListener.notifyError("io exception : {} {}",
+                    e,
                     fileToImport.getAbsolutePath(),
                     e.getMessage());
-            statusListener.notifyError(msgErr, e);
         } catch (Exception e) {
-            final String msgErr = MessageFormat.format("error during processing import file : {0} {1}",
+            statusListener.notifyError("error during processing import file : {} {}",
+                    e,
                     fileToImport.getAbsolutePath(),
                     e.getMessage());
-            statusListener.notifyError(msgErr, e);
         }
 
         if (failed) {

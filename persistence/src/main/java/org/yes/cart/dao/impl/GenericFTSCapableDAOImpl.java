@@ -130,14 +130,6 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @Override
-    public T findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
-        return genericDAO.findSingleByNamedQueryCached(namedQueryName, parameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
         return genericDAO.findByQuery(hsqlQuery, parameters);
     }
@@ -188,14 +180,6 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     @Override
     public List<T> findByNamedQueryForUpdate(final String namedQueryName, final int timeout, final Object... parameters) {
         return genericDAO.findByNamedQueryForUpdate(namedQueryName, timeout, parameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<T> findByNamedQueryCached(final String namedQueryName, final Object... parameters) {
-        return genericDAO.findByNamedQueryCached(namedQueryName, parameters);
     }
 
     /**

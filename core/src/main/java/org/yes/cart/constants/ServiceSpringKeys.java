@@ -100,6 +100,11 @@ public interface ServiceSpringKeys {
     String CATEGORY_IMAGE_NAME_STRATEGY = "categoryImageNameStrategy";
 
     /**
+     * {@link CategoryMediaFileNameStrategyImpl} bean key.
+     */
+    String CONTENT_IMAGE_NAME_STRATEGY = "contentImageNameStrategy";
+
+    /**
      * {@link ProductMediaFileNameStrategyImpl} bean key.
      */
     String PRODUCT_IMAGE_NAME_STRATEGY = "productImageNameStrategy";

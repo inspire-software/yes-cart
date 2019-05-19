@@ -34,11 +34,11 @@ public interface ExportDescriptor<C extends ImpExContext> extends ImpExDescripto
     ExportFile getExportFileDescriptor();
 
     /**
-     * Get select sql, which used to look up objects that are to
+     * Get select command, which used to look up objects that are to
      * be exported (if they exist).
      * 
-     * @return        select sql
+     * @return        select command
      */
-    String getSelectSql();
+    String getSelectCmd();
 
 }

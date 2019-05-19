@@ -48,7 +48,7 @@ public class ProductImageImportDomainObjectStrategyImplTest extends BaseCoreDBTe
         final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
         mockery.checking(new Expectations() {{
-            allowing(listener).notifyMessage(with(any(String.class)));
+            allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
         }});
 
 

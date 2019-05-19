@@ -21,7 +21,9 @@ import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.domain.PromotionCouponService;
+
+import java.io.OutputStreamWriter;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -35,13 +37,15 @@ public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<Pr
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, PromotionCoupon> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, PromotionCoupon> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagPromotionCoupon(null, tuple.getData()).toXml();
+        handleInternal(tagPromotionCoupon(null, tuple.getData()), writer, entityCount);
 
     }
 

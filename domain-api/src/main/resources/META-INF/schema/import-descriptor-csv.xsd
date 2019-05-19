@@ -67,9 +67,18 @@
             <xs:element name="context" type="ContextType" minOccurs="0"/>
             <xs:element name="entity-type" type="xs:string" minOccurs="1"/>
             <xs:element name="import-file-descriptor" type="ImportFileDescriptorType" minOccurs="1"/>
-            <xs:element name="select-sql" type="xs:string" minOccurs="1"/>
-            <xs:element name="insert-sql" type="xs:string" minOccurs="0"/>
-            <xs:element name="delete-sql" type="xs:string" minOccurs="0"/>
+            <xs:choice>
+                <xs:element name="select-sql" type="xs:string" minOccurs="0"/>
+                <xs:element name="select-cmd" type="xs:string" minOccurs="0"/>
+            </xs:choice>
+            <xs:choice>
+                <xs:element name="insert-sql" type="xs:string" minOccurs="0"/>
+                <xs:element name="insert-cmd" type="xs:string" minOccurs="0"/>
+            </xs:choice>
+            <xs:choice>
+                <xs:element name="delete-sql" type="xs:string" minOccurs="0"/>
+                <xs:element name="delete-cmd" type="xs:string" minOccurs="0"/>
+            </xs:choice>
             <xs:element name="import-columns" type="ImportColumnsType" minOccurs="1"/>
         </xs:sequence>
 

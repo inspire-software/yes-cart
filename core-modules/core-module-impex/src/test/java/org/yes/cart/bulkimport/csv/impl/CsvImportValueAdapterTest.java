@@ -37,7 +37,8 @@ public class CsvImportValueAdapterTest {
         assertEquals(DateUtils.zdtParseSDT("2017-01-01 14:25:00"), adapter.fromRaw("2017-01-01 14:25:00", ImpExValues.ZONEDTIME, null, null));
         assertEquals(DateUtils.iParseSDT("2017-01-01 14:25:00"), adapter.fromRaw("2017-01-01 14:25:00", ImpExValues.INSTANT, null, null));
         Instant now = Instant.now();
-        assertEquals(now, adapter.fromRaw(String.valueOf(now.toEpochMilli()), ImpExValues.INSTANT, null, null));
+        Instant converted = (Instant) adapter.fromRaw(String.valueOf(now.toEpochMilli()), ImpExValues.INSTANT, null, null);
+        assertEquals(DateUtils.format(now, "yyyyMMddHHmmss"), DateUtils.format(converted, "yyyyMMddHHmmss"));
 
     }
 

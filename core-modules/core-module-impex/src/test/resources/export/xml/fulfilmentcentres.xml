@@ -28,7 +28,7 @@
         <file-name>target/fulfilmentcentres_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select w from WarehouseEntity w</select-sql>
+    <select-cmd>select w from WarehouseEntity w</select-cmd>
 
     <xml-handler>FULFILMENTCENTRE_PRETTY</xml-handler>
 

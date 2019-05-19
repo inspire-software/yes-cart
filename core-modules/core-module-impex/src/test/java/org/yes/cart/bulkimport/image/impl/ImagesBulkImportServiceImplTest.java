@@ -139,8 +139,8 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                         will(returnValue("productimages.xml"));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR);
                         will(returnValue(descriptor));
-                        allowing(listener).notifyMessage(with(any(String.class)));
-                        allowing(listener).notifyPing("Processed 1 of 1 images");
+                        allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+                        allowing(listener).notifyPing("Processed {} of {} images", 1, 1);
                     }});
 
                     ImportService service = (ImportService) createContext().getBean("imagesBulkImportService");
@@ -212,8 +212,8 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                         allowing(context).getAttribute(JobContextKeys.IMAGE_VAULT_PATH); will(returnValue("file:" + File.separator + File.separator + "target" + File.separator));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_NAME); will(returnValue("productimages.xml"));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR); will(returnValue(descriptor));
-                        allowing(listener).notifyMessage(with(any(String.class)));
-                        allowing(listener).notifyPing("Processed 1 of 1 images");
+                        allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+                        allowing(listener).notifyPing("Processed {} of {} images", 1, 1);
                     }});
 
                     ImportService service = (ImportService) createContext().getBean("imagesBulkImportService");
@@ -285,8 +285,8 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                         allowing(context).getAttribute(JobContextKeys.IMAGE_VAULT_PATH); will(returnValue("file:" + File.separator + File.separator + "target" + File.separator));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_NAME); will(returnValue("productimages_simple.xml"));
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR); will(returnValue(descriptor));
-                        allowing(listener).notifyMessage(with(any(String.class)));
-                        allowing(listener).notifyPing("Processed 1 of 1 images");
+                        allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+                        allowing(listener).notifyPing("Processed {} of {} images", 1, 1);
                     }});
 
                     ImportService service = (ImportService) createContext().getBean("imagesBulkImportService");

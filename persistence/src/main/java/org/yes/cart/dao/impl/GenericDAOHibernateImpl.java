@@ -144,19 +144,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
-    public T findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
-        List<T> rez = this.findByNamedQueryCached(namedQueryName, parameters);
-        if (!rez.isEmpty()) {
-            return rez.get(0);
-        }
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Object getScalarResultByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         setQueryParameters(query, parameters);
@@ -257,20 +244,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
         if (parameters != null) {
             setQueryParameters(query, parameters);
         }
-        return query.list();
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<T> findByNamedQueryCached(final String namedQueryName, final Object... parameters) {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        query.setCacheable(true);
-        query.setCacheMode(CacheMode.NORMAL);
-        setQueryParameters(query, parameters);
         return query.list();
     }
 

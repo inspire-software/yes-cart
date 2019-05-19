@@ -22,6 +22,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
 import org.yes.cart.util.ExceptionUtil;
+import org.yes.cart.util.MessageFormatUtils;
 
 import java.util.UUID;
 
@@ -112,52 +113,53 @@ public class JobStatusListenerImpl implements JobStatusListener {
 
     /** {@inheritDoc} */
     @Override
-    public void notifyPing(final String msg) {
-        pingMsg = msg;
-        LOG.debug(msg);
+    public void notifyPing(final String msg, Object... args) {
+        pingMsg = MessageFormatUtils.format(msg, args);
+        LOG.debug(pingMsg);
         notifyPing();
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyMessage(final String message) {
+    public void notifyMessage(final String message, Object... args) {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
-        append(report, "INFO: ", message, "\n");
-        LOG.info(message);
+        append(report, "INFO: ", MessageFormatUtils.format(message, args), "\n");
+        LOG.info(message, args);
         notifyPing();
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyWarning(final String warning) {
+    public void notifyWarning(final String warning, Object... args) {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
-        append(report, "WARNING: ", warning, "\n");
-        LOG.warn(warning);
+        append(report, "WARNING: ", MessageFormatUtils.format(warning, args), "\n");
+        LOG.warn(warning, args);
         notifyPing();
         warn++;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyError(final String error) {
+    public void notifyError(final String error, Object... args) {
         if (result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
-        append(report, "ERROR: ", error, "\n");
-        LOG.error(error);
+        final String formatted = MessageFormatUtils.format(error, args);
+        append(report, "ERROR: ", formatted, "\n");
+        LOG.error(formatted);
         notifyPing();
         err++;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyError(final String error, final Exception exp) {
+    public void notifyError(final String error, final Exception exp, Object... args) {
         final String stack = ExceptionUtil.stackTraceToString(exp);
-        notifyError(error + "\n" + stack);
+        notifyError(error + "\n" + stack, args);
     }
 
     /** {@inheritDoc} */

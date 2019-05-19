@@ -47,7 +47,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     private String entityType;
     private Class entityTypeClass;
 
-    private String selectSql;
+    private String selectCmd;
 
     private boolean initialised = false;
 
@@ -110,15 +110,15 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
 
     /** {@inheritDoc} */
     @Override
-    public String getSelectSql() {
-        return selectSql;
+    public String getSelectCmd() {
+        return selectCmd;
     }
 
     /**
-     * @param selectSql select SQL to lookup existing records
+     * @param selectCmd select SQL to lookup existing records
      */
-    public void setSelectSql(final String selectSql) {
-        this.selectSql = selectSql;
+    public void setSelectCmd(final String selectCmd) {
+        this.selectCmd = selectCmd;
     }
 
     /**
@@ -215,7 +215,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
                 ", columnByName=" + columnByName +
                 ", columnsByType=" + columnsByType +
                 ", entityType='" + entityType + '\'' +
-                ", selectSql='" + selectSql + '\'' +
+                ", selectSql='" + selectCmd + '\'' +
                 ", initialised=" + initialised +
                 '}';
     }

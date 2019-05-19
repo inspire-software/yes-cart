@@ -103,8 +103,8 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
             mockery.checking(new Expectations() {{
                 // ONLY allow messages during import
                 allowing(listener).notifyPing();
-                allowing(listener).notifyPing(with(any(String.class)));
-                allowing(listener).notifyMessage(with(any(String.class)));
+                allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
+                allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
             }});
 
             Set<String> importedFilesSet = new HashSet<>();

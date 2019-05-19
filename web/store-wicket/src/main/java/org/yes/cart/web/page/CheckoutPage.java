@@ -52,6 +52,7 @@ import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.order.PlaceOrderDisabledException;
 import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.MessageFormatUtils;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.AddressForm;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
@@ -605,11 +606,11 @@ public class CheckoutPage extends AbstractWebPage {
                 payment);
 
 
-        return MessageFormat.format(
-                "<form method=\"POST\" action=\"{0}\" class=\"form-horizontal\">\n" +
-                        "{1}\n" +
+        return MessageFormatUtils.format(
+                "<form method=\"POST\" action=\"{}\" class=\"form-horizontal\">\n" +
+                        "{}\n" +
                         "<div id=\"paymentDiv\">\n" +
-                        "{2}" +
+                        "{}" +
                         "</div></form>",
                 postActionUrl,
                 htmlFragment,

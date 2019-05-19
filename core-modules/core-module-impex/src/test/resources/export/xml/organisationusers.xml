@@ -28,7 +28,7 @@
         <file-name>target/organisationusers_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select m from ManagerEntity m</select-sql>
+    <select-cmd>select m from ManagerEntity m</select-cmd>
 
     <xml-handler>ORGANISATIONUSER_PRETTY</xml-handler>
 

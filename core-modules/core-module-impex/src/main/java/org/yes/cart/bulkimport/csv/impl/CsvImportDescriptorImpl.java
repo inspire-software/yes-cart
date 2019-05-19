@@ -52,9 +52,9 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     private String entityType;
     private Class entityTypeClass;
 
-    private String selectSql;
-    private String insertSql;
-    private String deleteSql;
+    private String selectCmd;
+    private String insertCmd;
+    private String deleteCmd;
 
     private boolean initialised = false;
 
@@ -154,41 +154,41 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
     /** {@inheritDoc} */
     @Override
-    public String getSelectSql() {
-        return selectSql;
+    public String getSelectCmd() {
+        return selectCmd;
     }
 
     /**
-     * @param selectSql select SQL to lookup existing records
+     * @param selectCmd select SQL to lookup existing records
      */
-    public void setSelectSql(final String selectSql) {
-        this.selectSql = selectSql;
+    public void setSelectCmd(final String selectCmd) {
+        this.selectCmd = selectCmd;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getInsertSql() {
-        return insertSql;
+    public String getInsertCmd() {
+        return insertCmd;
     }
 
     /**
-     * @param insertSql insert SQL for quick and dirty inserts
+     * @param insertCmd insert SQL for quick and dirty inserts
      */
-    public void setInsertSql(final String insertSql) {
-        this.insertSql = insertSql;
+    public void setInsertCmd(final String insertCmd) {
+        this.insertCmd = insertCmd;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getDeleteSql() {
-        return deleteSql;
+    public String getDeleteCmd() {
+        return deleteCmd;
     }
 
     /**
-     * @param deleteSql delete SQL used for DELETE mode
+     * @param deleteCmd delete SQL used for DELETE mode
      */
-    public void setDeleteSql(final String deleteSql) {
-        this.deleteSql = deleteSql;
+    public void setDeleteCmd(final String deleteCmd) {
+        this.deleteCmd = deleteCmd;
     }
 
     CsvImportColumn getPrimaryKeyColumn() {
@@ -317,9 +317,9 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
                 ", columnsByType=" + columnsByType +
                 ", importDirectory='" + importDirectory + '\'' +
                 ", entityType='" + entityType + '\'' +
-                ", selectSql='" + selectSql + '\'' +
-                ", insertSql='" + insertSql + '\'' +
-                ", deleteSql='" + deleteSql + '\'' +
+                ", selectSql='" + selectCmd + '\'' +
+                ", insertSql='" + insertCmd + '\'' +
+                ", deleteSql='" + deleteCmd + '\'' +
                 ", initialised=" + initialised +
                 '}';
     }

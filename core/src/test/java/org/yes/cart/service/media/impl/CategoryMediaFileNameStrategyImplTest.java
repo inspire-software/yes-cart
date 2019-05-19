@@ -68,7 +68,7 @@ public class CategoryMediaFileNameStrategyImplTest extends BaseCoreDBTestCase {
         assertEquals("CC-TEST-products", mediaFileNameStrategy.resolveObjectCode("imgvault/category/category.jpeg"));
         assertEquals("CC-TEST-products", mediaFileNameStrategy.resolveObjectCode("imgvault/category/category.jpeg?w=10&h=4"));
 
-        // test that inexistent are resolved to no image
+        // test that non-existent are resolved to no image
         assertEquals(Constants.NO_IMAGE, mediaFileNameStrategy.resolveObjectCode("imgvault/category/unknown-category.jpeg"));
 
     }

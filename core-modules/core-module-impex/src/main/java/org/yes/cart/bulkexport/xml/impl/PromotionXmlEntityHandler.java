@@ -23,6 +23,9 @@ import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.PromotionCouponService;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 04/11/2018
@@ -39,13 +42,15 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Promotion> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, Promotion> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagPromotion(null, tuple.getData()).toXml();
+        handleInternal(tagPromotion(null, tuple.getData()), writer, entityCount);
 
     }
 

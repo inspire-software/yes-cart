@@ -26,7 +26,9 @@ import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.WarehouseService;
 
+import java.io.OutputStreamWriter;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -47,13 +49,15 @@ public class ShopXmlEntityHandler extends AbstractXmlEntityHandler<Shop> {
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Shop> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, Shop> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagShop(null, tuple.getData()).toXml();
+        handleInternal(tagShop(null, tuple.getData()), writer, entityCount);
 
     }
 

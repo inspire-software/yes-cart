@@ -21,7 +21,7 @@ import org.yes.cart.bulkimport.xml.internal.CustomAttributeType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.SystemType;
 import org.yes.cart.domain.entity.System;
-import org.yes.cart.domain.entity.impl.SystemEntity;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.SystemService;
 
 /**
@@ -38,12 +38,12 @@ public class SystemXmlEntityHandler extends AbstractXmlEntityHandler<SystemType,
     }
 
     @Override
-    protected void delete(final System system) {
+    protected void delete(final JobStatusListener statusListener, final System system) {
         throw new UnsupportedOperationException("Deleting the system entry in not supported");
     }
 
     @Override
-    protected void saveOrUpdate(final System domain, final SystemType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final System domain, final SystemType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getCustomAttributes() != null) {
 
@@ -58,7 +58,7 @@ public class SystemXmlEntityHandler extends AbstractXmlEntityHandler<SystemType,
     }
 
     @Override
-    protected System getOrCreate(final SystemType xmlType) {
+    protected System getOrCreate(final JobStatusListener statusListener, final SystemType xmlType) {
         return this.systemService.getSystem();
     }
 

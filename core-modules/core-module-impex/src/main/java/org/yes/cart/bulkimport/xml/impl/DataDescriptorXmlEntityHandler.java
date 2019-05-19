@@ -20,6 +20,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.DataDescriptorType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.DataDescriptor;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.DataDescriptorService;
 
 /**
@@ -36,13 +37,13 @@ public class DataDescriptorXmlEntityHandler extends AbstractXmlEntityHandler<Dat
     }
 
     @Override
-    protected void delete(final DataDescriptor descriptor) {
+    protected void delete(final JobStatusListener statusListener, final DataDescriptor descriptor) {
         this.dataDescriptorService.delete(descriptor);
         this.dataDescriptorService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final DataDescriptor domain, final DataDescriptorType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final DataDescriptor domain, final DataDescriptorType xmlType, final EntityImportModeType mode) {
 
         domain.setType(xmlType.getType().value());
         domain.setValue(xmlType.getValue());
@@ -57,7 +58,7 @@ public class DataDescriptorXmlEntityHandler extends AbstractXmlEntityHandler<Dat
     }
 
     @Override
-    protected DataDescriptor getOrCreate(final DataDescriptorType xmlType) {
+    protected DataDescriptor getOrCreate(final JobStatusListener statusListener, final DataDescriptorType xmlType) {
         DataDescriptor descriptor = this.dataDescriptorService.findSingleByCriteria(" where e.name = ?1", xmlType.getName());
         if (descriptor != null) {
             return descriptor;

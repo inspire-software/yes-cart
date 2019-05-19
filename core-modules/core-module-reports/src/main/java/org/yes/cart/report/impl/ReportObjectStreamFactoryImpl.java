@@ -23,6 +23,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.hibernate.collection.internal.AbstractPersistentCollection;
 import org.hibernate.collection.internal.PersistentBag;
 import org.hibernate.collection.internal.PersistentList;
@@ -72,6 +73,7 @@ public class ReportObjectStreamFactoryImpl implements ReportObjectStreamFactory 
     private XStream getXStream() {
 
         final XStream xStream = new XStream(new DomDriver());
+        xStream.addPermission(AnyTypePermission.ANY);
 
         xStream.registerConverter(new Converter() {
 

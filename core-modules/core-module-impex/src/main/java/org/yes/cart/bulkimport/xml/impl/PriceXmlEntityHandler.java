@@ -20,6 +20,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.PriceType;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ShopService;
 
@@ -38,13 +39,13 @@ public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, S
     }
 
     @Override
-    protected void delete(final SkuPrice price) {
+    protected void delete(final JobStatusListener statusListener, final SkuPrice price) {
         this.priceService.delete(price);
         this.priceService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final SkuPrice domain, final PriceType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final SkuPrice domain, final PriceType xmlType, final EntityImportModeType mode) {
 
         domain.setSkuCode(xmlType.getSku());
         domain.setCurrency(xmlType.getCurrency());
@@ -74,7 +75,7 @@ public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, S
     }
 
     @Override
-    protected SkuPrice getOrCreate(final PriceType xmlType) {
+    protected SkuPrice getOrCreate(final JobStatusListener statusListener, final PriceType xmlType) {
         SkuPrice price = this.priceService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (price != null) {
             return price;

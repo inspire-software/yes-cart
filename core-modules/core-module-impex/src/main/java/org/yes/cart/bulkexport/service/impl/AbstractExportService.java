@@ -28,7 +28,6 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.util.DateUtils;
 
 import java.io.File;
-import java.text.MessageFormat;
 
 /**
  * User: denispavlov
@@ -70,22 +69,15 @@ public abstract class AbstractExportService<ED extends ExportDescriptor> impleme
                     fileToExport = fileToExport.replace(TIMESTAMP_PLACEHOLDER, DateUtils.exportFileTimestamp());
                     if (new File(fileToExport).exists()) {
                         // Only do this for timestamped files, otherwise we assume that files are re-writable
-                        final String msgErr = MessageFormat.format(
-                                "export file already exists: {0}",
-                                fileToExport);
-                        statusListener.notifyError(msgErr);
+                        statusListener.notifyError("export file already exists: {}", fileToExport);
                         return BulkExportResult.ERROR;
                     }
                 }
             }
 
-            final String msgInfo = MessageFormat.format(
-                    "Export descriptor {0} specifies file {1} to export",
-                    exportDescriptorName,
-                    fileToExport);
-            statusListener.notifyMessage(msgInfo);
-            if (exportDescriptor.getSelectSql() == null) {
-                final String msgErr = "export can not be started, because select-sql is empty";
+            statusListener.notifyMessage("Export descriptor {} specifies file {} to export", exportDescriptorName, fileToExport);
+            if (exportDescriptor.getSelectCmd() == null) {
+                final String msgErr = "export can not be started, because 'select' is empty";
                 statusListener.notifyError(msgErr);
                 return BulkExportResult.ERROR;
             }
@@ -102,10 +94,7 @@ public abstract class AbstractExportService<ED extends ExportDescriptor> impleme
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
 
-            final String msgError = MessageFormat.format(
-                    "unexpected error {0}",
-                    e.getMessage());
-            statusListener.notifyError(msgError, e);
+            statusListener.notifyError("unexpected error {}", e, e.getMessage());
             return BulkExportResult.ERROR;
         }
         return BulkExportResult.OK;

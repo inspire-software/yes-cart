@@ -38,6 +38,13 @@ public class CsvExportDescriptorXStreamProviderTest {
 
     @Test
     public void testProvide() throws Exception {
+
+        testProvide("src/test/resources/export/csv/schematest001.xml");
+        testProvide("src/test/resources/export/csv/schematest002.xml");
+
+    }
+
+    public void testProvide(final String filename) throws Exception {
         final XStreamProvider<CsvExportDescriptor> provider = new CsvExportDescriptorXStreamProvider();
 
         final InputStream inputStream = new FileInputStream("src/test/resources/export/csv/schematest001.xml");
@@ -58,7 +65,7 @@ public class CsvExportDescriptorXStreamProviderTest {
         assertEquals(';', desc.getExportFileDescriptor().getColumnDelimiter());
         assertEquals('"', desc.getExportFileDescriptor().getTextQualifier());
 
-        assertEquals("select b from AttributeEntity b where b.code = {code}", desc.getSelectSql());
+        assertEquals("select b from AttributeEntity b where b.code = {code}", desc.getSelectCmd());
 
         assertNotNull(desc.getColumns());
         assertEquals(11, desc.getColumns().size());

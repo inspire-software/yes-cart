@@ -30,7 +30,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
 
@@ -64,8 +63,7 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
 
         final Shop shop = shopService.getShopByCode(code);
         if (shop == null) {
-            final String warn = MessageFormat.format("shop with code {0} not found.", code);
-            statusListener.notifyWarning(warn);
+            statusListener.notifyWarning("shop with code {} not found.", code);
             return false;
         }
 
@@ -93,8 +91,7 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
                 }
             }
             if (attribute == null) {
-                final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
-                statusListener.notifyWarning(warn);
+                statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
                 return false;
             }
             imageAttributeValue = shopService.getGenericDao().getEntityFactory().getByIface(AttrValueShop.class);
@@ -106,16 +103,14 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        final String info = MessageFormat.format("file {0} attached as {1} to shop {2}", fileName, attributeCode, shop.getName());
-        statusListener.notifyMessage(info);
+        statusListener.notifyMessage("file {} attached as {} to shop {}", fileName, attributeCode, shop.getName());
 
         try {
             shopService.update(shop);
             return true;
 
         } catch (DataIntegrityViolationException e) {
-            final String err = MessageFormat.format("image {0} for shop with name {1} could not be added (db error).", fileName, shop.getName());
-            statusListener.notifyError(err, e);
+            statusListener.notifyError("image {} for shop with name {} could not be added (db error).", e, fileName, shop.getName());
             return false;
 
         }

@@ -30,7 +30,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -63,8 +62,7 @@ public class ContentImageImportDomainObjectStrategyImpl extends AbstractImageImp
 
         final Content content = contentService.findContentIdBySeoUriOrGuid(code);
         if (content == null) {
-            final String warn = MessageFormat.format("content with code {0} not found.", code);
-            statusListener.notifyWarning(warn);
+            statusListener.notifyWarning("content with code {} not found.", code);
             return false;
         }
 
@@ -82,8 +80,7 @@ public class ContentImageImportDomainObjectStrategyImpl extends AbstractImageImp
                 }
             }
             if (attribute == null) {
-                final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
-                statusListener.notifyWarning(warn);
+                statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
                 return false;
             }
             imageAttributeValue = contentService.getGenericDao().getEntityFactory().getByIface(AttrValueContent.class);
@@ -95,16 +92,14 @@ public class ContentImageImportDomainObjectStrategyImpl extends AbstractImageImp
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        final String info = MessageFormat.format("file {0} attached as {1} to content {2}", fileName, attributeCode, content.getName());
-        statusListener.notifyMessage(info);
+        statusListener.notifyMessage("file {} attached as {} to content {}", fileName, attributeCode, content.getName());
 
         try {
             contentService.update(content);
             return true;
 
         } catch (DataIntegrityViolationException e) {
-            final String err = MessageFormat.format("image {0} for content with code {1} could not be added (db error).", fileName, content.getGuid());
-            statusListener.notifyError(err, e);
+            statusListener.notifyError("image {} for content with code {} could not be added (db error).", e, fileName, content.getGuid());
             return false;
 
         }

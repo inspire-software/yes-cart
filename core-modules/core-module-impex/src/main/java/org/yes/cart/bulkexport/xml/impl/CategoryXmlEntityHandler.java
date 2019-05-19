@@ -26,6 +26,9 @@ import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CategoryService;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 26/10/2018
@@ -41,13 +44,15 @@ public class CategoryXmlEntityHandler extends AbstractXmlEntityHandler<Category>
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Category> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, Category> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagCategory(null, tuple.getData()).toXml();
+        handleInternal(tagCategory(null, tuple.getData()), writer, entityCount);
 
     }
 

@@ -20,8 +20,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.FulfilmentCentreType;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.service.domain.AttributeGroupService;
-import org.yes.cart.service.domain.EtypeService;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.WarehouseService;
 
 /**
@@ -32,21 +31,19 @@ import org.yes.cart.service.domain.WarehouseService;
 public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<FulfilmentCentreType, Warehouse> implements XmlEntityImportHandler<FulfilmentCentreType, Warehouse> {
 
     private WarehouseService warehouseService;
-    private AttributeGroupService attributeGroupService;
-    private EtypeService etypeService;
 
     public FulfilmentCentreXmlEntityHandler() {
         super("fulfilment-centre");
     }
 
     @Override
-    protected void delete(final Warehouse fc) {
+    protected void delete(final JobStatusListener statusListener, final Warehouse fc) {
         this.warehouseService.delete(fc);
         this.warehouseService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Warehouse domain, final FulfilmentCentreType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Warehouse domain, final FulfilmentCentreType xmlType, final EntityImportModeType mode) {
         domain.setName(xmlType.getName());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
         domain.setDescription(xmlType.getDescription());
@@ -71,7 +68,7 @@ public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<F
     }
 
     @Override
-    protected Warehouse getOrCreate(final FulfilmentCentreType xmlType) {
+    protected Warehouse getOrCreate(final JobStatusListener statusListener, final FulfilmentCentreType xmlType) {
         Warehouse warehouse = this.warehouseService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (warehouse != null) {
             return warehouse;

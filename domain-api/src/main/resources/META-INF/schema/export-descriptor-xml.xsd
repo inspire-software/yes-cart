@@ -42,7 +42,10 @@
             <xs:element name="context" type="ContextType" minOccurs="0"/>
             <xs:element name="entity-type" type="xs:string" minOccurs="1"/>
             <xs:element name="export-file-descriptor" type="ExportFileDescriptorType" minOccurs="1"/>
-            <xs:element name="select-sql" type="xs:string" minOccurs="1"/>
+            <xs:choice>
+                <xs:element name="select-sql" type="xs:string" minOccurs="0"/>
+                <xs:element name="select-cmd" type="xs:string" minOccurs="0"/>
+            </xs:choice>
             <xs:element name="xml-handler" type="xs:string" minOccurs="1"/>
         </xs:sequence>
 

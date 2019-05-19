@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
@@ -20,6 +21,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.PriceRuleType;
 import org.yes.cart.domain.entity.SkuPriceRule;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.GenericService;
 
 /**
@@ -36,13 +38,13 @@ public class PriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<PriceRul
     }
 
     @Override
-    protected void delete(final SkuPriceRule rule) {
+    protected void delete(final JobStatusListener statusListener, final SkuPriceRule rule) {
         this.priceRuleService.delete(rule);
         this.priceRuleService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final SkuPriceRule domain, final PriceRuleType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final SkuPriceRule domain, final PriceRuleType xmlType, final EntityImportModeType mode) {
 
         domain.setTag(processTags(xmlType.getTags(), domain.getTag()));
         domain.setName(xmlType.getName());
@@ -78,7 +80,7 @@ public class PriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<PriceRul
     }
 
     @Override
-    protected SkuPriceRule getOrCreate(final PriceRuleType xmlType) {
+    protected SkuPriceRule getOrCreate(final JobStatusListener statusListener, final PriceRuleType xmlType) {
         SkuPriceRule rule = this.priceRuleService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (rule != null) {
             return rule;

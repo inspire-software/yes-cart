@@ -16,8 +16,6 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.CollectionImportModeType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
@@ -26,6 +24,7 @@ import org.yes.cart.bulkimport.xml.internal.ShopFulfilmentCentresCodeType;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.WarehouseService;
 
@@ -38,8 +37,6 @@ import java.util.List;
  */
 public class ShopFulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<ShopFulfilmentCentresCodeType, Shop> implements XmlEntityImportHandler<ShopFulfilmentCentresCodeType, Shop> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopFulfilmentCentreXmlEntityHandler.class);
-
     private WarehouseService warehouseService;
     private ShopService shopService;
 
@@ -48,15 +45,15 @@ public class ShopFulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandl
     }
 
     @Override
-    protected void delete(final Shop shop) {
+    protected void delete(final JobStatusListener statusListener, final Shop shop) {
         throw new UnsupportedOperationException("Shop delete mode is not supported");
     }
 
     @Override
-    protected void saveOrUpdate(final Shop domain, final ShopFulfilmentCentresCodeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Shop domain, final ShopFulfilmentCentresCodeType xmlType, final EntityImportModeType mode) {
 
         if (domain != null) {
-            processCentres(domain, xmlType);
+            processCentres(statusListener, domain, xmlType);
 
             if (domain.getShopId() == 0L) {
                 this.shopService.create(domain);
@@ -69,7 +66,7 @@ public class ShopFulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandl
 
     }
 
-    private void processCentres(final Shop domain, final ShopFulfilmentCentresCodeType xmlType) {
+    private void processCentres(final JobStatusListener statusListener, final Shop domain, final ShopFulfilmentCentresCodeType xmlType) {
 
         final CollectionImportModeType collectionMode = xmlType.getImportMode() != null ? xmlType.getImportMode() : CollectionImportModeType.MERGE;
 
@@ -94,17 +91,17 @@ public class ShopFulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandl
                     processCarriersRemove(domain, ff);
                 }
             } else {
-                processCentresSave(domain, ff);
+                processCentresSave(statusListener, domain, ff);
             }
         }
 
     }
 
-    private void processCentresSave(final Shop domain, final ShopFulfilmentCentreType ff) {
+    private void processCentresSave(final JobStatusListener statusListener, final Shop domain, final ShopFulfilmentCentreType ff) {
 
         final Warehouse centre = this.warehouseService.findSingleByCriteria(" where e.guid = ?1", ff.getGuid());
         if (centre == null) {
-            LOG.warn("Fulfilment centre {} for shop {} is not found and will be skipped", ff.getGuid(), domain.getCode());
+            statusListener.notifyWarning("Fulfilment centre {} for shop {} is not found and will be skipped", ff.getGuid(), domain.getCode());
             return;
         }
 
@@ -141,7 +138,7 @@ public class ShopFulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandl
     }
 
     @Override
-    protected Shop getOrCreate(final ShopFulfilmentCentresCodeType xmlType) {
+    protected Shop getOrCreate(final JobStatusListener statusListener, final ShopFulfilmentCentresCodeType xmlType) {
         Shop shop = this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getShopCode());
         if (shop != null) {
             return shop;

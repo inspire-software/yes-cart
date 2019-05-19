@@ -21,6 +21,7 @@ import org.yes.cart.bulkimport.xml.internal.BrandType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.AttrValueBrand;
 import org.yes.cart.domain.entity.Brand;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.BrandService;
 
 /**
@@ -37,13 +38,13 @@ public class BrandXmlEntityHandler extends AbstractAttributableXmlEntityHandler<
     }
 
     @Override
-    protected void delete(final Brand brand) {
+    protected void delete(final JobStatusListener statusListener, final Brand brand) {
         this.brandService.delete(brand);
         this.brandService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Brand domain, final BrandType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Brand domain, final BrandType xmlType, final EntityImportModeType mode) {
 
         updateExt(xmlType.getCustomAttributes(), domain, domain.getAttributes());
 
@@ -59,7 +60,7 @@ public class BrandXmlEntityHandler extends AbstractAttributableXmlEntityHandler<
     }
 
     @Override
-    protected Brand getOrCreate(final BrandType xmlType) {
+    protected Brand getOrCreate(final JobStatusListener statusListener, final BrandType xmlType) {
         Brand brand = this.brandService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (brand != null) {
             return brand;

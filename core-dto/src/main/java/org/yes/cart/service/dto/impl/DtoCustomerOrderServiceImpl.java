@@ -50,6 +50,7 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.util.MessageFormatUtils;
 import org.yes.cart.utils.HQLUtils;
 
 import java.text.MessageFormat;
@@ -148,18 +149,22 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_PAYMENT_CONFIRMED, orderNum, null, Collections.emptyMap());
             } catch (OrderException e) {
-                LOG.error(
-                        MessageFormat.format(
-                                "Cannot confirm payment for order with number [ {0} ] ",
-                                orderNum
-                        ),
-                        e);
-                return new Result(orderNum, null, "OR-0003", "Cannot confirm payment for order with number [" + orderNum + "]   ",
+                final String error = MessageFormatUtils.format(
+                        "Cannot confirm payment for order with number [ {} ] ",
+                        orderNum
+                );
+                LOG.error(error, e);
+                return new Result(orderNum, null, "OR-0003", error,
                         "error.order.payment.confirm.fatal", orderNum, e.getMessage());
             }
         } else {
 
-            return new Result(orderNum, null, "OR-0003", "Cannot confirm payment for order with number [" + orderNum + "]   ",
+            final String error = MessageFormatUtils.format(
+                    "Cannot confirm payment for order with number [ {} ] ",
+                    orderNum
+            );
+
+            return new Result(orderNum, null, "OR-0003", error,
                     "error.order.payment.confirm.fatal", orderNum, order.getOrderStatus());
 
         }
@@ -192,13 +197,14 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_CANCEL_WITH_REFUND, orderNum, null, Collections.emptyMap());
             } catch (OrderException e) {
-                LOG.error(
-                        MessageFormat.format(
-                                "Order with number [ {0} ] cannot be canceled ",
-                                orderNum
-                        ),
-                        e);
-                return new Result(orderNum, null, "OR-0002", "Order with number [" + orderNum + "] cannot be cancelled  ",
+
+                final String error = MessageFormatUtils.format(
+                        "Order with number [ {} ] cannot be canceled ",
+                        orderNum
+                );
+
+                LOG.error(error, e);
+                return new Result(orderNum, null, "OR-0002", error,
                         "error.order.cancel.fatal", orderNum, e.getMessage());
             }
         } else if (isWaitingRefund) {
@@ -207,18 +213,24 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_REFUND_PROCESSED, orderNum, null, Collections.emptyMap());
             } catch (OrderException e) {
-                LOG.error(
-                        MessageFormat.format(
-                                "Order with number [ {0} ] cannot be canceled ",
-                                orderNum
-                        ),
-                        e);
-                return new Result(orderNum, null, "OR-0004", "Order with number [" + orderNum + "] cannot be cancelled (retry) ",
+
+                final String error = MessageFormatUtils.format(
+                        "Order with number [ {} ] cannot be canceled (retry) ",
+                        orderNum
+                );
+
+                LOG.error(error, e);
+                return new Result(orderNum, null, "OR-0004", error,
                         "error.order.cancel.retry.fatal", orderNum, e.getMessage());
             }
         } else {
 
-            return new Result(orderNum, null, "OR-0007", "Order with number [" + orderNum + "] unable to cancel",
+            final String error = MessageFormatUtils.format(
+                    "Order with number [ {} ] unable to cancel ",
+                    orderNum
+            );
+
+            return new Result(orderNum, null, "OR-0007", error,
                     "error.order.cancel.fatal", orderNum);
 
         }
@@ -256,18 +268,24 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                             put("forceManualProcessingMessage", message);
                         }});
             } catch (OrderException e) {
-                LOG.error(
-                        MessageFormat.format(
-                                "Order with number [ {0} ] cannot be canceled ",
-                                orderNum
-                        ),
-                        e);
-                return new Result(orderNum, null, "OR-0005", "Order with number [" + orderNum + "] cannot be cancelled (retry manual) ",
+
+                final String error = MessageFormatUtils.format(
+                        "Order with number [ {} ] cannot be canceled  (retry manual) ",
+                        orderNum
+                );
+
+                LOG.error(error, e);
+                return new Result(orderNum, null, "OR-0005", error,
                         "error.order.cancel.retry.manual.fatal", orderNum, e.getMessage());
             }
         } else {
 
-            return new Result(orderNum, null, "OR-0007", "Order with number [" + orderNum + "] unable to cancel",
+            final String error = MessageFormatUtils.format(
+                    "Order with number [ {} ] unable to cancel ",
+                    orderNum
+            );
+
+            return new Result(orderNum, null, "OR-0007", error,
                     "error.order.cancel.fatal", orderNum);
 
         }
@@ -377,14 +395,14 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
         } catch (OrderException e) {
 
-            LOG.error(
-                    MessageFormat.format(
-                            "Order with number [ {0} ] delivery number [ {1} ] in [ {2} ] can not be transited to  [ {3} ] status ",
-                            orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus
-                    ),
-                    e);
+            final String error = MessageFormatUtils.format(
+                    "Order with number [ {} ] delivery number [ {} ] in [ {} ] can not be transitioned to  [ {} ] status ",
+                    orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus
+            );
 
-            return new Result(orderNum, deliveryNum, "DL-0004", "Order with number [" + orderNum + "] delivery number [" + deliveryNum + "] in [" + delivery.getDeliveryStatus() + "] can not be transited to  [" + currentStatus + "] status ",
+            LOG.error(error, e);
+
+            return new Result(orderNum, deliveryNum, "DL-0004", error,
                     "error.delivery.transition.fatal", orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus, e.getMessage());
 
 
@@ -445,14 +463,14 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
         } catch (OrderException e) {
 
-            LOG.error(
-                    MessageFormat.format(
-                            "Order with number [ {0} ] delivery number [ {1} ] in [ {2} ] can not be transited to  [ {3} ] status ",
-                            orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus
-                    ),
-                    e);
+            final String error = MessageFormat.format(
+                    "Order with number [ {} ] delivery number [ {} ] in [ {} ] can not be transited to  [ {} ] status ",
+                    orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus
+            );
 
-            return new Result(orderNum, deliveryNum, "DL-0004", "Order with number [" + orderNum + "] delivery number [" + deliveryNum + "] in [" + delivery.getDeliveryStatus() + "] can not be transited to  [" + currentStatus + "] status ",
+            LOG.error(error, e);
+
+            return new Result(orderNum, deliveryNum, "DL-0004", error,
                     "error.delivery.transition.fatal", orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus, e.getMessage());
 
 

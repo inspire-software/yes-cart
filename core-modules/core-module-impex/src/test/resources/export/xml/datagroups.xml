@@ -28,7 +28,7 @@
         <file-name>target/datagroups_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select dg from DataGroupEntity dg</select-sql>
+    <select-cmd>select dg from DataGroupEntity dg</select-cmd>
 
     <xml-handler>DATAGROUP_PRETTY</xml-handler>
 

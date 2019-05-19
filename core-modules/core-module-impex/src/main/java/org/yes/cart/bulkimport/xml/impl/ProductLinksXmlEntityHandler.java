@@ -23,6 +23,7 @@ import org.yes.cart.bulkimport.xml.internal.ProductLinkType;
 import org.yes.cart.domain.entity.Association;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductAssociation;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AssociationService;
 import org.yes.cart.service.domain.ProductAssociationService;
 import org.yes.cart.service.domain.ProductService;
@@ -45,13 +46,13 @@ public class ProductLinksXmlEntityHandler extends AbstractXmlEntityHandler<org.y
     }
 
     @Override
-    protected void delete(final Product product) {
+    protected void delete(final JobStatusListener statusListener, final Product product) {
         this.productService.delete(product);
         this.productService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType xmlType, final EntityImportModeType mode) {
 
         if (domain != null) {
             processProductAssociations(domain, xmlType);
@@ -132,7 +133,7 @@ public class ProductLinksXmlEntityHandler extends AbstractXmlEntityHandler<org.y
     }
 
     @Override
-    protected Product getOrCreate(final org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType xmlType) {
+    protected Product getOrCreate(final JobStatusListener statusListener, final org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType xmlType) {
         Product product = this.productService.findSingleByCriteria(" where e.code = ?1", xmlType.getProductCode());
         if (product != null) {
             return product;

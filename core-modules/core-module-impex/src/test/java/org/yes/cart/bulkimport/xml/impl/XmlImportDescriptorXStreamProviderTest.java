@@ -18,9 +18,15 @@ public class XmlImportDescriptorXStreamProviderTest {
 
     @Test
     public void testProvide() throws Exception {
+
+        testProvide("src/test/resources/import/xml/schematest001.xml");
+
+    }
+
+    public void testProvide(final String filename) throws Exception {
         final XStreamProvider<XmlImportDescriptor> provider = new XmlImportDescriptorXStreamProvider();
 
-        final InputStream inputStream = new FileInputStream("src/test/resources/import/xml/schematest001.xml");
+        final InputStream inputStream = new FileInputStream(filename);
         final XmlImportDescriptor desc = provider.fromXML(inputStream);
 
         assertNotNull(desc);

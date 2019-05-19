@@ -24,7 +24,7 @@
         <file-name>target/attributegroups_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select b from AttributeGroupEntity b</select-sql>
+    <select-cmd>select b from AttributeGroupEntity b</select-cmd>
 
     <xml-handler>ATTRIBUTEGROUP_PRETTY</xml-handler>
 

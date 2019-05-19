@@ -30,7 +30,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -76,8 +75,7 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
                 return false; // SKU specific
             }
 
-            final String warn = MessageFormat.format("product with code {0} not found.", code);
-            statusListener.notifyWarning(warn);
+            statusListener.notifyWarning("product with code {} not found.", code);
             return false;
         }
 
@@ -96,8 +94,7 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
                 }
             }
             if (attribute == null) {
-                final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
-                statusListener.notifyWarning(warn);
+                statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
                 return false;
             }
             imageAttributeValue = productService.getGenericDao().getEntityFactory().getByIface(AttrValueProduct.class);
@@ -109,16 +106,14 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        final String info = MessageFormat.format("file {0} attached as {1} to product {2}", fileName, attributeCode, productWithAttrs.getCode());
-        statusListener.notifyMessage(info);
+        statusListener.notifyMessage("file {} attached as {} to product {}", fileName, attributeCode, productWithAttrs.getCode());
 
         try {
             productService.update(productWithAttrs);
             return true;
 
         } catch (DataIntegrityViolationException e) {
-            final String err = MessageFormat.format("image {0} for product with code {1} could not be added (db error).", fileName, product.getCode());
-            statusListener.notifyError(err, e);
+            statusListener.notifyError("image {} for product with code {} could not be added (db error).", e, fileName, product.getCode());
             return false;
 
         }

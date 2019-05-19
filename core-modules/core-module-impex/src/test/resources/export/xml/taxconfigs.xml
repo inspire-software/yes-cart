@@ -28,7 +28,7 @@
         <file-name>target/taxconfigs_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select t from TaxConfigEntity t</select-sql>
+    <select-cmd>select t from TaxConfigEntity t</select-cmd>
 
     <xml-handler>TAXCONFIG_PRETTY</xml-handler>
 

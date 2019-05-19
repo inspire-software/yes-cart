@@ -56,7 +56,7 @@ public class ContentCMS3MediaFileNameStrategyImpl extends AbstractMediaFileNameS
     public String resolveObjectCode(final String url) {
 
         if (StringUtils.isNotBlank(url)) {
-            // Categories codes are used from URI which may have multiple undescores so always need to resolve the code
+            // Categories codes are used from URI which may have multiple underscores so always need to resolve the code
             // from the domain object
             final String code = resolveObjectCodeInternal(url);
             if (code != null) {

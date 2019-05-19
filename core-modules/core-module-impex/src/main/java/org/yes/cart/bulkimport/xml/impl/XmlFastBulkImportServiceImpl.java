@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Map;
 
@@ -59,14 +58,12 @@ public class XmlFastBulkImportServiceImpl extends AbstractImportService<XmlImpor
                                               final XmlImportDescriptor importDescriptor) throws Exception {
 
 
-        final String msgInfoImp = MessageFormat.format("import file : {0}", fileToImport.getAbsolutePath());
-        statusListener.notifyMessage(msgInfoImp);
+        statusListener.notifyMessage("import file : {}", fileToImport.getAbsolutePath());
 
         final XmlEntityImportHandler handler = this.handlerMap.get(importDescriptor.getXmlHandler());
 
         if (handler == null) {
-            final String msgNoHandler = MessageFormat.format("no handler : {0}", importDescriptor.getXmlHandler());
-            statusListener.notifyError(msgNoHandler);
+            statusListener.notifyError("no handler : {}", importDescriptor.getXmlHandler());
             return;
         }
 
@@ -83,12 +80,11 @@ public class XmlFastBulkImportServiceImpl extends AbstractImportService<XmlImpor
                     handler.handle(statusListener, importDescriptor, tuple, valueDataAdapter, fileToImport.getName());
                 },
                 (line, exp) -> {
-                    final String msgErr = MessageFormat.format(
-                            "unable to process XML file: {0}:{1}, cause by: {2}",
+                    statusListener.notifyError("unable to process XML file: {}:{}, cause by: {}",
+                            exp,
                             importDescriptor.getImportFileDescriptor().getFileEncoding(),
                             line,
                             exp.getMessage());
-                    statusListener.notifyError(msgErr, exp);
                 });
 
         // connect two components

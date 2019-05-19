@@ -39,12 +39,12 @@ import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.MessageFormatUtils;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.log.Markers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.MessageFormat;
 import java.util.*;
 
 
@@ -236,8 +236,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         }
         throw new RuntimeException(
-                MessageFormat.format(
-                        "Payment gateway {0}  must support either 'authorize' or 'authorize-capture' operations",
+                MessageFormatUtils.format(
+                        "Payment gateway {}  must support either 'authorize' or 'authorize-capture' operations",
                         getPaymentGateway().getLabel()
                 )
         );
@@ -487,8 +487,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     paymentResult = payment.getPaymentProcessorResult();
                 } catch (Throwable th) {
                     LOG.error(
-                            MessageFormat.format(
-                                    "Can not perform roll back operation on payment record {0} payment {1}",
+                            MessageFormatUtils.format(
+                                    "Can not perform roll back operation on payment record {} payment {}",
                                     customerOrderPayment.getCustomerOrderPaymentId(),
                                     payment
                             ), th
@@ -582,8 +582,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 paymentResult = payment.getPaymentProcessorResult();
             } catch (Throwable th) {
                 LOG.error(
-                        MessageFormat.format(
-                                "Can not perform roll back operation on payment record {0} payment {1}",
+                        MessageFormatUtils.format(
+                                "Can not perform roll back operation on payment record {} payment {}",
                                 customerOrderPayment.getCustomerOrderPaymentId(),
                                 payment
                         ), th

@@ -21,6 +21,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.TaxConfigType;
 import org.yes.cart.domain.entity.TaxConfig;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.domain.TaxService;
 
@@ -39,13 +40,13 @@ public class TaxConfigXmlEntityHandler extends AbstractXmlEntityHandler<TaxConfi
     }
 
     @Override
-    protected void delete(final TaxConfig tax) {
+    protected void delete(final JobStatusListener statusListener, final TaxConfig tax) {
         this.taxConfigService.delete(tax);
         this.taxConfigService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final TaxConfig domain, final TaxConfigType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final TaxConfig domain, final TaxConfigType xmlType, final EntityImportModeType mode) {
 
         domain.setProductCode(StringUtils.isNotBlank(xmlType.getSku()) ? xmlType.getSku() : null);
         if (xmlType.getTaxRegion() != null) {
@@ -63,7 +64,7 @@ public class TaxConfigXmlEntityHandler extends AbstractXmlEntityHandler<TaxConfi
     }
 
     @Override
-    protected TaxConfig getOrCreate(final TaxConfigType xmlType) {
+    protected TaxConfig getOrCreate(final JobStatusListener statusListener, final TaxConfigType xmlType) {
         TaxConfig taxCfg = this.taxConfigService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (taxCfg != null) {
             return taxCfg;

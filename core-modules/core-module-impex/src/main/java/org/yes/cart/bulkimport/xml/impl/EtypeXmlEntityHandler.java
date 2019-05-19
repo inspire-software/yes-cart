@@ -20,6 +20,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.ETypeType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.Etype;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.EtypeService;
 
 /**
@@ -36,13 +37,13 @@ public class EtypeXmlEntityHandler extends AbstractXmlEntityHandler<ETypeType, E
     }
 
     @Override
-    protected void delete(final Etype type) {
+    protected void delete(final JobStatusListener statusListener, final Etype type) {
         this.etypeService.delete(type);
         this.etypeService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Etype domain, final ETypeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Etype domain, final ETypeType xmlType, final EntityImportModeType mode) {
         domain.setJavatype(xmlType.getJavaType());
         domain.setBusinesstype(xmlType.getBusinessType());
         if (domain.getEtypeId() == 0L) {
@@ -55,7 +56,7 @@ public class EtypeXmlEntityHandler extends AbstractXmlEntityHandler<ETypeType, E
     }
 
     @Override
-    protected Etype getOrCreate(final ETypeType xmlType) {
+    protected Etype getOrCreate(final JobStatusListener statusListener, final ETypeType xmlType) {
         Etype type = this.etypeService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (type != null) {
             return type;

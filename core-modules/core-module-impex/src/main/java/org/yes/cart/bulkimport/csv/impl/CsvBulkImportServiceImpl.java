@@ -22,7 +22,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.yes.cart.bulkcommon.csv.CsvImpExColumn;
 import org.yes.cart.bulkcommon.csv.CsvValueAdapter;
 import org.yes.cart.bulkcommon.service.ImportService;
@@ -33,7 +32,6 @@ import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.service.ImportServiceSingleFile;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.bulkimport.service.support.csv.EntityCacheKeyStrategy;
 import org.yes.cart.dao.GenericDAO;
@@ -43,14 +41,11 @@ import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.util.MessageFormatUtils;
 
 import java.beans.PropertyDescriptor;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -100,8 +95,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
             final Map<String, Pair<Object, Boolean>> entityCache = new HashMap<>();
 
             final CsvImportDescriptor.ImportMode mode = importDescriptor.getMode();
-            final String msgInfoImp = MessageFormat.format("import file : {0} in {1} mode", fileToImport.getAbsolutePath(), mode);
-            statusListener.notifyMessage(msgInfoImp);
+            statusListener.notifyMessage("import file : {} in {} mode", fileToImport.getAbsolutePath(), mode);
 
             final String filename = fileToImport.getName();
             long lineNumber = 0;
@@ -122,10 +116,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
                     doImportMerge(statusListener, tuple, importDescriptorName, importDescriptor, null, entityCache);
                 }
             }
-            final String msgInfoLines = MessageFormat.format("total data lines : {0} ({1})",
+            statusListener.notifyMessage("total data lines : {} ({})",
                     (importDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()),
                     fileToImport.getAbsolutePath());
-            statusListener.notifyMessage(msgInfoLines);
 
         } finally {
 
@@ -146,17 +139,17 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
         try {
 
 
-            if (descriptor.getDeleteSql() != null) {
+            if (descriptor.getDeleteCmd() != null) {
 
                 // No need to validate sub imports
                 validateAccessBeforeUpdate(null, null); // only allowed by system admins
 
-                executeNativeQuery(descriptor, null, tuple, descriptor.getDeleteSql());
+                executeNativeQuery(descriptor, null, tuple, descriptor.getDeleteCmd());
 
 
             } else {
 
-                objects = getExistingEntities(descriptor, descriptor.getSelectSql(), null, tuple);
+                objects = getExistingEntities(descriptor, descriptor.getSelectCmd(), null, tuple);
 
                 if (CollectionUtils.isNotEmpty(objects)) {
 
@@ -183,33 +176,30 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
 
         } catch (AccessDeniedException ade) {
 
-            String message = MessageFormat.format(
-                    "Access denied during import row : {0} \ndescriptor {1} \nobject is {2}",
+            statusListener.notifyError(
+                    "Access denied during import row : {} \ndescriptor {} \nobject is {}",
+                    ade,
                     tuple,
                     csvImportDescriptorName,
-                    objects
-            );
-            statusListener.notifyError(message, ade);
+                    objects);
             genericDAO.clear();
 
-            throw new Exception(message, ade);
+            throw new Exception(ade.getMessage(), ade);
 
 
         } catch (Exception e) {
 
-            String additionalInfo = e.getMessage();
-            String message = MessageFormat.format(
-                    "during import row : {0} \ndescriptor {1} \nerror {2} \nadditional info {3} \nobject is {4}",
+            statusListener.notifyError(
+                    "during import row : {} \ndescriptor {} \nerror {}\nobject is {}",
+                    e,
                     tuple,
                     csvImportDescriptorName,
                     e.getMessage(),
-                    additionalInfo,
                     objects
-            );
-            statusListener.notifyError(message, e);
+                );
             genericDAO.clear();
 
-            throw new Exception(message, e);
+            throw e;
         }
     }
 
@@ -228,7 +218,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
         try {
 
 
-            if (descriptor.getInsertSql() != null) {
+            if (descriptor.getInsertCmd() != null) {
 
                 if (descriptor.getMode() == CsvImportDescriptor.ImportMode.INSERT_ONLY) {
 
@@ -237,7 +227,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
                         // No need to validate sub imports
                         validateAccessBeforeUpdate(null, null); // only allowed by system admins
                     }
-                    executeNativeQuery(descriptor, masterObject, tuple, descriptor.getInsertSql());
+                    executeNativeQuery(descriptor, masterObject, tuple, descriptor.getInsertCmd());
 
                 } else {
 
@@ -313,35 +303,32 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
 
         } catch (AccessDeniedException ade) {
 
-            String message = MessageFormat.format(
-                    "Access denied during import row : {0} \ndescriptor {1} \nobject is {2} \nmaster object is {3}",
+            statusListener.notifyError(
+                    "Access denied during import row : {} \ndescriptor {} \nobject is {} \nmaster object is {}",
                     tuple,
                     csvImportDescriptorName,
                     object,
                     masterObject
             );
-            statusListener.notifyError(message);
             genericDAO.clear();
 
-            throw new Exception(message, ade);
+            throw new Exception(ade.getMessage(), ade);
 
 
         } catch (Exception e) {
 
-            String additionalInfo = e.getMessage();
-            String message = MessageFormat.format(
-                    "during import row : {0} \ndescriptor {1} \nerror {2} \nadditional info {3} \nobject is {4} \nmaster object is {5}",
+            statusListener.notifyError(
+                    "during import row : {} \ndescriptor {} \nerror {}\nobject is {} \nmaster object is {}",
+                    e,
                     tuple,
                     csvImportDescriptorName,
                     e.getMessage(),
-                    additionalInfo,
                     object,
                     masterObject
-            );
-            statusListener.notifyError(message, e);
+                );
             genericDAO.clear();
 
-            throw new Exception(message, e);
+            throw e;
         }
     }
 
@@ -474,8 +461,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
                 final String propName = propertyDescriptor != null ? propertyDescriptor.getName() : null;
                 final String propType = propertyDescriptor != null ? propertyDescriptor.getPropertyType().getName() : null;
 
-                throw new Exception(MessageFormat.format(
-                        "Failed to process property name {0} type {1} object is {2}",
+                throw new Exception(MessageFormatUtils.format(
+                        "Failed to process property name {} type {} object is {}",
                         propName,
                         propType,
                         object
@@ -595,8 +582,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
             final String propName = propertyDescriptor != null ? propertyDescriptor.getName() : null;
             final String propType = propertyDescriptor != null ? propertyDescriptor.getPropertyType().getName() : null;
 
-            throw new Exception(MessageFormat.format(
-                    "Failed to process property name {0} type {1} object is {2} caused by column {0} with value {1}",
+            throw new Exception(MessageFormatUtils.format(
+                    "Failed to process property name {} type {} object is {} caused by column {} with value {}",
                     propName,
                     propType,
                     object,
@@ -629,7 +616,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
 
         if (column == null) {
             // no caching for prime select
-            final Object prime = getExistingEntity(importDescriptor, importDescriptor.getSelectSql(), masterObject, tuple);
+            final Object prime = getExistingEntity(importDescriptor, importDescriptor.getSelectCmd(), masterObject, tuple);
             if (prime == null) {
                 return new Pair<>(genericDAO.getEntityFactory().getByKey(importDescriptor.getEntityType()), Boolean.TRUE);
             }

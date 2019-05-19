@@ -28,7 +28,7 @@
         <file-name>target/categories_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select c from CategoryEntity c</select-sql>
+    <select-cmd>select c from CategoryEntity c</select-cmd>
 
     <xml-handler>CATEGORY_PRETTY</xml-handler>
 

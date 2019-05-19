@@ -18,8 +18,7 @@ package org.yes.cart.domain.dto.adapter.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.EntityRetriever;
 import org.yes.cart.dao.GenericDAO;
-
-import java.text.MessageFormat;
+import org.yes.cart.util.MessageFormatUtils;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -45,8 +44,8 @@ public class GenericDtoToEntityConverter<T> implements EntityRetriever {
                 return genericDAO.findById((Long) primaryKey);
             } catch (Exception e) {
                 throw new RuntimeException(
-                        MessageFormat.format(
-                                "Cannot getByKey entity {0} [{1}] for given primary key {2}",
+                        MessageFormatUtils.format(
+                                "Cannot getByKey entity {} [{}] for given primary key {}",
                                 entityClass.getSimpleName(), entityInterface.getSimpleName(), primaryKey
                         ), e);
             }

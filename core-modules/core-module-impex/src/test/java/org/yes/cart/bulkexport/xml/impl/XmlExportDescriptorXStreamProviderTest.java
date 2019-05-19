@@ -35,9 +35,16 @@ public class XmlExportDescriptorXStreamProviderTest {
 
     @Test
     public void testProvide() throws Exception {
+
+        testProvide("src/test/resources/export/xml/schematest001.xml");
+        testProvide("src/test/resources/export/xml/schematest002.xml");
+
+    }
+
+    public void testProvide(final String filename) throws Exception {
         final XStreamProvider<XmlExportDescriptor> provider = new XmlExportDescriptorXStreamProvider();
 
-        final InputStream inputStream = new FileInputStream("src/test/resources/export/xml/schematest001.xml");
+        final InputStream inputStream = new FileInputStream(filename);
         final XmlExportDescriptor desc = provider.fromXML(inputStream);
 
         assertNotNull(desc);
@@ -52,7 +59,7 @@ public class XmlExportDescriptorXStreamProviderTest {
         assertEquals("UTF-8", desc.getExportFileDescriptor().getFileEncoding());
         assertEquals("attributenames.csv", desc.getExportFileDescriptor().getFileName());
 
-        assertEquals("select b from AttributeEntity b where b.code = {code}", desc.getSelectSql());
+        assertEquals("select b from AttributeEntity b where b.code = {code}", desc.getSelectCmd());
 
         assertEquals("exportXmlAttributeHandler", desc.getXmlHandler());
 

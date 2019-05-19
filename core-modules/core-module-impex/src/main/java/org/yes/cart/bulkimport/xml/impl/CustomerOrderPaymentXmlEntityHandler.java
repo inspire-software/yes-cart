@@ -16,14 +16,13 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.CustomerOrderPaymentType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.util.DateUtils;
 
 /**
@@ -33,8 +32,6 @@ import org.yes.cart.util.DateUtils;
  */
 public class CustomerOrderPaymentXmlEntityHandler extends AbstractXmlEntityHandler<CustomerOrderPaymentType, CustomerOrderPayment> implements XmlEntityImportHandler<CustomerOrderPaymentType, CustomerOrderPayment> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CustomerOrderPaymentXmlEntityHandler.class);
-
     private CustomerOrderPaymentService customerOrderPaymentService;
 
     public CustomerOrderPaymentXmlEntityHandler() {
@@ -42,23 +39,23 @@ public class CustomerOrderPaymentXmlEntityHandler extends AbstractXmlEntityHandl
     }
 
     @Override
-    protected void delete(final CustomerOrderPayment payment) {
+    protected void delete(final JobStatusListener statusListener, final CustomerOrderPayment payment) {
         this.customerOrderPaymentService.delete(payment);
     }
 
     @Override
-    protected void saveOrUpdate(final CustomerOrderPayment domain, final CustomerOrderPaymentType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final CustomerOrderPayment domain, final CustomerOrderPaymentType xmlType, final EntityImportModeType mode) {
 
         if (domain.getCustomerOrderPaymentId() == 0L) {
             this.customerOrderPaymentService.create(domain);
         } else {
-            LOG.warn("Payment with GUID {} already exists and will not be updated", xmlType.getGuid());
+            statusListener.notifyWarning("Payment with GUID {} already exists and will not be updated", xmlType.getGuid());
         }
         
     }
 
     @Override
-    protected CustomerOrderPayment getOrCreate(final CustomerOrderPaymentType xmlType) {
+    protected CustomerOrderPayment getOrCreate(final JobStatusListener statusListener, final CustomerOrderPaymentType xmlType) {
         CustomerOrderPayment payment = this.customerOrderPaymentService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (payment != null) {
             return payment;

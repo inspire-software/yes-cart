@@ -27,9 +27,9 @@ import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
+import org.yes.cart.util.MessageFormatUtils;
 import org.yes.cart.util.log.Markers;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -236,8 +236,8 @@ public class StandardMessageListener implements Runnable {
 
             } catch (Exception e) {
                 LOG.error(Markers.alert(),
-                        MessageFormat.format(
-                                "Cannot compose or send email template {0} with locale {1} theme {2} to {3}, cause: {4}",
+                        MessageFormatUtils.format(
+                                "Cannot compose or send email template {} with locale {} theme {} to {}, cause: {}",
                                 map.get(TEMPLATE_NAME),
                                 map.get(LOCALE),
                                 map.get(TEMPLATE_FOLDER),

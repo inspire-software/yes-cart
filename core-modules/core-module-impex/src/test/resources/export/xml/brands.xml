@@ -28,7 +28,7 @@
         <file-name>target/brands_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select b from BrandEntity b</select-sql>
+    <select-cmd>select b from BrandEntity b</select-cmd>
 
     <xml-handler>BRAND_PRETTY</xml-handler>
 

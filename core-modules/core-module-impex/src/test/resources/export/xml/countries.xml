@@ -28,7 +28,7 @@
         <file-name>target/countries_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select c from CountryEntity c</select-sql>
+    <select-cmd>select c from CountryEntity c</select-cmd>
 
     <xml-handler>COUNTRY_PRETTY</xml-handler>
 

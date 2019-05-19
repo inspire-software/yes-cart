@@ -20,6 +20,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.PromotionCouponType;
 import org.yes.cart.domain.entity.PromotionCoupon;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.domain.PromotionService;
 
@@ -38,13 +39,13 @@ public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<Pr
     }
 
     @Override
-    protected void delete(final PromotionCoupon promotion) {
+    protected void delete(final JobStatusListener statusListener, final PromotionCoupon promotion) {
         this.promotionCouponService.delete(promotion);
         this.promotionCouponService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final PromotionCoupon domain, final PromotionCouponType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final PromotionCoupon domain, final PromotionCouponType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getUsageCount() != null) {
             domain.setUsageCount(xmlType.getUsageCount());
@@ -66,7 +67,7 @@ public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<Pr
     }
 
     @Override
-    protected PromotionCoupon getOrCreate(final PromotionCouponType xmlType) {
+    protected PromotionCoupon getOrCreate(final JobStatusListener statusListener, final PromotionCouponType xmlType) {
         PromotionCoupon coupon = this.promotionCouponService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (coupon != null) {
             return coupon;

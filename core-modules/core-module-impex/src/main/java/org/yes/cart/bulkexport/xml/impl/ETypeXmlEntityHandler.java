@@ -23,6 +23,9 @@ import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.EtypeService;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 26/10/2018
@@ -37,14 +40,16 @@ public class ETypeXmlEntityHandler extends AbstractXmlEntityHandler<Etype> {
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Etype> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, Etype> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagEType(null, tuple.getData()).toXml();
-        
+        handleInternal(tagEType(null, tuple.getData()), writer, entityCount);
+
     }
 
     Tag tagEType(final Tag parent, final Etype type) {

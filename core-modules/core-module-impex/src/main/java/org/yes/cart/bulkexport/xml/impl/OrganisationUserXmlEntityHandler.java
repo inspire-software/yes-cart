@@ -25,9 +25,10 @@ import org.yes.cart.domain.entity.ManagerRole;
 import org.yes.cart.domain.entity.ManagerShop;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.GenericService;
-import org.yes.cart.service.domain.ManagerService;
 
+import java.io.OutputStreamWriter;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -43,14 +44,16 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<M
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Manager> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, Manager> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagManager(null, tuple.getData()).toXml();
-        
+        handleInternal(tagManager(null, tuple.getData()), writer, entityCount);
+
     }
 
     Tag tagManager(final Tag parent, final Manager manager) {

@@ -28,7 +28,7 @@
         <file-name>target/addresses_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select t from AddressEntity t</select-sql>
+    <select-cmd>select t from AddressEntity t</select-cmd>
 
     <xml-handler>ADDRESS_PRETTY</xml-handler>
 

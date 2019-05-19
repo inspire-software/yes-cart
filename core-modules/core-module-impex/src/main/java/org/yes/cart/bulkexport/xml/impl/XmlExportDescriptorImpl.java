@@ -41,7 +41,7 @@ public class XmlExportDescriptorImpl implements XmlExportDescriptor, Serializabl
     private Class entityTypeClass;
     private String xmlHandler;
 
-    private String selectSql;
+    private String selectCmd;
 
     /**
      * Default constructor.
@@ -101,15 +101,15 @@ public class XmlExportDescriptorImpl implements XmlExportDescriptor, Serializabl
 
     /** {@inheritDoc} */
     @Override
-    public String getSelectSql() {
-        return selectSql;
+    public String getSelectCmd() {
+        return selectCmd;
     }
 
     /**
-     * @param selectSql select SQL to lookup existing records
+     * @param selectCmd select SQL to lookup existing records
      */
-    public void setSelectSql(final String selectSql) {
-        this.selectSql = selectSql;
+    public void setSelectCmd(final String selectCmd) {
+        this.selectCmd = selectCmd;
     }
 
     /**
@@ -152,7 +152,7 @@ public class XmlExportDescriptorImpl implements XmlExportDescriptor, Serializabl
         return "XmlExportDescriptorImpl{" +
                 "exportFileDescriptor=" + exportFileDescriptor +
                 ", entityType='" + entityType + '\'' +
-                ", selectSql='" + selectSql + '\'' +
+                ", selectSql='" + selectCmd + '\'' +
                 ", xmlHandler='" + xmlHandler + '\'' +
                 '}';
     }

@@ -28,7 +28,7 @@
         <file-name>target/shippingproviders_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select c from CarrierEntity c</select-sql>
+    <select-cmd>select c from CarrierEntity c</select-cmd>
 
     <xml-handler>SHIPPINGPROVIDER_PRETTY</xml-handler>
 

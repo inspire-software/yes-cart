@@ -28,7 +28,7 @@
         <file-name>target/content_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select c from ContentEntity c</select-sql>
+    <select-cmd>select c from ContentEntity c</select-cmd>
 
     <xml-handler>CONTENT_CMS3_PRETTY</xml-handler>
 

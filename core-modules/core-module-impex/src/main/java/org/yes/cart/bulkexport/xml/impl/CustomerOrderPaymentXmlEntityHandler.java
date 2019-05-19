@@ -22,6 +22,9 @@ import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.service.async.JobStatusListener;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 26/10/2018
@@ -34,13 +37,15 @@ public class CustomerOrderPaymentXmlEntityHandler extends AbstractXmlEntityHandl
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, CustomerOrderPayment> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, CustomerOrderPayment> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagPayment(null, tuple.getData()).toXml();
+        handleInternal(tagPayment(null, tuple.getData()), writer, entityCount);
 
     }
 

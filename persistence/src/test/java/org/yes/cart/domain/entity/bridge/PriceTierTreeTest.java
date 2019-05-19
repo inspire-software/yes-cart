@@ -16,14 +16,13 @@
 
 package org.yes.cart.domain.entity.bridge;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.junit.Test;
-import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.xml.CategoryPriceNavigationXStreamProvider;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.misc.navigation.price.impl.PriceTierNodeImpl;
 import org.yes.cart.domain.misc.navigation.price.impl.PriceTierTreeImpl;
+import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -40,13 +39,6 @@ import static org.junit.Assert.*;
  */
 public class PriceTierTreeTest {
 
-    private XStream getXStream() {
-        XStream xStream = new XStream(new DomDriver());
-        xStream.alias(Category.PRICE_TREE_ALIAS, PriceTierTreeImpl.class);
-        xStream.alias(Category.PRICE_NODE_ALIAS, PriceTierNodeImpl.class);
-        return xStream;
-    }
-
     @Test
     public void testXmlSerialization() {
         PriceTierTree tree = new PriceTierTreeImpl();
@@ -61,7 +53,9 @@ public class PriceTierTreeTest {
         list.add(new PriceTierNodeImpl(new BigDecimal(2), new BigDecimal(9)));
         tree.addPriceTierNode("USD", list);
 
-        String result = getXStream().toXML(tree);
+        final XStreamProvider<PriceTierTree> provider = new CategoryPriceNavigationXStreamProvider();
+
+        String result = provider.toXML(tree);
         assertNotNull(result);
         assertTrue(result.contains("USD"));
         assertTrue(result.contains("EUR"));

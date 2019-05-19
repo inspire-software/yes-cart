@@ -34,9 +34,9 @@ import org.yes.cart.service.async.JobStatusListener;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: denispavlov
@@ -72,14 +72,12 @@ public class XmlFastBulkExportServiceImpl extends AbstractExportService<XmlExpor
                             final XmlExportDescriptor xmlExportDescriptor,
                             final String fileToExport) throws Exception {
 
-        final String msgInfoImp = MessageFormat.format("export file : {0}", fileToExport);
-        statusListener.notifyMessage(msgInfoImp);
+        statusListener.notifyMessage("export file : {}", fileToExport);
 
-        final XmlEntityExportHandler<Object, String> handler = this.handlerMap.get(xmlExportDescriptor.getXmlHandler());
+        final XmlEntityExportHandler<Object> handler = this.handlerMap.get(xmlExportDescriptor.getXmlHandler());
 
         if (handler == null) {
-            final String msgNoHandler = MessageFormat.format("no handler : {0}", xmlExportDescriptor.getXmlHandler());
-            statusListener.notifyError(msgNoHandler);
+            statusListener.notifyError("no handler : {}", xmlExportDescriptor.getXmlHandler());
             return;
         }
 
@@ -89,58 +87,53 @@ public class XmlFastBulkExportServiceImpl extends AbstractExportService<XmlExpor
 
             writer.write(handler.startXml());
 
-            final String filename = fileToExport;
-            int count = 0;
+            Map<String, Integer> counts = new ConcurrentHashMap<>();
 
-            results = getExistingEntities(xmlExportDescriptor, xmlExportDescriptor.getSelectSql(), null, null);
+            results = getExistingEntities(xmlExportDescriptor, xmlExportDescriptor.getSelectCmd(), null, null);
             while (results.hasNext()) {
                 final Object entity = results.next();
                 final XmlExportTuple tuple = new XmlExportTupleImpl(entity);
 
-                final String xml = handler.handle(statusListener, xmlExportDescriptor, tuple, valueDataAdapter, filename);
+                handler.handle(statusListener, xmlExportDescriptor, tuple, valueDataAdapter, fileToExport, writer, counts);
 
-                if (xml != null) {
-                    writer.write(xml);
-                    count++;
-                }
                 releaseEntity(entity);
             }
 
             writer.write(handler.endXml());
 
-            final String msgInfoLines = MessageFormat.format("total data objects : {0}", count);
-            statusListener.notifyMessage(msgInfoLines);
+            for (final Map.Entry<String, Integer> countEntry : counts.entrySet()) {
+                statusListener.notifyMessage("total data objects : {} {}", countEntry.getKey(), countEntry.getValue());
+            }
 
         } catch (UnsupportedEncodingException e) {
-            final String msgErr = MessageFormat.format(
-                    "wrong file encoding in xml descriptor : {0} {1}",
+            statusListener.notifyError("wrong file encoding in xml descriptor : {} {}",
+                    e,
                     xmlExportDescriptor.getExportFileDescriptor().getFileEncoding(),
                     e.getMessage());
-            statusListener.notifyError(msgErr, e);
 
         } catch (IOException e) {
-            final String msgErr = MessageFormat.format("cannot write the xml file : {0} {1}",
+            statusListener.notifyError("cannot write the xml file : {} {}",
+                    e,
                     fileToExport,
                     e.getMessage());
-            statusListener.notifyError(msgErr, e);
         } finally {
             try {
                 if (results != null) {
                     results.close();
                 }
             } catch (Exception exp) {
-                final String msgErr = MessageFormat.format("cannot close the xml resultset : {0} {1}",
+                statusListener.notifyError("cannot close the xml resultset : {} {}",
+                        exp,
                         fileToExport,
                         exp.getMessage());
-                statusListener.notifyError(msgErr, exp);
             }
             try {
                 writer.close();
             } catch (IOException ioe) {
-                final String msgErr = MessageFormat.format("cannot close the xml file : {0} {1}",
+                statusListener.notifyError("cannot close the xml file : {} {}",
+                        ioe,
                         fileToExport,
                         ioe.getMessage());
-                statusListener.notifyError(msgErr, ioe);
             }
         }
 

@@ -18,6 +18,7 @@ package org.yes.cart.bulkexport.xml.impl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.yes.cart.bulkexport.model.ExportDescriptor;
 import org.yes.cart.bulkexport.xml.XmlExportContext;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
@@ -56,6 +57,7 @@ public class XmlExportDescriptorXStreamProvider implements XStreamProvider<XmlEx
     private XStream provide() {
         if (this.xStream == null) {
             XStream xStream = new XStream(new DomDriver());
+            xStream.addPermission(AnyTypePermission.ANY);
 
             xStream.alias("export-descriptor", XmlExportDescriptorImpl.class);
             xStream.addDefaultImplementation(XmlExportDescriptorImpl.class, ExportDescriptor.class);
@@ -66,7 +68,8 @@ public class XmlExportDescriptorXStreamProvider implements XStreamProvider<XmlEx
             xStream.addDefaultImplementation(XmlExportContextImpl.class, XmlExportContext.class);
             xStream.aliasField("shop-code", XmlExportContextImpl.class, "shopCode");
 
-            xStream.aliasField("select-sql", XmlExportDescriptorImpl.class, "selectSql");
+            xStream.aliasField("select-sql", XmlExportDescriptorImpl.class, "selectCmd");
+            xStream.aliasField("select-cmd", XmlExportDescriptorImpl.class, "selectCmd");
             xStream.aliasField("xml-handler", XmlExportDescriptorImpl.class, "xmlHandler");
 
             xStream.aliasField("export-file-descriptor", XmlExportDescriptorImpl.class, "exportFileDescriptor");

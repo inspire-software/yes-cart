@@ -25,6 +25,9 @@ import org.yes.cart.domain.entity.DataGroup;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.DataDescriptorService;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 26/10/2018
@@ -41,14 +44,16 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, DataGroup> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, DataGroup> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagDataGroup(null, tuple.getData()).toXml();
-        
+        handleInternal(tagDataGroup(null, tuple.getData()), writer, entityCount);
+
     }
 
     Tag tagDataGroup(final Tag parent, final DataGroup group) {

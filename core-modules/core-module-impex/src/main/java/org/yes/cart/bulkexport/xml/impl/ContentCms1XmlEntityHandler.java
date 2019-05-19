@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CategoryService;
 
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,18 +49,20 @@ public class ContentCms1XmlEntityHandler extends AbstractXmlEntityHandler<Catego
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Category> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, Category> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagCategory(null, tuple.getData()).toXml();
+        handleInternal(tagContent(null, tuple.getData()), writer, entityCount);
 
     }
 
 
-    Tag tagCategory(final Tag parent, final Category content) {
+    Tag tagContent(final Tag parent, final Category content) {
 
         final Tag tag = tag(parent, "content")
                 .attr("id", content.getCategoryId())

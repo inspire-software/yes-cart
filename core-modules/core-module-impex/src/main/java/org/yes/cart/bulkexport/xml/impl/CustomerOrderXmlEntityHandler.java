@@ -26,7 +26,9 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.PromotionCouponService;
 
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -44,13 +46,15 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, CustomerOrder> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, CustomerOrder> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagCustomerOrder(null, tuple.getData()).toXml();
+        handleInternal(tagCustomerOrder(null, tuple.getData()), writer, entityCount);
 
     }
 

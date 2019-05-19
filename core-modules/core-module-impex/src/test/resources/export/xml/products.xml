@@ -28,7 +28,7 @@
         <file-name>target/products_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select p from ProductEntity p</select-sql>
+    <select-cmd>select p from ProductEntity p</select-cmd>
 
     <xml-handler>PRODUCT_PRETTY</xml-handler>
 

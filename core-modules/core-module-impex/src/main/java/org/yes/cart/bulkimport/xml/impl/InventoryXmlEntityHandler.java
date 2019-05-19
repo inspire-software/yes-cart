@@ -22,6 +22,7 @@ import org.yes.cart.bulkimport.xml.internal.QuantityType;
 import org.yes.cart.bulkimport.xml.internal.QuantityTypeType;
 import org.yes.cart.bulkimport.xml.internal.StockType;
 import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 
@@ -42,7 +43,7 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockTyp
     }
 
     @Override
-    protected void delete(final SkuWarehouse inventory) {
+    protected void delete(final JobStatusListener statusListener, final SkuWarehouse inventory) {
         inventory.setQuantity(BigDecimal.ZERO);
         this.skuWarehouseService.update(inventory);
         this.skuWarehouseService.getGenericDao().flush();
@@ -50,7 +51,7 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockTyp
     }
 
     @Override
-    protected void saveOrUpdate(final SkuWarehouse domain, final StockType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final SkuWarehouse domain, final StockType xmlType, final EntityImportModeType mode) {
         for (final QuantityType qt : xmlType.getQuantity()) {
             if (qt.getType() == QuantityTypeType.STOCK) {
                 domain.setQuantity(qt.getValue());
@@ -66,7 +67,7 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockTyp
     }
 
     @Override
-    protected SkuWarehouse getOrCreate(final StockType xmlType) {
+    protected SkuWarehouse getOrCreate(final JobStatusListener statusListener, final StockType xmlType) {
         SkuWarehouse inventory = this.skuWarehouseService.findSingleByCriteria(" where e.skuCode = ?1 and e.warehouse.code = ?2", xmlType.getSku(), xmlType.getWarehouse());
         if (inventory != null) {
             return inventory;

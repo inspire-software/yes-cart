@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.service.locator.InstantiationStrategy;
 import org.yes.cart.service.locator.ServiceLocator;
+import org.yes.cart.util.MessageFormatUtils;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -73,8 +74,8 @@ public class ServiceLocatorImpl implements ServiceLocator {
         final InstantiationStrategy instantiationStrategy = protocolStrategyMap.get(strategyKey);
         if (instantiationStrategy == null) {
             throw new RuntimeException(
-                    MessageFormat.format(
-                            "Instantiation strategy can not be found for key {0} from url {1}",
+                    MessageFormatUtils.format(
+                            "Instantiation strategy can not be found for key {} from url {}",
                             strategyKey,
                             serviceUrl
                     )

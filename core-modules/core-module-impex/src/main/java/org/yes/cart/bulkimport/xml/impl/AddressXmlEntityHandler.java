@@ -17,13 +17,12 @@
 package org.yes.cart.bulkimport.xml.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.AddressType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.CustomerService;
 
@@ -34,8 +33,6 @@ import org.yes.cart.service.domain.CustomerService;
  */
 public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressType, Address> implements XmlEntityImportHandler<AddressType, Address> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AddressXmlEntityHandler.class);
-
     private AddressService addressService;
     private CustomerService customerService;
 
@@ -44,13 +41,13 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressTyp
     }
 
     @Override
-    protected void delete(final Address address) {
+    protected void delete(final JobStatusListener statusListener, final Address address) {
         this.addressService.delete(address);
         this.addressService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Address domain, final AddressType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Address domain, final AddressType xmlType, final EntityImportModeType mode) {
 
         domain.setName(xmlType.getAddressName());
         domain.setSalutation(xmlType.getSalutation());
@@ -93,7 +90,7 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressTyp
     }
 
     @Override
-    protected Address getOrCreate(final AddressType xmlType) {
+    protected Address getOrCreate(final JobStatusListener statusListener, final AddressType xmlType) {
         Address address = this.addressService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (address != null) {
             return address;
@@ -103,13 +100,13 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressTyp
         if (StringUtils.isNotBlank(xmlType.getCustomerCode())) {
             final Customer customer = this.customerService.findSingleByCriteria(" where e.guid = ?1", xmlType.getCustomerCode());
             if (customer == null) {
-                LOG.warn("Cannot find customer for GUID {} ... address will not be associated with customer", xmlType.getCustomerCode());
+                statusListener.notifyWarning("Cannot find customer for GUID {} ... address will not be associated with customer", xmlType.getCustomerCode());
             }
             address.setCustomer(customer);
         } else if (StringUtils.isNotBlank(xmlType.getShopCode())) {
             final Customer customer = this.customerService.findSingleByCriteria(" where e.email = ?1", "#" + xmlType.getCustomerCode() + "#");
             if (customer == null) {
-                LOG.warn("Cannot find customer for shop {} ... address will not be associated with customer", xmlType.getShopCode());
+                statusListener.notifyWarning("Cannot find customer for shop {} ... address will not be associated with customer", xmlType.getShopCode());
             }
             address.setCustomer(customer);
         }

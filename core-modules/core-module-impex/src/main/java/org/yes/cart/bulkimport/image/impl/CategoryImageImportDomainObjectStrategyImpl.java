@@ -30,7 +30,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -63,8 +62,7 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
 
         final Category category = categoryService.findCategoryIdBySeoUriOrGuid(code);
         if (category == null) {
-            final String warn = MessageFormat.format("category with code {0} not found.", code);
-            statusListener.notifyWarning(warn);
+            statusListener.notifyWarning("category with code {} not found.", code);
             return false;
         }
 
@@ -82,8 +80,7 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
                 }
             }
             if (attribute == null) {
-                final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
-                statusListener.notifyWarning(warn);
+                statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
                 return false;
             }
             imageAttributeValue = categoryService.getGenericDao().getEntityFactory().getByIface(AttrValueCategory.class);
@@ -95,16 +92,14 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        final String info = MessageFormat.format("file {0} attached as {1} to category {2}", fileName, attributeCode, category.getName());
-        statusListener.notifyMessage(info);
+        statusListener.notifyMessage("file {} attached as {} to category {}", fileName, attributeCode, category.getName());
 
         try {
             categoryService.update(category);
             return true;
 
         } catch (DataIntegrityViolationException e) {
-            final String err = MessageFormat.format("image {0} for category with code {1} could not be added (db error).", fileName, category.getGuid());
-            statusListener.notifyError(err, e);
+            statusListener.notifyError("image {} for category with code {} could not be added (db error).", e, fileName, category.getGuid());
             return false;
 
         }

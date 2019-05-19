@@ -28,7 +28,7 @@
         <file-name>target/promotions_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select p from PromotionEntity p</select-sql>
+    <select-cmd>select p from PromotionEntity p</select-cmd>
 
     <xml-handler>PROMOTION_PRETTY</xml-handler>
 

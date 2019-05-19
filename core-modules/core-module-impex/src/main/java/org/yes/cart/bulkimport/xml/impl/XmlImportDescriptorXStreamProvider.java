@@ -18,6 +18,7 @@ package org.yes.cart.bulkimport.xml.impl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.xml.XmlImportContext;
 import org.yes.cart.bulkimport.xml.XmlImportDescriptor;
@@ -56,6 +57,7 @@ public class XmlImportDescriptorXStreamProvider implements XStreamProvider<XmlIm
     private XStream provide() {
         if (this.xStream == null) {
             XStream xStream = new XStream(new DomDriver());
+            xStream.addPermission(AnyTypePermission.ANY);
 
             xStream.alias("import-descriptor", XmlImportDescriptorImpl.class);
             xStream.addDefaultImplementation(XmlImportDescriptorImpl.class, ImportDescriptor.class);

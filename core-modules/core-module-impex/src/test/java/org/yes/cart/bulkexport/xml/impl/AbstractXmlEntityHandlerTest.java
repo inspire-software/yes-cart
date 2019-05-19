@@ -29,10 +29,12 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.Assert.assertEquals;
 
@@ -47,15 +49,27 @@ public class AbstractXmlEntityHandlerTest {
 
     private final AbstractXmlEntityHandler<Object> handler = new AbstractXmlEntityHandler<Object>("root") {
         @Override
-        public String handle(final JobStatusListener statusListener, final XmlExportDescriptor xmlExportDescriptor, final ImpExTuple<String, Object> tuple, final XmlValueAdapter xmlValueAdapter, final String fileToExport) {
-            return null;
+        public void handle(final JobStatusListener statusListener,
+                           final XmlExportDescriptor xmlExportDescriptor,
+                           final ImpExTuple<String, Object> tuple,
+                           final XmlValueAdapter xmlValueAdapter,
+                           final String fileToExport,
+                           final OutputStreamWriter writer,
+                           final Map<String, Integer> entityCount) {
+            // do nothing
         }
     };
 
     private final AbstractXmlEntityHandler<Object> handlerPretty = new AbstractXmlEntityHandler<Object>("root") {
         @Override
-        public String handle(final JobStatusListener statusListener, final XmlExportDescriptor xmlExportDescriptor, final ImpExTuple<String, Object> tuple, final XmlValueAdapter xmlValueAdapter, final String fileToExport) {
-            return null;
+        public void handle(final JobStatusListener statusListener,
+                           final XmlExportDescriptor xmlExportDescriptor,
+                           final ImpExTuple<String, Object> tuple,
+                           final XmlValueAdapter xmlValueAdapter,
+                           final String fileToExport,
+                           final OutputStreamWriter writer,
+                           final Map<String, Integer> entityCount) {
+            // do nothing
         }
     };
 
@@ -364,6 +378,25 @@ public class AbstractXmlEntityHandlerTest {
         AttributeXmlEntityHandler.appendEscapedXmlUtf8(xml, test);
 
         assertEquals("Some string with &lt;tag&gt;tag&lt;/tag&gt; &amp; &quot;funky&quot; &#039;chars&#039;\\text", xml.toString());
+
+    }
+
+    @Test
+    public void count() throws Exception {
+
+        final Map<String, Integer> counts = new ConcurrentHashMap<>();
+
+        handler.count(counts, "a");
+        handler.count(counts, "a");
+        handler.count(counts, "b");
+        handler.count(counts, "c");
+        handler.count(counts, "c");
+        handler.count(counts, "c");
+
+        assertEquals(Integer.valueOf(2), counts.get("a"));
+        assertEquals(Integer.valueOf(1), counts.get("b"));
+        assertEquals(Integer.valueOf(3), counts.get("c"));
+        assertEquals(3, counts.size());
 
     }
 }

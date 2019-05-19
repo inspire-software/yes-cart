@@ -26,6 +26,9 @@ import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.service.async.JobStatusListener;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 15/03/2019
@@ -40,13 +43,15 @@ public class CustomerXmlEntityHandler extends AbstractXmlEntityHandler<Customer>
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Customer> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, Customer> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagCustomer(null, tuple.getData()).toXml();
+        handleInternal(tagCustomer(null, tuple.getData()), writer, entityCount);
 
     }
 

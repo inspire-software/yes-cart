@@ -18,6 +18,7 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.yes.cart.bulkimport.csv.CsvImportContext;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
@@ -58,6 +59,7 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
     private XStream provide() {
         if (this.xStream == null) {
             XStream xStream = new XStream(new DomDriver());
+            xStream.addPermission(AnyTypePermission.ANY);
 
             xStream.alias("import-descriptor", CsvImportDescriptorImpl.class);
             xStream.addDefaultImplementation(CsvImportDescriptorImpl.class, ImportDescriptor.class);
@@ -76,9 +78,12 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
                 Therefore we leave this property to internals (not config)
              */
             // xStream.aliasField("import-directory", CsvImportDescriptorImpl.class, "importDirectory");
-            xStream.aliasField("select-sql", CsvImportDescriptorImpl.class, "selectSql");
-            xStream.aliasField("insert-sql", CsvImportDescriptorImpl.class, "insertSql");
-            xStream.aliasField("delete-sql", CsvImportDescriptorImpl.class, "deleteSql");
+            xStream.aliasField("select-sql", CsvImportDescriptorImpl.class, "selectCmd");
+            xStream.aliasField("insert-sql", CsvImportDescriptorImpl.class, "insertCmd");
+            xStream.aliasField("delete-sql", CsvImportDescriptorImpl.class, "deleteCmd");
+            xStream.aliasField("select-cmd", CsvImportDescriptorImpl.class, "selectCmd");
+            xStream.aliasField("insert-cmd", CsvImportDescriptorImpl.class, "insertCmd");
+            xStream.aliasField("delete-cmd", CsvImportDescriptorImpl.class, "deleteCmd");
 
             xStream.aliasField("import-file-descriptor", CsvImportDescriptorImpl.class, "importFileDescriptor");
             xStream.addDefaultImplementation(CsvImportFileImpl.class, CsvImportFile.class);

@@ -18,6 +18,7 @@ package org.yes.cart.cluster.node.impl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.stream.xml.XStreamProvider;
 
@@ -56,6 +57,8 @@ public class NodeConfigurationXStreamProvider implements XStreamProvider<List<No
     private XStream provide() {
         if (this.xStream == null) {
             XStream xStream = new XStream(new DomDriver());
+            xStream.addPermission(AnyTypePermission.ANY);
+
             xStream.alias("nodes", ArrayList.class);
             xStream.alias("node", NodeImpl.class);
             xStream.aliasField("node-id", NodeImpl.class, "nodeId");
@@ -68,6 +71,7 @@ public class NodeConfigurationXStreamProvider implements XStreamProvider<List<No
             xStream.aliasField("build-number", NodeImpl.class, "buildNo");
             xStream.addDefaultImplementation(NodeImpl.class, Node.class);
             xStream.addDefaultImplementation(ArrayList.class, List.class);
+
             this.xStream = xStream;
         }
         return this.xStream;

@@ -28,7 +28,7 @@
         <file-name>target/customerorders_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select t from CustomerOrderEntity t</select-sql>
+    <select-cmd>select t from CustomerOrderEntity t</select-cmd>
 
     <xml-handler>CUSTOMERORDER_PRETTY</xml-handler>
 

@@ -22,6 +22,9 @@ import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.service.async.JobStatusListener;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 26/10/2018
@@ -34,13 +37,15 @@ public class BrandXmlEntityHandler extends AbstractXmlEntityHandler<Brand> {
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Brand> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, Brand> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagBrand(null, tuple.getData()).toXml();
+        handleInternal(tagBrand(null, tuple.getData()), writer, entityCount);
 
     }
 

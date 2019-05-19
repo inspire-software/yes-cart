@@ -18,6 +18,7 @@ package org.yes.cart.bulkexport.csv.impl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.yes.cart.bulkexport.csv.CsvExportContext;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.csv.CsvExportFile;
@@ -58,6 +59,7 @@ public class CsvExportDescriptorXStreamProvider implements XStreamProvider<CsvEx
     private XStream provide() {
         if (this.xStream == null) {
             XStream xStream = new XStream(new DomDriver());
+            xStream.addPermission(AnyTypePermission.ANY);
 
             xStream.alias("export-descriptor", CsvExportDescriptorImpl.class);
             xStream.addDefaultImplementation(CsvExportDescriptorImpl.class, ExportDescriptor.class);
@@ -69,7 +71,8 @@ public class CsvExportDescriptorXStreamProvider implements XStreamProvider<CsvEx
             xStream.aliasField("shop-code", CsvExportContextImpl.class, "shopCode");
             xStream.aliasField("shop-code-column", CsvExportContextImpl.class, "shopCodeColumn");
 
-            xStream.aliasField("select-sql", CsvExportDescriptorImpl.class, "selectSql");
+            xStream.aliasField("select-sql", CsvExportDescriptorImpl.class, "selectCmd");
+            xStream.aliasField("select-cmd", CsvExportDescriptorImpl.class, "selectCmd");
 
             xStream.aliasField("export-file-descriptor", CsvExportDescriptorImpl.class, "exportFileDescriptor");
             xStream.addDefaultImplementation(CsvExportFileImpl.class, CsvExportFile.class);

@@ -31,11 +31,9 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.util.ExceptionUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,8 +65,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
                             final CsvExportDescriptor csvExportDescriptor,
                             final String fileToExport) throws Exception {
 
-        final String msgInfoImp = MessageFormat.format("export file : {0}", fileToExport);
-        statusListener.notifyMessage(msgInfoImp);
+        statusListener.notifyMessage("export file : {}", fileToExport);
 
         CsvFileWriter csvFileWriter = new CsvFileWriterImpl();
         ResultsIterator<Object> results = null;
@@ -90,47 +87,41 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
                     csvExportDescriptor.getExportFileDescriptor().isPrintHeader());
 
 
-            results = getExistingEntities(csvExportDescriptor, csvExportDescriptor.getSelectSql(), null, null);
+            results = getExistingEntities(csvExportDescriptor, csvExportDescriptor.getSelectCmd(), null, null);
             while (results.hasNext()) {
                 final Object entity = results.next();
                 final CsvExportTuple tuple = new CsvExportTupleImpl(entity);
                 csvFileWriter.writeLine(doExportTuple(statusListener, tuple, csvExportDescriptorName, csvExportDescriptor, null));
                 releaseEntity(entity);
             }
-            final String msgInfoLines = MessageFormat.format("total data lines : {0}",
+            statusListener.notifyMessage("total data lines : {}",
                     (csvExportDescriptor.getExportFileDescriptor().isPrintHeader() ? csvFileWriter.getRowsWritten() - 1 : csvFileWriter.getRowsWritten()));
-            statusListener.notifyMessage(msgInfoLines);
 
         } catch (UnsupportedEncodingException e) {
-            final String msgErr = MessageFormat.format(
-                    "wrong file encoding in xml descriptor : {0} {1}",
+            statusListener.notifyError("wrong file encoding in xml descriptor : {} {}", e,
                     csvExportDescriptor.getExportFileDescriptor().getFileEncoding(),
                     e.getMessage());
-            statusListener.notifyError(msgErr, e);
 
         } catch (IOException e) {
-            final String msgErr = MessageFormat.format("cannot write the csv file : {0} {1}",
+            statusListener.notifyError("cannot write the csv file : {} {}", e,
                     fileToExport,
                     e.getMessage());
-            statusListener.notifyError(msgErr, e);
         } finally {
             try {
                 if (results != null) {
                     results.close();
                 }
             } catch (Exception exp) {
-                final String msgErr = MessageFormat.format("cannot close the csv resultset : {0} {1}",
+                statusListener.notifyError("cannot close the csv resultset : {} {}", exp,
                         fileToExport,
                         exp.getMessage());
-                statusListener.notifyError(msgErr, exp);
             }
             try {
                 csvFileWriter.close();
             } catch (IOException ioe) {
-                final String msgErr = MessageFormat.format("cannot close the csv file : {0} {1}",
+                statusListener.notifyError("cannot close the csv file : {} {}", ioe,
                         fileToExport,
                         ioe.getMessage());
-                statusListener.notifyError(msgErr, ioe);
             }
         }
 
@@ -155,13 +146,12 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
                 try {
                     validateAccessBeforeExport(tuple.getData(), descriptor.getEntityTypeClass());
                 } catch (AccessDeniedException ade) {
-                    String message = MessageFormat.format(
-                            "Access denied during export row : {0} \ndescriptor {1} \nobject is {2}",
+                    statusListener.notifyPing(
+                            "Access denied during export row : {} \ndescriptor {} \nobject is {}",
                             tuple,
                             csvExportDescriptorName,
                             object
                     );
-                    statusListener.notifyPing(message);
                     return null;
                 }
             }
@@ -184,11 +174,11 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
                             false
                     );
 
-                    if (StringUtils.isNotBlank(column.getDescriptor().getSelectSql())) {
+                    if (StringUtils.isNotBlank(column.getDescriptor().getSelectCmd())) {
                         ResultsIterator<Object> subResult = null;
 
                         try {
-                            subResult = getExistingEntities(column.getDescriptor(), column.getDescriptor().getSelectSql(), tuple.getData(), tuple);
+                            subResult = getExistingEntities(column.getDescriptor(), column.getDescriptor().getSelectCmd(), tuple.getData(), tuple);
                             while (subResult.hasNext()) {
                                 final Object subEntity = subResult.next();
                                 final CsvExportTuple subItem = new CsvExportTupleImpl(subEntity);
@@ -239,21 +229,17 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
 
         } catch (Exception e) {
 
-            String additionalInfo = e.getMessage();
-            String message = MessageFormat.format(
-                    "during export row : {0} \ndescriptor {1} \nerror {2}\n{3} \nadditional info {4} \nobject is {5} \nmaster object is {6}",
+            statusListener.notifyError(
+                    "during export row : {} \ndescriptor {} \nerror {}\nobject is {} \nmaster object is {}",
+                    e,
                     tuple,
                     csvExportDescriptorName,
                     e.getMessage(),
-                    ExceptionUtil.stackTraceToString(e),
-                    additionalInfo,
                     object,
-                    masterObject
-            );
-            statusListener.notifyError(message, e);
+                    masterObject);
             genericDAO.clear();
 
-            throw new Exception(message, e);
+            throw e;
         }
 
     }

@@ -22,6 +22,9 @@ import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.System;
 import org.yes.cart.service.async.JobStatusListener;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 26/10/2018
@@ -34,14 +37,16 @@ public class SystemXmlEntityHandler extends AbstractXmlEntityHandler<System> {
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, System> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, System> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagPreferences(null, tuple.getData()).toXml();
-        
+        handleInternal(tagPreferences(null, tuple.getData()), writer, entityCount);
+
     }
 
     Tag tagPreferences(final Tag parent, final System system) {

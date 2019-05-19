@@ -30,7 +30,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
 
@@ -64,8 +63,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
 
         final Brand brand = brandService.findByNameOrGuid(code);
         if (brand == null) {
-            final String warn = MessageFormat.format("brand with code {0} not found.", code);
-            statusListener.notifyWarning(warn);
+            statusListener.notifyWarning("brand with code {} not found.", code);
             return false;
         }
 
@@ -93,8 +91,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
                 }
             }
             if (attribute == null) {
-                final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
-                statusListener.notifyWarning(warn);
+                statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
                 return false;
             }
             imageAttributeValue = brandService.getGenericDao().getEntityFactory().getByIface(AttrValueBrand.class);
@@ -106,16 +103,14 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
         }
         imageAttributeValue.setVal(fileName);
         imageAttributeValue.setIndexedVal(fileName);
-        final String info = MessageFormat.format("file {0} attached as {1} to brand {2}", fileName, attributeCode, brand.getName());
-        statusListener.notifyMessage(info);
+        statusListener.notifyMessage("file {} attached as {} to brand {}", fileName, attributeCode, brand.getName());
 
         try {
             brandService.update(brand);
             return true;
 
         } catch (DataIntegrityViolationException e) {
-            final String err = MessageFormat.format("image {0} for brand with name {1} could not be added (db error).", fileName, brand.getName());
-            statusListener.notifyError(err, e);
+            statusListener.notifyError("image {} for brand with name {} could not be added (db error).", e, fileName, brand.getName());
             return false;
 
         }

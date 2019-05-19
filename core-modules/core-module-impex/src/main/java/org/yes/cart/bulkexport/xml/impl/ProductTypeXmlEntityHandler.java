@@ -29,6 +29,9 @@ import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.service.async.JobStatusListener;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 26/10/2018
@@ -41,14 +44,16 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, ProductType> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, ProductType> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagProductType(null, tuple.getData()).toXml();
-        
+        handleInternal(tagProductType(null, tuple.getData()), writer, entityCount);
+
     }
 
     Tag tagProductType(final Tag parent, final ProductType type) {

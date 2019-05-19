@@ -38,9 +38,16 @@ public class CsvImportDescriptorXStreamProviderTest {
 
     @Test
     public void testProvide() throws Exception {
+
+        testProvide("src/test/resources/import/csv/schematest001.xml");
+        testProvide("src/test/resources/import/csv/schematest002.xml");
+
+    }
+
+    public void testProvide(final String filename) throws Exception {
         final XStreamProvider<CsvImportDescriptor> provider = new CsvImportDescriptorXStreamProvider();
 
-        final InputStream inputStream = new FileInputStream("src/test/resources/import/csv/schematest001.xml");
+        final InputStream inputStream = new FileInputStream(filename);
         final CsvImportDescriptor desc = provider.fromXML(inputStream);
 
         assertNotNull(desc);
@@ -62,9 +69,9 @@ public class CsvImportDescriptorXStreamProviderTest {
         assertEquals(';', desc.getImportFileDescriptor().getColumnDelimiter());
         assertEquals('"', desc.getImportFileDescriptor().getTextQualifier());
 
-        assertEquals("select b from AttributeEntity b where b.code = {code}", desc.getSelectSql());
-        assertEquals("INSERT INTO TATTRIBUTE (VERSION, GUID, CODE) VALUES (0, {GUID}, {code})", desc.getInsertSql());
-        assertEquals("delete from AttributeEntity b where b.code = {code}", desc.getDeleteSql());
+        assertEquals("select b from AttributeEntity b where b.code = {code}", desc.getSelectCmd());
+        assertEquals("INSERT INTO TATTRIBUTE (VERSION, GUID, CODE) VALUES (0, {GUID}, {code})", desc.getInsertCmd());
+        assertEquals("delete from AttributeEntity b where b.code = {code}", desc.getDeleteCmd());
 
         assertNotNull(desc.getColumns());
         assertEquals(11, desc.getColumns().size());

@@ -18,8 +18,6 @@ package org.yes.cart.bulkimport.xml.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
@@ -41,8 +39,6 @@ import java.util.List;
  * Time: 22:23
  */
 public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportHandler<T, E> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractXmlEntityHandler.class);
 
     protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -74,10 +70,10 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
 
         final T xmlType = tuple.getData();
 
-        final E domain = getOrCreate(xmlType);
+        final E domain = getOrCreate(statusListener, xmlType);
 
         if (domain == null) {
-            LOG.warn("Unable to resolve domain object for {}:{}", xmlType.getClass().getSimpleName(), tuple.getSourceId());
+            statusListener.notifyWarning("Unable to resolve domain object for {}:{}", xmlType.getClass().getSimpleName(), tuple.getSourceId());
             return null;
         }
 
@@ -88,20 +84,22 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
         switch (mode) {
             case DELETE:
                 if (!isNew) {
-                    delete(domain);
+                    delete(statusListener, domain);
                 }
                 return null; // delete mode should not resolve domain object
             case INSERT_ONLY:
                 if (!isNew) {
+                    statusListener.notifyPing("Skipping tuple (insert restricted): " + tuple);
                     return domain; // no insert, return existing
                 }
             case UPDATE_ONLY:
                 if (isNew) {
+                    statusListener.notifyPing("Skipping tuple (update restricted): " + tuple);
                     return null; // no update, return nothing
                 }
             case MERGE:
             default:
-                saveOrUpdate(domain, xmlType, mode);
+                saveOrUpdate(statusListener, domain, xmlType, mode);
                 return domain; // return updated
 
         }
@@ -120,18 +118,20 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
     /**
      * Perform delete operation.
      *
+     * @param statusListener status listener
      * @param domain domain object
      */
-    protected abstract void delete(final E domain);
+    protected abstract void delete(final JobStatusListener statusListener, final E domain);
 
     /**
      * Perform save or update operation.
      *
+     * @param statusListener status listener
      * @param domain  domain object
      * @param xmlType XML object
      * @param mode    desired mode
      */
-    protected abstract void saveOrUpdate(final E domain, final T xmlType, final EntityImportModeType mode);
+    protected abstract void saveOrUpdate(final JobStatusListener statusListener, final E domain, final T xmlType, final EntityImportModeType mode);
 
     /**
      * Process I18n XML chunk.
@@ -278,11 +278,12 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
     /**
      * Retrieve domain object for given XML type
      *
+     * @param statusListener status listener
      * @param xmlType XML object
      *
      * @return domain object
      */
-    protected abstract E getOrCreate(final T xmlType);
+    protected abstract E getOrCreate(final JobStatusListener statusListener, final T xmlType);
 
     /**
      * Determine if domain object is new

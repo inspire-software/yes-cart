@@ -24,7 +24,7 @@
         <file-name>target/etypes_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select b from EtypeEntity b</select-sql>
+    <select-cmd>select b from EtypeEntity b</select-cmd>
 
     <xml-handler>ETYPE_PRETTY</xml-handler>
 

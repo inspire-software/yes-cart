@@ -28,7 +28,7 @@
         <file-name>target/inventory_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select sw from SkuWarehouseEntity sw</select-sql>
+    <select-cmd>select sw from SkuWarehouseEntity sw</select-cmd>
 
     <xml-handler>INVENTORY_PRETTY</xml-handler>
 

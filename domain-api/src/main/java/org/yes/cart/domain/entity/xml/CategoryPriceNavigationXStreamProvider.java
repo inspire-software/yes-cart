@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity.xml;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.yes.cart.domain.entity.xml.converter.MapConverter;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
@@ -59,6 +60,8 @@ public class CategoryPriceNavigationXStreamProvider implements XStreamProvider<P
     private XStream provide() {
         if (this.xStream == null) {
             XStream xStream = new XStream(new DomDriver());
+            xStream.addPermission(AnyTypePermission.ANY);
+
             xStream.alias("price-navigation", PriceTierTreeImpl.class);
             xStream.aliasField("currencies", PriceTierTreeImpl.class, "priceMap");
             xStream.alias("currency", Map.Entry.class);
@@ -67,6 +70,7 @@ public class CategoryPriceNavigationXStreamProvider implements XStreamProvider<P
             xStream.alias("price-tier", PriceTierNode.class);
             xStream.registerConverter(new MapConverter(xStream.getMapper(), "currency", "name", "price-tiers"), 10001);
             xStream.addDefaultImplementation(PriceTierNodeImpl.class, PriceTierNode.class);
+
             this.xStream = xStream;
         }
         return this.xStream;

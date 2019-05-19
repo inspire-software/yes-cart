@@ -16,8 +16,6 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.CollectionImportModeType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
@@ -26,6 +24,7 @@ import org.yes.cart.bulkimport.xml.internal.ShopCarriersCodeType;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierShop;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.ShopService;
 
@@ -38,8 +37,6 @@ import java.util.List;
  */
 public class ShopCarriersXmlEntityHandler extends AbstractXmlEntityHandler<ShopCarriersCodeType, Shop> implements XmlEntityImportHandler<ShopCarriersCodeType, Shop> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShopCarriersXmlEntityHandler.class);
-
     private CarrierService carrierService;
     private ShopService shopService;
 
@@ -48,15 +45,15 @@ public class ShopCarriersXmlEntityHandler extends AbstractXmlEntityHandler<ShopC
     }
 
     @Override
-    protected void delete(final Shop shop) {
+    protected void delete(final JobStatusListener statusListener, final Shop shop) {
         throw new UnsupportedOperationException("Shop delete mode is not supported");
     }
 
     @Override
-    protected void saveOrUpdate(final Shop domain, final ShopCarriersCodeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Shop domain, final ShopCarriersCodeType xmlType, final EntityImportModeType mode) {
 
         if (domain != null) {
-            processCarriers(domain, xmlType);
+            processCarriers(statusListener, domain, xmlType);
 
             if (domain.getShopId() == 0L) {
                 this.shopService.create(domain);
@@ -69,7 +66,7 @@ public class ShopCarriersXmlEntityHandler extends AbstractXmlEntityHandler<ShopC
 
     }
 
-    private void processCarriers(final Shop domain, final ShopCarriersCodeType xmlType) {
+    private void processCarriers(final JobStatusListener statusListener, final Shop domain, final ShopCarriersCodeType xmlType) {
 
         final CollectionImportModeType collectionMode = xmlType.getImportMode() != null ? xmlType.getImportMode() : CollectionImportModeType.MERGE;
 
@@ -94,17 +91,17 @@ public class ShopCarriersXmlEntityHandler extends AbstractXmlEntityHandler<ShopC
                     processCarriersRemove(domain, sc);
                 }
             } else {
-                processCarriersSave(domain, sc);
+                processCarriersSave(statusListener, domain, sc);
             }
         }
 
     }
 
-    private void processCarriersSave(final Shop domain, final ShopCarrierType cr) {
+    private void processCarriersSave(final JobStatusListener statusListener, final Shop domain, final ShopCarrierType cr) {
 
         final Carrier carrier = this.carrierService.findSingleByCriteria(" where e.guid = ?1", cr.getGuid());
         if (carrier == null) {
-            LOG.warn("Carrier {} for shop {} is not found and will be skipped", cr.getGuid(), domain.getCode());
+            statusListener.notifyWarning("Carrier {} for shop {} is not found and will be skipped", cr.getGuid(), domain.getCode());
             return;
         }
 
@@ -141,7 +138,7 @@ public class ShopCarriersXmlEntityHandler extends AbstractXmlEntityHandler<ShopC
     }
 
     @Override
-    protected Shop getOrCreate(final ShopCarriersCodeType xmlType) {
+    protected Shop getOrCreate(final JobStatusListener statusListener, final ShopCarriersCodeType xmlType) {
         Shop shop = this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getShopCode());
         if (shop != null) {
             return shop;

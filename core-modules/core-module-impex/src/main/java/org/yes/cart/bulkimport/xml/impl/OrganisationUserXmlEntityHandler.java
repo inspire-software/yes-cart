@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.entity.ManagerRole;
 import org.yes.cart.domain.entity.ManagerShop;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.domain.ShopService;
@@ -48,13 +49,13 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
     }
 
     @Override
-    protected void delete(final Manager domain) {
+    protected void delete(final JobStatusListener statusListener, final Manager domain) {
         this.managerService.delete(domain);
         this.managerService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Manager domain, final OrganisationUserType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Manager domain, final OrganisationUserType xmlType, final EntityImportModeType mode) {
 
         if (StringUtils.isNotBlank(xmlType.getCredentials().getPassword())) {
             domain.setPassword(xmlType.getCredentials().getPassword());
@@ -173,7 +174,7 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
     }
 
     @Override
-    protected Manager getOrCreate(final OrganisationUserType xmlType) {
+    protected Manager getOrCreate(final JobStatusListener statusListener, final OrganisationUserType xmlType) {
         Manager manager = this.managerService.findSingleByCriteria(" where e.email = ?1", xmlType.getCredentials().getEmail());
         if (manager != null) {
             return manager;

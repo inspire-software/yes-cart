@@ -16,8 +16,6 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.PaymentGatewayCallbackRequestParameterType;
@@ -25,6 +23,7 @@ import org.yes.cart.bulkimport.xml.internal.PaymentGatewayCallbackType;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayCallbackEntity;
 import org.yes.cart.payment.service.PaymentModuleGenericService;
+import org.yes.cart.service.async.JobStatusListener;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -36,8 +35,6 @@ import java.util.Map;
  */
 public class PaymentGatewayCallbackXmlEntityHandler extends AbstractXmlEntityHandler<PaymentGatewayCallbackType, PaymentGatewayCallback> implements XmlEntityImportHandler<PaymentGatewayCallbackType, PaymentGatewayCallback> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentGatewayCallbackXmlEntityHandler.class);
-
     private PaymentModuleGenericService<PaymentGatewayCallback> paymentGatewayCallbackService;
 
     public PaymentGatewayCallbackXmlEntityHandler() {
@@ -45,23 +42,23 @@ public class PaymentGatewayCallbackXmlEntityHandler extends AbstractXmlEntityHan
     }
 
     @Override
-    protected void delete(final PaymentGatewayCallback callback) {
+    protected void delete(final JobStatusListener statusListener, final PaymentGatewayCallback callback) {
         this.paymentGatewayCallbackService.delete(callback);
     }
 
     @Override
-    protected void saveOrUpdate(final PaymentGatewayCallback domain, final PaymentGatewayCallbackType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final PaymentGatewayCallback domain, final PaymentGatewayCallbackType xmlType, final EntityImportModeType mode) {
 
         if (domain.getPaymentGatewayCallbackId() == 0L) {
             this.paymentGatewayCallbackService.create(domain);
         } else {
-            LOG.warn("Payment callback with GUID {} already exists and will not be updated", xmlType.getGuid());
+            statusListener.notifyWarning("Payment callback with GUID {} already exists and will not be updated", xmlType.getGuid());
         }
         
     }
 
     @Override
-    protected PaymentGatewayCallback getOrCreate(final PaymentGatewayCallbackType xmlType) {
+    protected PaymentGatewayCallback getOrCreate(final JobStatusListener statusListener, final PaymentGatewayCallbackType xmlType) {
         PaymentGatewayCallback payment = this.paymentGatewayCallbackService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (payment != null) {
             return payment;

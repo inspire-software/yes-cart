@@ -20,6 +20,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.AttributeType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.EtypeService;
@@ -40,13 +41,13 @@ public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<Attribut
     }
 
     @Override
-    protected void delete(final Attribute attribute) {
+    protected void delete(final JobStatusListener statusListener, final Attribute attribute) {
         this.attributeService.delete(attribute);
         this.attributeService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Attribute domain, final AttributeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Attribute domain, final AttributeType xmlType, final EntityImportModeType mode) {
         domain.setMandatory(xmlType.isMandatory());
         domain.setSecure(xmlType.isSecure());
         domain.setAllowduplicate(xmlType.isAllowDuplicate());
@@ -75,7 +76,7 @@ public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<Attribut
     }
 
     @Override
-    protected Attribute getOrCreate(final AttributeType xmlType) {
+    protected Attribute getOrCreate(final JobStatusListener statusListener, final AttributeType xmlType) {
         Attribute attribute = this.attributeService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (attribute != null) {
             return attribute;

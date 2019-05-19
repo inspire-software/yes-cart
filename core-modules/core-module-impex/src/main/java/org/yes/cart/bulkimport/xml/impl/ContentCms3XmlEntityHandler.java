@@ -24,6 +24,7 @@ import org.yes.cart.bulkimport.xml.internal.ContentType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.AttrValueContent;
 import org.yes.cart.domain.entity.Content;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
 
@@ -48,13 +49,13 @@ public class ContentCms3XmlEntityHandler extends AbstractAttributableXmlEntityHa
     }
 
     @Override
-    protected void delete(final Content content) {
+    protected void delete(final JobStatusListener statusListener, final Content content) {
         this.contentService.delete(content);
         this.contentService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Content domain, final ContentType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Content domain, final ContentType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getParent() != null) {
             final Content parent = this.contentService.findSingleByCriteria(" where e.guid = ?1", xmlType.getParent().getGuid());
@@ -136,7 +137,7 @@ public class ContentCms3XmlEntityHandler extends AbstractAttributableXmlEntityHa
     }
 
     @Override
-    protected Content getOrCreate(final ContentType xmlType) {
+    protected Content getOrCreate(final JobStatusListener statusListener, final ContentType xmlType) {
         Content content = this.contentService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (content != null) {
             return content;

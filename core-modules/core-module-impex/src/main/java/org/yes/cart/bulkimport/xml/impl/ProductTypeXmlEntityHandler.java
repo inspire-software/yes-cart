@@ -30,6 +30,7 @@ import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.domain.misc.navigation.range.impl.DisplayValueImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeListImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeNodeImpl;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductTypeService;
 
@@ -52,13 +53,13 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
     }
 
     @Override
-    protected void delete(final ProductType type) {
+    protected void delete(final JobStatusListener statusListener, final ProductType type) {
         this.productTypeService.delete(type);
         this.productTypeService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final ProductType domain, final ProductTypeTypeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final ProductType domain, final ProductTypeTypeType xmlType, final EntityImportModeType mode) {
         if (xmlType.getConfiguration() != null) {
             if (xmlType.getConfiguration().isService() != null) {
                 domain.setService(xmlType.getConfiguration().isService());
@@ -266,7 +267,7 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
     }
 
     @Override
-    protected ProductType getOrCreate(final ProductTypeTypeType xmlType) {
+    protected ProductType getOrCreate(final JobStatusListener statusListener, final ProductTypeTypeType xmlType) {
         ProductType productType = this.productTypeService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (productType != null) {
             return productType;

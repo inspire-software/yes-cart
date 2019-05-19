@@ -28,7 +28,7 @@
         <file-name>target/systempreferences_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select t from SystemEntity t</select-sql>
+    <select-cmd>select t from SystemEntity t</select-cmd>
 
     <xml-handler>SYSTEM_PRETTY</xml-handler>
 

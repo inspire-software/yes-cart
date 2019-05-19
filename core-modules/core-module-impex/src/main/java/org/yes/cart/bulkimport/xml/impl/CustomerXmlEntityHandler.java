@@ -17,12 +17,11 @@
 package org.yes.cart.bulkimport.xml.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.*;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.CustomerWishListService;
 import org.yes.cart.service.domain.ProductSkuService;
@@ -39,8 +38,6 @@ import java.util.Optional;
  */
 public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandler<CustomerType, Customer, Customer, AttrValueCustomer> implements XmlEntityImportHandler<CustomerType, Customer> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CustomerXmlEntityHandler.class);
-
     private CustomerService customerService;
     private CustomerWishListService customerWishListService;
     private ShopService shopService;
@@ -53,13 +50,13 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
     }
 
     @Override
-    protected void delete(final Customer customer) {
+    protected void delete(final JobStatusListener statusListener, final Customer customer) {
         this.customerService.delete(customer);
         this.customerService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Customer domain, final CustomerType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Customer domain, final CustomerType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getCredentials() != null) {
 
@@ -115,7 +112,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
 
         processShops(domain, xmlType);
 
-        processWishList(domain, xmlType.getCustomerWishlist());
+        processWishList(statusListener, domain, xmlType.getCustomerWishlist());
 
         if (xmlType.getCustomerAddresses() != null) {
             for (final AddressType xmlAddressType : xmlType.getCustomerAddresses().getAddress()) {
@@ -130,14 +127,14 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
                     xmlAddressType.setCustomerCode(domain.getGuid());
                     xmlAddressType.setCustomerEmail(domain.getEmail());
                 }
-                addressXmlEntityImportHandler.handle(null, null, (ImpExTuple) new XmlImportTupleImpl(xmlAddressType.getGuid(), xmlAddressType), null, null);
+                addressXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlAddressType.getGuid(), xmlAddressType), null, null);
 
             }
         }
 
     }
 
-    private void processWishList(final Customer domain, final CustomerWishlistType xmlType) {
+    private void processWishList(final JobStatusListener statusListener, final Customer domain, final CustomerWishlistType xmlType) {
 
         if (xmlType == null) {
             return;
@@ -155,7 +152,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
                     processWishListRemove(domain, wli);
                 }
             } else {
-                processWishListSave(domain, wli);
+                processWishListSave(statusListener, domain, wli);
             }
         }
 
@@ -165,7 +162,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
 
     }
 
-    private void processWishListSave(final Customer domain, final CustomerWishlistItemType wli) {
+    private void processWishListSave(final JobStatusListener statusListener, final Customer domain, final CustomerWishlistItemType wli) {
 
         for (final CustomerWishList wlist : domain.getWishList()) {
             if (wli.getGuid() != null && wli.getGuid().equals(wlist.getGuid())) {
@@ -178,7 +175,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
         wlist.setGuid(wli.getGuid());
         ProductSku sku = this.productSkuService.getProductSkuBySkuCode(wli.getSkuCode());
         if (sku == null) {
-            LOG.warn("Wishlist skipped for SKU {} ... not found", wli.getSkuCode());
+            statusListener.notifyWarning("Wishlist skipped for SKU {} ... not found", wli.getSkuCode());
             return;
         }
         wlist.setSkus(sku);
@@ -252,7 +249,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
 
 
     @Override
-    protected Customer getOrCreate(final CustomerType xmlType) {
+    protected Customer getOrCreate(final JobStatusListener statusListener, final CustomerType xmlType) {
         Customer customer = this.customerService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (customer != null) {
             return customer;

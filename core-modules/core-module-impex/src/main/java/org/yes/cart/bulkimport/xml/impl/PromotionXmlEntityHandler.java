@@ -23,6 +23,7 @@ import org.yes.cart.bulkimport.xml.internal.PromotionCouponType;
 import org.yes.cart.bulkimport.xml.internal.PromotionType;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.PromotionCoupon;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.PromotionService;
 
 /**
@@ -41,13 +42,13 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
     }
 
     @Override
-    protected void delete(final Promotion promotion) {
+    protected void delete(final JobStatusListener statusListener, final Promotion promotion) {
         this.promotionService.delete(promotion);
         this.promotionService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final Promotion domain, final PromotionType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Promotion domain, final PromotionType xmlType, final EntityImportModeType mode) {
 
         domain.setTag(processTags(xmlType.getTags(), domain.getTag()));
         domain.setName(xmlType.getName());
@@ -86,7 +87,7 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
             for (final PromotionCouponType xmlCouponType : xmlType.getCoupons().getPromotionCoupon()) {
 
                 xmlCouponType.setPromotion(domain.getCode());
-                promotionCouponTypeXmlEntityImportHandler.handle(null, null, (ImpExTuple) new XmlImportTupleImpl(xmlCouponType.getCode(), xmlCouponType), null, null);
+                promotionCouponTypeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlCouponType.getCode(), xmlCouponType), null, null);
 
             }
         }
@@ -94,7 +95,7 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
     }
 
     @Override
-    protected Promotion getOrCreate(final PromotionType xmlType) {
+    protected Promotion getOrCreate(final JobStatusListener statusListener, final PromotionType xmlType) {
         Promotion promotion = this.promotionService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (promotion != null) {
             return promotion;

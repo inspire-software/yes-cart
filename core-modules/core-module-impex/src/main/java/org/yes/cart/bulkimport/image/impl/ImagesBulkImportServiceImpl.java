@@ -31,7 +31,6 @@ import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Set;
 
 /**
@@ -74,23 +73,20 @@ public class ImagesBulkImportServiceImpl implements ImportService {
 
         final String regExp = importDescriptor.getImportFileDescriptor().getFileNameMask();
 
-        String info = MessageFormat.format(
-                "start images import with {0} path using {1} and file mask {2}",
+        statusListener.notifyMessage(
+                "start images import with {} path using {} and file mask {}",
                 importDescriptor.getImportDirectory(),
                 imageImportDescriptorName,
-                regExp);
-        statusListener.notifyMessage(info);
+                regExp
+        );
         File[] files = ImportFileUtils.getFilesToImport(importDescriptor, fileName);
         if (files != null) {
-            info = MessageFormat.format(
-                    "\nINFO found {0} images to import",
-                    files.length);
-            statusListener.notifyMessage(info);
+            statusListener.notifyMessage("found {} images to import", files.length);
             int count = 0;
             int total = files.length;
             for (File file : files) {
                 doImport(file, importDescriptor, statusListener, importedFiles, imageVaultRootDirectory);
-                statusListener.notifyPing("Processed " + (++count) + " of " + total + " images");
+                statusListener.notifyPing("Processed {} of {} images", ++count, total);
             }
 
         }
@@ -116,7 +112,7 @@ public class ImagesBulkImportServiceImpl implements ImportService {
                           final Set<String> importedFiles,
                           final String imageVaultRootDirectory) {
 
-        final MediaFileNameStrategy strategy = imageService.getImageNameStrategy(importDescriptor.getSelectSql());
+        final MediaFileNameStrategy strategy = imageService.getImageNameStrategy(importDescriptor.getSelectCmd());
 
         final String fileName = file.getName();
         final String resolvedCode = strategy.resolveObjectCode(fileName);
@@ -140,14 +136,11 @@ public class ImagesBulkImportServiceImpl implements ImportService {
                         FileUtils.readFileToByteArray(file),
                         strategy.getUrlPath(),
                         imageVaultRootDirectory);
-                final String info = MessageFormat.format(
-                        "image {0} {1} added to image repository", file.getAbsolutePath(), newFileName);
-                statusListener.notifyMessage(info);
+                statusListener.notifyMessage("image {} {} added to image repository", file.getAbsolutePath(), newFileName);
 
             } catch (IOException e) {
-                final String err = MessageFormat.format(
-                        "can not add {0} to image repository. Try to add it manually. Error is {1}", file.getAbsolutePath(), e.getMessage());
-                statusListener.notifyError(err, e);
+                statusListener.notifyError(
+                        "can not add {} to image repository. Try to add it manually. Error is {}", e, file.getAbsolutePath(), e.getMessage());
             }
         }
 

@@ -23,6 +23,7 @@ import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.ShippingMethodExclusionsDatesDateType;
 import org.yes.cart.bulkimport.xml.internal.ShippingMethodType;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.util.DateUtils;
@@ -46,13 +47,13 @@ public class ShippingMethodXmlEntityHandler extends AbstractXmlEntityHandler<Shi
     }
 
     @Override
-    protected void delete(final CarrierSla method) {
+    protected void delete(final JobStatusListener statusListener, final CarrierSla method) {
         this.carrierSlaService.delete(method);
         this.carrierSlaService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final CarrierSla domain, final ShippingMethodType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final CarrierSla domain, final ShippingMethodType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getConfiguration() != null) {
             domain.setGuaranteed(xmlType.getConfiguration().isGuaranteedDelivery());
@@ -162,7 +163,7 @@ public class ShippingMethodXmlEntityHandler extends AbstractXmlEntityHandler<Shi
     }
 
     @Override
-    protected CarrierSla getOrCreate(final ShippingMethodType xmlType) {
+    protected CarrierSla getOrCreate(final JobStatusListener statusListener, final ShippingMethodType xmlType) {
         CarrierSla sla = this.carrierSlaService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (sla != null) {
             return sla;

@@ -16,8 +16,6 @@
 
 package org.yes.cart.bulkexport.image.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.service.ExportService;
 import org.yes.cart.bulkexport.image.ImageExportDomainObjectStrategy;
 import org.yes.cart.bulkexport.model.ExportDescriptor;
@@ -25,16 +23,12 @@ import org.yes.cart.bulkexport.service.impl.AbstractExportService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.text.MessageFormat;
-
 /**
  * User: denispavlov
  * Date: 27/11/2015
  * Time: 12:52
  */
 public class ImagesBulkExportServiceImpl extends AbstractExportService<ExportDescriptor> implements ExportService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ImagesBulkExportServiceImpl.class);
 
     private final ImageExportDomainObjectStrategy[] strategies;
 
@@ -63,18 +57,13 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService<ExportDes
                             final ExportDescriptor imageExportDescriptor,
                             final String fileToExport) throws Exception {
 
-        final String msgInfoImp = MessageFormat.format("export file : {0}", fileToExport);
-        statusListener.notifyMessage(msgInfoImp);
-        LOG.info(msgInfoImp);
+        statusListener.notifyMessage("export file : {}", fileToExport);
 
-        final String select = imageExportDescriptor.getSelectSql();
+        final String select = imageExportDescriptor.getSelectCmd();
 
-        String info = MessageFormat.format(
-                "start images export with {0} path using {1}",
-                imageExportDescriptor.getSelectSql(),
+        statusListener.notifyMessage("start images export with {} path using {}",
+                imageExportDescriptor.getSelectCmd(),
                 imageExportDescriptorName);
-        statusListener.notifyMessage(info);
-        LOG.info(info);
 
         for (final ImageExportDomainObjectStrategy domainStrategy : strategies) {
             if (domainStrategy.supports(select)) {

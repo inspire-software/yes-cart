@@ -24,6 +24,9 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ShopService;
 
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 16/03/2019
@@ -36,14 +39,16 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<Address>  
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, Address> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, Address> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagAddress(null, tuple.getData()).toXml();
-
+        handleInternal(tagAddress(null, tuple.getData()), writer, entityCount);
+        
     }
 
     Tag tagAddress(final Tag parent, final Address address) {

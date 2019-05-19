@@ -16,14 +16,13 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.bulkimport.xml.internal.PaymentGatewayParameterType;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
+import org.yes.cart.service.async.JobStatusListener;
 
 /**
  * User: denispavlov
@@ -32,8 +31,6 @@ import org.yes.cart.payment.service.PaymentGatewayParameterService;
  */
 public class PaymentGatewayParameterXmlEntityHandler extends AbstractXmlEntityHandler<PaymentGatewayParameterType, PaymentGatewayParameter> implements XmlEntityImportHandler<PaymentGatewayParameterType, PaymentGatewayParameter> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentGatewayParameterXmlEntityHandler.class);
-
     private PaymentGatewayParameterService paymentGatewayParameterService;
 
     public PaymentGatewayParameterXmlEntityHandler() {
@@ -41,12 +38,12 @@ public class PaymentGatewayParameterXmlEntityHandler extends AbstractXmlEntityHa
     }
 
     @Override
-    protected void delete(final PaymentGatewayParameter param) {
+    protected void delete(final JobStatusListener statusListener, final PaymentGatewayParameter param) {
         this.paymentGatewayParameterService.delete(param);
     }
 
     @Override
-    protected void saveOrUpdate(final PaymentGatewayParameter domain, final PaymentGatewayParameterType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final PaymentGatewayParameter domain, final PaymentGatewayParameterType xmlType, final EntityImportModeType mode) {
 
         domain.setValue(xmlType.getValue());
         domain.setBusinesstype(xmlType.getBusinessType());
@@ -61,7 +58,7 @@ public class PaymentGatewayParameterXmlEntityHandler extends AbstractXmlEntityHa
     }
 
     @Override
-    protected PaymentGatewayParameter getOrCreate(final PaymentGatewayParameterType xmlType) {
+    protected PaymentGatewayParameter getOrCreate(final JobStatusListener statusListener, final PaymentGatewayParameterType xmlType) {
         PaymentGatewayParameter payment = this.paymentGatewayParameterService.findSingleByCriteria(" where e.pgLabel = ?1 and e.name = ?2", xmlType.getPaymentGateway(), xmlType.getCode());
         if (payment != null) {
             return payment;

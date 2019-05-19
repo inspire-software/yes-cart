@@ -22,6 +22,7 @@ import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.service.async.JobStatusListener;
 
+import java.io.OutputStreamWriter;
 import java.util.Map;
 
 /**
@@ -36,13 +37,15 @@ public class PaymentGatewayParameterXmlEntityHandler extends AbstractXmlEntityHa
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, PaymentGatewayParameter> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, PaymentGatewayParameter> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagParam(null, tuple.getData()).toXml();
+        handleInternal(tagParam(null, tuple.getData()), writer, entityCount);
 
     }
 

@@ -28,7 +28,7 @@
         <file-name>target/shops_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select t from ShopEntity t</select-sql>
+    <select-cmd>select t from ShopEntity t</select-cmd>
 
     <xml-handler>SHOP_PRETTY</xml-handler>
 

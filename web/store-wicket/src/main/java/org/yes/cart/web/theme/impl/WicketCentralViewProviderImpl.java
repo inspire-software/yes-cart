@@ -35,7 +35,6 @@ import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.theme.WicketCentralViewProvider;
 
 import java.lang.reflect.Constructor;
-import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
@@ -135,7 +134,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
         } catch (Exception e) {
 
-            LOG.error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
+            LOG.error("Can not create instance of panel for label " + rendererLabel, e);
             return new EmptyCentralView(wicketComponentId, navigationContext);
 
         }

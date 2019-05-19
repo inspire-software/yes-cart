@@ -71,7 +71,7 @@ public class ShopTopSellerServiceImpl extends BaseGenericServiceImpl<ShopTopSell
                 final String skuCode = (String) tuple[0];
                 final BigDecimal qty = (BigDecimal) tuple[1];
 
-                final Product product = productDao.findSingleByNamedQueryCached("PRODUCT.BY.SKU.CODE", skuCode);
+                final Product product = productDao.findSingleByNamedQuery("PRODUCT.BY.SKU.CODE", skuCode);
                 if (product != null) {
                     topSellersProducts.put(product.getProductId(), product);
 

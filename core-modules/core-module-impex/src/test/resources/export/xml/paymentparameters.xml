@@ -28,7 +28,7 @@
         <file-name>target/payment_paramaeters_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select p from PaymentGatewayParameterEntity p</select-sql>
+    <select-cmd>select p from PaymentGatewayParameterEntity p</select-cmd>
 
     <xml-handler>PGPARAMETER_PRETTY</xml-handler>
 

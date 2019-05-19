@@ -26,7 +26,6 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.media.MediaFileNameStrategy;
 
 import java.io.*;
-import java.text.MessageFormat;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -95,10 +94,7 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
                     bytesLeft = maxBytes;
                     i++;
 
-                    final String msg = MessageFormat.format(
-                            "Creating images zip: {0}",
-                            zip);
-                    statusListener.notifyMessage(msg);
+                    statusListener.notifyMessage("Creating images zip: {}", zip);
 
                 }
 
@@ -133,10 +129,7 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
                     zos.close();
                     zos = null;
 
-                    final String msg = MessageFormat.format(
-                            "Created images zip: {0}",
-                            zip);
-                    statusListener.notifyMessage(msg);
+                    statusListener.notifyMessage("Created images zip: {}", zip);
                 }
 
 

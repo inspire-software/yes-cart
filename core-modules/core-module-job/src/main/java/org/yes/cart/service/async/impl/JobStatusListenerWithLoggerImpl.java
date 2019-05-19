@@ -57,37 +57,37 @@ public class JobStatusListenerWithLoggerImpl implements JobStatusListener {
 
     /** {@inheritDoc} */
     @Override
-    public void notifyPing(final String msg) {
-        this.wrapped.notifyPing(msg);
-        this.logger.notifyPing(msg);
+    public void notifyPing(final String msg, Object... args) {
+        this.wrapped.notifyPing(msg, args);
+        this.logger.notifyPing(msg, args);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyMessage(final String msg) {
-        this.wrapped.notifyMessage(msg);
-        this.logger.notifyMessage(msg);
+    public void notifyMessage(final String msg, Object... args) {
+        this.wrapped.notifyMessage(msg, args);
+        this.logger.notifyMessage(msg, args);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyWarning(final String warning) {
-        this.wrapped.notifyWarning(warning);
-        this.logger.notifyWarning(warning);
+    public void notifyWarning(final String warning, Object... args) {
+        this.wrapped.notifyWarning(warning, args);
+        this.logger.notifyWarning(warning, args);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyError(final String error) {
-        this.wrapped.notifyError(error);
-        this.logger.notifyError(error);
+    public void notifyError(final String error, Object... args) {
+        this.wrapped.notifyError(error, args);
+        this.logger.notifyError(error, args);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void notifyError(final String error, final Exception exp) {
-        this.wrapped.notifyError(error, exp);
-        this.logger.notifyError(error, exp);
+    public void notifyError(final String error, final Exception exp, Object... args) {
+        this.wrapped.notifyError(error, exp, args);
+        this.logger.notifyError(error, exp, args);
     }
 
     /** {@inheritDoc} */

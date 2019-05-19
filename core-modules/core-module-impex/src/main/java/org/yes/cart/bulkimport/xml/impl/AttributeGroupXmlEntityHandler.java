@@ -20,6 +20,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.AttributeGroupType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.AttributeGroup;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AttributeGroupService;
 
 /**
@@ -36,13 +37,13 @@ public class AttributeGroupXmlEntityHandler extends AbstractXmlEntityHandler<Att
     }
 
     @Override
-    protected void delete(final AttributeGroup group) {
+    protected void delete(final JobStatusListener statusListener, final AttributeGroup group) {
         this.attributeGroupService.delete(group);
         this.attributeGroupService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final AttributeGroup domain, final AttributeGroupType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final AttributeGroup domain, final AttributeGroupType xmlType, final EntityImportModeType mode) {
         domain.setName(xmlType.getName());
         domain.setDescription(xmlType.getDescription());
         if (domain.getAttributegroupId() == 0L) {
@@ -55,7 +56,7 @@ public class AttributeGroupXmlEntityHandler extends AbstractXmlEntityHandler<Att
     }
 
     @Override
-    protected AttributeGroup getOrCreate(final AttributeGroupType xmlType) {
+    protected AttributeGroup getOrCreate(final JobStatusListener statusListener, final AttributeGroupType xmlType) {
         AttributeGroup group = this.attributeGroupService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (group != null) {
             return group;

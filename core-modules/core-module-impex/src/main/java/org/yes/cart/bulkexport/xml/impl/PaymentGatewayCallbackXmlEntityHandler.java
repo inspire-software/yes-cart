@@ -22,6 +22,7 @@ import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
 import org.yes.cart.service.async.JobStatusListener;
 
+import java.io.OutputStreamWriter;
 import java.util.Map;
 
 /**
@@ -36,13 +37,15 @@ public class PaymentGatewayCallbackXmlEntityHandler extends AbstractXmlEntityHan
     }
 
     @Override
-    public String handle(final JobStatusListener statusListener,
-                         final XmlExportDescriptor xmlExportDescriptor,
-                         final ImpExTuple<String, PaymentGatewayCallback> tuple,
-                         final XmlValueAdapter xmlValueAdapter,
-                         final String fileToExport) {
+    public void handle(final JobStatusListener statusListener,
+                       final XmlExportDescriptor xmlExportDescriptor,
+                       final ImpExTuple<String, PaymentGatewayCallback> tuple,
+                       final XmlValueAdapter xmlValueAdapter,
+                       final String fileToExport,
+                       final OutputStreamWriter writer,
+                       final Map<String, Integer> entityCount) throws Exception {
 
-        return tagCallback(null, tuple.getData()).toXml();
+        handleInternal(tagCallback(null, tuple.getData()), writer, entityCount);
 
     }
 

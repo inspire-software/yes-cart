@@ -28,7 +28,7 @@
         <file-name>target/payment_payments_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-sql>select p from CustomerOrderPaymentEntity p</select-sql>
+    <select-cmd>select p from CustomerOrderPaymentEntity p</select-cmd>
 
     <xml-handler>CUSTOMERORDERPAYMENT_PRETTY</xml-handler>
 

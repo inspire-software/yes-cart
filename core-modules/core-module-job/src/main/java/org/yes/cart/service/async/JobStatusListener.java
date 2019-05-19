@@ -48,33 +48,44 @@ public interface JobStatusListener {
      * Use msg to have a current progress message (like a progress bar)
      * This message will be appended to the end of the report until a real
      * message method of this listener is invoked - then this message is removed.
+     *
+     * @param message message (with optional placeholders "{}" for arguments)
+     * @param args arguments
      */
-    void notifyPing(String msg);
+    void notifyPing(String message, Object... args);
 
     /**
      * Notify of a message (equivalent to info)
-     * @param message message
+     *
+     * @param message message (with optional placeholders "{}" for arguments)
+     * @param args arguments
      */
-    void notifyMessage(String message);
+    void notifyMessage(String message, Object... args);
 
     /**
      * Notify of a warning message
-     * @param warning warning message
+     *
+     * @param warning warning message (with optional placeholders "{}" for arguments)
+     * @param args arguments
      */
-    void notifyWarning(String warning);
+    void notifyWarning(String warning, Object... args);
 
     /**
      * Notify of an error message
-     * @param error error message
+     *
+     * @param error error message (with optional placeholders "{}" for arguments)
+     * @param args arguments
      */
-    void notifyError(String error);
+    void notifyError(String error, Object... args);
 
     /**
      * Notify of an error message
-     * @param error error message
+     *
+     * @param error error message (with optional placeholders "{}" for arguments)
      * @param exp exception that caused the error
+     * @param args arguments
      */
-    void notifyError(String error, Exception exp);
+    void notifyError(String error, Exception exp, Object... args);
 
     /**
      * Notify completion
