@@ -103,6 +103,8 @@ export class ExportManagerComponent implements OnInit {
           safeExt = '.csv';
         } else if (this.selectedGroup.name.toLowerCase().includes('xml')) {
           safeExt = '.xml';
+        } else if (this.selectedGroup.name.toLowerCase().includes('zip')) {
+          safeExt = '.zip';
         }
         this.tabs.push({
           group: this.selectedGroup,

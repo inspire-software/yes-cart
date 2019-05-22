@@ -31,3 +31,14 @@ org.yes.cart.utils.AttrValueDTOComparatorImpl -> org.yes.cart.service.dto.AttrVa
 
 org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl -> org.yes.cart.service.domain.SkuPriceQuantityComparator
 org.yes.cart.domain.misc.RankableComparatorImpl -> org.yes.cart.service.domain.RankableComparator
+
+SITE IMPEX
+==========
+
+Site export requires a simple export descriptor configuration which select one shop. SITE XML export handler will be used
+to generate all shop specific data as a collection of xml files as a single zip (see siteshop10-demo.xml as an example
+for SHOP10 / Demo shop).
+
+For importing there is no specific handler as each file from the zip can be handled by an import group containing XML
+handlers for individual imports. See example 'Site import' as a reference. This import group is generic and will work for
+all site exports if they are done in the same fashion as siteshop10-demo.xml

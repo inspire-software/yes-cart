@@ -30,10 +30,10 @@ import java.util.Map;
  * Date: 03/11/2018
  * Time: 11:42
  */
-public class SkuWarehouseXmlEntityHandler extends AbstractXmlEntityHandler<SkuWarehouse> {
+public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<SkuWarehouse> {
 
 
-    public SkuWarehouseXmlEntityHandler() {
+    public InventoryXmlEntityHandler() {
         super("inventory");
     }
 

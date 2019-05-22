@@ -216,77 +216,77 @@
                 </entry>
                 <entry key="CATEGORY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.CategoryXmlEntityHandler">
-                        <constructor-arg ref="categoryService"/>
+                        <property name="categoryService" ref="categoryService"/>
                     </bean>
                 </entry>
                 <entry key="CATEGORY_PRETTY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.CategoryXmlEntityHandler">
-                        <constructor-arg ref="categoryService"/>
+                        <property name="categoryService" ref="categoryService"/>
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
                 <entry key="CATEGORYTREE">
                     <bean class="org.yes.cart.bulkexport.xml.impl.CategoryTreeXmlEntityHandler">
-                        <constructor-arg ref="categoryService"/>
+                        <property name="categoryService" ref="categoryService"/>
                     </bean>
                 </entry>
                 <entry key="CATEGORYTREE_PRETTY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.CategoryTreeXmlEntityHandler">
-                        <constructor-arg ref="categoryService"/>
+                        <property name="categoryService" ref="categoryService"/>
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
                 <entry key="CONTENT_CMS1">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms1XmlEntityHandler">
-                        <constructor-arg ref="categoryService"/>
+                        <property name="categoryService" ref="categoryService"/>
                     </bean>
                 </entry>
                 <entry key="CONTENT_CMS1_PRETTY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms1XmlEntityHandler">
-                        <constructor-arg ref="categoryService"/>
+                        <property name="categoryService" ref="categoryService"/>
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
                 <entry key="SHOPCONTENT_CMS1">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ShopContentCms1XmlEntityHandler">
-                        <constructor-arg ref="contentServiceCMS1"/>
-                        <constructor-arg ref="categoryService"/>
+                        <property name="contentService" ref="contentServiceCMS1"/>
+                        <property name="categoryService" ref="categoryService"/>
                     </bean>
                 </entry>
                 <entry key="SHOPCONTENT_CMS1_PRETTY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ShopContentCms1XmlEntityHandler">
-                        <constructor-arg ref="contentServiceCMS1"/>
-                        <constructor-arg ref="categoryService"/>
+                        <property name="contentService" ref="contentServiceCMS1"/>
+                        <property name="categoryService" ref="categoryService"/>
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
                 <entry key="CONTENT_CMS3">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms3XmlEntityHandler">
-                        <constructor-arg ref="contentService"/>
+                        <property name="contentService" ref="contentServiceCMS3"/>
                     </bean>
                 </entry>
                 <entry key="CONTENT_CMS3_PRETTY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms3XmlEntityHandler">
-                        <constructor-arg ref="contentService"/>
+                        <property name="contentService" ref="contentServiceCMS3"/>
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
                 <entry key="SHOPCONTENT_CMS3">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ShopContentCms3XmlEntityHandler">
-                        <constructor-arg ref="contentService"/>
+                        <property name="contentService" ref="contentServiceCMS3"/>
                     </bean>
                 </entry>
                 <entry key="SHOPCONTENT_CMS3_PRETTY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ShopContentCms3XmlEntityHandler">
-                        <constructor-arg ref="contentService"/>
+                        <property name="contentService" ref="contentServiceCMS3"/>
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
                 <entry key="INVENTORY">
-                    <bean class="org.yes.cart.bulkexport.xml.impl.SkuWarehouseXmlEntityHandler"/>
+                    <bean class="org.yes.cart.bulkexport.xml.impl.InventoryXmlEntityHandler"/>
                 </entry>
                 <entry key="INVENTORY_PRETTY">
-                    <bean class="org.yes.cart.bulkexport.xml.impl.SkuWarehouseXmlEntityHandler">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.InventoryXmlEntityHandler">
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
@@ -482,6 +482,61 @@
                 </entry>
                 <entry key="PGPARAMETER_PRETTY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.PaymentGatewayParameterXmlEntityHandler">
+                        <property name="prettyPrint" value="true"/>
+                    </bean>
+                </entry>
+                <entry key="SITE">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SiteXmlHandler">
+                        <property name="etypeService" ref="etypeService"/>
+                        <property name="attributeGroupService" ref="attributeGroupService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                        <property name="brandService" ref="brandService"/>
+                        <property name="countryService" ref="countryService"/>
+                        <property name="stateService" ref="stateService"/>
+                        <property name="shopService" ref="shopService"/>
+                        <property name="categoryService" ref="categoryService"/>
+                        <property name="carrierService" ref="carrierService"/>
+                        <property name="warehouseService" ref="warehouseService"/>
+                        <property name="customerService" ref="customerService"/>
+                        <property name="managerService" ref="managerService"/>
+                        <property name="managerRoleService" ref="managerRoleService"/>
+                        <property name="promotionService" ref="promotionService"/>
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                        <property name="priceService" ref="priceService"/>
+                        <property name="customerOrderService" ref="customerOrderService"/>
+                        <property name="paymentGatewayCallbackService" ref="paymentGatewayCallbackService"/>
+                        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+                        <property name="customerOrderPaymentService" ref="customerOrderPaymentService"/>
+                        <property name="skuWarehouseService" ref="skuWarehouseService"/>
+                        <property name="taxService" ref="taxService"/>
+                        <property name="taxConfigService" ref="taxConfigService"/>
+                    </bean>
+                </entry>
+                <entry key="SITE_PRETTY">
+                    <bean class="org.yes.cart.bulkexport.xml.impl.SiteXmlHandler">
+                        <property name="etypeService" ref="etypeService"/>
+                        <property name="attributeGroupService" ref="attributeGroupService"/>
+                        <property name="attributeService" ref="attributeService"/>
+                        <property name="brandService" ref="brandService"/>
+                        <property name="countryService" ref="countryService"/>
+                        <property name="stateService" ref="stateService"/>
+                        <property name="shopService" ref="shopService"/>
+                        <property name="categoryService" ref="categoryService"/>
+                        <property name="carrierService" ref="carrierService"/>
+                        <property name="warehouseService" ref="warehouseService"/>
+                        <property name="customerService" ref="customerService"/>
+                        <property name="managerService" ref="managerService"/>
+                        <property name="managerRoleService" ref="managerRoleService"/>
+                        <property name="promotionService" ref="promotionService"/>
+                        <property name="priceService" ref="priceService"/>
+                        <property name="promotionCouponService" ref="promotionCouponService"/>
+                        <property name="customerOrderService" ref="customerOrderService"/>
+                        <property name="paymentGatewayCallbackService" ref="paymentGatewayCallbackService"/>
+                        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+                        <property name="customerOrderPaymentService" ref="customerOrderPaymentService"/>
+                        <property name="skuWarehouseService" ref="skuWarehouseService"/>
+                        <property name="taxService" ref="taxService"/>
+                        <property name="taxConfigService" ref="taxConfigService"/>
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>

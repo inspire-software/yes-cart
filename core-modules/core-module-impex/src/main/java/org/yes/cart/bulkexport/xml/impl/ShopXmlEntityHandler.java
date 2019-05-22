@@ -42,10 +42,17 @@ public class ShopXmlEntityHandler extends AbstractXmlEntityHandler<Shop> {
     private WarehouseService warehouseService;
     private CustomerService customerService;
 
-    private CustomerXmlEntityHandler customerXmlEntityHandler = new CustomerXmlEntityHandler();
+    private final CustomerXmlEntityHandler customerXmlEntityHandler = new CustomerXmlEntityHandler();
+
+    private boolean includeMaster = false;
 
     public ShopXmlEntityHandler() {
         super("shops");
+    }
+
+    public ShopXmlEntityHandler(final boolean includeMaster) {
+        this();
+        this.includeMaster = includeMaster;
     }
 
     @Override
@@ -57,6 +64,9 @@ public class ShopXmlEntityHandler extends AbstractXmlEntityHandler<Shop> {
                        final OutputStreamWriter writer,
                        final Map<String, Integer> entityCount) throws Exception {
 
+        if (this.includeMaster && tuple.getData().getMaster() != null) {
+            handleInternal(tagShop(null, tuple.getData().getMaster()), writer, entityCount);
+        }
         handleInternal(tagShop(null, tuple.getData()), writer, entityCount);
 
     }
@@ -235,6 +245,15 @@ public class ShopXmlEntityHandler extends AbstractXmlEntityHandler<Shop> {
     public void setPrettyPrint(final boolean prettyPrint) {
         super.setPrettyPrint(prettyPrint);
         this.customerXmlEntityHandler.setPrettyPrint(prettyPrint);
+    }
+
+    /**
+     * Inlclude master shop if available.
+     *
+     * @param includeMaster include master
+     */
+    public void setIncludeMaster(final boolean includeMaster) {
+        this.includeMaster = includeMaster;
     }
 
     /**

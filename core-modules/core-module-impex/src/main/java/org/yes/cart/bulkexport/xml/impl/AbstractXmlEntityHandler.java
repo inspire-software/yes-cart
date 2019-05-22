@@ -49,13 +49,21 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
 
 
     @Override
-    public String startXml() {
+    public void startXml(final OutputStreamWriter writer) throws Exception {
+        write(writer, startXmlInternal());
+    }
+
+    String startXmlInternal() {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<" + rootTag + ">\n";
     }
 
     @Override
-    public String endXml() {
+    public void endXml(final OutputStreamWriter writer) throws Exception {
+        write(writer, endXmlInternal(), true);
+    }
+
+    String endXmlInternal() {
         return "</" + rootTag + ">";
     }
 
@@ -477,8 +485,41 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
                                   final Map<String, Integer> entityCount) throws Exception {
         final String xmlChunk = tag.toXml();
         if (xmlChunk != null) {
-            writer.write(xmlChunk);
+            write(writer, xmlChunk);
             count(entityCount, tag.name);
+        }
+    }
+
+    /**
+     * Common writer method for writing.
+     *
+     * @param writer      writer to output tag to
+     * @param out         string out
+     *
+     * @throws Exception in case of write errors
+     */
+    protected void write(final OutputStreamWriter writer,
+                         final String out) throws Exception {
+        write(writer, out, false);
+    }
+
+    /**
+     * Common writer method for writing.
+     *
+     * @param writer      writer to output tag to
+     * @param out         string out
+     * @param forceFlush  force calling write.flush()
+     *
+     * @throws Exception in case of write errors
+     */
+    protected void write(final OutputStreamWriter writer,
+                         final String out,
+                         final boolean forceFlush) throws Exception {
+        if (out != null) {
+            writer.write(out);
+        }
+        if (forceFlush) {
+            writer.flush();
         }
     }
 

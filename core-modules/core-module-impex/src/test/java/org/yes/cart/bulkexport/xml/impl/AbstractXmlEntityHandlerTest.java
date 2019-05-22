@@ -73,13 +73,6 @@ public class AbstractXmlEntityHandlerTest {
         }
     };
 
-    private XmlValueAdapter adapter = new XmlValueAdapter() {
-        @Override
-        public Object fromRaw(final Object rawValue, final String requiredType, final XmlImpExTuple tuple) {
-            return rawValue;
-        }
-    };
-
     @Before
     public void setUp() throws Exception {
         handlerPretty.setPrettyPrint(true);
@@ -89,7 +82,7 @@ public class AbstractXmlEntityHandlerTest {
     public void testStart() throws Exception {
 
         assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<root>\n", handler.startXml());
+                "<root>\n", handler.startXmlInternal());
 
 
     }
@@ -97,7 +90,7 @@ public class AbstractXmlEntityHandlerTest {
     @Test
     public void testEnd() throws Exception {
 
-        assertEquals("</root>", handler.endXml());
+        assertEquals("</root>", handler.endXmlInternal());
 
 
     }

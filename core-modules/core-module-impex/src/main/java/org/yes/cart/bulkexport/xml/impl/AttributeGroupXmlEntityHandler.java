@@ -21,7 +21,6 @@ import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.AttributeGroup;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.domain.AttributeGroupService;
 
 import java.io.OutputStreamWriter;
 import java.util.Map;
@@ -32,8 +31,6 @@ import java.util.Map;
  * Time: 08:08
  */
 public class AttributeGroupXmlEntityHandler extends AbstractXmlEntityHandler<AttributeGroup> {
-
-    private AttributeGroupService attributeGroupService;
 
     public AttributeGroupXmlEntityHandler() {
         super("attribute-groups");
@@ -62,14 +59,5 @@ public class AttributeGroupXmlEntityHandler extends AbstractXmlEntityHandler<Att
                     .tagTime(group)
                 .end();
 
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param attributeGroupService attribute group service
-     */
-    public void setAttributeGroupService(final AttributeGroupService attributeGroupService) {
-        this.attributeGroupService = attributeGroupService;
     }
 }

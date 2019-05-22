@@ -38,17 +38,14 @@ import java.util.Map;
  */
 public class ShopContentCms1XmlEntityHandler extends AbstractXmlEntityHandler<Shop> {
 
-    private final ContentService contentService;
-    private final CategoryService categoryService;
-    private final ContentCms1XmlEntityHandler cms1XmlEntityHandler;
+    private ContentService contentService;
+    private CategoryService categoryService;
+
+    private final ContentCms1XmlEntityHandler cms1XmlEntityHandler = new ContentCms1XmlEntityHandler();
 
 
-    public ShopContentCms1XmlEntityHandler(final ContentService contentService,
-                                           final CategoryService categoryService) {
+    public ShopContentCms1XmlEntityHandler() {
         super("cms");
-        this.contentService = contentService;
-        this.categoryService = categoryService;
-        this.cms1XmlEntityHandler = new ContentCms1XmlEntityHandler(categoryService);
     }
 
     @Override
@@ -95,4 +92,26 @@ public class ShopContentCms1XmlEntityHandler extends AbstractXmlEntityHandler<Sh
         super.setPrettyPrint(prettyPrint);
         this.cms1XmlEntityHandler.setPrettyPrint(prettyPrint);
     }
+
+
+    /**
+     * Spring IoC.
+     *
+     * @param categoryService category service
+     */
+    public void setCategoryService(final CategoryService categoryService) {
+        this.categoryService = categoryService;
+        this.cms1XmlEntityHandler.setCategoryService(categoryService);
+    }
+
+
+    /**
+     * Spring IoC.
+     *
+     * @param contentService content service
+     */
+    public void setContentService(final ContentService contentService) {
+        this.contentService = contentService;
+    }
+
 }

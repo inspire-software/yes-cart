@@ -36,14 +36,13 @@ import java.util.Map;
  */
 public class ShopContentCms3XmlEntityHandler extends AbstractXmlEntityHandler<Shop> {
 
-    private final ContentService contentService;
-    private final ContentCms3XmlEntityHandler cms3XmlEntityHandler;
+    private ContentService contentService;
+
+    private final ContentCms3XmlEntityHandler cms3XmlEntityHandler = new ContentCms3XmlEntityHandler();
 
 
-    public ShopContentCms3XmlEntityHandler(final ContentService contentService) {
+    public ShopContentCms3XmlEntityHandler() {
         super("cms");
-        this.contentService = contentService;
-        this.cms3XmlEntityHandler = new ContentCms3XmlEntityHandler(contentService);
     }
 
     @Override
@@ -89,4 +88,15 @@ public class ShopContentCms3XmlEntityHandler extends AbstractXmlEntityHandler<Sh
         super.setPrettyPrint(prettyPrint);
         this.cms3XmlEntityHandler.setPrettyPrint(prettyPrint);
     }
+
+    /**
+     * Spring IoC.
+     *
+     * @param contentService content service
+     */
+    public void setContentService(final ContentService contentService) {
+        this.contentService = contentService;
+        this.cms3XmlEntityHandler.setContentService(contentService);
+    }
+
 }

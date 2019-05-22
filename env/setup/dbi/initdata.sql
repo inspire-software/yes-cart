@@ -1784,7 +1784,28 @@ INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1011, 'Im
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1012, 'Location import', 'IMPORT', 'countrynames.xml,statenames.xml');
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1013, 'Carriers and SLA import', 'IMPORT', 'carriernames.xml,carriershopnames.xml,carrierslanames.xml');
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1014, 'Shops and Warehouses import', 'IMPORT', 'shop.xml,warehouse.xml');
-
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1015, 'Site import', 'IMPORT', '
+xml/site/attributegroups.xml,
+xml/site/attributes.xml,
+xml/site/etypes.xml,
+xml/site/brands.xml,
+xml/site/category.xml,
+xml/site/countries.xml,
+xml/site/countrystates.xml,
+xml/site/fulfilmentcentres.xml,
+xml/site/shippingproviders.xml,
+xml/site/payment-callback.xml,
+xml/site/payment-parameters.xml,
+xml/site/payment-payments.xml,
+xml/site/shops.xml,
+xml/site/tax.xml,
+xml/site/taxconfigs.xml,
+xml/site/inventory.xml,
+xml/site/pricelist.xml,
+xml/site/promotions.xml,
+xml/site/customers.xml,
+xml/site/customerorders.xml,
+xml/site/organisationusers.xml');
 
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1000, 'attributegroupnames-demo.xml', 'WEBINF_XML', 'attributegroupnames-demo.xml');
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1001, 'attributegroupnames.xml', 'WEBINF_XML', 'attributegroupnames.xml');
@@ -1852,6 +1873,28 @@ INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1062,
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1063, 'taxnames.xml', 'WEBINF_XML', 'taxnames.xml');
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1064, 'warehouse.xml', 'WEBINF_XML', 'warehouse.xml');
 
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1101, 'xml/site/attributegroups.xml', 'WEBINF_XML/XML', 'xml/site/attributegroups.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1102, 'xml/site/attributes.xml', 'WEBINF_XML/XML', 'xml/site/attributes.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1103, 'xml/site/etypes.xml', 'WEBINF_XML/XML', 'xml/site/etypes.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1104, 'xml/site/brands.xml', 'WEBINF_XML/XML', 'xml/site/brands.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1105, 'xml/site/category.xml', 'WEBINF_XML/XML', 'xml/site/category.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1106, 'xml/site/countries.xml', 'WEBINF_XML/XML', 'xml/site/countries.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1107, 'xml/site/countrystates.xml', 'WEBINF_XML/XML', 'xml/site/countrystates.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1108, 'xml/site/fulfilmentcentres.xml', 'WEBINF_XML/XML', 'xml/site/fulfilmentcentres.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1109, 'xml/site/shippingproviders.xml', 'WEBINF_XML/XML', 'xml/site/shippingproviders.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1110, 'xml/site/payment-callback.xml', 'WEBINF_XML/XML', 'xml/site/payment-callback.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1111, 'xml/site/payment-parameters.xml', 'WEBINF_XML/XML', 'xml/site/payment-parameters.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1112, 'xml/site/payment-payments.xml', 'WEBINF_XML/XML', 'xml/site/payment-payments.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1113, 'xml/site/shops.xml', 'WEBINF_XML/XML', 'xml/site/shops.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1114, 'xml/site/tax.xml', 'WEBINF_XML/XML', 'xml/site/tax.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1115, 'xml/site/taxconfigs.xml', 'WEBINF_XML/XML', 'xml/site/taxconfigs.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1116, 'xml/site/inventory.xml', 'WEBINF_XML/XML', 'xml/site/inventory.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1117, 'xml/site/pricelist.xml', 'WEBINF_XML/XML', 'xml/site/pricelist.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1118, 'xml/site/promotions.xml', 'WEBINF_XML/XML', 'xml/site/promotions.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1119, 'xml/site/customers.xml', 'WEBINF_XML/XML', 'xml/site/customers.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1120, 'xml/site/customerorders.xml', 'WEBINF_XML/XML', 'xml/site/customerorders.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1121, 'xml/site/organisationusers.xml', 'WEBINF_XML/XML', 'xml/site/organisationusers.xml');
+
 
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2000, 'Export Customer Addresses', 'EXPORT', 'customeraddresses.xml');
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2001, 'Export Customer Profiles', 'EXPORT', 'customers.xml');
@@ -1864,6 +1907,7 @@ INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2007, 'Ex
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2008, 'Export Product Types (Definitions)', 'EXPORT', 'producttypes.xml');
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2009, 'Export Product Types (Attributes)', 'EXPORT', 'producttypeattributes.xml');
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2010, 'Export Tax Configurations', 'EXPORT', 'taxconfigs.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2101, 'YC DEMO: Export Site SHOP10 (ZIP)', 'EXPORT', 'siteshop10-demo.xml');
 
 
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2000, 'customeraddresses.xml', 'WEBINF_XML', 'customeraddresses.xml');
@@ -1877,6 +1921,7 @@ INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2007,
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2008, 'producttypes.xml', 'WEBINF_XML', 'producttypes.xml');
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2009, 'producttypeattributes.xml', 'WEBINF_XML', 'producttypeattributes.xml');
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2010, 'taxconfigs.xml', 'WEBINF_XML', 'taxconfigs.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2101, 'siteshop10-demo.xml', 'WEBINF_XML/XML', 'siteshop10-demo.xml');
 
 
 INSERT INTO HIBERNATE_UNIQUE_KEYS VALUES (100000);

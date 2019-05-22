@@ -41,11 +41,10 @@ public class ContentCms3XmlEntityHandler extends AbstractXmlEntityHandler<Conten
 
     private static final String CONTENT_ATTR_PREFIX = "CONTENT_BODY_";
 
-    private final ContentService contentService;
+    private ContentService contentService;
 
-    public ContentCms3XmlEntityHandler(final ContentService contentService) {
+    public ContentCms3XmlEntityHandler() {
         super("cms");
-        this.contentService = contentService;
     }
 
     @Override
@@ -206,4 +205,12 @@ public class ContentCms3XmlEntityHandler extends AbstractXmlEntityHandler<Conten
         }
     }
 
+    /**
+     * Spring IoC.
+     *
+     * @param contentService content service
+     */
+    public void setContentService(final ContentService contentService) {
+        this.contentService = contentService;
+    }
 }

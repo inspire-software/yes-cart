@@ -85,7 +85,7 @@ public class XmlFastBulkExportServiceImpl extends AbstractExportService<XmlExpor
         ResultsIterator<Object> results = null;
         try {
 
-            writer.write(handler.startXml());
+            handler.startXml(writer);
 
             Map<String, Integer> counts = new ConcurrentHashMap<>();
 
@@ -99,7 +99,7 @@ public class XmlFastBulkExportServiceImpl extends AbstractExportService<XmlExpor
                 releaseEntity(entity);
             }
 
-            writer.write(handler.endXml());
+            handler.endXml(writer);
 
             for (final Map.Entry<String, Integer> countEntry : counts.entrySet()) {
                 statusListener.notifyMessage("total data objects : {} {}", countEntry.getKey(), countEntry.getValue());

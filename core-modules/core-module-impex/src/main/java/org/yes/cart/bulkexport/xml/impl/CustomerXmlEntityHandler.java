@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class CustomerXmlEntityHandler extends AbstractXmlEntityHandler<Customer>  {
 
-    private AddressXmlEntityHandler addressHandler = new AddressXmlEntityHandler();
+    private final AddressXmlEntityHandler addressHandler = new AddressXmlEntityHandler();
 
     public CustomerXmlEntityHandler() {
         super("customers");

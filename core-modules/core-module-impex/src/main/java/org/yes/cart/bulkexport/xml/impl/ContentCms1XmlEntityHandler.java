@@ -41,11 +41,10 @@ public class ContentCms1XmlEntityHandler extends AbstractXmlEntityHandler<Catego
 
     private static final String CONTENT_ATTR_PREFIX = "CONTENT_BODY_";
 
-    private final CategoryService categoryService;
+    private CategoryService categoryService;
 
-    public ContentCms1XmlEntityHandler(final CategoryService categoryService) {
+    public ContentCms1XmlEntityHandler() {
         super("cms");
-        this.categoryService = categoryService;
     }
 
     @Override
@@ -204,6 +203,15 @@ public class ContentCms1XmlEntityHandler extends AbstractXmlEntityHandler<Catego
         public void setDescription(final String description) {
 
         }
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param categoryService category service
+     */
+    public void setCategoryService(final CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
 }

@@ -33,9 +33,11 @@ public interface XmlEntityExportHandler<T> {
     /**
      * Start XML output (header + root element).
      *
-     * @return start
+     * @param writer              writer stream to print tag(s) using {@link OutputStreamWriter#write(String)}
+     *
+     * @throws Exception in case of write errors
      */
-    String startXml();
+    void startXml(OutputStreamWriter writer) throws Exception;
 
 
     /**
@@ -64,8 +66,10 @@ public interface XmlEntityExportHandler<T> {
     /**
      * End XML (close root).
      *
-     * @return end
+     * @param writer              writer stream to print tag(s) using {@link OutputStreamWriter#write(String)}
+     *
+     * @throws Exception in case of write errors
      */
-    String endXml();
+    void endXml(OutputStreamWriter writer) throws Exception;
 
 }

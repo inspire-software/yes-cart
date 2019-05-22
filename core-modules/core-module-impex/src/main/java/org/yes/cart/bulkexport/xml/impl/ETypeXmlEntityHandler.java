@@ -21,7 +21,6 @@ import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.domain.EtypeService;
 
 import java.io.OutputStreamWriter;
 import java.util.Map;
@@ -32,8 +31,6 @@ import java.util.Map;
  * Time: 08:08
  */
 public class ETypeXmlEntityHandler extends AbstractXmlEntityHandler<Etype> {
-
-    private EtypeService etypeService;
 
     public ETypeXmlEntityHandler() {
         super("e-types");
@@ -62,14 +59,5 @@ public class ETypeXmlEntityHandler extends AbstractXmlEntityHandler<Etype> {
                     .tagTime(type)
                 .end();
 
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param etypeService eType service
-     */
-    public void setEtypeService(final EtypeService etypeService) {
-        this.etypeService = etypeService;
     }
 }

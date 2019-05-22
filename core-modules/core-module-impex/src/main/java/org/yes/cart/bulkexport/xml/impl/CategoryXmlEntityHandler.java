@@ -36,11 +36,10 @@ import java.util.Map;
  */
 public class CategoryXmlEntityHandler extends AbstractXmlEntityHandler<Category> {
 
-    private final CategoryService categoryService;
+    private CategoryService categoryService;
 
-    public CategoryXmlEntityHandler(final CategoryService categoryService) {
+    public CategoryXmlEntityHandler() {
         super("categories");
-        this.categoryService = categoryService;
     }
 
     @Override
@@ -175,4 +174,12 @@ public class CategoryXmlEntityHandler extends AbstractXmlEntityHandler<Category>
 
     }
 
+    /**
+     * Spring IoC.
+     *
+     * @param categoryService category service
+     */
+    public void setCategoryService(final CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 }

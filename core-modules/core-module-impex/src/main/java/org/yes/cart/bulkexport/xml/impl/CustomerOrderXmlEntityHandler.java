@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<CustomerOrder>  {
 
-    private AddressXmlEntityHandler addressHandler = new AddressXmlEntityHandler();
+    private final AddressXmlEntityHandler addressHandler = new AddressXmlEntityHandler();
 
     private PromotionCouponService promotionCouponService;
 

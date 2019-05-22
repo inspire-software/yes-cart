@@ -35,14 +35,19 @@ import java.util.Map;
  */
 public class CategoryTreeXmlEntityHandler extends AbstractXmlEntityHandler<Category> {
 
-    private final CategoryService categoryService;
-    private final CategoryXmlEntityHandler entityHandler;
+    private CategoryService categoryService;
 
+    private final CategoryXmlEntityHandler entityHandler = new CategoryXmlEntityHandler();
 
-    public CategoryTreeXmlEntityHandler(final CategoryService categoryService) {
+    private boolean lookUpRoot = false;
+
+    public CategoryTreeXmlEntityHandler() {
         super("categories");
-        this.categoryService = categoryService;
-        this.entityHandler = new CategoryXmlEntityHandler(categoryService);
+    }
+
+    public CategoryTreeXmlEntityHandler(final boolean lookUpRoot) {
+        this();
+        this.lookUpRoot = lookUpRoot;
     }
 
     @Override
@@ -54,17 +59,21 @@ public class CategoryTreeXmlEntityHandler extends AbstractXmlEntityHandler<Categ
                        final OutputStreamWriter writer,
                        final Map<String, Integer> entityCount) throws Exception {
 
-        this.handle(statusListener, xmlExportDescriptor, tuple.getData(), xmlValueAdapter, fileToExport, writer, entityCount);
+        if (lookUpRoot) {
+            this.handleUp(statusListener, xmlExportDescriptor, tuple.getData(), xmlValueAdapter, fileToExport, writer, entityCount);
+        }
+
+        this.handleDown(statusListener, xmlExportDescriptor, tuple.getData(), xmlValueAdapter, fileToExport, writer, entityCount);
 
     }
 
-    private void handle(final JobStatusListener statusListener,
-                        final XmlExportDescriptor xmlExportDescriptor,
-                        final Category category,
-                        final XmlValueAdapter xmlValueAdapter,
-                        final String fileToExport,
-                        final OutputStreamWriter writer,
-                        final Map<String, Integer> entityCount) throws Exception {
+    private void handleDown(final JobStatusListener statusListener,
+                            final XmlExportDescriptor xmlExportDescriptor,
+                            final Category category,
+                            final XmlValueAdapter xmlValueAdapter,
+                            final String fileToExport,
+                            final OutputStreamWriter writer,
+                            final Map<String, Integer> entityCount) throws Exception {
 
         final List<Category> children =
                 this.categoryService.findChildCategoriesWithAvailability(category.getCategoryId(), false);
@@ -73,14 +82,56 @@ public class CategoryTreeXmlEntityHandler extends AbstractXmlEntityHandler<Categ
         this.entityHandler.handle(statusListener, xmlExportDescriptor, (ImpExTuple) tuple, xmlValueAdapter, fileToExport, writer, entityCount);
 
         for (final Category child : children) {
-            handle(statusListener, xmlExportDescriptor, child, xmlValueAdapter, fileToExport, writer, entityCount);
+            handleDown(statusListener, xmlExportDescriptor, child, xmlValueAdapter, fileToExport, writer, entityCount);
         }
 
     }
+
+
+    private void handleUp(final JobStatusListener statusListener,
+                          final XmlExportDescriptor xmlExportDescriptor,
+                          final Category category,
+                          final XmlValueAdapter xmlValueAdapter,
+                          final String fileToExport,
+                          final OutputStreamWriter writer,
+                          final Map<String, Integer> entityCount) throws Exception {
+
+        final Category parent =
+                this.categoryService.findById(category.getParentId());
+
+        final XmlExportTuple tuple = new XmlExportTupleImpl(parent);
+        this.entityHandler.handle(statusListener, xmlExportDescriptor, (ImpExTuple) tuple, xmlValueAdapter, fileToExport, writer, entityCount);
+
+        if (!parent.isRoot()) {
+            handleUp(statusListener, xmlExportDescriptor, parent, xmlValueAdapter, fileToExport, writer, entityCount);
+        }
+
+    }
+
 
     @Override
     public void setPrettyPrint(final boolean prettyPrint) {
         super.setPrettyPrint(prettyPrint);
         this.entityHandler.setPrettyPrint(prettyPrint);
     }
+
+    /**
+     * Trverse to root and include it in export.
+     *
+     * @param lookUpRoot look up root
+     */
+    public void setLookUpRoot(final boolean lookUpRoot) {
+        this.lookUpRoot = lookUpRoot;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param categoryService category service
+     */
+    public void setCategoryService(final CategoryService categoryService) {
+        this.categoryService = categoryService;
+        this.entityHandler.setCategoryService(categoryService);
+    }
+
 }

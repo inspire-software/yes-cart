@@ -48,7 +48,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * User: denispavlov
@@ -712,6 +713,39 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(content.contains("<i18n lang=\"xx\"><![CDATA[AUDITEXPORT]]></i18n>"));
 
             validateXmlFile(xml);
+
+
+
+
+
+            mockery.assertIsSatisfied();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+    }
+
+
+    @Test
+    public void testDoExportSite() throws Exception {
+        try {
+
+            final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
+
+            mockery.checking(new Expectations() {{
+                // ONLY allow messages during import
+                allowing(listener).notifyPing();
+                allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
+                allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+            }});
+
+            long dt = System.currentTimeMillis();
+            String fileToExport = "target/site-export-" + UUID.randomUUID().toString() + ".zip";
+            bulkExportService.doExport(createContext("src/test/resources/export/xml/site.xml", listener, fileToExport));
+            final long shop = System.currentTimeMillis() - dt;
+            System.out.println(String.format("%5d", 1) + " shop in " + shop + "millis (~" + (shop) + " per item)");
 
 
 
