@@ -17,17 +17,17 @@ org.yes.cart.search.util -> org.yes.cart.search.utils
 org.yes.cart.web.util -> org.yes.cart.web.utils
 
 3) classes moved
-org.yes.cart.utils.ExtendedConversionService -> org.yes.cart.service.misc.impl.ExtendedConversionService
-org.yes.cart.utils.StringValueToInstantConverter -> org.yes.cart.service.misc.impl.StringValueToInstantConverter
-org.yes.cart.utils.StringValueToLocalDateConverter -> org.yes.cart.service.misc.impl.StringValueToLocalDateConverter
-org.yes.cart.utils.StringValueToLocalDateTimeConverter -> org.yes.cart.service.misc.impl.StringValueToLocalDateTimeConverter
-org.yes.cart.utils.StringValueToPairListConverter -> org.yes.cart.service.misc.impl.StringValueToPairListConverter
-org.yes.cart.utils.StringValueToZonedDateTimeConverter -> org.yes.cart.service.misc.impl.StringValueToZonedDateTimeConverter
+org.yes.cart.utils.impl.ExtendedConversionService -> org.yes.cart.service.misc.impl.ExtendedConversionService
+org.yes.cart.utils.impl.StringValueToInstantConverter -> org.yes.cart.service.misc.impl.StringValueToInstantConverter
+org.yes.cart.utils.impl.StringValueToLocalDateConverter -> org.yes.cart.service.misc.impl.StringValueToLocalDateConverter
+org.yes.cart.utils.impl.StringValueToLocalDateTimeConverter -> org.yes.cart.service.misc.impl.StringValueToLocalDateTimeConverter
+org.yes.cart.utils.impl.StringValueToPairListConverter -> org.yes.cart.service.misc.impl.StringValueToPairListConverter
+org.yes.cart.utils.impl.StringValueToZonedDateTimeConverter -> org.yes.cart.service.misc.impl.StringValueToZonedDateTimeConverter
 
-org.yes.cart.utils.AttributeRankComparator -> org.yes.cart.service.domain.AttributeRankComparator
-org.yes.cart.utils.CustomerOrderComparator -> org.yes.cart.service.domain.CustomerOrderComparator
-org.yes.cart.utils.CustomerOrderPaymentComparator -> org.yes.cart.service.domain.CustomerOrderPaymentComparator
-org.yes.cart.utils.AttrValueDTOComparatorImpl -> org.yes.cart.service.dto.AttrValueDTOComparator
+org.yes.cart.utils.impl.AttributeRankComparator -> org.yes.cart.service.domain.AttributeRankComparator
+org.yes.cart.utils.impl.CustomerOrderComparator -> org.yes.cart.service.domain.CustomerOrderComparator
+org.yes.cart.utils.impl.CustomerOrderPaymentComparator -> org.yes.cart.service.domain.CustomerOrderPaymentComparator
+org.yes.cart.utils.impl.AttrValueDTOComparatorImpl -> org.yes.cart.service.dto.AttrValueDTOComparator
 
 org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl -> org.yes.cart.service.domain.SkuPriceQuantityComparator
 org.yes.cart.domain.misc.RankableComparatorImpl -> org.yes.cart.service.domain.RankableComparator
