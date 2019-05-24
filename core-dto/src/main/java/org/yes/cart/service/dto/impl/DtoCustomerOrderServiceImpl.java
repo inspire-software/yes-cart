@@ -50,10 +50,9 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.payment.PaymentModulesManager;
-import org.yes.cart.utils.MessageFormatUtils;
 import org.yes.cart.utils.HQLUtils;
+import org.yes.cart.utils.MessageFormatUtils;
 
-import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -463,7 +462,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
         } catch (OrderException e) {
 
-            final String error = MessageFormat.format(
+            final String error = MessageFormatUtils.format(
                     "Order with number [ {} ] delivery number [ {} ] in [ {} ] can not be transited to  [ {} ] status ",
                     orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus
             );
