@@ -23,6 +23,8 @@ import org.yes.cart.domain.entity.Country;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CountryService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -37,13 +39,13 @@ public class CountryXmlEntityHandler extends AbstractXmlEntityHandler<CountryTyp
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Country country) {
+    protected void delete(final JobStatusListener statusListener, final Country country, final Map<String, Integer> entityCount) {
         this.countryService.delete(country);
         this.countryService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Country domain, final CountryType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Country domain, final CountryType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
         domain.setIsoCode(xmlType.getIso31661Numeric());
         domain.setName(xmlType.getName());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
@@ -57,7 +59,7 @@ public class CountryXmlEntityHandler extends AbstractXmlEntityHandler<CountryTyp
     }
 
     @Override
-    protected Country getOrCreate(final JobStatusListener statusListener, final CountryType xmlType) {
+    protected Country getOrCreate(final JobStatusListener statusListener, final CountryType xmlType, final Map<String, Integer> entityCount) {
         Country country = this.countryService.findSingleByCriteria(" where e.countryCode = ?1", xmlType.getIso31661Alpha2());
         if (country != null) {
             return country;

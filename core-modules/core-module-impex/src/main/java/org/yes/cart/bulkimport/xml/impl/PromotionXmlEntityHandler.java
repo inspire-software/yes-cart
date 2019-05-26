@@ -26,6 +26,8 @@ import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.PromotionService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -42,13 +44,13 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Promotion promotion) {
+    protected void delete(final JobStatusListener statusListener, final Promotion promotion, final Map<String, Integer> entityCount) {
         this.promotionService.delete(promotion);
         this.promotionService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Promotion domain, final PromotionType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Promotion domain, final PromotionType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         domain.setTag(processTags(xmlType.getTags(), domain.getTag()));
         domain.setName(xmlType.getName());
@@ -87,7 +89,7 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
             for (final PromotionCouponType xmlCouponType : xmlType.getCoupons().getPromotionCoupon()) {
 
                 xmlCouponType.setPromotion(domain.getCode());
-                promotionCouponTypeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlCouponType.getCode(), xmlCouponType), null, null);
+                promotionCouponTypeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlCouponType.getCode(), xmlCouponType), null, null, entityCount);
 
             }
         }
@@ -95,7 +97,7 @@ public class PromotionXmlEntityHandler extends AbstractXmlEntityHandler<Promotio
     }
 
     @Override
-    protected Promotion getOrCreate(final JobStatusListener statusListener, final PromotionType xmlType) {
+    protected Promotion getOrCreate(final JobStatusListener statusListener, final PromotionType xmlType, final Map<String, Integer> entityCount) {
         Promotion promotion = this.promotionService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (promotion != null) {
             return promotion;

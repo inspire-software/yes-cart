@@ -24,6 +24,8 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.domain.PromotionService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -39,13 +41,13 @@ public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<Pr
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final PromotionCoupon promotion) {
+    protected void delete(final JobStatusListener statusListener, final PromotionCoupon promotion, final Map<String, Integer> entityCount) {
         this.promotionCouponService.delete(promotion);
         this.promotionCouponService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final PromotionCoupon domain, final PromotionCouponType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final PromotionCoupon domain, final PromotionCouponType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         if (xmlType.getUsageCount() != null) {
             domain.setUsageCount(xmlType.getUsageCount());
@@ -67,7 +69,7 @@ public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<Pr
     }
 
     @Override
-    protected PromotionCoupon getOrCreate(final JobStatusListener statusListener, final PromotionCouponType xmlType) {
+    protected PromotionCoupon getOrCreate(final JobStatusListener statusListener, final PromotionCouponType xmlType, final Map<String, Integer> entityCount) {
         PromotionCoupon coupon = this.promotionCouponService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (coupon != null) {
             return coupon;

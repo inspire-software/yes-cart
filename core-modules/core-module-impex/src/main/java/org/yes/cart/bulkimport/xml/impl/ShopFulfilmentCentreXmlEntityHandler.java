@@ -29,6 +29,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.WarehouseService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -45,12 +46,12 @@ public class ShopFulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandl
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Shop shop) {
+    protected void delete(final JobStatusListener statusListener, final Shop shop, final Map<String, Integer> entityCount) {
         throw new UnsupportedOperationException("Shop delete mode is not supported");
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Shop domain, final ShopFulfilmentCentresCodeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Shop domain, final ShopFulfilmentCentresCodeType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         if (domain != null) {
             processCentres(statusListener, domain, xmlType);
@@ -138,7 +139,7 @@ public class ShopFulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandl
     }
 
     @Override
-    protected Shop getOrCreate(final JobStatusListener statusListener, final ShopFulfilmentCentresCodeType xmlType) {
+    protected Shop getOrCreate(final JobStatusListener statusListener, final ShopFulfilmentCentresCodeType xmlType, final Map<String, Integer> entityCount) {
         Shop shop = this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getShopCode());
         if (shop != null) {
             return shop;

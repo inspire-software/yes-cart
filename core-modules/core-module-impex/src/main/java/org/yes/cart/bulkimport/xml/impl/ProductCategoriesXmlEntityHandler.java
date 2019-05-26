@@ -29,6 +29,7 @@ import org.yes.cart.service.domain.ProductCategoryService;
 import org.yes.cart.service.domain.ProductService;
 
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -46,12 +47,12 @@ public class ProductCategoriesXmlEntityHandler extends AbstractXmlEntityHandler<
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Product product) {
+    protected void delete(final JobStatusListener statusListener, final Product product, final Map<String, Integer> entityCount) {
         throw new UnsupportedOperationException("Product delete mode is not supported");
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductCategoriesCodeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductCategoriesCodeType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         if (domain != null) {
             processCategories(domain, xmlType);
@@ -132,7 +133,7 @@ public class ProductCategoriesXmlEntityHandler extends AbstractXmlEntityHandler<
     }
 
     @Override
-    protected Product getOrCreate(final JobStatusListener statusListener, final org.yes.cart.bulkimport.xml.internal.ProductCategoriesCodeType xmlType) {
+    protected Product getOrCreate(final JobStatusListener statusListener, final org.yes.cart.bulkimport.xml.internal.ProductCategoriesCodeType xmlType, final Map<String, Integer> entityCount) {
         Product product = this.productService.findSingleByCriteria(" where e.code = ?1", xmlType.getProductCode());
         if (product != null) {
             return product;

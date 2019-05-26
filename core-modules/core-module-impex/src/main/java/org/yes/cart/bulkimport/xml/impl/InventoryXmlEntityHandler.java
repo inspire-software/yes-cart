@@ -27,6 +27,7 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -43,7 +44,7 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockTyp
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final SkuWarehouse inventory) {
+    protected void delete(final JobStatusListener statusListener, final SkuWarehouse inventory, final Map<String, Integer> entityCount) {
         inventory.setQuantity(BigDecimal.ZERO);
         this.skuWarehouseService.update(inventory);
         this.skuWarehouseService.getGenericDao().flush();
@@ -51,7 +52,7 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockTyp
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final SkuWarehouse domain, final StockType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final SkuWarehouse domain, final StockType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
         for (final QuantityType qt : xmlType.getQuantity()) {
             if (qt.getType() == QuantityTypeType.STOCK) {
                 domain.setQuantity(qt.getValue());
@@ -67,7 +68,7 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockTyp
     }
 
     @Override
-    protected SkuWarehouse getOrCreate(final JobStatusListener statusListener, final StockType xmlType) {
+    protected SkuWarehouse getOrCreate(final JobStatusListener statusListener, final StockType xmlType, final Map<String, Integer> entityCount) {
         SkuWarehouse inventory = this.skuWarehouseService.findSingleByCriteria(" where e.skuCode = ?1 and e.warehouse.code = ?2", xmlType.getSku(), xmlType.getWarehouse());
         if (inventory != null) {
             return inventory;

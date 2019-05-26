@@ -30,6 +30,7 @@ import org.yes.cart.service.domain.DataGroupService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -47,19 +48,19 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final DataGroup datagroup) {
+    protected void delete(final JobStatusListener statusListener, final DataGroup datagroup, final Map<String, Integer> entityCount) {
         this.dataGroupService.delete(datagroup);
         this.dataGroupService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final DataGroup domain, final DataGroupType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final DataGroup domain, final DataGroupType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         domain.setType(xmlType.getType().value());
         domain.setQualifier(xmlType.getQualifier());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
 
-        processDataDescriptors(statusListener, domain, xmlType);
+        processDataDescriptors(statusListener, domain, xmlType, entityCount);
 
         if (domain.getDatagroupId() == 0L) {
             this.dataGroupService.create(domain);
@@ -70,7 +71,7 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
         this.dataGroupService.getGenericDao().evict(domain);
     }
 
-    private void processDataDescriptors(final JobStatusListener statusListener, final DataGroup domain, final DataGroupType xmlType) {
+    private void processDataDescriptors(final JobStatusListener statusListener, final DataGroup domain, final DataGroupType xmlType, final Map<String, Integer> entityCount) {
 
         if (xmlType.getDescriptors() != null) {
 
@@ -94,7 +95,7 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
                 final EntityImportModeType itemMode = dataDescriptor.getImportMode() != null ? dataDescriptor.getImportMode() : EntityImportModeType.MERGE;
                 if (itemMode != EntityImportModeType.DELETE) {
 
-                    processDataDescriptorsSave(statusListener, domain, dataDescriptor);
+                    processDataDescriptorsSave(statusListener, domain, dataDescriptor, entityCount);
 
                     final String descName = dataDescriptor.getName().trim();
                     int pos = groupDescriptors.indexOf(descName);
@@ -116,18 +117,18 @@ public class DataGroupXmlEntityHandler extends AbstractXmlEntityHandler<DataGrou
 
     }
 
-    private void processDataDescriptorsSave(final JobStatusListener statusListener, final DataGroup domain, final DataDescriptorType dataDescriptor) {
+    private void processDataDescriptorsSave(final JobStatusListener statusListener, final DataGroup domain, final DataDescriptorType dataDescriptor, final Map<String, Integer> entityCount) {
 
         if (StringUtils.isNotBlank(dataDescriptor.getValue())) {
 
-            descriptorXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(dataDescriptor.getName(), dataDescriptor), null, null);
+            descriptorXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(dataDescriptor.getName(), dataDescriptor), null, null, entityCount);
 
         }
 
     }
 
     @Override
-    protected DataGroup getOrCreate(final JobStatusListener statusListener, final DataGroupType xmlType) {
+    protected DataGroup getOrCreate(final JobStatusListener statusListener, final DataGroupType xmlType, final Map<String, Integer> entityCount) {
         DataGroup group = this.dataGroupService.findSingleByCriteria(" where e.name = ?1", xmlType.getName());
         if (group != null) {
             return group;

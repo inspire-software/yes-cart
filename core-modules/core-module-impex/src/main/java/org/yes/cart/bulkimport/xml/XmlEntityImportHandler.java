@@ -20,6 +20,8 @@ import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.service.async.JobStatusListener;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -50,6 +52,7 @@ public interface XmlEntityImportHandler<T, E> {
      * @param tuple               tuple
      * @param xmlValueAdapter     adapter
      * @param fileToExport        file to export
+     * @param entityCount         count of entities that have been imported
      *
      * @return XML fragment
      */
@@ -57,7 +60,8 @@ public interface XmlEntityImportHandler<T, E> {
              XmlImportDescriptor xmlImportDescriptor,
              ImpExTuple<String, T> tuple,
              XmlValueAdapter xmlValueAdapter,
-             String fileToExport);
+             String fileToExport,
+             Map<String, Integer> entityCount);
 
 
 }

@@ -23,6 +23,8 @@ import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.EtypeService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -37,13 +39,13 @@ public class EtypeXmlEntityHandler extends AbstractXmlEntityHandler<ETypeType, E
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Etype type) {
+    protected void delete(final JobStatusListener statusListener, final Etype type, final Map<String, Integer> entityCount) {
         this.etypeService.delete(type);
         this.etypeService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Etype domain, final ETypeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Etype domain, final ETypeType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
         domain.setJavatype(xmlType.getJavaType());
         domain.setBusinesstype(xmlType.getBusinessType());
         if (domain.getEtypeId() == 0L) {
@@ -56,7 +58,7 @@ public class EtypeXmlEntityHandler extends AbstractXmlEntityHandler<ETypeType, E
     }
 
     @Override
-    protected Etype getOrCreate(final JobStatusListener statusListener, final ETypeType xmlType) {
+    protected Etype getOrCreate(final JobStatusListener statusListener, final ETypeType xmlType, final Map<String, Integer> entityCount) {
         Etype type = this.etypeService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (type != null) {
             return type;

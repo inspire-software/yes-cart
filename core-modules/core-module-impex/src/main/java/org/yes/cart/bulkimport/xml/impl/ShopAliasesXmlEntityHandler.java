@@ -27,6 +27,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ShopService;
 
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -42,12 +43,12 @@ public class ShopAliasesXmlEntityHandler extends AbstractXmlEntityHandler<ShopAl
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Shop shop) {
+    protected void delete(final JobStatusListener statusListener, final Shop shop, final Map<String, Integer> entityCount) {
         throw new UnsupportedOperationException("Shop delete mode is not supported");
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Shop domain, final ShopAliasesCodeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Shop domain, final ShopAliasesCodeType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         if (domain != null) {
             processAliases(domain, xmlType);
@@ -115,7 +116,7 @@ public class ShopAliasesXmlEntityHandler extends AbstractXmlEntityHandler<ShopAl
     }
 
     @Override
-    protected Shop getOrCreate(final JobStatusListener statusListener, final ShopAliasesCodeType xmlType) {
+    protected Shop getOrCreate(final JobStatusListener statusListener, final ShopAliasesCodeType xmlType, final Map<String, Integer> entityCount) {
         Shop shop = this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getShopCode());
         if (shop != null) {
             return shop;

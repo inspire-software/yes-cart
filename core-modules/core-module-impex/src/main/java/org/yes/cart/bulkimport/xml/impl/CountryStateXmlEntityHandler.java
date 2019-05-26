@@ -23,6 +23,8 @@ import org.yes.cart.domain.entity.State;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.StateService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -37,13 +39,13 @@ public class CountryStateXmlEntityHandler extends AbstractXmlEntityHandler<Count
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final State state) {
+    protected void delete(final JobStatusListener statusListener, final State state, final Map<String, Integer> entityCount) {
         this.stateService.delete(state);
         this.stateService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final State domain, final CountryStateType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final State domain, final CountryStateType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
         domain.setName(xmlType.getName());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
         if (domain.getStateId() == 0L) {
@@ -56,7 +58,7 @@ public class CountryStateXmlEntityHandler extends AbstractXmlEntityHandler<Count
     }
 
     @Override
-    protected State getOrCreate(final JobStatusListener statusListener, final CountryStateType xmlType) {
+    protected State getOrCreate(final JobStatusListener statusListener, final CountryStateType xmlType, final Map<String, Integer> entityCount) {
         State state = this.stateService.findSingleByCriteria(" where e.stateCode = ?1", xmlType.getRegionCode());
         if (state != null) {
             return state;

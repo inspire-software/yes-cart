@@ -49,13 +49,13 @@ public class ContentCms3XmlEntityHandler extends AbstractAttributableXmlEntityHa
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Content content) {
+    protected void delete(final JobStatusListener statusListener, final Content content, final Map<String, Integer> entityCount) {
         this.contentService.delete(content);
         this.contentService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Content domain, final ContentType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Content domain, final ContentType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         if (xmlType.getParent() != null) {
             final Content parent = this.contentService.findSingleByCriteria(" where e.guid = ?1", xmlType.getParent().getGuid());
@@ -137,7 +137,7 @@ public class ContentCms3XmlEntityHandler extends AbstractAttributableXmlEntityHa
     }
 
     @Override
-    protected Content getOrCreate(final JobStatusListener statusListener, final ContentType xmlType) {
+    protected Content getOrCreate(final JobStatusListener statusListener, final ContentType xmlType, final Map<String, Integer> entityCount) {
         Content content = this.contentService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (content != null) {
             return content;

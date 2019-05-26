@@ -35,6 +35,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: denispavlov
@@ -74,10 +76,12 @@ public class XmlFastBulkImportServiceImpl extends AbstractImportService<XmlImpor
         factory.setNamespaceAware(true);
         final XMLReader reader = factory.newSAXParser().getXMLReader();
 
+        final Map<String, Integer> counts = new ConcurrentHashMap<>();
+
         final ChunkFilter splitter = new ChunkFilter(
                 context, handler.getElementName(),
                 (tuple) -> {
-                    handler.handle(statusListener, importDescriptor, tuple, valueDataAdapter, fileToImport.getName());
+                    handler.handle(statusListener, importDescriptor, tuple, valueDataAdapter, fileToImport.getName(), counts);
                 },
                 (line, exp) -> {
                     statusListener.notifyError("unable to process XML file: {}:{}, cause by: {}",
@@ -95,7 +99,12 @@ public class XmlFastBulkImportServiceImpl extends AbstractImportService<XmlImpor
             reader.parse(new InputSource(in));
 
         }
-        
+
+        for (final String key : new TreeSet<>(counts.keySet())) {
+            final Integer count = counts.get(key);
+            statusListener.notifyMessage("total data objects : {} {}", key, count);
+        }
+
     }
 
     /**

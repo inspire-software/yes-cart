@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ShopService;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -49,13 +50,13 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Shop shop) {
+    protected void delete(final JobStatusListener statusListener, final Shop shop, final Map<String, Integer> entityCount) {
         this.shopService.delete(shop);
         this.shopService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         if (xmlType.getPresentation() != null) {
             domain.setName(xmlType.getPresentation().getName());
@@ -79,11 +80,11 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
         this.shopService.getGenericDao().evict(domain);
 
 
-        processUrls(statusListener, domain, xmlType);
-        processAliases(statusListener, domain, xmlType);
-        processCategories(statusListener, domain, xmlType);
-        processCarriers(statusListener, domain, xmlType);
-        processCentres(statusListener, domain, xmlType);
+        processUrls(statusListener, domain, xmlType, entityCount);
+        processAliases(statusListener, domain, xmlType, entityCount);
+        processCategories(statusListener, domain, xmlType, entityCount);
+        processCarriers(statusListener, domain, xmlType, entityCount);
+        processCentres(statusListener, domain, xmlType, entityCount);
 
         if (xmlType.getShopAddressbook() != null) {
 
@@ -103,13 +104,13 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
             customerType.getContactDetails().setFirstname(domain.getCode());
             customerType.getContactDetails().setLastname(domain.getName());
 
-            customerXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(customerType.getGuid(), customerType), null, null);
+            customerXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(customerType.getGuid(), customerType), null, null, entityCount);
 
         }
 
     }
 
-    private void processUrls(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType) {
+    private void processUrls(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType, final Map<String, Integer> entityCount) {
 
         if (xmlType.getShopUrls() != null) {
 
@@ -118,13 +119,13 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
             subXmlType.setImportMode(xmlType.getShopUrls().getImportMode());
             subXmlType.getShopUrl().addAll(xmlType.getShopUrls().getShopUrl());
 
-            shopUrlXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null);
+            shopUrlXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null, entityCount);
 
         }
 
     }
 
-    private void processAliases(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType) {
+    private void processAliases(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType, final Map<String, Integer> entityCount) {
 
         if (xmlType.getShopAliases() != null) {
 
@@ -133,14 +134,14 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
             subXmlType.setImportMode(xmlType.getShopAliases().getImportMode());
             subXmlType.getShopAlias().addAll(xmlType.getShopAliases().getShopAlias());
 
-            shopAliasesXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null);
+            shopAliasesXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null, entityCount);
 
         }
 
     }
 
 
-    private void processCategories(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType) {
+    private void processCategories(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType, final Map<String, Integer> entityCount) {
 
         if (xmlType.getShopCategories() != null) {
 
@@ -149,14 +150,14 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
             subXmlType.setImportMode(xmlType.getShopCategories().getImportMode());
             subXmlType.getShopCategory().addAll(xmlType.getShopCategories().getShopCategory());
 
-            shopCategoriesXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null);
+            shopCategoriesXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null, entityCount);
 
         }
 
     }
 
 
-    private void processCarriers(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType) {
+    private void processCarriers(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType, final Map<String, Integer> entityCount) {
 
         if (xmlType.getShopCarriers() != null) {
 
@@ -165,14 +166,14 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
             subXmlType.setImportMode(xmlType.getShopCarriers().getImportMode());
             subXmlType.getShopCarrier().addAll(xmlType.getShopCarriers().getShopCarrier());
 
-            shopCarriersXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null);
+            shopCarriersXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null, entityCount);
 
         }
 
     }
 
 
-    private void processCentres(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType) {
+    private void processCentres(final JobStatusListener statusListener, final Shop domain, final ShopType xmlType, final Map<String, Integer> entityCount) {
 
         if (xmlType.getShopFulfilmentCentres() != null) {
 
@@ -181,14 +182,14 @@ public class ShopXmlEntityHandler extends AbstractAttributableXmlEntityHandler<S
             subXmlType.setImportMode(xmlType.getShopFulfilmentCentres().getImportMode());
             subXmlType.getShopFulfilmentCentre().addAll(xmlType.getShopFulfilmentCentres().getShopFulfilmentCentre());
 
-            shopFulfilmentCentresXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null);
+            shopFulfilmentCentresXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getShopCode(), subXmlType), null, null, entityCount);
 
         }
 
     }
 
     @Override
-    protected Shop getOrCreate(final JobStatusListener statusListener, final ShopType xmlType) {
+    protected Shop getOrCreate(final JobStatusListener statusListener, final ShopType xmlType, final Map<String, Integer> entityCount) {
         Shop shop = this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (shop != null) {
             return shop;

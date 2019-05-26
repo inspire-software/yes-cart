@@ -25,6 +25,8 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.domain.TaxService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -40,13 +42,13 @@ public class TaxConfigXmlEntityHandler extends AbstractXmlEntityHandler<TaxConfi
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final TaxConfig tax) {
+    protected void delete(final JobStatusListener statusListener, final TaxConfig tax, final Map<String, Integer> entityCount) {
         this.taxConfigService.delete(tax);
         this.taxConfigService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final TaxConfig domain, final TaxConfigType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final TaxConfig domain, final TaxConfigType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         domain.setProductCode(StringUtils.isNotBlank(xmlType.getSku()) ? xmlType.getSku() : null);
         if (xmlType.getTaxRegion() != null) {
@@ -64,7 +66,7 @@ public class TaxConfigXmlEntityHandler extends AbstractXmlEntityHandler<TaxConfi
     }
 
     @Override
-    protected TaxConfig getOrCreate(final JobStatusListener statusListener, final TaxConfigType xmlType) {
+    protected TaxConfig getOrCreate(final JobStatusListener statusListener, final TaxConfigType xmlType, final Map<String, Integer> entityCount) {
         TaxConfig taxCfg = this.taxConfigService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (taxCfg != null) {
             return taxCfg;

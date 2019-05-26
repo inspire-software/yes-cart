@@ -23,6 +23,8 @@ import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.DataDescriptorService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -37,13 +39,13 @@ public class DataDescriptorXmlEntityHandler extends AbstractXmlEntityHandler<Dat
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final DataDescriptor descriptor) {
+    protected void delete(final JobStatusListener statusListener, final DataDescriptor descriptor, final Map<String, Integer> entityCount) {
         this.dataDescriptorService.delete(descriptor);
         this.dataDescriptorService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final DataDescriptor domain, final DataDescriptorType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final DataDescriptor domain, final DataDescriptorType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         domain.setType(xmlType.getType().value());
         domain.setValue(xmlType.getValue());
@@ -58,7 +60,7 @@ public class DataDescriptorXmlEntityHandler extends AbstractXmlEntityHandler<Dat
     }
 
     @Override
-    protected DataDescriptor getOrCreate(final JobStatusListener statusListener, final DataDescriptorType xmlType) {
+    protected DataDescriptor getOrCreate(final JobStatusListener statusListener, final DataDescriptorType xmlType, final Map<String, Integer> entityCount) {
         DataDescriptor descriptor = this.dataDescriptorService.findSingleByCriteria(" where e.name = ?1", xmlType.getName());
         if (descriptor != null) {
             return descriptor;

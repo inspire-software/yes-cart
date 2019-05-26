@@ -37,6 +37,7 @@ import org.yes.cart.service.domain.ProductTypeService;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -53,13 +54,13 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final ProductType type) {
+    protected void delete(final JobStatusListener statusListener, final ProductType type, final Map<String, Integer> entityCount) {
         this.productTypeService.delete(type);
         this.productTypeService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final ProductType domain, final ProductTypeTypeType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final ProductType domain, final ProductTypeTypeType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
         if (xmlType.getConfiguration() != null) {
             if (xmlType.getConfiguration().isService() != null) {
                 domain.setService(xmlType.getConfiguration().isService());
@@ -267,7 +268,7 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
     }
 
     @Override
-    protected ProductType getOrCreate(final JobStatusListener statusListener, final ProductTypeTypeType xmlType) {
+    protected ProductType getOrCreate(final JobStatusListener statusListener, final ProductTypeTypeType xmlType, final Map<String, Integer> entityCount) {
         ProductType productType = this.productTypeService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (productType != null) {
             return productType;

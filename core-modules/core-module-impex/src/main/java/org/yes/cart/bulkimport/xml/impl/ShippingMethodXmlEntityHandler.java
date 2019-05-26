@@ -31,6 +31,7 @@ import org.yes.cart.utils.DateUtils;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -47,13 +48,13 @@ public class ShippingMethodXmlEntityHandler extends AbstractXmlEntityHandler<Shi
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final CarrierSla method) {
+    protected void delete(final JobStatusListener statusListener, final CarrierSla method, final Map<String, Integer> entityCount) {
         this.carrierSlaService.delete(method);
         this.carrierSlaService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final CarrierSla domain, final ShippingMethodType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final CarrierSla domain, final ShippingMethodType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         if (xmlType.getConfiguration() != null) {
             domain.setGuaranteed(xmlType.getConfiguration().isGuaranteedDelivery());
@@ -163,7 +164,7 @@ public class ShippingMethodXmlEntityHandler extends AbstractXmlEntityHandler<Shi
     }
 
     @Override
-    protected CarrierSla getOrCreate(final JobStatusListener statusListener, final ShippingMethodType xmlType) {
+    protected CarrierSla getOrCreate(final JobStatusListener statusListener, final ShippingMethodType xmlType, final Map<String, Integer> entityCount) {
         CarrierSla sla = this.carrierSlaService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (sla != null) {
             return sla;

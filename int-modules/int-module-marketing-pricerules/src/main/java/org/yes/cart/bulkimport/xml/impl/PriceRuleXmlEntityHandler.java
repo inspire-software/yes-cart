@@ -24,6 +24,8 @@ import org.yes.cart.domain.entity.SkuPriceRule;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.GenericService;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -38,13 +40,13 @@ public class PriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<PriceRul
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final SkuPriceRule rule) {
+    protected void delete(final JobStatusListener statusListener, final SkuPriceRule rule, final Map<String, Integer> entityCount) {
         this.priceRuleService.delete(rule);
         this.priceRuleService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final SkuPriceRule domain, final PriceRuleType xmlType, final EntityImportModeType mode) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final SkuPriceRule domain, final PriceRuleType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
         domain.setTag(processTags(xmlType.getTags(), domain.getTag()));
         domain.setName(xmlType.getName());
@@ -80,7 +82,7 @@ public class PriceRuleXmlEntityHandler extends AbstractXmlEntityHandler<PriceRul
     }
 
     @Override
-    protected SkuPriceRule getOrCreate(final JobStatusListener statusListener, final PriceRuleType xmlType) {
+    protected SkuPriceRule getOrCreate(final JobStatusListener statusListener, final PriceRuleType xmlType, final Map<String, Integer> entityCount) {
         SkuPriceRule rule = this.priceRuleService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (rule != null) {
             return rule;

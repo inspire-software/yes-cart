@@ -36,6 +36,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -87,7 +88,7 @@ public class XmlFastBulkExportServiceImpl extends AbstractExportService<XmlExpor
 
             handler.startXml(writer);
 
-            Map<String, Integer> counts = new ConcurrentHashMap<>();
+            final Map<String, Integer> counts = new ConcurrentHashMap<>();
 
             results = getExistingEntities(xmlExportDescriptor, xmlExportDescriptor.getSelectCmd(), null, null);
             while (results.hasNext()) {
@@ -101,8 +102,9 @@ public class XmlFastBulkExportServiceImpl extends AbstractExportService<XmlExpor
 
             handler.endXml(writer);
 
-            for (final Map.Entry<String, Integer> countEntry : counts.entrySet()) {
-                statusListener.notifyMessage("total data objects : {} {}", countEntry.getKey(), countEntry.getValue());
+            for (final String key : new TreeSet<>(counts.keySet())) {
+                final Integer count = counts.get(key);
+                statusListener.notifyMessage("total data objects : {} {}", key, count);
             }
 
         } catch (UnsupportedEncodingException e) {
