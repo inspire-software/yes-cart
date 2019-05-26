@@ -66,3 +66,13 @@ PRODUCTION:
   you are unable to transition quickly)
 * When transitioning to CMS3 copy all media to content after migration /filevault/category/ to /filevault/content/ and
   /imgvault/category/ to /imgvault/content/
+
+* Removing obsolete CMS1 data
+- run the tool to update you DB entries
+  !!! WARNING THIS TOOL WILL CHANGE DATA IN YOUR DB             !!!
+  !!! MAKE SURE YOU CREATE FULL DB DUMP BEFORE RUNNING THE TOOL !!!
+
+  E.g. from env/migration/migrate-3.5.0-3.6.0/yc859 directory:
+  java -Dfile.encoding=UTF-8 -classpath ".:/path/to/derbyclient-10.8.1.2.jar" org.yes.cart.migrationtools.yc859.RemoveCategoryTreeById
+  java -Dfile.encoding=UTF-8 -classpath ".:/path/to/mysql-connector-java-5.1.43.jar" org.yes.cart.migrationtools.yc859.RemoveCategoryTreeById
+
