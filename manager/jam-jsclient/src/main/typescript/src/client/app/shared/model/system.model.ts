@@ -48,7 +48,7 @@ export interface CacheInfoVO {
   hits : number;
   misses : number;
 
-  stats : number;
+  disabled : boolean;
 
   nodeId : string;
   nodeUri : string;

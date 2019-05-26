@@ -66,12 +66,12 @@ public class WsCacheDirectorImpl extends CacheDirectorImpl implements CacheDirec
             WsCacheDirectorImpl.this.evictCache((String) message.getPayload());
             return "OK";
         });
-        nodeService.subscribe("CacheDirector.enableStats", message -> {
-            WsCacheDirectorImpl.this.enableStats((String) message.getPayload());
+        nodeService.subscribe("CacheDirector.enableCache", message -> {
+            WsCacheDirectorImpl.this.enableCache((String) message.getPayload());
             return "OK";
         });
-        nodeService.subscribe("CacheDirector.disableStats", message -> {
-            WsCacheDirectorImpl.this.disableStats((String) message.getPayload());
+        nodeService.subscribe("CacheDirector.disableCache", message -> {
+            WsCacheDirectorImpl.this.disableCache((String) message.getPayload());
             return "OK";
         });
         nodeService.subscribe("CacheDirector.onCacheableChange", message -> {

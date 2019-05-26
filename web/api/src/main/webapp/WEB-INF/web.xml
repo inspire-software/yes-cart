@@ -196,18 +196,14 @@
         <url-pattern>/filevault/*</url-pattern>
     </filter-mapping>
 
+    <!-- Cluster connector -->
 
-    <servlet>
-        <servlet-name>cxf</servlet-name>
-        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+    ${cluster.connector.servlet}
 
-    <servlet-mapping>
-        <servlet-name>cxf</servlet-name>
-        <url-pattern>/services/*</url-pattern>
-    </servlet-mapping>
+    ${cluster.connector.servlet-mapping}
 
+    <!-- EoF Cluster connector -->
+    
     <servlet>
         <servlet-name>rest</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

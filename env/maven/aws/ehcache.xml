@@ -50,6 +50,8 @@
         as risk of concurrent modification exceptions rises with longer cache times.
       -->
 
+    <sizeOfPolicy maxDepth="100" maxDepthExceededBehavior="abort" />
+
     <defaultCache
             maxElementsInMemory="1000"
             overflowToDisk="false"

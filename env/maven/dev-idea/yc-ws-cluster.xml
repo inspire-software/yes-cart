@@ -24,7 +24,7 @@
         <version>${project.version}</version>
         <build-number>${buildNumber}</build-number>
         <lucene-index-disabled>${cluster.config.sf.lucene_index_disabled}</lucene-index-disabled>
-        <channel>${cluster.config.sf.ws.channel_uri}</channel>
+        <channel>${cluster.config.sf.channel_uri}</channel>
     </node>
     <node>
         <cluster-id>${cluster.config.cluster_id}</cluster-id>
@@ -34,7 +34,7 @@
         <version>${project.version}</version>
         <build-number>${buildNumber}</build-number>
         <lucene-index-disabled>${cluster.config.api.lucene_index_disabled}</lucene-index-disabled>
-        <channel>${cluster.config.api.ws.channel_uri}</channel>
+        <channel>${cluster.config.api.channel_uri}</channel>
     </node>
     <node>
         <cluster-id>${cluster.config.cluster_id}</cluster-id>

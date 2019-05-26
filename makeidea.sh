@@ -5,4 +5,4 @@
 #
 # @author Denys Pavlov
 
-mvn clean install -PdevIntellijIDEA,derby,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
+mvn clean install -PdevIntellijIDEA,derby,ftEmbededLucene,connWS,paymentAll,pricerules -DskipTests=true

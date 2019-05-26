@@ -140,9 +140,9 @@ public interface SystemEndpointController {
      * @param name name of cache to evict
      */
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/cache/statson/{name}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/cache/on/{name}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCacheInfo> enableStats(@PathVariable("name") String name) throws Exception;
+    List<VoCacheInfo> enableCache(@PathVariable("name") String name) throws Exception;
 
     /**
      * Disable cache statistics by name.
@@ -150,9 +150,9 @@ public interface SystemEndpointController {
      * @param name name of cache to evict
      */
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/cache/statsoff/{name}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/cache/off/{name}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCacheInfo> disableStats(@PathVariable("name") String name) throws Exception;
+    List<VoCacheInfo> disableCache(@PathVariable("name") String name) throws Exception;
 
 
     /**

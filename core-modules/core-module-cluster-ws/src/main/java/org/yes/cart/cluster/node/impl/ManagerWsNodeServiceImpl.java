@@ -92,7 +92,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
                 WebServiceInboundChannel service = factory.getService();
                 try {
                     final WsMessage rsp = service.accept(new WsMessage(wsMessage));
-                    if (rsp instanceof WsMessage) {
+                    if (rsp != null) {
                         wsMessage.addResponse(
                                 new BasicMessageImpl(
                                         rsp.getSource(),

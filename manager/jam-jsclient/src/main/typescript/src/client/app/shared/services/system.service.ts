@@ -109,17 +109,17 @@ export class SystemService {
   }
 
   /**
-   * Save cache stats flag.
+   * Save cache flag.
    * @param name cache name
-   * @param stats flag whether to turn it on or off
+   * @param enable whether to turn it on or off
    * @returns {Observable<R>}
    */
-  saveCacheStatsFlag(name:string, stats:boolean) {
+  saveCacheFlag(name:string, enable:boolean) {
 
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
-    let path = stats ? 'statson/' : 'statsoff/';
+    let path = enable ? 'on/' : 'off/';
 
     return this.http.post(this._serviceBaseUrl + '/cache/' + path + name + '/', null, options)
       .map(res => <CacheInfoVO[]> this.json(res))

@@ -30,7 +30,7 @@ public class VoCacheInfo {
     private String cacheName;
 
     @DtoField(readOnly = true)
-    private int cacheSize;
+    private long cacheSize;
 
     @DtoField(readOnly = true)
     private long inMemorySize;
@@ -39,10 +39,10 @@ public class VoCacheInfo {
     private long inMemorySizeMax;
 
     @DtoField(readOnly = true)
-    private int timeToLiveSeconds;
+    private long timeToLiveSeconds;
 
     @DtoField(readOnly = true)
-    private int timeToIdleSeconds;
+    private long timeToIdleSeconds;
 
     @DtoField(readOnly = true)
     private boolean eternal;
@@ -54,7 +54,7 @@ public class VoCacheInfo {
     private boolean overflowToDisk;
 
     @DtoField(readOnly = true)
-    private int  diskStoreSize;
+    private long  diskStoreSize;
 
     @DtoField(readOnly = true)
     private long  calculateInMemorySize;
@@ -69,7 +69,7 @@ public class VoCacheInfo {
     private long  misses;
 
     @DtoField(readOnly = true)
-    private boolean stats;
+    private boolean disabled;
 
     @DtoField(readOnly = true)
     private String nodeId;
@@ -93,11 +93,11 @@ public class VoCacheInfo {
         this.nodeUri = nodeUri;
     }
 
-    public int getDiskStoreSize() {
+    public long getDiskStoreSize() {
         return diskStoreSize;
     }
 
-    public void setDiskStoreSize(int diskStoreSize) {
+    public void setDiskStoreSize(long diskStoreSize) {
         this.diskStoreSize = diskStoreSize;
     }
 
@@ -125,11 +125,11 @@ public class VoCacheInfo {
         this.cacheName = cacheName;
     }
 
-    public int getCacheSize() {
+    public long getCacheSize() {
         return cacheSize;
     }
 
-    public void setCacheSize(int cacheSize) {
+    public void setCacheSize(long cacheSize) {
         this.cacheSize = cacheSize;
     }
 
@@ -149,19 +149,19 @@ public class VoCacheInfo {
         this.inMemorySizeMax = inMemorySizeMax;
     }
 
-    public int getTimeToLiveSeconds() {
+    public long getTimeToLiveSeconds() {
         return timeToLiveSeconds;
     }
 
-    public void setTimeToLiveSeconds(final int timeToLiveSeconds) {
+    public void setTimeToLiveSeconds(final long timeToLiveSeconds) {
         this.timeToLiveSeconds = timeToLiveSeconds;
     }
 
-    public int getTimeToIdleSeconds() {
+    public long getTimeToIdleSeconds() {
         return timeToIdleSeconds;
     }
 
-    public void setTimeToIdleSeconds(final int timeToIdleSeconds) {
+    public void setTimeToIdleSeconds(final long timeToIdleSeconds) {
         this.timeToIdleSeconds = timeToIdleSeconds;
     }
 
@@ -205,12 +205,12 @@ public class VoCacheInfo {
         this.misses = misses;
     }
 
-    public boolean isStats() {
-        return stats;
+    public boolean isDisabled() {
+        return disabled;
     }
 
-    public void setStats(final boolean stats) {
-        this.stats = stats;
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
 

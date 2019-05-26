@@ -29,8 +29,8 @@
 
       <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
 
-        <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CACHESTATS' | translate }}">
-          <i class="fa {{ selectedRow != null && selectedRow.stats ? 'fa-toggle-off' : 'fa-toggle-on' }}"></i>
+        <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn {{(selectedRow != null && !selectedRow.disabled) ? 'btn-success' : 'btn-danger' }} btn-circle btn-xl" title="{{ ((selectedRow != null && !selectedRow.disabled) ? 'MODAL_BUTTON_DISABLE' : 'MODAL_BUTTON_ENABLE') | translate }}">
+          <i class="fa fa-power-off"></i>
         </button>
 
         <button type="button" (click)="onRowDeleteSelected()" class="btn {{ selectedRow == null ? 'btn-danger' : 'btn-info' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CACHEEVICT' | translate }}">

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <bean id="websupportRestServiceInboundChannel" class="org.yes.cart.web.service.rest.WebsupportRestServiceInboundChannel">
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg index="0" name="defaultCharset" value="UTF-8"/>
+            </bean>
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="connectorObjectMapper" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- serviceConnectorAuthenticationManager -->
+
+    <bean id="connectorInterceptorAuth" class="org.yes.cart.utils.spring.ArrayListBean">
+        <constructor-arg>
+            <list>
+               <bean class="org.yes.cart.web.service.rest.impl.ConnectorAuthStrategyBasicAuth">
+                   <property name="authenticationManager" ref="serviceConnectorAuthenticationManager"/>
+               </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <mvc:interceptors>
+        <bean id="webContentInterceptor"
+              class="org.yes.cart.web.service.rest.impl.ConnectorInterceptor">
+            <constructor-arg ref="connectorInterceptorAuth"/>
+            <property name="cacheSeconds" value="0"/>
+            <property name="useExpiresHeader" value="true"/>
+            <property name="useCacheControlHeader" value="true"/>
+            <property name="useCacheControlNoStore" value="true"/>
+        </bean>
+    </mvc:interceptors>
+
+    <bean id="connectorObjectMapper" class="org.yes.cart.web.service.rest.impl.ConnectorObjectMapper"/>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="api"/>
+        <property name="subName" value="rest-mvc"/>
+    </bean>
+
+</beans>

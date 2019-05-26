@@ -43,8 +43,8 @@ public interface NodeService {
     /** Lucene index disabled (used for Admin as it does not use FT index) */
     String LUCENE_INDEX_DISABLED = "LUCENE_INDEX_DISABLED";
 
-    /** WS Channel URI context parameter */
-    String CHANNEL_URI = "CHANNEL_URI";
+    /** Channel context parameter */
+    String CHANNEL = "CHANNEL";
 
     /**
      * Current node identification. This should be set in the

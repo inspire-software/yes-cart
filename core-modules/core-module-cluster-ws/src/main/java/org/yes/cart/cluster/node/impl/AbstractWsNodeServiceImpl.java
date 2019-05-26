@@ -286,7 +286,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
                 configuration.get(BUILD_NO),
                 Boolean.valueOf(luceneDisabledValue)
         );
-        node.setChannel(configuration.get(CHANNEL_URI));
+        node.setChannel(configuration.get(CHANNEL));
         this.node = node;
         this.cluster.add(node);
 

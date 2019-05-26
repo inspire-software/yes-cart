@@ -59,7 +59,7 @@ public class JGroupsNodeServiceImplTest {
             LOG.warn("\n\n" +
                     "***\n" +
                     "JGroup multicast test is DISABLED.\n" +
-                    "You can enable test in /env/maven/${env}/config-cluster.properties\n" +
+                    "You can enable test in /env/maven/${env}/config-cluster-${env.cluster}.properties\n" +
                     "Set:\n" +
                     "testJGroupsMulticast=true\n\n" +
                     "NOTE: The configurations used in test are in src/test/resources/yc-jgroups-udp.xml\n" +

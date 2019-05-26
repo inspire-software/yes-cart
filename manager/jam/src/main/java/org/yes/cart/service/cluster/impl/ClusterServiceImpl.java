@@ -622,12 +622,12 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Boolean> enableStats(final AsyncContext context, final String name) {
+    public Map<String, Boolean> enableCache(final AsyncContext context, final String name) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 determineAllSfTargets(),
-                "CacheDirector.enableStats",
+                "CacheDirector.enableCache",
                 name,
                 context
         );
@@ -645,7 +645,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         }
 
-        localCacheDirector.enableStats(name);
+        localCacheDirector.enableCache(name);
         stats.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
 
         return stats;
@@ -657,12 +657,12 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Boolean> disableStats(final AsyncContext context, final String name) {
+    public Map<String, Boolean> disableCache(final AsyncContext context, final String name) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 determineAllSfTargets(),
-                "CacheDirector.disableStats",
+                "CacheDirector.disableCache",
                 name,
                 context
         );
@@ -680,7 +680,7 @@ public class ClusterServiceImpl implements ClusterService {
 
         }
 
-        localCacheDirector.disableStats(name);
+        localCacheDirector.disableCache(name);
         stats.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
 
         return stats;

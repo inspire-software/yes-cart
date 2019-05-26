@@ -15,8 +15,9 @@
  */
 package org.yes.cart.cluster.service.impl;
 
+import net.sf.ehcache.CacheOperationOutcomes;
 import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.statistics.LiveCacheStatistics;
+import net.sf.ehcache.statistics.StatisticsGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
@@ -63,43 +64,27 @@ public class CacheDirectorImpl implements CacheDirector {
             final Cache cache = cacheManager.getCache(cacheName);
             final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
             final CacheConfiguration cacheConfiguration = nativeCache.getCacheConfiguration();
-            final LiveCacheStatistics stats = nativeCache.getLiveCacheStatistics();
-            final boolean statsEnabled = stats != null && stats.isStatisticsEnabled();
-            if (statsEnabled) {
-                rez.add(
-                        new CacheInfoDTO(
-                                nativeCache.getName(),
-                                nativeCache.getSize(),
-                                nativeCache.getMemoryStoreSize(),
-                                cacheConfiguration.getMaxEntriesLocalHeap(),
-                                cacheConfiguration.isOverflowToDisk(),
-                                cacheConfiguration.isEternal(),
-                                (int) cacheConfiguration.getTimeToLiveSeconds(),
-                                (int) cacheConfiguration.getTimeToIdleSeconds(),
-                                cacheConfiguration.getMemoryStoreEvictionPolicy().toString(),
-                                nativeCache.getDiskStoreSize(),
-                                stats.getCacheHitCount(),
-                                stats.getCacheMissCount(),
-                                nativeCache.calculateInMemorySize(),
-                                nativeCache.calculateOnDiskSize()
-                        )
-                );
-            } else {
-                rez.add(
-                        new CacheInfoDTO(
-                                nativeCache.getName(),
-                                nativeCache.getSize(),
-                                nativeCache.getMemoryStoreSize(),
-                                cacheConfiguration.getMaxEntriesLocalHeap(),
-                                cacheConfiguration.isOverflowToDisk(),
-                                cacheConfiguration.isEternal(),
-                                (int) cacheConfiguration.getTimeToLiveSeconds(),
-                                (int) cacheConfiguration.getTimeToIdleSeconds(),
-                                cacheConfiguration.getMemoryStoreEvictionPolicy().toString(),
-                                nativeCache.getDiskStoreSize()
-                        )
-                );
-            }
+            final StatisticsGateway stats = nativeCache.getStatistics();
+
+            rez.add(
+                    new CacheInfoDTO(
+                            nativeCache.getName(),
+                            nativeCache.getSize(),
+                            stats.getLocalHeapSize(),
+                            cacheConfiguration.getMaxEntriesLocalHeap(),
+                            cacheConfiguration.isOverflowToDisk(),
+                            cacheConfiguration.isEternal(),
+                            cacheConfiguration.getTimeToLiveSeconds(),
+                            cacheConfiguration.getTimeToIdleSeconds(),
+                            cacheConfiguration.getMemoryStoreEvictionPolicy().toString(),
+                            stats.getLocalDiskSize(),
+                            stats.getCore().get().value(CacheOperationOutcomes.GetOutcome.HIT),
+                            stats.getExtended().allMiss().count().value(),
+                            stats.getLocalHeapSizeInBytes(),
+                            stats.getLocalDiskSizeInBytes(),
+                            nativeCache.isDisabled()
+                    )
+            );
 
         }
         return rez;
@@ -143,22 +128,22 @@ public class CacheDirectorImpl implements CacheDirector {
      * {@inheritDoc}
      */
     @Override
-    public void enableStats(final String cacheName) {
+    public void enableCache(final String cacheName) {
         final CacheManager cm = getCacheManager();
         final Cache cache = cm.getCache(cacheName);
         if (cache != null) {
             final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
-            nativeCache.setStatisticsEnabled(true);
+            nativeCache.setDisabled(false);
         }
     }
 
     @Override
-    public void disableStats(final String cacheName) {
+    public void disableCache(final String cacheName) {
         final CacheManager cm = getCacheManager();
         final Cache cache = cm.getCache(cacheName);
         if (cache != null) {
             final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
-            nativeCache.setStatisticsEnabled(false);
+            nativeCache.setDisabled(true);
         }
     }
 

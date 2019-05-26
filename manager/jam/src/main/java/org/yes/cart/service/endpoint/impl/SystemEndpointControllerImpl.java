@@ -27,7 +27,6 @@ import org.yes.cart.domain.dto.impl.CacheInfoDTO;
 import org.yes.cart.domain.dto.impl.ConfigurationDTO;
 import org.yes.cart.domain.dto.impl.ModuleDTO;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.async.AsyncContextFactory;
 import org.yes.cart.service.async.model.AsyncContext;
@@ -172,20 +171,20 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     /** {@inheritDoc} */
     @Override
     public @ResponseBody
-    List<VoCacheInfo> enableStats(@PathVariable("name") final String name) throws Exception {
+    List<VoCacheInfo> enableCache(@PathVariable("name") final String name) throws Exception {
         final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS);
-        clusterService.enableStats(createCtx(param), name);
+        clusterService.enableCache(createCtx(param), name);
         return getCacheInfo();
     }
 
     /** {@inheritDoc} */
     @Override
     public @ResponseBody
-    List<VoCacheInfo> disableStats(@PathVariable("name") final String name) throws Exception {
+    List<VoCacheInfo> disableCache(@PathVariable("name") final String name) throws Exception {
         final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS);
-        clusterService.disableStats(createCtx(param), name);
+        clusterService.disableCache(createCtx(param), name);
         return getCacheInfo();
     }
 

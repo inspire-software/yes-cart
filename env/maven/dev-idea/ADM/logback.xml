@@ -392,6 +392,11 @@
         <appender-ref ref="SECURITY"/>
     </logger>
 
+    <!-- Ehcache errors -->
+    <logger name="net.sf.ehcache.pool.sizeof" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="DEFAULT"/>
         <appender-ref ref="CONSOLE"/>

@@ -45,6 +45,7 @@
         <env>dev</env>
         <!-- env.db>use profile to set this as we need to make sure the dependencies for drivers are included</env.db -->
         <!-- env.search>use profile to set this as we need to make sure the dependencies for providers are included</env.search -->
+        <!-- env.cluster>use profile to set this as we need to make sure the dependencies for providers are included</env.cluster -->
         <env.ssl>off</env.ssl>
         <marketing.pricerules>off</marketing.pricerules>
         <payment.liqpay.module>off</payment.liqpay.module>
@@ -73,7 +74,7 @@
         <cxf.version>3.2.4</cxf.version>
         <spring-security.version>4.2.12.RELEASE</spring-security.version>
         <spring.version>4.3.23.RELEASE</spring.version>
-        <ehcache-core.version>2.6.11</ehcache-core.version>
+        <ehcache-core.version>2.10.6</ehcache-core.version>
         <jackson.version>2.9.1</jackson.version>
         <GeDA.version>3.1.2</GeDA.version>
         <cglib.version>3.2.5</cglib.version>
@@ -636,23 +637,24 @@
                                 <echo> </echo>
                                 <echo>YC module ${project.artifactId}-${project.version}-rev.${buildNumber} configurations:</echo>
                                 <echo> </echo>
-                                <echo>Environment configuration (use -Denv=x to switch)                 : ${env} </echo>
-                                <echo>Database provider (use -Pmysql or -Pderby)                        : ${env.db} </echo>
-                                <echo>Full text search provider (use -PftEmbededLucene or -PftDisabled) : ${env.search} </echo>
-                                <echo>Tomcat SSL configuration (use -Pssl)                              : ${env.ssl} </echo>
-                                <echo>JAM npm goal (use -Dnpm.goal=x to switch)                         : ${npm.goal} </echo>
-                                <echo>JAM npm target (use -Dnpm.target.home=x to switch)                : ${npm.target.home} (${ts.target.home}) </echo>
-                                <echo>JAM npm modules (use -Dnpm.target.modules=x to switch)            : ${npm.target.modules} (${ts.target.modules}) </echo>
+                                <echo>Environment configuration (use -Denv=x to switch)                           : ${env} </echo>
+                                <echo>Database provider (use -Pmysql or -Pderby)                                  : ${env.db} </echo>
+                                <echo>Cluster connector (use -PconnWS, -PconnREST, -PconnJGIPv4 or -PconnJGIPv6)  : ${env.cluster} </echo>
+                                <echo>Full text search provider (use -PftEmbededLucene or -PftDisabled)           : ${env.search} </echo>
+                                <echo>Tomcat SSL configuration (use -Pssl)                                        : ${env.ssl} </echo>
+                                <echo>JAM npm goal (use -Dnpm.goal=x to switch)                                   : ${npm.goal} </echo>
+                                <echo>JAM npm target (use -Dnpm.target.home=x to switch)                          : ${npm.target.home} (${ts.target.home}) </echo>
+                                <echo>JAM npm modules (use -Dnpm.target.modules=x to switch)                      : ${npm.target.modules} (${ts.target.modules}) </echo>
                                 <echo> </echo>
                                 <echo>Payment modules</echo>
-                                <echo>LiqPay payments (use -PpaymentLiqPay or -PpaymentAll)             : ${payment.liqpay.module} </echo>
-                                <echo>Cybersource payments (use -PpaymentCybersource or -PpaymentAll)   : ${payment.cybersource.module} </echo>
-                                <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll)   : ${payment.authorizenet.module} </echo>
-                                <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)             : ${payment.paypal.module} </echo>
-                                <echo>PostFinance payments (use -PpaymentPostFinance or -PpaymentAll)   : ${payment.postfinance.module} </echo>
+                                <echo>LiqPay payments (use -PpaymentLiqPay or -PpaymentAll)                       : ${payment.liqpay.module} </echo>
+                                <echo>Cybersource payments (use -PpaymentCybersource or -PpaymentAll)             : ${payment.cybersource.module} </echo>
+                                <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll)             : ${payment.authorizenet.module} </echo>
+                                <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)                       : ${payment.paypal.module} </echo>
+                                <echo>PostFinance payments (use -PpaymentPostFinance or -PpaymentAll)             : ${payment.postfinance.module} </echo>
                                 <echo> </echo>
                                 <echo>Add-on modules</echo>
-                                <echo>Marketing price rules integration  (use -Ppricerules)             : ${marketing.pricerules}</echo>
+                                <echo>Marketing price rules integration  (use -Ppricerules)                       : ${marketing.pricerules}</echo>
                                 <echo> </echo>
                                 <echo>Web Apps</echo>
                                 <echo>Storefront: ${webapp.sf.war.name}.war</echo>
@@ -695,6 +697,16 @@
                                     </message>
                                 </requireProperty>
                                 <requireProperty>
+                                    <property>env.cluster</property>
+                                    <message>
+== YC build config error ==============================================================================================
+| env.cluster is missing!                                                                                             |
+| If you are running custom build using profiles make sure you selected all necessary profiles for cluster connector. |
+| Possible values: connWS, connREST, connJGIPv4 orconnJGIPv6                                                                         |
+=======================================================================================================================
+                                    </message>
+                                </requireProperty>
+                                <requireProperty>
                                     <property>env.search</property>
                                     <message>
 == YC build config error =======================================================================================
@@ -713,6 +725,7 @@
 
         </plugins>
     </build>
+    
     <profiles>
 
         <!--
@@ -780,8 +793,8 @@
         <!--
             DATABASE PROFILES
         -->
+
         <profile>
-            <!-- Use this profile to setup MySQL connection -->
             <id>mysql</id>
             <properties>
                 <env.db>mysql</env.db>
@@ -789,13 +802,46 @@
         </profile>
 
         <profile>
-            <!-- Use this profile to setup Derby connection -->
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>derby</id>
             <properties>
                 <env.db>derby</env.db>
             </properties>
         </profile>
+
+        <!--
+            CLUSTER CONNECTOR
+        -->
+
+        <profile>
+            <id>connWS</id>
+            <properties>
+                <env.cluster>WS</env.cluster>
+            </properties>
+        </profile>
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>connREST</id>
+            <properties>
+                <env.cluster>REST</env.cluster>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>connJGIPv4</id>
+            <properties>
+                <env.cluster>JGIPv4</env.cluster>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>connJGIPv6</id>
+            <properties>
+                <env.cluster>JGIPv6</env.cluster>
+            </properties>
+        </profile>
+
 
         <!--
             FULLTEXT PROFILES
@@ -820,8 +866,8 @@
         <!--
             ADD-ON PROFILES
         -->
+
         <profile>
-            <!-- Use price rules marketing integration -->
             <id>pricerules</id>
             <properties>
                 <marketing.pricerules>on</marketing.pricerules>
@@ -840,46 +886,7 @@
         </profile>
 
         <!--
-            DEMO STORE
-        -->
-
-        <profile>
-            <id>buildDemo</id>
-            <properties>
-                <env>demo</env>
-                <env.db>mysql</env.db>
-                <env.search>embeded-lucene</env.search>
-                <env.ssl>off</env.ssl>
-                <payment.liqpay.module>on</payment.liqpay.module>
-                <payment.cybersource.module>on</payment.cybersource.module>
-                <payment.authorizenet.module>on</payment.authorizenet.module>
-                <payment.paypal.module>on</payment.paypal.module>
-                <payment.postfinance.module>on</payment.postfinance.module>
-            </properties>
-        </profile>
-
-
-        <!--
-            AWS STORE
-        -->
-
-        <profile>
-            <id>buildAws</id>
-            <properties>
-                <env>aws</env>
-                <env.db>mysql</env.db>
-                <env.search>embeded-lucene</env.search>
-                <env.ssl>off</env.ssl>
-                <payment.liqpay.module>on</payment.liqpay.module>
-                <payment.cybersource.module>on</payment.cybersource.module>
-                <payment.authorizenet.module>on</payment.authorizenet.module>
-                <payment.paypal.module>on</payment.paypal.module>
-                <payment.postfinance.module>on</payment.postfinance.module>
-            </properties>
-        </profile>
-
-        <!--
-            ADDITIONAL MODULES ACTIVATION
+            PAYMENT MODULES ACTIVATION
         -->
 
         <profile>
@@ -975,6 +982,10 @@
             </properties>
         </profile>
 
+        <!--
+            JDK11 Legacy API 
+        -->
+
         <profile>
             <id>jdk11</id>
             <activation>
@@ -1001,17 +1012,47 @@
                     <version>2.4.0-b180830.0438</version>
                 </dependency>
 
-                <!-- WebServices (JDK11) -->
-
-                <dependency>
-                    <groupId>com.sun.xml.ws</groupId>
-                    <artifactId>jaxws-ri</artifactId>
-                    <version>2.3.0</version>
-                    <type>pom</type>
-                </dependency>
-
             </dependencies>
 
+        </profile>
+
+        <!--
+            DEMO STORE
+        -->
+
+        <profile>
+            <id>buildDemo</id>
+            <properties>
+                <env>demo</env>
+                <env.db>mysql</env.db>
+                <env.search>embeded-lucene</env.search>
+                <env.ssl>off</env.ssl>
+                <payment.liqpay.module>on</payment.liqpay.module>
+                <payment.cybersource.module>on</payment.cybersource.module>
+                <payment.authorizenet.module>on</payment.authorizenet.module>
+                <payment.paypal.module>on</payment.paypal.module>
+                <payment.postfinance.module>on</payment.postfinance.module>
+            </properties>
+        </profile>
+
+
+        <!--
+            AWS STORE
+        -->
+
+        <profile>
+            <id>buildAws</id>
+            <properties>
+                <env>aws</env>
+                <env.db>mysql</env.db>
+                <env.search>embeded-lucene</env.search>
+                <env.ssl>off</env.ssl>
+                <payment.liqpay.module>on</payment.liqpay.module>
+                <payment.cybersource.module>on</payment.cybersource.module>
+                <payment.authorizenet.module>on</payment.authorizenet.module>
+                <payment.paypal.module>on</payment.paypal.module>
+                <payment.postfinance.module>on</payment.postfinance.module>
+            </properties>
         </profile>
 
 

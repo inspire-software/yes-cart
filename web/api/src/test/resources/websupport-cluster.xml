@@ -20,13 +20,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="nodeService" class="org.yes.cart.cluster.node.impl.WebsupportWsNodeServiceImpl">
-        <constructor-arg index="0" ref="systemService"/>
-        <property name="wsConfiguration" value="classpath:yc-ws-cluster.xml"/>
-        <property name="wsConfigurationLoader">
-            <bean class="org.yes.cart.cluster.node.impl.NodeConfigurationXStreamProvider"/>
-        </property>
-    </bean>
+    <bean id="nodeService" class="org.yes.cart.cluster.node.impl.NoopNodeServiceImpl"/>
 
     <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
         <constructor-arg>

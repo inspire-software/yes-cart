@@ -113,14 +113,14 @@ export class CacheMonitoringComponent implements OnInit {
     if (this.selectedRow != null) {
 
       let cache = this.selectedRow.cacheName;
-      let stats = !this.selectedRow.stats;
+      let enabled = this.selectedRow.disabled;
 
-      LogUtil.debug('CacheMonitoringComponent stats set: ' + stats, this.selectedRow);
+      LogUtil.debug('CacheMonitoringComponent flag set: ' + enabled, this.selectedRow);
 
       this.loading = true;
-      let _sub:any = this._systemService.saveCacheStatsFlag(cache, stats).subscribe(caches => {
+      let _sub:any = this._systemService.saveCacheFlag(cache, enabled).subscribe(caches => {
 
-        LogUtil.debug('CacheMonitoringComponent saveCacheStatsFlag', caches);
+        LogUtil.debug('CacheMonitoringComponent saveCacheFlag', caches);
         this.caches = caches;
         this.selectedRow = null;
         this.filterCaches();
@@ -189,7 +189,7 @@ export class CacheMonitoringComponent implements OnInit {
   }
 
   protected getHitsAndMissed(row:CacheInfoVO):string {
-    if (row.stats) {
+    if (!row.disabled) {
       if (row.hits <= 0) {
         return '0/' + row.misses;
       }
@@ -199,12 +199,12 @@ export class CacheMonitoringComponent implements OnInit {
   }
 
   protected getMemSize(row:CacheInfoVO):string {
-    return row.inMemorySize + (row.stats ? this.getHumanReadableSize(row.calculateInMemorySize) : '');
+    return row.inMemorySize + (row.disabled ? '' : this.getHumanReadableSize(row.calculateInMemorySize));
   }
 
   protected getDiskSize(row:CacheInfoVO):string {
     if (row.diskStoreSize > 0 || row.overflowToDisk) {
-      return row.diskStoreSize + (row.stats ? this.getHumanReadableSize(row.calculateOnDiskSize) : '');
+      return row.diskStoreSize + (row.disabled ? '' : this.getHumanReadableSize(row.calculateOnDiskSize));
     }
     return '';
   }

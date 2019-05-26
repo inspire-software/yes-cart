@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
@@ -62,16 +62,6 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-orderstate</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.yes</groupId>
-            <artifactId>core-module-ws</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.yes</groupId>
-            <artifactId>core-module-cluster-ws</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -167,43 +157,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>${cxf.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>asm</artifactId>
-                    <groupId>org.ow2.asm</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-ws-security</artifactId>
-            <version>${cxf.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bouncycastle</groupId>
-                    <artifactId>bcprov-jdk15on</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>net.sf.ehcache</groupId>
-                    <artifactId>ehcache</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- Bouncy castle for ws-security -->
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
-            <version>${bcprov-jdk15on.version}</version>
-        </dependency>
-        <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
@@ -215,9 +168,26 @@
             <version>${commons-fileupload.version}</version>
         </dependency>
 
+
+        <!--<dependency>-->
+        <!--<groupId>com.mchange</groupId>-->
+        <!--<artifactId>c3p0</artifactId>-->
+        <!--<version>${c3p0.version}</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari.version}</version>
+        </dependency>
+
     </dependencies>
 
     <profiles>
+
+        <!--
+            DATABASE PROFILES
+        -->
 
         <profile>
             <id>mysql</id>
@@ -226,78 +196,6 @@
                     <groupId>mysql</groupId>
                     <artifactId>mysql-connector-java</artifactId>
                     <version>${mysql-connector.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>buildDemo</id>
-            <dependencies>
-                <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>${mysql-connector.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-liqpay</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-cybersource</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-authorizenet</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-paypal</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-postfinance</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>buildAws</id>
-            <dependencies>
-                <dependency>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>${mysql-connector.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-liqpay</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-cybersource</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-authorizenet</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-paypal</artifactId>
-                    <version>${project.parent.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.yes</groupId>
-                    <artifactId>payment-module-postfinance</artifactId>
-                    <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -313,6 +211,75 @@
                 </dependency>
             </dependencies>
         </profile>
+
+        <!--
+            CLUSTER CONNECTOR
+        -->
+
+        <profile>
+            <id>connWS</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-cluster-ws</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>connREST</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-cluster-rest</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>connJGIPv4</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-cluster-jgroups</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>orconnJGIPv6</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-cluster-jgroups</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+
+        <!--
+            ADD-ON PROFILES
+        -->
+
+        <profile>
+            <id>pricerules</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>int-module-marketing-pricerules</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <!--
+            PAYMENT MODULES ACTIVATION
+        -->
 
         <profile>
             <id>paymentAll</id>
@@ -400,27 +367,90 @@
             </dependencies>
         </profile>
 
+
+        <!--
+            DEMO STORE
+        -->
+
         <profile>
-            <id>jgroups</id>
+            <id>buildDemo</id>
             <dependencies>
                 <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>${mysql-connector.version}</version>
+                </dependency>
+                <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>core-module-cluster-jgroups</artifactId>
+                    <artifactId>payment-module-liqpay</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-cybersource</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-authorizenet</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-postfinance</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
         </profile>
 
+        <!--
+            AWS STORE
+        -->
+
         <profile>
-            <id>pricerules</id>
+            <id>buildAws</id>
             <dependencies>
                 <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>${mysql-connector.version}</version>
+                </dependency>
+                <dependency>
                     <groupId>org.yes</groupId>
-                    <artifactId>int-module-marketing-pricerules</artifactId>
+                    <artifactId>payment-module-liqpay</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-cybersource</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-authorizenet</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-postfinance</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
         </profile>
+
+        <!--
+            TEMPLATES PROFILES
+        -->
 
         <profile>
             <id>templates</id>
@@ -487,11 +517,14 @@
             </build>
         </profile>
 
+        <!--
+            ANGULAR DEVELOPMENT PROFILES
+
+            This is a utility profile to bridge NodeJS updates (from "npm start") so that exploded war directory
+            is up to date for running from IDE (e.g. Intellij)
+        -->
+
         <profile>
-            <!--
-                    This is a utility profile to bridge NodeJS updates (from "npm start") so that exploded war directory
-                    is up to date for running from IDE (e.g. Intellij)
-              -->
             <id>nodejs</id>
             <build>
                 <pluginManagement>
@@ -528,6 +561,7 @@
 
         <filters>
             <filter>${basedir}/../../env/maven/${env}/config-cluster.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-cluster-${env.cluster}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-fs.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-db-${env.db}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-ft-${env.search}.properties</filter>

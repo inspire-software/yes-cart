@@ -75,7 +75,7 @@
     <Parameter name="VERSION" value="${project.version}" override="false"/>
     <Parameter name="BUILD_NO" value="${buildNumber}" override="false"/>
     <Parameter name="LUCENE_INDEX_DISABLED" value="true" override="false"/>
-    <Parameter name="CHANNEL_URI" value="" override="false"/>
+    <Parameter name="CHANNEL" value="" override="false"/>
 
 </Context>
 

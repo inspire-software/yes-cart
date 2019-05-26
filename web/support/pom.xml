@@ -151,6 +151,10 @@
 
     <profiles>
 
+        <!--
+            FULLTEXT PROFILES
+        -->
+
         <profile>
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>ftEmbededLucene</id>

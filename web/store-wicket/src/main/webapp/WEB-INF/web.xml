@@ -245,18 +245,13 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- Cluster connector -->
 
+    ${cluster.connector.servlet}
 
-    <servlet>
-        <servlet-name>cxf</servlet-name>
-        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+    ${cluster.connector.servlet-mapping}
 
-    <servlet-mapping>
-        <servlet-name>cxf</servlet-name>
-        <url-pattern>/services/*</url-pattern>
-    </servlet-mapping>
+    <!-- EoF Cluster connector -->
 
 
     <!--<servlet>

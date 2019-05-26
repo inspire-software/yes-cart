@@ -31,15 +31,15 @@ public class CacheInfoDTO implements Serializable {
 
     private String cacheName;
 
-    private int cacheSize;
+    private long cacheSize;
 
     private long inMemorySize;
 
     private long inMemorySizeMax;
 
-    private int timeToLiveSeconds;
+    private long timeToLiveSeconds;
 
-    private int timeToIdleSeconds;
+    private long timeToIdleSeconds;
 
     private boolean eternal;
 
@@ -47,7 +47,7 @@ public class CacheInfoDTO implements Serializable {
 
     private boolean overflowToDisk;
 
-    private int  diskStoreSize;
+    private long  diskStoreSize;
 
     private long  calculateInMemorySize;
 
@@ -57,7 +57,7 @@ public class CacheInfoDTO implements Serializable {
 
     private long  misses;
 
-    private boolean stats;
+    private boolean disabled;
 
     private String nodeId;
 
@@ -79,11 +79,11 @@ public class CacheInfoDTO implements Serializable {
         this.nodeUri = nodeUri;
     }
 
-    public int getDiskStoreSize() {
+    public long getDiskStoreSize() {
         return diskStoreSize;
     }
 
-    public void setDiskStoreSize(int diskStoreSize) {
+    public void setDiskStoreSize(long diskStoreSize) {
         this.diskStoreSize = diskStoreSize;
     }
 
@@ -111,11 +111,11 @@ public class CacheInfoDTO implements Serializable {
         this.cacheName = cacheName;
     }
 
-    public int getCacheSize() {
+    public long getCacheSize() {
         return cacheSize;
     }
 
-    public void setCacheSize(int cacheSize) {
+    public void setCacheSize(long cacheSize) {
         this.cacheSize = cacheSize;
     }
 
@@ -135,19 +135,19 @@ public class CacheInfoDTO implements Serializable {
         this.inMemorySizeMax = inMemorySizeMax;
     }
 
-    public int getTimeToLiveSeconds() {
+    public long getTimeToLiveSeconds() {
         return timeToLiveSeconds;
     }
 
-    public void setTimeToLiveSeconds(final int timeToLiveSeconds) {
+    public void setTimeToLiveSeconds(final long timeToLiveSeconds) {
         this.timeToLiveSeconds = timeToLiveSeconds;
     }
 
-    public int getTimeToIdleSeconds() {
+    public long getTimeToIdleSeconds() {
         return timeToIdleSeconds;
     }
 
-    public void setTimeToIdleSeconds(final int timeToIdleSeconds) {
+    public void setTimeToIdleSeconds(final long timeToIdleSeconds) {
         this.timeToIdleSeconds = timeToIdleSeconds;
     }
 
@@ -191,28 +191,29 @@ public class CacheInfoDTO implements Serializable {
         this.misses = misses;
     }
 
-    public boolean isStats() {
-        return stats;
+    public boolean isDisabled() {
+        return disabled;
     }
 
-    public void setStats(final boolean stats) {
-        this.stats = stats;
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     public CacheInfoDTO(final String cacheName,
-                        final int cacheSize,
+                        final long cacheSize,
                         final long inMemorySize,
                         final long inMemorySizeMax,
                         final boolean overflowToDisk,
                         final boolean eternal,
-                        final int timeToLiveSeconds,
-                        final int timeToIdleSeconds,
+                        final long timeToLiveSeconds,
+                        final long timeToIdleSeconds,
                         final String memoryStoreEvictionPolicy,
-                        final int diskStoreSize,
+                        final long diskStoreSize,
                         final long hits,
                         final long misses,
                         final long calculateInMemorySize,
-                        final long calculateOnDiskSize) {
+                        final long calculateOnDiskSize,
+                        final boolean disabled) {
         this.cacheName = cacheName;
         this.cacheSize = cacheSize;
         this.inMemorySize = inMemorySize;
@@ -227,36 +228,8 @@ public class CacheInfoDTO implements Serializable {
         this.calculateOnDiskSize = calculateOnDiskSize;
         this.hits = hits;
         this.misses = misses;
-        this.stats = true;
+        this.disabled = disabled;
     }
-
-    public CacheInfoDTO(final String cacheName,
-                        final int cacheSize,
-                        final long inMemorySize,
-                        final long inMemorySizeMax,
-                        final boolean overflowToDisk,
-                        final boolean eternal,
-                        final int timeToLiveSeconds,
-                        final int timeToIdleSeconds,
-                        final String memoryStoreEvictionPolicy,
-                        final int diskStoreSize) {
-        this.cacheName = cacheName;
-        this.cacheSize = cacheSize;
-        this.inMemorySize = inMemorySize;
-        this.inMemorySizeMax = inMemorySizeMax;
-        this.overflowToDisk = overflowToDisk;
-        this.eternal = eternal;
-        this.timeToLiveSeconds = timeToLiveSeconds;
-        this.timeToIdleSeconds = timeToIdleSeconds;
-        this.memoryStoreEvictionPolicy = memoryStoreEvictionPolicy;
-        this.diskStoreSize = diskStoreSize;
-        this.calculateInMemorySize = -1;
-        this.calculateOnDiskSize = -1;
-        this.hits = -1;
-        this.misses = -1;
-        this.stats = false;
-    }
-
 
     public CacheInfoDTO() {
     }

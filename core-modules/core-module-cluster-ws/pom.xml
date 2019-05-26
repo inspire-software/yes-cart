@@ -70,6 +70,7 @@
 
         <filters>
             <filter>${basedir}/../../env/maven/${env}/config-cluster.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-cluster-${env.cluster}.properties</filter>
         </filters>
 
     </build>

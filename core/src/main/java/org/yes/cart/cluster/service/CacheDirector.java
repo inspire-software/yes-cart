@@ -63,12 +63,12 @@ public interface CacheDirector {
     /**
      * Enable specific cache statistics.
      */
-    void enableStats(String cache);
+    void enableCache(String cache);
 
     /**
      * Enable specific cache statistics.
      */
-    void disableStats(String cache);
+    void disableCache(String cache);
 
     /**
      * Fire event entity change event

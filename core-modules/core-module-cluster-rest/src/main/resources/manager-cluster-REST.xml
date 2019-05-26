@@ -22,14 +22,28 @@
 
     <!-- ################################ Clustering begin ###################################### -->
 
-    <bean id="nodeService" class="org.yes.cart.cluster.node.impl.AbstractWsNodeServiceImpl">
+    <bean id="nodeService" class="org.yes.cart.cluster.node.impl.ManagerRestNodeServiceImpl">
         <constructor-arg index="0" ref="systemService"/>
-        <property name="wsConfiguration" value="classpath:yc-ws-cluster.xml"/>
-        <property name="wsConfigurationLoader">
+        <property name="restConfiguration" value="classpath:yc-ws-cluster.xml"/>
+        <property name="restConfigurationLoader">
             <bean class="org.yes.cart.cluster.node.impl.NodeConfigurationXStreamProvider"/>
+        </property>
+        <property name="reloadClusterTopics">
+            <set>
+                <value>ClusterUtilsService.ping</value>
+                <value>CacheDirector.evictAllCache</value>
+            </set>
         </property>
     </bean>
 
     <!-- ################################ Clustering end ######################################## -->
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="cluster"/>
+        <property name="name" value="core-module-cluster-rest"/>
+        <property name="subName" value="manager-cluster-REST"/>
+    </bean>
 
 </beans>

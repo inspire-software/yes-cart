@@ -16,6 +16,8 @@
 
 <ehcache updateCheck="false">
 
+    <sizeOfPolicy maxDepth="100" maxDepthExceededBehavior="abort" />
+
     <defaultCache
             maxElementsInMemory="10000"
             overflowToDisk="false"
