@@ -232,7 +232,7 @@ build_demo() {
     echo "================================================";
     echo " ";
 
-    "$MVN" clean install -PbuildDemo,mysql,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
+    "$MVN" clean install -PbuildDemo,mysql,ftEmbededLucene,connREST,paymentAll,pricerules -DskipTests=true
 
     cp $YC_HOME/manager/jam/target/cp.war $YC_HOME/
     cp $YC_HOME/web/store-wicket/target/ROOT.war $YC_HOME/
@@ -246,7 +246,7 @@ build_dev() {
     echo "================================================";
     echo " ";
 
-    "$MVN" clean install -Pdev,derby,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
+    "$MVN" clean install -Pdev,derby,ftEmbededLucene,connREST,paymentAll,pricerules -DskipTests=true
 
 }
 
@@ -257,7 +257,7 @@ build_idea() {
     echo "================================================";
     echo " ";
 
-    "$MVN" clean install -PdevIntellijIDEA,derby,ftEmbededLucene,paymentAll,pricerules -DskipTests=true
+    "$MVN" clean install -PdevIntellijIDEA,derby,ftEmbededLucene,connREST,paymentAll,pricerules -DskipTests=true
 
 }
 
