@@ -59,12 +59,22 @@ public class CategoryTreeXmlEntityHandler extends AbstractXmlEntityHandler<Categ
                        final OutputStreamWriter writer,
                        final Map<String, Integer> entityCount) throws Exception {
 
+        handleCategory(statusListener, xmlExportDescriptor, tuple, xmlValueAdapter, fileToExport, writer, entityCount);
+
+    }
+
+    private void handleCategory(final JobStatusListener statusListener,
+                                final XmlExportDescriptor xmlExportDescriptor,
+                                final ImpExTuple<String, Category> tuple,
+                                final XmlValueAdapter xmlValueAdapter,
+                                final String fileToExport,
+                                final OutputStreamWriter writer,
+                                final Map<String, Integer> entityCount) throws Exception {
         if (lookUpRoot) {
             this.handleUp(statusListener, xmlExportDescriptor, tuple.getData(), xmlValueAdapter, fileToExport, writer, entityCount);
         }
 
         this.handleDown(statusListener, xmlExportDescriptor, tuple.getData(), xmlValueAdapter, fileToExport, writer, entityCount);
-
     }
 
     private void handleDown(final JobStatusListener statusListener,
@@ -78,11 +88,22 @@ public class CategoryTreeXmlEntityHandler extends AbstractXmlEntityHandler<Categ
         final List<Category> children =
                 this.categoryService.findChildCategoriesWithAvailability(category.getCategoryId(), false);
 
-        final XmlExportTuple tuple = new XmlExportTupleImpl(category);
-        this.entityHandler.handle(statusListener, xmlExportDescriptor, (ImpExTuple) tuple, xmlValueAdapter, fileToExport, writer, entityCount);
+        final XmlExportTuple tupleCategory = new XmlExportTupleImpl(category);
+        this.entityHandler.handle(statusListener, xmlExportDescriptor, (ImpExTuple) tupleCategory, xmlValueAdapter, fileToExport, writer, entityCount);
 
         for (final Category child : children) {
             handleDown(statusListener, xmlExportDescriptor, child, xmlValueAdapter, fileToExport, writer, entityCount);
+        }
+
+        if (category.getLinkToId() != null) {
+
+            final Category link =
+                    this.categoryService.findById(category.getLinkToId());
+
+            final XmlExportTuple tupleLink = new XmlExportTupleImpl(link);
+
+            handleCategory(statusListener, xmlExportDescriptor, (ImpExTuple) tupleLink, xmlValueAdapter, fileToExport, writer, entityCount);
+
         }
 
     }
