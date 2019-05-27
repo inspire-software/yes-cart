@@ -30,7 +30,7 @@ import java.util.Scanner;
 public class RemoveCategoryTreeById {
 
 
-    private void remove(String uri, String user, String pass, String catId, boolean category) throws Exception {
+    private void remove(String uri, String user, String pass, String[] catId, boolean category) throws Exception {
         Connection conn = DriverManager.getConnection(uri, user, pass);
         conn.setAutoCommit(false);
 
@@ -38,12 +38,16 @@ public class RemoveCategoryTreeById {
         String table2 = category ? "TCATEGORYATTRVALUE" : "TCONTENTATTRVALUE";
         String colId = category ? "CATEGORY_ID" : "CONTENT_ID";
 
-        if ("-1".equals(catId)) {
-            System.out.println("Removing orphans entries");
-            this.removeOrphanData(conn, table1, table2, colId);
-        } else {
-            System.out.println("Removing tree, starting with " + catId);
-            this.removeData(conn, table1, table2, colId, catId);
+        if (catId != null && catId.length > 0) {
+            if ("-1".equals(catId[0])) {
+                System.out.println("Removing orphans entries");
+                this.removeOrphanData(conn, table1, table2, colId);
+            } else {
+                for (final String id : catId) {
+                    System.out.println("Removing tree, starting with " + id);
+                    this.removeData(conn, table1, table2, colId, id);
+                }
+            }
         }
         conn.close();
     }
@@ -106,9 +110,9 @@ public class RemoveCategoryTreeById {
         String dbPass = scan.nextLine();
         System.out.print("Is category (Y), content (N) :");
         String category = scan.nextLine();
-        System.out.print("Specify category ID (or '-1' for orphan clean up) :");
+        System.out.print("Specify CSV category IDs (or '-1' for orphan clean up) :");
         String catId = scan.nextLine();
-        (new RemoveCategoryTreeById()).remove(dbConn, dbUser, dbPass, catId, "Y".equalsIgnoreCase(category));
+        (new RemoveCategoryTreeById()).remove(dbConn, dbUser, dbPass, catId.split(","), "Y".equalsIgnoreCase(category));
     }
 
 }
