@@ -28,8 +28,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -89,6 +88,12 @@ public class ContentCms1XmlEntityHandler extends AbstractAttributableXmlEntityHa
 
                 if (StringUtils.isNotBlank(value)) {
                     final int max = value.length() % CHUNK_SIZE > 0 ? value.length() / CHUNK_SIZE + 1 : value.length() / CHUNK_SIZE;
+                    final Set<String> keys = new TreeSet<>();
+                    for (int chunkCount = 0; chunkCount < max; chunkCount++) {
+                        final Integer chunkIndex = chunkCount + 1;
+                        keys.add("CONTENT_BODY_" + lang + "_" + chunkIndex);
+                    }
+                    final List<String> orderedKeys = new ArrayList<>(keys);
                     for (int chunkCount = 0; chunkCount < max; chunkCount++) {
                         final Integer chunkIndex = chunkCount + 1;
                         final int start = chunkCount * CHUNK_SIZE;
@@ -99,7 +104,7 @@ public class ContentCms1XmlEntityHandler extends AbstractAttributableXmlEntityHa
                         } else {
                             final AttrValueCategory avc = this.categoryService.getGenericDao().getEntityFactory().getByIface(AttrValueCategory.class);
                             avc.setCategory(domain);
-                            avc.setAttributeCode("CONTENT_BODY_" + lang + "_" + chunkIndex);
+                            avc.setAttributeCode(orderedKeys.get(chunkCount));
                             avc.setVal(chunkValue);
                             domain.getAttributes().add(avc);
                         }

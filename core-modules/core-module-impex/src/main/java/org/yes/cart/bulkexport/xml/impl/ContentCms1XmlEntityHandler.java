@@ -27,10 +27,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CategoryService;
 
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -120,12 +117,17 @@ public class ContentCms1XmlEntityHandler extends AbstractXmlEntityHandler<Catego
         final Tag body = tag.tag("body");
         final Map<String, AttrValue> attrMap = content.getAllAttributesAsMap();
         for (final String lang : langs) {
-            final StringBuilder fullContent = new StringBuilder();
+            final Map<String, String> sortedMap = new TreeMap<>();
             for (int i = 1; i <= maxChunks; i++) {
-                final AttrValue chunk = attrMap.get(CONTENT_ATTR_PREFIX + lang + '_' + i);
+                final String key = CONTENT_ATTR_PREFIX + lang + '_' + i;
+                final AttrValue chunk = attrMap.get(key);
                 if (chunk != null) {
-                    fullContent.append(chunk.getVal());
+                    sortedMap.put(key, chunk.getVal());
                 }
+            }
+            final StringBuilder fullContent = new StringBuilder();
+            for (final Map.Entry<String, String> entry : sortedMap.entrySet()) {
+                fullContent.append(entry.getValue());
             }
             body.tag("body-content").attr("lang", lang).cdata(fullContent.toString()).end();
 
