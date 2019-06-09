@@ -74,7 +74,7 @@
 
 <yc-modal #featuresModalDialog
           title="{{ selectedRow != null ? selectedRow.id : '' }}"
-          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          disableCancel="true"
           positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
           [valid]="true">
 

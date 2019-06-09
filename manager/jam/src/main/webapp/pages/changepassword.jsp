@@ -25,10 +25,10 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="expires" content="0" />
     <title>YC - pure eCommerce</title>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/yc-main.css" rel="stylesheet"/>
-    <link rel="icon" href="${pageContext.servletContext.contextPath}/resources/assets/favicon.ico" type="image/x-icon">
+    <link href="${pageContext.servletContext.contextPath}/client/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/client/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/client/css/yc-main.css" rel="stylesheet"/>
+    <link rel="icon" href="${pageContext.servletContext.contextPath}/favicon.ico" type="image/x-icon">
 </head>
 <body>
 <div class="container gear-top">
@@ -37,7 +37,7 @@
             <form class="whitebg" name='loginForm' action='<c:url value="/changepassword.jsp"/>' method='POST'>
                 <div class="text-center clearfix">
                     <a href="http://yes-cart.org" target="_blank">
-                        <img border="0" src="${pageContext.servletContext.contextPath}/resources/assets/img/logo-button-100x100.png"/>
+                        <img border="0" src="${pageContext.servletContext.contextPath}/client/assets/img/logo-button-100x100.png"/>
                     </a>
                 </div>
                 <c:if test="${error != null}">
@@ -99,7 +99,7 @@
 
                 <div class="input-group input-sm pull-right">
                     <div class="btn-block">
-                        <a class="btn btn-default" style="margin-right: 3px" href="<c:url value='/resources/index.html'/>">
+                        <a class="btn btn-default" style="margin-right: 3px" href="<c:url value='/client/index.html'/>">
                             <i class="fa fa-chevron-left"></i>
                         </a>
                         <button type="submit"

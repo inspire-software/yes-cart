@@ -15,7 +15,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -46,7 +46,7 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   getGroups(lang:string, mode:string) {
-    return this.http.get(this._serviceBaseUrl + '/impex/' + mode + '/groups/' + lang)
+    return this.http.get(this._serviceBaseUrl + '/impex/' + mode + '/groups/' + lang, Util.requestOptions())
       .map(res => <DataGroupInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -57,9 +57,8 @@ export class ImpexService {
    */
   importFromFile(group:string, fileName:string) {
     let body = fileName;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/impex/import?group=' + encodeURIComponent(group), body, options)
+    return this.http.post(this._serviceBaseUrl + '/impex/import?group=' + encodeURIComponent(group), body,
+          Util.requestOptions({ type:'text/plain; charset=utf-8', accept: 'text/plain' }))
       .map(res => <string> res.text())
       .catch(this.handleError);
   }
@@ -69,7 +68,7 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   getImportStatus(token:string) {
-    return this.http.get(this._serviceBaseUrl + '/impex/import/status?token=' + encodeURIComponent(token))
+    return this.http.get(this._serviceBaseUrl + '/impex/import/status?token=' + encodeURIComponent(token), Util.requestOptions())
       .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
@@ -80,9 +79,8 @@ export class ImpexService {
    */
   exportToFile(group:string, fileName:string) {
     let body = fileName;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/impex/export?group=' + encodeURIComponent(group), body, options)
+    return this.http.post(this._serviceBaseUrl + '/impex/export?group=' + encodeURIComponent(group), body,
+          Util.requestOptions({ type:'text/plain; charset=utf-8', accept: 'text/plain' }))
       .map(res => <string> res.text())
       .catch(this.handleError);
   }
@@ -93,7 +91,7 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   getExportStatus(token:string) {
-    return this.http.get(this._serviceBaseUrl + '/impex/export/status?token=' + encodeURIComponent(token))
+    return this.http.get(this._serviceBaseUrl + '/impex/export/status?token=' + encodeURIComponent(token), Util.requestOptions())
       .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
@@ -105,7 +103,7 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   getFiles(mode:string) {
-    return this.http.get(this._serviceBaseUrl + '/filemanager/list/' + mode)
+    return this.http.get(this._serviceBaseUrl + '/filemanager/list/' + mode, Util.requestOptions())
       .map(res => <Pair<string, string>[]> this.json(res))
       .catch(this.handleError);
   }
@@ -117,11 +115,27 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   removeFile(fileName:string) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/filemanager/delete?fileName=' + encodeURIComponent(fileName), options)
+    return this.http.delete(this._serviceBaseUrl + '/filemanager/delete?fileName=' + encodeURIComponent(fileName), Util.requestOptions())
       .catch(this.handleError);
+  }
+
+  /**
+   * Download file.
+   * @param fileName file
+   * @returns {Observable<R>}
+   */
+  downloadFile(filePath:string) {
+
+    return this.http.get(this._serviceBaseUrl + '/' + filePath,
+        Util.requestOptions({ accept: null }))
+      .map(res => {
+        let data = new Blob([res.arrayBuffer()], { type: res.headers.get('Content-Type')});
+        window.open(URL.createObjectURL(data), '_blank');
+        return true;
+      })
+      .catch(this.handleError);
+
   }
 
 

@@ -1,10 +1,11 @@
-import { Component, OnDestroy, Inject } from '@angular/core';
+import { Component, OnDestroy, Inject, HostListener } from '@angular/core';
 import { Config } from './shared/config/env.config';
 import './operators';
 
-import { ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, UserEventBus, ValidationService, ManagementService, ShopService } from './shared/services/index';
+import { ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, UserEventBus, CommandEventBus, ValidationService } from './shared/services/index';
 import { YcValidators } from './shared/validation/validators';
 import { CookieUtil } from './shared/cookies/index';
+import { Futures, Future } from './shared/event/index';
 import { LogUtil } from './shared/log/index';
 
 import { TranslateService } from '@ngx-translate/core';
@@ -23,28 +24,33 @@ import { TranslateService } from '@ngx-translate/core';
 export class AppComponent implements OnDestroy {
 
   private langSub:any;
+  private userSub:any;
 
   private showNav:boolean = false;
+
+  private userActivity:Future;
+  private userActivityCheckBufferMs:number = Config.AUTH_USERCHECK_BUFFER;
 
   constructor(@Inject(ShopEventBus)          _shopEventBus:ShopEventBus,
               @Inject(ErrorEventBus)         _errorEventBus:ErrorEventBus,
               @Inject(I18nEventBus)          _i18nEventBus:I18nEventBus,
               @Inject(WindowMessageEventBus) _windowMessageEventBus:WindowMessageEventBus,
               @Inject(UserEventBus)          _userEventBus:UserEventBus,
+              @Inject(CommandEventBus)       _commandEventBus:CommandEventBus,
               @Inject(ValidationService)     _validationService:ValidationService,
-              @Inject(ManagementService)     _managementService:ManagementService,
-              @Inject(ShopService)           _shopService:ShopService,
               @Inject(TranslateService)      translate: TranslateService) {
+
     LogUtil.debug('Environment config', Config);
 
     ErrorEventBus.init(_errorEventBus);
+    CommandEventBus.init(_commandEventBus);
     ShopEventBus.init(_shopEventBus);
     I18nEventBus.init(_i18nEventBus);
     WindowMessageEventBus.init(_windowMessageEventBus);
     UserEventBus.init(_userEventBus);
     YcValidators.init(_validationService);
 
-    let cookieLang = CookieUtil.readCookie('YCJAM_UI_LANG', '-');
+    let cookieLang = CookieUtil.readCookie('ADM_UI_LANG', '-');
     let lang = Config.DEFAULT_LANG;
     if (cookieLang != '-' && (new RegExp(Config.SUPPORTED_LANGS, 'gi')).test(cookieLang)) {
       LogUtil.debug('AppComponent language found supported lang cookie', cookieLang);
@@ -71,23 +77,32 @@ export class AppComponent implements OnDestroy {
 
     this.loadUiPreferences();
 
-    let _sub:any = _managementService.getMyUI().subscribe( myui => {
-      LogUtil.debug('Loading ui', myui);
-      _sub.unsubscribe();
-
-      let _sub2:any = _managementService.getMyself().subscribe( myself => {
-        LogUtil.debug('Loading user', myself);
-        UserEventBus.getUserEventBus().emit(myself);
-        _sub2.unsubscribe();
-      });
-
-      let _sub3:any = _shopService.getAllShops().subscribe( allshops => {
-        LogUtil.debug('Loading user shops', allshops);
-        ShopEventBus.getShopEventBus().emitAll(allshops);
-        _sub3.unsubscribe();
-      });
-
-
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      LogUtil.debug('AppComponent user change', user);
+      if (user != null) {
+        if (this.userActivity) {
+          LogUtil.debug('AppComponent user change - old activity tracker exists, assuming token refresh');
+        } else {
+          let jwt = UserEventBus.getUserEventBus().currentJWT();
+          if (jwt) {
+            let sessionTimeoutMs = (jwt.decoded.exp - jwt.decoded.iat) * 1000 - this.userActivityCheckBufferMs;
+            LogUtil.debug('AppComponent user change - new user, started activity tracker', user, jwt, sessionTimeoutMs, this.userActivityCheckBufferMs);
+            this.userActivity = Futures.perpetual(function () {
+              UserEventBus.getUserEventBus().emitActive(false);
+            }, sessionTimeoutMs);
+            this.userActivity.delay(); // start tracker
+          } else {
+            LogUtil.error('AppComponent user change - new user, attempted to start activity tracker, but no JWT', user);
+            if (this.userActivity) {
+              this.userActivity.delay(); // start tracker using previous config as fallback
+            }
+          }
+        }
+      } else if (this.userActivity) {
+        LogUtil.debug('AppComponent user change - no user, assume log out, removing activity tracker');
+        this.userActivity.cancel();
+        this.userActivity = null; // Logged out so we do not need tracker
+      }
     });
 
   }
@@ -109,7 +124,7 @@ export class AppComponent implements OnDestroy {
 
   configureStringPreference(configName:string):void {
     let cfg:any = Config;
-    let cookieName = 'YCJAM_' + configName;
+    let cookieName = 'ADM_' + configName;
     let defaultValue = ''+cfg[configName];
     let value = CookieUtil.readCookie(cookieName, defaultValue);
     if (defaultValue !== value) {
@@ -121,7 +136,7 @@ export class AppComponent implements OnDestroy {
 
   configureIntPreference(configName:string):void {
     let cfg:any = Config;
-    let cookieName = 'YCJAM_' + configName;
+    let cookieName = 'ADM_' + configName;
     let defaultValue = ''+cfg[configName];
     let value = CookieUtil.readCookie(cookieName, defaultValue);
     if (defaultValue !== value) {
@@ -135,6 +150,9 @@ export class AppComponent implements OnDestroy {
     LogUtil.debug('AppComponent ngOnDestroy');
     if (this.langSub) {
       this.langSub.unsubscribe();
+    }
+    if (this.userSub) {
+      this.userSub.unsubscribe();
     }
   }
 
@@ -155,5 +173,15 @@ export class AppComponent implements OnDestroy {
     LogUtil.debug('AppComponent menuExpandRequired', itemIsNowOpen, menuIsOpen, this.showNav);
   }
 
+  @HostListener('window:mousemove') refreshUserState() {
+    if (UserEventBus.getUserEventBus().current() != null) {
+
+      UserEventBus.getUserEventBus().emitActive(true);
+      if (this.userActivity) {
+        this.userActivity.delay();
+      }
+
+    } // else if no user no point in tracking
+  }
 
 }

@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { ContentWithBodyVO, ContentVO, AttrValueContentVO, ContentBodyVO, Pair } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -46,7 +46,7 @@ export class ContentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllShopContent(shopId:number) {
-    return this.http.get(this._serviceBaseUrl + '/shop/' + shopId)
+    return this.http.get(this._serviceBaseUrl + '/shop/' + shopId, Util.requestOptions())
       .map(res => <ContentVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -62,11 +62,11 @@ export class ContentService {
       expand.forEach(node => {
         param += node + '|';
       });
-      return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/?expand=' + encodeURIComponent(param))
+      return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/?expand=' + encodeURIComponent(param), Util.requestOptions())
         .map(res => <ContentVO[]> this.json(res))
         .catch(this.handleError);
     }
-    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/')
+    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/', Util.requestOptions())
       .map(res => <ContentVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -80,7 +80,7 @@ export class ContentService {
     expand.forEach(node => {
       param += node + '|';
     });
-    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branchpaths/?expand=' + encodeURIComponent(param))
+    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branchpaths/?expand=' + encodeURIComponent(param), Util.requestOptions())
       .map(res => <number[]> this.json(res))
       .catch(this.handleError);
   }
@@ -93,10 +93,9 @@ export class ContentService {
   getFilteredContent(shopId:number, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/shop/' + shopId + '/filtered/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/shop/' + shopId + '/filtered/' + max, body,
+          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .map(res => <ContentVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -106,7 +105,7 @@ export class ContentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getContentById(contentId:number) {
-    return this.http.get(this._serviceBaseUrl + '/' + contentId)
+    return this.http.get(this._serviceBaseUrl + '/' + contentId, Util.requestOptions())
       .map(res => <ContentWithBodyVO> this.json(res))
       .catch(this.handleError);
   }
@@ -120,15 +119,13 @@ export class ContentService {
   saveContent(content:ContentVO) {
 
     let body = JSON.stringify(content);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (content.contentId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/', body, options)
+      return this.http.post(this._serviceBaseUrl + '/', body, Util.requestOptions())
         .map(res => <ContentWithBodyVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/', body, options)
+      return this.http.put(this._serviceBaseUrl + '/', body, Util.requestOptions())
         .map(res => <ContentWithBodyVO> this.json(res))
         .catch(this.handleError);
     }
@@ -142,10 +139,8 @@ export class ContentService {
    * @returns {Observable<R>}
    */
   removeContent(content:ContentVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/' + content.contentId, options)
+    return this.http.delete(this._serviceBaseUrl + '/' + content.contentId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -156,7 +151,7 @@ export class ContentService {
    * @returns {Observable<R>}
    */
   getContentAttributes(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/attributes/' + id)
+    return this.http.get(this._serviceBaseUrl + '/attributes/' + id, Util.requestOptions())
       .map(res => <AttrValueContentVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -169,9 +164,7 @@ export class ContentService {
    */
   saveContentAttributes(attrs:Array<Pair<AttrValueContentVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/attributes', body, options)
+    return this.http.post(this._serviceBaseUrl + '/attributes', body, Util.requestOptions())
       .map(res => <AttrValueContentVO[]> this.json(res))
       .catch(this.handleError);
   }

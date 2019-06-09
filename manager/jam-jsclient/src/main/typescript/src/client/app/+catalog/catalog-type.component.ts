@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { CatalogService } from './../shared/services/index';
+import { CatalogService, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
@@ -93,7 +93,9 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('CatalogTypeComponent refresh handler');
-    this.getFilteredTypes();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getFilteredTypes();
+    }
   }
 
   protected onTypeSelected(data:ProductTypeInfoVO) {

@@ -26,6 +26,7 @@
       <div class="modal-footer">
         <button type="button"
                 class="btn btn-default btn-sm"
+                [hidden]="disableCancel"
                 (click)="cancelAction()">
           {{cancelLabel}}
         </button>

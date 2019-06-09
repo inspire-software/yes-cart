@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ShopEventBus, FulfilmentService, Util } from './../shared/services/index';
+import { ShopEventBus, FulfilmentService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { FulfilmentCentreVO, ShopVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
@@ -84,7 +84,9 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('FulfilmentComponent refresh handler');
-    this.getAllCentres();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getAllCentres();
+    }
   }
 
   protected onCentreSelected(data:FulfilmentCentreVO) {

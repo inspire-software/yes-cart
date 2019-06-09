@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { I18nEventBus, ShopEventBus, ShippingService, FulfilmentService, PaymentService, Util } from './../shared/services/index';
+import { I18nEventBus, ShopEventBus, ShippingService, FulfilmentService, PaymentService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { CarrierVO, CarrierSlaVO, ShopVO, PaymentGatewayInfoVO, FulfilmentCentreVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
@@ -103,12 +103,14 @@ export class ShippingComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('ShippingComponent refresh handler');
-    if (this.viewMode === ShippingComponent.CARRIERS ||
-        this.viewMode === ShippingComponent.CARRIER ||
-        this.selectedCarrier == null) {
-      this.getAllCarriers();
-    } else {
-      this.getAllSlas();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      if (this.viewMode === ShippingComponent.CARRIERS ||
+          this.viewMode === ShippingComponent.CARRIER ||
+          this.selectedCarrier == null) {
+        this.getAllCarriers();
+      } else {
+        this.getAllSlas();
+      }
     }
   }
 

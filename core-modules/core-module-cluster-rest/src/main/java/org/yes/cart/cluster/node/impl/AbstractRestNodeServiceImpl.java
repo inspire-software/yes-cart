@@ -45,7 +45,7 @@ public abstract class AbstractRestNodeServiceImpl implements NodeService, Servle
     protected Logger log;
 
     private final Map<String, String> configuration = new HashMap<>();
-    private Node node = new NodeImpl(true, "-", null, "DEFAULT", "YCCLUSTER", "N/A", "", true);
+    private Node node = new NodeImpl(true, "ND0", null, "DEFAULT", "CL0", "N/A", "", true);
     private final List<Node> cluster = new CopyOnWriteArrayList<>();
     private final List<Node> blacklisted = new CopyOnWriteArrayList<>();
 

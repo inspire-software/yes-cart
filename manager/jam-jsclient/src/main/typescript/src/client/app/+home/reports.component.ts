@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReportDescriptorVO, ReportRequestVO, ReportRequestParameterVO, Pair } from './../shared/model/index';
-import { ReportsService, I18nEventBus } from './../shared/services/index';
+import { ReportsService, I18nEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { LogUtil } from './../shared/log/index';
 import { Config } from './../shared/config/env.config';
@@ -202,7 +202,9 @@ export class ReportsComponent implements OnInit {
 
   protected onRefreshHandler() {
     LogUtil.debug('ReportsComponent refresh handler');
-    this.getReportInfo();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getReportInfo();
+    }
   }
 
   /**

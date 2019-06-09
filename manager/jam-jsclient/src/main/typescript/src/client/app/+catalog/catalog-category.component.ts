@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { CatalogService, Util } from './../shared/services/index';
+import { CatalogService, UserEventBus, Util } from './../shared/services/index';
 import { CategoryMinSelectComponent } from './../shared/catalog/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { CategoryVO, AttrValueCategoryVO, Pair } from './../shared/model/index';
@@ -107,7 +107,9 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('CatalogCategoryComponent refresh handler');
-    this.getFilteredCategories();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getFilteredCategories();
+    }
   }
 
   protected onCategorySelected(data:CategoryVO) {

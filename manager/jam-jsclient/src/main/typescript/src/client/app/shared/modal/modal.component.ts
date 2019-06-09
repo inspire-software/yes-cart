@@ -17,14 +17,6 @@ import { Component,  Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { LogUtil } from './../log/index';
 
 /**
- *
- *
- *
- * Warning this is ^C^V from https://github.com/valor-software/ng2-bootstrap/issues/29
- * TODO replace with original implementation when in will be ready for usage
- *
- *
- *
  * Shows a bootstrap modal dialog.
  * Set the body of the dialog by adding content to the modal tag: <yc-modal>content here</yc-modal>.
  */
@@ -37,6 +29,7 @@ export class ModalComponent implements OnInit {
 
   @Input() title: string;
   @Input() cancelLabel: string = 'Cancel';
+  @Input() disableCancel: boolean = false;
   @Input() positiveLabel: string = 'OK';
   @Input() valid: boolean = false;
 
@@ -72,20 +65,21 @@ export class ModalComponent implements OnInit {
 
   positiveAction() {
     if (this.valid) {
-      this.showModal = false;
+      LogUtil.debug('ModalComponent sending positive event');
       this.closed.next({
         action: ModalAction.POSITIVE
       });
+      this.showModal = false;
     }
     return false;
   }
 
   cancelAction() {
     LogUtil.debug('ModalComponent sending close event');
-    this.showModal = false;
     this.closed.next({
       action: ModalAction.CANCEL
     });
+    this.showModal = false;
     return false;
   }
 }

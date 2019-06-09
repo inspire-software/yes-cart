@@ -110,7 +110,7 @@ export class WidgetUiSettingsComponent {
   set uiLang(lang:string) {
     if (['uk','ru','en','de'].indexOf(lang) !== -1) {
       I18nEventBus.getI18nEventBus().emit(lang);
-      CookieUtil.createCookie('YCJAM_UI_LANG', lang, 360);
+      CookieUtil.createCookie('ADM_UI_LANG', lang, 360);
     }
   }
 
@@ -122,7 +122,7 @@ export class WidgetUiSettingsComponent {
   set uiSetting(value:number) {
     let cfg:any = Config;
     cfg[this.uiSettingProperty] = value;
-    let cookieName = 'YCJAM_' + this.uiSettingProperty;
+    let cookieName = 'ADM_' + this.uiSettingProperty;
     CookieUtil.createCookie(cookieName, ''+value, 360);
   }
 

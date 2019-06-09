@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
-import { PaymentService, I18nEventBus } from './../../shared/services/index';
+import { PaymentService, I18nEventBus, UserEventBus } from './../../shared/services/index';
 import { ParameterValuesComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { PaymentGatewayVO, PaymentGatewayParameterVO, Pair } from './../../shared/model/index';
@@ -193,7 +193,9 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
   protected onRefreshHandler() {
     LogUtil.debug('PaymentGatewaysComponent refresh handler');
     this.changeIncludeSecure = this.includeSecure;
-    this.getAllPgs();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getAllPgs();
+    }
   }
 
   protected onRowListSelected() {

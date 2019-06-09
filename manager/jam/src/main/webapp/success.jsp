@@ -18,10 +18,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>YC - pure eCommerce</title>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/yc-main.css" rel="stylesheet"/>
-    <link rel="icon" href="${pageContext.servletContext.contextPath}/resources/assets/favicon.ico" type="image/x-icon">
+    <link href="${pageContext.servletContext.contextPath}/client/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/client/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/client/css/cl-main.css" rel="stylesheet"/>
+    <link rel="icon" href="${pageContext.servletContext.contextPath}/favicon.ico" type="image/x-icon">
     <script>
         window.opener.postMessage("ok", '*');
     </script>

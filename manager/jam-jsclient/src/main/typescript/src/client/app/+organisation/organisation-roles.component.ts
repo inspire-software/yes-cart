@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { OrganisationService, Util } from './../shared/services/index';
+import { OrganisationService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { RoleVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
@@ -69,7 +69,9 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('OrganisationRoleComponent refresh handler');
-    this.getAllRoles();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getAllRoles();
+    }
   }
 
   protected onRoleSelected(data:RoleVO) {

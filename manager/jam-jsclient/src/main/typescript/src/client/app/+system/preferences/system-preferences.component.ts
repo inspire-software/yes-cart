@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
 import { AttrValueSystemVO, Pair } from './../../shared/model/index';
-import { SystemService } from './../../shared/services/index';
+import { SystemService, UserEventBus } from './../../shared/services/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
 import { LogUtil } from './../../shared/log/index';
 
@@ -134,7 +134,9 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
   protected onRefreshHandler() {
     LogUtil.debug('ShopAttributeComponent refresh handler');
     this.changeIncludeSecure = this.includeSecure;
-    this.getSystemPreferences();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getSystemPreferences();
+    }
   }
 
   protected onClearFilter() {

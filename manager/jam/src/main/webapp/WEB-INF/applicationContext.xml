@@ -41,53 +41,71 @@
     <property name="suffix" value=".jsp" />
   </bean>
 
-  <bean id="securityExceptionTranslationHandler" class="org.yes.cart.security.impl.ExceptionMappingAuthenticationFailureHandler">
-    <property name="exceptionMappings">
-      <map>
-        <entry key="org.springframework.security.authentication.CredentialsExpiredException">
-          <bean class="org.yes.cart.security.impl.CredentialsExpiredExceptionHandler">
-            <property name="useForward" value="true"/>
-            <property name="defaultFailureUrl" value="/pages/changepassword.jsp"/>
-          </bean>
-        </entry>
-      </map>
-    </property>
-    <property name="useForward" value="false"/>
-    <property name="defaultFailureUrl" value="/login.jsp?error"/>
+  <!--<bean id="securityExceptionTranslationHandler" class="org.yes.cart.security.impl.ExceptionMappingAuthenticationFailureHandler">-->
+    <!--<property name="exceptionMappings">-->
+      <!--<map>-->
+        <!--<entry key="org.springframework.security.authentication.CredentialsExpiredException">-->
+          <!--<bean class="org.yes.cart.security.impl.CredentialsExpiredExceptionHandler">-->
+            <!--<property name="useForward" value="true"/>-->
+            <!--<property name="defaultFailureUrl" value="/pages/changepassword.jsp"/>-->
+          <!--</bean>-->
+        <!--</entry>-->
+      <!--</map>-->
+    <!--</property>-->
+    <!--<property name="useForward" value="false"/>-->
+    <!--<property name="defaultFailureUrl" value="/login.jsp?error"/>-->
+  <!--</bean>-->
+
+  <bean id="jwtAuthorisationFilter" class="org.yes.cart.security.impl.JWTAuthorisationFilter">
+    <property name="systemService" ref="systemService"/>
+    <property name="secretKey" value="MANAGER_JWT_SECRET"/>
+    <property name="expiryKey" value="MANAGER_JWT_EXPIRY_MIN"/>
   </bean>
 
-  <security:http auto-config="true" use-expressions="true">
+  <bean id="jwtAuthenticationFilter" class="org.yes.cart.security.impl.JWTAuthenticationFilter">
+    <property name="authenticationManager" ref="authenticationManager"/>
+    <property name="systemService" ref="systemService"/>
+    <property name="secretKey" value="MANAGER_JWT_SECRET"/>
+    <property name="expiryKey" value="MANAGER_JWT_EXPIRY_MIN"/>
+  </bean>
+
+  <bean id="changePasswordFilter" class="org.yes.cart.security.impl.ChangePasswordFilter">
+    <property name="authenticationManager" ref="authenticationManager"/>
+    <property name="managementService" ref="userManagementService"/>
+  </bean>
+
+  <bean id="restAwareExceptionTranslationFilter" class="org.yes.cart.security.impl.RestAwareExceptionTranslationFilter">
+      <constructor-arg value="/client/index.html"/>
+  </bean>
+
+  <security:http auto-config="true" use-expressions="true" create-session="stateless">
 
     <security:csrf disabled="true"/>
-
     <security:anonymous enabled="false"/>
 
-    <security:intercept-url pattern="/pages/**" access="isFullyAuthenticated()" />
+    <security:custom-filter ref="changePasswordFilter" before="FIRST"/>
+    <security:custom-filter ref="jwtAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
+    <security:custom-filter ref="jwtAuthorisationFilter" after="FORM_LOGIN_FILTER"/>
+    <security:custom-filter ref="restAwareExceptionTranslationFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
 
-    <security:intercept-url pattern="/resources/index.html" access="isFullyAuthenticated()" />
+    <security:http-basic />
+    <!--<security:form-login-->
+      <!--login-page="/login.jsp"-->
+      <!--default-target-url="/pages/index.jsp"-->
+      <!--always-use-default-target="true"-->
+      <!--authentication-failure-url="/login.jsp?error"-->
+      <!--authentication-failure-handler-ref="securityExceptionTranslationHandler"-->
+      <!--username-parameter="j_username"-->
+      <!--password-parameter="j_password"-->
+      <!--login-processing-url="/logincheck.jsp"/>-->
 
-    <security:intercept-url pattern="/resources/components/**" access="isFullyAuthenticated()" />
-
-    <!--<security:http-basic />-->
-    <security:form-login
-      login-page="/login.jsp"
-      default-target-url="/pages/index.jsp"
-      always-use-default-target="true"
-      authentication-failure-url="/login.jsp?error"
-      authentication-failure-handler-ref="securityExceptionTranslationHandler"
-      username-parameter="j_username"
-      password-parameter="j_password"
-      login-processing-url="/logincheck.jsp"/>
-
-    <security:logout
-      logout-url="/logout.jsp"
-      logout-success-url="/login.jsp?logout"
-      delete-cookies="JSESSIONID"
-      invalidate-session="true"/>
+    <!--<security:logout-->
+      <!--logout-url="/logout.jsp"-->
+      <!--logout-success-url="/login.jsp?logout"-->
+      <!--delete-cookies="JSESSIONID"-->
+      <!--invalidate-session="true"/>-->
+    
   </security:http>
-
-  <!--<bean id="entryPoint"
-        class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>-->
 
   <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
 

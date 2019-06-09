@@ -110,12 +110,12 @@ accept-language=en-us
 connection=keep-alive
 content-length=330
 content-type=application/x-www-form-urlencoded
-cookie=__utma=1.1924053283.1490046699.1499094199.1499097115.6; __utmz=1.1490046699.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); yc=b69194bd-87b4-4cbc-afe4-8090b2c4325b; yccookiepolicy=accepted; YCJAM_UI_TABLE_PAGE_SIZE=25
+cookie=__utma=1.1924053283.1490046699.1499094199.1499097115.6; __utmz=1.1490046699.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); yc=b69194bd-87b4-4cbc-afe4-8090b2c4325b; yccookiepolicy=accepted; ADM_UI_TABLE_PAGE_SIZE=25
 host=localhost:8080
 origin=file://
 user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.73.11 (KHTML, like Gecko) Version/7.0.1 Safari/537.73.11
 
-CookiesYCJAM_UI_TABLE_PAGE_SIZE=25
+CookiesADM_UI_TABLE_PAGE_SIZE=25
 __utma=1.1924053283.1490046699.1499094199.1499097115.6
 __utmz=1.1490046699.1.1.utmcsr
 yc=b69194bd-87b4-4cbc-afe4-8090b2c4325b

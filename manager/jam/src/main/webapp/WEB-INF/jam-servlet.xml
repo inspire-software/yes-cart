@@ -76,10 +76,8 @@
 
     <bean id="localeResolver"
           class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-        <property name="cookieName" value="YCJAM_UI_LANG"/>
+        <property name="cookieName" value="ADM_UI_LANG"/>
     </bean>
-
-    <mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" />
 
     <bean id="voObjectMapper" class="org.yes.cart.remote.service.misc.VoObjectMapper"/>
 

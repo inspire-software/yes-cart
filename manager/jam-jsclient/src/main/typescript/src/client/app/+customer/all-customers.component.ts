@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CustomerService, ShopEventBus } from './../shared/services/index';
+import { CustomerService, ShopEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ShopVO, CustomerInfoVO, CustomerVO, AttrValueCustomerVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
@@ -128,7 +128,9 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('AllCustomersComponent refresh handler');
-    this.getFilteredCustomers();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getFilteredCustomers();
+    }
   }
 
   protected onCustomerSelected(data:CustomerInfoVO) {

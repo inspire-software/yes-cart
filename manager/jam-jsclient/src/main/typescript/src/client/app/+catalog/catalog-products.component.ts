@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { PIMService, Util } from './../shared/services/index';
+import { PIMService, UserEventBus, Util } from './../shared/services/index';
 import { UiUtil } from './../shared/ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ProductVO, ProductWithLinksVO, ProductSkuVO, AttrValueProductVO, AttrValueProductSkuVO, Pair } from './../shared/model/index';
@@ -144,12 +144,14 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('CatalogProductsComponent refresh handler');
-    if (this.viewMode === CatalogProductsComponent.PRODUCTS ||
-        this.viewMode === CatalogProductsComponent.PRODUCT ||
-        this.selectedProduct == null) {
-      this.getFilteredProducts();
-    } else {
-      this.getProductSkus();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      if (this.viewMode === CatalogProductsComponent.PRODUCTS ||
+          this.viewMode === CatalogProductsComponent.PRODUCT ||
+          this.selectedProduct == null) {
+        this.getFilteredProducts();
+      } else {
+        this.getProductSkus();
+      }
     }
   }
 

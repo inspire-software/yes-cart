@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { CustomerOrderService, I18nEventBus, ErrorEventBus } from './../shared/services/index';
+import { CustomerOrderService, I18nEventBus, ErrorEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, Pair } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
@@ -153,7 +153,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   set showGrossTotal(showGrossTotal:boolean) {
     Config.UI_ORDER_TOTALS = showGrossTotal ? 'gross' : 'net';
-    let cookieName = 'YCJAM_UI_ORDER_TOTALS';
+    let cookieName = 'ADM_UI_ORDER_TOTALS';
     CookieUtil.createCookie(cookieName, Config.UI_ORDER_TOTALS, 360);
   }
 
@@ -175,10 +175,12 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('AllCustomerOrdersComponent refresh handler');
-    if (this.customerorderEdit != null) {
-      this.onRowEditCustomerorder(this.customerorderEdit);
-    } else {
-      this.getFilteredCustomerorders();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      if (this.customerorderEdit != null) {
+        this.onRowEditCustomerorder(this.customerorderEdit);
+      } else {
+        this.getFilteredCustomerorders();
+      }
     }
   }
 

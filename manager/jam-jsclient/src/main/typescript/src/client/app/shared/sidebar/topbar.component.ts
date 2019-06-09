@@ -15,7 +15,7 @@
  */
 import { Component,  OnInit, OnDestroy } from '@angular/core';
 import { UserVO, DashboardWidgetVO } from '../model/index';
-import { I18nEventBus, UserEventBus, SystemService, ReportsService } from '../services/index';
+import { I18nEventBus, UserEventBus, CommandEventBus, SystemService, ReportsService } from '../services/index';
 import { Futures, Future } from '../event/index';
 import { LogUtil } from '../log/index';
 import { Config } from '../index';
@@ -28,16 +28,18 @@ import { Config } from '../index';
 
 export class TopbarComponent implements OnInit, OnDestroy {
 
+  private currentUser:UserVO = null;
   private currentUserName : string;
   private currentUserEmail : string;
   private menuType : string;
   private envLabel : string;
 
   private userSub:any;
+  private alertSub:any;
 
   private evictingCache:boolean = false;
   private hasAlerts:boolean = false;
-  private continuePolling:boolean = true;
+  private continuePolling:boolean = false;
 
   private delayedAlerts:Future;
   private delayedAlertsMs:number = Config.UI_ALERTCHECK_DELAY;
@@ -49,34 +51,40 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('TopbarComponent ngOnInit');
-    if (UserEventBus.getUserEventBus().current() != null) {
-      this.configureUser(UserEventBus.getUserEventBus().current());
-    }
-    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
-      this.configureUser(user);
-    });
+
     let that = this;
     this.delayedAlerts = Futures.perpetual(function() {
       if (that.continuePolling) {
         that.checkAlerts();
-        that.continuePolling = false; // disable polling
+        that.continuePolling = false; // disable polling until we get activity notification
       }
+      that.delayedAlerts.delay();
     }, this.delayedAlertsMs);
-    this.delayedAlerts.delay(3000);
-    let _pollingRefresh = function() {
-      if (!that.continuePolling) {
-        that.continuePolling = true; // enable polling if user interaction detected
-        LogUtil.debug('TopbarComponent user interaction detected, continue polling');
+
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.configureUser(UserEventBus.getUserEventBus().current());
+    }
+
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      this.configureUser(user);
+    });
+
+    this.alertSub = UserEventBus.getUserEventBus().activeUpdated$.subscribe(active => {
+      if (active && !that.continuePolling) {
+        that.continuePolling = (that.currentUser != null); // enable polling if user interaction detected
+        if (that.continuePolling) {
+          LogUtil.debug('TopbarComponent user interaction detected, continue polling');
+        }
       }
-    };
-    document.addEventListener('mousemove', _pollingRefresh);
+    });
+
   }
 
   protected configureUser(user:any) {
-    let currentUser:UserVO = user;
-    this.currentUserName = currentUser != null ? currentUser.name : 'anonymous';
-    this.currentUserEmail = currentUser != null && currentUser.manager != null ? currentUser.manager.email : 'anonymous';
-    this.menuType = currentUser != null ? currentUser.ui : {
+    this.currentUser = user;
+    this.currentUserName = this.currentUser != null ? this.currentUser.name : 'anonymous';
+    this.currentUserEmail = this.currentUser != null && this.currentUser.manager != null ? this.currentUser.manager.email : 'anonymous';
+    this.menuType = this.currentUser != null ? this.currentUser.ui : {
       'CCC': false,
       'PIM': false,
       'CMS': false,
@@ -89,12 +97,22 @@ export class TopbarComponent implements OnInit, OnDestroy {
       'SYS': false
     };
     this.envLabel = Config.UI_LABEL;
+
+    if (this.currentUser != null) {
+      this.delayedAlerts.delay();
+    } else {
+      this.delayedAlerts.cancel();
+    }
+
   }
 
   ngOnDestroy() {
     LogUtil.debug('TopbarComponent ngOnDestroy');
     if (this.userSub) {
       this.userSub.unsubscribe();
+    }
+    if (this.alertSub) {
+      this.alertSub.unsubscribe();
     }
   }
 
@@ -106,6 +124,16 @@ export class TopbarComponent implements OnInit, OnDestroy {
       this.evictingCache = false;
       _sub.unsubscribe();
     });
+  }
+
+  onChangePassword() {
+    LogUtil.debug('TopbarComponent onChangePassword');
+    CommandEventBus.getCommandEventBus().emit('changepassword');
+  }
+
+  onLogOutClick() {
+    LogUtil.debug('TopbarComponent onLogOutClick');
+    CommandEventBus.getCommandEventBus().emit('logout');
   }
 
   checkAlerts() {
@@ -122,8 +150,6 @@ export class TopbarComponent implements OnInit, OnDestroy {
       LogUtil.debug('TopbarComponent widgets', this.hasAlerts);
 
       _sub.unsubscribe();
-
-      this.delayedAlerts.delay();
 
     });
   }

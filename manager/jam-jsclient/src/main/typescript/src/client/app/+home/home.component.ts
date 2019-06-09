@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DashboardWidgetVO, DashboardWidgetInfoVO } from '../shared/model/index';
-import { ReportsService, I18nEventBus } from '../shared/services/index';
+import { ReportsService, I18nEventBus, UserEventBus } from '../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from '../shared/modal/index';
 import { LogUtil } from './../shared/log/index';
 
@@ -217,10 +217,18 @@ export class HomeComponent implements OnInit {
 
   onRefreshHandler() {
 
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getWidgets();
+    }
+
+  }
+
+  private getWidgets() {
+
     this.loading = true;
 
     let lang = I18nEventBus.getI18nEventBus().current();
-    let _sub:any = this._dashboardService.getDashboard(lang).subscribe((widgets:DashboardWidgetVO[]) => {
+    let _sub: any = this._dashboardService.getDashboard(lang).subscribe((widgets: DashboardWidgetVO[]) => {
 
       LogUtil.debug('HomeComponent getDashboard', widgets);
 
@@ -239,4 +247,5 @@ export class HomeComponent implements OnInit {
     });
 
   }
+
 }

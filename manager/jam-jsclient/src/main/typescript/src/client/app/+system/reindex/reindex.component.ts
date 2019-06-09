@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ShopVO, JobStatusVO } from './../../shared/model/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
-import { SystemService } from './../../shared/services/index';
+import { SystemService, UserEventBus } from './../../shared/services/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -195,20 +195,22 @@ export class ReindexComponent implements OnInit, OnDestroy {
 
   protected getStatusUpdate() {
     LogUtil.debug('ReindexComponent getStatusUpdate before', this.jobStatus);
-    if (!this.jobCompleted && this.jobStatus != null) {
-      this.jobRunning = true;
-      let _sub:any = this._systemService.getIndexJobStatus(this.jobStatus.token).subscribe(status => {
-        LogUtil.debug('ReindexComponent getStatusUpdate after', status);
-        this.jobStatus = status;
-        this.lastReport = this.jobStatus.report;
-        this.jobCompleted = this.jobStatus.completion != null;
-        if (!this.jobCompleted && this.jobStatus != null) {
-          this.delayedUpdate.delay();
-        } else {
-          this.jobRunning = false;
-        }
-        _sub.unsubscribe();
-      });
+    if (UserEventBus.getUserEventBus().current() != null) {
+      if (!this.jobCompleted && this.jobStatus != null) {
+        this.jobRunning = true;
+        let _sub: any = this._systemService.getIndexJobStatus(this.jobStatus.token).subscribe(status => {
+          LogUtil.debug('ReindexComponent getStatusUpdate after', status);
+          this.jobStatus = status;
+          this.lastReport = this.jobStatus.report;
+          this.jobCompleted = this.jobStatus.completion != null;
+          if (!this.jobCompleted && this.jobStatus != null) {
+            this.delayedUpdate.delay();
+          } else {
+            this.jobRunning = false;
+          }
+          _sub.unsubscribe();
+        });
+      }
     }
   }
 

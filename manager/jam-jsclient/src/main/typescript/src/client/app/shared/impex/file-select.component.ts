@@ -15,7 +15,7 @@
  */
 import { Component,  OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Pair } from './../model/index';
-import { ImpexService, WindowMessageEventBus } from './../services/index';
+import { ImpexService, UserEventBus, WindowMessageEventBus } from './../services/index';
 import { Futures, Future } from './../event/index';
 import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
@@ -82,7 +82,7 @@ export class FileSelectComponent implements OnInit, OnDestroy {
 
     let that = this;
 
-    let myWindow = window.open(Config.CONTEXT_PATH + '/resources/assets/uploader/uploader.html', 'UPLOAD', 'width=300,height=100');
+    let myWindow = window.open(Config.CONTEXT_PATH + '/client/assets/uploader/uploader.html', 'UPLOAD', 'width=300,height=100');
     myWindow.onbeforeunload = function() {
       that.onRefresh();
     };
@@ -106,9 +106,11 @@ export class FileSelectComponent implements OnInit, OnDestroy {
   }
 
   protected onRefresh() {
-    this.dataSelected.emit(null);
-    this.getAllFiles();
-    this.reloadFileList();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.dataSelected.emit(null);
+      this.getAllFiles();
+      this.reloadFileList();
+    }
   }
 
   protected onDeleteClick(file:Pair<string,string>) {

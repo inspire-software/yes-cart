@@ -66,9 +66,11 @@ export class CarriersComponent implements OnInit, OnDestroy {
 
   @Input()
   set shops(shops:Array<ShopVO>) {
-    shops.forEach(shop => {
-      this._shops['S' + shop.shopId] = shop;
-    });
+    if (shops != null) {
+      shops.forEach(shop => {
+        this._shops['S' + shop.shopId] = shop;
+      });
+    }
     LogUtil.debug('CarrierComponent mapped shops', this._shops);
   }
 

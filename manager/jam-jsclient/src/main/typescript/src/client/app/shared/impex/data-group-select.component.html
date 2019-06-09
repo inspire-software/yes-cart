@@ -1,14 +1,21 @@
 <ul class="nav nav-second-level item-list-control">
 
   <li>
-    <form>
-      <div class="input-group">
-        <input class="form-control filter-input" type="text" name="groupFilter" [(ngModel)]="groupFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
-        <span class="input-group-btn">
-          <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
-            <i class="fa fa-times-circle-o"></i>
-          </button>
-        </span>
+    <form class="row">
+      <div class="col-xs-10">
+        <div class="input-group">
+          <input class="form-control filter-input" type="text" name="groupFilter" [(ngModel)]="groupFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-circle filter-btn" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+              <i class="fa fa-times-circle-o"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+      <div class="col-xs-2">
+        <button type="button" (click)="onRefresh()"  class="btn btn-info btn-circle pull-right" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
+          <i class="fa fa-refresh"></i>
+        </button>
       </div>
     </form>
   </li>

@@ -16,10 +16,11 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { UserVO, ManagerVO, ManagerInfoVO, LicenseAgreementVO } from '../model/index';
+import { UserVO, ManagerVO, ManagerInfoVO, LicenseAgreementVO, JWT, JWTAuth } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
+import { UserEventBus } from './user-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
 import { Observable }     from 'rxjs/Observable';
@@ -32,6 +33,7 @@ import 'rxjs/Rx';
 export class ManagementService {
 
   private _serviceBaseUrl = Config.API + 'service/management';  // URL to web api
+  private _authBaseUrl = Config.API + 'service';  // URL to web api
 
   /**
    * Construct management service, which has methods to work with information related to shop(s).
@@ -42,11 +44,177 @@ export class ManagementService {
   }
 
   /**
+   * Login endpoint
+   * @param {string} user
+   * @param {string} password
+   * @param {string} organisation
+   * @return {Observable<any | any>}
+   */
+  attemptResume() {
+
+    return this.http.post(this._authBaseUrl + '/authenticate', {},
+      Util.requestOptions({ includeAuth:false }))
+      .map(res => {
+        let jwt = <JWT> this.json(res);
+
+        let decodedJWT = this.decodeJwt(jwt);
+
+        let fullJwt:JWTAuth = {
+          jwt: jwt.token,
+          decoded: decodedJWT,
+          status: 200
+        };
+
+        LogUtil.debug('resume JWT', fullJwt);
+
+        UserEventBus.getUserEventBus().emitJWT(fullJwt);
+
+        return fullJwt;
+      })
+      .catch(error => {
+
+        LogUtil.debug('resume JWT catch', error);
+        let message = Util.determineErrorMessage(error);
+
+        let fullJwt:JWTAuth = {
+          status: message.code,
+          message: message.message
+        };
+
+        return Observable.empty().startWith(fullJwt);
+
+      });
+  }
+
+
+  /**
+   * Login endpoint
+   * @param {string} user
+   * @param {string} password
+   * @param {string} organisation
+   * @return {Observable<any | any>}
+   */
+  login(user:string, password:string, organisation:string = null) {
+
+    let body = {
+      username: user,
+      password: password,
+      organisation: organisation
+    };
+
+    return this.http.post(this._authBaseUrl + '/authenticate', body,
+          Util.requestOptions({ includeAuth:false }))
+      .map(res => {
+        let jwt = <JWT> this.json(res);
+
+        let decodedJWT = this.decodeJwt(jwt);
+
+        let fullJwt:JWTAuth = {
+          jwt: jwt.token,
+          decoded: decodedJWT,
+          status: 200
+        };
+
+        LogUtil.debug('login JWT', fullJwt);
+
+        UserEventBus.getUserEventBus().emitJWT(fullJwt);
+
+        return fullJwt;
+      })
+      .catch(error => {
+
+        LogUtil.debug('login JWT catch', error);
+        let message = Util.determineErrorMessage(error);
+
+        let fullJwt:JWTAuth = {
+          status: message.code,
+          message: message.message
+        };
+
+        UserEventBus.getUserEventBus().emitJWT(fullJwt);
+
+        return Observable.throw(message.message || 'Server error');
+
+      });
+  }
+
+  /**
+   * Login endpoint
+   * @param {string} user
+   * @param {string} password
+   * @param {string} npassword
+   * @param {string} cpassword
+   * @param {string} organisation
+   * @return {Observable<any | any>}
+   */
+  changePassword(user:string, password:string, npassword:string, cpassword:string, organisation:string = null) {
+
+    let body = {
+      username: user,
+      password: password,
+      npassword: npassword,
+      cpassword: cpassword,
+      organisation: organisation
+    };
+
+    return this.http.post(this._authBaseUrl + '/changepwd', body,
+          Util.requestOptions({ includeAuth:false }))
+      .map(res => {
+
+        LogUtil.debug('changepwd', res);
+
+        return this.json(res);
+      })
+      .catch(this.handleError);
+  }
+
+  /**
+   * Login endpoint
+   * @return {Observable<any | any>}
+   */
+  refreshToken() {
+    return this.http.post(this._authBaseUrl + '/refreshtoken', null, Util.requestOptions())
+      .map(res => {
+        let jwt = <JWT> this.json(res);
+
+        let decodedJWT = this.decodeJwt(jwt);
+
+        let fullJwt:JWTAuth = {
+          jwt: jwt.token,
+          decoded: decodedJWT,
+          status: 200
+        };
+
+        LogUtil.debug('refreshToken JWT', fullJwt);
+
+        UserEventBus.getUserEventBus().emitJWT(fullJwt);
+
+        return fullJwt;
+      })
+      .catch(error => {
+
+        LogUtil.debug('refreshToken JWT catch', error);
+        let message = Util.determineErrorMessage(error);
+
+        let fullJwt:JWTAuth = {
+          status: message.code,
+          message: message.message
+        };
+
+        UserEventBus.getUserEventBus().emitJWT(fullJwt);
+
+        return Observable.throw(message.message || 'Server error');
+
+      });
+  }
+
+  /**
    * Get current user info,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getMyself() {
-    return this.http.get(this._serviceBaseUrl + '/myself')
+
+    return this.http.get(this._serviceBaseUrl + '/myself', Util.requestOptions())
       .map(res => {
         let manager = <ManagerVO> this.json(res);
         let name = this.getUserName(manager);
@@ -162,7 +330,7 @@ export class ManagementService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getMyUI() {
-    return this.http.get(this._serviceBaseUrl + '/myui')
+    return this.http.get(this._serviceBaseUrl + '/myui', Util.requestOptions())
       .map(res => {
         let vals = <any> this.json(res);
         if (vals.hasOwnProperty('SYSTEM_PANEL_HELP_DOCS')) {
@@ -200,7 +368,7 @@ export class ManagementService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getMyAgreement() {
-    return this.http.get(this._serviceBaseUrl + '/license')
+    return this.http.get(this._serviceBaseUrl + '/license', Util.requestOptions())
       .map(res => <LicenseAgreementVO> this.json(res))
       .catch(this.handleError);
   }
@@ -211,14 +379,50 @@ export class ManagementService {
    */
   acceptMyAgreement() {
 
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-
-    return this.http.post(this._serviceBaseUrl + '/license', null, options)
+    return this.http.post(this._serviceBaseUrl + '/license', null, Util.requestOptions())
         .map(res => <LicenseAgreementVO> this.json(res))
         .catch(this.handleError);
   }
 
+  private atobPolyfill(input:string):any {
+
+    let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    let str = String(input).replace(/=+$/, '');
+    if (str.length % 4 == 1) {
+      return '';
+    }
+    let output = '';
+    for (
+      // initialize result and counters
+      let bc = 0, bs = 0, buffer, idx = 0;
+      // get next character
+      buffer = str.charAt(idx++);
+      // character found in table? initialize bit storage and add its ascii value;
+      ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+        // and if not first of each 4 characters,
+        // convert the first 8 bits to one ascii character
+      bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
+    ) {
+      // try to find character in table (0-63, not found => -1)
+      buffer = chars.indexOf(buffer);
+    }
+    return output;
+
+  }
+
+  private decodeJwt(token:JWT):any {
+
+    let body = token.token.split('.')[1];
+
+    let atob = window && window.atob || this.atobPolyfill;
+
+    var base64 = decodeURIComponent(atob(body).split('').map(function(c:string):string {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(base64);
+
+  }
 
   private json(res: Response): any {
     let contentType = res.headers.get('Content-Type');

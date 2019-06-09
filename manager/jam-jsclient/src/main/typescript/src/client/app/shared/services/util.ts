@@ -13,6 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+import { Headers, RequestOptions, ResponseContentType } from '@angular/http';
+import { JWTAuth } from '../model/index';
+import { UserEventBus } from './user-event-bus.service';
 import { LogUtil } from './../log/index';
 
 export interface ErrorMessage {
@@ -25,6 +28,37 @@ export interface ErrorMessage {
 }
 
 export class Util {
+
+  /**
+   * Create request options with typical headers.
+   *
+   * @param {boolean} includeAuth add JWT
+   * @param {boolean} type content type (default 'application/json; charset=utf-8'), other type could be 'text/plain; charset=utf-8'
+   * @param {boolean} accept accept header (default 'application/json'), other types could be 'text/plain', '*\*'
+   * @return {RequestOptions}
+   */
+  public static requestOptions({ includeAuth = true, type = 'application/json; charset=utf-8', accept = 'application/json' }:
+                                 {includeAuth?:boolean; type?:string; accept?:string} = {}):RequestOptions {
+
+    let headers = new Headers();
+
+    if (includeAuth) {
+      let auth:JWTAuth = UserEventBus.getUserEventBus().currentJWT();
+      if (auth != null && auth.status == 200) {
+        headers.append('Authorization', auth.jwt);
+      }
+    }
+
+    headers.append('Content-Type', type);
+
+    if (accept != null) {
+      headers.append('Accept', accept);
+      return new RequestOptions({headers: headers});
+    }
+    // null accept should get array buffer pass through
+    return new RequestOptions({headers: headers, responseType: ResponseContentType.ArrayBuffer });
+
+  }
 
   /**
    * Clone Object using JSON serialization.

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { OrganisationService, ShopEventBus } from './../shared/services/index';
+import { OrganisationService, ShopEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ManagerInfoVO, ManagerVO, ShopVO, RoleVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
@@ -77,7 +77,6 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('OrganisationManagerComponent ngOnInit');
-    this.getAllRoles();
     this.onRefreshHandler();
   }
 
@@ -90,7 +89,13 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('OrganisationManagerComponent refresh handler');
-    this.getAllManagers();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      if (this.roles == null || this.roles.length == 0) {
+        this.getAllRoles();
+      } else {
+        this.getAllManagers();
+      }
+    }
   }
 
   protected onManagerSelected(data:ManagerVO) {
@@ -304,10 +309,11 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   private getAllRoles() {
     this.loading = true;
     let _sub:any = this._organisationService.getAllRoles().subscribe( allroles => {
-      LogUtil.debug('OrganisationManagerComponent getAllManagers', allroles);
+      LogUtil.debug('OrganisationManagerComponent getAllRoles', allroles);
       this.roles = allroles;
       this.loading = false;
       _sub.unsubscribe();
+      this.getAllManagers();
     });
   }
 

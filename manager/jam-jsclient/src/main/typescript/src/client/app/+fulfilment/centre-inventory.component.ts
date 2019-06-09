@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../shared/validation/validators';
-import { FulfilmentService, Util } from './../shared/services/index';
+import { FulfilmentService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ProductSkuSelectComponent } from './../shared/catalog/index';
 import { InventoryInfoComponent } from './../shared/fulfilment/index';
@@ -35,7 +35,7 @@ import { CookieUtil } from './../shared/cookies/index';
 
 export class CentreInventoryComponent implements OnInit, OnDestroy {
 
-  private static COOKIE_CENTRE:string = 'YCJAM_UI_FFCENTRE';
+  private static COOKIE_CENTRE:string = 'ADM_UI_FFCENTRE';
 
   private static _selectedCentre:FulfilmentCentreInfoVO;
 
@@ -184,7 +184,9 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('CentreInventoryComponent refresh handler');
-    this.getFilteredInventory();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getFilteredInventory();
+    }
   }
 
   protected onInventorySelected(data:InventoryVO) {

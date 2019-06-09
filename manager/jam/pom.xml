@@ -157,6 +157,12 @@
         </dependency>
 
         <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
@@ -470,10 +476,10 @@
                                         <outputDirectory>${basedir}/target/${webapp.admin.war.name}</outputDirectory>
                                         <resources>
                                             <resource>
-                                                <directory>${basedir}/../../theme/mail/src/main/resources</directory>
+                                                <directory>${basedir}/../../theme/mail/src/main/client</directory>
                                             </resource>
                                             <resource>
-                                                <directory>${basedir}/../../theme/reports/src/main/resources</directory>
+                                                <directory>${basedir}/../../theme/reports/src/main/client</directory>
                                             </resource>
                                         </resources>
                                     </configuration>
@@ -485,7 +491,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}/resources/node_modules</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}/client/node_modules</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <filtering>false</filtering>
@@ -501,7 +507,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}/resources</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}/client</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <filtering>false</filtering>
@@ -539,7 +545,7 @@
                                         <goal>copy-resources</goal>
                                     </goals>
                                     <configuration>
-                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}/resources</outputDirectory>
+                                        <outputDirectory>${basedir}/target/${webapp.admin.war.name}/client</outputDirectory>
                                         <resources>
                                             <resource>
                                                 <filtering>false</filtering>
@@ -656,12 +662,12 @@
                             <resource>
                                 <filtering>false</filtering>
                                 <directory>../jam-jsclient/src/main/${ts.target.home}</directory>
-                                <targetPath>resources</targetPath>
+                                <targetPath>client</targetPath>
                             </resource>
                             <resource>
                                 <filtering>false</filtering>
                                 <directory>../jam-jsclient/src/main/${ts.target.modules}</directory>
-                                <targetPath>resources/node_modules</targetPath>
+                                <targetPath>client/node_modules</targetPath>
                             </resource>
                         </webResources>
                         <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->

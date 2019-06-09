@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
-import { ErrorEventBus, Util } from './../services/index';
+import { ErrorEventBus, UserEventBus, CommandEventBus, Util } from './../services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { LogUtil } from './../log/index';
 
@@ -29,6 +29,7 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('errorModalDialog')
   private errorModalDialog:ModalComponent;
 
+  private errorAuth:boolean = false;
   private errorTitleKey:string = '';
   private errorTitleParams:any = {};
   private errorString:string = '';
@@ -65,7 +66,11 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
       LogUtil.debug('ErrorModalComponent error event', event);
       if (event !== 'init') {
         this.setErrorString(event);
-        this.showErrorModal();
+        if (this.errorAuth && (UserEventBus.getUserEventBus().current() === null)) {
+          CommandEventBus.getCommandEventBus().emit('login');
+        } else {
+          this.showErrorModal();
+        }
       }
     });
   }
@@ -73,7 +78,11 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
   protected onErrorResult(modalresult: ModalResult) {
     LogUtil.debug('ErrorModalComponent onErrorResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
-      window.location.href = '../logout.jsp'; //.reload();
+      if (this.errorAuth) {
+        CommandEventBus.getCommandEventBus().emit('login');
+      } else {
+        window.location.href = '../'; // '../logout.jsp'; //.reload();
+      }
     }
   }
 
@@ -82,6 +91,7 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
     let message = Util.determineErrorMessage(event);
     LogUtil.debug('ErrorModalComponent setErrorString', message);
 
+    let auth = false;
     let key = 'MODAL_ERROR_MESSAGE';
     let keyParams:any = {};
 
@@ -89,6 +99,7 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
       if (message.message == 'MODAL_ERROR_MESSAGE_AUTH') {
         key = 'MODAL_ERROR_MESSAGE_AUTH';
         this.errorString = '';
+        auth = true;
       } else {
         if (message.message.includes('JSON Parse error')) {
           key = 'MODAL_ERROR_MESSAGE_AUTH200';
@@ -103,8 +114,9 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.errorString = 'Server error';
     }
 
-    if (message.code == 403) {
+    if (message.code == 403 || message.code == 401) {
       key = 'MODAL_ERROR_MESSAGE_AUTH403';
+      auth = true;
     }
 
     if (message.code == 404) {
@@ -125,6 +137,7 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.errorTitleKey = key;
     this.errorTitleParams = keyParams;
+    this.errorAuth = auth;
 
   }
 

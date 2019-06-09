@@ -252,7 +252,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   @Input()
   set shops(shops:ShopVO[]) {
-    this._shops = shops;
+    this._shops = shops != null ? shops : [];
     if (this._reload) {
       this.reloadAddressbook();
     }

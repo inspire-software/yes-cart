@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { AssociationVO, AttrValueProductVO, AttrValueProductSkuVO, ProductSkuVO, ProductVO, ProductWithLinksVO, Pair } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -48,7 +48,7 @@ export class PIMService {
    */
   getAllAssociations() {
 
-    return this.http.get(this._serviceBaseUrl + '/associations/all')
+    return this.http.get(this._serviceBaseUrl + '/associations/all', Util.requestOptions())
       .map(res => <AssociationVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -62,10 +62,9 @@ export class PIMService {
   getFilteredProducts(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/product/filtered/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/product/filtered/' + max, body,
+          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .map(res => <ProductVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -75,7 +74,7 @@ export class PIMService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getProductById(productId:number) {
-    return this.http.get(this._serviceBaseUrl + '/product/' + productId)
+    return this.http.get(this._serviceBaseUrl + '/product/' + productId, Util.requestOptions())
       .map(res => <ProductWithLinksVO> this.json(res))
       .catch(this.handleError);
   }
@@ -88,15 +87,13 @@ export class PIMService {
   saveProduct(product:ProductWithLinksVO) {
 
     let body = JSON.stringify(product);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (product.productId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/product', body, options)
+      return this.http.post(this._serviceBaseUrl + '/product', body, Util.requestOptions())
         .map(res => <ProductWithLinksVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/product', body, options)
+      return this.http.put(this._serviceBaseUrl + '/product', body, Util.requestOptions())
         .map(res => <ProductWithLinksVO> this.json(res))
         .catch(this.handleError);
     }
@@ -109,10 +106,8 @@ export class PIMService {
    * @returns {Observable<R>}
    */
   removeProduct(product:ProductVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/product/' + product.productId, options)
+    return this.http.delete(this._serviceBaseUrl + '/product/' + product.productId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -123,7 +118,7 @@ export class PIMService {
    * @returns {Observable<R>}
    */
   getProductAttributes(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/product/attributes/' + id)
+    return this.http.get(this._serviceBaseUrl + '/product/attributes/' + id, Util.requestOptions())
       .map(res => <AttrValueProductVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -136,9 +131,7 @@ export class PIMService {
    */
   saveProductAttributes(attrs:Array<Pair<AttrValueProductVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/product/attributes', body, options)
+    return this.http.post(this._serviceBaseUrl + '/product/attributes', body, Util.requestOptions())
       .map(res => <AttrValueProductVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -152,7 +145,7 @@ export class PIMService {
    */
   getProductSkuAll(product:ProductVO) {
 
-    return this.http.get(this._serviceBaseUrl + '/product/sku/' + product.productId)
+    return this.http.get(this._serviceBaseUrl + '/product/sku/' + product.productId, Util.requestOptions())
       .map(res => <ProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -166,10 +159,9 @@ export class PIMService {
   getFilteredProductSkus(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/product/sku/filtered/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/product/sku/filtered/' + max, body,
+          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .map(res => <ProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -180,7 +172,7 @@ export class PIMService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getSkuById(skuId:number) {
-    return this.http.get(this._serviceBaseUrl + '/sku/' + skuId)
+    return this.http.get(this._serviceBaseUrl + '/sku/' + skuId, Util.requestOptions())
       .map(res => <ProductSkuVO> this.json(res))
       .catch(this.handleError);
   }
@@ -193,15 +185,13 @@ export class PIMService {
   saveSKU(sku:ProductSkuVO) {
 
     let body = JSON.stringify(sku);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (sku.skuId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/sku', body, options)
+      return this.http.post(this._serviceBaseUrl + '/sku', body, Util.requestOptions())
         .map(res => <ProductSkuVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/sku', body, options)
+      return this.http.put(this._serviceBaseUrl + '/sku', body, Util.requestOptions())
         .map(res => <ProductSkuVO> this.json(res))
         .catch(this.handleError);
     }
@@ -214,10 +204,8 @@ export class PIMService {
    * @returns {Observable<R>}
    */
   removeSKU(sku:ProductSkuVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/sku/' + sku.skuId, options)
+    return this.http.delete(this._serviceBaseUrl + '/sku/' + sku.skuId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -228,7 +216,7 @@ export class PIMService {
    * @returns {Observable<R>}
    */
   getSKUAttributes(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/sku/attributes/' + id)
+    return this.http.get(this._serviceBaseUrl + '/sku/attributes/' + id, Util.requestOptions())
       .map(res => <AttrValueProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -241,9 +229,7 @@ export class PIMService {
    */
   saveSKUAttributes(attrs:Array<Pair<AttrValueProductSkuVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl + '/sku/attributes', body, options)
+    return this.http.post(this._serviceBaseUrl + '/sku/attributes', body, Util.requestOptions())
       .map(res => <AttrValueProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }

@@ -74,6 +74,7 @@
         <cxf.version>3.2.4</cxf.version>
         <spring-security.version>4.2.12.RELEASE</spring-security.version>
         <spring.version>4.3.23.RELEASE</spring.version>
+        <jjwt.version>0.9.0</jjwt.version>
         <ehcache-core.version>2.10.6</ehcache-core.version>
         <jackson.version>2.9.1</jackson.version>
         <GeDA.version>3.1.2</GeDA.version>

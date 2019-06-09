@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { AttributeService, Util } from './../../shared/services/index';
+import { AttributeService, UserEventBus, Util } from './../../shared/services/index';
 import { ProductAttributeUsageComponent } from './../../shared/attributes/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { EtypeVO, AttributeGroupVO, AttributeVO } from './../../shared/model/index';
@@ -96,8 +96,9 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('AttributeDefinitionsComponent ngOnInit');
-    this.getAllEtypes();
+
     this.onRefreshHandler();
+
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.getAllAttributes();
@@ -117,11 +118,17 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('AttributeDefinitionsComponent refresh handler');
-    if (this.viewMode === AttributeDefinitionsComponent.GROUPS ||
-        this.selectedGroup == null) {
-      this.getAllGroups();
-    } else {
-      this.getAllAttributes();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      if (this.etypes == null || this.etypes.length == 0) {
+        this.getAllEtypes();
+      } else {
+        if (this.viewMode === AttributeDefinitionsComponent.GROUPS ||
+          this.selectedGroup == null) {
+          this.getAllGroups();
+        } else {
+          this.getAllAttributes();
+        }
+      }
     }
   }
 
@@ -333,6 +340,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
       LogUtil.debug('AttributeDefinitionsComponent getAllEtypes', alletypes);
       this.etypes = alletypes;
       this.loading = false;
+      this.onRefreshHandler();
       _sub.unsubscribe();
     });
   }

@@ -72,3 +72,40 @@ export interface UserVO {
   ui: any;
 
 }
+
+export interface JWT {
+
+  token: string;
+
+}
+
+export interface JWTDecoded {
+
+  aud: string;
+  exp: number;
+  iat: number;
+  iss: string;
+  rol: string[];
+  sub: string;
+
+}
+
+export interface JWTAuth {
+
+  jwt?: string;
+  decoded?: JWTDecoded;
+  status: number;
+  message?: string;
+
+}
+
+export interface LoginVO {
+
+  username:string;
+  password:string;
+  organisation?:string;
+
+  npassword?:string;
+  cpassword?:string;
+
+}

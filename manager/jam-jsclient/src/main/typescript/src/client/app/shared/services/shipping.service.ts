@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { CarrierInfoVO, CarrierVO, CarrierSlaVO, ShopCarrierAndSlaVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -46,7 +46,7 @@ export class ShippingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllCarriers() {
-    return this.http.get(this._serviceBaseUrl + '/carrier/all')
+    return this.http.get(this._serviceBaseUrl + '/carrier/all', Util.requestOptions())
       .map(res => <CarrierVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -56,7 +56,7 @@ export class ShippingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getShopCarriers(shopId:number) {
-    return this.http.get(this._serviceBaseUrl + '/carrier/shop/' + shopId)
+    return this.http.get(this._serviceBaseUrl + '/carrier/shop/' + shopId, Util.requestOptions())
       .map(res => <ShopCarrierAndSlaVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -69,15 +69,13 @@ export class ShippingService {
   saveCarrier(carrier:CarrierVO) {
 
     let body = JSON.stringify(carrier);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (carrier.carrierId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/carrier', body, options)
+      return this.http.post(this._serviceBaseUrl + '/carrier', body, Util.requestOptions())
         .map(res => <CarrierVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/carrier', body, options)
+      return this.http.put(this._serviceBaseUrl + '/carrier', body, Util.requestOptions())
         .map(res => <CarrierVO> this.json(res))
         .catch(this.handleError);
     }
@@ -91,10 +89,8 @@ export class ShippingService {
      */
   createCarrier(carrier:CarrierInfoVO, shopId : number) {
     let body = JSON.stringify(carrier);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.put(this._serviceBaseUrl + '/carrier/shop/' + shopId, body, options)
+    return this.http.put(this._serviceBaseUrl + '/carrier/shop/' + shopId, body, Util.requestOptions())
       .map(res => <CarrierVO> this.json(res))
       .catch(this.handleError);
   }
@@ -108,10 +104,8 @@ export class ShippingService {
   saveShopCarriers(carriers:Array<ShopCarrierAndSlaVO>) {
 
     let body = JSON.stringify(carriers);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/carrier/shop', body, options)
+    return this.http.post(this._serviceBaseUrl + '/carrier/shop', body, Util.requestOptions())
       .map(res => <Array<ShopCarrierAndSlaVO>> this.json(res))
       .catch(this.handleError);
   }
@@ -123,10 +117,8 @@ export class ShippingService {
    * @returns {Observable<R>}
    */
   removeCarrier(carrier:CarrierVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/carrier/' + carrier.carrierId, options)
+    return this.http.delete(this._serviceBaseUrl + '/carrier/' + carrier.carrierId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -136,7 +128,7 @@ export class ShippingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getCarrierSlas(carrierId:number) {
-    return this.http.get(this._serviceBaseUrl + '/carriersla/all/' + carrierId)
+    return this.http.get(this._serviceBaseUrl + '/carriersla/all/' + carrierId, Util.requestOptions())
       .map(res => <CarrierSlaVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -148,10 +140,9 @@ export class ShippingService {
   getFilteredCarrierSlas(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/carriersla/filtered/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/carriersla/filtered/' + max, body,
+        Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .map(res => <CarrierSlaVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -165,15 +156,13 @@ export class ShippingService {
   saveCarrierSla(sla:CarrierSlaVO) {
 
     let body = JSON.stringify(sla);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (sla.carrierslaId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/carriersla', body, options)
+      return this.http.post(this._serviceBaseUrl + '/carriersla', body, Util.requestOptions())
         .map(res => <CarrierSlaVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/carriersla', body, options)
+      return this.http.put(this._serviceBaseUrl + '/carriersla', body, Util.requestOptions())
         .map(res => <CarrierSlaVO> this.json(res))
         .catch(this.handleError);
     }
@@ -187,10 +176,8 @@ export class ShippingService {
    * @returns {Observable<R>}
    */
   removeCarrierSla(sla:CarrierSlaVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/carriersla/' + sla.carrierslaId, options)
+    return this.http.delete(this._serviceBaseUrl + '/carriersla/' + sla.carrierslaId, Util.requestOptions())
       .catch(this.handleError);
   }
 

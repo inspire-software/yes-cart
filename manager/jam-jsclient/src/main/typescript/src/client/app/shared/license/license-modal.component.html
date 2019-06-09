@@ -2,6 +2,7 @@
   <yc-modal #licenseModalDialog
          title="{{ 'MODAL_LICENSE_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CLOSE' | translate }}"
+         disableCancel="true"
          positiveLabel="{{ 'MODAL_BUTTON_AGREE' | translate }}"
          [valid]="license && !license.agreed"
          (closed)="onAgreeResult($event)">

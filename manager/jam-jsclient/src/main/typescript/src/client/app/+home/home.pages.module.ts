@@ -5,7 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ServicesModule } from '../shared/services/services.module';
 
 import { HomeRoutingModule } from './home-routing.module';
-import { HomeComponent, ReportsComponent } from './index';
+import { EmptyComponent, HomeComponent, ReportsComponent } from './index';
 
 import {
   WidgetNoopComponent,
@@ -22,7 +22,7 @@ import { WidgetDirective, WidgetContainerComponent } from './index';
 @NgModule({
     imports: [HomeRoutingModule, CommonModule, SharedModule, ServicesModule],
     declarations: [
-      HomeComponent, ReportsComponent,
+      EmptyComponent, HomeComponent, ReportsComponent,
       WidgetNoopComponent,
       WidgetAlertComponent,
       WidgetOrdersComponent,
@@ -45,7 +45,7 @@ import { WidgetDirective, WidgetContainerComponent } from './index';
       WidgetUiSettingsComponent,
     ],
     exports: [
-      HomeComponent, ReportsComponent,
+      EmptyComponent, HomeComponent, ReportsComponent,
     ]
 })
 

@@ -15,7 +15,7 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { ClusterNodeVO, Pair } from './../../shared/model/index';
-import { SystemService } from './../../shared/services/index';
+import { SystemService, UserEventBus } from './../../shared/services/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
@@ -134,7 +134,9 @@ export class QueryComponent implements OnInit {
 
   protected onRefreshHandler() {
     LogUtil.debug('QueryComponent refresh handler');
-    this.getClusterInfo();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getClusterInfo();
+    }
   }
 
   private getClusterInfo() {

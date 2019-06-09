@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { ShopVO, PriceListVO, TaxVO, TaxConfigVO, PromotionVO, PromotionCouponVO, CartVO, PromotionTestVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -48,10 +48,8 @@ export class PricingService {
   getFilteredPriceLists(shop:ShopVO, currency:string, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-
-    return this.http.post(this._serviceBaseUrl + '/price/shop/' + shop.shopId + '/currency/' + currency + '/filtered/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/price/shop/' + shop.shopId + '/currency/' + currency + '/filtered/' + max, body,
+          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
         .map(res => <PriceListVO[]> this.json(res))
         .catch(this.handleError);
   }
@@ -74,15 +72,13 @@ export class PricingService {
   savePriceList(price:PriceListVO) {
 
     let body = JSON.stringify(price);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (price.skuPriceId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/price', body, options)
+      return this.http.post(this._serviceBaseUrl + '/price', body, Util.requestOptions())
         .map(res => <PriceListVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/price', body, options)
+      return this.http.put(this._serviceBaseUrl + '/price', body, Util.requestOptions())
         .map(res => <PriceListVO> this.json(res))
         .catch(this.handleError);
     }
@@ -95,10 +91,8 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removePriceList(price:PriceListVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/price/' + price.skuPriceId, options)
+    return this.http.delete(this._serviceBaseUrl + '/price/' + price.skuPriceId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -111,10 +105,9 @@ export class PricingService {
   getFilteredTax(shop:ShopVO, currency:string, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/tax/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/tax/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body,
+          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .map(res => <TaxVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -124,7 +117,7 @@ export class PricingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getTaxById(taxId:number) {
-    return this.http.get(this._serviceBaseUrl + '/tax/' + taxId)
+    return this.http.get(this._serviceBaseUrl + '/tax/' + taxId, Util.requestOptions())
       .map(res => <TaxVO> this.json(res))
       .catch(this.handleError);
   }
@@ -137,15 +130,13 @@ export class PricingService {
   saveTax(tax:TaxVO) {
 
     let body = JSON.stringify(tax);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (tax.taxId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/tax', body, options)
+      return this.http.post(this._serviceBaseUrl + '/tax', body, Util.requestOptions())
         .map(res => <TaxVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/tax', body, options)
+      return this.http.put(this._serviceBaseUrl + '/tax', body, Util.requestOptions())
         .map(res => <TaxVO> this.json(res))
         .catch(this.handleError);
     }
@@ -158,10 +149,8 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removeTax(tax:TaxVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/tax/' + tax.taxId, options)
+    return this.http.delete(this._serviceBaseUrl + '/tax/' + tax.taxId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -174,10 +163,9 @@ export class PricingService {
   getFilteredTaxConfig(tax:TaxVO, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/taxconfig/tax/' + tax.taxId + '/filtered/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/taxconfig/tax/' + tax.taxId + '/filtered/' + max, body,
+        Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .map(res => <TaxConfigVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -187,7 +175,7 @@ export class PricingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getTaxConfigById(taxConfigId:number) {
-    return this.http.get(this._serviceBaseUrl + '/taxconfig/' + taxConfigId)
+    return this.http.get(this._serviceBaseUrl + '/taxconfig/' + taxConfigId, Util.requestOptions())
       .map(res => <TaxConfigVO> this.json(res))
       .catch(this.handleError);
   }
@@ -200,10 +188,8 @@ export class PricingService {
   createTaxConfig(taxConfig:TaxConfigVO) {
 
     let body = JSON.stringify(taxConfig);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.put(this._serviceBaseUrl + '/taxconfig', body, options)
+    return this.http.put(this._serviceBaseUrl + '/taxconfig', body, Util.requestOptions())
       .map(res => <TaxConfigVO> this.json(res))
       .catch(this.handleError);
   }
@@ -215,10 +201,8 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removeTaxConfig(taxConfig:TaxConfigVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/taxconfig/' + taxConfig.taxConfigId, options)
+    return this.http.delete(this._serviceBaseUrl + '/taxconfig/' + taxConfig.taxConfigId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -231,10 +215,8 @@ export class PricingService {
   testPromotions(shop:ShopVO, currency:string, test:PromotionTestVO) {
 
     let body = JSON.stringify(test);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/promotion/test/shop/' + shop.code + '/currency/' + currency + '/', body, options)
+    return this.http.post(this._serviceBaseUrl + '/promotion/test/shop/' + shop.code + '/currency/' + currency + '/', body, Util.requestOptions())
       .map(res => <CartVO> this.json(res))
       .catch(this.handleError);
   }
@@ -247,10 +229,8 @@ export class PricingService {
   getFilteredPromotions(shop:ShopVO, currency:string, filter:string, types:string[], actions:string[], max:number) {
 
     let body = JSON.stringify({ filter: filter, types: types, actions: actions });
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/promotion/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/promotion/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, Util.requestOptions())
       .map(res => <PromotionVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -260,7 +240,7 @@ export class PricingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getPromotionById(promotionId:number) {
-    return this.http.get(this._serviceBaseUrl + '/promotion/' + promotionId)
+    return this.http.get(this._serviceBaseUrl + '/promotion/' + promotionId, Util.requestOptions())
       .map(res => <PromotionVO> this.json(res))
       .catch(this.handleError);
   }
@@ -273,15 +253,13 @@ export class PricingService {
   savePromotion(promotion:PromotionVO) {
 
     let body = JSON.stringify(promotion);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (promotion.promotionId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/promotion', body, options)
+      return this.http.post(this._serviceBaseUrl + '/promotion', body, Util.requestOptions())
         .map(res => <PromotionVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/promotion', body, options)
+      return this.http.put(this._serviceBaseUrl + '/promotion', body, Util.requestOptions())
         .map(res => <PromotionVO> this.json(res))
         .catch(this.handleError);
     }
@@ -294,10 +272,8 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removePromotion(promotion:PromotionVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/promotion/' + promotion.promotionId, options)
+    return this.http.delete(this._serviceBaseUrl + '/promotion/' + promotion.promotionId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -311,10 +287,8 @@ export class PricingService {
   updatePromotionDisabledFlag(promotion:PromotionVO, state:boolean) {
     LogUtil.debug('PricingService change state promotion ' + promotion.promotionId + ' to ' + state ? 'online' : 'offline');
 
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-
-    return this.http.post(this._serviceBaseUrl + '/promotion/offline/' + promotion.promotionId + '/' + state, null, options)
+    return this.http.post(this._serviceBaseUrl + '/promotion/offline/' + promotion.promotionId + '/' + state, null,
+        Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .catch(this.handleError);
   }
 
@@ -326,10 +300,9 @@ export class PricingService {
   getFilteredPromotionCoupons(promotion:PromotionVO, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/promotioncoupon/' + promotion.promotionId + '/filtered/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/promotioncoupon/' + promotion.promotionId + '/filtered/' + max, body,
+          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .map(res => <PromotionCouponVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -343,10 +316,8 @@ export class PricingService {
   createPromotionCoupons(coupons:PromotionCouponVO) {
 
     let body = JSON.stringify(coupons);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.put(this._serviceBaseUrl + '/promotioncoupon', body, options)
+    return this.http.put(this._serviceBaseUrl + '/promotioncoupon', body, Util.requestOptions())
       .map(res => <PromotionCouponVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -358,10 +329,8 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removePromotionCoupon(coupon:PromotionCouponVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/promotioncoupon/' + coupon.promotioncouponId, options)
+    return this.http.delete(this._serviceBaseUrl + '/promotioncoupon/' + coupon.promotioncouponId, Util.requestOptions())
       .catch(this.handleError);
   }
 

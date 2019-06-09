@@ -181,6 +181,15 @@ public interface AttributeNamesKeys {
          */
         String MANAGER_PASSWORD_REGEX = "MANAGER_PASSWORD_REGEX";
 
+        /**
+         * JWT encoding/decoding secret
+         */
+        String MANAGER_JWT_SECRET = "MANAGER_JWT_SECRET";
+
+        /**
+         * JWT expiry in minutes
+         */
+        String MANAGER_JWT_EXPIRY_MIN = "MANAGER_JWT_EXPIRY_MIN";
     }
 
 

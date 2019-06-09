@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { CustomerOrderService } from './../shared/services/index';
+import { CustomerOrderService, UserEventBus } from './../shared/services/index';
 import { ModalComponent } from './../shared/modal/index';
 import { PaymentVO, Pair } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
@@ -133,7 +133,9 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('AllPaymentsComponent refresh handler');
-    this.getFilteredPayments();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getFilteredPayments();
+    }
   }
 
   protected onPaymentSelected(data:PaymentVO) {

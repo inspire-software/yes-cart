@@ -117,6 +117,21 @@
   "MODAL_BUTTON_SECURE_ATTR_OFF": "Der sichere Modus ist deaktiviert, vertrauliche Daten werden angezeigt. Klicken Sie erneut auf diese Schaltfläche, um den sicheren Modus zu aktivieren.",
   "MODAL_BUTTON_RUN": "Ausführen",
 
+  "MODAL_LOGIN_TITLE": "Einloggen",
+  "MODAL_BUTTON_LOGIN": "Einloggen",
+  "MODAL_CHANGE_PASSWORD_TITLE": "Passwort ändern",
+  "USERNAME": "Benutzername",
+  "PASSWORD": "Passwort",
+  "NEW_PASSWORD": "Neues Passwort",
+  "CONFIRM_PASSWORD": "Passwort bestätigen",
+  "AUTH_TOKEN_INVALID": "Ungültiges Token, bitte erneut anmelden",
+  "AUTH_TOKEN_EXPIRED": "Token abgelaufen, bitte erneut anmelden",
+  "AUTH_CREDENTAILS_INVALID": "Ungültiger Benutzername und / oder Passwort",
+  "AUTH_CREDENTAILS_EXPIRED": "Passwort abgelaufen, bitte ändern",
+  "AUTH_CHANGEPWD_SAMEASOLD": "Das Passwort darf nicht mit dem alten identisch sein",
+  "AUTH_CHANGEPWD_NOMATCH": "Passwort und Bestätigung müssen übereinstimmen",
+  "AUTH_CHANGEPWD_SUCCESS": "Passwort geändert, bitte neues Passwort verwenden um sich einzuloggen",
+
   "NAME": "Name",
   "DESCRIPTION": "Beschreibung",
   "DEFAULT_VALUE": "Standartwert",
@@ -863,6 +878,7 @@
   "SEARCH_HELP_CACHE_TOP": "Zur Anzeige von meist X verwendeten Caches. Format: '^X'",
   "SEARCH_HELP_CACHE_SIZE": "Um Caches mit X oder mehr Elementen anzuzeigen. Format: '#X'",
   "SEARCH_HELP_CACHE_HOT": "Um überladene Caches anzeigen. Format: '!X'",
+  "SEARCH_HELP_CACHE_HEAVY": "Anzeige der schwersten Caches. Format: '$X'",
 
   "SEARCH_HELP_CALENDAR": "Um ein Datum oder einen Bereich zu suchen, benutzen Sie das Zeichen mit Datum nach (links) oder vorher (rechts). E.g: 'vor 2000': <2000 , nach 'Sept 2000 vor 2017': 2000-09<2017"
 

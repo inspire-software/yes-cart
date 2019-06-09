@@ -29,6 +29,8 @@ import { SidebarComponent, TopbarComponent, DataControlComponent } from './sideb
 import { ErrorModalComponent } from './error/index';
 import { LicenseComponent, LicenseModalComponent } from './license/index';
 
+import { LoginModalComponent } from './auth/index';
+
 import { TreeViewComponent } from './tree-view/index';
 
 import { CarrierSlaSelectComponent } from './shipping/index';
@@ -64,6 +66,7 @@ import { CurrencySelectComponent } from './price/index';
     ShopSelectComponent,
     CurrencySelectComponent,
     TreeViewComponent,
+    LoginModalComponent,
   ],
   exports: [
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,
@@ -84,6 +87,7 @@ import { CurrencySelectComponent } from './price/index';
     CommonModule, RouterModule,
     FormsModule, ReactiveFormsModule,
     TranslateModule,
+    LoginModalComponent,
     AccordionModule, PaginationModule, TabsModule
   ]
 })

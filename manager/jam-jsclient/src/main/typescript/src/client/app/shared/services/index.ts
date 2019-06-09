@@ -3,6 +3,7 @@
  */
 export * from './util';
 export * from './error-event-bus.service';
+export * from './command-event-bus.service';
 export * from './shop-event-bus.service';
 export * from './i18n-event-bus.service';
 export * from './window-message-event-bus.service';

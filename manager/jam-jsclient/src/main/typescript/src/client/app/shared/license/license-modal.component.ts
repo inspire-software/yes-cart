@@ -13,8 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { ManagementService } from './../services/index';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { UserEventBus, ManagementService } from './../services/index';
 import { LicenseAgreementVO } from './../model/index';
 import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { LogUtil } from './../log/index';
@@ -25,12 +25,14 @@ import { LogUtil } from './../log/index';
   templateUrl: 'license-modal.component.html',
 })
 
-export class LicenseModalComponent implements OnInit, AfterViewInit {
+export class LicenseModalComponent implements OnInit, OnDestroy {
 
   @ViewChild('licenseModalDialog')
-    licenseModalDialog:ModalComponent;
+  licenseModalDialog:ModalComponent;
 
   private license:LicenseAgreementVO;
+
+  private userSub:any;
 
   constructor(private _managementService:ManagementService) {
     LogUtil.debug('LicenseModalComponent constructed');
@@ -39,26 +41,33 @@ export class LicenseModalComponent implements OnInit, AfterViewInit {
   /** {@inheritDoc} */
   public ngOnInit() {
     LogUtil.debug('LicenseModalComponent ngOnInit');
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      if (user != null) {
+        // Here you get a reference to the modal so you can control it programmatically
+        let _sub:any = this._managementService.getMyAgreement().subscribe(license => {
+          LogUtil.debug('LicenseModalComponent event', license);
+          this.license = license;
+          if (!license.agreed) {
+            this.showLicenseModal();
+          }
+          _sub.unsubscribe();
+        });
+      }
+    });
   }
 
-  protected showErrorModal() {
-    LogUtil.debug('LicenseModalComponent showErrorModal', this.license);
-    if (this.licenseModalDialog) {
-      this.licenseModalDialog.show();
+  ngOnDestroy() {
+    LogUtil.debug('LicenseModalComponent ngOnDestroy');
+    if (this.userSub) {
+      this.userSub.unsubscribe();
     }
   }
 
-  public ngAfterViewInit() {
-    LogUtil.debug('LicenseModalComponent ngAfterViewInit');
-    // Here you get a reference to the modal so you can control it programmatically
-    let _sub:any = this._managementService.getMyAgreement().subscribe(license => {
-      LogUtil.debug('LicenseModalComponent event', license);
-      this.license = license;
-      if (!license.agreed) {
-        this.showErrorModal();
-      }
-      _sub.unsubscribe();
-    });
+  protected showLicenseModal() {
+    LogUtil.debug('LicenseModalComponent showLicenseModal', this.license);
+    if (this.licenseModalDialog) {
+      this.licenseModalDialog.show();
+    }
   }
 
   protected onAgreeResult(modalresult: ModalResult) {
@@ -68,12 +77,10 @@ export class LicenseModalComponent implements OnInit, AfterViewInit {
         LogUtil.debug('LicenseModalComponent event', license);
         this.license = license;
         if (!license.agreed) {
-          this.showErrorModal();
+          this.showLicenseModal();
         }
         _sub.unsubscribe();
       });
-    } else if (!this.license.agreed) {
-      window.location.href = '../logout.jsp';
     }
   }
 

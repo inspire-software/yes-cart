@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 import { Injectable } from '@angular/core';
+import { UserVO, JWTAuth } from '../model/manager.model';
 import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
 import { Observable }    from 'rxjs/Observable';
 import { LogUtil } from './../log/index';
@@ -23,9 +24,13 @@ export class UserEventBus {
 
   private static _userEventBus:UserEventBus;
 
-  userUpdated$ : Observable<any>;
+  userUpdated$ : Observable<UserVO>;
+  jwtUpdated$ : Observable<JWTAuth>;
+  activeUpdated$ : Observable<boolean>;
 
-  private _userSource : BehaviorSubject<any>;
+  private _userSource : BehaviorSubject<UserVO>;
+  private _jwtSource : BehaviorSubject<JWTAuth>;
+  private _activeSource : BehaviorSubject<boolean>;
 
   public static init(userEventBus:UserEventBus) {
     UserEventBus._userEventBus = userEventBus;
@@ -37,17 +42,42 @@ export class UserEventBus {
 
   constructor() {
     LogUtil.debug('UserEventBus constructed');
-    this._userSource = new BehaviorSubject<any>(null);
+    this._userSource = new BehaviorSubject<UserVO>(null);
     this.userUpdated$ = this._userSource.asObservable();
+    this._jwtSource = new BehaviorSubject<JWTAuth>(null);
+    this.jwtUpdated$ = this._jwtSource.asObservable();
+    this._activeSource = new BehaviorSubject<boolean>(false);
+    this.activeUpdated$ = this._activeSource.asObservable();
   }
 
-  public emit(value: any): void {
-    this._userSource.next(value);
+  public emit(value: UserVO): void {
     LogUtil.debug('emit user event', value);
+    this._userSource.next(value);
   }
 
-  public current():any {
+  public current():UserVO {
     return this._userSource.getValue();
+  }
+
+  public emitJWT(value: JWTAuth): void {
+    LogUtil.debug('emit JWT event', value);
+    this._jwtSource.next(value);
+  }
+
+  public currentJWT():JWTAuth {
+    return this._jwtSource.getValue();
+  }
+
+  public emitActive(value: boolean): void {
+    //LogUtil.debug('emit active event new value', this._activeSource.getValue(), value);
+    if (this._activeSource.getValue() != value) {
+      LogUtil.debug('emit active event', value);
+      this._activeSource.next(value);
+    }
+  }
+
+  public currentActive():boolean {
+    return this._activeSource.getValue();
   }
 
 }

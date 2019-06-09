@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { RoleVO, ManagerInfoVO, ManagerVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -46,7 +46,7 @@ export class OrganisationService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllManagers() {
-    return this.http.get(this._serviceBaseUrl + '/managers/all')
+    return this.http.get(this._serviceBaseUrl + '/managers/all', Util.requestOptions())
       .map(res => <ManagerInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -56,7 +56,7 @@ export class OrganisationService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getManagerByEmail(email:string) {
-    return this.http.get(this._serviceBaseUrl + '/manager/' + email + '/')
+    return this.http.get(this._serviceBaseUrl + '/manager/' + email + '/', Util.requestOptions())
       .map(res => <ManagerVO> this.json(res))
       .catch(this.handleError);
   }
@@ -69,15 +69,13 @@ export class OrganisationService {
   saveManager(manager:ManagerVO) {
 
     let body = JSON.stringify(manager);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (manager.managerId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/manager', body, options)
+      return this.http.post(this._serviceBaseUrl + '/manager', body, Util.requestOptions())
         .map(res => <ManagerVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/manager', body, options)
+      return this.http.put(this._serviceBaseUrl + '/manager', body, Util.requestOptions())
         .map(res => <ManagerVO> this.json(res))
         .catch(this.handleError);
     }
@@ -89,10 +87,8 @@ export class OrganisationService {
    * @returns {Observable<R>}
    */
   removeManager(email:string) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/manager/' + email + '/', options)
+    return this.http.delete(this._serviceBaseUrl + '/manager/' + email + '/', Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -102,10 +98,8 @@ export class OrganisationService {
    * @returns {Observable<R>}
    */
   resetPassword(email:string) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/manager/reset/' + email + '/', options)
+    return this.http.post(this._serviceBaseUrl + '/manager/reset/' + email + '/', null, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -118,10 +112,7 @@ export class OrganisationService {
   updateDisabledFlag(manager:string, state:boolean) {
     LogUtil.debug('ManagementService change manager state for ' + manager + ' to ' + state ? 'online' : 'offline');
 
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-
-    return this.http.post(this._serviceBaseUrl +  '/manager/offline/' + manager + '/' + state, null, options)
+    return this.http.post(this._serviceBaseUrl +  '/manager/offline/' + manager + '/' + state, null, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -130,7 +121,7 @@ export class OrganisationService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllRoles() {
-    return this.http.get(this._serviceBaseUrl + '/role/all')
+    return this.http.get(this._serviceBaseUrl + '/role/all', Util.requestOptions())
       .map(res => <RoleVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -143,15 +134,13 @@ export class OrganisationService {
   saveRole(role:RoleVO) {
 
     let body = JSON.stringify(role);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (role.roleId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/role', body, options)
+      return this.http.post(this._serviceBaseUrl + '/role', body, Util.requestOptions())
         .map(res => <RoleVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/role', body, options)
+      return this.http.put(this._serviceBaseUrl + '/role', body, Util.requestOptions())
         .map(res => <RoleVO> this.json(res))
         .catch(this.handleError);
     }
@@ -163,10 +152,8 @@ export class OrganisationService {
    * @returns {Observable<R>}
    */
   removeRole(role:RoleVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/role/' + role.code, options)
+    return this.http.delete(this._serviceBaseUrl + '/role/' + role.code, Util.requestOptions())
       .catch(this.handleError);
   }
 

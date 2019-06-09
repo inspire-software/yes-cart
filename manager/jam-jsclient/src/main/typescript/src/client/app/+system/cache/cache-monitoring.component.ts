@@ -15,7 +15,7 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { CacheInfoVO } from './../../shared/model/index';
-import { SystemService, Util } from './../../shared/services/index';
+import { SystemService, UserEventBus, Util } from './../../shared/services/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -153,7 +153,9 @@ export class CacheMonitoringComponent implements OnInit {
 
   protected onRefreshHandler() {
     LogUtil.debug('CacheMonitoringComponent refresh handler');
-    this.getCacheInfo();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getCacheInfo();
+    }
   }
 
   protected onFilterChange() {
@@ -272,6 +274,12 @@ export class CacheMonitoringComponent implements OnInit {
     this.filterCaches();
   }
 
+  protected onHeavySelected() {
+    this.cacheFilter = '$10';
+    this.searchHelpShow = false;
+    this.filterCaches();
+  }
+
 
   private getCacheInfo() {
     LogUtil.debug('CacheMonitoringComponent get caches');
@@ -323,6 +331,15 @@ export class CacheMonitoringComponent implements OnInit {
         }
 
         this.filteredCaches = this.caches.sort((n1,n2) => (n2.cacheSize / n2.inMemorySizeMax) - (n1.cacheSize / n1.inMemorySizeMax)).slice(0, _hot);
+
+      } else if (_filter.indexOf('$') == 0) {
+
+        let _heavy = parseInt(_filter.substr(1));
+        if (isNaN(_heavy)) {
+          _heavy = 5;
+        }
+
+        this.filteredCaches = this.caches.sort((n1,n2) => (n2.calculateInMemorySize - n1.calculateInMemorySize)).slice(0, _heavy);
 
       } else {
         this.filteredCaches = this.caches.filter(cache =>

@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ClusterNodeVO, ModuleVO } from './../../shared/model/index';
-import { SystemService, Util } from './../../shared/services/index';
+import { SystemService, UserEventBus, Util } from './../../shared/services/index';
 import { ModalComponent } from './../../shared/modal/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
@@ -135,7 +135,9 @@ export class ClusterComponent implements OnInit {
 
   protected onRefreshHandler() {
     LogUtil.debug('ClusterComponent refresh handler');
-    this.getClusterInfo();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getClusterInfo();
+    }
   }
 
   protected onModuleFilterChange() {

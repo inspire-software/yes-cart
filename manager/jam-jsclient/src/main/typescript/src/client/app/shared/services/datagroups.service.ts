@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { DataGroupVO, DataDescriptorVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -46,7 +46,7 @@ export class DataGroupsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllDataGroups() {
-    return this.http.get(this._serviceBaseUrl + '/impex/datagroup/all')
+    return this.http.get(this._serviceBaseUrl + '/impex/datagroup/all', Util.requestOptions())
       .map(res => <DataGroupVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -57,7 +57,7 @@ export class DataGroupsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getDataGroupById(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/impex/datagroup/' + id)
+    return this.http.get(this._serviceBaseUrl + '/impex/datagroup/' + id, Util.requestOptions())
       .map(res => <DataGroupVO> this.json(res))
       .catch(this.handleError);
   }
@@ -70,15 +70,13 @@ export class DataGroupsService {
   saveDataGroup(group:DataGroupVO) {
 
     let body = JSON.stringify(group);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (group.datagroupId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/impex/datagroup', body, options)
+      return this.http.post(this._serviceBaseUrl + '/impex/datagroup', body, Util.requestOptions())
         .map(res => <DataGroupVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/impex/datagroup', body, options)
+      return this.http.put(this._serviceBaseUrl + '/impex/datagroup', body, Util.requestOptions())
         .map(res => <DataGroupVO> this.json(res))
         .catch(this.handleError);
     }
@@ -91,10 +89,8 @@ export class DataGroupsService {
    * @returns {Observable<R>}
    */
   removeDataGroup(group:DataGroupVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/impex/datagroup/' + group.datagroupId, options)
+    return this.http.delete(this._serviceBaseUrl + '/impex/datagroup/' + group.datagroupId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -104,7 +100,7 @@ export class DataGroupsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllDataDescriptors() {
-    return this.http.get(this._serviceBaseUrl + '/impex/datadescriptor/all')
+    return this.http.get(this._serviceBaseUrl + '/impex/datadescriptor/all', Util.requestOptions())
       .map(res => <DataDescriptorVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -116,7 +112,7 @@ export class DataGroupsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getDataDescriptorById(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/impex/datadescriptor/' + id)
+    return this.http.get(this._serviceBaseUrl + '/impex/datadescriptor/' + id, Util.requestOptions())
       .map(res => <DataDescriptorVO> this.json(res))
       .catch(this.handleError);
   }
@@ -128,15 +124,13 @@ export class DataGroupsService {
    */
   saveDataDescriptor(descriptor:DataDescriptorVO) {
     let body = JSON.stringify(descriptor);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (descriptor.datadescriptorId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/impex/datadescriptor', body, options)
+      return this.http.post(this._serviceBaseUrl + '/impex/datadescriptor', body, Util.requestOptions())
         .map(res => <DataDescriptorVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/impex/datadescriptor', body, options)
+      return this.http.put(this._serviceBaseUrl + '/impex/datadescriptor', body, Util.requestOptions())
         .map(res => <DataDescriptorVO> this.json(res))
         .catch(this.handleError);
     }
@@ -148,10 +142,8 @@ export class DataGroupsService {
    * @returns {Observable<R>}
    */
   removeDataDescriptor(descriptor:DataDescriptorVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/descriptor/' + descriptor.datadescriptorId, options)
+    return this.http.delete(this._serviceBaseUrl + '/datadescriptor/' + descriptor.datadescriptorId, Util.requestOptions())
       .catch(this.handleError);
   }
 

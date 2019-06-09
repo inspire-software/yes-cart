@@ -312,7 +312,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     };
 
     let id = 'cms' + Math.random();
-    let myWindow = window.open(Config.CONTEXT_PATH + '/resources/assets/editor/tinymce/editor.html?lang=' + body.lang + '&id=' + id, 'CMS', 'width=1024,height=660');
+    let myWindow = window.open(Config.CONTEXT_PATH + '/client/assets/editor/tinymce/editor.html?lang=' + body.lang + '&id=' + id, 'CMS', 'width=1024,height=660');
 
     LogUtil.debug('ContentComponent onCMSEdit', msg);
 

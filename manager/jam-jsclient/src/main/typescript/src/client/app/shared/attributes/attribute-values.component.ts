@@ -85,6 +85,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   private fileEditor:boolean = false;
   private lockedEditor:boolean = false;
 
+  private loading:boolean = false;
+
   /**
    * Construct attribute panel
    */
@@ -475,6 +477,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
       LogUtil.debug('AttributeValuesComponent image file selected', imageName);
       let reader:FileReader = new FileReader();
 
+      this.loading = true;
       let that = this;
 
       reader.onloadend = function(e:any) {
@@ -484,6 +487,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
         that.processImageView(that.attributeToEdit);
         that.changed = true;
         that.validForSave = true;
+        that.loading = false;
         srcElement.value = '';
       };
       reader.readAsDataURL(image);
@@ -509,6 +513,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
       LogUtil.debug('AttributeValuesComponent media file selected', file.name);
       let reader:FileReader = new FileReader();
 
+      this.loading = true;
       let that = this;
 
       reader.onloadend = function(e:any) {
@@ -517,6 +522,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
         that.attributeToEdit.valBase64Data = e.target.result;
         that.changed = true;
         that.validForSave = true;
+        that.loading = false;
         srcElement.value = '';
       };
       reader.readAsDataURL(file);

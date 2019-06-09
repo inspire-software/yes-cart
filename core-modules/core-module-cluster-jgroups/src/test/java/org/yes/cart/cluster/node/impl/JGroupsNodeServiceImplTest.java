@@ -87,9 +87,9 @@ public class JGroupsNodeServiceImplTest {
         final ServletContext ctx2 = context.mock(ServletContext.class, "ctx2");
         final ServletContext ctx3 = context.mock(ServletContext.class, "ctx3");
 
-        setExpectations(ctx1, new NodeImpl(false, "SF0", "SFW", "DEFAULT", "YCTEST", "0.0.0", "ABC", false));
-        setExpectations(ctx2, new NodeImpl(false, "SF1", "API", "DEFAULT", "YCTEST", "0.0.0", "ABC", true));
-        setExpectations(ctx3, new NodeImpl(false, "JAM", "ADM", "DEFAULT", "YCTEST", "0.0.0", "ABC", true));
+        setExpectations(ctx1, new NodeImpl(false, "SF0", "SFW", "DEFAULT", "TEST", "0.0.0", "ABC", false));
+        setExpectations(ctx2, new NodeImpl(false, "SF1", "API", "DEFAULT", "TEST", "0.0.0", "ABC", true));
+        setExpectations(ctx3, new NodeImpl(false, "JAM", "ADM", "DEFAULT", "TEST", "0.0.0", "ABC", true));
 
         ns1.setServletContext(ctx1);
         Thread.sleep(200L);

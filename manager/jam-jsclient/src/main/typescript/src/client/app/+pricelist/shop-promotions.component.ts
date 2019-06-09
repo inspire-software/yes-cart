@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ShopEventBus, PricingService, Util } from './../shared/services/index';
+import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/services/index';
 import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { PromotionVO, ShopVO, Pair, CartVO, PromotionTestVO } from './../shared/model/index';
@@ -36,8 +36,8 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   private static PROMOTION:string = 'promotion';
   private static PROMOTIONS_TEST:string = 'promotionstest';
 
-  private static COOKIE_SHOP:string = 'YCJAM_UI_PROMO_SHOP';
-  private static COOKIE_CURRENCY:string = 'YCJAM_UI_PROMO_CURR';
+  private static COOKIE_SHOP:string = 'ADM_UI_PROMO_SHOP';
+  private static COOKIE_CURRENCY:string = 'ADM_UI_PROMO_CURR';
 
   private static _selectedShopCode:string;
   private static _selectedShop:ShopVO;
@@ -164,17 +164,33 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('ShopPromotionsComponent ngOnInit');
+
+    this.onRefreshHandler();
+
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.getFilteredPromotions();
+    }, this.delayedFilteringMs);
+
+  }
+
+  ngOnDestroy() {
+    LogUtil.debug('ShopPromotionsComponent ngOnDestroy');
+  }
+
+  protected presetFromCookie() {
+
     if (this.selectedShop == null) {
       let shopCode = CookieUtil.readCookie(ShopPromotionsComponent.COOKIE_SHOP, null);
       if (shopCode != null) {
         let shops = ShopEventBus.getShopEventBus().currentAll();
         if (shops != null) {
           shops.forEach(shop => {
-             if (shop.code == shopCode) {
-               this.selectedShop = shop;
-               this.selectedShopCode = shop.code;
-               LogUtil.debug('ShopPromotionsComponent ngOnInit presetting shop from cookie', shop);
-             }
+            if (shop.code == shopCode) {
+              this.selectedShop = shop;
+              this.selectedShopCode = shop.code;
+              LogUtil.debug('ShopPromotionsComponent ngOnInit presetting shop from cookie', shop);
+            }
           });
         }
       }
@@ -186,16 +202,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopPromotionsComponent ngOnInit presetting currency from cookie', curr);
       }
     }
-    this.onRefreshHandler();
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.getFilteredPromotions();
-    }, this.delayedFilteringMs);
 
-  }
-
-  ngOnDestroy() {
-    LogUtil.debug('ShopPromotionsComponent ngOnDestroy');
   }
 
 
@@ -270,6 +277,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     }
   }
 
+
   protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
@@ -278,7 +286,10 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('ShopPromotionsComponent refresh handler');
-    this.getFilteredPromotions();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.presetFromCookie();
+      this.getFilteredPromotions();
+    }
   }
 
   protected onPromotionSelected(data:PromotionVO) {

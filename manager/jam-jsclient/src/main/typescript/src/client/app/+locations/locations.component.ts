@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { LocationService, Util } from './../shared/services/index';
+import { LocationService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { CountryVO, StateVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
@@ -83,12 +83,14 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('LocationsComponent refresh handler');
-    if (this.viewMode === LocationsComponent.COUNTRIES ||
-        this.viewMode === LocationsComponent.COUNTRY ||
-        this.selectedCountry == null) {
-      this.getAllLocations();
-    } else {
-      this.getAllStates();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      if (this.viewMode === LocationsComponent.COUNTRIES ||
+          this.viewMode === LocationsComponent.COUNTRY ||
+          this.selectedCountry == null) {
+        this.getAllLocations();
+      } else {
+        this.getAllStates();
+      }
     }
   }
 

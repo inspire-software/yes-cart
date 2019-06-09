@@ -117,6 +117,21 @@
   "MODAL_BUTTON_SECURE_ATTR_OFF": "Secure mode is disabled, sensitive data will be displayed. Click this button again to enable secure mode.",
   "MODAL_BUTTON_RUN": "Run",
 
+  "MODAL_LOGIN_TITLE": "Login",
+  "MODAL_BUTTON_LOGIN": "Login",
+  "MODAL_CHANGE_PASSWORD_TITLE": "Change password",
+  "USERNAME": "Username",
+  "PASSWORD": "Password",
+  "NEW_PASSWORD": "New password",
+  "CONFIRM_PASSWORD": "Confirm password",
+  "AUTH_TOKEN_INVALID": "Invalid token, please login again",
+  "AUTH_TOKEN_EXPIRED": "Token expired, please login again",
+  "AUTH_CREDENTAILS_INVALID": "Invalid username and/or password",
+  "AUTH_CREDENTAILS_EXPIRED": "Password expired, please change it",
+  "AUTH_CHANGEPWD_SAMEASOLD": "Password cannot be same as old",
+  "AUTH_CHANGEPWD_NOMATCH": "Password and confirmation must match",
+  "AUTH_CHANGEPWD_SUCCESS": "Password changed, please use new password to login",
+
   "NAME": "Name",
   "DESCRIPTION": "Description",
   "DEFAULT_VALUE": "default value",
@@ -863,6 +878,7 @@
   "SEARCH_HELP_CACHE_TOP": "To display top X used caches. Format: '^X'",
   "SEARCH_HELP_CACHE_SIZE": "To display caches with X or more elements. Format: '#X'",
   "SEARCH_HELP_CACHE_HOT": "To display overloaded caches. Format: '!X'",
+  "SEARCH_HELP_CACHE_HEAVY": "To display heaviest caches. Format: '$X'",
 
   "SEARCH_HELP_CALENDAR": "To search by date use the < character with dates after (on left) or before (on right). E.g: 'before 2000': <2000, 'after sep 2000 before 2017': 2000-09<2017"
 

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { DataGroupsService, Util } from './../shared/services/index';
+import { DataGroupsService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { DataDescriptorVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
@@ -71,7 +71,9 @@ export class ImpexDataDescriptorsComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('ImpexDataDescriptorsComponent refresh handler');
-    this.getAllDataDescriptors();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getAllDataDescriptors();
+    }
   }
 
   protected onDataDescriptorSelected(data:DataDescriptorVO) {

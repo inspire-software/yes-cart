@@ -21,15 +21,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>YC - pure eCommerce</title>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/yc-main.css" rel="stylesheet"/>
-    <link rel="icon" href="${pageContext.servletContext.contextPath}/resources/assets/favicon.ico" type="image/x-icon">
+    <link href="${pageContext.servletContext.contextPath}/client/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/client/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/client/css/cl-main.css" rel="stylesheet"/>
+    <link rel="icon" href="${pageContext.servletContext.contextPath}/favicon.ico" type="image/x-icon">
 </head>
 <body>
 <script type="text/javascript">
     <!--
-    redirectToPage = "<c:url value='/resources/index.html'/>";
+    redirectToPage = "<c:url value='/client/index.html'/>";
     setTimeout('redirectTo()', 100);
     function redirectTo() {
         window.location = redirectToPage;
@@ -40,16 +40,16 @@
 <div class="container gear-top">
     <div class="row gear-bottom">
         <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 vcenter">
-            <form class="whitebg" name='loginForm' action='<c:url value='/resources/index.html' />' method='GET'>
+            <form class="whitebg" name='loginForm' action='<c:url value='/client/index.html' />' method='GET'>
 
                 <div class="text-center clearfix">
                     <a href="http://yes-cart.org" target="_blank">
-                        <img border="0" src="${pageContext.servletContext.contextPath}/resources/assets/img/logo-button-100x100.png"/>
+                        <img border="0" src="${pageContext.servletContext.contextPath}/client/assets/img/logo-button-100x100.png"/>
                     </a>
                 </div>
 
                 <div class="text-center clearfix">
-                    <img border="0" src="${pageContext.servletContext.contextPath}/resources/assets/img/ajax-loader.gif"/>
+                    <img border="0" src="${pageContext.servletContext.contextPath}/client/assets/img/ajax-loader.gif"/>
                 </div>
 
                 <div class="input-group input-sm pull-right">
@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="input-group input-sm">
-                    Powered by <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a><br/>
+                    Powered by <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a>
                     &copy; YesCart.org 2009 - <%= DateUtils.formatYear() %>
                 </div>
             </form>

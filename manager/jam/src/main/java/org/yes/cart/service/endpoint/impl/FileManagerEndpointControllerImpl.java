@@ -25,6 +25,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.remote.service.FileManager;
 import org.yes.cart.service.endpoint.FileManagerEndpointController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -75,9 +76,9 @@ public class FileManagerEndpointControllerImpl implements FileManagerEndpointCon
     }
 
     @Override
-    public String upload(@RequestParam("file") MultipartFile file) throws IOException {
+    public void upload(@RequestParam("file") final MultipartFile file, final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         this.fileManager.upload(file.getBytes(), file.getOriginalFilename());
-        return "upload-success";
+        response.sendRedirect(request.getContextPath() + "/success.jsp");
     }
 
     @Override

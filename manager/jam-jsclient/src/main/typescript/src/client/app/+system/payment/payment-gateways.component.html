@@ -112,7 +112,7 @@
 
   <yc-modal #featuresModalDialog
             title="{{ selectedGateway != null ? selectedGateway.name : '' }}"
-            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            disableCancel="true"
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
             [valid]="true">
 

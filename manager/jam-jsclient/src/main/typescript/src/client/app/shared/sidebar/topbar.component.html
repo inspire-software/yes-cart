@@ -1,4 +1,4 @@
-<div id="page-topbar" class="row">
+<div id="page-topbar" class="row" [hidden]="currentUser == null">
   <div class="col-md-4 padding-lr-0">
     <a class="btn btn-default" [routerLink]="['/dashboard']">
       <i class="fa {{ hasAlerts ? 'fa-exclamation-triangle text-danger' : 'fa-tachometer'}}" title="{{ 'PANEL_DASHBOARD' | translate }}"></i>
@@ -8,7 +8,7 @@
         <i class="fa {{ evictingCache ? 'fa-spinner' : 'fa-thermometer-half text-danger' }}" title="{{ 'MODAL_BUTTON_CACHEEVICT' | translate }}"></i>
       </a>
     </ng-template>
-    <a class="btn btn-default" href="../changepassword.jsp?j_username={{currentUserEmail}}" title="{{ 'CHANGE_PASSWORD' | translate }}">
+    <a class="btn btn-default"  (click)="onChangePassword()" title="{{ 'CHANGE_PASSWORD' | translate }}">
       <i class="fa fa-lock"></i>
     </a>
   </div>
@@ -17,7 +17,7 @@
   </div>
   <div class="col-md-4 padding-lr-0 text-right">
     <span>{{ 'LOGGED_IN' | translate: { user: currentUserName } }}</span>
-    <a class="btn btn-danger" href="../logout.jsp">
+    <a class="btn btn-danger" (click)="onLogOutClick()">
       <i class="fa fa-sign-out"></i>
     </a>
   </div>

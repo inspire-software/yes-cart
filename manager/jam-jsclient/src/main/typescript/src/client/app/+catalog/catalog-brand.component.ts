@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { CatalogService, Util } from './../shared/services/index';
+import { CatalogService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { BrandVO, AttrValueBrandVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
@@ -92,7 +92,9 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('CatalogBrandComponent refresh handler');
-    this.getFilteredBrands();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getFilteredBrands();
+    }
   }
 
   protected onBrandSelected(data:BrandVO) {

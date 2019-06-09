@@ -15,7 +15,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -47,9 +47,7 @@ export class ValidationService {
    */
   validate(request:ValidationRequestVO) {
     let body = JSON.stringify(request);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._serviceBaseUrl, body, options)
+    return this.http.post(this._serviceBaseUrl, body, Util.requestOptions())
       .map(res => <ValidationResultVO> this.json(res))
       .catch(this.handleError);
   }

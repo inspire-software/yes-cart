@@ -44,6 +44,8 @@
          [valid]="validForSave"
          (closed)="onEditModalResult($event)">
 
+    <div class="panel-body {{ loading ? 'loading-data' : '' }}">
+
     <ng-template [ngIf]="booleanEditor">
 
       <form role="form">
@@ -227,6 +229,8 @@
       </form>
 
     </ng-template>
+
+    </div>
 
   </yc-modal>
 

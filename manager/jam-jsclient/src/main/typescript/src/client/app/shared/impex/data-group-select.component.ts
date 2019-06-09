@@ -15,7 +15,7 @@
  */
 import { Component,  OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { DataGroupInfoVO } from './../model/index';
-import { ImpexService, I18nEventBus } from './../services/index';
+import { ImpexService, I18nEventBus, UserEventBus } from './../services/index';
 import { Futures, Future } from './../event/index';
 import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
@@ -52,7 +52,7 @@ export class DataGroupSelectComponent implements OnInit, OnDestroy {
   ngOnInit() {
     LogUtil.debug('DataGroupSelectComponent ngOnInit');
     if (this.groups == null) {
-      this.getAllGroups();
+      this.onRefresh();
     }
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -65,6 +65,13 @@ export class DataGroupSelectComponent implements OnInit, OnDestroy {
     LogUtil.debug('DataGroupSelectComponent onSelectClick', group);
     this.selectedGroup = group;
     this.dataSelected.emit(this.selectedGroup);
+  }
+
+  protected onRefresh() {
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.dataSelected.emit(null);
+      this.getAllGroups();
+    }
   }
 
   protected onFilterChange() {

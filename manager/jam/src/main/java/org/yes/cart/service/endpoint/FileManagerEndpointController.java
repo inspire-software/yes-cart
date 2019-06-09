@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.yes.cart.domain.misc.MutablePair;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -58,11 +59,10 @@ public interface FileManagerEndpointController {
     /**
      * Store given bytes as file.
      * @param file file body.
-     * @return file name, including path, on server side.
      */
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    String upload(@RequestParam("file") MultipartFile file) throws IOException;
+    void upload(@RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     /**
      * Delete given file.

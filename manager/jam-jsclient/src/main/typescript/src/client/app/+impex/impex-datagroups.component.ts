@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { DataGroupsService, Util } from './../shared/services/index';
+import { DataGroupsService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { DataGroupVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
@@ -71,7 +71,9 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('ImpexDataGroupsComponent refresh handler');
-    this.getAllDataGroups();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getAllDataGroups();
+    }
   }
 
   protected onDataGroupSelected(data:DataGroupVO) {

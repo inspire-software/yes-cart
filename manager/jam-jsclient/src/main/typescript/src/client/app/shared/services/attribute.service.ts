@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { EtypeVO, AttributeGroupVO, AttributeVO, Pair } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -46,7 +46,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllEtypes() {
-    return this.http.get(this._serviceBaseUrl + '/etype/all')
+    return this.http.get(this._serviceBaseUrl + '/etype/all', Util.requestOptions())
       .map(res => <EtypeVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -56,7 +56,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllGroups() {
-    return this.http.get(this._serviceBaseUrl + '/group/all')
+    return this.http.get(this._serviceBaseUrl + '/group/all', Util.requestOptions())
       .map(res => <AttributeGroupVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -67,7 +67,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllAttributes(groupCode:string) {
-    return this.http.get(this._serviceBaseUrl + '/attribute/all/' + groupCode + '/')
+    return this.http.get(this._serviceBaseUrl + '/attribute/all/' + groupCode + '/', Util.requestOptions())
       .map(res => <AttributeVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -81,10 +81,9 @@ export class AttributeService {
   getFilteredAttributes(groupCode:string, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/attribute/filtered/' + groupCode + '/' + max, body, options)
+    return this.http.post(this._serviceBaseUrl + '/attribute/filtered/' + groupCode + '/' + max, body,
+              Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .map(res => <AttributeVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -96,7 +95,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getProductTypesByAttributeCode(code:string) {
-    return this.http.get(this._serviceBaseUrl + '/attribute/producttype/' + code)
+    return this.http.get(this._serviceBaseUrl + '/attribute/producttype/' + code, Util.requestOptions())
       .map(res => <Pair<number,string>[]> this.json(res))
       .catch(this.handleError);
   }
@@ -109,7 +108,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAttributeById(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/attribute/' + id)
+    return this.http.get(this._serviceBaseUrl + '/attribute/' + id, Util.requestOptions())
       .map(res => <AttributeVO> this.json(res))
       .catch(this.handleError);
   }
@@ -122,15 +121,13 @@ export class AttributeService {
    */
   saveAttribute(attribute:AttributeVO) {
     let body = JSON.stringify(attribute);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
     if (attribute.attributeId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/attribute', body, options)
+      return this.http.post(this._serviceBaseUrl + '/attribute', body, Util.requestOptions())
         .map(res => <AttributeVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/attribute', body, options)
+      return this.http.put(this._serviceBaseUrl + '/attribute', body, Util.requestOptions())
         .map(res => <AttributeVO> this.json(res))
         .catch(this.handleError);
     }
@@ -143,10 +140,8 @@ export class AttributeService {
    * @returns {Observable<R>}
    */
   removeAttribute(attribute:AttributeVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/attribute/' + attribute.attributeId, options)
+    return this.http.delete(this._serviceBaseUrl + '/attribute/' + attribute.attributeId, Util.requestOptions())
       .catch(this.handleError);
   }
 

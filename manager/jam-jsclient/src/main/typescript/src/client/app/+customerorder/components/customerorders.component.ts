@@ -65,7 +65,7 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
 
   set showGrossTotal(showGrossTotal:boolean) {
     Config.UI_ORDER_TOTALS = showGrossTotal ? 'gross' : 'net';
-    let cookieName = 'YCJAM_UI_ORDER_TOTALS';
+    let cookieName = 'ADM_UI_ORDER_TOTALS';
     CookieUtil.createCookie(cookieName, Config.UI_ORDER_TOTALS, 360);
   }
 

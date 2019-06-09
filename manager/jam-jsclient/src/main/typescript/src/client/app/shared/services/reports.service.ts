@@ -16,7 +16,7 @@
 
 
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import { DashboardWidgetInfoVO, DashboardWidgetVO, ReportDescriptorVO, ReportRequestVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
@@ -46,7 +46,7 @@ export class ReportsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getDashboard(lang:string) {
-    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/')
+    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/', Util.requestOptions())
       .map(res => <DashboardWidgetVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -56,7 +56,7 @@ export class ReportsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getDashboardWidget(widget:string, lang:string) {
-    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/' + widget + '/')
+    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/' + widget + '/', Util.requestOptions())
       .map(res => <DashboardWidgetVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -66,7 +66,7 @@ export class ReportsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAvailableWidgets(lang:string) {
-    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/available/')
+    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/available/', Util.requestOptions())
       .map(res => <DashboardWidgetInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -83,10 +83,9 @@ export class ReportsService {
     });
 
     let body = widgetCsv;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/dashboard/' + lang + '/', body, options)
+    return this.http.post(this._serviceBaseUrl + '/dashboard/' + lang + '/', body,
+          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
       .catch(this.handleError);
 
   }
@@ -96,7 +95,7 @@ export class ReportsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getReportDescriptors() {
-    return this.http.get(this._serviceBaseUrl + '/report/all')
+    return this.http.get(this._serviceBaseUrl + '/report/all', Util.requestOptions())
       .map(res => <ReportDescriptorVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -110,10 +109,8 @@ export class ReportsService {
   updateReportRequestValues(req:ReportRequestVO) {
 
     let body = JSON.stringify(req);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/report/configure', body, options)
+    return this.http.post(this._serviceBaseUrl + '/report/configure', body, Util.requestOptions())
         .map(res => <ReportRequestVO> this.json(res))
         .catch(this.handleError);
   }
@@ -127,10 +124,8 @@ export class ReportsService {
   generateReport(req:ReportRequestVO) {
 
     let body = JSON.stringify(req);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/report/generate', body, options)
+    return this.http.post(this._serviceBaseUrl + '/report/generate', body, Util.requestOptions())
         .map(res => res.text())
         .catch(this.handleError);
   }
