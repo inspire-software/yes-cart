@@ -199,7 +199,7 @@ Parameters
 Attributes
 CharacterEncodingFilter.FILTERED=true
 ShoppingCart=org.yes.cart.shoppingcart.impl.ShoppingCartImpl@408b6695
-YC_APP_MULTIWEBAPP_RESOLVER=[theme chain = [/ycdemolive/markup/, /ycdemo/markup/, /default/markup/]]
+SFW_APP_MULTIWEBAPP_RESOLVER=[theme chain = [/ycdemolive/markup/, /ycdemo/markup/, /default/markup/]]
 org.springframework.web.context.request.RequestContextListener.REQUEST_ATTRIBUTES=org.apache.catalina.connector.Request@37858dfa
 org.springframework.web.context.request.async.WebAsyncManager.WEB_ASYNC_MANAGER=org.springframework.web.context.request.async.WebAsyncManager@6dd216d7
 

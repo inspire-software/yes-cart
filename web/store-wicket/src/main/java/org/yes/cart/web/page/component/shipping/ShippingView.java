@@ -22,10 +22,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -126,7 +123,7 @@ public class ShippingView extends BaseComponent {
             }
         }
 
-        final Form form = new StatelessForm(SHIPPING_FORM) {
+        final Form form = new StatelessForm<Object>(SHIPPING_FORM) {
             @Override
             protected void onSubmit() {
 
@@ -146,89 +143,81 @@ public class ShippingView extends BaseComponent {
 
         final Component shippingSelector = new RadioGroup<CarrierSla>(
                 CARRIER_SLA_LIST,
-                new PropertyModel<>(this, "carrierSla")) {
+                new PropertyModel<>(this, "carrierSla")) {{
+                    add(new FormComponentUpdatingBehavior() {
+                        @Override
+                        protected void onUpdate() {
+                            final ShoppingCart cart = getCurrentCart();
 
-            /** {@inheritDoc} */
-            @Override
-            protected void onSelectionChanged(final CarrierSla descriptor) {
-                super.onSelectionChanged(carrierSla);
+                            final Set<Long> slaSelection = new HashSet<>(cart.getCarrierSlaId().values());
+                            slaSelection.add(carrierSla.getCarrierslaId());
 
+                            final Pair<Boolean, Boolean> addressNotRequired = shippingServiceFacade.isAddressNotRequired(slaSelection);
 
-                final ShoppingCart cart = getCurrentCart();
+                            final Address billingAddress;
+                            final Address shippingAddress;
+                            if (customer != null &&
+                                    (!addressNotRequired.getFirst() || !addressNotRequired.getSecond())) {
 
-                final Set<Long> slaSelection = new HashSet<>(cart.getCarrierSlaId().values());
-                slaSelection.add(carrierSla.getCarrierslaId());
+                                final Shop customerShop = getCurrentCustomerShop();
+                                final Address billingAddressTemp = addressBookFacade.getDefaultAddress(customer, customerShop, Address.ADDR_TYPE_BILLING);
+                                final Address shippingAddressTemp = addressBookFacade.getDefaultAddress(customer, customerShop, Address.ADDR_TYPE_SHIPPING);
 
-                final Pair<Boolean, Boolean> addressNotRequired = shippingServiceFacade.isAddressNotRequired(slaSelection);
+                                if (shippingAddressTemp != null) { //normal case when we entered shipping address
 
-                final Address billingAddress;
-                final Address shippingAddress;
-                if (customer != null &&
-                        (!addressNotRequired.getFirst() || !addressNotRequired.getSecond())) {
+                                    if (!cart.isSeparateBillingAddress() || billingAddressTemp == null) {
 
-                    final Shop customerShop = getCurrentCustomerShop();
-                    final Address billingAddressTemp = addressBookFacade.getDefaultAddress(customer, customerShop, Address.ADDR_TYPE_BILLING);
-                    final Address shippingAddressTemp = addressBookFacade.getDefaultAddress(customer, customerShop, Address.ADDR_TYPE_SHIPPING);
+                                        billingAddress = shippingAddressTemp;
+                                        shippingAddress = shippingAddressTemp;
 
-                    if (shippingAddressTemp != null) { //normal case when we entered shipping address
+                                    } else {
 
-                        if (!cart.isSeparateBillingAddress() || billingAddressTemp == null) {
+                                        billingAddress = billingAddressTemp;
+                                        shippingAddress = shippingAddressTemp;
 
-                            billingAddress = shippingAddressTemp;
-                            shippingAddress = shippingAddressTemp;
+                                    }
 
-                        } else {
+                                } else if (billingAddressTemp != null) { // exception use case when we only have billing address
 
-                            billingAddress = billingAddressTemp;
-                            shippingAddress = shippingAddressTemp;
+                                    billingAddress = billingAddressTemp;
+                                    shippingAddress = billingAddressTemp;
 
+                                } else {
+
+                                    billingAddress = null;
+                                    shippingAddress = null;
+
+                                }
+
+                            } else {
+
+                                billingAddress = null;
+                                shippingAddress = null;
+
+                            }
+
+                            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, cart,
+                                    (Map) new HashMap() {{
+                                        put(ShoppingCartCommand.CMD_SETCARRIERSLA, String.valueOf(carrierSla.getCarrierslaId()) + '-' + supplier);
+                                        put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, addressNotRequired.getFirst());
+                                        put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billingAddress);
+                                        put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, addressNotRequired.getSecond());
+                                        put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, shippingAddress);
+                                    }}
+                            );
+
+                            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                                    cart,
+                                    (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+
+                            ((AbstractWebPage) getPage()).persistCartIfNecessary();
+
+                            addPriceView(form);
+
+                            addShippingOptionFeedback();
                         }
-
-                    } else if (billingAddressTemp != null) { // exception use case when we only have billing address
-
-                        billingAddress = billingAddressTemp;
-                        shippingAddress = billingAddressTemp;
-
-                    } else {
-
-                        billingAddress = null;
-                        shippingAddress = null;
-
-                    }
-
-                } else {
-
-                    billingAddress = null;
-                    shippingAddress = null;
-
-                }
-
-                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, cart,
-                        (Map) new HashMap() {{
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA, String.valueOf(carrierSla.getCarrierslaId()) + '-' + supplier);
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, addressNotRequired.getFirst());
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billingAddress);
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, addressNotRequired.getSecond());
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, shippingAddress);
-                        }}
-                );
-
-                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
-                        cart,
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
-
-                ((AbstractWebPage) getPage()).persistCartIfNecessary();
-
-                addPriceView(form);
-
-                addShippingOptionFeedback();
-            }
-
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-        }.add(
+                    });
+        }}.add(
                 new ListView<CarrierSla>("shippingList", carrierSlas) {
                     @Override
                     protected void populateItem(final ListItem<CarrierSla> shippingItem) {

@@ -19,10 +19,7 @@ package org.yes.cart.web.page.component.customer.address;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -105,29 +102,24 @@ public class ManageAddressesView extends BaseComponent {
                 new Form(SELECT_ADDRESSES_FORM).add(
                         new RadioGroup<Address>(
                                 ADDRESS_RADIO_GROUP,
-                                new Model<>(addressBookFacade.getDefaultAddress(customerModel.getObject(), getCurrentCustomerShop(), addressType))) {
-
-                            @Override
-                            protected void onSelectionChanged(final Address address) {
-                                super.onSelectionChanged(address);
-                                addressBookFacade.useAsDefault(address, getCurrentCustomerShop());
-                                final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
-                                        ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
-                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, getCurrentCart(),
-                                        new HashMap() {{
-                                            put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
-                                            put(key, address);
-                                        }}
-                                );
-                                ((AbstractWebPage) getPage()).persistCartIfNecessary();
-                            }
-
-                            @Override
-                            protected boolean wantOnSelectionChangedNotifications() {
-                                return true;
-                            }
-
-                        }
+                                new Model<>(addressBookFacade.getDefaultAddress(customerModel.getObject(), getCurrentCustomerShop(), addressType))) {{
+                                    add(new FormComponentUpdatingBehavior() {
+                                        @Override
+                                        protected void onUpdate() {
+                                            final Address address = (Address) getDefaultModelObject();
+                                            addressBookFacade.useAsDefault(address, getCurrentCustomerShop());
+                                            final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
+                                                    ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
+                                            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, getCurrentCart(),
+                                                    new HashMap() {{
+                                                        put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
+                                                        put(key, address);
+                                                    }}
+                                            );
+                                            ((AbstractWebPage) getPage()).persistCartIfNecessary();
+                                        }
+                                    });
+                                }}
                                 .add(
                                         new Label(ADDRESS_LABEL, new StringResourceModel("addressType" + addressType, this, null))
                                 )

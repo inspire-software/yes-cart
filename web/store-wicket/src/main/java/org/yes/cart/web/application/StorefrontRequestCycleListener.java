@@ -16,7 +16,7 @@
 package org.yes.cart.web.application;
 
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ import org.yes.cart.web.support.seo.SeoEntryIdInvalidException;
  * Date: 2/3/13
  * Time: 12:10 PM
  */
-public class StorefrontRequestCycleListener extends AbstractRequestCycleListener {
+public class StorefrontRequestCycleListener implements IRequestCycleListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(StorefrontRequestCycleListener.class);
 
@@ -39,6 +39,6 @@ public class StorefrontRequestCycleListener extends AbstractRequestCycleListener
             LOG.error(ex.getMessage());
             return new RedirectRequestHandler("/"); //TODO: add more sophisticated error handling if require
         }
-        return super.onException(cycle, ex);
+        return null;
     }
 }

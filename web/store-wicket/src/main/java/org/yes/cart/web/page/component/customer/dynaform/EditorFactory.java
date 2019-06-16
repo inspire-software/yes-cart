@@ -19,7 +19,6 @@ package org.yes.cart.web.page.component.customer.dynaform;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -68,7 +67,7 @@ public class EditorFactory implements Serializable {
 
         final String prop = attrValue.getAttribute().getVal();
 
-        final IModel<String> labelModel = new AbstractReadOnlyModel<String>() {
+        final IModel<String> labelModel = new IModel<String>() {
 
             private final I18NModel m = nameModel;
 
@@ -93,7 +92,7 @@ public class EditorFactory implements Serializable {
                     attrValue.getAttribute().getChoiceData(),
                     attrValue.getAttribute().getChoiceData());
 
-            final IModel<List<Pair<String, String>>> enumChoices = new AbstractReadOnlyModel<List<Pair<String, String>>>() {
+            final IModel<List<Pair<String, String>>> enumChoices = new IModel<List<Pair<String,String>>>() {
 
                 private final I18NModel m = choices;
 

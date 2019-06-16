@@ -20,10 +20,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
@@ -213,7 +212,7 @@ public class ResetPanel extends BaseComponent {
                 attrValue.getAttribute().getDisplayName(),
                 attrValue.getAttribute().getName());
 
-        return new Label(id, new AbstractReadOnlyModel<String>() {
+        return new Label(id, new IModel<String>() {
 
             private final I18NModel m = model;
 

@@ -21,10 +21,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -70,7 +67,6 @@ import org.yes.cart.web.support.service.*;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -455,24 +451,16 @@ public class CheckoutPage extends AbstractWebPage {
         rez.addOrReplace(new Label(PAYMENT_FRAGMENT_PAYMENT_FORM));
         rez.addOrReplace(new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getGuid(), false));
 
-        final Component multiDelivery = new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new Model<>(multipleDelivery)) {
-
-            /** {@inheritDoc} */
+        final Component multiDelivery = new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new Model<>(multipleDelivery));
+        multiDelivery.add(new FormComponentUpdatingBehavior() {
             @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-
-            @Override
-            public void onSelectionChanged() {
-                setModelObject(!getModelObject());
+            protected void onUpdate() {
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_MULTIPLEDELIVERY,
                         getCurrentCart(),
-                        Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, getModelObject().toString()));
-                super.onSelectionChanged();
+                        Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, Boolean.toString((Boolean) multiDelivery.getDefaultModelObject())));
                 persistCartIfNecessary();
                 setResponsePage(
-                        this.getPage().getPageClass(),
+                        getPage().getPageClass(),
                         new PageParameters().set(
                                 CheckoutPage.THREE_STEPS_PROCESS,
                                 "true"
@@ -482,32 +470,29 @@ public class CheckoutPage extends AbstractWebPage {
                         )
                 );
             }
-
-        }.setVisible(showMultipleDelivery);
+        }).setVisible(showMultipleDelivery);
 
         final List<Pair<PaymentGatewayDescriptor, String>> available =
                 checkoutServiceFacade.getPaymentGatewaysDescriptors(getCurrentShop(), getCurrentCart());
 
-        final Component pgSelector = new RadioGroup<String>(
+        final RadioGroup pgSelector = new RadioGroup<String>(
                 PAYMENT_FRAGMENT_GATEWAY_CHECKBOX,
-                new PropertyModel<>(orderInfo, "paymentGatewayLabel")) {
-
-            /** {@inheritDoc} */
+                new PropertyModel<>(orderInfo, "paymentGatewayLabel"));
+        pgSelector.add(new FormComponentUpdatingBehavior() {
             @Override
-            protected void onSelectionChanged(final String descriptor) {
-
+            protected void onUpdate() {
                 final ShoppingCart cart = getCurrentCart();
                 final Shop shop = getCurrentShop();
 
                 final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
                 if ((!((AuthenticatedWebSession) getSession()).isSignedIn()
-                                || cart.getLogonState() != ShoppingCart.LOGGED_IN) &&
+                        || cart.getLogonState() != ShoppingCart.LOGGED_IN) &&
                         (customer == null || !customer.isGuest())) {
                     // Make sure we are logged in on the very last step
                     final PageParameters parameters = new PageParameters(getPageParameters());
                     parameters.set(STEP, STEP_LOGIN);
-                    setResponsePage(this.getPage().getClass(), parameters);
+                    setResponsePage(getPage().getClass(), parameters);
                 }
 
                 final CustomerOrder order = checkoutServiceFacade.findByReference(cart.getGuid());
@@ -515,7 +500,7 @@ public class CheckoutPage extends AbstractWebPage {
                 final BigDecimal grandTotal = total.getTotalAmount();
 
                 // update pgLabel and delivery info on the order
-                order.setPgLabel(descriptor);
+                order.setPgLabel(orderInfo.getPaymentGatewayLabel());
                 checkoutServiceFacade.estimateDeliveryTimeForOnlinePaymentOrder(order);
                 checkoutServiceFacade.update(order);
 
@@ -532,20 +517,12 @@ public class CheckoutPage extends AbstractWebPage {
 
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
                         cart,
-                        Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor));
+                        Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, orderInfo.getPaymentGatewayLabel()));
 
                 persistCartIfNecessary();
-
             }
-
-
-            /** {@inheritDoc} */
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-
-        }.add(
+        });
+        pgSelector.add(
                 new ListView<Pair<PaymentGatewayDescriptor, String>>("pgList", available) {
                     @Override
                     protected void populateItem(final ListItem<Pair<PaymentGatewayDescriptor, String>> pgListItem) {
@@ -772,36 +749,30 @@ public class CheckoutPage extends AbstractWebPage {
 
         rez.add(
                 new Form(BILLING_THE_SAME_FORM).add(
-                        new CheckBox(BILLING_THE_SAME, new Model<>(billingAddressHidden)) {
+                        new CheckBox(BILLING_THE_SAME, new Model<>(billingAddressHidden)) {{
+                            add(new FormComponentUpdatingBehavior() {
+                                @Override
+                                protected void onUpdate() {
+                                    billingAddress.setVisible(!billingAddressHidden);
+                                    shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SEPARATEBILLING, getCurrentCart(),
+                                            new HashMap() {{
+                                                put(ShoppingCartCommand.CMD_SEPARATEBILLING, Boolean.valueOf(!billingAddressHidden));
+                                            }}
+                                    );
+                                    persistCartIfNecessary();
 
-                            @Override
-                            protected boolean wantOnSelectionChangedNotifications() {
-                                return true;
-                            }
-
-                            @Override
-                            public void onSelectionChanged() {
-                                final boolean billingHidden = !getModelObject();
-                                setModelObject(billingHidden);
-                                billingAddress.setVisible(!billingHidden);
-                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SEPARATEBILLING, getCurrentCart(),
-                                        new HashMap() {{
-                                            put(ShoppingCartCommand.CMD_SEPARATEBILLING, String.valueOf(!billingHidden));
-                                        }}
-                                );
-                                persistCartIfNecessary();
-
-                                final Customer customer = customerServiceFacade.getCheckoutCustomer(getCurrentShop(), getCurrentCart());
-                                if (!billingHidden && customerNeedsToEnterAddress(customer, getCurrentCart(), Address.ADDR_TYPE_BILLING)) {
-                                    final PageParameters parameters = new PageParameters();
-                                    parameters.set(STEP, STEP_ADDR);
-                                    parameters.set(WebParametersKeys.ADDRESS_TYPE, Address.ADDR_TYPE_BILLING);
-                                    setResponsePage(CheckoutPage.this.getClass(), parameters);
-                                } else {
-                                    addFeedbackForAddressSelection();
+                                    final Customer customer = customerServiceFacade.getCheckoutCustomer(getCurrentShop(), getCurrentCart());
+                                    if (!billingAddressHidden && customerNeedsToEnterAddress(customer, getCurrentCart(), Address.ADDR_TYPE_BILLING)) {
+                                        final PageParameters parameters = new PageParameters();
+                                        parameters.set(STEP, STEP_ADDR);
+                                        parameters.set(WebParametersKeys.ADDRESS_TYPE, Address.ADDR_TYPE_BILLING);
+                                        setResponsePage(CheckoutPage.this.getClass(), parameters);
+                                    } else {
+                                        addFeedbackForAddressSelection();
+                                    }
                                 }
-                            }
-                        }
+                            });
+                        }}
                 ).setVisible(!forceTwoAddresses)
         );
 

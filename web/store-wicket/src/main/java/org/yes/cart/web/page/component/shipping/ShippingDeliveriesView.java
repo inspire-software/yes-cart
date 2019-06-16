@@ -21,6 +21,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -212,27 +213,18 @@ public class ShippingDeliveriesView extends BaseComponent {
                 }
         );
 
-        final Component multiDelivery = new CheckBox("multipleDelivery", new PropertyModel(this, "multipleDelivery")) {
-
-            /** {@inheritDoc} */
+        final Component multiDelivery = new CheckBox("multipleDelivery", new PropertyModel(this, "multipleDelivery"));
+        multiDelivery.add(new FormComponentUpdatingBehavior() {
             @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-
-            @Override
-            public void onSelectionChanged() {
-                setModelObject(!getModelObject());
+            protected void onUpdate() {
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_MULTIPLEDELIVERY,
                         getCurrentCart(),
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, getModelObject().toString()));
-                super.onSelectionChanged();
+                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, Boolean.toString(multipleDelivery)));
                 ((AbstractWebPage) getPage()).persistCartIfNecessary();
             }
+        });
 
-        };
-
-        add(new Form("paymentOptionsForm") {
+        add(new Form<Object>("paymentOptionsForm") {
                     @Override
                     public boolean isVisible() {
                         return isMultipleDeliveryAvailableForAtLeastOneSupplier();

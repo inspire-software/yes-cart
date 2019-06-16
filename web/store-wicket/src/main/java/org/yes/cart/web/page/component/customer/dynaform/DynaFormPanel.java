@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
@@ -99,7 +98,7 @@ public class DynaFormPanel extends BaseComponent {
 
         final List<Pair<AttrValueWithAttribute, Boolean>> attrValueCollection = customerService.getCustomerProfileAttributes(shop, customer);
 
-        final Form form = new Form(FORM) {
+        final Form form = new Form<Object>(FORM) {
 
             @Override
             protected void onSubmit() {
@@ -197,7 +196,7 @@ public class DynaFormPanel extends BaseComponent {
                 attrValue.getAttribute().getDisplayName(),
                 attrValue.getAttribute().getName());
 
-        return new Label(NAME, new AbstractReadOnlyModel<String>() {
+        return new Label(NAME, new IModel<String>() {
 
             private final I18NModel m = model;
 

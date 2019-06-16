@@ -178,9 +178,8 @@
         <init-param>
             <param-name>secureMode</param-name>
             <!--
-            false security not need at all, for example intranet.
-            true in case if we are run with ssl support, regardles where the ssl ofloaded
-            on web of htt server.
+            false security is not need at all (i.e. http protocol only).
+            true in case if we run with ssl support.
             -->
             <param-value>${wicket.security.enabled}</param-value>
         </init-param>

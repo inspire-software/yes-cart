@@ -17,21 +17,16 @@
 package org.yes.cart.web.page.component.customer.auth;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.page.component.customer.dynaform.EditorFactory;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;

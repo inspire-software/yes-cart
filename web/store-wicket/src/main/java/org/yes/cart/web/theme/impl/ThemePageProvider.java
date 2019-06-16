@@ -17,7 +17,6 @@
 package org.yes.cart.web.theme.impl;
 
 import org.apache.wicket.request.component.IRequestablePage;
-import org.apache.wicket.util.IProvider;
 import org.apache.wicket.util.reference.ClassReference;
 import org.springframework.util.Assert;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -25,6 +24,7 @@ import org.yes.cart.web.application.ApplicationDirector;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * User: denispavlov
@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class ThemePageProvider extends ClassReference<IRequestablePage> {
 
-    private final Map<String, IProvider<Class<IRequestablePage>>> pages = new HashMap<>();
+    private final Map<String, Supplier<Class<IRequestablePage>>> pages = new HashMap<>();
 
     public ThemePageProvider(final Map<String, Class<IRequestablePage>> pages) {
         super(IRequestablePage.class);

@@ -117,7 +117,7 @@
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
 
         <!-- Storefront global versions -->
-        <wicket.version>7.9.0</wicket.version>
+        <wicket.version>8.5.0</wicket.version>
         <jetty.version>6.1.4</jetty.version>
 
         <!-- Storefront API global versions -->
@@ -418,6 +418,12 @@
 
         <dependency>
             <artifactId>asm</artifactId>
+            <groupId>org.ow2.asm</groupId>
+            <version>${asm.version}</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>asm-util</artifactId>
             <groupId>org.ow2.asm</groupId>
             <version>${asm.version}</version>
         </dependency>

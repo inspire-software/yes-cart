@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.application;
 
-import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.IRequestCycleProvider;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
@@ -128,8 +128,8 @@ public class StorefrontApplication extends AuthenticatedWebApplication
         if ("true".equalsIgnoreCase(getInitParameter("secureMode"))) {
 
             final HttpsConfig httpsConfig = new HttpsConfig(
-                    Integer.valueOf((String) ObjectUtils.defaultIfNull(getInitParameter("unsecurePort"), "8080")),
-                    Integer.valueOf((String) ObjectUtils.defaultIfNull(getInitParameter("securePort"), "8443"))
+                    NumberUtils.toInt(getInitParameter("unsecurePort"), 8080),
+                    NumberUtils.toInt(getInitParameter("securePort"), 8443)
             );
 
             final HttpsMapper httpsMapper = new HttpsMapper(getRootRequestMapper(), httpsConfig);
@@ -253,7 +253,7 @@ public class StorefrontApplication extends AuthenticatedWebApplication
      * {@inheritDoc}
      */
     @Override
-    public RequestCycle get(final RequestCycleContext context) {
+    public RequestCycle apply(final RequestCycleContext context) {
         return new RequestCycle(context);
     }
 
@@ -266,7 +266,7 @@ public class StorefrontApplication extends AuthenticatedWebApplication
     private MultiWebApplicationPath configureMultiWebApplicationPath() {
 
         HttpServletRequest rawRequest = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
-        final Object resolver = rawRequest.getAttribute("YC_APP_MULTIWEBAPP_RESOLVER");
+        final Object resolver = rawRequest.getAttribute("SFW_APP_MULTIWEBAPP_RESOLVER");
         if (resolver == null) {
 
             MultiWebApplicationPath multiWebApplicationPath = new MultiWebApplicationPath(getServletContext());
@@ -276,7 +276,7 @@ public class StorefrontApplication extends AuthenticatedWebApplication
                 multiWebApplicationPath.add(theme + "/markup");  // shop specific markup folder
             }
 
-            rawRequest.setAttribute("YC_APP_MULTIWEBAPP_RESOLVER", multiWebApplicationPath);
+            rawRequest.setAttribute("SFW_APP_MULTIWEBAPP_RESOLVER", multiWebApplicationPath);
             return multiWebApplicationPath;
         }
         return (MultiWebApplicationPath) resolver;

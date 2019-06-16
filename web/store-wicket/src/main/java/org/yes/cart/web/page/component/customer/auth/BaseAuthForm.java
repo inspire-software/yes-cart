@@ -28,11 +28,7 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
  * Date: 10/16/11
  * Time: 3:29 PM
  */
-public class BaseAuthForm extends Form {
-
-    public static final int MIN_LEN = 6;
-    public static final int MAX_LEN = 256;
-
+public class BaseAuthForm extends Form<Object> {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerServiceFacade;
