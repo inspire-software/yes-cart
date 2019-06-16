@@ -188,9 +188,11 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @Override
     public boolean isCustomerExists(final String email, final Shop shop) {
-        final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("EMAIL.CHECK", email.toLowerCase(), shop.getShopId());
-        if (CollectionUtils.isNotEmpty(counts)) {
-            return ((Number) counts.get(0)).intValue() > 0;
+        if (StringUtils.isNotBlank(email)) {
+            final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("EMAIL.CHECK", email.toLowerCase(), shop.getShopId());
+            if (CollectionUtils.isNotEmpty(counts)) {
+                return ((Number) counts.get(0)).intValue() > 0;
+            }
         }
         return false;
     }

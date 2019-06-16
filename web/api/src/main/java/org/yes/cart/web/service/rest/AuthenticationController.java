@@ -542,7 +542,7 @@ public class AuthenticationController {
 
     }
 
-    private List<AttrValueWithAttribute> getAllRegistrationAttributes(final @RequestParam(value = "customerType", required = false) String customerType, final Shop shop) {
+    private List<AttrValueWithAttribute> getAllRegistrationAttributes(final String customerType, final Shop shop) {
         final List<AttrValueWithAttribute> allReg = new ArrayList<>();
         final List<AttrValueWithAttribute> avs = customerServiceFacade.getShopRegistrationAttributes(shop, customerType);
 
@@ -652,6 +652,8 @@ public class AuthenticationController {
      * <p>
      * <h3>Error codes</h3><p>
      * <table border="1">
+     *     <tr><td>USER_EXISTS</td><td>Customer already exists</td></tr>
+     *     <tr><td>USER_TYPE_FAILED</td><td>Unsupported customer type</td></tr>
      *     <tr><td>EMAIL_FAILED</td><td>email must be more than 6 and less than 256 chars (^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*((\.[A-Za-z]{2,}){1}$)) </td></tr>
      *     <tr><td>FIRSTNAME_FAILED</td><td>must be not blank</td></tr>
      *     <tr><td>LASTNAME_FAILED</td><td>must be not blank</td></tr>
@@ -686,11 +688,14 @@ public class AuthenticationController {
                                                          final HttpServletResponse response) {
 
         // No existing users, non-typed customers or guests allowed
-        if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())
-                || StringUtils.isBlank(registerRO.getCustomerType()) || AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST.equals(registerRO.getCustomerType())
+        if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())) {
+            return new AuthenticationResultRO("USER_EXISTS");
+        }
+
+        if (StringUtils.isBlank(registerRO.getCustomerType()) || AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST.equals(registerRO.getCustomerType())
                 || !customerServiceFacade.isShopCustomerTypeSupported(cartMixin.getCurrentShop(), registerRO.getCustomerType())) {
 
-            return new AuthenticationResultRO("USER_FAILED");
+            return new AuthenticationResultRO("USER_TYPE_FAILED");
 
         }
 
@@ -729,14 +734,14 @@ public class AuthenticationController {
                     emailAttr = av.getAttributeCode();
                 }
 
-                final String value = av.getAttributeCode().equals(emailAttr) ? registerRO.getEmail() : registerRO.getCustom().get(attr.getCode());
+                final String value = av.getAttributeCode().equals(emailAttr) ? registerRO.getEmail() : registerRO.getCustom().get(av.getAttributeCode());
 
                 final AuthenticationResultRO result = checkValid(attr, value, cart.getCurrentLocale());
                 if (result != null) {
                     return result;
                 }
 
-                data.put(attr.getCode(), value);
+                data.put(av.getAttributeCode(), value);
 
             }
         }
