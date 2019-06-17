@@ -391,6 +391,10 @@
         <appender-ref ref="SECURITY"/>
     </logger>
 
+    <logger name="net.sf.ehcache.pool.impl.DefaultSizeOfEngine" level="ERROR">
+        <appender-ref ref="DEFAULT"/>
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="DEFAULT"/>
         <appender-ref ref="CONSOLE"/>
