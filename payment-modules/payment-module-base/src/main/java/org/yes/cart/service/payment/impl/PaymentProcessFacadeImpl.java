@@ -71,6 +71,9 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade, Applicati
                 paymentParameter
         );
         final CustomerOrder order = orderEvent.getCustomerOrder();
+        if (order == null) {
+            throw new OrderException("No order for for cart");
+        }
         final String orderNumber = order.getOrdernum();
 
         if (getOrderStateManager().fireTransition(orderEvent)
