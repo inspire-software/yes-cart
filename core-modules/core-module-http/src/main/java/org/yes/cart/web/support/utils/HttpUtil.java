@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -375,5 +376,43 @@ public class HttpUtil {
         }
         return null;
 
+    }
+
+    private static final Pattern NO_TAGS = Pattern.compile("<[^>]*>");
+
+    /**
+     * Escape raw text to be safe for rendering HTML.
+     *
+     * @param raw raw value
+     *
+     * @return XSS safe value
+     */
+    public static String escapeForHTML(final String raw) {
+        if (StringUtils.isNotBlank(raw)) {
+            if (raw.indexOf('%') != -1) {
+                return NO_TAGS.matcher(decodeUtf8UriParam(raw)).replaceAll("");
+            }
+            return NO_TAGS.matcher(raw).replaceAll("");
+        }
+        return raw;
+    }
+
+    private static final String[][] NO_QUOTES = new String[][] {
+            new String[] { "\"",        "'",        "&"     },
+            new String[] { "&quot;",    "&apos;",   "&amp;" },
+    };
+
+    /**
+     * Escape raw text to be safe for rendering HTML.
+     *
+     * @param raw raw value
+     *
+     * @return XSS safe value
+     */
+    public static String escapeForHTMLAttribute(final String raw) {
+        if (StringUtils.isNotBlank(raw)) {
+            return StringUtils.replaceEach(escapeForHTML(raw), NO_QUOTES[0], NO_QUOTES[1]);
+        }
+        return raw;
     }
 }

@@ -868,4 +868,27 @@ public class HttpUtilTest {
         assertEquals("бе%7B%2F%7Dлый", HttpUtil.encodeUtf8UriParam("бе{/}лый"));
 
     }
+
+
+    @Test
+    public void testEscapeForHTML() throws Exception {
+
+        assertNull(HttpUtil.escapeForHTML(null));
+        assertEquals(" ", HttpUtil.escapeForHTML(" "));
+        assertEquals("abc", HttpUtil.escapeForHTML("abc"));
+        assertEquals("abc=alert(\"XSS\")&def=xyz", HttpUtil.escapeForHTML("abc=</script><script>alert(\"XSS\")</script>&def=xyz"));
+        assertEquals("abc=alert('XSS')&def=xyz", HttpUtil.escapeForHTML("abc=%3C/script%3E%3Cscript%3Ealert(%27XSS%27)%3C/script%3E&def=xyz"));
+
+    }
+
+    @Test
+    public void testEscapeForHTMLAttribute() throws Exception {
+
+        assertNull(HttpUtil.escapeForHTMLAttribute(null));
+        assertEquals(" ", HttpUtil.escapeForHTMLAttribute(" "));
+        assertEquals("abc", HttpUtil.escapeForHTMLAttribute("abc"));
+        assertEquals("abc=alert(&quot;XSS&quot;)&amp;def=xyz", HttpUtil.escapeForHTMLAttribute("abc=</script><script>alert(\"XSS\")</script>&def=xyz"));
+        assertEquals("abc=alert(&apos;XSS&apos;)&amp;def=xyz", HttpUtil.escapeForHTMLAttribute("abc=%3C/script%3E%3Cscript%3Ealert(%27XSS%27)%3C/script%3E&def=xyz"));
+
+    }
 }
