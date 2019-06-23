@@ -185,7 +185,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
             }
             if (topDocs.totalHits > firstResult) {
 
-                lastResult = lastResult > topDocs.totalHits ? topDocs.totalHits : lastResult;
+                lastResult = lastResult > topDocs.totalHits ? (int) topDocs.totalHits : lastResult;
 
                 final List<Object[]> resItems = new ArrayList<>(lastResult - firstResult);
 
@@ -200,7 +200,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                     logExplanation(searcher, query, sort, hit.doc);
                 }
 
-                return new Pair<>(resItems, topDocs.totalHits);
+                return new Pair<>(resItems, (int) topDocs.totalHits);
             }
         } catch (IllegalStateException ise) {
             LOG.warn("Failed to run query " + query + ", caused: " + ise.getMessage());

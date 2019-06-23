@@ -175,6 +175,19 @@ public class LuceneDocumentAdapterUtils {
     }
 
     /**
+     * Adds a double field (stored and not tokenized)
+     *
+     * @param document document
+     * @param name     field name
+     * @param value    value
+     */
+    public static void addStoredField(final Document document, final String name, final Double value) {
+        if (value != null) {
+            document.add(new StoredField(name, value));
+        }
+    }
+
+    /**
      * Adds a float field (stored and not tokenized)
      *
      * @param document document
@@ -323,6 +336,22 @@ public class LuceneDocumentAdapterUtils {
             LongPoint allows ranges as well LongPoint.newRangeQuery()
          */
         document.add(new LongPoint(name, nonNull));
+
+    }
+
+    /**
+     * Adds a long point field with long value
+     *
+     * @param document     document
+     * @param name         field name
+     * @param value        value (default is 1)
+     */
+    public static void addBoostField(final Document document,
+                                     final String name,
+                                     final Double value) {
+
+        final double nonNull = value != null ? value : 1d;
+        document.add(new DoubleDocValuesField(name, nonNull));
 
     }
 

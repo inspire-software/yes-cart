@@ -70,7 +70,7 @@
 
         <!-- Core frameworks globals versions -->
         <hibernate.core.version>5.2.17.Final</hibernate.core.version>
-        <lucene.version>6.6.3</lucene.version>
+        <lucene.version>7.7.2</lucene.version>
         <cxf.version>3.2.4</cxf.version>
         <spring-security.version>4.2.12.RELEASE</spring-security.version>
         <spring.version>4.3.23.RELEASE</spring.version>

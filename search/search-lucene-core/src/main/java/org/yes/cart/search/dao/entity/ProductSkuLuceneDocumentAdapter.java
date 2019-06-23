@@ -100,16 +100,19 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                 addSortFields(document, PRODUCT_DISPLAYNAME_SORT_FIELD, displayName);
 
                 addNumericField(document, "rank", (long) entity.getRank(), false);
-                float boost = 1f;
+                double boost = 1d;
                 // 50 is lowest rank, anything lower increases boost, higher decreases boost
                 if (entity.getRank() != 50) {
                     // 1pt == 0.01f boost
-                    boost += 50f - ((float) entity.getRank()) / 100f;
+                    boost += 50d - ((double) entity.getRank()) / 100d;
                     if (boost < 0.25) {
-                        boost = 0.25f; // does not make any sense to have it lower
+                        boost = 0.25d; // does not make any sense to have it lower
                     }
                 }
-                addStoredField(document, "rank_boost", boost);
+                if (LOGFTQ.isTraceEnabled()) {
+                    addStoredField(document, "rank_boost_debug", boost);
+                }
+                addBoostField(document, "rank_boost", boost);
 
                 // Created timestamp is used to determine ranges
                 addInstantField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);

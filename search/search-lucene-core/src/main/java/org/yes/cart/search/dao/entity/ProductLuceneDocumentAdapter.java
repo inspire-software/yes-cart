@@ -177,7 +177,10 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     addSortField(document, BRAND_SORT_FIELD, brand);
 
                     addSimpleField(document, PRODUCT_FEATURED_FIELD, entity.getFeatured() != null && entity.getFeatured() ? "true" : "false");
-                    addStoredField(document, "featured_boost", entity.getFeatured() != null && entity.getFeatured() ? 1.25f : 1.0f);
+                    if (LOGFTQ.isTraceEnabled()) {
+                        addStoredField(document, "featured_boost_debug", entity.getFeatured() != null && entity.getFeatured() ? 1.25d : 1.0d);
+                    }
+                    addBoostField(document, "featured_boost", entity.getFeatured() != null && entity.getFeatured() ? 1.25d : 1.0d);
                     // Created timestamp is used to determine ranges
                     addInstantField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
                     addSortField(document, PRODUCT_CREATED_SORT_FIELD, entity.getCreatedTimestamp(), false);
@@ -563,20 +566,23 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             }
 
         }
-        float boost = 1f;
+        double boost = 1d;
         if (count > 0) {
             // 500 is base rank, anything lower increases boost, higher decreases boost
-            float score = (500f - ((float) rank / (float) count));
+            double score = (500d - ((double) rank / (double) count));
             if (score != 0f) {
-                // 1pt == 0.001f boost
-                boost += score / 1000f;
+                // 1pt == 0.001d boost
+                boost += score / 1000d;
             }
             if (boost < 0.25) {
-                boost = 0.25f; // does not make any sense to have it lower
+                boost = 0.25d; // does not make any sense to have it lower
             }
         }
 
-        addStoredField(document, PRODUCT_CATEGORY_FIELD + "_boost", boost);
+        if (LOGFTQ.isTraceEnabled()) {
+            addStoredField(document, PRODUCT_CATEGORY_FIELD + "_boost_debug", boost);
+        }
+        addBoostField(document, PRODUCT_CATEGORY_FIELD + "_boost", boost);
 
         if (CollectionUtils.isNotEmpty(availableCategories)) {
 
@@ -711,20 +717,20 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      */
     protected void addInventoryFields(final Document document, final ProductSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
 
-        float boost = 1.0f;
+        double boost = 1.0d;
         for (final Long shop : available) {
             if (LOGFTQ.isTraceEnabled()) {
                 addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_debug", shop.toString());
             }
             addNumericField(document, PRODUCT_SHOP_INSTOCK_FIELD, shop, false);
             if (result.getAvailability() == Product.AVAILABILITY_ALWAYS) {
-                boost = 0.95f; // Always = -5% boost (stocked items must be first)
+                boost = 0.95d; // Always = -5% boost (stocked items must be first)
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "095");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + "1", shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), "1");
             } else if (result.getAvailability() == Product.AVAILABILITY_PREORDER &&
                     DomainApiUtils.isObjectAvailableNow(true, result.getAvailablefrom(), null, now)) {
-                boost = 1.25f; // Preorder is 1.25f = 25% boost
+                boost = 1.25d; // Preorder is 1.25f = 25% boost
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "125");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + "1", shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), "1");
@@ -737,13 +743,16 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                         break;
                     }
                 }
-                boost = hasStock ? 1.0f : 0.9f; // Standard + Backorder in stock = no boost, out of stock = -10% boost
+                boost = hasStock ? 1.0d : 0.9d; // Standard + Backorder in stock = no boost, out of stock = -10% boost
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), hasStock ? "100" : "090");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + (hasStock ? "1" : "0"), shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), hasStock ? "1" : "0");
             }
         }
-        addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", boost);
+        if (LOGFTQ.isTraceEnabled()) {
+            addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost_debug", boost);
+        }
+        addBoostField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_boost", boost);
 
     }
 
