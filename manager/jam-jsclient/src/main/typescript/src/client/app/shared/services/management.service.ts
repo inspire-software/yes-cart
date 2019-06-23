@@ -86,6 +86,38 @@ export class ManagementService {
       });
   }
 
+  /**
+   * LogOff endpoint
+   * @return {Observable<any | any>}
+   */
+  logoff() {
+
+    return this.http.delete(this._authBaseUrl + '/authenticate', Util.requestOptions())
+      .map(res => {
+        let jwt = <JWT> this.json(res);
+
+        let fullJwt:JWTAuth = {
+          status: 200
+        };
+
+        LogUtil.debug('logoff JWT');
+
+        UserEventBus.getUserEventBus().emitJWT(null);
+        UserEventBus.getUserEventBus().emit(null);
+
+        return fullJwt;
+      })
+      .catch(error => {
+
+        LogUtil.debug('logoff JWT catch', error);
+
+        UserEventBus.getUserEventBus().emitJWT(null);
+        UserEventBus.getUserEventBus().emit(null);
+
+        return Observable.throw(message.message || 'Server error');
+
+      });
+  }
 
   /**
    * Login endpoint

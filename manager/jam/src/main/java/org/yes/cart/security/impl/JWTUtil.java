@@ -187,6 +187,27 @@ final class JWTUtil {
 
     }
 
+    /**
+     * Send JWT log off response.
+     *
+     * @param response     response to render
+     *
+     * @throws IOException error
+     */
+    static void sendLogOffJWT(final HttpServletResponse response) throws IOException {
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        final Cookie xAuth = new Cookie(JWTUtil.COOKIE_HEADER, "");
+        xAuth.setMaxAge(0);
+        response.addCookie(xAuth);
+
+        response.getWriter().write("{\"token\": null }");
+
+    }
+
 
     /**
      * Decodes the header into a username and password.

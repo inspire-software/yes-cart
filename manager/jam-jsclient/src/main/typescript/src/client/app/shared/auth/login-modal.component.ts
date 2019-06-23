@@ -141,9 +141,10 @@ export class LoginModalComponent implements OnInit, OnDestroy, AfterViewInit {
           this.showLoginModal();
           break;
         case 'logout':
-          UserEventBus.getUserEventBus().emitJWT(null);
-          UserEventBus.getUserEventBus().emit(null);
-          this._router.navigate(['']);
+          let _logout = this._managementService.logoff().subscribe(res => {
+            this._router.navigate(['']);
+            _logout.unsubscribe();
+          });
           break;
         case 'changepassword':
           this.showLoginModal(true);

@@ -74,6 +74,8 @@
     <property name="managementService" ref="userManagementService"/>
   </bean>
 
+  <bean id="logoutFilter" class="org.yes.cart.security.impl.LogoutFilter"/>
+
   <bean id="restAwareExceptionTranslationFilter" class="org.yes.cart.security.impl.RestAwareExceptionTranslationFilter">
       <constructor-arg value="/client/index.html"/>
   </bean>
@@ -83,6 +85,7 @@
     <security:csrf disabled="true"/>
     <security:anonymous enabled="false"/>
 
+    <security:custom-filter ref="logoutFilter" before="LOGOUT_FILTER"/>
     <security:custom-filter ref="changePasswordFilter" before="FIRST"/>
     <security:custom-filter ref="jwtAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
     <security:custom-filter ref="jwtAuthorisationFilter" after="FORM_LOGIN_FILTER"/>
