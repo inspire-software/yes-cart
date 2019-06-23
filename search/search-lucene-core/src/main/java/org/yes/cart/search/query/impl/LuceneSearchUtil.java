@@ -19,6 +19,7 @@ package org.yes.cart.search.query.impl;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.de.GermanAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
 import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.ru.RussianAnalyzer;
@@ -114,10 +115,16 @@ public class LuceneSearchUtil {
                 return new ItalianAnalyzer();
             }
         });
+        LANGUAGE_SPECIFIC.put("en", new Analysis() {
+            @Override
+            protected Analyzer initialValue() {
+                return new StandardAnalyzer(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
+            }
+        });
         LANGUAGE_SPECIFIC.put("default", new Analysis() {
             @Override
             protected Analyzer initialValue() {
-                return new StandardAnalyzer();
+                return new StandardAnalyzer(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET);
             }
         });
     }

@@ -98,7 +98,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
         IndexSearcher searcher = this.luceneIndexProvider.provideIndexReader();
         try {
             final TopDocs topDocs = searcher.search(query, Integer.MAX_VALUE);
-            if (topDocs.totalHits > 0) {
+            if (topDocs.totalHits.value > 0) {
                 for (final ScoreDoc hit : topDocs.scoreDocs) {
                     final Document doc = searcher.doc(hit.doc, PKS);
                     pks.add(Long.valueOf(doc.get("_PK")));
@@ -138,7 +138,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
             } else {
                 topDocs = searcher.search(query, firstResult + maxResults);
             }
-            if (topDocs.totalHits > 0) {
+            if (topDocs.totalHits.value > 0) {
                 for (int i = firstResult; i < firstResult + maxResults; i++) {
                     final ScoreDoc hit = topDocs.scoreDocs[i];
                     final Document doc = searcher.doc(hit.doc, PKS);
@@ -183,9 +183,9 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
             } else {
                 topDocs = searcher.search(query, lastResult);
             }
-            if (topDocs.totalHits > firstResult) {
+            if (topDocs.totalHits.value > firstResult) {
 
-                lastResult = lastResult > topDocs.totalHits ? (int) topDocs.totalHits : lastResult;
+                lastResult = lastResult > topDocs.totalHits.value ? (int) topDocs.totalHits.value : lastResult;
 
                 final List<Object[]> resItems = new ArrayList<>(lastResult - firstResult);
 
@@ -200,7 +200,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
                     logExplanation(searcher, query, sort, hit.doc);
                 }
 
-                return new Pair<>(resItems, (int) topDocs.totalHits);
+                return new Pair<>(resItems, (int) topDocs.totalHits.value);
             }
         } catch (IllegalStateException ise) {
             LOG.warn("Failed to run query " + query + ", caused: " + ise.getMessage());
