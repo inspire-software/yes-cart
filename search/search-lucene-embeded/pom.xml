@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>search</artifactId>
-        <version>3.6.0-SNAPSHOT</version>
+        <version>3.6.0</version>
     </parent>
     <artifactId>search-lucene-embeded</artifactId>
     <name>Yes cart search: Lucene embeded provider</name>
