@@ -22,7 +22,7 @@
     <parent>
         <artifactId>int-modules</artifactId>
         <groupId>org.yes</groupId>
-        <version>3.6.0</version>
+        <version>3.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>int-module-reports-dto-mapping</artifactId>
     <name>Yes cart core: reports support DTO mapping</name>
