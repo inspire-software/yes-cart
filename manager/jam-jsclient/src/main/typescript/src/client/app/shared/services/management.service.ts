@@ -114,6 +114,8 @@ export class ManagementService {
         UserEventBus.getUserEventBus().emitJWT(null);
         UserEventBus.getUserEventBus().emit(null);
 
+        let message = Util.determineErrorMessage(error);
+
         return Observable.throw(message.message || 'Server error');
 
       });
