@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>manager</artifactId>
-        <version>3.6.0</version>
+        <version>3.6.1</version>
     </parent>
     <artifactId>jam</artifactId>
     <packaging>war</packaging>

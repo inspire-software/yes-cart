@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>web</artifactId>
-        <version>3.6.0</version>
+        <version>3.6.1</version>
     </parent>
     <artifactId>rest-api</artifactId>
     <packaging>war</packaging>
