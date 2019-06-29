@@ -1,6 +1,6 @@
 {
   "name": "yes-cart-jam",
-  "version": "3.7.0-SNAPSHOT",
+  "version": "3.7.0",
   "description": "YC administration console",
   "repository": {
     "url": "https://github.com/inspire-software/yes-cart"
