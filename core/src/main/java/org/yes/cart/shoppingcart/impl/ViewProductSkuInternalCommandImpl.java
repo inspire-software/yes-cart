@@ -88,7 +88,8 @@ public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl i
 
         if (skus == null) {
             skus = new LinkedList<>();
-            shoppingCart.getShoppingContext().setLatestViewedSkus(skus);
+        } else {
+            skus = new LinkedList<>(skus);
         }
 
         if (!skus.contains(skuCode)) {
@@ -99,6 +100,7 @@ public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl i
                 skus.addAll(last);
             }
             skus.add(skuCode);
+            shoppingCart.getShoppingContext().setLatestViewedSkus(skus);
             shoppingCart.markDirty();
         }
 

@@ -92,7 +92,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         final List<Long> obsoleteIds = productService.findProductIdsByUnavailableBefore(time);
 
         int toIndex = batchSize > obsoleteIds.size() ? obsoleteIds.size() : batchSize;
-        final List<Long> batch = obsoleteIds.subList(0, toIndex);
+        final List<Long> batch = new ArrayList<>(obsoleteIds.subList(0, toIndex));
 
         LOG.info("Remove obsolete products {}", batch);
 

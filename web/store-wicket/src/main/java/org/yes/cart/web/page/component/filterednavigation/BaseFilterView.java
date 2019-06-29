@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -77,14 +78,15 @@ public class BaseFilterView extends BaseComponent {
      */
     private List<AbstractProductFilter.Value> cutTheTail(final List<AbstractProductFilter.Value> navigationList, final int recordLimit) {
 
-        if (navigationList.size() > recordLimit && recordLimit > 0) {
+        final List<AbstractProductFilter.Value> tail = new ArrayList<>(navigationList);
+        if (tail.size() > recordLimit && recordLimit > 0) {
 
-            navigationList.sort(VALUE_COMPARATOR);
+            tail.sort(VALUE_COMPARATOR);
 
-            return navigationList.subList(0, recordLimit);
+            return tail.subList(0, recordLimit);
 
         }
-        return navigationList;
+        return tail;
     }
 
     /**
