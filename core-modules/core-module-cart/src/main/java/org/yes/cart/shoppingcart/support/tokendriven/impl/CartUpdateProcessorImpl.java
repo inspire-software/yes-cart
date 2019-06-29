@@ -99,10 +99,12 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
         dbState.setState(saveState(shoppingCart));
 
         // 6. Persist
-        if (dbState.getShoppingCartStateId() > 0L) {
-            shoppingCartStateService.update(dbState);
-        } else {
-            shoppingCartStateService.create(dbState);
+        if (dbState.getState() != null && dbState.getState().length > 0) {
+            if (dbState.getShoppingCartStateId() > 0L) {
+                shoppingCartStateService.update(dbState);
+            } else {
+                shoppingCartStateService.create(dbState);
+            }
         }
 
     }

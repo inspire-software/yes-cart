@@ -18,9 +18,13 @@ package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.hibernate.StaleStateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.dao.ConcurrencyFailureException;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShoppingCartState;
@@ -38,6 +42,8 @@ import org.yes.cart.utils.ShopCodeContext;
  * Time: 20:11
  */
 public class ResilientCartRepositoryImpl implements CartRepository {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ResilientCartRepositoryImpl.class);
 
     private final Cache CART_CACHE;
 
@@ -237,6 +243,18 @@ public class ResilientCartRepositoryImpl implements CartRepository {
                 cartUpdateProcessor.updateShoppingCart(shoppingCart);
                 // So we re-save it in cache
                 CART_CACHE.put(shoppingCart.getGuid(), shoppingCart);
+
+            } catch (ConcurrencyFailureException cexp) {
+
+                LOG.warn("Unable to persist cart state for {}, caused by concurrency update", shoppingCart.getGuid());
+
+            } catch (StaleStateException sexp) {
+
+                LOG.warn("Unable to persist cart state for {}, caused by stale state", shoppingCart.getGuid());
+
+            } catch (Exception exp) {
+
+                LOG.error("Unable to persist cart state for " + shoppingCart.getGuid(), exp);
 
             } finally {
                 if (sccCode != null) {

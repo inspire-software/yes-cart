@@ -100,7 +100,7 @@ export class ManagementService {
           status: 200
         };
 
-        LogUtil.debug('logoff JWT');
+        LogUtil.debug('logoff JWT', jwt);
 
         UserEventBus.getUserEventBus().emitJWT(null);
         UserEventBus.getUserEventBus().emit(null);

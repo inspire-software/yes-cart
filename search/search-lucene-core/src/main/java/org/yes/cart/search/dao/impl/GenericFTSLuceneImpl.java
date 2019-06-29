@@ -355,7 +355,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
 
                     }
                 } catch (IllegalArgumentException | IllegalStateException iae) {
-                    LOG.warn(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + iae.getMessage());
+                    LOG.debug(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + iae.getMessage());
                 } catch (Exception exp) {
                     LOG.error(Markers.alert(), "Failed to create facet for request " + request + ", caused: " + exp.getMessage(), exp);
                 }

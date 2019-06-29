@@ -160,7 +160,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         if (productIds != null && !productIds.isEmpty()) {
 
 
-            final List<String> search = productIds.size() > 50 ? productIds.subList(0, 50) : productIds;
+            final List<String> search = new ArrayList<>(productIds.size() > 50 ? productIds.subList(0, 50) : productIds);
 
             final NavigationContext assoc = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, null,
                     false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
@@ -261,12 +261,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                                         final long customerShopId) {
         if (CollectionUtils.isNotEmpty(productIds)) {
 
-            List<String> productIdsForCategory = productIds;
+            List<String> productIdsForCategory = new ArrayList<>(productIds);
             int limit = categoryServiceFacade.getNewArrivalListSizeConfig(categoryId, customerShopId);
-            if (limit > productIds.size() || categoryId < 0L) {
-                limit = productIds.size();
+            if (limit > productIdsForCategory.size() || categoryId < 0L) {
+                limit = productIdsForCategory.size();
             } else {
-                productIdsForCategory = productIds.subList(productIds.size() - limit, productIds.size());
+                productIdsForCategory = productIdsForCategory.subList(productIdsForCategory.size() - limit, productIdsForCategory.size());
             }
 
             final NavigationContext recent = searchQueryFactory.getFilteredNavigationQueryChain(shopId, customerShopId, null, null,
