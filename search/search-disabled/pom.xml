@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>search</artifactId>
-        <version>3.6.1</version>
+        <version>3.6.2</version>
     </parent>
     <artifactId>search-disabled</artifactId>
     <name>Yes cart search: disabled provider</name>

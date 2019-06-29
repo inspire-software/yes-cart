@@ -22,7 +22,7 @@
     <parent>
         <artifactId>core-modules</artifactId>
         <groupId>org.yes</groupId>
-        <version>3.6.1</version>
+        <version>3.6.2</version>
     </parent>
     <artifactId>core-module-cart</artifactId>
     <name>Yes cart core: cart support</name>

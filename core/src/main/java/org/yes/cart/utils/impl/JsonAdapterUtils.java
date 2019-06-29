@@ -26,8 +26,8 @@ public final class JsonAdapterUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonAdapterUtils.class);
 
-    // 3.6.1 keep this marker for easier version changes
-    public static final Version VERSION = new Version(3, 6, 1, null, "org.yes", "json");
+    // 3.6.2 keep this marker for easier version changes
+    public static final Version VERSION = new Version(3, 6, 2, null, "org.yes", "json");
 
     public static final JsonSerializer<Instant> JS_FRIENDLY_INSTANT_SERIALIZER = new JSInstantSerializer();
     public static final JsonSerializer<LocalDate> JS_FRIENDLY_LOCALDATE_SERIALIZER = new JSLocalDateSerializer();
