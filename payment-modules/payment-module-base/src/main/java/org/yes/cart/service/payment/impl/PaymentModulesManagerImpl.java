@@ -298,9 +298,13 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
             for (final PaymentGatewayDescriptor pgDescriptor : moduleEntry.getValue().getPaymentGateways()) {
                 if (pgDescriptor.getLabel().equals(paymentGatewayLabel)) {
 
-                    final PaymentGatewayConfigurationVisitor visitor = new PaymentGatewayConfigurationVisitorImpl(
-                            Collections.singletonMap("shopCode", shopCode)
-                    );
+                    final Map<String, Object> context = new HashMap<>();
+                    context.put("shopCode", shopCode);
+                    context.put("descriptor", pgDescriptor);
+                    context.put("pgLabel", pgDescriptor.getLabel());
+                    context.put("label", pgDescriptor.getLabel().replace("Label", ""));
+
+                    final PaymentGatewayConfigurationVisitor visitor = new PaymentGatewayConfigurationVisitorImpl(context);
 
                     final PaymentGateway pg = serviceLocator.getServiceInstance(
                             pgDescriptor.getUrl(),

@@ -55,15 +55,6 @@ public class PayPalProPaymentGatewayImpl extends AbstractPayPalNVPPaymentGateway
             false, true
     );
 
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "payPalProPaymentGateway";
-    }
-
     /**
      * {@inheritDoc}
      */

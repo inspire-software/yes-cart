@@ -498,6 +498,9 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
                               final String currencyCode, final String orderReference, final Payment payment) {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getHiddenFieldValue(ORDER_GUID, orderReference));  // this will be passed via payment gateway to restore it latter
+
+        LOG.debug("PayPalExpress form request: {}", stringBuilder);
+
         return stringBuilder.toString();
     }
 
@@ -521,14 +524,6 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPa
         payment.setShopperIpAddress(params.get(PaymentMiscParam.CLIENT_IP));
         return payment;
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "payPalExpressPaymentGateway";
     }
 
 }

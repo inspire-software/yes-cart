@@ -163,14 +163,6 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
      * {@inheritDoc}
      */
     @Override
-    public String getLabel() {
-        return "cyberSourcePaymentGateway";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public synchronized PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }

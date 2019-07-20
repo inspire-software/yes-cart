@@ -44,15 +44,6 @@ public class InStorePaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
 
 
 
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "inStorePaymentGateway";
-    }
-
     /**
      * {@inheritDoc}
      */

@@ -43,6 +43,17 @@ public abstract class AbstractPaymentGatewayImpl implements ConfigurablePaymentG
     private Collection<PaymentGatewayParameter> allParameters = null;
 
     private String shopCode;
+    private String label;
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getLabel() {
+        return label;
+    }
+
 
     /**
      * {@inheritDoc}
@@ -203,6 +214,7 @@ public abstract class AbstractPaymentGatewayImpl implements ConfigurablePaymentG
     @Override
     public void accept(final PaymentGatewayConfigurationVisitor visitor) {
         this.shopCode = visitor.getConfiguration("shopCode");
+        this.label = visitor.getConfiguration("label");
     }
 
 

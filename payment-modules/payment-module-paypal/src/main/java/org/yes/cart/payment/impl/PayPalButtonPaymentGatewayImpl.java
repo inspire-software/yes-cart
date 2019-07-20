@@ -417,6 +417,8 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         }
         form.append(getHiddenFieldValue("tax_cart", payment.getTaxAmount().toPlainString()));
 
+        LOG.debug("PayPalButton form request: {}", form);
+
         return form.toString();
     }
 
@@ -470,14 +472,6 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
 
         return payment;
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "payPalButtonPaymentGateway";
     }
 
     /**

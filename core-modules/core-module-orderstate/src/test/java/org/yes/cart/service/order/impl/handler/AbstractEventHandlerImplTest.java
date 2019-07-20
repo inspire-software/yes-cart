@@ -692,7 +692,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
         assertEquals(pg + " authorise feature", authorise, proto.getPaymentGatewayFeatures().isSupportAuthorize());
         assertEquals(pg + " authorise per shipment feature", perShipment, proto.getPaymentGatewayFeatures().isSupportAuthorizePerShipment());
 
-        return proto.getLabel() + "Label"; // all descriptors have Label suffix
+        return pg + "Label"; // all descriptors have Label suffix
     }
 
     /**
@@ -725,7 +725,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
         assertEquals(pg + " void feature", voidCapture, proto.getPaymentGatewayFeatures().isSupportVoid());
         assertEquals(pg + " refund feature", refund, proto.getPaymentGatewayFeatures().isSupportRefund());
 
-        return proto.getLabel() + "Label"; // all descriptors have Label suffix
+        return pg + "Label"; // all descriptors have Label suffix
     }
 
 }

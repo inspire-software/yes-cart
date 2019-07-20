@@ -109,15 +109,6 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             false, false
     );
 
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "authorizeNetSimPaymentGateway";
-    }
-
     /**
      * {@inheritDoc}
      */

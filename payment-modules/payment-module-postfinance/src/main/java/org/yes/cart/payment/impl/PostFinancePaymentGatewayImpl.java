@@ -101,6 +101,9 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
     static final String PF_ITEMISED = "PF_ITEMISED";
 
+    // Delivery & Invoice info enabled
+    static final String PF_DELIVERY_AND_INVOICE_ON = "PF_DELIVERY_AND_INVOICE_ON";
+
     private final PaymentLocaleTranslator paymentLocaleTranslator = new PaymentLocaleTranslatorImpl();
 
     /**
@@ -298,6 +301,44 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             setValueIfNotNull(params, "OWNERTELNO", address.getPhone1());
         }
 
+        // Delivery & Invoice info enabled
+        final boolean invoiceDetailsEnabled = Boolean.valueOf(getParameterValue(PF_DELIVERY_AND_INVOICE_ON));
+        if (invoiceDetailsEnabled) {
+            // Billing Address
+            final PaymentAddress billing = payment.getBillingAddress() != null ? payment.getBillingAddress() : payment.getShippingAddress();
+            if (billing != null) {
+                setValueIfNotNull(params, "ECOM_BILLTO_COMPANY", billing.getCompanyName1());
+                setValueIfNotNull(params, "ECOM_BILLTO_POSTAL_NAME_PREFIX", billing.getSalutation());
+                setValueIfNotNull(params, "ECOM_BILLTO_POSTAL_NAME_FIRST", billing.getFirstname());
+                setValueIfNotNull(params, "ECOM_BILLTO_POSTAL_NAME_LAST", billing.getLastname());
+                // setValueIfNotNull(params, "ECOM_BILLTO_POSTAL_STREET_NUMBER", billing.xxx);
+                setValueIfNotNull(params, "ECOM_BILLTO_POSTAL_STREET_LINE1", billing.getAddrline1());
+                setValueIfNotNull(params, "ECOM_BILLTO_POSTAL_STREET_LINE2", billing.getAddrline2());
+                setValueIfNotNull(params, "ECOM_BILLTO_POSTAL_POSTALCODE", billing.getPostcode());
+                setValueIfNotNull(params, "ECOM_BILLTO_POSTAL_CITY", billing.getCity());
+                setValueIfNotNull(params, "ECOM_BILLTO_POSTAL_COUNTRYCODE", billing.getCountryCode());
+                setValueIfNotNull(params, "ECOM_BILLTO_TELECOM_MOBILE_NUMBER", billing.getMobile1());
+                setValueIfNotNull(params, "ECOM_BILLTO_TELECOM_PHONE_NUMBER", billing.getPhone1());
+            }
+
+            // Delivery Address
+            final PaymentAddress shipping = payment.getShippingAddress() != null ? payment.getShippingAddress() : payment.getBillingAddress();
+            if (shipping != null) {
+                setValueIfNotNull(params, "ECOM_SHIPTO_COMPANY", shipping.getCompanyName1());
+                setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_NAME_PREFIX", shipping.getSalutation());
+                setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_NAME_FIRST", shipping.getFirstname());
+                setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_NAME_LAST", shipping.getLastname());
+                //setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_STREET_NUMBER", shipping.getAddrline1());
+                setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_STREET_LINE1", shipping.getAddrline1());
+                setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_STREET_LINE2", shipping.getAddrline2());
+                setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_POSTALCODE", shipping.getPostcode());
+                setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_CITY", shipping.getCity());
+                setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_COUNTRYCODE", shipping.getCountryCode());
+                setValueIfNotNull(params, "ECOM_SHIPTO_TELECOM_MOBILE_NUMBER", shipping.getMobile1());
+                setValueIfNotNull(params, "ECOM_SHIPTO_TELECOM_PHONE_NUMBER", shipping.getPhone1());
+            }
+        }
+
         // Order description
         final boolean itemised = Boolean.valueOf(getParameterValue(PF_ITEMISED));
         params.put("COM", getDescription(payment, itemised));
@@ -392,6 +433,8 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
         form.append(getHiddenField("SUBMIT2", ""));
 
+        LOG.debug("PostFinance form request: {}", form);
+
         return form.toString();
 
     }
@@ -423,6 +466,9 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         for (final PaymentLine item : payment.getOrderItems()) {
 
             final BigDecimal itemGrossAmount = item.getUnitPrice().multiply(item.getQuantity()).setScale(Total.ZERO.scale(), RoundingMode.HALF_UP);
+            final BigDecimal unitTax = item.getTaxAmount().divide(item.getQuantity(), Total.ZERO.scale(), RoundingMode.CEILING);
+//            final BigDecimal taxRate = MoneyUtils.isPositive(item.getTaxAmount()) && MoneyUtils.isPositive(itemGrossAmount) ?
+//                    item.getTaxAmount().divide(itemGrossAmount.subtract(item.getTaxAmount()),3, BigDecimal.ROUND_HALF_EVEN).movePointRight(2) : BigDecimal.ZERO.setScale(1);
             params.put("ITEMID" + i, item.getSkuCode().length() > ITEMID ? item.getSkuCode().substring(0, ITEMID - 1) + "~" : item.getSkuCode());
             params.put("ITEMNAME" + i, item.getSkuName().length() > ITEMNAME ? item.getSkuName().substring(0, ITEMNAME - 1) + "~" : item.getSkuName());
             params.put("ITEMQUANT" + i, item.getQuantity().toPlainString());
@@ -436,22 +482,26 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
                 } else {
                     BigDecimal itemDiscount = itemGrossAmount.multiply(orderDiscountPercent).setScale(Total.ZERO.scale(), RoundingMode.CEILING);
                     if (MoneyUtils.isFirstBiggerThanSecond(orderDiscountRemainder, itemDiscount)) {
-                        discount = itemDiscount;
-                        orderDiscountRemainder = orderDiscountRemainder.subtract(itemDiscount);
+                        discount = itemDiscount.divide(item.getQuantity(), Total.ZERO.scale(), RoundingMode.CEILING);
+                        orderDiscountRemainder = orderDiscountRemainder.subtract(discount.multiply(item.getQuantity()).setScale(Total.ZERO.scale(), RoundingMode.CEILING));
                     } else {
-                        discount = orderDiscountRemainder;
+                        discount = orderDiscountRemainder.divide(item.getQuantity(), Total.ZERO.scale(), RoundingMode.CEILING);
                         orderDiscountRemainder = Total.ZERO;
                     }
 
                 }
-                final BigDecimal scaleRate = discount.divide(itemGrossAmount.subtract(discount), 10, RoundingMode.CEILING);
-                final BigDecimal scaledTax = item.getTaxAmount().multiply(scaleRate).setScale(Total.ZERO.scale(), RoundingMode.FLOOR);
-                params.put("ITEMDISCOUNT" + i, discount.toPlainString());
-                params.put("ITEMPRICE" + i, itemGrossAmount.subtract(discount).subtract(item.getTaxAmount()).add(scaledTax).toPlainString());
-                params.put("ITEMVAT" + i, item.getTaxAmount().subtract(scaledTax).toPlainString());
+                final BigDecimal scaleRate = discount.divide(item.getUnitPrice().subtract(discount), 10, RoundingMode.CEILING);
+                final BigDecimal scaledTax = unitTax.multiply(scaleRate).setScale(Total.ZERO.scale(), RoundingMode.FLOOR);
+                //params.put("ITEMDISCOUNT" + i, discount.setScale(4, RoundingMode.FLOOR).toPlainString());
+                params.put("ITEMPRICE" + i, item.getUnitPrice().subtract(discount).setScale(4, RoundingMode.FLOOR).toPlainString());
+                params.put("ITEMVAT" + i, unitTax.subtract(scaledTax).setScale(4, RoundingMode.FLOOR).toPlainString());
+                //params.put("ITEMVATCODE" + i, taxRate.toPlainString() + "%");
+                params.put("TAXINCLUDED" + i, "1");
             } else {
-                params.put("ITEMPRICE" + i, itemGrossAmount.subtract(item.getTaxAmount()).toPlainString());
-                params.put("ITEMVAT" + i, item.getTaxAmount().toPlainString());
+                params.put("ITEMPRICE" + i, item.getUnitPrice().setScale(4, RoundingMode.FLOOR).toPlainString());
+                params.put("ITEMVAT" + i, unitTax.toPlainString());
+                //params.put("ITEMVATCODE" + i, taxRate.toPlainString() + "%");
+                params.put("TAXINCLUDED" + i, "1");
             }
             i++;
         }
@@ -653,15 +703,6 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
     }
 
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "postFinancePaymentGateway";
-    }
 
     /**
      * {@inheritDoc}

@@ -145,6 +145,10 @@ VALUES (15178, 'postFinancePaymentGateway', 'LANGUAGE_MAP', 'en=en_US,de=de_DE,r
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (15179, 'postFinancePaymentGateway', 'restrictToCustomerTags', null, 'Gateway restrictions (Customer tags)', 'Gateway restrictions (Customer tags)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15180, 'postFinancePaymentGateway', 'PF_DELIVERY_AND_INVOICE_ON', null, 'Enable invoice and delivery data',
+  'Invoice and delivery information will be sent with the order (ECOM_*)');
+
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -292,6 +296,10 @@ VALUES (15278, 'postFinanceManualPaymentGateway', 'LANGUAGE_MAP', 'en=en_US,de=d
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (15279, 'postFinanceManualPaymentGateway', 'restrictToCustomerTags', null, 'Gateway restrictions (Customer tags)', 'Gateway restrictions (Customer tags)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15280, 'postFinanceManualPaymentGateway', 'PF_DELIVERY_AND_INVOICE_ON', null, 'Enable invoice and delivery data',
+  'Invoice and delivery information will be sent with the order (ECOM_*)');
 
 
 

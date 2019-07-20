@@ -43,16 +43,6 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
     );
 
 
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "prePaymentGateway";
-    }
-
     /**
      * {@inheritDoc}
      */

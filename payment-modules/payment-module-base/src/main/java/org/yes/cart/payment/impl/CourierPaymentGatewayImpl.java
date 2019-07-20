@@ -44,15 +44,6 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
 
 
 
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "courierPaymentGateway";
-    }
-
     /**
      * {@inheritDoc}
      */

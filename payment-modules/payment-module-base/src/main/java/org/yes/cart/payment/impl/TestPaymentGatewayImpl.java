@@ -217,15 +217,6 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
      * {@inheritDoc}
      */
     @Override
-    public String getLabel() {
-        return "testPaymentGateway";
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return paymentGatewayFeature;
     }

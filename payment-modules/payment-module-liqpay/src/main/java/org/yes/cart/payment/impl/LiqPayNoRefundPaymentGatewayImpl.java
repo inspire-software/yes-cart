@@ -52,15 +52,6 @@ public class LiqPayNoRefundPaymentGatewayImpl extends LiqPayPaymentGatewayImpl {
         return payment;
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "liqPayNoRefundPaymentGateway";
-    }
-
     /**
      * {@inheritDoc}
      */

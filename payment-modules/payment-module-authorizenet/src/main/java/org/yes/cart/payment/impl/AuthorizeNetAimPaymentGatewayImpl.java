@@ -50,14 +50,6 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     @Override
-    public String getLabel() {
-        return "authorizeNetAimPaymentGateway";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }

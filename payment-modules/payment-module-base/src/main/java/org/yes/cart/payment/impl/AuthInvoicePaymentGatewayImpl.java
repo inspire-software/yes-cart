@@ -49,14 +49,6 @@ public class AuthInvoicePaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      * {@inheritDoc}
      */
     @Override
-    public String getLabel() {
-        return "authInvoicePaymentGateway";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return PAYMENT_GATEWAY_FEATURE;
     }

@@ -304,7 +304,11 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
         params.put("currency", currencyCode);
         params.put("formDataOnly", "formDataOnly"); // YC specific
 
-        return api.cnb_form(params);
+        final String form = api.cnb_form(params);
+
+        LOG.debug("LiqPay form request: {}", form);
+
+        return form;
 
     }
 
@@ -450,14 +454,6 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
         payment.setShopperIpAddress(singleParamMap.get(PaymentMiscParam.CLIENT_IP));
 
         return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getLabel() {
-        return "liqPayPaymentGateway";
     }
 
     /**

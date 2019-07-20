@@ -57,6 +57,7 @@ public class AbstractLiqPayPaymentGatewayImplTest {
             allowing(shopParam).getLabel(); will(returnValue("#SHOP10_param"));
             allowing(shopParam).getValue(); will(returnValue("shopvalue"));
             allowing(visitor).getConfiguration("shopCode"); will(returnValue("SHOP10"));
+            allowing(visitor).getConfiguration("label"); will(returnValue("LiqPay"));
         }});
 
         final AbstractLiqPayPaymentGatewayImpl pg = new AbstractLiqPayPaymentGatewayImpl() {
@@ -87,11 +88,6 @@ public class AbstractLiqPayPaymentGatewayImplTest {
 
             @Override
             public Payment refund(final Payment payment, final boolean forceProcessing) {
-                return null;
-            }
-
-            @Override
-            public String getLabel() {
                 return null;
             }
 

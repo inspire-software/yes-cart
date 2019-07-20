@@ -48,7 +48,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
     private Collection<PaymentGatewayParameter> allParameters = null;
 
     private String shopCode;
-
+    private String label;
 
     /**
      * {@inheritDoc}
@@ -56,6 +56,14 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
     @Override
     public String getShopCode() {
         return shopCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getLabel() {
+        return label;
     }
 
     /**
@@ -243,6 +251,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
     @Override
     public void accept(final PaymentGatewayConfigurationVisitor visitor) {
         this.shopCode = visitor.getConfiguration("shopCode");
+        this.label = visitor.getConfiguration("label");
     }
 
 }
