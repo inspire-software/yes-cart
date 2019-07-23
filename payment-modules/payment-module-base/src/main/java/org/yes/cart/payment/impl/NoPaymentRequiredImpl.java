@@ -22,19 +22,17 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 
 /**
- * Offline prepayment PG
- *
  * User: denispavlov
- * Date: 15/12/2014
- * Time: 14:10
+ * Date: 20/07/2019
+ * Time: 11:43
  */
-public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements PaymentGatewayInternalForm {
+public class NoPaymentRequiredImpl extends AbstractPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
 
     private static final PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, true,
-            false, false, false, false,
+            false, true, false, false,
             null,
             true, true
     );

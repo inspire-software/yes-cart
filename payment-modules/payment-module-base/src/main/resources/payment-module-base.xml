@@ -55,6 +55,10 @@
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 
+    <bean id="noPaymentRequired"  class="org.yes.cart.payment.impl.NoPaymentRequiredImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
     <bean id="testPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="testPaymentGatewayLabel"/>
         <property name="url" value="testPaymentGateway"/>
@@ -97,6 +101,13 @@
         <property name="description" value="Authorize Invoice payment gateway"/>
     </bean>
 
+    <bean id="noPaymentRequiredDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="noPaymentRequiredLabel"/>
+        <property name="url" value="noPaymentRequired"/>
+        <!--name without protocol means spring context-->
+        <property name="description" value="No payment required"/>
+    </bean>
+
     <bean id="basePaymentModule" class="org.yes.cart.payment.impl.PaymentModuleImpl">
         <property name="descriptor">
             <bean class="org.yes.cart.payment.persistence.entity.impl.DescriptorImpl">
@@ -107,12 +118,13 @@
         </property>
         <property name="gateways">
             <map>
-                <entry key="testPaymentGateway" value-ref="testPaymentGatewayDescriptor"/>
-                <entry key="courierPaymentGateway" value-ref="courierPaymentGatewayDescriptor"/>
-                <entry key="inStorePaymentGateway" value-ref="inStorePaymentGatewayDescriptor"/>
-                <entry key="prePaymentGateway" value-ref="prePaymentGatewayDescriptor"/>
-                <entry key="invoicePaymentGateway" value-ref="invoicePaymentGatewayDescriptor"/>
-                <entry key="authInvoicePaymentGateway" value-ref="authInvoicePaymentGatewayDescriptor"/>
+                <entry key="testPaymentGateway"         value-ref="testPaymentGatewayDescriptor"/>
+                <entry key="courierPaymentGateway"      value-ref="courierPaymentGatewayDescriptor"/>
+                <entry key="inStorePaymentGateway"      value-ref="inStorePaymentGatewayDescriptor"/>
+                <entry key="prePaymentGateway"          value-ref="prePaymentGatewayDescriptor"/>
+                <entry key="invoicePaymentGateway"      value-ref="invoicePaymentGatewayDescriptor"/>
+                <entry key="authInvoicePaymentGateway"  value-ref="authInvoicePaymentGatewayDescriptor"/>
+                <entry key="noPaymentRequired"          value-ref="noPaymentRequiredDescriptor"/>
             </map>
         </property>
         <property name="paymentModulesManager" ref="paymentModulesManager"/>

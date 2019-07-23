@@ -73,9 +73,9 @@
         </property>
         <property name="gateways">
             <map>
-                <entry key="payPalButtonPaymentGateway" value-ref="payPalButtonPaymentGatewayDescriptor"/>
-                <entry key="payPalProPaymentGateway" value-ref="payPalProPaymentGatewayDescriptor"/>
-                <entry key="payPalExpressPaymentGateway" value-ref="payPalExpressPaymentGatewayDescriptor"/>
+                <entry key="payPalButtonPaymentGateway"     value-ref="payPalButtonPaymentGatewayDescriptor"/>
+                <entry key="payPalProPaymentGateway"        value-ref="payPalProPaymentGatewayDescriptor"/>
+                <entry key="payPalExpressPaymentGateway"    value-ref="payPalExpressPaymentGatewayDescriptor"/>
             </map>
         </property>
         <property name="paymentModulesManager" ref="paymentModulesManager"/>

@@ -63,8 +63,8 @@
         </property>
         <property name="gateways">
             <map>
-                <entry key="liqPayPaymentGateway" value-ref="liqPayPaymentGatewayDescriptor"/>
-                <entry key="liqPayNoRefundPaymentGateway" value-ref="liqPayNoRefundPaymentGatewayDescriptor"/>
+                <entry key="liqPayPaymentGateway"           value-ref="liqPayPaymentGatewayDescriptor"/>
+                <entry key="liqPayNoRefundPaymentGateway"   value-ref="liqPayNoRefundPaymentGatewayDescriptor"/>
             </map>
         </property>
         <property name="paymentModulesManager" ref="paymentModulesManager"/>

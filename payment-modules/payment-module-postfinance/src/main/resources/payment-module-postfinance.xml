@@ -62,8 +62,8 @@
         </property>
         <property name="gateways">
             <map>
-                <entry key="postFinancePaymentGateway" value-ref="postFinancePaymentGatewayDescriptor"/>
-                <entry key="postFinanceManualPaymentGateway" value-ref="postFinanceManualPaymentGatewayDescriptor"/>
+                <entry key="postFinancePaymentGateway"          value-ref="postFinancePaymentGatewayDescriptor"/>
+                <entry key="postFinanceManualPaymentGateway"    value-ref="postFinanceManualPaymentGatewayDescriptor"/>
             </map>
         </property>
         <property name="paymentModulesManager" ref="paymentModulesManager"/>

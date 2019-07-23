@@ -16,13 +16,10 @@
 
 package org.yes.cart.payment.impl;
 
-import org.apache.commons.lang.SerializationUtils;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
-
-import java.util.UUID;
 
 /**
  * Authorize invoice payment gateway.
@@ -59,13 +56,7 @@ public class AuthInvoicePaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      */
     @Override
     public Payment authorize(final Payment paymentIn, final boolean forceProcessing) {
-        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
-        payment.setTransactionOperation(AUTH);
-        payment.setTransactionReferenceId(UUID.randomUUID().toString());
-        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
-        payment.setPaymentProcessorBatchSettlement(false);
-        return payment;
+        return runDefaultOperation(paymentIn, AUTH, Payment.PAYMENT_STATUS_OK, false);
     }
 
     /**
@@ -73,13 +64,7 @@ public class AuthInvoicePaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      */
     @Override
     public Payment reverseAuthorization(final Payment paymentIn, final boolean forceProcessing) {
-        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
-        payment.setTransactionOperation(REVERSE_AUTH);
-        payment.setTransactionReferenceId(UUID.randomUUID().toString());
-        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
-        payment.setPaymentProcessorBatchSettlement(false);
-        return payment;
+        return runDefaultOperation(paymentIn, REVERSE_AUTH, Payment.PAYMENT_STATUS_OK, false);
     }
 
     /**
@@ -87,13 +72,7 @@ public class AuthInvoicePaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      */
     @Override
     public Payment capture(final Payment paymentIn, final boolean forceProcessing) {
-        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
-        payment.setTransactionOperation(CAPTURE);
-        payment.setTransactionReferenceId(UUID.randomUUID().toString());
-        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
-        payment.setPaymentProcessorBatchSettlement(true);
-        return payment;
+        return runDefaultOperation(paymentIn, CAPTURE, Payment.PAYMENT_STATUS_OK, true);
     }
 
     /**
@@ -101,13 +80,7 @@ public class AuthInvoicePaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      */
     @Override
     public Payment authorizeCapture(final Payment paymentIn, final boolean forceProcessing) {
-        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
-        payment.setTransactionOperation(AUTH_CAPTURE);
-        payment.setTransactionReferenceId(UUID.randomUUID().toString());
-        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
-        payment.setPaymentProcessorBatchSettlement(false);
-        return payment;
+        return runDefaultOperation(paymentIn, AUTH_CAPTURE, Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED, false);
     }
 
     /**
@@ -115,13 +88,7 @@ public class AuthInvoicePaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      */
     @Override
     public Payment voidCapture(final Payment paymentIn, final boolean forceProcessing) {
-       final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
-        payment.setTransactionOperation(VOID_CAPTURE);
-        payment.setTransactionReferenceId(UUID.randomUUID().toString());
-        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
-        payment.setPaymentProcessorBatchSettlement(false);
-        return payment;
+        return runDefaultOperation(paymentIn, VOID_CAPTURE, Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED, false);
     }
 
     /**
@@ -129,12 +96,6 @@ public class AuthInvoicePaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      */
     @Override
     public Payment refund(final Payment paymentIn, final boolean forceProcessing) {
-        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
-        payment.setTransactionOperation(REFUND);
-        payment.setTransactionReferenceId(UUID.randomUUID().toString());
-        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
-        payment.setPaymentProcessorBatchSettlement(false);
-        return payment;
+        return runDefaultOperation(paymentIn, REFUND, Payment.PAYMENT_STATUS_OK, false);
     }
 }
