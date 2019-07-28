@@ -4,16 +4,26 @@
 #
 # Docker, kubernetes, java, mysql workstation configuration.
 # 02-Aug-2017 Igor Azarny (iazarny@yahoo.com)
+# 18-Jul-2019 Igor Azarny (iazarny@yahoo.com)
 
 
 Vagrant.configure("2") do |config|
+    #config.vm.box = "ubuntu/xenial64"
     config.vm.box = "ubuntu/trusty64"
+
     config.vm.hostname = "ycdev"
+    config.vm.boot_timeout = 120
+    config.ssh.insert_key = false
+    # in case of problems during provision (vagrant cannot login to vm box) uncomment 2 lines below
+    #config.ssh.username = "vagrant"
+    #config.ssh.password = "vagrant"
 
     config.vm.network :private_network, type: "dhcp"
     config.vm.network "forwarded_port", guest: 8080, host: 8080
     config.vm.network "forwarded_port", guest: 8443, host: 8443
     config.vm.network "forwarded_port", guest: 3306, host: 3306
+    config.vm.network "forwarded_port", guest: 80, host: 80
+    config.vm.network "forwarded_port", guest: 22, host: 22
 
     config.vm.synced_folder "../../", "/project"
 
@@ -26,9 +36,6 @@ Vagrant.configure("2") do |config|
         libvirt.video_type = "qxl"
     end
 
-    # in case of problems during provision (vagrant cannot login to vm box) uncomment 2 lines below
-    #config.ssh.username = "vagrant"
-    #config.ssh.password = "vagrant"
 
     config.vm.provider "virtualbox" do |vb|
         vb.name = "ycdev"
@@ -38,16 +45,89 @@ Vagrant.configure("2") do |config|
     end
 
     config.vm.provision :shell, inline: "mkdir -p /home/vagrant/.m2 && chown vagrant:vagrant /home/vagrant/.m2"
+    config.vm.provision "shell", inline: <<-SHELL
+        apt-get update
+#tools
+        apt-get install -y git
+        apt-get install -y wget
+        apt-get install -y curl
+        apt-get install -y net-tools
+        apt-get install -y mc
+        apt-get install -y unzip
+	apt-get install -y jq
+        apt-get install -y apache2
+#node
+        #curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+        #apt-get install -y nodejs
+        curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+        sudo apt-get install -y nodejs
 
-    config.vm.provision :shell, :path => "awscli-setup.sh"
-    config.vm.provision :shell, :path => "mysql-setup.sh"
-    config.vm.provision :shell, :path => "util-setup.sh"
-    config.vm.provision :shell, :path => "nodejs-setup.sh"
-    config.vm.provision :shell, :path => "java-setup.sh"
-    config.vm.provision :shell, :path => "docker-setup.sh"
-    config.vm.provision :shell, :path => "kubernetes-setup.sh"
+
+        npm install -g webpack webpack-dev-server --save
+        npm install -g spawn-sync --save
+
+#java
+
+#exnial
+#        apt-get install openjdk-8-jdk -y
+#trusty
+        add-apt-repository ppa:openjdk-r/ppa
+        apt-get update
+        apt-get install -y openjdk-8-jdk    
+        update-java-alternatives --list    
+
+        wget http://www-eu.apache.org/dist/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.tar.gz
+        tar xzvf apache-maven-3.6.1-bin.tar.gz -C /usr/local/
+        ln -s /usr/local/apache-maven-3.6.1/bin/mvn /usr/bin/mvn
+
+#aws
+        #apt-get update
+        #apt-get install awscli
+#docker
+
+        #apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+        
+        #curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        
+        #apt-key fingerprint 0EBFCD88
+
+        #add-apt-repository \
+        #   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+        #   $(lsb_release -cs) \
+        #   stable"
+        
+        #apt-get update
+        
+        apt-get install -y docker.io
+        
+        usermod -aG docker vagrant
+
+        newgrp docker
+        
+        docker run hello-world
+        #systemctl enable docker
+
+#k8s
+        curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube
+        #minikube start --vm-driver=none
+        
+    SHELL
 
     config.vm.provision "file", source: "ufw", destination: "/home/vagrant/ufw"
-    config.vm.provision :shell, :path => "firewall-setup.sh"
+
+    config.vm.provision "shell", inline: <<-SHELL
+       #sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+       #sed -i 's/ChallengeResponseAuthentication yes/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config
+       
+       cp /home/vagrant/ufw  /etc/default/ufw
+       chown root:root /etc/default/ufw
+       iptables -t filter --policy FORWARD ACCEPT
+       echo "-------------------------------------------------"
+       echo "| 1. Change vagrant passord.                    |"
+       echo "| 2. Clone the yes cart repo and build as usual |"
+       echo "-------------------------------------------------"
+       echo "-------------------------------------------------"
+       service ssh restart
+    SHELL
 
 end
