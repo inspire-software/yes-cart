@@ -422,6 +422,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         //        <input type="hidden" name="ALIAS" value="">
         //        <input type="hidden" name="ALIASUSAGE" value="">
         //        <input type="hidden" name="ALIASOPERATION" value="">
+        //        <input type="submit" id="submit2" name="SUBMIT2" value="">
 
         // 13. check before the payment: see SHA-IN signature
         params.put("SHASIGN", sha1sign(params, getParameterValue(PF_SHA_IN)));
@@ -430,8 +431,6 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         for (final Map.Entry<String, String> param : params.entrySet()) {
             form.append(getHiddenField(param.getKey(), param.getValue()));
         }
-
-        form.append(getHiddenField("SUBMIT2", ""));
 
         LOG.debug("PostFinance form request: {}", form);
 

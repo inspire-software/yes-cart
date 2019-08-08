@@ -91,8 +91,7 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
                         "<input type='hidden' name='SHASIGN' value='3E8661D1CCD6B78D4EE0801C9F014B9D4010DAFD'>\n" +
-                        "<input type='hidden' name='USERID' value='bob@doe.com'>\n" +
-                        "<input type='hidden' name='SUBMIT2' value=''>\n",
+                        "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
                 htmlFormPart);
 
 
@@ -127,8 +126,7 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='OWNERZIP' value='NA1 NA1'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
                         "<input type='hidden' name='SHASIGN' value='85FFDCC3257ABBA193753D38B223E9511F6CC781'>\n" +
-                        "<input type='hidden' name='USERID' value='bob@doe.com'>\n" +
-                        "<input type='hidden' name='SUBMIT2' value=''>\n",
+                        "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
                 htmlFormPart);
 
     }
