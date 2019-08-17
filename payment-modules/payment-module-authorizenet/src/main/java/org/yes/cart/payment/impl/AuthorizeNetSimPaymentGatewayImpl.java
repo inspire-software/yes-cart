@@ -405,10 +405,13 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             LOG.debug("Signature is not valid");
         }
         if ("1".equals(responseCode)) {
+            LOG.debug("Payment result is {}: {}", responseCode, CallbackAware.CallbackResult.OK);
             return CallbackAware.CallbackResult.OK;
         } else if ("4".equals(responseCode)) {
+            LOG.debug("Payment result is {}: {}", responseCode, CallbackAware.CallbackResult.PROCESSING);
             return CallbackAware.CallbackResult.PROCESSING;
         } else {
+            LOG.debug("Payment result is {}: {}", responseCode, CallbackAware.CallbackResult.FAILED);
             return CallbackAware.CallbackResult.FAILED;
         }
     }

@@ -254,10 +254,13 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
 
         if (success) {
             if ("wait_secure".equalsIgnoreCase(statusRes)) {
+                LOG.debug("Payment result is {}: {}", statusRes, CallbackAware.CallbackResult.UNSETTLED);
                 return CallbackAware.CallbackResult.UNSETTLED;
             }
+            LOG.debug("Payment result is {}: {}", statusRes, CallbackAware.CallbackResult.OK);
             return CallbackAware.CallbackResult.OK;
         }
+        LOG.debug("Payment result is {}: {}", statusRes, CallbackAware.CallbackResult.FAILED);
         return CallbackAware.CallbackResult.FAILED;
 
     }

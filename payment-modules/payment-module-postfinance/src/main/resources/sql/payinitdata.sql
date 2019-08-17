@@ -149,6 +149,22 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (15180, 'postFinancePaymentGateway', 'PF_DELIVERY_AND_INVOICE_ON', null, 'Enable invoice and delivery data',
   'Invoice and delivery information will be sent with the order (ECOM_*)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15181, 'postFinancePaymentGateway', 'PF_ITEMISED_ITEM_CAT', null, 'Enabled itemised data item category',
+  'Refer to PostFinance documentation on what values can be set (if not blank will be set for all itemised parameters)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15182, 'postFinancePaymentGateway', 'PF_ITEMISED_SHIP_CAT', null, 'Enabled itemised data shipping category',
+  'Refer to PostFinance documentation on what values can be set (if not blank will be set for all itemised parameters)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15184, 'postFinancePaymentGateway', 'PF_DELIVERY_AND_INVOICE_ADDR2_IS_NUMBER', null, 'Enable invoice and delivery data (line 2 is number)',
+  'When invoice parameters (ECOM_*) are generated address line 2 will be used as *STREET_NUMBER');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15185, 'postFinancePaymentGateway', 'PF_DELIVERY_AND_INVOICE_ADDR1_NUMBER_REGEX', null, 'Enable invoice and delivery data (line 1 regex)',
+  'When invoice parameters (ECOM_*) are generated regex is used on address line 1 to extract and populate *STREET_NUMBER');
+
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -300,6 +316,22 @@ VALUES (15279, 'postFinanceManualPaymentGateway', 'restrictToCustomerTags', null
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (15280, 'postFinanceManualPaymentGateway', 'PF_DELIVERY_AND_INVOICE_ON', null, 'Enable invoice and delivery data',
   'Invoice and delivery information will be sent with the order (ECOM_*)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15281, 'postFinanceManualPaymentGateway', 'PF_ITEMISED_ITEM_CAT', null, 'Enabled itemised data item category',
+  'Refer to PostFinance documentation on what values can be set (if not blank will be set for all itemised parameters)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15282, 'postFinanceManualPaymentGateway', 'PF_ITEMISED_SHIP_CAT', null, 'Enabled itemised data shipping category',
+  'Refer to PostFinance documentation on what values can be set (if not blank will be set for all itemised parameters)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15284, 'postFinanceManualPaymentGateway', 'PF_DELIVERY_AND_INVOICE_ADDR2_IS_NUMBER', null, 'Enable invoice and delivery data (line 2 is number)',
+  'When invoice parameters (ECOM_*) are generated address line 2 will be used as *STREET_NUMBER');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15285, 'postFinanceManualPaymentGateway', 'PF_DELIVERY_AND_INVOICE_ADDR1_NUMBER_REGEX', null, 'Enable invoice and delivery data (line 1 regex)',
+  'When invoice parameters (ECOM_*) are generated regex is used on address line 1 to extract and populate *STREET_NUMBER');
 
 
 
