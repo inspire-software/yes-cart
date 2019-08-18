@@ -243,6 +243,28 @@
         </property>
     </bean>
 
+
+    <bean id="productAvailabilityStrategyBackorderInStockOnly" class="org.yes.cart.shoppingcart.impl.ProductAvailabilityStrategyBackorderInStockOnlyImpl">
+        <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="skuWarehouseService"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="inventory"/>
+                <property name="name" value="ProductAvailabilityStrategyBackorderInStockOnly"/>
+                <property name="cfgInterface" value="ProductAvailabilityStrategy"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="description">Custome service for availability determination, makes BACKORDER items without stock show as unavailable (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.productAvailabilityStrategy=productAvailabilityStrategyBackorderInStockOnly, where SHOPCODE is the code of the shop</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
     <bean id="productAvailabilityStrategy"
           class="org.yes.cart.shoppingcart.impl.ProductAvailabilityStrategyImpl">
         <constructor-arg index="0" ref="productAvailabilityStrategyDefault"/>
