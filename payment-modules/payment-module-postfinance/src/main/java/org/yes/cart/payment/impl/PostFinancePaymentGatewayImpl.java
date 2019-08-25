@@ -105,6 +105,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     static final String PF_ITEMISED = "PF_ITEMISED";
     static final String PF_ITEMISED_ITEM_CAT = "PF_ITEMISED_ITEM_CAT";
     static final String PF_ITEMISED_SHIP_CAT = "PF_ITEMISED_SHIP_CAT";
+    static final String PF_ITEMISED_USE_TAX_AMOUNT = "PF_ITEMISED_USE_TAX_AMOUNT";
 
     // Delivery & Invoice info enabled
     static final String PF_DELIVERY_AND_INVOICE_ON = "PF_DELIVERY_AND_INVOICE_ON";
@@ -488,6 +489,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
         final String itemCategory = getParameterValue(PF_ITEMISED_ITEM_CAT);
         final String shippingCategory = getParameterValue(PF_ITEMISED_SHIP_CAT);
+        final boolean useTaxAmount = Boolean.valueOf(getParameterValue(PF_ITEMISED_USE_TAX_AMOUNT));
 
         BigDecimal totalItemsGross = Total.ZERO;
 
@@ -539,13 +541,19 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
                 final BigDecimal scaledTax = unitTax.multiply(scaleRate).setScale(Total.ZERO.scale(), RoundingMode.FLOOR);
                 //params.put("ITEMDISCOUNT" + i, discount.setScale(4, RoundingMode.FLOOR).toPlainString());
                 params.put("ITEMPRICE" + i, item.getUnitPrice().subtract(discount).setScale(4, RoundingMode.FLOOR).toPlainString());
-                //params.put("ITEMVAT" + i, unitTax.subtract(scaledTax).setScale(4, RoundingMode.FLOOR).toPlainString());
-                params.put("ITEMVATCODE" + i, taxRate.toPlainString() + "%");
+                if (useTaxAmount) {
+                    params.put("ITEMVAT" + i, unitTax.subtract(scaledTax).setScale(4, RoundingMode.FLOOR).toPlainString());
+                } else {
+                    params.put("ITEMVATCODE" + i, taxRate.toPlainString());
+                }
                 params.put("TAXINCLUDED" + i, "1");
             } else {
                 params.put("ITEMPRICE" + i, item.getUnitPrice().setScale(4, RoundingMode.FLOOR).toPlainString());
-                //params.put("ITEMVAT" + i, unitTax.toPlainString());
-                params.put("ITEMVATCODE" + i, taxRate.toPlainString() + "%");
+                if (useTaxAmount) {
+                    params.put("ITEMVAT" + i, unitTax.toPlainString());
+                } else {
+                    params.put("ITEMVATCODE" + i, taxRate.toPlainString());
+                }
                 params.put("TAXINCLUDED" + i, "1");
             }
 

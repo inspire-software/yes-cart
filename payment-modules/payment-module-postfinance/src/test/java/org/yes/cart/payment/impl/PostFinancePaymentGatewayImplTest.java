@@ -260,13 +260,13 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='ITEMPRICE2' value='0.0000'>\n" +
                         "<input type='hidden' name='ITEMQUANT1' value='2'>\n" +
                         "<input type='hidden' name='ITEMQUANT2' value='1'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE1' value='25.0%'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE2' value='0.0%'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE1' value='25.0'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE2' value='0.0'>\n" +
                         "<input type='hidden' name='LANGUAGE' value='en'>\n" +
                         "<input type='hidden' name='OPERATION' value='SAL'>\n" +
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='A965B0B768EA00DC4CF794CA414B02C18D8D283A'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='2FE15F62625775D690066416BD424F55F463AD83'>\n" +
                         "<input type='hidden' name='TAXINCLUDED1' value='1'>\n" +
                         "<input type='hidden' name='TAXINCLUDED2' value='1'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
@@ -323,13 +323,13 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='ITEMPRICE2' value='0.0000'>\n" +
                         "<input type='hidden' name='ITEMQUANT1' value='2'>\n" +
                         "<input type='hidden' name='ITEMQUANT2' value='1'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE1' value='25.0%'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE2' value='0.0%'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE1' value='25.0'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE2' value='0.0'>\n" +
                         "<input type='hidden' name='LANGUAGE' value='en'>\n" +
                         "<input type='hidden' name='OPERATION' value='SAL'>\n" +
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='C9152A6D0E8C36800FD2F7AD9480FA2848C6A9BC'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='DA59B8F8D3E9585588E8BB54DA175970124DF442'>\n" +
                         "<input type='hidden' name='TAXINCLUDED1' value='1'>\n" +
                         "<input type='hidden' name='TAXINCLUDED2' value='1'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
@@ -389,13 +389,79 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='ITEMPRICE2' value='0.0000'>\n" +
                         "<input type='hidden' name='ITEMQUANT1' value='2'>\n" +
                         "<input type='hidden' name='ITEMQUANT2' value='1'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE1' value='25.0%'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE2' value='0.0%'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE1' value='25.0'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE2' value='0.0'>\n" +
                         "<input type='hidden' name='LANGUAGE' value='en'>\n" +
                         "<input type='hidden' name='OPERATION' value='SAL'>\n" +
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='FD6B2A3AE9B3905A3D992C5EEC3D478151A6809C'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='6E994496299064381B115EA9D0D3D8F0D44F41AA'>\n" +
+                        "<input type='hidden' name='TAXINCLUDED1' value='1'>\n" +
+                        "<input type='hidden' name='TAXINCLUDED2' value='1'>\n" +
+                        "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
+                htmlFormPart);
+
+    }
+
+
+    @Test
+    public void testGetHtmlFormItemisedWithCategoriesAndTaxAmount() throws Exception {
+
+        final Map<String, String> params = getHtmlFormParamsItemised();
+        params.put(PostFinancePaymentGatewayImpl.PF_ITEMISED_ITEM_CAT, "Item");
+        params.put(PostFinancePaymentGatewayImpl.PF_ITEMISED_SHIP_CAT, "Shipping");
+        params.put(PostFinancePaymentGatewayImpl.PF_ITEMISED_USE_TAX_AMOUNT, "true");
+
+
+        final PostFinancePaymentGatewayImpl gatewayImpl = new PostFinancePaymentGatewayImpl() {
+
+            @Override
+            public String getParameterValue(String valueLabel) {
+                if (params.containsKey(valueLabel)) {
+                    return params.get(valueLabel);
+                }
+                return "";
+            }
+        };
+
+        String htmlFormPart = gatewayImpl.getHtmlForm(
+                "holder  name",
+                "en",
+                BigDecimal.TEN.setScale(2),
+                "USD",
+                "234-1324-1324-1324sdf-sdf",
+                createTestPayment(false, false)
+
+        );
+
+        assertEquals("<input type='hidden' name='ACCEPTURL' value='http://mydomain.com/result?hint=ok'>\n" +
+                        "<input type='hidden' name='AMOUNT' value='1000'>\n" +
+                        "<input type='hidden' name='CANCELURL' value='http://mydomain.com/result?hint=ca'>\n" +
+                        "<input type='hidden' name='CATALOGURL' value='http://mydomain.com/result'>\n" +
+                        "<input type='hidden' name='CN' value='holder  name'>\n" +
+                        "<input type='hidden' name='COM' value='bob@doe.com, 1234'>\n" +
+                        "<input type='hidden' name='CURRENCY' value='USD'>\n" +
+                        "<input type='hidden' name='DECLINEURL' value='http://mydomain.com/result?hint=de'>\n" +
+                        "<input type='hidden' name='EMAIL' value='bob@doe.com'>\n" +
+                        "<input type='hidden' name='EXCEPTIONURL' value='http://mydomain.com/result?hint=ex'>\n" +
+                        "<input type='hidden' name='HOMEURL' value='http://mydomain.com/result'>\n" +
+                        "<input type='hidden' name='ITEMCATEGORY1' value='Item'>\n" +
+                        "<input type='hidden' name='ITEMCATEGORY2' value='Shipping'>\n" +
+                        "<input type='hidden' name='ITEMID1' value='code2'>\n" +
+                        "<input type='hidden' name='ITEMID2' value='ship2'>\n" +
+                        "<input type='hidden' name='ITEMNAME1' value='name2'>\n" +
+                        "<input type='hidden' name='ITEMNAME2' value='ship2'>\n" +
+                        "<input type='hidden' name='ITEMPRICE1' value='5.0000'>\n" +
+                        "<input type='hidden' name='ITEMPRICE2' value='0.0000'>\n" +
+                        "<input type='hidden' name='ITEMQUANT1' value='2'>\n" +
+                        "<input type='hidden' name='ITEMQUANT2' value='1'>\n" +
+                        "<input type='hidden' name='ITEMVAT1' value='1.00'>\n" +
+                        "<input type='hidden' name='ITEMVAT2' value='0.00'>\n" +
+                        "<input type='hidden' name='LANGUAGE' value='en'>\n" +
+                        "<input type='hidden' name='OPERATION' value='SAL'>\n" +
+                        "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
+                        "<input type='hidden' name='PSPID' value='ID0001'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='961956DF6425AF437BA00D4BDFC5D9A2BFBBCE3F'>\n" +
                         "<input type='hidden' name='TAXINCLUDED1' value='1'>\n" +
                         "<input type='hidden' name='TAXINCLUDED2' value='1'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
@@ -449,8 +515,8 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='ITEMPRICE2' value='0.0000'>\n" +
                         "<input type='hidden' name='ITEMQUANT1' value='2'>\n" +
                         "<input type='hidden' name='ITEMQUANT2' value='1'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE1' value='25.0%'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE2' value='0.0%'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE1' value='25.0'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE2' value='0.0'>\n" +
                         "<input type='hidden' name='LANGUAGE' value='en'>\n" +
                         "<input type='hidden' name='OPERATION' value='SAL'>\n" +
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
@@ -460,7 +526,7 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='OWNERTOWN' value='Nowhere'>\n" +
                         "<input type='hidden' name='OWNERZIP' value='NA1 NA1'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='35C4DD2ADD5159EDCE8AD4987D8EDEE44DAD3764'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='86CBF9A6FD81EF04642D73788393365F8FE1D55C'>\n" +
                         "<input type='hidden' name='TAXINCLUDED1' value='1'>\n" +
                         "<input type='hidden' name='TAXINCLUDED2' value='1'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
@@ -516,8 +582,8 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='ITEMPRICE2' value='0.0000'>\n" +
                         "<input type='hidden' name='ITEMQUANT1' value='2'>\n" +
                         "<input type='hidden' name='ITEMQUANT2' value='1'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE1' value='25.0%'>\n" +
-                        "<input type='hidden' name='ITEMVATCODE2' value='0.0%'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE1' value='25.0'>\n" +
+                        "<input type='hidden' name='ITEMVATCODE2' value='0.0'>\n" +
                         "<input type='hidden' name='LANGUAGE' value='en'>\n" +
                         "<input type='hidden' name='OPERATION' value='SAL'>\n" +
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
@@ -527,7 +593,7 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='OWNERTOWN' value='Nowhere'>\n" +
                         "<input type='hidden' name='OWNERZIP' value='NA1 NA1'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='7EDFD39697CCA96A292992B395A3482CFFC1DF87'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='31E48B4A837DD6F09A2B41615CB37F2CA1AD957F'>\n" +
                         "<input type='hidden' name='TAXINCLUDED1' value='1'>\n" +
                         "<input type='hidden' name='TAXINCLUDED2' value='1'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
