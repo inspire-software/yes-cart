@@ -22,7 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -370,23 +373,18 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
 
             for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
-                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+                final String skuCode = det.getProductSkuCode();
+                final BigDecimal toAllocate = det.getQty();
+                final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
-                if (product == null || Product.AVAILABILITY_ALWAYS != product.getAvailability()) {
-
-                    final String skuCode = det.getProductSkuCode();
-                    final BigDecimal toAllocate = det.getQty();
-                    final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
-
-                    if (selected == null) {
-                        LOG.warn(Markers.alert(),
-                                "Warehouse is not found for delivery detail {}:{}",
-                                orderDelivery.getDeliveryNum(), det.getProductSkuCode()
-                        );
-                    } else {
-                        // At this point we should have reserved the quantity, so we just releasing the reservation
-                        inventoryResolver.voidReservation(selected, skuCode, toAllocate);
-                    }
+                if (selected == null) {
+                    LOG.warn(Markers.alert(),
+                            "Warehouse is not found for delivery detail {}:{}",
+                            orderDelivery.getDeliveryNum(), det.getProductSkuCode()
+                    );
+                } else {
+                    // At this point we should have reserved the quantity, so we just releasing the reservation
+                    inventoryResolver.voidReservation(selected, skuCode, toAllocate);
                 }
             }
         }

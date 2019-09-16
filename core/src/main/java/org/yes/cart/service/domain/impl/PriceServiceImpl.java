@@ -21,9 +21,8 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.SkuPriceQuantityComparator;
 import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.utils.DomainApiUtils;
+import org.yes.cart.service.domain.SkuPriceQuantityComparator;
 import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.TimeContext;
 
@@ -196,7 +195,7 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
         final LocalDateTime now = now();
         for (Pair<String, SkuPrice> skuPrice : skuPrices) {
 
-            if (DomainApiUtils.isObjectAvailableNow(true, skuPrice.getSecond().getSalefrom(), skuPrice.getSecond().getSaleto(), now)) {
+            if (skuPrice.getSecond().isAvailable(now)) {
                 allPrices.add(skuPrice);
             }
 

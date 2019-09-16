@@ -22,7 +22,6 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
-import org.yes.cart.domain.ro.xml.impl.LocalDateTimeAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -30,8 +29,6 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -59,18 +56,6 @@ public class ProductRO implements Serializable {
 
     @DtoField(value = "tag", readOnly = true)
     private String tag;
-
-    @DtoField(value = "disabled", readOnly = true)
-    private boolean disabled;
-
-    @DtoField(value = "availablefrom", readOnly = true)
-    private LocalDateTime availablefrom;
-
-    @DtoField(value = "availableto", readOnly = true)
-    private LocalDateTime availableto;
-
-    @DtoField(value = "availability", readOnly = true)
-    private int availability;
 
     private String uitemplate;
     private String uitemplateFallback;
@@ -113,19 +98,6 @@ public class ProductRO implements Serializable {
 
     @DtoField(value = "description", readOnly = true)
     private String description;
-
-    @DtoField(value = "featured", readOnly = true)
-    private Boolean featured;
-
-    @DtoField(value = "minOrderQuantity", readOnly = true)
-    private BigDecimal minOrderQuantity;
-
-    @DtoField(value = "maxOrderQuantity", readOnly = true)
-    private BigDecimal maxOrderQuantity;
-
-    @DtoField(value = "stepOrderQuantity", readOnly = true)
-    private BigDecimal stepOrderQuantity;
-
 
     @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo", readOnly = true)
     private String uri;
@@ -196,42 +168,6 @@ public class ProductRO implements Serializable {
     public void setTag(final String tag) {
         this.tag = tag;
     }
-
-    @XmlAttribute(name = "disabled")
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(final boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-    public LocalDateTime getAvailablefrom() {
-        return availablefrom;
-    }
-
-    public void setAvailablefrom(final LocalDateTime availablefrom) {
-        this.availablefrom = availablefrom;
-    }
-
-    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-    public LocalDateTime getAvailableto() {
-        return availableto;
-    }
-
-    public void setAvailableto(final LocalDateTime availableto) {
-        this.availableto = availableto;
-    }
-
-    public int getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(final int availability) {
-        this.availability = availability;
-    }
-
 
     public String getUitemplate() {
         return uitemplate;
@@ -366,41 +302,6 @@ public class ProductRO implements Serializable {
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    public Boolean getFeatured() {
-        return featured;
-    }
-
-    public void setFeatured(final Boolean featured) {
-        this.featured = featured;
-    }
-
-    @XmlElement(name = "min-order-quantity")
-    public BigDecimal getMinOrderQuantity() {
-        return minOrderQuantity;
-    }
-
-    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
-        this.minOrderQuantity = minOrderQuantity;
-    }
-
-    @XmlElement(name = "max-order-quantity")
-    public BigDecimal getMaxOrderQuantity() {
-        return maxOrderQuantity;
-    }
-
-    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
-        this.maxOrderQuantity = maxOrderQuantity;
-    }
-
-    @XmlElement(name = "step-order-quantity")
-    public BigDecimal getStepOrderQuantity() {
-        return stepOrderQuantity;
-    }
-
-    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
-        this.stepOrderQuantity = stepOrderQuantity;
     }
 
     public String getUri() {

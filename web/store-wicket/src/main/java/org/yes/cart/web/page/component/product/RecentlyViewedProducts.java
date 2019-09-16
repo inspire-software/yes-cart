@@ -16,9 +16,13 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.codehaus.groovy.util.ListHashMap;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Show new arrival. Current category will be selected to pick up
@@ -53,10 +57,32 @@ public class RecentlyViewedProducts extends AbstractProductSearchResultList {
         if (products == null) {
 
             final long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
-            final List<String> productIds = getCurrentCart().getShoppingContext().getLatestViewedSkus();
-            final long shopId = getCurrentShopId();
-            final long browsingShopId = getCurrentCustomerShopId();
-            products = productServiceFacade.getListProducts(productIds, categoryId, shopId, browsingShopId);
+            final List<String> viewedSkus = getCurrentCart().getShoppingContext().getLatestViewedSkus();
+            if (CollectionUtils.isNotEmpty(viewedSkus)) {
+                final Map<String, List<String>> skuAndSupplier = new ListHashMap<>();
+                for (final String viewedSku : viewedSkus) {
+                    final int pos = viewedSku.indexOf("|");
+                    if (pos != -1) {
+                        final String skuCode = viewedSku.substring(0, pos);
+                        final String skuSupplier = viewedSku.substring(pos + 1);
+                        final List<String> skuSuppliers = skuAndSupplier.computeIfAbsent(skuCode, k -> new ArrayList<>());
+                        skuSuppliers.add(skuSupplier);
+                    }
+                }
+
+                final long shopId = getCurrentShopId();
+                final long browsingShopId = getCurrentCustomerShopId();
+                final List<ProductSearchResultDTO> viewedProducts =
+                        new ArrayList<>(productServiceFacade.getListProductSKUs(
+                                new ArrayList<>(skuAndSupplier.keySet()), categoryId, shopId, browsingShopId));
+                viewedProducts.removeIf(viewed -> {
+                    final List<String> skuSuppliers = skuAndSupplier.get(viewed.getDefaultSkuCode());
+                    return skuSuppliers == null || !skuSuppliers.contains(viewed.getFulfilmentCentreCode());
+                });
+                products = viewedProducts;
+            } else {
+                products = new ArrayList<>();
+            }
 
         }
         return products;

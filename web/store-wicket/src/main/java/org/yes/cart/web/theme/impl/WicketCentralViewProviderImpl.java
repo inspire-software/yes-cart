@@ -25,7 +25,6 @@ import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.ShopCodeContext;
 import org.yes.cart.utils.TimeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -177,7 +176,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
                 while (category != null && !category.isRoot()) { // while enabled and not reached root
 
-                    if (!DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+                    if (!category.isAvailable(now)) {
                         LOG.warn("Attempted to access category {} in shop {} but {} category is not available", categoryId, customerShopId, category.getCategoryId());
                         return false; // not available
                     }
@@ -219,7 +218,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
                 while (content != null && !content.isRoot() &&  !CentralViewLabel.INCLUDE.equals(content.getUitemplate())) {
 
-                    if (!DomainApiUtils.isObjectAvailableNow(!content.isDisabled(), content.getAvailablefrom(), content.getAvailableto(), now)) {
+                    if (!content.isAvailable(now)) {
                         LOG.warn("Attempted to access content {} in shop {} but {} content is not available", contentId, shopId, content.getContentId());
                         return false; // not available
                     }

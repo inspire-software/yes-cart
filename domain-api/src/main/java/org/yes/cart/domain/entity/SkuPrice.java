@@ -231,6 +231,15 @@ public interface SkuPrice extends Auditable, Taggable {
     void setSaleto(LocalDateTime saleto);
 
     /**
+     * Returns true if product is enabled and now is within from/to date range.
+     *
+     * @param now    time now
+     *
+     * @return true if the product is available now
+     */
+    boolean isAvailable(LocalDateTime now);
+
+    /**
      * Primary key.
      *
      * @return pk value

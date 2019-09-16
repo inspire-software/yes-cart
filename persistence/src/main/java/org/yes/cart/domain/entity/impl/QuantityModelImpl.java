@@ -31,6 +31,7 @@ public class QuantityModelImpl implements QuantityModel {
 
     private static final BigDecimal MAX = new BigDecimal(Integer.MAX_VALUE);
 
+    private final String supplier;
     private final boolean canOrderLess;
     private final boolean canOrderMore;
     private final boolean hasMin;
@@ -42,11 +43,17 @@ public class QuantityModelImpl implements QuantityModel {
     private final BigDecimal maxOrder;
     private final BigDecimal step;
     private final BigDecimal cartQty;
+    private final String defaultSku;
 
-    public QuantityModelImpl(final BigDecimal min,
+    public QuantityModelImpl(final String supplier,
+                             final String defaultSku,
+                             final BigDecimal min,
                              final BigDecimal max,
                              final BigDecimal step,
                              final BigDecimal cartQty) {
+
+        this.supplier = supplier;
+        this.defaultSku = defaultSku;
 
         this.hasStep = MoneyUtils.isPositive(step);
         this.step = (this.hasStep ? step : BigDecimal.ONE).stripTrailingZeros(); // Stepping ultimately defines the scale for quantity
@@ -84,6 +91,12 @@ public class QuantityModelImpl implements QuantityModel {
             this.maxOrder = BigDecimal.ZERO;
         }
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getSupplier() {
+        return supplier;
     }
 
     /** {@inheritDoc} */
@@ -164,8 +177,10 @@ public class QuantityModelImpl implements QuantityModel {
         final BigDecimal toAdd;
         if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(this.minOrder, addQty)) {
             toAdd = this.minOrder; // do not allow qty less than min
-        } else {
+        } else if (addQty != null) {
             toAdd = addQty;
+        } else {
+            toAdd = BigDecimal.ONE;
         }
         final BigDecimal rem = cartQty.add(toAdd).setScale(step.scale(), RoundingMode.HALF_UP); // trial add
 
@@ -183,8 +198,10 @@ public class QuantityModelImpl implements QuantityModel {
         final BigDecimal toRemove;
         if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(this.step, remQty)) {
             toRemove = this.step;
-        } else {
+        } else if (remQty != null) {
             toRemove = remQty;
+        } else {
+            toRemove = BigDecimal.ONE;
         }
         final BigDecimal rem = cartQty.subtract(toRemove);
         if (MoneyUtils.isFirstBiggerThanSecond(min, rem)) {
@@ -206,8 +223,14 @@ public class QuantityModelImpl implements QuantityModel {
             return max;
         }
 
-        final BigDecimal margin = qty.subtract(min);
+        final BigDecimal margin = (qty != null ? qty : BigDecimal.ONE).subtract(min);
         final BigDecimal multiplier = margin.divide(step, 0, RoundingMode.CEILING);
         return min.add(step.multiply(multiplier)).setScale(step.scale(), RoundingMode.HALF_UP);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getDefaultSkuCode() {
+        return defaultSku;
     }
 }

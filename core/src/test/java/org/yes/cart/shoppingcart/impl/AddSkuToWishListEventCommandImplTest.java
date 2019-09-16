@@ -81,6 +81,7 @@ public class AddSkuToWishListEventCommandImplTest extends BaseCoreDBTestCase {
         params.clear();
 
         params.put(ShoppingCartCommand.CMD_ADDTOWISHLIST, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         params.put(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TAGS, "mine");
 
         commands.execute(shoppingCart, (Map) params);
@@ -92,13 +93,14 @@ public class AddSkuToWishListEventCommandImplTest extends BaseCoreDBTestCase {
         CustomerWishList item1 = wishList.get(0);
         assertEquals(CustomerWishList.PRIVATE, item1.getVisibility());
         assertEquals(CustomerWishList.SIMPLE_WISH_ITEM, item1.getWlType());
-        assertEquals(skuService.getProductSkuBySkuCode("CC_TEST1").getSkuId(),  item1.getSkus().getSkuId());
+        assertEquals("CC_TEST1",  item1.getSkuCode());
         assertEquals("mine", item1.getTag());
         assertEquals(1, item1.getQuantity().intValue());
         assertEquals("19.99", item1.getRegularPriceWhenAdded().toString());
 
 
         params.put(ShoppingCartCommand.CMD_ADDTOWISHLIST, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         params.put(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TAGS, "mine shared");
 
         commands.execute(shoppingCart, (Map) params);
@@ -111,7 +113,7 @@ public class AddSkuToWishListEventCommandImplTest extends BaseCoreDBTestCase {
         item1 = wishList.get(0);
         assertEquals(CustomerWishList.PRIVATE, item1.getVisibility());
         assertEquals(CustomerWishList.SIMPLE_WISH_ITEM, item1.getWlType());
-        assertEquals(skuService.getProductSkuBySkuCode("CC_TEST1").getSkuId(),  item1.getSkus().getSkuId());
+        assertEquals("CC_TEST1", item1.getSkuCode());
         assertEquals("mine shared", item1.getTag());
         assertEquals(2, item1.getQuantity().intValue());
         assertEquals("19.99", item1.getRegularPriceWhenAdded().toString());

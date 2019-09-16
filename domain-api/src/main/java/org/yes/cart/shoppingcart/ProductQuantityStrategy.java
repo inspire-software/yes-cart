@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
@@ -41,43 +42,98 @@ public interface ProductQuantityStrategy {
     /**
      * Quantity model.
      *
-     * @param cartQty quantity of given sku in cart
-     * @param product required product
+     * @param shopId    shop PK
+     * @param cartQty   quantity of given sku in cart
+     * @param product   required product
+     * @param supplier  supplier
      *
      * @return quantity model
      */
-    QuantityModel getQuantityModel(BigDecimal cartQty, Product product);
+    QuantityModel getQuantityModel(long shopId,
+                                   BigDecimal cartQty,
+                                   Product product,
+                                   String supplier);
 
     /**
      * Quantity model.
      *
-     * @param cartQty quantity of given sku in cart
-     * @param product required product
+     * @param shopId        shop PK
+     * @param cartQty       quantity of given sku in cart
+     * @param productSku    required product SKU
+     * @param supplier      supplier
      *
      * @return quantity model
      */
-    QuantityModel getQuantityModel(BigDecimal cartQty, ProductSearchResultDTO product);
+    QuantityModel getQuantityModel(long shopId,
+                                   BigDecimal cartQty,
+                                   ProductSku productSku,
+                                   String supplier);
+
+
 
     /**
      * Quantity model.
      *
-     * @param cartQty quantity of given sku in cart
-     * @param productSku required product SKU
+     * @param shopId    shop PK
+     * @param cartQty   quantity of given sku in cart
+     * @param product   required product
      *
      * @return quantity model
      */
-    QuantityModel getQuantityModel(BigDecimal cartQty, ProductSku productSku);
+    QuantityModel getQuantityModel(long shopId,
+                                   BigDecimal cartQty,
+                                   ProductSearchResultDTO product);
+
 
     /**
      * Quantity model.
      *
-     * @param cartQty quantity of given sku in cart
-     * @param min min order quantity
-     * @param max max order quantity
-     * @param step step order quantity
+     * @param shopId    shop PK
+     * @param cartQty   quantity of given sku in cart
+     * @param sku       required product
      *
      * @return quantity model
      */
-    QuantityModel getQuantityModel(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
+    QuantityModel getQuantityModel(long shopId,
+                                   BigDecimal cartQty,
+                                   ProductSkuSearchResultDTO sku);
+
+
+    /**
+     * Quantity model.
+     *
+     * @param shopId    shop PK
+     * @param cartQty   quantity of given sku in cart
+     * @param sku       required product SKU
+     * @param supplier  supplier
+     *
+     * @return quantity model
+     */
+    QuantityModel getQuantityModel(long shopId,
+                                   BigDecimal cartQty,
+                                   String sku,
+                                   String supplier);
+
+    /**
+     * Quantity model.
+     *
+     * @param shopId    shop PK
+     * @param cartQty   quantity of given sku in cart
+     * @param sku       required product SKU
+     * @param min       min order quantity
+     * @param max       max order quantity
+     * @param step      step order quantity
+     * @param supplier  supplier
+     *
+     * @return quantity model
+     */
+    QuantityModel getQuantityModel(long shopId,
+                                   BigDecimal cartQty,
+                                   String sku,
+                                   BigDecimal min,
+                                   BigDecimal max,
+                                   BigDecimal step,
+                                   String supplier);
+
 
 }

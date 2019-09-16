@@ -145,15 +145,21 @@ public final class ShoppingCartUtils {
     /**
      * Search for an index of first item with given SKU.
      *
+     * @param supplier supplier
      * @param skuCode SKU
      * @param items items to search
      *
      * @return index, or -1 if not found
      */
-    public static int indexOf(final String skuCode, final List<? extends CartItem> items) {
+    public static int indexOf(final String supplier,
+                              final String skuCode,
+                              final List<? extends CartItem> items) {
+
         for (int index = 0; index < items.size(); index++) {
             final CartItem item = items.get(index);
-            if (item.getProductSkuCode().equals(skuCode)) {
+            if (item.getProductSkuCode().equals(skuCode) &&
+                    ((item.getSupplierCode() == null && supplier == null)
+                        || (item.getSupplierCode() != null && item.getSupplierCode().equals(supplier)))) {
                 return index;
             }
         }

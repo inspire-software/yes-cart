@@ -44,10 +44,7 @@ import org.yes.cart.web.support.entity.decorator.impl.ProductSkuSeoableDecorator
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Central view to show product sku.
@@ -213,6 +210,7 @@ public class SkuCentralView extends AbstractCentralView {
     private boolean isProduct;
     private Product product;
     private ProductSku sku;
+    private String supplier;
 
 
     /**
@@ -231,6 +229,7 @@ public class SkuCentralView extends AbstractCentralView {
         long browsingShopId = cart.getShoppingContext().getCustomerShopId();
         String productId = getPage().getPageParameters().get(WebParametersKeys.PRODUCT_ID).toString();
         String skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toString();
+        this.supplier = getPage().getPageParameters().get(WebParametersKeys.FULFILMENT_CENTRE_ID).toString();
         if (skuId != null) {
             isProduct = false;
             try {
@@ -245,7 +244,10 @@ public class SkuCentralView extends AbstractCentralView {
             try {
                 final Long prodPK = Long.valueOf(productId);
                 product = productServiceFacade.getProductById(prodPK);
-                final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, browsingShopId);
+                final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, browsingShopId, supplier);
+                if (StringUtils.isBlank(supplier)) {
+                    this.supplier = pam.getSupplier();
+                }
                 sku = getDefault(product, pam, browsingShopId);
                 sku = productServiceFacade.getSkuById(sku.getSkuId());
             } catch (Exception exp) {
@@ -254,10 +256,6 @@ public class SkuCentralView extends AbstractCentralView {
         } else {
             throw new RuntimeException("Product or Sku id expected");
         }
-
-        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, cart, new HashMap<String, Object>() {{
-            put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, product);
-        }});
 
     }
 
@@ -272,6 +270,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         add(new TopCategories("topCategories"));
 
+        final ShoppingCart cart = getCurrentCart();
         final Shop shop = getCurrentShop();
         final long browsingStoreId = getCurrentCustomerShopId();
 
@@ -287,36 +286,55 @@ public class SkuCentralView extends AbstractCentralView {
             }
         }
 
+        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(sku, browsingStoreId, supplier);
+        if (StringUtils.isBlank(supplier)) {
+            this.supplier = skuPam.getSupplier();
+        }
+
         final PriceModel model = productServiceFacade.getSkuPrice(
                 getCurrentCart(),
                 null,
                 sku.getCode(), /* We always preselect a SKU */
-                BigDecimal.ONE
+                BigDecimal.ONE,
+                supplier
         );
 
         add(getPriceView(model));
-        add(new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct));
+
+        final List<ProductSku> skus = new ArrayList<>(product.getSku());
+        if (skus.size() > 1) {
+            final Iterator<ProductSku> skusIt = skus.iterator();
+            while (skusIt.hasNext()) {
+                final ProductSku skuNext = skusIt.next();
+                if (!sku.getCode().equals(skuNext.getCode())) {
+                    final ProductAvailabilityModel skuNextPam = productServiceFacade.getProductAvailability(skuNext.getCode(), browsingStoreId, supplier);
+                    if (skuNextPam.getAvailability() == SkuWarehouse.AVAILABILITY_NA) {
+                        skusIt.remove();
+                    }
+                }
+            }
+        }
+
+        add(new SkuListView(SKU_LIST_VIEW, skus, sku, isProduct, supplier));
         add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(shop, sku)));
         add(new Label(PRODUCT_NAME_LABEL, decorator.getName(selectedLocale)));
         add(new Label(PRODUCT_DESCRIPTION_LABEL, desc).setEscapeModelStrings(false));
-        add(new AddAnyButton(SOCIAL_ADD_TO_ANY_BUTTON, product));
+        add(new AddAnyButton(SOCIAL_ADD_TO_ANY_BUTTON, product, supplier));
 
-        final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(sku, browsingStoreId);
+        final boolean qtyPickVisible = !model.isPriceUponRequest() && skuPam.isAvailable() && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER);
 
-        final boolean qtyPickVisible = !model.isPriceUponRequest() && pam.isAvailable() && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER);
-
-        add(new QuantityPickerPanel(QTY_PICKER, product.getProductId(), sku.getCode()).setVisible(qtyPickVisible));
+        add(new QuantityPickerPanel(QTY_PICKER, product.getProductId(), sku.getCode(), supplier).setVisible(qtyPickVisible));
 
         add(
-                getWicketSupportFacade().links().newAddToCartLink(ADD_TO_CART_LINK, sku.getCode(), null, getPage().getPageParameters())
-                        .add(new Label(ADD_TO_CART_LINK_LABEL, pam.isInStock() || pam.isPerpetual() ?
+                getWicketSupportFacade().links().newAddToCartLink(ADD_TO_CART_LINK, supplier, sku.getCode(), null, getPage().getPageParameters())
+                        .add(new Label(ADD_TO_CART_LINK_LABEL, skuPam.isInStock() || skuPam.isPerpetual() ?
                                 getLocalizer().getString("addToCart", this) :
                                 getLocalizer().getString("preorderCart", this)))
-                        .setVisible(!model.isPriceUponRequest() && pam.isAvailable())
+                        .setVisible(!model.isPriceUponRequest() && skuPam.isAvailable())
         );
 
         add(
-                getWicketSupportFacade().links().newAddToWishListLink(ADD_TO_WISHLIST_LINK, sku.getCode(), null, null, null, getPage().getPageParameters())
+                getWicketSupportFacade().links().newAddToWishListLink(ADD_TO_WISHLIST_LINK, supplier, sku.getCode(), null, null, null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_WISHLIST_LINK_LABEL, getLocalizer().getString("addToWishlist", this)))
         );
 
@@ -399,6 +417,11 @@ public class SkuCentralView extends AbstractCentralView {
 
         add(new WishListNotification("wishListNotification"));
 
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, cart, new HashMap<String, Object>() {{
+            put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, sku.getCode());
+            put(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
+        }});
+
         super.onBeforeRender();
 
     }
@@ -432,17 +455,21 @@ public class SkuCentralView extends AbstractCentralView {
         return productServiceFacade.getSkuPrices(
                 getCurrentCart(),
                 product.getProductId(),
-                sku.getCode());
+                sku.getCode(),
+                supplier
+        );
     }
 
     /*
     * Return first available sku rather than default to improve customer experience.
     */
-    private ProductSku getDefault(final Product product, final ProductAvailabilityModel productPam, final long shopId) {
+    private ProductSku getDefault(final Product product,
+                                  final ProductAvailabilityModel productPam,
+                                  final long shopId) {
         if (productPam.isAvailable()) {
             if (product.isMultiSkuProduct()) {
                 for (final ProductSku sku : product.getSku()) {
-                    final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(sku, shopId);
+                    final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(sku, shopId, productPam.getSupplier());
                     if (skuPam.isAvailable()) {
                         return sku;
                     }
@@ -476,6 +503,7 @@ public class SkuCentralView extends AbstractCentralView {
             final String uri = getBookmarkService().saveBookmarkForProduct(String.valueOf(product.getProductId()));
 
             return getWicketUtil().getHttpServletRequest().getContextPath() + "/"
+                    + WebParametersKeys.FULFILMENT_CENTRE_ID + "/" + supplier
                     + WebParametersKeys.PRODUCT_ID + "/" + uri + "/" + ShoppingCartCommand.CMD_CHANGELOCALE + "/" + language;
 
         }
@@ -483,6 +511,7 @@ public class SkuCentralView extends AbstractCentralView {
         final String uri = getBookmarkService().saveBookmarkForSku(String.valueOf(sku.getSkuId()));
 
         return getWicketUtil().getHttpServletRequest().getContextPath() + "/"
+                + WebParametersKeys.FULFILMENT_CENTRE_ID + "/" + supplier
                 + WebParametersKeys.SKU_ID + "/" + uri + "/" + ShoppingCartCommand.CMD_CHANGELOCALE + "/" + language;
 
     }

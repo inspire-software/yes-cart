@@ -387,6 +387,7 @@
   "PRODUCT_ENABLED": "Available",
   "PRODUCT_FROM": "Available from",
   "PRODUCT_TO": "Available to",
+  "PRODUCT_RELEASE": "Release",
   "PRODUCT_AVAILABILITY": "Availability",
   "PRODUCT_AVAILABILITY_1": "Standard (stock required)",
   "PRODUCT_AVAILABILITY_2": "Preorder (wait for 'Available from')",

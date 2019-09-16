@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.wicketsupport.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -49,70 +50,102 @@ public class LinksSupportImpl implements LinksSupport {
 
     /** {@inheritDoc} */
     @Override
-    public Link newLink(final String linkId, final PageParameters pageParameters) {
+    public Link newLink(final String linkId,
+                        final PageParameters pageParameters) {
+
         return new BookmarkablePageLink(linkId, getHomePage(), pageParameters);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Link newCategoryLink(final String linkId, final Object categoryRef) {
+    public Link newCategoryLink(final String linkId,
+                                final Object categoryRef) {
+
         return newBookmarkableLink(linkId, WebParametersKeys.CATEGORY_ID, categoryRef);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Link newCategoryLink(final String linkId, final long categoryRef, final PageParameters pageParameters) {
+    public Link newCategoryLink(final String linkId,
+                                final long categoryRef,
+                                final PageParameters pageParameters) {
+
         return newBookmarkableLink(linkId, WebParametersKeys.CATEGORY_ID, categoryRef,
                 getFilteredCurrentParameters(pageParameters));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Link newContentLink(final String linkId, final Object contentRef) {
+    public Link newContentLink(final String linkId,
+                               final Object contentRef) {
+
         return newBookmarkableLink(linkId, WebParametersKeys.CONTENT_ID, contentRef);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Link newContentLink(final String linkId, final Object contentRef, final PageParameters pageParameters) {
+    public Link newContentLink(final String linkId,
+                               final Object contentRef,
+                               final PageParameters pageParameters) {
+
         return newBookmarkableLink(linkId, WebParametersKeys.CONTENT_ID, contentRef,
                 getFilteredCurrentParameters(pageParameters));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Link newProductLink(final String linkId, final Object productRef) {
-        return newBookmarkableLink(linkId, WebParametersKeys.PRODUCT_ID, productRef);
+    public Link newProductLink(final String linkId,
+                               final String supplier,
+                               final Object productRef) {
+
+        return newBookmarkableLink(linkId, supplier, WebParametersKeys.PRODUCT_ID, productRef);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Link newProductLink(final String linkId, final Object productRef, final PageParameters pageParameters) {
-        return newBookmarkableLink(linkId, WebParametersKeys.PRODUCT_ID, productRef,
+    public Link newProductLink(final String linkId,
+                               final String supplier,
+                               final Object productRef,
+                               final PageParameters pageParameters) {
+
+        return newBookmarkableLink(linkId, supplier, WebParametersKeys.PRODUCT_ID, productRef,
                 getFilteredCurrentParameters(pageParameters));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Link newProductSkuLink(final String linkId, final Object productRef) {
-        return newBookmarkableLink(linkId, WebParametersKeys.SKU_ID, productRef);
+    public Link newProductSkuLink(final String linkId,
+                                  final String supplier,
+                                  final Object productRef) {
+
+        return newBookmarkableLink(linkId, supplier, WebParametersKeys.SKU_ID, productRef);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Link newProductSkuLink(final String linkId, final Object productRef, final PageParameters pageParameters) {
-        return newBookmarkableLink(linkId, WebParametersKeys.SKU_ID, productRef,
+    public Link newProductSkuLink(final String linkId,
+                                  final String supplier,
+                                  final Object productRef,
+                                  final PageParameters pageParameters) {
+
+        return newBookmarkableLink(linkId, supplier, WebParametersKeys.SKU_ID, productRef,
                 getFilteredCurrentParameters(pageParameters));
     }
 
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
-    public Link newAddToCartLink(final String linkId, final String skuCode, final String quantity, final PageParameters pageParameters) {
+    public Link newAddToCartLink(final String linkId,
+                                 final String supplier,
+                                 final String skuCode,
+                                 final String quantity,
+                                 final PageParameters pageParameters) {
+
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_ADDTOCART, skuCode);
+        params.set(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
         if (quantity != null) { // null quantity will pick min from product
-            params.set(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, quantity);
+            params.set(ShoppingCartCommand.CMD_P_QTY, quantity);
         }
         return new BookmarkablePageLink(linkId, getHomePage(), params);
     }
@@ -120,13 +153,21 @@ public class LinksSupportImpl implements LinksSupport {
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
-    public Link newAddToCartLink(final String linkId, final String skuCode, final String quantity, final String wishlistId, final Class<Page> target, final PageParameters pageParameters) {
+    public Link newAddToCartLink(final String linkId,
+                                 final String supplier,
+                                 final String skuCode,
+                                 final String quantity,
+                                 final String wishlistId,
+                                 final Class<Page> target,
+                                 final PageParameters pageParameters) {
+
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_ADDTOCART, skuCode);
+        params.set(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
         params.set(ShoppingCartCommand.CMD_REMOVEFROMWISHLIST, skuCode);
         params.set(ShoppingCartCommand.CMD_REMOVEFROMWISHLIST_P_ID, wishlistId);
         if (quantity != null) { // null quantity will pick min from product
-            params.set(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, quantity);
+            params.set(ShoppingCartCommand.CMD_P_QTY, quantity);
         }
         return new BookmarkablePageLink(linkId, target, params);
     }
@@ -134,18 +175,34 @@ public class LinksSupportImpl implements LinksSupport {
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
-    public Link newAddToWishListLink(final String linkId, final String skuCode, final String quantity, final String wishList, final String tags, final PageParameters pageParameters) {
-        return newAddToWishListLink(linkId, skuCode, quantity, wishList, tags, null, pageParameters);
+    public Link newAddToWishListLink(final String linkId,
+                                     final String supplier,
+                                     final String skuCode,
+                                     final String quantity,
+                                     final String wishList,
+                                     final String tags,
+                                     final PageParameters pageParameters) {
+
+        return newAddToWishListLink(linkId, supplier, skuCode, quantity, wishList, tags, null, pageParameters);
     }
 
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
-    public Link newAddToWishListLink(final String linkId, final String skuCode, final String quantity, final String wishList, final String tags, final String visibility, final PageParameters pageParameters) {
+    public Link newAddToWishListLink(final String linkId,
+                                     final String supplier,
+                                     final String skuCode,
+                                     final String quantity,
+                                     final String wishList,
+                                     final String tags,
+                                     final String visibility,
+                                     final PageParameters pageParameters) {
+
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST, skuCode);
+        params.set(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
         if (quantity != null) { // null quantity will pick min from product
-            params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_QTY, quantity);
+            params.set(ShoppingCartCommand.CMD_P_QTY, quantity);
         }
         params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TYPE, wishList != null ? wishList : CustomerWishList.SIMPLE_WISH_ITEM);
         if (visibility != null) {
@@ -164,16 +221,27 @@ public class LinksSupportImpl implements LinksSupport {
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
-    public Link newRemoveFromWishListLink(final String linkId, final String skuCode, final Long itemId, final Class<Page> target, final PageParameters pageParameters) {
+    public Link newRemoveFromWishListLink(final String linkId,
+                                          final String supplier,
+                                          final String skuCode,
+                                          final Long itemId,
+                                          final Class<Page> target,
+                                          final PageParameters pageParameters) {
+
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_REMOVEFROMWISHLIST, skuCode);
+        params.set(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
         params.set(ShoppingCartCommand.CMD_REMOVEFROMWISHLIST_P_ID, itemId);
         return new BookmarkablePageLink(linkId, target, params);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Link newAddCouponLink(final String linkId, final String coupon, final Class<Page> target, final PageParameters pageParameters) {
+    public Link newAddCouponLink(final String linkId,
+                                 final String coupon,
+                                 final Class<Page> target,
+                                 final PageParameters pageParameters) {
+
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_ADDCOUPON, coupon);
         return new BookmarkablePageLink(linkId, target, params);
@@ -181,7 +249,11 @@ public class LinksSupportImpl implements LinksSupport {
 
     /** {@inheritDoc} */
     @Override
-    public Link newRemoveCouponLink(final String linkId, final String coupon, final Class<Page> target, final PageParameters pageParameters) {
+    public Link newRemoveCouponLink(final String linkId,
+                                    final String coupon,
+                                    final Class<Page> target,
+                                    final PageParameters pageParameters) {
+
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_REMOVECOUPON, coupon);
         return new BookmarkablePageLink(linkId, target, params);
@@ -190,7 +262,9 @@ public class LinksSupportImpl implements LinksSupport {
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
-    public Link newLogOffLink(final String linkId, final PageParameters pageParameters) {
+    public Link newLogOffLink(final String linkId,
+                              final PageParameters pageParameters) {
+
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
         return new BookmarkablePageLink(linkId, getHomePage(), params);
@@ -199,24 +273,32 @@ public class LinksSupportImpl implements LinksSupport {
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
-    public Link newChangeLocaleLink(final String linkId, final String language, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
+    public Link newChangeLocaleLink(final String linkId,
+                                    final String language,
+                                    final Class<? extends Page> target,
+                                    final PageParameters pageParameters) {
+
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_CHANGELOCALE, language);
         return new BookmarkablePageLink(
                 linkId,
-                pageClass == null ? getHomePage() : pageClass,
+                target == null ? getHomePage() : target,
                 params);
     }
 
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
-    public Link newChangeCurrencyLink(final String linkId, final String currency, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
+    public Link newChangeCurrencyLink(final String linkId,
+                                      final String currency,
+                                      final Class<? extends Page> target,
+                                      final PageParameters pageParameters) {
+
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_CHANGECURRENCY, currency);
         return new BookmarkablePageLink(
                 linkId,
-                pageClass == null ? getHomePage() : pageClass,
+                target == null ? getHomePage() : target,
                 params);
     }
 
@@ -230,8 +312,27 @@ public class LinksSupportImpl implements LinksSupport {
      * Generate bookmarkable link for current shop home page. This covers all pa
      */
     @SuppressWarnings("unchecked")
-    private Link newBookmarkableLink(final String linkId, final String uriContext, final Object uri) {
-        final PageParameters params = new PageParameters().add(uriContext, uri);
+    private Link newBookmarkableLink(final String linkId,
+                                     final String uriContext,
+                                     final Object uri) {
+
+        return newBookmarkableLink(linkId, null, uriContext, uri);
+    }
+
+    /*
+     * Generate bookmarkable link for current shop home page. This covers all pa
+     */
+    @SuppressWarnings("unchecked")
+    private Link newBookmarkableLink(final String linkId,
+                                     final String supplier,
+                                     final String uriContext,
+                                     final Object uri) {
+
+        final PageParameters params = new PageParameters();
+        if (StringUtils.isNotBlank(supplier)) {
+            params.add(WebParametersKeys.FULFILMENT_CENTRE_ID, supplier);
+        }
+        params.add(uriContext, uri);
         return new BookmarkablePageLink(linkId, getHomePage(), params);
     }
 
@@ -239,9 +340,30 @@ public class LinksSupportImpl implements LinksSupport {
      * Generate bookmarkable link for current shop home page. This covers all pa
      */
     @SuppressWarnings("unchecked")
-    private Link newBookmarkableLink(final String linkId, final String uriContext, final Object uri, final PageParameters carried) {
-        carried.set(uriContext, uri);
-        return new BookmarkablePageLink(linkId, getHomePage(), carried);
+    private Link newBookmarkableLink(final String linkId,
+                                     final String uriContext,
+                                     final Object uri,
+                                     final PageParameters carried) {
+
+        return newBookmarkableLink(linkId, null, uriContext, uri, carried);
+    }
+
+    /*
+     * Generate bookmarkable link for current shop home page. This covers all pa
+     */
+    @SuppressWarnings("unchecked")
+    private Link newBookmarkableLink(final String linkId,
+                                     final String supplier,
+                                     final String uriContext,
+                                     final Object uri,
+                                     final PageParameters carried) {
+        
+        final PageParameters params = new PageParameters(carried);
+        if (StringUtils.isNotBlank(supplier)) {
+            params.set(WebParametersKeys.FULFILMENT_CENTRE_ID, supplier);
+        }
+        params.set(uriContext, uri);
+        return new BookmarkablePageLink(linkId, getHomePage(), params);
     }
 
 }

@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.SortedSet;
 
 /**
@@ -25,6 +26,11 @@ import java.util.SortedSet;
  * Time: 1:08 PM
  */
 public interface ProductAvailabilityModel {
+
+    /**
+     * @return supplier code for this model
+     */
+    String getSupplier();
 
     /**
      * @return true if this product is purchasable at minimum quantity.
@@ -58,6 +64,11 @@ public interface ProductAvailabilityModel {
     String getDefaultSkuCode();
 
     /**
+     * @return release date
+     */
+    LocalDateTime getReleaseDate();
+
+    /**
      * Returns sku code for the first available item. The order is:
      * default SKU if available first then other skus from getSkuCodes()
      *
@@ -72,6 +83,7 @@ public interface ProductAvailabilityModel {
 
     /**
      * @param skuCode code
+     *
      * @return quantity that is available for customer to purchase.
      */
     BigDecimal getAvailableToSellQuantity(String skuCode);

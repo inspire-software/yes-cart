@@ -26,9 +26,7 @@ import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.ProductSku;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -77,18 +75,6 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "tag")
     private String tag;
 
-    @DtoField(value = "disabled")
-    private boolean disabled;
-
-    @DtoField(value = "availablefrom")
-    private LocalDateTime availablefrom;
-
-    @DtoField(value = "availableto")
-    private LocalDateTime availableto;
-
-    @DtoField(value = "availability")
-    private int availability;
-
     @DtoField(value = "brand",
             dtoBeanKey = "org.yes.cart.domain.dto.BrandDTO",
             entityBeanKeys = "org.yes.cart.domain.entity.Brand")
@@ -121,18 +107,6 @@ public class ProductDTOImpl implements ProductDTO {
 
     @DtoField(value = "description")
     private String description;
-
-    @DtoField(value = "featured")
-    private Boolean featured;
-
-    @DtoField(value = "minOrderQuantity")
-    private BigDecimal minOrderQuantity;
-
-    @DtoField(value = "maxOrderQuantity")
-    private BigDecimal maxOrderQuantity;
-
-    @DtoField(value = "stepOrderQuantity")
-    private BigDecimal stepOrderQuantity;
 
 
     @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
@@ -367,70 +341,6 @@ public class ProductDTOImpl implements ProductDTO {
      * {@inheritDoc}
      */
     @Override
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDisabled(final boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public LocalDateTime getAvailablefrom() {
-        return availablefrom;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setAvailablefrom(final LocalDateTime availablefrom) {
-        this.availablefrom = availablefrom;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public LocalDateTime getAvailableto() {
-        return availableto;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setAvailableto(final LocalDateTime availableto) {
-        this.availableto = availableto;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getAvailability() {
-        return availability;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setAvailability(final int availability) {
-        this.availability = availability;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public BrandDTO getBrandDTO() {
         return brandDTO;
     }
@@ -518,70 +428,6 @@ public class ProductDTOImpl implements ProductDTO {
     @Override
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Boolean getFeatured() {
-        return featured;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setFeatured(final Boolean featured) {
-        this.featured = featured;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BigDecimal getMinOrderQuantity() {
-        return minOrderQuantity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
-        this.minOrderQuantity = minOrderQuantity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BigDecimal getMaxOrderQuantity() {
-        return maxOrderQuantity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
-        this.maxOrderQuantity = maxOrderQuantity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public BigDecimal getStepOrderQuantity() {
-        return stepOrderQuantity;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
-        this.stepOrderQuantity = stepOrderQuantity;
     }
 
     /**
@@ -750,15 +596,11 @@ public class ProductDTOImpl implements ProductDTO {
                 "productId=" + productId +
                 ", code='" + code + '\'' +
                 ", tag='" + tag + '\'' +
-                ", availablefrom=" + availablefrom +
-                ", availableto=" + availableto +
-                ", availability=" + availability +
                 ", brandDTO=" + brandDTO +
                 ", productTypeDTO=" + productTypeDTO +
                 ", productCategoryDTOs=" + productCategoryDTOs +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", featured=" + featured +
                 ", attribute=" + attributes +
                 '}';
     }

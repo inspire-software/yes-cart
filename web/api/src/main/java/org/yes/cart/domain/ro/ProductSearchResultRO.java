@@ -56,6 +56,8 @@ public class ProductSearchResultRO implements Serializable {
     @DtoField(readOnly = true)
     private String manufacturerCode;
     @DtoField(readOnly = true)
+    private String fulfilmentCentreCode;
+    @DtoField(readOnly = true)
     private boolean multisku;
     @DtoField(readOnly = true)
     private String defaultSkuCode;
@@ -90,6 +92,8 @@ public class ProductSearchResultRO implements Serializable {
     @DtoField(readOnly = true)
     private LocalDateTime availableto;
     @DtoField(readOnly = true)
+    private LocalDateTime releaseDate;
+    @DtoField(readOnly = true)
     private int availability;
     private ProductAvailabilityModelRO productAvailabilityModel;
     private SkuPriceRO price;
@@ -105,7 +109,7 @@ public class ProductSearchResultRO implements Serializable {
     private BigDecimal stepOrderQuantity;
 
     @DtoCollection(
-            value = "skus",
+            value = "searchSkus",
             dtoBeanKey = "org.yes.cart.domain.ro.ProductSkuSearchResultRO",
             entityGenericType = ProductSkuSearchResultDTO.class,
             entityCollectionClass = ArrayList.class,
@@ -164,6 +168,15 @@ public class ProductSearchResultRO implements Serializable {
         this.availablefrom = availablefrom;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    public LocalDateTime getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(final LocalDateTime releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
     public int getAvailability() {
         return availability;
     }
@@ -195,6 +208,15 @@ public class ProductSearchResultRO implements Serializable {
 
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
+    }
+
+    @XmlElement(name = "supplier-code")
+    public String getFulfilmentCentreCode() {
+        return fulfilmentCentreCode;
+    }
+
+    public void setFulfilmentCentreCode(final String fulfilmentCentreCode) {
+        this.fulfilmentCentreCode = fulfilmentCentreCode;
     }
 
     public boolean isMultisku() {

@@ -45,6 +45,8 @@ public class AjaxAtbPage extends AbstractWebPage {
 
         final StringValue skuValue = getPageParameters().get(ShoppingCartCommand.CMD_ADDTOCART);
         final String sku = skuValue.toString();
+        final StringValue supplierValue = getPageParameters().get(ShoppingCartCommand.CMD_P_SUPPLIER);
+        final String supplier = supplierValue.toString();
 
         addOrReplace(new SmallShoppingCartView("smallCart"));
         addOrReplace(new Label("productAddedMsg",
@@ -53,8 +55,13 @@ public class AjaxAtbPage extends AbstractWebPage {
 
         final ProductSku productSku = productServiceFacade.getProductSkuBySkuCode(sku);
         final ShoppingCart cart = getCurrentCart();
-        final BigDecimal cartQty = cart.getProductSkuQuantity(sku);
-        final QuantityModel pqm = productServiceFacade.getProductQuantity(cartQty, productSku.getProduct());
+        final BigDecimal cartQty = cart.getProductSkuQuantity(supplier, sku);
+        final QuantityModel pqm = productServiceFacade.getProductQuantity(
+                cartQty,
+                productSku.getProduct(),
+                cart.getShoppingContext().getCustomerShopId(),
+                supplier
+        );
 
         final String message;
         if (!pqm.canOrderMore()) {

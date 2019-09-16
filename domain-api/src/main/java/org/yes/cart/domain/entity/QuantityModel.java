@@ -27,6 +27,11 @@ import java.math.BigDecimal;
 public interface QuantityModel extends Serializable {
 
     /**
+     * @return supplier code for this model
+     */
+    String getSupplier();
+
+    /**
      * Returns true if we can order less one step of this item
      * (i.e. we will not yet reach min by going one step down)
      *
@@ -138,5 +143,11 @@ public interface QuantityModel extends Serializable {
      * @return valid quantity to set
      */
     BigDecimal getValidSetQty(BigDecimal qty);
+
+
+    /**
+     * @return default sku for multisku
+     */
+    String getDefaultSkuCode();
 
 }

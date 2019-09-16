@@ -16,15 +16,12 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -39,8 +36,6 @@ import java.util.Map;
 public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20100122L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(AddSkuToCartEventCommandImpl.class);
 
     private final ProductQuantityStrategy productQuantityStrategy;
 
@@ -73,30 +68,14 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
     }
 
 
-    private BigDecimal getQuantityValue(final Map parameters, final ProductSku productSku, final BigDecimal quantityInCart) {
-        final Object strQty = parameters.get(CMD_ADDTOCART_P_QTY);
+    private BigDecimal getQuantityValue(final long shopId,
+                                        final String supplier,
+                                        final String productSku,
+                                        final BigDecimal qty,
+                                        final BigDecimal quantityInCart) {
 
-        if (strQty instanceof String) {
-            try {
-                final BigDecimal qty = new BigDecimal((String) strQty);
-                if (productSku != null) {
-                    final QuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
-                    return pqm.getValidAddQty(qty);
-                }
-                if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(qty, BigDecimal.ZERO)) {
-                    return qty.setScale(0, BigDecimal.ROUND_CEILING);
-                } // nfe
-            } catch (NumberFormatException nfe) {
-                LOG.error("Invalid quantity {} in add to cart command", strQty);
-            } catch (Exception exp) {
-                LOG.error("Invalid quantity in add to cart command", exp);
-            }
-        }
-        if (productSku != null) {
-            final QuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
-            return pqm.getValidAddQty(null);
-        }
-        return BigDecimal.ONE;
+        final QuantityModel pqm = productQuantityStrategy.getQuantityModel(shopId, quantityInCart, productSku, supplier);
+        return pqm.getValidAddQty(qty);
     }
 
     /**
@@ -106,26 +85,34 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
                            final String skuCode,
+                           final String supplier,
+                           final BigDecimal qty,
                            final Map<String, Object> parameters) {
+
+        if (determineSkuPrice(shoppingCart, supplier, skuCode, BigDecimal.ONE) == null) {
+            LOG.debug("[{}] Unable to add item {} for supplier {} because could not resolve price",
+                    shoppingCart.getGuid(), skuCode, supplier);
+            return;
+        }
+
+        final long shopId = shoppingCart.getShoppingContext().getCustomerShopId();
+        final BigDecimal cartQty = shoppingCart.getProductSkuQuantity(supplier, skuCode);
+        final BigDecimal toAdd = getQuantityValue(shopId, supplier, skuCode, qty, cartQty);
+
+        String skuName = skuCode;
         if (productSku != null) {
 
-            final String skuName = new FailoverStringI18NModel(
+            skuName = new FailoverStringI18NModel(
                     productSku.getDisplayName(),
                     productSku.getName()
             ).getValue(shoppingCart.getCurrentLocale());
 
-            shoppingCart.addProductSkuToCart(productSku.getCode(),
-                    skuName, getQuantityValue(parameters, productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())));
-            recalculatePricesInCart(shoppingCart);
-            markDirty(shoppingCart);
-            LOG.debug("Added one item of sku code {} to cart", productSku.getCode());
-        } else if (determineSkuPrice(shoppingCart, skuCode, BigDecimal.ONE) != null) {
-            // if we have no product for SKU, make sure we have price for this SKU
-            shoppingCart.addProductSkuToCart(skuCode,
-                    skuCode, getQuantityValue(parameters, null, shoppingCart.getProductSkuQuantity(skuCode)));
-            recalculatePricesInCart(shoppingCart);
-            markDirty(shoppingCart);
-            LOG.debug("Added one item of sku code {} to cart", skuCode);
         }
+
+        shoppingCart.addProductSkuToCart(supplier, skuCode, skuName, toAdd);
+        recalculatePricesInCart(shoppingCart);
+        markDirty(shoppingCart);
+        LOG.debug("[{}] Added {} item(s) of sku code {}", shoppingCart.getGuid(), toAdd, skuCode);
+
     }
 }

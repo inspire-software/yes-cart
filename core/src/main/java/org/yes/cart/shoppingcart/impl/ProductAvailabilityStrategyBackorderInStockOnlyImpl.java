@@ -17,9 +17,9 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.config.Configuration;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.shoppingcart.ProductAvailabilityStrategy;
 import org.yes.cart.utils.MoneyUtils;
 
@@ -32,12 +32,12 @@ import java.util.Map;
  * Date: 18/08/2019
  * Time: 11:36
  */
-public class ProductAvailabilityStrategyBackorderInStockOnlyImpl extends  ProductAvailabilityStrategyDefaultImpl
+public class ProductAvailabilityStrategyBackorderInStockOnlyImpl extends ProductAvailabilityStrategyDefaultImpl
         implements ProductAvailabilityStrategy, Configuration {
 
     public ProductAvailabilityStrategyBackorderInStockOnlyImpl(final WarehouseService warehouseService,
-                                                               final SkuWarehouseService skuWarehouseService) {
-        super(warehouseService, skuWarehouseService);
+                                                               final InventoryResolver inventoryResolver) {
+        super(warehouseService, inventoryResolver);
     }
 
     @Override
@@ -45,11 +45,12 @@ public class ProductAvailabilityStrategyBackorderInStockOnlyImpl extends  Produc
                                      final boolean enabled,
                                      final LocalDateTime from,
                                      final LocalDateTime to,
+                                     final LocalDateTime releaseDate,
                                      final Map<String, BigDecimal> qty) {
 
-        final boolean available = super.isAvailableNow(availability, enabled, from, to, qty);
+        final boolean available = super.isAvailableNow(availability, enabled, from, to, releaseDate, qty);
 
-        if (available && availability == Product.AVAILABILITY_BACKORDER) {
+        if (available && availability == SkuWarehouse.AVAILABILITY_BACKORDER) {
 
             for (final BigDecimal qtyItem : qty.values()) {
                 if (MoneyUtils.isPositive(qtyItem)) {

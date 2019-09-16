@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.DomainApiUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -756,6 +757,7 @@ public class OrderSplittingStrategyImplTest {
                                       final boolean digital,
                                       final LocalDateTime availableFrom,
                                       final LocalDateTime availableTo,
+                                      final LocalDateTime releaseDate,
                                       final LocalDateTime now,
                                       final BigDecimal stock,
                                       final BigDecimal required,
@@ -797,10 +799,6 @@ public class OrderSplittingStrategyImplTest {
             }
             allowing(sku).getCode(); will(returnValue(skuCode));
             allowing(sku).getProduct(); will(returnValue(product));
-            allowing(product).getAvailability(); will(returnValue(availability));
-            allowing(product).isDisabled(); will(returnValue(false));
-            allowing(product).getAvailablefrom(); will(returnValue(availableFrom));
-            allowing(product).getAvailableto(); will(returnValue(availableTo));
             allowing(product).getProducttype(); will(returnValue(productType));
             allowing(productType).isDigital(); will(returnValue(digital));
             allowing(item).getProductSkuCode(); will(returnValue(skuCode));
@@ -810,7 +808,10 @@ public class OrderSplittingStrategyImplTest {
 
             if (stock != null) {
                 allowing(inventoryResolver).findByWarehouseSku(warehouse, skuCode); will(returnValue(skuWarehouse));
-                allowing(skuWarehouse).isAvailableToSell(qty); will(returnValue(stock.compareTo(qty) >= 0));
+                allowing(skuWarehouse).isAvailableToSell(qty, false); will(returnValue(stock.compareTo(qty) >= 0));
+                allowing(skuWarehouse).getAvailability(); will(returnValue(availability));
+                allowing(skuWarehouse).isAvailable(now); will(returnValue(DomainApiUtils.isObjectAvailableNow(true, availableFrom, availableTo, now)));
+                allowing(skuWarehouse).isReleased(now); will(returnValue(releaseDate == null || !now.isBefore(releaseDate)));
             }
         }});
 
@@ -825,12 +826,13 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = null;
         final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_ALWAYS, true, /* Digital */
-                availableFrom, availableTo, now, /* Available */
-                null, BigDecimal.TEN, /* No stock, need 10 */
+                SkuWarehouse.AVAILABILITY_ALWAYS, true, /* Digital */
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
                 CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP /* Expected */
         );
 
@@ -841,12 +843,30 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_ALWAYS, true, /* Digital */
-                availableFrom, availableTo, now, /* Available */
-                null, BigDecimal.TEN, /* No stock, need 10 */
+                SkuWarehouse.AVAILABILITY_ALWAYS, true, /* Digital */
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
+                CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityAlwaysDigitalProductAvailablePreorder() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_ALWAYS, true, /* Digital */
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
                 CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP /* Expected */
         );
 
@@ -857,12 +877,30 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_ALWAYS, true, /* Digital */
-                availableFrom, availableTo, now, /* Available */
-                null, BigDecimal.TEN, /* No stock, need 10 */
+                SkuWarehouse.AVAILABILITY_ALWAYS, true, /* Digital */
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityAlwaysDigitalProductNotAvailablePreorderAfter() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_ALWAYS, true, /* Digital */
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
@@ -874,12 +912,30 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_ALWAYS, true, /* Digital */
-                availableFrom, availableTo, now, /* Available */
-                null, BigDecimal.TEN, /* No stock, need 10 */
+                SkuWarehouse.AVAILABILITY_ALWAYS, true, /* Digital */
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityAlwaysDigitalProductNotAvailablePreorderBefore() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_ALWAYS, true, /* Digital */
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
@@ -891,12 +947,13 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = null;
         final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_ALWAYS, false,
-                availableFrom, availableTo, now, /* Available */
-                null, BigDecimal.TEN, /* No stock, need 10 */
+                SkuWarehouse.AVAILABILITY_ALWAYS, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
                 CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
@@ -907,13 +964,31 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_ALWAYS, false,
-                availableFrom, availableTo, now, /* Available */
-                null, BigDecimal.TEN, /* No stock, need 10 */
+                SkuWarehouse.AVAILABILITY_ALWAYS, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
                 CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityAlwaysProductAvailablePreorder() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_ALWAYS, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
+                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -924,12 +999,30 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_ALWAYS, false,
-                availableFrom, availableTo, now, /* Available */
-                null, BigDecimal.TEN, /* No stock, need 10 */
+                SkuWarehouse.AVAILABILITY_ALWAYS, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityAlwaysProductNotAvailablePreorderAfter() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_ALWAYS, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
@@ -940,102 +1033,34 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_ALWAYS, false,
-                availableFrom, availableTo, now, /* Available */
-                null, BigDecimal.TEN, /* No stock, need 10 */
+                SkuWarehouse.AVAILABILITY_ALWAYS, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
 
-
     @Test
-    public void testGetDeliveryGroupAvailabilityPreorderProduct() throws Exception {
+    public void testGetDeliveryGroupAvailabilityAlwaysProductNotAvailablePreorderBefore() throws Exception {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
-        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* Available */
-                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
-        );
-
-    }
-
-
-    @Test
-    public void testGetDeliveryGroupAvailabilityPreorderProductAvailable() throws Exception {
-
-        final LocalDateTime availableFrom = null;
-        final LocalDateTime availableTo = null;
-        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
-
-        testGetDeliveryGroup(
-                Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* Available */
-                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
-        );
-
-    }
-
-    @Test
-    public void testGetDeliveryGroupAvailabilityPreorderProductAvailableNotEnough() throws Exception {
-
-        final LocalDateTime availableFrom = null;
-        final LocalDateTime availableTo = null;
-        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
-
-        testGetDeliveryGroup(
-                Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* Available */
-                BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
-                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP /* Expected */
-        );
-
-    }
-
-
-    @Test
-    public void testGetDeliveryGroupAvailabilityPreorderProductNotAvailableAfter() throws Exception {
-
-        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
-        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
-        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
-
-        testGetDeliveryGroup(
-                Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* Available */
-                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                SkuWarehouse.AVAILABILITY_ALWAYS, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ZERO, BigDecimal.TEN, /* No stock, need 10 */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
-
-
-    @Test
-    public void testGetDeliveryGroupAvailabilityPreorderProductNotAvailableBefore() throws Exception {
-
-        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
-        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
-        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
-
-        testGetDeliveryGroup(
-                Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* Available */
-                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP /* Expected */
-        );
-
-    }
-
-
 
 
     @Test
@@ -1043,11 +1068,12 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_BACKORDER, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
@@ -1059,13 +1085,31 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = null;
         final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_BACKORDER, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityBackorderProductAvailablePreorder() throws Exception {
+
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_BACKORDER, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -1075,13 +1119,31 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = null;
         final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_BACKORDER, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
                 CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityBackorderProductAvailablePreorderNotEnough() throws Exception {
+
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_BACKORDER, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
+                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -1091,11 +1153,29 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_BACKORDER, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityBackorderProductNotAvailablePreorderAfter() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_BACKORDER, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
@@ -1108,11 +1188,30 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_BACKORDER, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityBackorderProductNotAvailablePreorderBefore() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_BACKORDER, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
@@ -1125,13 +1224,31 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityStandardProductPreorder() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -1142,13 +1259,31 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = null;
         final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityStandardProductAvailablePreorder() throws Exception {
+
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -1158,11 +1293,29 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = null;
         final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
+                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityStandardProductAvailablePreorderNotEnough() throws Exception {
+
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
                 CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP /* Expected */
         );
@@ -1174,11 +1327,29 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityStandardProductNotAvailablePreorderAfter() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
@@ -1190,11 +1361,29 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityStandardProductNotAvailablePreorderBefore() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_STANDARD, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
@@ -1207,11 +1396,29 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_SHOWROOM, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_SHOWROOM, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityShowroomProductPreorder() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_SHOWROOM, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
@@ -1224,11 +1431,29 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = null;
         final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_SHOWROOM, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_SHOWROOM, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityShowroomProductAvailablePreorder() throws Exception {
+
+        final LocalDateTime availableFrom = null;
+        final LocalDateTime availableTo = null;
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2016-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_SHOWROOM, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
@@ -1242,11 +1467,29 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_SHOWROOM, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_SHOWROOM, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityShowroomProductNotAvailablePreorderAfter() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2017-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_SHOWROOM, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
@@ -1258,11 +1501,29 @@ public class OrderSplittingStrategyImplTest {
 
         final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
         final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = null;
         final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
 
         testGetDeliveryGroup(
-                Product.AVAILABILITY_SHOWROOM, false,
-                availableFrom, availableTo, now, /* Available */
+                SkuWarehouse.AVAILABILITY_SHOWROOM, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
+                BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
+        );
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupAvailabilityShowroomProductNotAvailablePreorderBefore() throws Exception {
+
+        final LocalDateTime availableFrom = DateUtils.ldtParseSDT("2016-01-01");
+        final LocalDateTime availableTo = DateUtils.ldtParseSDT("2016-03-01");
+        final LocalDateTime releaseDate = DateUtils.ldtParseSDT("2016-02-25");
+        final LocalDateTime now = DateUtils.ldtParseSDT("2015-02-18");
+
+        testGetDeliveryGroup(
+                SkuWarehouse.AVAILABILITY_SHOWROOM, false,
+                availableFrom, availableTo, releaseDate, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
@@ -1276,7 +1537,7 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 0, false,
-                null, null, null,
+                null, null, null, null,
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
                 CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
@@ -1289,7 +1550,7 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 0, false,
-                null, null, null,
+                null, null, null, null,
                 BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
                 CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP /* Expected */
         );

@@ -47,14 +47,48 @@ public class PriceResolverImpl
 
     /** {@inheritDoc} */
     @Override
-    public SkuPrice getMinimalPrice(final Long productId, final String selectedSku, final long customerShopId, final Long masterShopId, final String currencyCode, final BigDecimal quantity, final boolean enforceTier, final String pricingPolicy) {
-        return getPriceResolver(customerShopId).getMinimalPrice(productId, selectedSku, customerShopId, masterShopId, currencyCode, quantity, enforceTier, pricingPolicy);
+    public SkuPrice getMinimalPrice(final Long productId,
+                                    final String selectedSku,
+                                    final long customerShopId,
+                                    final Long masterShopId,
+                                    final String currencyCode,
+                                    final BigDecimal quantity,
+                                    final boolean enforceTier,
+                                    final String pricingPolicy,
+                                    final String supplier) {
+
+        return getPriceResolver(customerShopId).getMinimalPrice(
+                productId,
+                selectedSku,
+                customerShopId,
+                masterShopId,
+                currencyCode,
+                quantity,
+                enforceTier,
+                pricingPolicy,
+                supplier
+        );
     }
 
     /** {@inheritDoc} */
     @Override
-    public List<SkuPrice> getAllCurrentPrices(final Long productId, final String selectedSku, final long customerShopId, final Long masterShopId, final String currencyCode, final String pricingPolicy) {
-        return getPriceResolver(customerShopId).getAllCurrentPrices(productId, selectedSku, customerShopId, masterShopId, currencyCode, pricingPolicy);
+    public List<SkuPrice> getAllCurrentPrices(final Long productId,
+                                              final String selectedSku,
+                                              final long customerShopId,
+                                              final Long masterShopId,
+                                              final String currencyCode,
+                                              final String pricingPolicy,
+                                              final String supplier) {
+
+        return getPriceResolver(customerShopId).getAllCurrentPrices(
+                productId,
+                selectedSku,
+                customerShopId,
+                masterShopId,
+                currencyCode,
+                pricingPolicy,
+                supplier
+        );
     }
 
     protected PriceResolver getPriceResolver(final Long shopId) {

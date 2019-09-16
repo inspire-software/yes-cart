@@ -30,18 +30,19 @@ public interface DtoShoppingCartService {
     /**
      * Create amendment shopping cart for given order ref.
      *
-     * @param ref order reference
-     * @param recalculate if this flag is set to true then cart is recalculates using current prices and offers,
-     *                    otherwise the cart is using old prices
+     * @param ref           order reference
+     * @param recalculate   if this flag is set to true then cart is recalculates using current prices and offers,
+     *                      otherwise the cart is using old prices
      *
      * @return shopping cart
      */
-    ShoppingCart create(String ref, boolean recalculate);
+    ShoppingCart create(String ref,
+                        boolean recalculate);
 
     /**
      * Get shopping cart by its GUID.
      *
-     * @param guid cart GUID
+     * @param guid  cart GUID
      *
      * @return shopping cart
      */
@@ -50,26 +51,41 @@ public interface DtoShoppingCartService {
     /**
      * Remove SKU line from cart.
      *
-     * @param guid cart guid
-     * @param sku SKU to remove
+     * @param guid      cart guid
+     * @param supplier  supplier
+     * @param sku       SKU to remove
      */
-    void removeLine(String guid, String sku);
+    void removeLine(String guid,
+                    String supplier,
+                    String sku);
 
     /**
      * Update SKU line quantity (if sku did not exist creates one).
      *
-     * @param guid cart guid
-     * @param sku SKU to remove
+     * @param guid      cart guid
+     * @param supplier  supplier
+     * @param sku       SKU to update
+     * @param quantity  quantity to set
      */
-    void updateLineQuantity(String guid, String sku, BigDecimal quantity);
+    void updateLineQuantity(String guid,
+                            String supplier,
+                            String sku,
+                            BigDecimal quantity);
 
     /**
      * Update SKU line quantity (if sku did not exist does not update).
      *
-     * @param guid cart guid
-     * @param sku SKU to remove
+     * @param guid      cart guid
+     * @param supplier  supplier
+     * @param sku       SKU to update
+     * @param offer     special price
+     * @param auth      authorisation
      */
-    void updateLinePrice(String guid, String sku, BigDecimal offer, String auth);
+    void updateLinePrice(String guid,
+                         String supplier,
+                         String sku,
+                         BigDecimal offer,
+                         String auth);
 
     /**
      * Remove shopping cart by GUID.

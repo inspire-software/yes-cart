@@ -77,12 +77,12 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         // if sku is out of stock then we cannot create order
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
-        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         try {
+            CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
             deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
             fail("Must not allow creating orders with unavailable SKU");
         } catch (SkuUnavailableException sue) {
-            assertEquals("Sku CC_TEST4-M:cc test 4 m is not available, cause:  out of stock", sue.getMessage());
+            assertEquals("Sku CC_TEST4-M:cc test 4 m is not available, cause: offline", sue.getMessage());
         }
     }
 
@@ -201,25 +201,22 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, getMultiSelection(shoppingCart));
         Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, getMultiSelection(shoppingCart));
-        assertEquals(5, dgroups.size());
-        final DeliveryBucket d11 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "");
+        assertEquals(4, dgroups.size());
         final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
         final DeliveryBucket d2 = new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
         final DeliveryBucket d3 = new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
-        final DeliveryBucket d44 = new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "");
-        assertNotNull(dgroups.get(d11));
+        final DeliveryBucket d44 = new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "WAREHOUSE_1");
         assertNotNull(dgroups.get(d1));
         assertNotNull(dgroups.get(d2));
         assertNotNull(dgroups.get(d3));
         assertNotNull(dgroups.get(d44));
-        assertEquals(1, dgroups.get(d11).size());
-        assertEquals(1, dgroups.get(d1).size());
+        assertEquals(2, dgroups.get(d1).size());
         assertEquals(1, dgroups.get(d2).size());
         assertEquals(1, dgroups.get(d3).size());
         assertEquals(2, dgroups.get(d44).size());
 
         // Ensure that they are ordered
-        final Iterator<DeliveryBucket> sequence = Arrays.asList(d11, d44, d1, d2, d3).iterator();
+        final Iterator<DeliveryBucket> sequence = Arrays.asList(d1, d2, d3, d44).iterator();
         for (final Map.Entry<DeliveryBucket, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
             assertEquals(sequence.next(), entry.getKey());
         }
@@ -270,12 +267,22 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
+        Map<String, String> params;
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
 
         prepareDeliveriesAndRecalculate(shoppingCart);
 
@@ -288,10 +295,17 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4-M"));
+        Map<String, String> params;
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4-M");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
 
         prepareDeliveriesAndRecalculate(shoppingCart);
 
@@ -309,10 +323,18 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST5"));
+
+        Map<String, String> params;
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST5");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
 
         prepareDeliveriesAndRecalculate(shoppingCart);
 
@@ -331,13 +353,18 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4"));
+        Map<String, String> params;
 
-        Map<String, String> param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "23.00");
-        commands.execute(shoppingCart, (Map) param);
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "23.00");
+        commands.execute(shoppingCart, (Map) params);
 
         prepareDeliveriesAndRecalculate(shoppingCart);
 
@@ -355,17 +382,17 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        Map<String, String> params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
+        commands.execute(shoppingCart, (Map) params);
 
-        param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "23.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "23.00");
+        commands.execute(shoppingCart, (Map) params);
 
         prepareDeliveriesAndRecalculate(shoppingCart);
 
@@ -383,23 +410,23 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        Map<String, String> param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        Map<String, String> params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
+        commands.execute(shoppingCart, (Map) params);
 
-        param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
+        commands.execute(shoppingCart, (Map) params);
 
-        param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "3.00");
+        commands.execute(shoppingCart, (Map) params);
 
         prepareDeliveriesAndRecalculate(shoppingCart);
 
@@ -417,41 +444,41 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
 
-        Map<String, String> param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        Map<String, String> params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
+        commands.execute(shoppingCart, (Map) params);
 
-        param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "200.00");
+        commands.execute(shoppingCart, (Map) params);
 
-        param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "3.00");
+        commands.execute(shoppingCart, (Map) params);
 
-        param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST7");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST7");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
+        commands.execute(shoppingCart, (Map) params);
 
-        param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST8");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST8");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
+        commands.execute(shoppingCart, (Map) params);
 
-        param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
+        commands.execute(shoppingCart, (Map) params);
 
         prepareDeliveriesAndRecalculate(shoppingCart);
 

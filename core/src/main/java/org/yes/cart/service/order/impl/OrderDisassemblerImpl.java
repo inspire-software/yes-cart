@@ -67,42 +67,42 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
             // fill from order if no deliveries are available
             for (CustomerOrderDet orderDet : customerOrder.getOrderDetail()) {
                 if (orderDet.isGift()) {
-                    shoppingCart.addGiftToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getAppliedPromo());
-                    shoppingCart.setGiftPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                    shoppingCart.addGiftToCart(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getAppliedPromo());
+                    shoppingCart.setGiftPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                     shoppingCart.setGiftDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                 } else {
-                    shoppingCart.addProductSkuToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty());
-                    shoppingCart.setProductSkuPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                    shoppingCart.addProductSkuToCart(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty());
+                    shoppingCart.setProductSkuPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                     if (orderDet.isFixedPrice()) {
                         // Offers in existing order
-                        shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
+                        shoppingCart.setProductSkuOffer(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
                     }
                     shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                 }
 
-                copyLineRemarks(shoppingCart, orderDet.getProductSkuCode(), orderDet.getB2bRemarks());
-                copyLineCustomAttributes(shoppingCart, orderDet.getProductSkuCode(), orderDet.getAllValues());
+                copyLineRemarks(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getB2bRemarks());
+                copyLineCustomAttributes(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getAllValues());
             }
         } else {
             // fill from delivery details
             for (CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
                 for (CustomerOrderDeliveryDet orderDet : delivery.getDetail()) {
                     if (orderDet.isGift()) {
-                        shoppingCart.addGiftToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getAppliedPromo());
-                        shoppingCart.setGiftPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                        shoppingCart.addGiftToCart(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getAppliedPromo());
+                        shoppingCart.setGiftPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                         shoppingCart.setGiftDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                     } else {
-                        shoppingCart.addProductSkuToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty());
-                        shoppingCart.setProductSkuPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                        shoppingCart.addProductSkuToCart(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty());
+                        shoppingCart.setProductSkuPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                         if (orderDet.isFixedPrice()) {
                             // Offers in existing order
-                            shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
+                            shoppingCart.setProductSkuOffer(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
                         }
                         shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                     }
 
-                    copyLineRemarks(shoppingCart, orderDet.getProductSkuCode(), orderDet.getB2bRemarks());
-                    copyLineCustomAttributes(shoppingCart, orderDet.getProductSkuCode(), orderDet.getAllValues());
+                    copyLineRemarks(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getB2bRemarks());
+                    copyLineCustomAttributes(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getAllValues());
                 }
             }
         }
@@ -213,23 +213,30 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         return shoppingCart;
     }
 
-    private void copyLineRemarks(final ShoppingCartImpl shoppingCart, final String skuCode, final String remarks) {
+    private void copyLineRemarks(final ShoppingCartImpl shoppingCart,
+                                 final String supplier,
+                                 final String skuCode,
+                                 final String remarks) {
+
         if (StringUtils.isNotBlank(remarks)) {
             shoppingCart.getOrderInfo().putDetail(
-                    AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + skuCode,
+                    AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + supplier + "_" + skuCode,
                     remarks
             );
         }
     }
 
-    private void copyLineCustomAttributes(final ShoppingCartImpl shoppingCart, final String skuCode, final Map<String, Pair<String, String>> attributes) {
+    private void copyLineCustomAttributes(final ShoppingCartImpl shoppingCart,
+                                          final String supplier,
+                                          final String skuCode,
+                                          final Map<String, Pair<String, String>> attributes) {
 
         final String attributeIdPrefix = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + ":";
         for (final Map.Entry<String, Pair<String, String>> custom : attributes.entrySet()) {
             if (custom.getKey().startsWith(attributeIdPrefix)) {
                 final String avCode = custom.getKey().substring(attributeIdPrefix.length());
                 shoppingCart.getOrderInfo().putDetail(
-                        AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + skuCode + "_" + avCode,
+                        AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + supplier + "_" + skuCode + "_" + avCode,
                         custom.getValue().getFirst()
                 );
             }

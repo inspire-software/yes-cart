@@ -324,7 +324,15 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
                     final BigDecimal netPrice = money.getNet();
                     final BigDecimal grossPrice = money.getGross();
 
-                    cart.setProductSkuTax(item.getProductSkuCode(), netPrice, grossPrice, tax.getRate(), tax.getCode(), tax.isExcluded());
+                    cart.setProductSkuTax(
+                            item.getSupplierCode(),
+                            item.getProductSkuCode(),
+                            netPrice,
+                            grossPrice,
+                            tax.getRate(),
+                            tax.getCode(),
+                            tax.isExcluded()
+                    );
 
                 }
 

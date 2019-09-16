@@ -18,14 +18,19 @@ package org.yes.cart.service.order.impl.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.shoppingcart.InventoryResolver;
+import org.yes.cart.utils.TimeContext;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -71,32 +76,26 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl extends ProcessAllo
                 // If this delivery is physical then try inventory
                 for (CustomerOrderDeliveryDet det : orderDelivery.getDetail()) {
 
-                    final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
-                    // there may not be this product anymore potentially, so it can be null
-                    // Null products are treated as AVAILABILITY_STANDARD
-                    if (product == null || Product.AVAILABILITY_ALWAYS != product.getAvailability()) {
+                    final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
-                        final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
-
-                        if (selected == null) {
-                            LOG.warn(
-                                    "Warehouse is not found for delivery detail {}:{}",
-                                    orderDelivery.getDeliveryNum(), det.getProductSkuCode()
-                            );
-                            return false; // warehouse is disabled or not available
-                        }
-
-                        final SkuWarehouse stock = getInventoryResolver().findByWarehouseSku(
-                                selected,
-                                det.getProductSkuCode()
+                    if (selected == null) {
+                        LOG.warn(
+                                "Warehouse is not found for delivery detail {}:{}",
+                                orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                         );
-                        if (stock == null || !stock.isAvailableToAllocate(det.getQty())) {
-                            LOG.info(
-                                    "Not enough stock for delivery detail {}:{}",
-                                    orderDelivery.getDeliveryNum(), det.getProductSkuCode()
-                            );
-                            return false; //inventory is less than we can give for this order
-                        }
+                        return false; // warehouse is disabled or not available
+                    }
+
+                    final SkuWarehouse stock = getInventoryResolver().findByWarehouseSku(
+                            selected,
+                            det.getProductSkuCode()
+                    );
+                    if (stock == null || !stock.isAvailable(now()) || !stock.isAvailableToAllocate(det.getQty())) {
+                        LOG.info(
+                                "Not enough stock for delivery detail {}:{}",
+                                orderDelivery.getDeliveryNum(), det.getProductSkuCode()
+                        );
+                        return false; //inventory is less than we can give for this order
                     }
                 }
             }
@@ -104,5 +103,8 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl extends ProcessAllo
         }
     }
 
+    LocalDateTime now() {
+        return TimeContext.getLocalDateTime();
+    }
 
 }

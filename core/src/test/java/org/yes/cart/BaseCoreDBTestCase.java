@@ -107,11 +107,13 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         // this digital product available
         Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, firstCode);
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, secondCode);
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
         commands.execute(shoppingCart, (Map) param);
 
         prepareMultiDeliveriesAndRecalculate(shoppingCart, multi);
@@ -132,34 +134,40 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
         Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "200.00");
         commands.execute(shoppingCart, (Map) param);
 
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "3.00");
         commands.execute(shoppingCart, (Map) param);
 
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST7");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         // this digital product not available to date
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST8");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         // this digital product available
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         prepareMultiDeliveriesAndRecalculate(shoppingCart, multi);
@@ -186,41 +194,55 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
         commands.execute(shoppingCart, (Map) params);
 
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
-
         Map<String, String> param = new HashMap<>();
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) param);
+
+        param = new HashMap<>();
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) param);
+
+        param = new HashMap<>();
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) param);
+
+        param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "200.00");
         commands.execute(shoppingCart, (Map) param);
 
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "3.00");
         commands.execute(shoppingCart, (Map) param);
 
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST7");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST8");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
         prepareMultiDeliveriesAndRecalculate(shoppingCart, multi);
@@ -229,15 +251,23 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     }
 
 
-    protected void setCustomItemDetail(final ShoppingCart shoppingCart, final String sku, final String detail, final String value) {
+    protected void setCustomItemDetail(final ShoppingCart shoppingCart,
+                                       final String supplier,
+                                       final String sku,
+                                       final String detail,
+                                       final String value) {
 
-        setCustomDetail(shoppingCart, AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + sku + "_" + detail + ":" + value);
+        setCustomDetail(shoppingCart,
+                AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + supplier + "_" + sku + "_" + detail + ":" + value);
 
     }
 
-    protected void setCustomOrderDetail(final ShoppingCart shoppingCart, final String detail, final String value) {
+    protected void setCustomOrderDetail(final ShoppingCart shoppingCart,
+                                        final String detail,
+                                        final String value) {
 
-        setCustomDetail(shoppingCart, AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + "_" + detail + ":" + value);
+        setCustomDetail(shoppingCart,
+                AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + "_" + detail + ":" + value);
 
     }
 

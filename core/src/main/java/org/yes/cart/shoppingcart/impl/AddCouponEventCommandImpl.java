@@ -57,15 +57,27 @@ public class AddCouponEventCommandImpl extends AbstractCartCommandImpl implement
         if (parameters.containsKey(getCmdKey())) {
 
             final Object coupon = parameters.get(getCmdKey());
-            if (coupon instanceof String ) {
-                final String couponCode = (String) coupon;
-                if (StringUtils.isNotBlank(couponCode)) {
-                    if (shoppingCart.addCoupon(couponCode)) {
-                        recalculate(shoppingCart);
-                        markDirty(shoppingCart);
-                    }
+            if (addCouponCodeIfNecessary(shoppingCart, coupon)) {
+                LOG.debug("[{}] Added coupon code {}", shoppingCart.getGuid(), coupon);
+            } else {
+                LOG.debug("[{}] Skipped coupon code {}", shoppingCart.getGuid(), coupon);
+            }
+        }
+    }
+
+    private boolean addCouponCodeIfNecessary(final MutableShoppingCart shoppingCart, final Object coupon) {
+
+        if (coupon instanceof String ) {
+            final String couponCode = (String) coupon;
+            if (StringUtils.isNotBlank(couponCode)) {
+                if (shoppingCart.addCoupon(couponCode)) {
+                    recalculate(shoppingCart);
+                    markDirty(shoppingCart);
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 }

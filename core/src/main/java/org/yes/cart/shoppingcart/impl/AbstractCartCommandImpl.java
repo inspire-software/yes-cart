@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.*;
 
 import java.util.Map;
@@ -26,6 +28,8 @@ import java.util.Map;
  * Time: 13:16
  */
 public abstract class AbstractCartCommandImpl implements ConfigurableShoppingCartCommand {
+
+    protected static final Logger LOG = LoggerFactory.getLogger(ShoppingCartCommand.class);
 
     private int priority = 0;
 

@@ -28,9 +28,8 @@ import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.theme.templates.TemplateProcessor;
-import org.yes.cart.utils.DomainApiUtils;
-import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.HQLUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -343,7 +342,7 @@ public class ContentServiceCMS3Impl extends BaseGenericServiceImpl<Content> impl
         if (withAvailability) {
 
             final LocalDateTime now = now();
-            cns.removeIf(cat -> !DomainApiUtils.isObjectAvailableNow(!cat.isDisabled(), cat.getAvailablefrom(), cat.getAvailableto(), now));
+            cns.removeIf(cat -> !cat.isAvailable(now));
 
         }
         return cns;

@@ -16,11 +16,14 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,13 +37,26 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
 
     private Warehouse warehouse;
     private String skuCode;
-    private BigDecimal quantity;
-    private BigDecimal reserved;
+    private BigDecimal quantity = BigDecimal.ZERO;
+    private BigDecimal reserved = BigDecimal.ZERO;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
+
+    private boolean disabled;
+    private LocalDateTime availablefrom;
+    private LocalDateTime availableto;
+    private LocalDateTime releaseDate;
+    private int availability = AVAILABILITY_STANDARD;
+
+    private BigDecimal minOrderQuantity;
+    private BigDecimal maxOrderQuantity;
+    private BigDecimal stepOrderQuantity;
+
+    private Boolean featured = Boolean.FALSE;
+    private String tag;
 
     public SkuWarehouseEntity() {
     }
@@ -161,25 +177,145 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public boolean isAvailableToSell() {
-        return MoneyUtils.isPositive(getQuantity())
-                && MoneyUtils.isFirstBiggerThanSecond(getQuantity(), getReserved());
+    public boolean isAvailable(final LocalDateTime now) {
+        return DomainApiUtils.isObjectAvailableNow(!this.disabled, this.availablefrom, this.availableto, now);
     }
 
     @Override
-    public boolean isAvailableToSell(final BigDecimal required) {
-        return MoneyUtils.isFirstBiggerThanOrEqualToSecond(getAvailableToSell(), required);
+    public boolean isReleased(final LocalDateTime now) {
+        return releaseDate == null || !now.isBefore(releaseDate);
+    }
+
+    @Override
+    public boolean isAvailableToSell(final boolean allowOrderMore) {
+        return availability == SkuWarehouse.AVAILABILITY_ALWAYS
+                || (availability != SkuWarehouse.AVAILABILITY_SHOWROOM
+                        && MoneyUtils.isPositive(getQuantity())
+                        && MoneyUtils.isFirstBiggerThanSecond(getQuantity(), getReserved()))
+                || allowOrderMore && availability == SkuWarehouse.AVAILABILITY_BACKORDER;
+    }
+
+    @Override
+    public boolean isAvailableToSell(final BigDecimal required, final boolean allowOrderMore) {
+        return availability == SkuWarehouse.AVAILABILITY_ALWAYS
+                || (availability != SkuWarehouse.AVAILABILITY_SHOWROOM
+                    && MoneyUtils.isFirstBiggerThanOrEqualToSecond(getAvailableToSell(), required))
+                || allowOrderMore && availability == SkuWarehouse.AVAILABILITY_BACKORDER;
     }
 
     @Override
     public boolean isAvailableToAllocate(final BigDecimal required) {
-        return MoneyUtils.isFirstBiggerThanOrEqualToSecond(getQuantity(), required);
+        return availability == SkuWarehouse.AVAILABILITY_ALWAYS
+                || (availability != SkuWarehouse.AVAILABILITY_SHOWROOM
+                    && MoneyUtils.isFirstBiggerThanOrEqualToSecond(getQuantity(), required));
     }
 
     @Override
     public BigDecimal getAvailableToSell() {
         return MoneyUtils.notNull(getQuantity()).subtract(
                 MoneyUtils.notNull(getReserved(), BigDecimal.ZERO));
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    @Override
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    @Override
+    public LocalDateTime getAvailablefrom() {
+        return this.availablefrom;
+    }
+
+    @Override
+    public void setAvailablefrom(LocalDateTime availablefrom) {
+        this.availablefrom = availablefrom;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public LocalDateTime getAvailableto() {
+        return this.availableto;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setAvailableto(LocalDateTime availableto) {
+        this.availableto = availableto;
+    }
+
+    @Override
+    public int getAvailability() {
+        return this.availability;
+    }
+
+    @Override
+    public void setAvailability(int availability) {
+        this.availability = availability;
+    }
+
+    @Override
+    public Boolean getFeatured() {
+        return this.featured;
+    }
+
+    @Override
+    public void setFeatured(Boolean featured) {
+        this.featured = featured;
+    }
+
+    @Override
+    public String getTag() {
+        return this.tag;
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    @Override
+    public BigDecimal getMinOrderQuantity() {
+        return minOrderQuantity;
+    }
+
+    @Override
+    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
+        this.minOrderQuantity = minOrderQuantity;
+    }
+
+    @Override
+    public BigDecimal getMaxOrderQuantity() {
+        return maxOrderQuantity;
+    }
+
+    @Override
+    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
+        this.maxOrderQuantity = maxOrderQuantity;
+    }
+
+    @Override
+    public BigDecimal getStepOrderQuantity() {
+        return stepOrderQuantity;
+    }
+
+    @Override
+    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
+        this.stepOrderQuantity = stepOrderQuantity;
+    }
+
+    @Override
+    public LocalDateTime getReleaseDate() {
+        return releaseDate;
+    }
+
+    @Override
+    public void setReleaseDate(final LocalDateTime releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }
 

@@ -18,17 +18,22 @@ package org.yes.cart.promotion.impl.action;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.OrderSplittingStrategy;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.utils.MoneyUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -50,16 +55,22 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
     private static final Pattern RATIO_PATTERN = Pattern.compile("(.*)(( (=|~) )((\\d*)\\.?(\\d*)))");
 
     private final PriceResolver priceResolver;
+    private final InventoryResolver inventoryResolver;
     private final ShopService shopService;
+    private final WarehouseService warehouseService;
     private final ProductService productService;
     private final OrderSplittingStrategy orderSplittingStrategy;
 
     public OrderGiftPromotionAction(final PriceResolver priceResolver,
+                                    final InventoryResolver inventoryResolver,
                                     final ShopService shopService,
+                                    final WarehouseService warehouseService,
                                     final ProductService productService,
                                     final OrderSplittingStrategy orderSplittingStrategy) {
         this.priceResolver = priceResolver;
+        this.inventoryResolver = inventoryResolver;
         this.shopService = shopService;
+        this.warehouseService = warehouseService;
         this.productService = productService;
         this.orderSplittingStrategy = orderSplittingStrategy;
     }
@@ -71,7 +82,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
         final Total itemTotal = getItemTotal(context);
         final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
         if (MoneyUtils.isPositive(giftQty)) {
-            final BigDecimal giftValue = getAmountValue(context);
+            final BigDecimal giftValue = getAmountValue(context, giftQty);
             if (MoneyUtils.isPositive(giftValue) && MoneyUtils.isPositive(itemTotal.getPriceSubTotal())) {
                 return giftValue.divide(itemTotal.getPriceSubTotal(), RoundingMode.HALF_UP);
             }
@@ -80,7 +91,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
         return BigDecimal.ZERO; // no gift
     }
 
-    private BigDecimal getAmountValue(final Map<String, Object> context) {
+    private BigDecimal getAmountValue(final Map<String, Object> context, final BigDecimal giftQty) {
 
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);
         final Total itemTotal = getItemTotal(context);
@@ -89,7 +100,13 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
         final BigDecimal multiplier = ctx.getMultiplier(itemTotal.getPriceSubTotal());
         if (MoneyUtils.isPositive(multiplier)) {
 
-            final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
+            final String supplier = getGiftSupplier(ctx.getSubject(), cart, giftQty);
+            if (supplier == null) {
+                LOG.warn(Markers.alert(), "Gift item {} is now out of stock", ctx.getSubject());
+                return BigDecimal.ZERO;
+            }
+
+            final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart, supplier);
             if (giftValue == null) {
                 return BigDecimal.ZERO;
             }
@@ -106,7 +123,22 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
         return BigDecimal.ZERO;
     }
 
-    private SkuPrice getGiftPrices(final String sku, final ShoppingCart cart) {
+    private String getGiftSupplier(final String sku, final ShoppingCart cart, final BigDecimal qty) {
+
+        final long shopId = cart.getShoppingContext().getCustomerShopId();
+        final Map<String, Warehouse> warehouses = warehouseService.getByShopIdMapped(shopId, false);
+
+        for (final Warehouse warehouse : warehouses.values()) {
+            final SkuWarehouse inventory = inventoryResolver.findByWarehouseSku(warehouse, sku);
+            if (inventory != null && inventory.isAvailableToSell(qty, true)) {
+                return warehouse.getCode();
+            }
+        }
+
+        return null;
+    }
+
+    private SkuPrice getGiftPrices(final String sku, final ShoppingCart cart, final String supplier) {
         try {
             final long customerShopId = cart.getShoppingContext().getCustomerShopId();
             final long masterShopId = cart.getShoppingContext().getShopId();
@@ -119,7 +151,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
                     customerShopId,
                     fallbackShopId,
                     cart.getCurrencyCode(),
-                    BigDecimal.ONE, false, null);
+                    BigDecimal.ONE, false, null, supplier);
         } catch (Exception exp) {
             LOG.error("Unable to find price for gift for promotion action context: {}", sku);
         }
@@ -148,25 +180,31 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);
         final Total itemTotal = getItemTotal(context);
         final MutableShoppingCart cart = getShoppingCart(context);
+        final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
 
-        final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
-        if (giftValue != null) {
-            // add gift and set its price, we assume gift are in whole units
-            final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
-            cart.addGiftToCart(ctx.getSubject(), getSkuName(ctx.getSubject(), cart.getCurrentLocale()), giftQty, getPromotionCode(context));
+        final String supplier = getGiftSupplier(ctx.getSubject(), cart, giftQty);
+        if (supplier == null) {
+            LOG.warn(Markers.alert(), "Gift item {} is now out of stock", ctx.getSubject());
+        } else {
 
-            final Pair<BigDecimal, BigDecimal> listAndSale = giftValue.getSalePriceForCalculation();
-            final BigDecimal list = listAndSale.getFirst();
-            final BigDecimal sale = listAndSale.getSecond();
+            final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart, supplier);
+            if (giftValue != null) {
+                // add gift and set its price, we assume gift are in whole units
+                cart.addGiftToCart(supplier, ctx.getSubject(), getSkuName(ctx.getSubject(), cart.getCurrentLocale()), giftQty, getPromotionCode(context));
 
-            cart.setGiftPrice(ctx.getSubject(), sale != null ? sale : list, list);
+                final Pair<BigDecimal, BigDecimal> listAndSale = giftValue.getSalePriceForCalculation();
+                final BigDecimal list = listAndSale.getFirst();
+                final BigDecimal sale = listAndSale.getSecond();
 
-            addListValue(context, MoneyUtils.notNull(list).multiply(giftQty).setScale(2, RoundingMode.HALF_UP));
+                cart.setGiftPrice(supplier, ctx.getSubject(), sale != null ? sale : list, list);
 
-            for (final CartItem item : cart.getCartItemList()) {
-                if (item.isGift() && ctx.getSubject().equals(item.getProductSkuCode())) {
-                    final DeliveryBucket bucket = this.orderSplittingStrategy.determineDeliveryBucket(item, cart);
-                    cart.setGiftDeliveryBucket(ctx.getSubject(), bucket);
+                addListValue(context, MoneyUtils.notNull(list).multiply(giftQty).setScale(2, RoundingMode.HALF_UP));
+
+                for (final CartItem item : cart.getCartItemList()) {
+                    if (item.isGift() && ctx.getSubject().equals(item.getProductSkuCode())) {
+                        final DeliveryBucket bucket = this.orderSplittingStrategy.determineDeliveryBucket(item, cart);
+                        cart.setGiftDeliveryBucket(ctx.getSubject(), bucket);
+                    }
                 }
             }
         }

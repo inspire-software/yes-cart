@@ -69,7 +69,7 @@ public class ItemDiscountPromotionAction extends AbstractItemPromotionAction imp
                 promoPrice = MoneyUtils.ZERO;
             }
 
-            cart.setProductSkuPromotion(cartItem.getProductSkuCode(), promoPrice, getPromotionCode(context));
+            cart.setProductSkuPromotion(cartItem.getSupplierCode(), cartItem.getProductSkuCode(), promoPrice, getPromotionCode(context));
 
         }
     }

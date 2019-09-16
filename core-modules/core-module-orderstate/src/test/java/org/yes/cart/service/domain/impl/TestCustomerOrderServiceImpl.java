@@ -83,18 +83,33 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_SETCARRIERSLA, "3-WAREHOUSE_1|3-WAREHOUSE_2"));
 
 
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
+        Map<String, String> params;
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
         // 3 x 180  usd
 
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
+
+        params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        commands.execute(shoppingCart, (Map) params);
         //2 x 7.99  usd
 
         prepareMultiDeliveriesAndRecalculate(shoppingCart, false);

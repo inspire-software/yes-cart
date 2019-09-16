@@ -36,6 +36,7 @@ import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.dto.DtoWarehouseService;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -221,6 +222,20 @@ public class DtoWarehouseServiceImpl
         return result;
     }
 
+
+    private void cleanOrderQuantities(final SkuWarehouseDTO skuWarehouseDTO) {
+        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, skuWarehouseDTO.getMinOrderQuantity())) {
+            skuWarehouseDTO.setMinOrderQuantity(null);
+        }
+        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, skuWarehouseDTO.getMaxOrderQuantity())) {
+            skuWarehouseDTO.setMaxOrderQuantity(null);
+        }
+        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, skuWarehouseDTO.getStepOrderQuantity())) {
+            skuWarehouseDTO.setStepOrderQuantity(null);
+        }
+    }
+
+
     /**
      * Create given {@link SkuWarehouseDTO}
      *
@@ -229,6 +244,7 @@ public class DtoWarehouseServiceImpl
      */
     @Override
     public SkuWarehouseDTO createSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) {
+        cleanOrderQuantities(skuWarehouseDTO);
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
         dtoSkuWarehouseAssembler.assembleEntity(
                 skuWarehouseDTO,
@@ -248,6 +264,7 @@ public class DtoWarehouseServiceImpl
      */
     @Override
     public SkuWarehouseDTO updateSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) {
+        cleanOrderQuantities(skuWarehouseDTO);
         SkuWarehouse skuWarehouse = skuWarehouseService.findById(skuWarehouseDTO.getSkuWarehouseId());
         dtoSkuWarehouseAssembler.assembleEntity(
                 skuWarehouseDTO,

@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="wishlist-type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="visibility" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sku-code" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="fulfilment-centre-code" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="import-mode" type="{}entityImportModeType" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -60,6 +61,8 @@ public class CustomerWishlistItemType {
     protected String visibility;
     @XmlAttribute(name = "sku-code", required = true)
     protected String skuCode;
+    @XmlAttribute(name = "fulfilment-centre-code", required = true)
+    protected String fulfilmentCentreCode;
     @XmlAttribute(name = "import-mode")
     protected EntityImportModeType importMode;
 
@@ -253,6 +256,30 @@ public class CustomerWishlistItemType {
      */
     public void setSkuCode(String value) {
         this.skuCode = value;
+    }
+
+    /**
+     * Gets the value of the fulfilmentCentreCode property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getFulfilmentCentreCode() {
+        return fulfilmentCentreCode;
+    }
+
+    /**
+     * Sets the value of the fulfilmentCentreCode property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setFulfilmentCentreCode(String value) {
+        this.fulfilmentCentreCode = value;
     }
 
     /**

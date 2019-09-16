@@ -280,9 +280,10 @@
     </logger>
     -->
 
-    <logger name="FTQ" level="INFO">
+    <logger name="FTQ" level="DEBUG">
         <!-- FTQ logs at DEBUG level, TRACE logs FTQ explanations -->
-        <appender-ref ref="FTQ"/>
+        <!--<appender-ref ref="FTQ"/>-->
+        <appender-ref ref="CONSOLE"/>
     </logger>
 
     <logger name="WS.IN" level="ERROR">

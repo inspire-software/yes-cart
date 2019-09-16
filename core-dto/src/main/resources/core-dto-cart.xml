@@ -116,6 +116,7 @@
                 <value>setPriceCmd</value>
                 <value>recalculatePriceCmd</value>
                 <value>qty</value>
+                <value>supplier</value>
                 <value>type</value>
                 <value>wlv</value>
                 <value>sku</value>

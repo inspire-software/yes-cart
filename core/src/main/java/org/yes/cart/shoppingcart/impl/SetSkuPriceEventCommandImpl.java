@@ -66,6 +66,7 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
         if (parameters.containsKey(getCmdKey())) {
 
             final String skuCode = (String) parameters.get(getCmdKey());
+            final String supplier = (String) parameters.get(CMD_P_SUPPLIER);
             final String price = (String) parameters.get(CMD_SETPRICE_P_PRICE);
 
             BigDecimal offer;
@@ -83,7 +84,7 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
                 return;
             }
 
-            final int index = shoppingCart.indexOfProductSku(skuCode);
+            final int index = shoppingCart.indexOfProductSku(supplier, skuCode);
 
             if (index != -1) {
 
@@ -91,7 +92,7 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
 
                 if (MoneyUtils.isFirstBiggerThanSecond(item.getSalePrice(), offer)) {
 
-                    if (!shoppingCart.setProductSkuOffer(skuCode, offer, auth)) {
+                    if (!shoppingCart.setProductSkuOffer(supplier, skuCode, offer, auth)) {
                         LOG.warn("Can not set price to sku with code {} ", skuCode);
                     } else {
 
@@ -102,8 +103,8 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
 
                 } else {
                     // Use case whereby we override the price upwards
-                    if (!(shoppingCart.setProductSkuPrice(skuCode, offer, offer) &&
-                            shoppingCart.setProductSkuOffer(skuCode, offer, auth))) {
+                    if (!(shoppingCart.setProductSkuPrice(supplier, skuCode, offer, offer) &&
+                            shoppingCart.setProductSkuOffer(supplier, skuCode, offer, auth))) {
                         LOG.warn("Can not set price to sku with code {} ", skuCode);
                     } else {
 

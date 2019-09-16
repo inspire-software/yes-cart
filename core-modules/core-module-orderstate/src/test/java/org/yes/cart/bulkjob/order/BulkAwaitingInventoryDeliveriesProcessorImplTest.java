@@ -20,7 +20,9 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -37,11 +39,9 @@ import static org.junit.Assert.assertEquals;
 public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDBTestCase {
 
     private CustomerOrderService customerOrderService;
-    private ProductService productService;
     private OrderStateManager orderStateManager;
     private WarehouseService warehouseService;
     private SkuWarehouseService skuWarehouseService;
-    private ProductSkuService productSkuService;
 
     private Runnable bulkAwaitingInventoryDeliveriesProcessor;
 
@@ -51,11 +51,9 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
     @Before
     public void setUp()  {
         customerOrderService = ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE, CustomerOrderService.class);
-        productService = ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE, ProductService.class);
         orderStateManager =  ctx().getBean(ServiceSpringKeys.ORDER_STATE_MANAGER, OrderStateManager.class);
         warehouseService =  ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE, WarehouseService.class);
         skuWarehouseService =  ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE, SkuWarehouseService.class);
-        productSkuService =  ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE, ProductSkuService.class);
         bulkAwaitingInventoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInventoryDeliveriesProcessor", Runnable.class);
         super.setUp();
     }
@@ -64,15 +62,19 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
     @Test
     public void testProcessAwaitingOrders() throws Exception {
 
+        Warehouse warehouse = warehouseService.findById(1L);
+
         LocalDateTime calendar = LocalDateTime.now().plusHours(1);
 
-        Product product = productService.getProductById(15350L);
-        product.setAvailablefrom(calendar);
-        productService.update(product);
+        SkuWarehouse inventory;
 
-        product = productService.getProductById(15360L);
-        product.setAvailablefrom(calendar);
-        productService.update(product);
+        inventory = skuWarehouseService.findByWarehouseSku(warehouse, "PREORDER-BACK-TO-FLOW4");
+        inventory.setReleaseDate(calendar);
+        skuWarehouseService.update(inventory);
+
+        inventory = skuWarehouseService.findByWarehouseSku(warehouse, "PREORDER-BACK-TO-FLOW5");
+        inventory.setReleaseDate(calendar);
+        skuWarehouseService.update(inventory);
 
         final Customer customer = createCustomer();
         final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 2, true);
@@ -110,13 +112,13 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
 
         calendar = LocalDateTime.now().minusHours(1);
 
-        product = productService.getProductById(15350L);
-        product.setAvailablefrom(calendar);
-        productService.update(product);
+        inventory = skuWarehouseService.findByWarehouseSku(warehouse, "PREORDER-BACK-TO-FLOW4");
+        inventory.setReleaseDate(calendar);
+        skuWarehouseService.update(inventory);
 
-        product = productService.getProductById(15360L);
-        product.setAvailablefrom(calendar);
-        productService.update(product);
+        inventory = skuWarehouseService.findByWarehouseSku(warehouse, "PREORDER-BACK-TO-FLOW5");
+        inventory.setReleaseDate(calendar);
+        skuWarehouseService.update(inventory);
 
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
@@ -128,7 +130,6 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         }
 
         //add inventory
-        Warehouse warehouse = warehouseService.findById(1L);
         //need 2 items to push order back to life cycle
         skuWarehouseService.credit(warehouse, "PREORDER-BACK-TO-FLOW4", BigDecimal.TEN);
         skuWarehouseService.credit(warehouse, "PREORDER-BACK-TO-FLOW5", BigDecimal.TEN);

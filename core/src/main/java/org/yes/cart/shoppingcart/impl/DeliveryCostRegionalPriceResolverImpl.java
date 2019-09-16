@@ -47,13 +47,17 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
      * {@inheritDoc}
      */
     @Override
-    public SkuPrice getSkuPrice(final ShoppingCart cart, final String carrierSlaBaseCode, final PricingPolicyProvider.PricingPolicy policy, final BigDecimal qty) {
+    public SkuPrice getSkuPrice(final ShoppingCart cart,
+                                final String carrierSlaBaseCode,
+                                final PricingPolicyProvider.PricingPolicy policy,
+                                final String supplier,
+                                final BigDecimal qty) {
 
         SkuPrice price;
 
         if (StringUtils.isNotBlank(cart.getShoppingContext().getCountryCode()) && StringUtils.isNotBlank(cart.getShoppingContext().getStateCode())) {
             final String stateSpecificSla = carrierSlaBaseCode + "_" + cart.getShoppingContext().getCountryCode() + "_" + cart.getShoppingContext().getStateCode();
-            price = resolveMinimalPrice(cart, policy, stateSpecificSla, qty);
+            price = resolveMinimalPrice(cart, policy, supplier, stateSpecificSla, qty);
             if (price != null && price.getSkuPriceId() > 0L) {
                 return price; // State price
             }
@@ -61,14 +65,14 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
 
         if (StringUtils.isNotBlank(cart.getShoppingContext().getCountryCode())) {
             final String countrySpecificSla = carrierSlaBaseCode + "_" + cart.getShoppingContext().getCountryCode();
-            price = resolveMinimalPrice(cart, policy, countrySpecificSla, qty);
+            price = resolveMinimalPrice(cart, policy, supplier, countrySpecificSla, qty);
             if (price != null && price.getSkuPriceId() > 0L) {
                 return price; // Country price
             }
         }
 
         // Carrier SLA GUID price
-        return resolveMinimalPrice(cart, policy, carrierSlaBaseCode, qty);
+        return resolveMinimalPrice(cart, policy, supplier, carrierSlaBaseCode, qty);
 
     }
 
@@ -80,6 +84,7 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
      *
      * @param cart       cart
      * @param policy     policy to use
+     * @param supplier   supplier
      * @param slaSkuCode sku to resolve price for
      * @param qty        quantity
      *
@@ -87,6 +92,7 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
      */
     protected SkuPrice resolveMinimalPrice(final ShoppingCart cart,
                                            final PricingPolicyProvider.PricingPolicy policy,
+                                           final String supplier,
                                            final String slaSkuCode,
                                            final BigDecimal qty) {
 
@@ -96,7 +102,17 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
         final Long fallbackShopId = masterShopId == customerShopId || shopService.getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
         final String currency = cart.getCurrencyCode();
 
-        return priceResolver.getMinimalPrice(null, slaSkuCode, customerShopId, fallbackShopId, currency, qty, true, policy.getID());
+        return priceResolver.getMinimalPrice(
+                null,
+                slaSkuCode,
+                customerShopId,
+                fallbackShopId,
+                currency,
+                qty,
+                true,
+                policy.getID(),
+                supplier
+        );
 
     }
 

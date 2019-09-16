@@ -195,7 +195,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 String paymentResult = null;
                 try {
                     if (atLeastOneError) {
-                        // no point in order auths as we reverse all in case of at least one failure
+                        // no point in other auths as we reverse all in case of at least one failure
                         paymentResult = Payment.PAYMENT_STATUS_FAILED;
                         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                         payment.setPaymentProcessorBatchSettlement(false);

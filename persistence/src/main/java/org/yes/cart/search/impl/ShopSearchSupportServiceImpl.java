@@ -26,7 +26,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.ShopSearchSupportService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
@@ -63,7 +62,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
 
             Category category = categoryService.getById(categoryId);
 
-            if (DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now())) {
+            if (category.isAvailable(now())) {
 
                 while (category != null) {
                     final String searchInSub = category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH);

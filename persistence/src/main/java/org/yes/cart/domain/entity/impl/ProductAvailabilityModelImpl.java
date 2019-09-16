@@ -16,11 +16,12 @@
 
 package org.yes.cart.domain.entity.impl;
 
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -30,10 +31,11 @@ import java.util.*;
  */
 public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
 
-    public static final BigDecimal PERPETUAL = new BigDecimal(Integer.MAX_VALUE);
+    private static final BigDecimal PERPETUAL = new BigDecimal(Integer.MAX_VALUE);
 
     private static final SortedSet<String> NO_SKU = new TreeSet<>();
 
+    private final String supplier;
     private final boolean available;
     private final int availability;
     private boolean inStock;
@@ -41,19 +43,28 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
     private final Map<String, BigDecimal> availableToSellQuantity;
     private final SortedSet<String> skuCodes;
     private final String defaultSku;
+    private final LocalDateTime releaseDate;
     private String firstAvailableSku = null;
 
-    public ProductAvailabilityModelImpl(final String defaultSku,
+    public ProductAvailabilityModelImpl(final String supplier,
+                                        final String defaultSku,
                                         final int availability,
                                         final boolean availableNow,
+                                        final LocalDateTime releaseDate,
                                         final Map<String, BigDecimal> inventoryQty) {
+        this.supplier = supplier;
         this.defaultSku = defaultSku;
+        this.releaseDate = releaseDate;
+
         this.availability = availability;
-        perpetual = availability == Product.AVAILABILITY_ALWAYS;
-        boolean notForSale = availability == Product.AVAILABILITY_SHOWROOM;
+
+        perpetual = availability == SkuWarehouse.AVAILABILITY_ALWAYS;
+        boolean notForSale = availability == SkuWarehouse.AVAILABILITY_SHOWROOM;
+
         if (perpetual) {
             inStock = false; // perpetual is used exactly for purpose of not needing to have stock
         }
+
         if (inventoryQty != null) {
             inStock = false;
             availableToSellQuantity = new HashMap<>(inventoryQty);
@@ -73,7 +84,13 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
             inStock = false;
         }
 
-        available = availableNow && !notForSale && (inStock || (availability != Product.AVAILABILITY_STANDARD));
+        available = availableNow && !notForSale && (inStock || (availability != SkuWarehouse.AVAILABILITY_STANDARD));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getSupplier() {
+        return supplier;
     }
 
     /** {@inheritDoc} */
@@ -104,6 +121,12 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
     @Override
     public String getDefaultSkuCode() {
         return defaultSku;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public LocalDateTime getReleaseDate() {
+        return releaseDate;
     }
 
     /** {@inheritDoc} */

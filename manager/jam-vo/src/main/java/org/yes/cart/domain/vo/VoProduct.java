@@ -25,9 +25,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.matcher.VoProductCategoryMatcher;
 import org.yes.cart.domain.vo.matcher.VoProductSkuMatcher;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -75,18 +73,6 @@ public class VoProduct {
     @DtoField(value = "tag")
     private String tag;
 
-    @DtoField(value = "disabled")
-    private boolean disabled;
-
-    @DtoField(value = "availablefrom")
-    private LocalDateTime availablefrom;
-
-    @DtoField(value = "availableto")
-    private LocalDateTime availableto;
-
-    @DtoField(value = "availability")
-    private int availability;
-
     @DtoField(value = "brandDTO",
             dtoBeanKey = "VoBrand",
             entityBeanKeys = "org.yes.cart.dto.BrandDTO",
@@ -119,18 +105,6 @@ public class VoProduct {
 
     @DtoField(value = "description")
     private String description;
-
-    @DtoField(value = "featured")
-    private Boolean featured;
-
-    @DtoField(value = "minOrderQuantity")
-    private BigDecimal minOrderQuantity;
-
-    @DtoField(value = "maxOrderQuantity")
-    private BigDecimal maxOrderQuantity;
-
-    @DtoField(value = "stepOrderQuantity")
-    private BigDecimal stepOrderQuantity;
 
 
     @DtoField(value = "uri")
@@ -263,38 +237,6 @@ public class VoProduct {
         this.tag = tag;
     }
 
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(final boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    public LocalDateTime getAvailablefrom() {
-        return availablefrom;
-    }
-
-    public void setAvailablefrom(final LocalDateTime availablefrom) {
-        this.availablefrom = availablefrom;
-    }
-
-    public LocalDateTime getAvailableto() {
-        return availableto;
-    }
-
-    public void setAvailableto(final LocalDateTime availableto) {
-        this.availableto = availableto;
-    }
-
-    public int getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(final int availability) {
-        this.availability = availability;
-    }
-
     public VoBrand getBrand() {
         return brand;
     }
@@ -341,38 +283,6 @@ public class VoProduct {
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    public Boolean getFeatured() {
-        return featured;
-    }
-
-    public void setFeatured(final Boolean featured) {
-        this.featured = featured;
-    }
-
-    public BigDecimal getMinOrderQuantity() {
-        return minOrderQuantity;
-    }
-
-    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
-        this.minOrderQuantity = minOrderQuantity;
-    }
-
-    public BigDecimal getMaxOrderQuantity() {
-        return maxOrderQuantity;
-    }
-
-    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
-        this.maxOrderQuantity = maxOrderQuantity;
-    }
-
-    public BigDecimal getStepOrderQuantity() {
-        return stepOrderQuantity;
-    }
-
-    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
-        this.stepOrderQuantity = stepOrderQuantity;
     }
 
     public String getUri() {

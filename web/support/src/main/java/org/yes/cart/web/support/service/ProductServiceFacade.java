@@ -18,6 +18,7 @@ package org.yes.cart.web.support.service;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dto.NavigationContext;
@@ -92,6 +93,7 @@ public interface ProductServiceFacade {
      * @param productId  product ID
      * @param skuId sku ID
      * @param productTypeId product type id
+     *
      * @return hierarchy of attributes for this product or sku.
      */
     Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(String locale,
@@ -138,6 +140,7 @@ public interface ProductServiceFacade {
      * @param locale locale
      * @param productId  product ID
      * @param skuId sku ID
+     *              
      * @return hierarchy of attributes for this product or sku.
      */
     Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(String locale,
@@ -166,7 +169,9 @@ public interface ProductServiceFacade {
      *
      * @return list of featured products
      */
-    List<ProductSearchResultDTO> getFeaturedProducts(long categoryId, long shopId, final long customerShopId);
+    List<ProductSearchResultDTO> getFeaturedProducts(long categoryId,
+                                                     long shopId,
+                                                     long customerShopId);
 
     /**
      * Get new products for given category. Limit is set by the category.
@@ -177,7 +182,9 @@ public interface ProductServiceFacade {
      *
      * @return list of new products
      */
-    List<ProductSearchResultDTO> getNewProducts(long categoryId, long shopId, final long customerShopId);
+    List<ProductSearchResultDTO> getNewProducts(long categoryId,
+                                                long shopId,
+                                                long customerShopId);
 
     /**
      * Get new products for given category. Limit is set by the category.
@@ -189,7 +196,25 @@ public interface ProductServiceFacade {
      *
      * @return list of new products
      */
-    List<ProductSearchResultDTO> getTaggedProducts(long categoryId, long shopId, final long customerShopId, String tag);
+    List<ProductSearchResultDTO> getTaggedProducts(long categoryId,
+                                                   long shopId,
+                                                   long customerShopId,
+                                                   String tag);
+
+    /**
+     * Get new products for given category. Limit is set by the category.
+     *
+     * @param SKUs            list of products
+     * @param categoryId      category (optional), specify -1 for no limit
+     * @param shopId          current shop
+     * @param customerShopId  current customer shop
+     *
+     * @return list of new products
+     */
+    List<ProductSearchResultDTO> getListProductSKUs(List<String> SKUs,
+                                                    long categoryId,
+                                                    long shopId,
+                                                    long customerShopId);
 
     /**
      * Get new products for given category. Limit is set by the category.
@@ -201,7 +226,10 @@ public interface ProductServiceFacade {
      *
      * @return list of new products
      */
-    List<ProductSearchResultDTO> getListProducts(List<String> productIds, long categoryId, long shopId, final long customerShopId);
+    List<ProductSearchResultDTO> getListProducts(List<String> productIds,
+                                                 long categoryId,
+                                                 long shopId,
+                                                 long customerShopId);
 
     /**
      * Get the all products , that match the given query
@@ -222,85 +250,141 @@ public interface ProductServiceFacade {
     /**
      * Get product availability.
      *
-     * @param product product
-     * @param customerShopId  current shop
+     * @param product           product
+     * @param customerShopId    current shop
      *
      * @return availability model
      */
-    ProductAvailabilityModel getProductAvailability(ProductSearchResultDTO product, long customerShopId);
+    ProductAvailabilityModel getProductAvailability(ProductSearchResultDTO product,
+                                                    long customerShopId);
 
     /**
      * Get product availability.
      *
-     * @param product product
-     * @param customerShopId  current shop
+     * @param sku               product
+     * @param customerShopId    current shop
      *
      * @return availability model
      */
-    ProductAvailabilityModel getProductAvailability(Product product, long customerShopId);
+    ProductAvailabilityModel getProductAvailability(ProductSkuSearchResultDTO sku,
+                                                    long customerShopId);
 
     /**
      * Get product availability.
      *
-     * @param product product
-     * @param customerShopId  current shop
+     * @param product           product
+     * @param customerShopId    current shop
+     * @param supplier          supplier
      *
      * @return availability model
      */
-    ProductAvailabilityModel getProductAvailability(ProductSku product, long customerShopId);
+    ProductAvailabilityModel getProductAvailability(Product product,
+                                                    long customerShopId,
+                                                    String supplier);
 
     /**
      * Get product availability.
      *
-     * @param skuCode SKU code (not product code)
-     * @param customerShopId  current shop
+     * @param product           product
+     * @param customerShopId    current shop
+     * @param supplier          supplier
      *
      * @return availability model
      */
-    ProductAvailabilityModel getProductAvailability(String skuCode, long customerShopId);
+    ProductAvailabilityModel getProductAvailability(ProductSku product,
+                                                    long customerShopId,
+                                                    String supplier);
+
+    /**
+     * Get product availability.
+     *
+     * @param skuCode           SKU code (not product code)
+     * @param customerShopId    current shop
+     * @param supplier          supplier
+     *
+     * @return availability model
+     */
+    ProductAvailabilityModel getProductAvailability(String skuCode,
+                                                    long customerShopId,
+                                                    String supplier);
 
     /**
      * Quantity model.
      *
      * @param cartQty quantity of given sku in cart
      * @param product required product
+     * @param customerShopId    current shop
+     * @param supplier          supplier
      *
      * @return quantity model
      */
-    QuantityModel getProductQuantity(BigDecimal cartQty, Product product);
+    QuantityModel getProductQuantity(BigDecimal cartQty,
+                                     Product product,
+                                     long customerShopId,
+                                     String supplier);
 
     /**
      * Quantity model.
      *
-     * @param cartQty quantity of given sku in cart
-     * @param product required product
+     * @param cartQty           quantity of given sku in cart
+     * @param product           required product
+     * @param customerShopId    current shop
+     * @param supplier          supplier
      *
      * @return quantity model
      */
-    QuantityModel getProductQuantity(BigDecimal cartQty, ProductSku product);
+    QuantityModel getProductQuantity(BigDecimal cartQty,
+                                     ProductSku product,
+                                     long customerShopId,
+                                     String supplier);
 
     /**
      * Quantity model.
      *
-     * @param cartQty quantity of given sku in cart
-     * @param product required product
+     * @param cartQty           quantity of given sku in cart
+     * @param product           required product
+     * @param customerShopId    current shop
      *
      * @return quantity model
      */
-    QuantityModel getProductQuantity(BigDecimal cartQty, ProductSearchResultDTO product);
+    QuantityModel getProductQuantity(BigDecimal cartQty,
+                                     ProductSearchResultDTO product,
+                                     long customerShopId);
+
+    /**
+     * Quantity model.
+     *
+     * @param cartQty           quantity of given sku in cart
+     * @param sku           required product
+     * @param customerShopId    current shop
+     *
+     * @return quantity model
+     */
+    QuantityModel getProductQuantity(BigDecimal cartQty,
+                                     ProductSkuSearchResultDTO sku,
+                                     long customerShopId);
 
 
     /**
      * Quantity model.
      *
-     * @param cartQty quantity of given sku in cart
-     * @param min min order quantity
-     * @param max max order quantity
-     * @param step step order quantity
+     * @param cartQty           quantity of given sku in cart
+     * @param skuCode           SKU code
+     * @param min               min order quantity
+     * @param max               max order quantity
+     * @param step              step order quantity
+     * @param customerShopId    current shop
+     * @param supplier          supplier
      *
      * @return quantity model
      */
-    QuantityModel getProductQuantity(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
+    QuantityModel getProductQuantity(BigDecimal cartQty,
+                                     String skuCode,
+                                     BigDecimal min,
+                                     BigDecimal max,
+                                     BigDecimal step,
+                                     long customerShopId,
+                                     String supplier);
 
     /**
      * Get price model (or blank object) with respect to current shop tax display settings.
@@ -312,7 +396,8 @@ public interface ProductServiceFacade {
      *
      * @return price (or blank object)
      */
-    Pair<PriceModel, CustomerWishList.PriceChange> getSkuPrice(ShoppingCart cart, CustomerWishList item);
+    Pair<PriceModel, CustomerWishList.PriceChange> getSkuPrice(ShoppingCart cart,
+                                                               CustomerWishList item);
 
 
     /**
@@ -324,10 +409,15 @@ public interface ProductServiceFacade {
      * @param productId product id (optional)
      * @param skuCode   selected SKU (optional)
      * @param quantity  quantity tier
+     * @param supplier  supplier
      *
      * @return active product/SKU price (or blank object)
      */
-    PriceModel getSkuPrice(ShoppingCart cart, Long productId, String skuCode, BigDecimal quantity);
+    PriceModel getSkuPrice(ShoppingCart cart,
+                           Long productId,
+                           String skuCode,
+                           BigDecimal quantity,
+                           String supplier);
 
     /**
      * Get price model (or blank object) with respect to current shop tax display settings.
@@ -339,10 +429,16 @@ public interface ProductServiceFacade {
      * @param quantity  quantity tier
      * @param listPrice base list price
      * @param salePrice base sale price
+     * @param supplier  supplier
      *
      * @return price (or blank object)
      */
-    PriceModel getSkuPrice(ShoppingCart cart, String ref, BigDecimal quantity, BigDecimal listPrice, BigDecimal salePrice);
+    PriceModel getSkuPrice(ShoppingCart cart,
+                           String ref,
+                           BigDecimal quantity,
+                           BigDecimal listPrice,
+                           BigDecimal salePrice,
+                           String supplier);
 
     /**
      * Get price model (or blank object) with respect to current shop tax display settings.
@@ -355,7 +451,9 @@ public interface ProductServiceFacade {
      *
      * @return price (or blank object)
      */
-    PriceModel getSkuPrice(ShoppingCart cart, CartItem item, boolean total);
+    PriceModel getSkuPrice(ShoppingCart cart,
+                           CartItem item,
+                           boolean total);
 
     /**
      * Get price model (or blank object) with respect to current shop tax display settings. (used by YCE)
@@ -372,7 +470,13 @@ public interface ProductServiceFacade {
      *
      * @return price (or blank object)
      */
-    PriceModel getSkuPrice(String currency, boolean showTax, boolean showTaxNet, boolean showTaxAmount, CartItem item, boolean total, final boolean hide);
+    PriceModel getSkuPrice(String currency,
+                           boolean showTax,
+                           boolean showTaxNet,
+                           boolean showTaxAmount,
+                           CartItem item,
+                           boolean total,
+                           final boolean hide);
 
     /**
      * Get prices for all SKU quantity tiers sorted by tier.
@@ -380,10 +484,14 @@ public interface ProductServiceFacade {
      * @param cart      current cart
      * @param productId product id (optional)
      * @param skuCode   selected SKU (optional)
+     * @param supplier  supplier
      *
      * @return active product/SKU prices (or blank object)
      */
-    List<PriceModel> getSkuPrices(ShoppingCart cart, Long productId, String skuCode);
+    List<PriceModel> getSkuPrices(ShoppingCart cart,
+                                  Long productId,
+                                  String skuCode,
+                                  String supplier);
 
 
     /**

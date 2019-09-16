@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.Hibernate;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.service.domain.CustomerWishListService;
@@ -41,12 +40,7 @@ public class CustomerWishListServiceImpl extends BaseGenericServiceImpl<Customer
     /** {@inheritDoc} */
     @Override
     public List<CustomerWishList> findWishListByCustomerId(final long customerId) {
-        final List<CustomerWishList> wishList = getGenericDao().findByNamedQuery("WISHLIST.BY.CUSTOMER", customerId);
-        for (final CustomerWishList item : wishList) {
-            // Need to load the sku information, so that it is available without session
-            Hibernate.initialize(item.getSkus());
-        }
-        return wishList;
+        return getGenericDao().findByNamedQuery("WISHLIST.BY.CUSTOMER", customerId);
     }
 
     /** {@inheritDoc} */

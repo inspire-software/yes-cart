@@ -524,7 +524,8 @@
     create table TCUSTOMERWISHLIST (
         CUSTOMERWISHLIST_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        SKU_ID bigint not null,
+        SKU_CODE varchar(255) not null,
+        SUPPLIER_CODE varchar(255) not null,
         CUSTOMER_ID bigint not null,
         WL_TYPE varchar(1) default 'W',
         VISIBILITY varchar(1) default 'P',
@@ -676,17 +677,12 @@
         PIM_DISABLED bit not null default 0,
         PIM_OUTDATED bit not null default 0,
         PIM_UPDATED datetime,
-        DISABLED bit default 0,
-        AVAILABLEFROM datetime,
-        AVAILABLETO datetime,
         NAME varchar(255) not null,
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
         TAG varchar(255),
         BRAND_ID bigint not null,
         PRODUCTTYPE_ID bigint not null,
-        AVAILABILITY integer default 1 not null,
-        FEATURED bit,
         URI varchar(255) unique,
         TITLE varchar(255),
         METAKEYWORDS varchar(255),
@@ -694,9 +690,6 @@
         DISPLAY_TITLE longtext,
         DISPLAY_METAKEYWORDS longtext,
         DISPLAY_METADESCRIPTION longtext,
-        MIN_ORDER_QUANTITY decimal(19,2),
-        MAX_ORDER_QUANTITY decimal(19,2),
-        STEP_ORDER_QUANTITY decimal(19,2),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -991,6 +984,7 @@
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
         PRODUCT_ID bigint,
+        TAG varchar(255),
         RANK integer,
         BARCODE varchar(128),
         URI varchar(255) unique,
@@ -1073,6 +1067,16 @@
         SKU_CODE varchar(255) not null,
         QUANTITY decimal(19,2) not null,
         RESERVED decimal(19,2) default 0,
+        DISABLED bit default 0,
+        AVAILABLEFROM datetime,
+        AVAILABLETO datetime,
+        RELEASEDATE datetime,
+        AVAILABILITY integer default 1 not null,
+        FEATURED bit,
+        TAG varchar(255),
+        MIN_ORDER_QUANTITY decimal(19,2),
+        MAX_ORDER_QUANTITY decimal(19,2),
+        STEP_ORDER_QUANTITY decimal(19,2),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -1490,14 +1494,7 @@
         references TCUSTOMER (CUSTOMER_ID)         on delete cascade;
 
 
-    alter table TCUSTOMERWISHLIST 
-        add index FK_WL_SKU (SKU_ID), 
-        add constraint FK_WL_SKU 
-        foreign key (SKU_ID) 
-        references TSKU (SKU_ID);
-
-
-    alter table TCUSTOMERWISHLIST 
+    alter table TCUSTOMERWISHLIST
         add index FK_WL_CUSTOMER (CUSTOMER_ID), 
         add constraint FK_WL_CUSTOMER 
         foreign key (CUSTOMER_ID) 

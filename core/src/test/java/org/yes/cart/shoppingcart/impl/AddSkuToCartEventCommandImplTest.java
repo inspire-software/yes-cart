@@ -63,11 +63,11 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 57.00", (new BigDecimal("57.00")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
 
-        params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, "7");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "7");
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 180.00", (new BigDecimal("180.00")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
 
-        params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, "zzzz"); // if invalid use 1
+        params.put(ShoppingCartCommand.CMD_P_QTY, "zzzz"); // if invalid use 1
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 198.00", (new BigDecimal("198.00")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
 
@@ -99,15 +99,15 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 149.97", (new BigDecimal("149.97")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
 
-        params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, "7");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "7");
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 499.90", (new BigDecimal("499.90")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
 
-        params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, "zzzz"); // if invalid use 1
+        params.put(ShoppingCartCommand.CMD_P_QTY, "zzzz"); // if invalid use 1
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 549.89", (new BigDecimal("549.89")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
 
-        params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, "0.3"); // if no prod model round up to int
+        params.put(ShoppingCartCommand.CMD_P_QTY, "0.3"); // if no prod model round up to int
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 599.88", (new BigDecimal("599.88")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
 

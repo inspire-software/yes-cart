@@ -68,5 +68,20 @@ export interface InventoryVO {
   quantity : number;
   reserved : number;
 
+  tag : string;
+
+  featured : boolean;
+
+  disabled : boolean;
+  availablefrom : Date;
+  availableto : Date;
+  releaseDate : Date;
+
+  availability : number;
+
+  minOrderQuantity : number;
+  maxOrderQuantity : number;
+  stepOrderQuantity : number;
+
 }
 

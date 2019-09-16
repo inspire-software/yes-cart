@@ -63,6 +63,9 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     @DtoField(value = "supplierCatalogCode")
     private String supplierCatalogCode;
 
+    @DtoField(value = "tag")
+    private String tag;
+
     @DtoField(value = "name")
     private String name;
 
@@ -299,6 +302,22 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     @Override
     public void setProductId(final long productId) {
         this.productId = productId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTag(final String tag) {
+        this.tag = tag;
     }
 
     /**

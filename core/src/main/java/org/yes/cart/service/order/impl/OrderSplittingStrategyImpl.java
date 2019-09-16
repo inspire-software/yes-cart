@@ -27,7 +27,6 @@ import org.yes.cart.service.order.OrderSplittingStrategy;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
@@ -192,52 +191,11 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
         final String name = item.getProductName();
 
         final ProductSku productSku = productService.getProductSkuByCode(sku);
-        final int availability;
-        final boolean enabled;
-        final LocalDateTime availableFrom;
-        final LocalDateTime availableTo;
-        final boolean digital;
+        boolean digital = false;
         if (productSku != null) {
             final Product product = productSku.getProduct();
-            availability = product.getAvailability();
-            enabled = !product.isDisabled();
-            availableFrom = product.getAvailablefrom();
-            availableTo = product.getAvailableto();
             digital = product.getProducttype().isDigital();
-        } else { // default behaviour for SKU not in PIM
-            availability = Product.AVAILABILITY_STANDARD;
-            enabled = true;
-            availableFrom = null;
-            availableTo = null;
-            digital = false;
         }
-
-        final boolean isAvailableNow = availability != Product.AVAILABILITY_SHOWROOM && DomainApiUtils.isObjectAvailableNow(enabled, availableFrom, availableTo, now);
-        final boolean isAvailableLater = availability == Product.AVAILABILITY_PREORDER && DomainApiUtils.isObjectAvailableNow(enabled, null, availableTo, now);
-
-        // Must not create orders with items that are unavailable
-        if (!isAvailableNow && !isAvailableLater) {
-            return new Pair<>(
-                    CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
-                    StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
-            );
-        }
-
-        if (availability == Product.AVAILABILITY_ALWAYS) {
-
-            // We do not track inventory for this item, so supplier is the same as stated on the item (could be null)
-            if (digital) {
-                return new Pair<>(
-                        CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
-                        StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
-                );
-            }
-            return new Pair<>(
-                    CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
-                    StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
-            );
-        }
-
 
         Warehouse supplier = null;
 
@@ -246,13 +204,10 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
             supplier = warehouses.get(item.getSupplierCode());
         }
 
-        final boolean preorderNotYetAvailable = availability == Product.AVAILABILITY_PREORDER && !isAvailableNow;
-        final boolean backorder = availability == Product.AVAILABILITY_BACKORDER;
-
         // suppliers are either chosen one or we use all to "guess" one
         final Collection<Warehouse> suppliers = supplier == null ? warehouses.values() : Collections.singleton(supplier);
 
-        Warehouse oosWarehouse = null;
+        Pair<String, String> lastError = null;
 
         for (final Warehouse warehouse : suppliers) {
 
@@ -260,20 +215,45 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
             if (inventory != null) { // we need inventory for inventory tracked items
 
+                final int availability = inventory.getAvailability();
+                final boolean isAvailableNow = availability != SkuWarehouse.AVAILABILITY_SHOWROOM && inventory.isAvailable(now);
+
+                // Must not create orders with items that are unavailable
+                if (!isAvailableNow) {
+                    lastError = new Pair<>(
+                            CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
+                            warehouse.getCode()
+                    );
+                    continue;
+                }
+
+                // We do not track inventory for this item, so supplier is the same as stated on the item (could be null)
+                if (digital) {
+                    return new Pair<>(
+                            CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
+                            warehouse.getCode()
+                    );
+                }
+
+
+                final boolean preorderNotYetAvailable = !inventory.isReleased(now);
+                final boolean backorder = availability == SkuWarehouse.AVAILABILITY_BACKORDER;
+                final boolean always = availability == SkuWarehouse.AVAILABILITY_ALWAYS;
+
                 // preorders that are launched become standard later in the flow but for now we allow all orders
-                if (preorderNotYetAvailable) {
+                if (preorderNotYetAvailable && (backorder || always)) {
                     return new Pair<>(
                             CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,
                             warehouse.getCode()
                     );
                 }
 
-                final boolean inStock = inventory.isAvailableToSell(item.getQty());
+                final boolean inStock = inventory.isAvailableToSell(item.getQty(), false);
 
-                if (inStock) {
+                if (inStock || always) {
                     // Enough quantity
                     return new Pair<>(
-                            CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
+                            preorderNotYetAvailable ? CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP : CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
                             warehouse.getCode()
                     );
                 } else {
@@ -284,7 +264,10 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
                                 warehouse.getCode()
                         );
                     } else { // else we go to another warehouse but track last one
-                        oosWarehouse = warehouse;
+                        lastError = new Pair<>(
+                                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
+                                warehouse.getCode()
+                        );
                     }
                 }
 
@@ -292,16 +275,13 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         }
 
-        if (oosWarehouse == null) {
+        if (lastError == null) {
             return new Pair<>(
                     CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
                     StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
             );
         }
-        return new Pair<>(
-                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
-                oosWarehouse.getCode()
-        );
+        return lastError;
 
     }
 

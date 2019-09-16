@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.InventoryDTO;
+import org.yes.cart.domain.dto.ProductDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.ProductSku;
@@ -36,8 +37,10 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
 import org.yes.cart.utils.HQLUtils;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -96,97 +99,111 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
             if (StringUtils.isNotBlank(filter)) {
 
-                final Pair<String, BigDecimal> lowOrReserved = ComplexSearchUtils.checkNumericSearch(filter, LOW_OR_RESERVED, Constants.INVENTORY_SCALE);
+                final Pair<LocalDateTime, LocalDateTime> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
 
-                if (lowOrReserved != null) {
+                if (dateSearch != null) {
 
-                    if ("-".equals(lowOrReserved.getFirst())) {
-                        entities = skuWarehouseDAO.findRangeByCriteria(
-                                " where e.warehouse.warehouseId = ?1 and e.quantity <= ?2",
-                                page * pageSize, pageSize,
-                                warehouseId,
-                                lowOrReserved.getSecond()
-                        );
-                    } else if ("+".equals(lowOrReserved.getFirst())) {
-                        entities = skuWarehouseDAO.findRangeByCriteria(
-                                " where e.warehouse.warehouseId = ?1 and e.reserved >= ?2",
-                                page * pageSize, pageSize,
-                                warehouseId,
-                                lowOrReserved.getSecond()
-                        );
-                    }
+                    entities = skuWarehouseDAO.findRangeByCriteria(
+                            " where (?1 is null or e.availablefrom <= ?1) and (?2 is null or e.availableto >= ?2) order by e.skuCode",
+                            page * pageSize, pageSize,
+                            dateSearch.getFirst(),
+                            dateSearch.getSecond()
+                    );
 
                 } else {
 
-                    final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
+                    final Pair<String, BigDecimal> lowOrReserved = ComplexSearchUtils.checkNumericSearch(filter, LOW_OR_RESERVED, Constants.INVENTORY_SCALE);
 
-                    if (byCode != null) {
+                    if (lowOrReserved != null) {
 
-                        final List<ProductSku> skus = productSkuDAO.findRangeByCriteria(
-                                " where lower(e.product.code) = ?1 or lower(e.product.manufacturerCode) = ?1 or lower(e.product.pimCode) = ?1 or lower(e.barCode) = ?1 or lower(e.manufacturerCode) = ?1",
-                                0, pageSize,
-                                HQLUtils.criteriaIeq(byCode.getSecond())
-                        );
-
-                        final List<String> skuCodes = new ArrayList<>();
-                        for (final ProductSku sku : skus) {
-                            skuCodes.add(sku.getCode()); // sku codes from product match
-                        }
-
-                        if (skuCodes.isEmpty()) {
-
+                        if ("-".equals(lowOrReserved.getFirst())) {
                             entities = skuWarehouseDAO.findRangeByCriteria(
-                                    " where e.warehouse.warehouseId = ?1 and lower(e.skuCode) = ?2 order by e.skuCode",
+                                    " where e.warehouse.warehouseId = ?1 and e.quantity <= ?2",
                                     page * pageSize, pageSize,
                                     warehouseId,
-                                    HQLUtils.criteriaIeq(byCode.getSecond())
+                                    lowOrReserved.getSecond()
                             );
-
-                        } else {
-
+                        } else if ("+".equals(lowOrReserved.getFirst())) {
                             entities = skuWarehouseDAO.findRangeByCriteria(
-                                    " where e.warehouse.warehouseId = ?1 and (e.skuCode in (?2) or lower(e.skuCode) = ?3) order by e.skuCode",
+                                    " where e.warehouse.warehouseId = ?1 and e.reserved >= ?2",
                                     page * pageSize, pageSize,
                                     warehouseId,
-                                    skuCodes,
-                                    HQLUtils.criteriaIeq(byCode.getSecond())
+                                    lowOrReserved.getSecond()
                             );
-
                         }
-
 
                     } else {
 
-                        final List<ProductSku> skus = productSkuDAO.findRangeByCriteria(
-                                " where lower(e.product.code) like ?1 or lower(e.product.name) like ?1 or lower(e.name) like ?1",
-                                0, pageSize,
-                                HQLUtils.criteriaIlikeAnywhere(filter)
-                        );
+                        final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
 
-                        final List<String> skuCodes = new ArrayList<>();
-                        for (final ProductSku sku : skus) {
-                            skuCodes.add(sku.getCode()); // sku codes from product match
-                        }
+                        if (byCode != null) {
 
-                        if (skuCodes.isEmpty()) {
-
-                            entities = skuWarehouseDAO.findRangeByCriteria(
-                                    " where e.warehouse.warehouseId = ?1 and lower(e.skuCode) like ?2 order by e.skuCode",
-                                    page * pageSize, pageSize,
-                                    warehouseId,
-                                    HQLUtils.criteriaIlikeAnywhere(filter)
+                            final List<ProductSku> skus = productSkuDAO.findRangeByCriteria(
+                                    " where lower(e.product.code) = ?1 or lower(e.product.manufacturerCode) = ?1 or lower(e.product.pimCode) = ?1 or lower(e.barCode) = ?1 or lower(e.manufacturerCode) = ?1",
+                                    0, pageSize,
+                                    HQLUtils.criteriaIeq(byCode.getSecond())
                             );
+
+                            final List<String> skuCodes = new ArrayList<>();
+                            for (final ProductSku sku : skus) {
+                                skuCodes.add(sku.getCode()); // sku codes from product match
+                            }
+
+                            if (skuCodes.isEmpty()) {
+
+                                entities = skuWarehouseDAO.findRangeByCriteria(
+                                        " where e.warehouse.warehouseId = ?1 and lower(e.skuCode) = ?2 order by e.skuCode",
+                                        page * pageSize, pageSize,
+                                        warehouseId,
+                                        HQLUtils.criteriaIeq(byCode.getSecond())
+                                );
+
+                            } else {
+
+                                entities = skuWarehouseDAO.findRangeByCriteria(
+                                        " where e.warehouse.warehouseId = ?1 and (e.skuCode in (?2) or lower(e.skuCode) = ?3) order by e.skuCode",
+                                        page * pageSize, pageSize,
+                                        warehouseId,
+                                        skuCodes,
+                                        HQLUtils.criteriaIeq(byCode.getSecond())
+                                );
+
+                            }
+
 
                         } else {
 
-                            entities = skuWarehouseDAO.findRangeByCriteria(
-                                    " where e.warehouse.warehouseId = ?1 and (e.skuCode in (?2) or lower(e.skuCode) like ?3) order by e.skuCode",
-                                    page * pageSize, pageSize,
-                                    warehouseId,
-                                    skuCodes,
+                            final List<ProductSku> skus = productSkuDAO.findRangeByCriteria(
+                                    " where lower(e.product.code) like ?1 or lower(e.product.name) like ?1 or lower(e.name) like ?1",
+                                    0, pageSize,
                                     HQLUtils.criteriaIlikeAnywhere(filter)
                             );
 
+                            final List<String> skuCodes = new ArrayList<>();
+                            for (final ProductSku sku : skus) {
+                                skuCodes.add(sku.getCode()); // sku codes from product match
+                            }
+
+                            if (skuCodes.isEmpty()) {
+
+                                entities = skuWarehouseDAO.findRangeByCriteria(
+                                        " where e.warehouse.warehouseId = ?1 and lower(e.skuCode) like ?2 order by e.skuCode",
+                                        page * pageSize, pageSize,
+                                        warehouseId,
+                                        HQLUtils.criteriaIlikeAnywhere(filter)
+                                );
+
+                            } else {
+
+                                entities = skuWarehouseDAO.findRangeByCriteria(
+                                        " where e.warehouse.warehouseId = ?1 and (e.skuCode in (?2) or lower(e.skuCode) like ?3) order by e.skuCode",
+                                        page * pageSize, pageSize,
+                                        warehouseId,
+                                        skuCodes,
+                                        HQLUtils.criteriaIlikeAnywhere(filter)
+                                );
+
+                            }
                         }
                     }
                 }
@@ -283,6 +300,8 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
             entity.setWarehouse(warehouses.get(0));
         }
 
+        cleanOrderQuantities(inventory);
+
         final Map<String, Object> adapters = adaptersRepository.getAll();
 
         skuWarehouseAsm.assembleEntity(inventory, entity, adapters, dtoFactory);
@@ -296,6 +315,18 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
         skuWarehouseAsm.assembleDto(inventory, entity, adapters, dtoFactory);
 
         return inventory;
+    }
+
+    private void cleanOrderQuantities(final InventoryDTO inventoryDTO) {
+        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, inventoryDTO.getMinOrderQuantity())) {
+            inventoryDTO.setMinOrderQuantity(null);
+        }
+        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, inventoryDTO.getMaxOrderQuantity())) {
+            inventoryDTO.setMaxOrderQuantity(null);
+        }
+        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, inventoryDTO.getStepOrderQuantity())) {
+            inventoryDTO.setStepOrderQuantity(null);
+        }
     }
 
 }

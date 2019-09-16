@@ -9,8 +9,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="8"/>
     <name><![CDATA[Sku has differen code]]></name>
     <description/>
     <seo/>
@@ -37,11 +35,6 @@
         <pim-code>ICE00001</pim-code>
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2010-04-08 11:15:17</available-from>
-        <available-to>2040-04-08 11:15:17</available-to>
-    </availability>
-    <inventory-config type="1"/>
     <name><![CDATA[Бендер Згинач Родріґес]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Bender Bending Rodriguez]]></i18n>
@@ -97,8 +90,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="16"/>
     <name><![CDATA[Bender Bending Rodriguez]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Bender Bending Rodriguez]]></i18n>
@@ -150,8 +141,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[I-Sobot]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[I-Sobot]]></i18n>
@@ -258,8 +247,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 1]]></name>
     <description><![CDATA[product 1 for price testing]]></description>
     <tags><tag>specialpromo</tag></tags>
@@ -289,8 +276,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 2]]></name>
     <description><![CDATA[product 2 for price testing]]></description>
     <seo/>
@@ -319,8 +304,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 3]]></name>
     <description><![CDATA[product 3 for price testing]]></description>
     <seo/>
@@ -349,8 +332,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 4]]></name>
     <description><![CDATA[product 4 for price testing]]></description>
     <seo/>
@@ -379,8 +360,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 5]]></name>
     <description><![CDATA[product 5 for price testing]]></description>
     <seo/>
@@ -409,8 +388,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 5 up sell assoc]]></name>
     <description/>
     <seo/>
@@ -425,8 +402,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 5 cross sell assoc]]></name>
     <description/>
     <seo/>
@@ -441,8 +416,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 5 cross sell assoc]]></name>
     <description/>
     <seo/>
@@ -457,8 +430,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 5 accsesories sell assoc]]></name>
     <description/>
     <seo/>
@@ -473,8 +444,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 5 buy with this product sell assoc]]></name>
     <description/>
     <seo/>
@@ -489,8 +458,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 6]]></name>
     <description/>
     <seo/>
@@ -514,8 +481,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 7]]></name>
     <description/>
     <seo/>
@@ -539,8 +504,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product 8]]></name>
     <description/>
     <seo/>
@@ -564,11 +527,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2010-04-08 11:15:17</available-from>
-        <available-to>2040-04-08 11:15:17</available-to>
-    </availability>
-    <inventory-config type="1"/>
     <name><![CDATA[featured product 1]]></name>
     <description/>
     <seo/>
@@ -585,8 +543,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[featured product 2]]></name>
     <description/>
     <seo/>
@@ -603,11 +559,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2000-04-08 11:15:17</available-from>
-        <available-to>2001-04-08 11:15:17</available-to>
-    </availability>
-    <inventory-config type="1"/>
     <name><![CDATA[featured product 3]]></name>
     <description/>
     <seo/>
@@ -624,8 +575,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[featured product 4]]></name>
     <description/>
     <seo/>
@@ -642,10 +591,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2000-04-08 11:15:17</available-from>
-    </availability>
-    <inventory-config type="1"/>
     <name><![CDATA[featured product 5]]></name>
     <description/>
     <seo/>
@@ -662,8 +607,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[featured product 6]]></name>
     <description/>
     <seo/>
@@ -680,10 +623,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-to>2040-04-08 11:15:17</available-to>
-    </availability>
-    <inventory-config type="1"/>
     <name><![CDATA[featured product 7]]></name>
     <description/>
     <seo/>
@@ -700,8 +639,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[featured product 8]]></name>
     <description/>
     <seo/>
@@ -718,8 +655,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[featured product 9]]></name>
     <description/>
     <seo/>
@@ -736,8 +671,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product available on stockonly 1]]></name>
     <description/>
     <seo/>
@@ -761,8 +694,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="1"/>
     <name><![CDATA[product available on stockonly 2]]></name>
     <description/>
     <seo/>
@@ -786,7 +717,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[product available on stockonly 3]]></name>
     <description/>
     <seo/>
@@ -810,10 +740,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2099-01-01 00:00:00</available-from>
-    </availability>
-    <inventory-config type="2"/>
     <name><![CDATA[product available for preorder]]></name>
     <description/>
     <seo/>
@@ -837,8 +763,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="4"/>
     <name><![CDATA[product available for backorder]]></name>
     <description/>
     <seo/>
@@ -862,8 +786,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="8"/>
     <name><![CDATA[product always]]></name>
     <description/>
     <seo/>
@@ -887,8 +809,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="8"/>
     <name><![CDATA[product always 2]]></name>
     <description/>
     <seo/>
@@ -912,7 +832,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[product price upon request]]></name>
     <description/>
     <seo/>
@@ -936,7 +855,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[product price upon request 2]]></name>
     <description/>
     <seo/>
@@ -960,7 +878,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[cc test 1]]></name>
     <description><![CDATA[cc test 1]]></description>
     <seo/>
@@ -984,7 +901,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[cc test 2]]></name>
     <description><![CDATA[cc test 1]]></description>
     <seo/>
@@ -1008,7 +924,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[cc test 3]]></name>
     <description><![CDATA[cc test 1]]></description>
     <seo/>
@@ -1032,7 +947,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[cc test 4]]></name>
     <description><![CDATA[cc test 1]]></description>
     <seo/>
@@ -1062,8 +976,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="4"/>
     <name><![CDATA[back order product with inventory]]></name>
     <description/>
     <seo/>
@@ -1087,10 +999,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2099-01-01 00:00:00</available-from>
-    </availability>
-    <inventory-config type="2"/>
     <name><![CDATA[pre order product]]></name>
     <description/>
     <seo/>
@@ -1114,8 +1022,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="8"/>
     <name><![CDATA[Always available]]></name>
     <description/>
     <seo/>
@@ -1139,8 +1045,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="8"/>
     <name><![CDATA[Always available Digital]]></name>
     <description/>
     <seo/>
@@ -1164,8 +1068,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="8"/>
     <name><![CDATA[Always available Digital]]></name>
     <description/>
     <seo/>
@@ -1189,8 +1091,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="4"/>
     <name><![CDATA[back order product without inventory]]></name>
     <description/>
     <seo/>
@@ -1214,7 +1114,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[One sku product in signle exemplar]]></name>
     <description><![CDATA[Standard availability]]></description>
     <seo/>
@@ -1238,7 +1137,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Check remove process and items from warehouses]]></name>
     <description/>
     <seo/>
@@ -1266,10 +1164,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2099-01-01 00:00:00</available-from>
-    </availability>
-    <inventory-config type="2"/>
     <name><![CDATA[Return orders with preorder products back to flow, when qty is available]]></name>
     <description/>
     <seo/>
@@ -1291,10 +1185,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2099-01-01 00:00:00</available-from>
-    </availability>
-    <inventory-config type="2"/>
     <name><![CDATA[Return orders with preorder products back to flow, when qty is available]]></name>
     <description/>
     <seo/>
@@ -1308,31 +1198,6 @@
         </sku>
     </product-sku>
 </product>
-<product code="XML_PREORDER-BACK-TO-FLOW0">
-    <brand>XML_PreorderCompany</brand>
-    <product-type guid="6"/>
-    <manufacturer/>
-    <supplier/>
-    <pim disabled="false">
-        <pim-outdated>false</pim-outdated>
-    </pim>
-    <availability disabled="false">
-        <available-from>2099-01-01 00:00:00</available-from>
-    </availability>
-    <inventory-config type="2"/>
-    <name><![CDATA[Return orders with preorder products back to flow, when qty is available]]></name>
-    <description/>
-    <seo/>
-    <product-categories/>
-    <product-sku>
-        <sku code="XML_PREORDER-BACK-TO-FLOW2" product-code="XML_PREORDER-BACK-TO-FLOW0" rank="0">
-            <manufacturer/>
-            <supplier/>
-            <name><![CDATA[preorder sku 2]]></name>
-            <seo/>
-        </sku>
-    </product-sku>
-</product>
 <product code="XML_PREORDER-BACK-TO-FLOW3">
     <brand>XML_PreorderCompany</brand>
     <product-type guid="6"/>
@@ -1341,10 +1206,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2099-01-01 00:00:00</available-from>
-    </availability>
-    <inventory-config type="2"/>
     <name><![CDATA[Return orders with preorder products back to flow, when qty is available]]></name>
     <description/>
     <seo/>
@@ -1366,10 +1227,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2099-01-01 00:00:00</available-from>
-    </availability>
-    <inventory-config type="2"/>
     <name><![CDATA[Return orders with preorder products back to flow, when qty is available]]></name>
     <description/>
     <seo/>
@@ -1391,10 +1248,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false">
-        <available-from>2099-01-01 00:00:00</available-from>
-    </availability>
-    <inventory-config type="2"/>
     <name><![CDATA[Return orders with preorder products back to flow, when qty is available]]></name>
     <description/>
     <seo/>
@@ -1416,7 +1269,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[cc test 12]]></name>
     <description><![CDATA[cc test 12]]></description>
     <seo/>
@@ -1440,8 +1292,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="4"/>
     <name><![CDATA[Return orders with preorder products back to flow, when qty is available]]></name>
     <description/>
     <seo/>
@@ -1463,8 +1313,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
-    <inventory-config type="4"/>
     <name><![CDATA[Return orders with preorder products back to flow, when qty is available]]></name>
     <description/>
     <seo/>
@@ -1486,7 +1334,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Scanjet Enterprise 7000nx Document Capture Workstation]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Scanjet Enterprise 7000nx Document Capture Workstation]]></i18n>
@@ -1677,7 +1524,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[iPics2Go]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[iPics2Go]]></i18n>
@@ -1728,7 +1574,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Workcentre 6015, 2 Year Extended On-Site Service]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Workcentre 6015, 2 Year Extended On-Site Service]]></i18n>
@@ -1829,7 +1674,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Universal Tablet Cradle]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Universal Tablet Cradle]]></i18n>
@@ -1972,7 +1816,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Virtual Rooms (up to 15 people in one meeting) License]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Virtual Rooms (up to 15 people in one meeting) License]]></i18n>
@@ -2150,7 +1993,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Toshiba NB500-10L]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Toshiba NB500-10L]]></i18n>
@@ -2876,7 +2718,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[18.01.1083]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[18.01.1083]]></i18n>
@@ -3010,7 +2851,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[18.01.1084]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[18.01.1084]]></i18n>
@@ -3145,7 +2985,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[VG-KBD1500]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[VG-KBD1500]]></i18n>
@@ -3379,7 +3218,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[18.01.1082]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[18.01.1082]]></i18n>
@@ -3513,7 +3351,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Scanjet Enterprise 7000nx Document Capture Workstation]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Scanjet Enterprise 7000nx Document Capture Workstation]]></i18n>
@@ -3984,7 +3821,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[A-U200-S 1-year Anti-Spam Service License]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[A-U200-S 1-year Anti-Spam Service License]]></i18n>
@@ -4085,7 +3921,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[USB Keyboard ES]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[USB Keyboard ES]]></i18n>
@@ -4151,7 +3986,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[USB Keyboard US]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[USB Keyboard US]]></i18n>
@@ -4217,7 +4051,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Optical Wireless 5-Button Desktop Mouse]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Optical Wireless 5-Button Desktop Mouse]]></i18n>
@@ -4283,7 +4116,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Easy Mouse]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Easy Mouse]]></i18n>
@@ -4349,7 +4181,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite A660-1H7]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite A660-1H7]]></i18n>
@@ -5096,7 +4927,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Scanjet Enterprise 7000nx Document Capture Workstation]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Scanjet Enterprise 7000nx Document Capture Workstation]]></i18n>
@@ -5567,7 +5397,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Toshiba NB550D-10G]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Toshiba NB550D-10G]]></i18n>
@@ -6246,7 +6075,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Toshiba NB520-109]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Toshiba NB520-109]]></i18n>
@@ -6972,7 +6800,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Virtual Rooms (up to 15 people in one meeting) License]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Virtual Rooms (up to 15 people in one meeting) License]]></i18n>
@@ -7150,7 +6977,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Numeric Keypad]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Numeric Keypad]]></i18n>
@@ -7216,7 +7042,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Toshiba NB520-10H]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Toshiba NB520-10H]]></i18n>
@@ -7943,7 +7768,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Toshiba NB500-10M]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Toshiba NB500-10M]]></i18n>
@@ -8669,7 +8493,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[GXT 25 Gaming Mouse]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[GXT 25 Gaming Mouse]]></i18n>
@@ -8756,7 +8579,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Tecra M11-16C]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Tecra M11-16C]]></i18n>
@@ -9515,7 +9337,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite Pro L630-15W]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite Pro L630-15W]]></i18n>
@@ -10281,7 +10102,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite Pro L630-162]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite Pro L630-162]]></i18n>
@@ -11055,7 +10875,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[AMW5021EU]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[AMW5021EU]]></i18n>
@@ -11240,7 +11059,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Portégé M780-10U]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Portégé M780-10U]]></i18n>
@@ -12009,7 +11827,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[AMW5011EU]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[AMW5011EU]]></i18n>
@@ -12194,7 +12011,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Toshiba NB550D-108]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Toshiba NB550D-108]]></i18n>
@@ -12873,7 +12689,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Toshiba NB550D-105]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Toshiba NB550D-105]]></i18n>
@@ -13552,7 +13367,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Green Laser Professional Presenter]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Green Laser Professional Presenter]]></i18n>
@@ -13660,7 +13474,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Wireless Keyboard and Mouse]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Wireless Keyboard and Mouse]]></i18n>
@@ -13813,7 +13626,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Docs2GO]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Docs2GO]]></i18n>
@@ -14040,7 +13852,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[GXT 35 Wireless Laser Gaming Mouse]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[GXT 35 Wireless Laser Gaming Mouse]]></i18n>
@@ -14120,7 +13931,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[97-617]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[97-617]]></i18n>
@@ -14263,7 +14073,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite L650D-173]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite L650D-173]]></i18n>
@@ -15031,7 +14840,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite R630-13U]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite R630-13U]]></i18n>
@@ -15796,7 +15604,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite R630-14T]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite R630-14T]]></i18n>
@@ -16561,7 +16368,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite L670-1H1]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite L670-1H1]]></i18n>
@@ -17327,7 +17133,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Qosmio F60-15D]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Qosmio F60-15D]]></i18n>
@@ -18100,7 +17905,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite R630-144]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite R630-144]]></i18n>
@@ -18866,7 +18670,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite A665-15M]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite A665-15M]]></i18n>
@@ -19605,7 +19408,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite A660-1H0]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite A660-1H0]]></i18n>
@@ -20357,7 +20159,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Qosmio F60-15N]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Qosmio F60-15N]]></i18n>
@@ -21103,7 +20904,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Tecra M11-16E]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Tecra M11-16E]]></i18n>
@@ -21870,7 +21670,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[M325]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[M325]]></i18n>
@@ -22125,7 +21924,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[DSmobile 700D]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[DSmobile 700D]]></i18n>
@@ -22478,7 +22276,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[97-606]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[97-606]]></i18n>
@@ -22614,7 +22411,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite P500-1J4]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite P500-1J4]]></i18n>
@@ -23380,7 +23176,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[DS-600]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[DS-600]]></i18n>
@@ -23726,7 +23521,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[WorkFit-C]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[WorkFit-C]]></i18n>
@@ -23869,7 +23663,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Scanjet Enterprise 7000nx Document Capture Workstation]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Scanjet Enterprise 7000nx Document Capture Workstation]]></i18n>
@@ -24340,7 +24133,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite P500-1H6]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite P500-1H6]]></i18n>
@@ -25066,7 +24858,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite P500-1H9]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite P500-1H9]]></i18n>
@@ -25805,7 +25596,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[M325]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[M325]]></i18n>
@@ -26060,7 +25850,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[M325]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[M325]]></i18n>
@@ -26315,7 +26104,6 @@
     <pim disabled="false">
         <pim-outdated>false</pim-outdated>
     </pim>
-    <availability disabled="false"/>
     <name><![CDATA[Satellite A665-168]]></name>
     <display-name>
         <i18n lang="en"><![CDATA[Satellite A665-168]]></i18n>

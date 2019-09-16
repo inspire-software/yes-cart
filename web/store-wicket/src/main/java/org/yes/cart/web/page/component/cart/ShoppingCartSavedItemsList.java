@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.page.component.customer.wishlist.WishListView;
@@ -75,8 +76,12 @@ public class ShoppingCartSavedItemsList extends WishListView {
                                     final CustomerWishList itemData,
                                     final String qty) {
         final PageParameters params = new PageParameters();
-        params.add(WebParametersKeys.SKU_ID, itemData.getSkus().getSkuId());
-        return links.newAddToCartLink(linkId, product.getDefaultSkuCode(), qty, String.valueOf(itemData.getCustomerwishlistId()), (Class) getPage().getClass(), params);
+        for (final ProductSkuSearchResultDTO sku : product.getSearchSkus()) {
+            if (sku.getCode().equals(itemData.getSkuCode())) {
+                params.add(WebParametersKeys.SKU_ID, sku.getId());
+            }
+        }
+        return links.newAddToCartLink(linkId, product.getFulfilmentCentreCode(), product.getDefaultSkuCode(), qty, String.valueOf(itemData.getCustomerwishlistId()), (Class) getPage().getClass(), params);
     }
 
 }

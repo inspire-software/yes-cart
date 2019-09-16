@@ -66,7 +66,8 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
             param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+            param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
 
             commands.execute(shoppingCart,
@@ -137,11 +138,13 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
             param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+            param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
 
             param.clear();
             param.put(ShoppingCartCommand.CMD_SETPRICE, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             param.put(ShoppingCartCommand.CMD_SETPRICE_P_PRICE, "115.00");
             param.put(ShoppingCartCommand.CMD_SETPRICE_P_AUTH, "QUOTE");
             commands.execute(shoppingCart, (Map) param);
@@ -214,11 +217,13 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
             param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+            param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
 
             param.clear();
             param.put(ShoppingCartCommand.CMD_SETPRICE, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             param.put(ShoppingCartCommand.CMD_SETPRICE_P_PRICE, "105.00");
             param.put(ShoppingCartCommand.CMD_SETPRICE_P_AUTH, "QUOTE");
             commands.execute(shoppingCart, (Map) param);
@@ -290,7 +295,8 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
             param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+            param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
 
             commands.execute(shoppingCart,
@@ -342,7 +348,8 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
             // add many qualifying items to get better value promotions
             Map<String, String> param2 = new HashMap<>();
             param2.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-            param2.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "20.00");
+            param2.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+            param2.put(ShoppingCartCommand.CMD_P_QTY, "20.00");
             commands.execute(shoppingCart, (Map) param2);
 
 

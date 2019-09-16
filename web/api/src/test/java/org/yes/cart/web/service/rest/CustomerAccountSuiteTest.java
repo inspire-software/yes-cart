@@ -249,7 +249,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("[]")))
             .andExpect(header().string("yc", uuid));
 
-        final byte[] addToWishList = toJsonAddToWishListCommand("BENDER-ua");
+        final byte[] addToWishList = toJsonAddToWishListCommand("BENDER-ua", "WAREHOUSE_2");
 
          mockMvc.perform(put("/cart")
                      .contentType(MediaType.APPLICATION_JSON)
@@ -269,6 +269,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("9998")))
+                .andExpect(content().string(StringContains.containsString("WAREHOUSE_2")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -550,7 +551,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("<wishlist/>")))
             .andExpect(header().string("yc", uuid));
 
-        final byte[] addToWishList = toJsonAddToWishListCommand("BENDER-ua");
+        final byte[] addToWishList = toJsonAddToWishListCommand("BENDER-ua", "WAREHOUSE_2");
 
          mockMvc.perform(put("/cart")
                      .contentType(MediaType.APPLICATION_JSON)
@@ -570,6 +571,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("9998")))
+                .andExpect(content().string(StringContains.containsString("WAREHOUSE_2")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -735,11 +737,12 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
 
     }
 
-    private byte[] toJsonAddToWishListCommand(final String sku) throws Exception {
+    private byte[] toJsonAddToWishListCommand(final String sku, final String supplier) throws Exception {
 
         final Map<String, String> addToWishList = new HashMap<String, String>();
         addToWishList.put(ShoppingCartCommand.CMD_ADDTOWISHLIST, sku);
-        addToWishList.put(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_QTY, "10");
+        addToWishList.put(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
+        addToWishList.put(ShoppingCartCommand.CMD_P_QTY, "10");
 
         return toJsonBytes(addToWishList);
 

@@ -21,10 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ContentService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.utils.DateUtils;
@@ -38,10 +35,8 @@ import org.yes.cart.web.support.seo.SitemapXmlService;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -56,6 +51,8 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     private final CategoryService categoryService;
     private final ContentService contentService;
     private final ProductService productService;
+    private final WarehouseService warehouseService;
+    private final SkuWarehouseService skuWarehouseService;
     private final LanguageService languageService;
     private final String contextPath;
 
@@ -63,12 +60,16 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
                                  final CategoryService categoryService,
                                  final ContentService contentService,
                                  final ProductService productService,
+                                 final WarehouseService warehouseService,
+                                 final SkuWarehouseService skuWarehouseService,
                                  final LanguageService languageService,
                                  final RuntimeConstants runtimeConstants) {
         this.shopService = shopService;
         this.categoryService = categoryService;
         this.contentService = contentService;
         this.productService = productService;
+        this.warehouseService = warehouseService;
+        this.skuWarehouseService = skuWarehouseService;
         this.languageService = languageService;
         this.contextPath = runtimeConstants.getConstant(RuntimeConstants.WEBAPP_SF_CONTEXT_PATH);
     }
@@ -190,7 +191,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
     private void appendCategory(final OutputStreamWriter writer, final Category category, final Set<Long> accessible, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
-        if (DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+        if (category.isAvailable(now)) {
 
             appendCategoryLoc(writer, category, languages, urlBase);
 
@@ -229,7 +230,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
     private void appendContent(final OutputStreamWriter writer, final Content content, final boolean childInclude, final String urlBase, final List<String> languages, final LocalDateTime now) throws IOException {
 
-        if (DomainApiUtils.isObjectAvailableNow(!content.isDisabled(), content.getAvailablefrom(), content.getAvailableto(), now)) {
+        if (content.isAvailable(now)) {
 
             final boolean include = CentralViewLabel.INCLUDE.equals(content.getUitemplate()) ||
                     childInclude && StringUtils.isBlank(content.getUitemplate());
@@ -260,41 +261,37 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         writer.write("<!-- Products -->\n");
 
-        productService.findAllIterator(product -> {
+        final List<Warehouse> warehouses = warehouseService.getByShopId(shop.getShopId(), false);
+        final Map<Long, String> idToCode = warehouses.stream().collect(Collectors.toMap(Warehouse::getWarehouseId, Warehouse::getCode));
 
-            if (DomainApiUtils.isObjectAvailableNow(!product.isDisabled(), product.getAvailablefrom(), product.getAvailableto(), now)) {
+        skuWarehouseService.findByCriteriaIterator(" where e.warehouse in (?1)", new Object[]{ warehouses }, (inventory) -> {
 
-                try {
-                    for (final ProductCategory productCategory : product.getProductCategory()) {
-                        if (accessible.contains(productCategory.getCategory().getCategoryId())) {
+            try {
+                if (inventory.isAvailable(now)) {
 
-                            appendProductLoc(writer, product, languages, urlBase);
+                    final String fcPath = WebParametersKeys.FULFILMENT_CENTRE_ID + "/" + idToCode.get(inventory.getWarehouse().getWarehouseId()) + "/";
+                    final Product product = productService.getProductBySkuCode(inventory.getSkuCode());
+                    appendProductLoc(writer, product, languages, urlBase + fcPath);
 
-                            if (product.isMultiSkuProduct()) {
+                    if (product.isMultiSkuProduct()) {
 
-                                for (final ProductSku sku : product.getSku()) {
+                        for (final ProductSku sku : product.getSku()) {
 
-                                    appendSkuLoc(writer, sku, languages, urlBase);
+                            appendSkuLoc(writer, sku, languages, urlBase + fcPath);
 
-                                }
-
-                            }
-
-                            break;
                         }
 
                     }
-                } catch (IOException ioe) {
-
-                    LOG.error("Error generating sitemap for " + shop.getCode(), ioe);
-                    return false; // no point to continue if we have IO failure
 
                 }
+            } catch (IOException ioe) {
+
+                LOG.error("Error generating sitemap for " + shop.getCode(), ioe);
+                return false; // no point to continue if we have IO failure
 
             }
 
-            return true; // read fully
-
+            return true;
         });
 
         writer.write("<!-- End of Products -->\n");

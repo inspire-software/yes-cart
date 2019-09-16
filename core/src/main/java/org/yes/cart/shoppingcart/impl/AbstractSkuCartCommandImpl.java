@@ -16,13 +16,12 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -36,16 +35,14 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractRecalculatePric
 
     private static final long serialVersionUID = 20100313L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractSkuCartCommandImpl.class);
-
     /**
      * Construct abstract sku command.
      *
-     * @param registry shopping cart command registry
-     * @param priceResolver price service
+     * @param registry              shopping cart command registry
+     * @param priceResolver         price service
      * @param pricingPolicyProvider pricing policy provider
-     * @param productService product service
-     * @param shopService shop service
+     * @param productService        product service
+     * @param shopService           shop service
      */
     public AbstractSkuCartCommandImpl(final ShoppingCartCommandRegistry registry,
                                       final PriceResolver priceResolver,
@@ -61,11 +58,24 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractRecalculatePric
 
         if (parameters.containsKey(getCmdKey())) {
             final String skuCode = (String) parameters.get(getCmdKey());
+            final String supplier = (String) parameters.get(CMD_P_SUPPLIER);
+            final Object strQty = parameters.get(CMD_P_QTY);
+            BigDecimal qty = null;
+            if (strQty instanceof String) {
+                try {
+                    qty = new BigDecimal((String) strQty);
+                } catch (NumberFormatException nfe) {
+                    LOG.error("[{}] Invalid quantity {} in add to cart command", shoppingCart.getGuid(), strQty);
+                } catch (Exception exp) {
+                    LOG.error("[" + shoppingCart.getGuid() + "] Invalid quantity in add to cart command", exp);
+                }
+            }
+
             try {
                 final ProductSku productSku = getProductService().getProductSkuByCode(skuCode);
-                execute(shoppingCart, productSku, skuCode, parameters);
+                execute(shoppingCart, productSku, skuCode, supplier, qty, parameters);
             } catch (Exception e) {
-                LOG.error("Error processing command for " + skuCode + ", caused: " + e.getMessage(), e);
+                LOG.error("[" + shoppingCart.getGuid() + "] Error processing command for " + skuCode + ", caused: " + e.getMessage(), e);
             }
         }
     }
@@ -73,14 +83,18 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractRecalculatePric
     /**
      * Abstract execute method.
      *
-     * @param shoppingCart shopping cart
-     * @param productSku current sku object (if exists)
-     * @param skuCode actual SKU code sent
-     * @param parameters all parameters
+     * @param shoppingCart  shopping cart
+     * @param productSku    current sku object (if exists)
+     * @param skuCode       actual SKU code sent
+     * @param supplier      SKU supplier
+     * @param qty           SKU quantity parameter if provided
+     * @param parameters    all parameters
      */
     protected abstract void execute(final MutableShoppingCart shoppingCart,
                                     final ProductSku productSku,
                                     final String skuCode,
+                                    final String supplier,
+                                    final BigDecimal qty,
                                     final Map<String, Object> parameters);
 
 

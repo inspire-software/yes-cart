@@ -177,13 +177,13 @@ public class GroovyPromotionConditionParserTest {
         mockery.checking(new Expectations() {{
             allowing(promotion).getPromotionId(); will(returnValue(1L));
             allowing(promotion).getCode(); will(returnValue("ABC#"));
-            allowing(promotion).getEligibilityCondition(); will(returnValue("product(SKU)?.featured"));
+            allowing(promotion).getEligibilityCondition(); will(returnValue("product(SKU)?.manufacturerPartCode == 'MAN001'"));
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(10L));
             allowing(cartCtx).getCustomerShopId(); will(returnValue(1010L));
             allowing(cartItem).getProductSkuCode(); will(returnValue("SKU001"));
             allowing(promotionConditionSupport).getProductBySkuCode("SKU001"); will(returnValue(product));
-            allowing(product).getFeatured(); will(returnValue(true));
+            allowing(product).getManufacturerPartCode(); will(returnValue("MAN001"));
         }});
 
         GroovyPromotionConditionParser parser = new GroovyPromotionConditionParser();

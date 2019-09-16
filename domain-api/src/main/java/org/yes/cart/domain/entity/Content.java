@@ -126,6 +126,15 @@ public interface Content extends Auditable, Attributable, Rankable, Nameable, Se
     void setAvailableto(LocalDateTime availableto);
 
     /**
+     * Returns true if product is enabled and now is within from/to date range.
+     *
+     * @param now    time now
+     *
+     * @return true if the product is available now
+     */
+    boolean isAvailable(LocalDateTime now);
+
+    /**
      * Get all bodies in all languages.
      *
      * @return language - body map

@@ -39,11 +39,8 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.*;
 import org.yes.cart.service.misc.LanguageService;
-import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.HQLUtils;
-import org.yes.cart.service.dto.AttrValueDTOComparator;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -185,83 +182,69 @@ public class DtoProductServiceImpl
 
         if (StringUtils.isNotBlank(filter)) {
 
-            final Pair<LocalDateTime, LocalDateTime> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
+            final Pair<String, String> tagOrCodeOrBrandOrType = ComplexSearchUtils.checkSpecialSearch(filter, TAG_OR_CODE_OR_BRAND_OR_TYPE);
 
-            if (dateSearch != null) {
+            if (tagOrCodeOrBrandOrType != null) {
 
-                entities = getService().getGenericDao().findRangeByCriteria(
-                        " where (?1 is null or e.availablefrom <= ?1) and (?2 is null or e.availableto >= ?2) order by e.code",
-                        page * pageSize, pageSize,
-                        dateSearch.getFirst(),
-                        dateSearch.getSecond()
-                );
+                if ("*".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
-            } else {
-
-                final Pair<String, String> tagOrCodeOrBrandOrType = ComplexSearchUtils.checkSpecialSearch(filter, TAG_OR_CODE_OR_BRAND_OR_TYPE);
-
-                if (tagOrCodeOrBrandOrType != null) {
-
-                    if ("*".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                        // If this by PK then to by PK
-                        final long byPk = NumberUtils.toLong(tagOrCodeOrBrandOrType.getSecond());
-                        if (page == 0 && byPk > 0) {
-                            final ProductDTO product = getById(byPk);
-                            if (product != null) {
-                                dtos.add(product);
-                            }
+                    // If this by PK then to by PK
+                    final long byPk = NumberUtils.toLong(tagOrCodeOrBrandOrType.getSecond());
+                    if (page == 0 && byPk > 0) {
+                        final ProductDTO product = getById(byPk);
+                        if (product != null) {
+                            dtos.add(product);
                         }
-                        return dtos;
-
-                    } else if ("!".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                        entities = getService().getGenericDao().findRangeByCriteria(
-                                " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.tag) like ?1 order by e.code",
-                                page * pageSize, pageSize,
-                                HQLUtils.criteriaIeq(tagOrCodeOrBrandOrType.getSecond())
-                        );
-
-                    } else if ("#".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                        entities = getService().getGenericDao().findRangeByCriteria(
-                                " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.tag) like ?1 order by e.code",
-                                page * pageSize, pageSize,
-                                HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond())
-                        );
-
-                    } else if ("?".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                        entities = getService().getGenericDao().findRangeByCriteria(
-                                " where lower(e.brand.guid) like ?1 or lower(e.brand.name) like ?1 or lower(e.producttype.guid) like ?1 or lower(e.producttype.name) like ?1 order by e.code",
-                                page * pageSize, pageSize,
-                                HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond())
-                        );
-
-                    } else if ("^".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                        final List<Object> categoryIds = productService.getGenericDao().findQueryObjectByNamedQuery("CATEGORY.IDS.BY.NAME.OR.GUID", HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond()));
-                        if (CollectionUtils.isEmpty(categoryIds)) {
-                            return Collections.emptyList();
-                        }
-
-                        entities = getService().getGenericDao().findRangeByNamedQuery(
-                                "PRODUCTS.BY.CATEGORYIDS.ALL",
-                                page * pageSize, pageSize,
-                                categoryIds
-                        );
-
                     }
+                    return dtos;
 
-                } else {
+                } else if ("!".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
                     entities = getService().getGenericDao().findRangeByCriteria(
-                            " where lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.name) like ?1 order by e.code",
+                            " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.tag) like ?1 order by e.code",
                             page * pageSize, pageSize,
-                            HQLUtils.criteriaIlikeAnywhere(filter)
+                            HQLUtils.criteriaIeq(tagOrCodeOrBrandOrType.getSecond())
+                    );
+
+                } else if ("#".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                    entities = getService().getGenericDao().findRangeByCriteria(
+                            " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.tag) like ?1 order by e.code",
+                            page * pageSize, pageSize,
+                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond())
+                    );
+
+                } else if ("?".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                    entities = getService().getGenericDao().findRangeByCriteria(
+                            " where lower(e.brand.guid) like ?1 or lower(e.brand.name) like ?1 or lower(e.producttype.guid) like ?1 or lower(e.producttype.name) like ?1 order by e.code",
+                            page * pageSize, pageSize,
+                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond())
+                    );
+
+                } else if ("^".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                    final List<Object> categoryIds = productService.getGenericDao().findQueryObjectByNamedQuery("CATEGORY.IDS.BY.NAME.OR.GUID", HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond()));
+                    if (CollectionUtils.isEmpty(categoryIds)) {
+                        return Collections.emptyList();
+                    }
+
+                    entities = getService().getGenericDao().findRangeByNamedQuery(
+                            "PRODUCTS.BY.CATEGORYIDS",
+                            page * pageSize, pageSize,
+                            categoryIds
                     );
 
                 }
+
+            } else {
+
+                entities = getService().getGenericDao().findRangeByCriteria(
+                        " where lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.name) like ?1 order by e.code",
+                        page * pageSize, pageSize,
+                        HQLUtils.criteriaIlikeAnywhere(filter)
+                );
+
             }
 
         }
@@ -290,38 +273,6 @@ public class DtoProductServiceImpl
         } catch (Exception exp) {
             throw new UnableToWrapObjectException(ProductSku.class, ProductSkuDTO.class, exp);
         }
-    }
-
-    private void cleanProductOrderQuantities(final ProductDTO productDTO) {
-        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, productDTO.getMinOrderQuantity())) {
-            productDTO.setMinOrderQuantity(null);
-        }
-        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, productDTO.getMaxOrderQuantity())) {
-            productDTO.setMaxOrderQuantity(null);
-        }
-        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, productDTO.getStepOrderQuantity())) {
-            productDTO.setStepOrderQuantity(null);
-        }
-    }
-
-
-    /**
-     * {@inheritDoc}
-     * Default product sku will be also created.
-     */
-    @Override
-    public ProductDTO create(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        cleanProductOrderQuantities(instance);
-        return super.create(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ProductDTO update(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        cleanProductOrderQuantities(instance);
-        return super.update(instance);
     }
 
     /**
@@ -386,20 +337,6 @@ public class DtoProductServiceImpl
         return Product.class;
     }
 
-
-    /**
-     * Get products, that assigned to given category id.
-     *
-     * @param categoryId given category id
-     * @return List of assigned product DTOs
-     */
-    @Override
-    public List<ProductDTO> getProductByCategory(final long categoryId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Product> products = ((ProductService) service).findProductByCategory(categoryId);
-        final List<ProductDTO> dtos = new ArrayList<>(products.size());
-        fillDTOs(products, dtos);
-        return dtos;
-    }
 
 
     /**

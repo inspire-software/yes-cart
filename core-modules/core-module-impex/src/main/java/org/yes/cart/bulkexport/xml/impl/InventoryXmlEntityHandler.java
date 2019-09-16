@@ -59,6 +59,21 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<SkuWareh
                 .attr("sku", inventory.getSkuCode())
                 .attr("warehouse", inventory.getWarehouse().getCode());
 
+        tag
+                .tag("availability")
+                    .attr("disabled", inventory.isDisabled())
+                    .tagTime("available-from", inventory.getAvailablefrom())
+                    .tagTime("available-to", inventory.getAvailableto())
+                    .tagTime("release-date", inventory.getReleaseDate())
+                .end()
+                .tag("inventory-config")
+                    .attr("type", inventory.getAvailability())
+                    .attr("min", inventory.getMinOrderQuantity())
+                    .attr("max", inventory.getMaxOrderQuantity())
+                    .attr("step", inventory.getStepOrderQuantity())
+                    .attr("featured", inventory.getFeatured())
+                .end();
+
         if (inventory.getQuantity() != null) {
                    tag(tag, "quantity")
                     .attr("type", "stock")

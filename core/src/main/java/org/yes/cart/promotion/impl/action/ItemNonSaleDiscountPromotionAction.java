@@ -70,7 +70,7 @@ public class ItemNonSaleDiscountPromotionAction extends AbstractItemPromotionAct
                 promoPrice = cartItem.getPrice();
             }
 
-            cart.setProductSkuPromotion(cartItem.getProductSkuCode(), promoPrice, getPromotionCode(context));
+            cart.setProductSkuPromotion(cartItem.getSupplierCode(), cartItem.getProductSkuCode(), promoPrice, getPromotionCode(context));
 
         }
     }

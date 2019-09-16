@@ -42,7 +42,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
-import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.HQLUtils;
 
 import java.lang.System;
@@ -128,38 +127,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return images.get(productId);
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Product> findProductByCategory(final long categoryId) {
-        return productDao.findByNamedQuery("PRODUCTS.BY.CATEGORYID", categoryId, now(), Boolean.FALSE);
-    }
-
-    LocalDateTime now() {
-        return TimeContext.getLocalDateTime();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Product getRandomProductByCategory(final Category category) {
-        final int qty = getProductQty(category.getCategoryId());
-        if (qty > 0) {
-            final int idx = rand.nextInt(qty);
-            final List<ProductCategory> productCategory =
-                    productCategoryDao.findRangeByNamedQuery("PRODUCT.IN.CATEGORY.ONE", idx, 1, category.getCategoryId());
-
-            if (!CollectionUtils.isEmpty(productCategory)) {
-                final Product product = productDao.findById(productCategory.get(0).getProduct().getProductId());
-                product.getAttributes().size(); // initialise attributes
-                return product;
-            }
-        }
-        return null;
-    }
 
     private static final Comparator<Pair> BY_SECOND = (pair1, pair2) -> ((String) pair1.getSecond()).compareTo((String) pair2.getSecond());
 
@@ -491,10 +458,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public Pair<Integer, Integer> findProductQtyAll() {
 
         final int total = getGenericDao().findCountByCriteria(null);
-        final int active = getGenericDao().findCountByCriteria(
-                " where (e.availablefrom is null or e.availability = ?1 or e.availablefrom <= ?2) and (e.availableto is null or e.availableto >= ?2)",
-                Product.AVAILABILITY_PREORDER, now()
-        );
+        final int active = total; // TODO find a way to detect active, potentially count of distinct inventory?
 
         return new Pair<>(total, active);
     }
@@ -506,12 +470,10 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public List<Product> findProductByCategory(final long categoryId,
                                                final int firstResult,
                                                final int maxResults) {
-        return productDao.findRangeByNamedQuery("PRODUCTS.BY.CATEGORYID",
+        return productDao.findRangeByNamedQuery("PRODUCTS.BY.CATEGORYIDS",
                 firstResult,
                 maxResults,
-                categoryId,
-                now(),
-                Boolean.FALSE
+                Collections.singleton(categoryId)
         );
     }
 
@@ -611,14 +573,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     @Override
-    public List<Long> findProductIdsByUnavailableBefore(final LocalDateTime before) {
-        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.AVAILABLETO", before, Boolean.TRUE);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public List<Long> findProductIdsByAttributeValue(final String attrCode, final String attrValue) {
         return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE", attrCode, attrValue);
     }
@@ -698,15 +652,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             return String.valueOf(uriAndId[1]);
         }
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getProductQty(final long categoryId) {
-        return Integer.valueOf(
-                String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, now(), Boolean.FALSE)));
     }
 
 
@@ -842,7 +787,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * Persist product. Default sku will be created.
      *
      * @param instance instance to persist
-     * @return persisted instanse
+     * @return persisted instance
      */
     @Override
     public Product create(final Product instance) {
@@ -853,7 +798,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         sku.setDisplayName(instance.getDisplayName());
         sku.setDescription(instance.getDescription());
         sku.setProduct(instance);
-        sku.setRank(500);
+        sku.setRank(0);
         instance.getSku().add(sku);
 
         return getGenericDao().create(instance);

@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.SortedSet;
 
@@ -50,6 +51,8 @@ public class ProductAvailabilityModelRO implements Serializable {
     private int availability;
     @DtoField(readOnly = true)
     private String defaultSkuCode;
+    @DtoField(readOnly = true)
+    private LocalDateTime releaseDate;
     @DtoField(readOnly = true)
     private String firstAvailableSkuCode;
     @DtoField(readOnly = true)
@@ -97,6 +100,15 @@ public class ProductAvailabilityModelRO implements Serializable {
 
     public void setDefaultSkuCode(final String defaultSkuCode) {
         this.defaultSkuCode = defaultSkuCode;
+    }
+
+    @XmlElement(name = "release-date")
+    public LocalDateTime getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(final LocalDateTime releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     @XmlElement(name = "first-available-sku")

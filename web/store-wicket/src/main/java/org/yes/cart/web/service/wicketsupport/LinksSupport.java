@@ -36,7 +36,7 @@ public interface LinksSupport {
      * Create new instance of page parameters from current page parameters
      * except parameters that need to be stripped out (such as commands).
      *
-     * @param pageParameters current page parameters
+     * @param pageParameters    current page parameters
      *
      * @return new instance of page parameters that can be used for links
      */
@@ -45,186 +45,254 @@ public interface LinksSupport {
     /**
      * Generic bookmarkable link with given page parameters.
      *
-     * @param linkId wicket link component id
-     * @param pageParameters link parameters
+     * @param linkId            wicket link component id
+     * @param pageParameters    link parameters
      *
      * @return bookmarkable link
      */
-    Link newLink(String linkId, PageParameters pageParameters);
+    Link newLink(String linkId,
+                 PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param categoryRef category PK or SEO URI
+     * @param linkId            wicket link component id
+     * @param categoryRef       category PK or SEO URI
      *
      * @return bookmarkable category link
      */
-    Link newCategoryLink(String linkId, Object categoryRef);
+    Link newCategoryLink(String linkId,
+                         Object categoryRef);
 
     /**
-     * @param linkId wicket link component id
-     * @param categoryRef category PK or SEO URI
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param categoryRef       category PK or SEO URI
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable category link
      */
-    Link newCategoryLink(String linkId, long categoryRef, PageParameters pageParameters);
+    Link newCategoryLink(String linkId,
+                         long categoryRef,
+                         PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param contentRef content PK or SEO URI
+     * @param linkId            wicket link component id
+     * @param contentRef        content PK or SEO URI
      * @return bookmarkable content link
      */
-    Link newContentLink(String linkId, Object contentRef);
+    Link newContentLink(String linkId,
+                        Object contentRef);
 
     /**
-     * @param linkId wicket link component id
-     * @param contentRef content PK or SEO URI
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param contentRef        content PK or SEO URI
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable content link
      */
-    Link newContentLink(String linkId, Object contentRef, PageParameters pageParameters);
+    Link newContentLink(String linkId,
+                        Object contentRef,
+                        PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param productRef product PK or SEO URI
+     * @param linkId            wicket link component id
+     * @param supplier          supplier
+     * @param productRef        product PK or SEO URI
      *
      * @return bookmarkable product link
      */
-    Link newProductLink(String linkId, Object productRef);
+    Link newProductLink(String linkId,
+                        String supplier,
+                        Object productRef);
 
     /**
-     * @param linkId wicket link component id
-     * @param productRef product PK or SEO URI
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param supplier          supplier
+     * @param productRef        product PK or SEO URI
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable product link
      */
-    Link newProductLink(String linkId, Object productRef, PageParameters pageParameters);
+    Link newProductLink(String linkId,
+                        String supplier,
+                        Object productRef,
+                        PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param productRef product PK or URI
+     * @param linkId            wicket link component id
+     * @param supplier          supplier
+     * @param productRef        product PK or URI
      *
      * @return bookmarkable product link
      */
-    Link newProductSkuLink(String linkId, Object productRef);
+    Link newProductSkuLink(String linkId,
+                           String supplier,
+                           Object productRef);
 
     /**
-     * @param linkId wicket link component id
-     * @param productRef product PK or URI
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param supplier          supplier
+     * @param productRef        product PK or URI
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable product link
      */
-    Link newProductSkuLink(String linkId, Object productRef, PageParameters pageParameters);
+    Link newProductSkuLink(String linkId,
+                           String supplier,
+                           Object productRef,
+                           PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param skuCode SKU to add to cart
-     * @param quantity quantity to add
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param supplier          supplier
+     * @param skuCode           SKU to add to cart
+     * @param quantity          quantity to add
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable link
      */
-    Link newAddToCartLink(String linkId, String skuCode, String quantity, PageParameters pageParameters);
+    Link newAddToCartLink(String linkId,
+                          String supplier,
+                          String skuCode,
+                          String quantity,
+                          PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param skuCode SKU to add to cart
-     * @param quantity quantity to add
-     * @param wishlistId wishlist id
-     * @param target target page
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param supplier          supplier
+     * @param skuCode           SKU to add to cart
+     * @param quantity          quantity to add
+     * @param wishlistId        wishlist id
+     * @param target            target page
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable link
      */
-    Link newAddToCartLink(String linkId, String skuCode, String quantity, String wishlistId, Class<Page> target, PageParameters pageParameters);
+    Link newAddToCartLink(String linkId,
+                          String supplier,
+                          String skuCode,
+                          String quantity,
+                          String wishlistId,
+                          Class<Page> target,
+                          PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param skuCode SKU to add to cart
-     * @param quantity quantity to add
-     * @param wishList wish list type
-     * @param tags wish list tags
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param supplier          supplier
+     * @param skuCode           SKU to add to cart
+     * @param quantity          quantity to add
+     * @param wishList          wish list type
+     * @param tags              wish list tags
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable link
      */
-    Link newAddToWishListLink(String linkId, String skuCode, String quantity, String wishList, String tags, PageParameters pageParameters);
+    Link newAddToWishListLink(String linkId,
+                              String supplier,
+                              String skuCode,
+                              String quantity,
+                              String wishList,
+                              String tags,
+                              PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param skuCode SKU to add to cart
-     * @param quantity quantity to add
-     * @param wishList wish list type
-     * @param tags wish list tags
-     * @param visibility wish list item visibility
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param supplier          supplier
+     * @param skuCode           SKU to add to cart
+     * @param quantity          quantity to add
+     * @param wishList          wish list type
+     * @param tags              wish list tags
+     * @param visibility        wish list item visibility
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable link
      */
-    Link newAddToWishListLink(String linkId, String skuCode, String quantity, String wishList, String tags, String visibility, PageParameters pageParameters);
+    Link newAddToWishListLink(String linkId,
+                              String supplier,
+                              String skuCode,
+                              String quantity,
+                              String wishList,
+                              String tags,
+                              String visibility,
+                              PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param skuCode SKU to add to cart
-     * @param itemId wish list item pk
-     * @param target target page
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param supplier          supplier
+     * @param skuCode           SKU to add to cart
+     * @param itemId            wish list item pk
+     * @param target            target page
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable link
      */
-    Link newRemoveFromWishListLink(String linkId, String skuCode, Long itemId, Class<Page> target, PageParameters pageParameters);
+    Link newRemoveFromWishListLink(String linkId,
+                                   String supplier,
+                                   String skuCode,
+                                   Long itemId,
+                                   Class<Page> target,
+                                   PageParameters pageParameters);
 
 
     /**
-     * @param linkId wicket link component id
-     * @param coupon coupon code
-     * @param target target page
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param coupon            coupon code
+     * @param target            target page
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable link
      */
-    Link newAddCouponLink(String linkId, String coupon, Class<Page> target, PageParameters pageParameters);
+    Link newAddCouponLink(String linkId,
+                          String coupon,
+                          Class<Page> target,
+                          PageParameters pageParameters);
 
 
     /**
-     * @param linkId wicket link component id
-     * @param coupon coupon code
-     * @param target target page
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param coupon            coupon code
+     * @param target            target page
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable link
      */
-    Link newRemoveCouponLink(String linkId, String coupon, Class<Page> target, PageParameters pageParameters);
+    Link newRemoveCouponLink(String linkId,
+                             String coupon,
+                             Class<Page> target,
+                             PageParameters pageParameters);
 
 
     /**
-     * @param linkId wicket link component id
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param linkId            wicket link component id
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable link
      */
-    Link newLogOffLink(String linkId, PageParameters pageParameters);
+    Link newLogOffLink(String linkId,
+                       PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param language language to change to
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
-     * @param pageClass optional current page class
+     * @param linkId            wicket link component id
+     * @param language          language to change to
+     * @param target            optional current page class
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
      *
      * @return bookmarkable link
      */
-    Link newChangeLocaleLink(String linkId, String language, final Class<? extends Page> pageClass,  PageParameters pageParameters);
+    Link newChangeLocaleLink(String linkId,
+                             String language,
+                             Class<? extends Page> target,
+                             PageParameters pageParameters);
 
     /**
-     * @param linkId wicket link component id
-     * @param currency currency to change to
-     * @param pageParameters current request parameters that will be filtered and carried over to new link
-     * @param pageClass optional current page class
+     * @param linkId            wicket link component id
+     * @param currency          currency to change to
+     * @param target            optional current page class
+     * @param pageParameters    current request parameters that will be filtered and carried over to new link
+     *
      * @return bookmarkable link
      */
-    Link newChangeCurrencyLink(String linkId, String currency, final Class<? extends Page> pageClass, PageParameters pageParameters);
+    Link newChangeCurrencyLink(String linkId,
+                               String currency,
+                               Class<? extends Page> target,
+                               PageParameters pageParameters);
 
 }

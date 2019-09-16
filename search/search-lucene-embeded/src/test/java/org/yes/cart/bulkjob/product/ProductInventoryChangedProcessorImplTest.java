@@ -22,9 +22,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
@@ -55,19 +54,21 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         final SkuWarehouseService skuWarehouseService = ctx().getBean("skuWarehouseService", SkuWarehouseService.class);
         final SearchQueryFactory searchQueryFactory = ctx().getBean("ftQueryFactory", SearchQueryFactory.class);
 
-        final List<Warehouse> warehouses = warehouseService.getByShopId(10L, false);
+        final long warehouseId = 2L;
+        final String skuCode = "BENDER-ua";
+        final Warehouse warehouse = warehouseService.findById(warehouseId);
 
-        Product product = productService.findById(9998L);
-        assertEquals(Product.AVAILABILITY_STANDARD, product.getAvailability());
+        SkuWarehouse inventory = skuWarehouseService.findByWarehouseSku(warehouse, skuCode);
+        assertNotNull(inventory);
 
-        final String skuCode = product.getDefaultSku().getCode();
-        Pair<BigDecimal, BigDecimal> quantity = skuWarehouseService.findQuantity(warehouses, product.getDefaultSku().getCode());
-        assertTrue(quantity.getFirst().compareTo(BigDecimal.ZERO) > 0);
-        assertTrue(quantity.getFirst().compareTo(quantity.getSecond()) > 0);
+        assertEquals(SkuWarehouse.AVAILABILITY_STANDARD, inventory.getAvailability());
 
-        final BigDecimal oldQuantity = quantity.getFirst();
+        assertTrue(inventory.getQuantity().compareTo(BigDecimal.ZERO) > 0);
+        assertTrue(inventory.getQuantity().compareTo(inventory.getReserved()) > 0);
 
-        productService.reindexProduct(product.getId());
+        final BigDecimal oldQuantity = inventory.getQuantity();
+
+        productService.reindexProductSku(skuCode);
 
         final NavigationContext context = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, null,
                 false, Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Collections.singletonList("9998")));
@@ -81,19 +82,16 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 // native update to bypass indexing on save!!
-                for (final Warehouse warehouse : warehouses) {
-                    productService.getGenericDao().executeNativeUpdate("update TSKUWAREHOUSE set QUANTITY = 0"
-                            + ", UPDATED_TIMESTAMP = '2099-01-01 00:00:00' where WAREHOUSE_ID = "
-                            + warehouse.getWarehouseId() + " and SKU_CODE = '" + skuCode + "'");
-                }
+                productService.getGenericDao().executeNativeUpdate("update TSKUWAREHOUSE set QUANTITY = 0"
+                        + ", UPDATED_TIMESTAMP = '2099-01-01 00:00:00' where WAREHOUSE_ID = "
+                        + warehouseId + " and SKU_CODE = '" + skuCode + "'");
             }
         });
 
-        product = productService.findById(9998L);
+        inventory = skuWarehouseService.findByWarehouseSku(warehouse, skuCode);
 
-        quantity = skuWarehouseService.findQuantity(warehouseService.getByShopId(10L, false), product.getDefaultSku().getCode());
-        assertTrue(quantity.getFirst().compareTo(BigDecimal.ZERO) == 0);
-        assertTrue(quantity.getFirst().compareTo(quantity.getSecond()) <= 0);
+        assertTrue(inventory.getQuantity().compareTo(BigDecimal.ZERO) == 0);
+        assertTrue(inventory.getQuantity().compareTo(inventory.getReserved()) <= 0);
 
 
         getTx().execute(runInTransactionNow(productService, skuWarehouseService));
@@ -112,19 +110,16 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 // native update to bypass indexing on save!!
-                for (final Warehouse warehouse : warehouses) {
-                    productService.getGenericDao().executeNativeUpdate("update TSKUWAREHOUSE set QUANTITY = " + oldQuantity.toPlainString()
-                            + ", UPDATED_TIMESTAMP = '2099-01-01 00:00:00' where WAREHOUSE_ID = "
-                            + warehouse.getWarehouseId() + " and SKU_CODE = '" + skuCode + "'");
-                }
+                productService.getGenericDao().executeNativeUpdate("update TSKUWAREHOUSE set QUANTITY = " + oldQuantity.toPlainString()
+                        + ", UPDATED_TIMESTAMP = '2099-01-01 00:00:00' where WAREHOUSE_ID = "
+                        + warehouseId + " and SKU_CODE = '" + skuCode + "'");
             }
         });
 
-        product = productService.findById(9998L);
+        inventory = skuWarehouseService.findByWarehouseSku(warehouse, skuCode);
 
-        quantity = skuWarehouseService.findQuantity(warehouseService.getByShopId(10L, false), product.getDefaultSku().getCode());
-        assertTrue(quantity.getFirst().compareTo(BigDecimal.ZERO) > 0);
-        assertTrue(quantity.getFirst().compareTo(quantity.getSecond()) > 0);
+        assertTrue(inventory.getQuantity().compareTo(BigDecimal.ZERO) > 0);
+        assertTrue(inventory.getQuantity().compareTo(inventory.getReserved()) > 0);
 
 
 

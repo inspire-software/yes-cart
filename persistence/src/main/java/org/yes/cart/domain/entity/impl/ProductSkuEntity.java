@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     private String name;
     private String displayName;
     private String description;
+    private String tag;
     private Product product;
     private int rank;
     private String barCode;
@@ -144,6 +146,36 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     @Override
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getDescriptionAsIs() {
+        final StringBuilder builder = new StringBuilder();
+        for (AttrValue attr : attributes) {
+            if (attr.getAttributeCode() != null &&
+                    attr.getAttributeCode().startsWith(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX)) {
+                builder.append(getLocale(attr.getAttributeCode()));
+                builder.append(StringI18NModel.SEPARATOR);
+                builder.append(attr.getVal());
+                builder.append(StringI18NModel.SEPARATOR);
+            }
+        }
+        return builder.toString();
+    }
+
+    String getLocale(final String attrCode) {
+        return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length());
+    }
+
+    @Override
+    public String getTag() {
+        return this.tag;
+    }
+
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     @Override

@@ -129,13 +129,6 @@ public interface ProductSearchResultDTO extends Identifiable {
     boolean isMultisku();
 
     /**
-     * Set multi SKU flag.
-     *
-     * @param multisku true if this product has multiple SKU
-     */
-    void setMultisku(boolean multisku);
-
-    /**
      * Get product default sku code.
      * @return product default sku code.
      */
@@ -179,76 +172,6 @@ public interface ProductSearchResultDTO extends Identifiable {
     void setDescription(String description);
 
 
-    /**
-     * Get start of product availability.
-     * Null - product has not start date, means no limitation.
-     *
-     * Note that search result does not have isDisabled() because it would not be part of the index if it was
-     *
-     * @return start of product availability.
-     */
-    LocalDateTime getAvailablefrom();
-
-    /**
-     * Set start of product availability.
-     *
-     * @param availablefrom start of product availability.
-     */
-    void setAvailablefrom(LocalDateTime availablefrom);
-
-    /**
-     * Get end of product availability.
-     * Null - product has not end date, means no limitation.
-     *
-     * Note that search result does not have isDisabled() because it would not be part of the index if it was
-     *
-     * @return end of product availability.
-     */
-    LocalDateTime getAvailableto();
-
-    /**
-     * Set end of product availability.
-     *
-     * @param availableto end of product availability.
-     */
-    void setAvailableto(LocalDateTime availableto);
-
-    /**
-     * Set product availability. See ProductEntity fields for more details.
-     * @return product availability.
-     */
-    int getAvailability();
-
-    /**
-     * Set product availability.
-     * @param availability product availability.
-     */
-    void setAvailability(int availability);
-
-    /**
-     * Get available quantity on warehouses.
-     * @return available qty on all warehouses.
-     */
-    Map<String, BigDecimal> getQtyOnWarehouse(long shop);
-
-    /**
-     * Set available qty on all warehouses.
-     * @param qty quantity.
-     */
-    void setQtyOnWarehouse(Map<Long, Map<String, BigDecimal>> qty);
-
-    /**
-     * Get default image, under IMAGE0 attribute.
-     * @return default image.
-     */
-    String getDefaultImage();
-
-    /**
-     * Set default image.
-     * @param defaultImage default image.
-     */
-    void setDefaultImage(String defaultImage);
-
 
     /**
      * Get display name, which is hold localization failover.
@@ -283,6 +206,59 @@ public interface ProductSearchResultDTO extends Identifiable {
      * @param displayDescription localized raw value
      */
     void setDisplayDescription(String displayDescription);
+
+
+    /**
+     * Get start of product availability.
+     * Null - product has not start date, means no limitation.
+     *
+     * Note that search result does not have isDisabled() because it would not be part of the index if it was
+     *
+     * @return start of product availability.
+     */
+    LocalDateTime getAvailablefrom();
+
+    /**
+     * Get end of product availability.
+     * Null - product has not end date, means no limitation.
+     *
+     * Note that search result does not have isDisabled() because it would not be part of the index if it was
+     *
+     * @return end of product availability.
+     */
+    LocalDateTime getAvailableto();
+
+    /**
+     * Get product release date.
+     * Null - product has no release date (alrady available).
+     *
+     * @return product release date.
+     */
+    LocalDateTime getReleaseDate();
+
+    /**
+     * Set product availability. See ProductEntity fields for more details.
+     * @return product availability.
+     */
+    int getAvailability();
+
+    /**
+     * Get available quantity on warehouses.
+     * @return available qty on all warehouses.
+     */
+    Map<String, BigDecimal> getQtyOnWarehouse(long shop);
+
+    /**
+     * Get default image, under IMAGE0 attribute.
+     * @return default image.
+     */
+    String getDefaultImage();
+
+    /**
+     * Set default image.
+     * @param defaultImage default image.
+     */
+    void setDefaultImage(String defaultImage);
 
 
     /**
@@ -394,14 +370,7 @@ public interface ProductSearchResultDTO extends Identifiable {
      *
      * @return set featured flag.
      */
-    Boolean getFeatured();
-
-    /**
-     * Set product featured flag.
-     *
-     * @param featured featured flag.
-     */
-    void setFeatured(Boolean featured);
+    boolean isFeatured();
 
 
     /**
@@ -412,21 +381,11 @@ public interface ProductSearchResultDTO extends Identifiable {
     BigDecimal getMinOrderQuantity();
 
     /**
-     * @param minOrderQuantity minimal quantity for order.
-     */
-    void setMinOrderQuantity(BigDecimal minOrderQuantity);
-
-    /**
      * Get maximum quantity for order. E.g. 5.0 means customer can only buy up to 5
      *
      * @return maximum order quantity
      */
     BigDecimal getMaxOrderQuantity();
-
-    /**
-     * @param maxOrderQuantity maximum quantity for order.
-     */
-    void setMaxOrderQuantity(BigDecimal maxOrderQuantity);
 
     /**
      * Get step quantity for order. E.g. 5.0 means customer can only buy in batches of 5 - 5, 10, 15
@@ -437,23 +396,39 @@ public interface ProductSearchResultDTO extends Identifiable {
     BigDecimal getStepOrderQuantity();
 
     /**
-     * @param stepOrderQuantity step quantity for order.
+     * Get SKUs defined for this product.
+     *
+     * @return list of SKU
      */
-    void setStepOrderQuantity(BigDecimal stepOrderQuantity);
+    ProductSkuSearchResultDTO getBaseSku(long skuId);
+
+    /**
+     * Get SKUs defined for this product.
+     *
+     * @return SKUs
+     */
+    Map<Long, ProductSkuSearchResultDTO> getBaseSkus();
+
+    /**
+     * Set SKUs defined for this product.
+     *
+     * @param baseSkus list of SKU
+     */
+    void setBaseSkus(Map<Long, ProductSkuSearchResultDTO> baseSkus);
 
     /**
      * Get SKUs sorted by search priority from the FT search.
      *
      * @return list of SKU
      */
-    List<ProductSkuSearchResultDTO> getSkus();
+    List<ProductSkuSearchResultDTO> getSearchSkus();
 
     /**
      * Set SKUs sorted by search priority from the FT search.
      *
-     * @param skus list of SKU
+     * @param searchSkus list of SKU
      */
-    void setSkus(List<ProductSkuSearchResultDTO> skus);
+    void setSearchSkus(List<ProductSkuSearchResultDTO> searchSkus);
 
     /**
      * Stored attributes container.

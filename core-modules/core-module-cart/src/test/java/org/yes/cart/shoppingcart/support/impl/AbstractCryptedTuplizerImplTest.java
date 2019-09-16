@@ -20,8 +20,8 @@ public class AbstractCryptedTuplizerImplTest {
 
         final ShoppingCartImpl cart = new ShoppingCartImpl();
 
-        cart.addProductSkuToCart("SKU001", "SKU001", BigDecimal.ONE);
-        cart.setProductSkuPrice("SKU001", new BigDecimal("9.99"), new BigDecimal("9.99"));
+        cart.addProductSkuToCart("s01","SKU001", "SKU001", BigDecimal.ONE);
+        cart.setProductSkuPrice("s01","SKU001", new BigDecimal("9.99"), new BigDecimal("9.99"));
 
         final AbstractCryptedTuplizerImpl tup = new AbstractCryptedTuplizerImpl(
                 "CHANGE_PASSWORD",

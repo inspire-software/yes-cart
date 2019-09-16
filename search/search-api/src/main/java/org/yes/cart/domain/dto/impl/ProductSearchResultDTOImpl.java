@@ -20,12 +20,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.StoredAttributesDTO;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +43,6 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private String code;
     private String manufacturerCode;
     private String fulfilmentCentreCode;
-    private boolean multisku;
     private String defaultSkuCode;
     private String name;
     private String displayName;
@@ -52,18 +53,12 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private int typeMask;
     private String tag;
     private String brand;
-    private LocalDateTime availablefrom;
-    private LocalDateTime availableto;
-    private int availability;
-    private Map<Long, Map<String, BigDecimal>> qtyOnWarehouse;
     private String defaultImage;
-    private Boolean featured;
-    private BigDecimal minOrderQuantity;
-    private BigDecimal maxOrderQuantity;
-    private BigDecimal stepOrderQuantity;
+
+    private Map<Long, ProductSkuSearchResultDTO> baseSkus;
 
     // This is dependent of FT search, so not part of the copy()
-    private List<ProductSkuSearchResultDTO> skus;
+    private List<ProductSkuSearchResultDTO> searchSkus;
 
     private I18NModel i18NModelName;
     private I18NModel i18NModelDescription;
@@ -78,9 +73,9 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     /** {@inheritDoc} */
     @Override
     public String getDefaultImage() {
-        if (multisku && skus != null && !skus.isEmpty()) {
+        if (searchSkus != null && !searchSkus.isEmpty()) {
             // if this is multi SKU and we have relevancy list - use it
-            return skus.get(0).getDefaultImage();
+            return searchSkus.get(0).getDefaultImage();
         }
         return defaultImage;
     }
@@ -93,55 +88,54 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     @Override
+    @JsonIgnore
     public Map<String, BigDecimal> getQtyOnWarehouse(final long shopId) {
-        return qtyOnWarehouse != null ? qtyOnWarehouse.get(shopId) : null;
-    }
-
-    // JSON serialization accessor
-    public Map<Long, Map<String, BigDecimal>> getQtyOnWarehouse() {
-        return qtyOnWarehouse;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setQtyOnWarehouse(final Map<Long, Map<String, BigDecimal>> qtyOnWarehouse) {
-        this.qtyOnWarehouse = qtyOnWarehouse;
+        final Map<String, BigDecimal> qty = new HashMap<>();
+        if (this.searchSkus != null) {
+            for (final ProductSkuSearchResultDTO sku : searchSkus) {
+                qty.put(sku.getCode(), sku.getQtyOnWarehouse(shopId));
+            }
+        }
+        return qty;
     }
 
     /** {@inheritDoc} */
     @Override
+    @JsonIgnore
     public LocalDateTime getAvailableto() {
-        return availableto;
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getAvailableto();
+        }
+        return null;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setAvailableto(final LocalDateTime availableto) {
-        this.availableto = availableto;
-    }
-
-    /** {@inheritDoc} */
-    @Override
+    @JsonIgnore
     public LocalDateTime getAvailablefrom() {
-        return availablefrom;
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getAvailablefrom();
+        }
+        return null;
+    }
+
+    @Override
+    @JsonIgnore
+    public LocalDateTime getReleaseDate() {
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getReleaseDate();
+        }
+        return null;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setAvailablefrom(final LocalDateTime availablefrom) {
-        this.availablefrom = availablefrom;
-    }
-
-    /** {@inheritDoc} */
-    @Override
+    @JsonIgnore
     public int getAvailability() {
-        return availability;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setAvailability(final int availability) {
-        this.availability = availability;
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getAvailability();
+        }
+        return SkuWarehouse.AVAILABILITY_STANDARD;
     }
 
     /** {@inheritDoc} */
@@ -194,22 +188,17 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     @Override
+    @JsonIgnore
     public boolean isMultisku() {
-        return multisku;
+        return searchSkus != null && searchSkus.size() > 1;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setMultisku(final boolean multisku) {
-        this.multisku = multisku;
-    }
-
-    /** {@inheritDoc} */
-    @Override
+    @JsonIgnore
     public String getDefaultSkuCode() {
-        if (multisku && skus != null && !skus.isEmpty()) {
-            // if this is multi SKU and we have relevancy list - use it
-            return skus.get(0).getCode();
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getCode();
         }
         return defaultSkuCode;
     }
@@ -440,62 +429,75 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     @Override
-    public Boolean getFeatured() {
-        return featured;
+    @JsonIgnore
+    public boolean isFeatured() {
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).isFeatured();
+        }
+        return false;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setFeatured(final Boolean featured) {
-        this.featured = featured;
-    }
-
-    /** {@inheritDoc} */
-    @Override
+    @JsonIgnore
     public BigDecimal getMinOrderQuantity() {
-        return minOrderQuantity;
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getMinOrderQuantity();
+        }
+        return null;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
-        this.minOrderQuantity = minOrderQuantity;
-    }
-
-    /** {@inheritDoc} */
-    @Override
+    @JsonIgnore
     public BigDecimal getMaxOrderQuantity() {
-        return maxOrderQuantity;
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getMaxOrderQuantity();
+        }
+        return null;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
-        this.maxOrderQuantity = maxOrderQuantity;
-    }
-
-    /** {@inheritDoc} */
-    @Override
+    @JsonIgnore
     public BigDecimal getStepOrderQuantity() {
-        return stepOrderQuantity;
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getStepOrderQuantity();
+        }
+        return null;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
-        this.stepOrderQuantity = stepOrderQuantity;
+    @JsonIgnore
+    public ProductSkuSearchResultDTO getBaseSku(final long skuId) {
+        return baseSkus != null ? baseSkus.get(skuId) : null;
     }
 
     /** {@inheritDoc} */
     @Override
-    public List<ProductSkuSearchResultDTO> getSkus() {
-        return skus;
+    public Map<Long, ProductSkuSearchResultDTO> getBaseSkus() {
+        return baseSkus;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setSkus(final List<ProductSkuSearchResultDTO> skus) {
-        this.skus = skus;
+    public void setBaseSkus(final Map<Long, ProductSkuSearchResultDTO> baseSkus) {
+        this.baseSkus = baseSkus;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @JsonIgnore
+    public List<ProductSkuSearchResultDTO> getSearchSkus() {
+        return searchSkus;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @JsonIgnore
+    public void setSearchSkus(final List<ProductSkuSearchResultDTO> searchSkus) {
+        this.searchSkus = searchSkus;
     }
 
     /** {@inheritDoc} */
@@ -546,7 +548,6 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setCode(this.code);
         copy.setManufacturerCode(this.manufacturerCode);
         copy.setFulfilmentCentreCode(this.fulfilmentCentreCode);
-        copy.setMultisku(this.multisku);
         copy.setDefaultSkuCode(this.defaultSkuCode);
         copy.setName(this.name);
         copy.setDisplayName(this.displayName);
@@ -557,20 +558,29 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setTypeMask(this.typeMask);
         copy.setTag(this.tag);
         copy.setBrand(this.brand);
-        copy.setAvailablefrom(this.availablefrom);
-        copy.setAvailableto(this.availableto);
-        copy.setAvailability(this.availability);
-        copy.setQtyOnWarehouse(this.qtyOnWarehouse);
         copy.setDefaultImage(this.defaultImage);
-        copy.setFeatured(this.featured);
-        copy.setMaxOrderQuantity(this.maxOrderQuantity);
-        copy.setMinOrderQuantity(this.minOrderQuantity);
-        copy.setStepOrderQuantity(this.stepOrderQuantity);
         copy.setCreatedTimestamp(this.createdTimestamp);
         copy.setUpdatedTimestamp(this.updatedTimestamp);
+        final Map<Long, ProductSkuSearchResultDTO> copyBaseSku = new HashMap<>();
+        if (this.baseSkus != null) {
+            for (final Map.Entry<Long, ProductSkuSearchResultDTO> skuDTO : this.baseSkus.entrySet()) {
+                copyBaseSku.put(skuDTO.getKey(), skuDTO.getValue().copy());
+            }
+        }
+        copy.setBaseSkus(copyBaseSku);
         if (this.attributes != null) {
             copy.setAttributes(new StoredAttributesDTOImpl(this.attributes.toString()));
         }
         return copy;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductSearchResultDTOImpl{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", fulfilmentCentreCode='" + fulfilmentCentreCode + '\'' +
+                ", defaultSkuCode='" + defaultSkuCode + '\'' +
+                '}';
     }
 }

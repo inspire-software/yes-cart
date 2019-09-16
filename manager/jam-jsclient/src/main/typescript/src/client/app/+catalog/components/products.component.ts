@@ -109,16 +109,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
 
-  protected isAvailableFromNow(row:ProductVO) {
-    // Preorder (2) ignores the from date as we want to show them before they are available
-    return row.availability == 2 || row.availablefrom === null || (row.availablefrom < new Date());
-  }
-
-  protected isAvailableToNow(row:ProductVO) {
-    return row.availableto === null || (row.availableto > new Date());
-  }
-
-
   protected getUri(row:ProductVO) {
     if (row.uri) {
       return '<i  title="' + row.uri + '" class="fa fa-globe"></i>';

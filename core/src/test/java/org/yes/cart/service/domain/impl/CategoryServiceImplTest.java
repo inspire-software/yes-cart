@@ -63,7 +63,6 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         product.setName("product");
         product.setDescription("description");
         product.setProducttype(productTypeService.findById(1L));
-        product.setAvailability(Product.AVAILABILITY_ALWAYS);
         product.setBrand(brandService.findById(101L));
         product = productService.create(product);
         assertTrue(product.getProductId() > 0);

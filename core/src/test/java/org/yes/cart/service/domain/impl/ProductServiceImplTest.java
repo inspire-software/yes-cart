@@ -61,7 +61,6 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         product.setName("product");
         product.setDescription("description");
         product.setProducttype(productTypeService.findById(1L));
-        product.setAvailability(Product.AVAILABILITY_ALWAYS);
         product.setBrand(brandService.findById(101L));
         product = productService.create(product);
         assertTrue(product.getProductId() > 0);
@@ -101,27 +100,6 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         }};
         prods = productService.getProductByIdList(ids);
         assertEquals(2, prods.size());
-    }
-
-    @Test
-    public void testGetRandomProductByCategory() {
-
-        CategoryService categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
-        Category category = categoryService.findById(211L);
-        Set<Long> list = new HashSet<>();
-
-        final CacheManager cm = ctx().getBean("cacheManager", CacheManager.class);
-        final Cache cache = cm.getCache("productService-randomProductByCategory");
-
-        for (int i = 0; i < 10; i++) {
-            /*
-             * The value is cached, hence before get new value need to evict related cache "productService-randomProductByCategory"
-             */
-            cache.clear();
-            list.add(productService.getRandomProductByCategory(category).getProductId());
-        }
-        //assume, that we select at least two different products in ten times
-        assertTrue("Set is " + list + " his size is " + list.size() + " but expected more that 1", list.size() > 1);
     }
 
     @Test

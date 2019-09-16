@@ -93,6 +93,11 @@ public interface WebParametersKeys {
     /**
      * Key for product rendering
      */
+    String FULFILMENT_CENTRE_ID = "fc";
+
+    /**
+     * Key for product rendering
+     */
     String PRODUCT_ID = "product";
 
     /**

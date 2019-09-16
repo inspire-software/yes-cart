@@ -53,13 +53,13 @@ public class SetSkuQuantityToCartEventCommandImplTest extends BaseCoreDBTestCase
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         Map<String, String> params = new HashMap<>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST4");
-        params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "1");
         commands.execute(shoppingCart, (Map) params);
 
         assertTrue("Expected 123.00", (new BigDecimal("123.00")).equals(shoppingCart.getTotal().getSubTotal()));
         params = new HashMap<>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST4");
-        params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "5");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "5");
         commands.execute(shoppingCart, (Map) params);
 
         assertTrue("Expected 499.55 but got " + shoppingCart.getTotal().getSubTotal(),

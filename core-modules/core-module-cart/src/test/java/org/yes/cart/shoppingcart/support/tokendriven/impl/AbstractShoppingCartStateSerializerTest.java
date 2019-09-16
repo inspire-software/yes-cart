@@ -87,11 +87,11 @@ public abstract class AbstractShoppingCartStateSerializerTest {
             }
         });
 
-        cart.addProductSkuToCart("ABC", "ABC", BigDecimal.TEN);
-        cart.setProductSkuPrice("ABC", new BigDecimal("49.99"), new BigDecimal("99.99"));
-        cart.setProductSkuPromotion("ABC", new BigDecimal("39.99"), "PROMO1");
-        cart.addGiftToCart("GIFT", "GIFT", BigDecimal.ONE, "GIFT");
-        cart.setGiftPrice("GIFT", new BigDecimal("9.99"), new BigDecimal("9.99"));
+        cart.addProductSkuToCart("s01","ABC", "ABC", BigDecimal.TEN);
+        cart.setProductSkuPrice("s01","ABC", new BigDecimal("49.99"), new BigDecimal("99.99"));
+        cart.setProductSkuPromotion("s01","ABC", new BigDecimal("39.99"), "PROMO1");
+        cart.addGiftToCart("s01","GIFT", "GIFT", BigDecimal.ONE, "GIFT");
+        cart.setGiftPrice("s01","GIFT", new BigDecimal("9.99"), new BigDecimal("9.99"));
         cart.addShippingToCart(new DeliveryBucketImpl("D1", "ABC"), "10", "Ship10", BigDecimal.ONE);
         cart.setShippingPrice("10", new DeliveryBucketImpl("D1", "ABC"), new BigDecimal("4.99"), new BigDecimal("4.99"));
         cart.addCoupon("COUPON-001");
@@ -282,10 +282,10 @@ public abstract class AbstractShoppingCartStateSerializerTest {
             sale = sale.add(itemQty.multiply(itemSale));
             promo = promo.add(itemQty.multiply(itemPromo));
 
-            cart.addProductSkuToCart("ABC-" + i, "ABC", itemQty);
-            cart.setProductSkuPrice("ABC-" + i, itemSale, itemList);
+            cart.addProductSkuToCart("s01","ABC-" + i, "ABC", itemQty);
+            cart.setProductSkuPrice("s01","ABC-" + i, itemSale, itemList);
             if (isPromo) {
-                cart.setProductSkuPromotion("ABC-" + i, itemPromo, "IPROMO-" + i);
+                cart.setProductSkuPromotion("s01","ABC-" + i, itemPromo, "IPROMO-" + i);
             }
         }
         for (int i = 0; i < giftCount; i++) {
@@ -297,8 +297,8 @@ public abstract class AbstractShoppingCartStateSerializerTest {
             list = list.add(itemQty.multiply(itemList));
             sale = sale.add(itemQty.multiply(itemSale));
 
-            cart.addGiftToCart("ABC-" + i, "GIFT", itemQty, "CPROMO-" + i);
-            cart.setGiftPrice("ABC-" + i, itemSale, itemList);
+            cart.addGiftToCart("s01","ABC-" + i, "GIFT", itemQty, "CPROMO-" + i);
+            cart.setGiftPrice("s01","ABC-" + i, itemSale, itemList);
         }
         for (int i = 0; i < couponCount; i++) {
             cart.addCoupon("COUPON-" + i);

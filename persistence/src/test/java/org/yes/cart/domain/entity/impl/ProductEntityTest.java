@@ -84,7 +84,7 @@ public class ProductEntityTest {
             allowing(sku2).getRank(); will(returnValue(0));
         }});
 
-        assertSame(sku1, pe.getDefaultSku());
+        assertSame(sku2, pe.getDefaultSku());
 
     }
 
@@ -101,7 +101,7 @@ public class ProductEntityTest {
             allowing(sku2).getRank(); will(returnValue(1));
         }});
 
-        assertSame(sku2, pe.getDefaultSku());
+        assertSame(sku1, pe.getDefaultSku());
 
     }
 }

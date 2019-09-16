@@ -152,9 +152,95 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_AVAILABILITY' | translate }}</div>
+            <div class="col-xs-9">
+              <select class="form-control" formControlName="availability" name="availability" [(ngModel)]="inventoryEdit.availability">
+                <option value="1">{{ 'PRODUCT_AVAILABILITY_1' | translate }}</option>
+                <option value="4">{{ 'PRODUCT_AVAILABILITY_4' | translate }}</option>
+                <option value="8">{{ 'PRODUCT_AVAILABILITY_8' | translate }}</option>
+                <option value="16">{{ 'PRODUCT_AVAILABILITY_16' | translate }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-xs-3">{{ 'INVENTORY_RESERVED' | translate }}</div>
             <div class="col-xs-9">
               <input class="form-control" formControlName="reserved" name="reserved" type="text" [(ngModel)]="inventoryEdit.reserved" [readonly]="true">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_FEATURED' | translate }}</div>
+            <div class="col-xs-9">
+              <input formControlName="featured" name="featured" type="checkbox" [(ngModel)]="inventoryEdit.featured">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_TAG' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" placeholder="{{ 'PRODUCT_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="inventoryEdit.tag">
+              <div [hidden]="inventoryEditForm.controls['tag'].valid || inventoryEditForm.controls['tag'].pristine" class="alert alert-danger">
+                {{ 'TAGS_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_DISABLED' | translate }}</div>
+            <div class="col-xs-9">
+              <input formControlName="disabled" name="disabled" type="checkbox" [(ngModel)]="inventoryEdit.disabled">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_FROM' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom">
+              <div [hidden]="inventoryEditForm.controls['availablefrom'].valid || inventoryEditForm.controls['availablefrom'].pristine" class="alert alert-danger">
+                {{ 'DATE_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_TO' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto">
+              <div [hidden]="inventoryEditForm.controls['availableto'].valid || inventoryEditForm.controls['availableto'].pristine" class="alert alert-danger">
+                {{ 'DATE_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_RELEASE' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="releaseDate" name="releaseDate" type="text" [(ngModel)]="releaseDate">
+              <div [hidden]="inventoryEditForm.controls['releaseDate'].valid || inventoryEditForm.controls['releaseDate'].pristine" class="alert alert-danger">
+                {{ 'DATE_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_ORDER_MIN' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_MIN' | translate }}" formControlName="minOrderQuantity" name="minOrderQuantity" type="text" [(ngModel)]="inventoryEdit.minOrderQuantity">
+              <div [hidden]="inventoryEditForm.controls['minOrderQuantity'].valid || inventoryEditForm.controls['minOrderQuantity'].pristine" class="alert alert-danger">
+                {{ 'POS_DECIMAL_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_ORDER_MAX' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_MAX' | translate }}" formControlName="maxOrderQuantity" name="maxOrderQuantity" type="text" [(ngModel)]="inventoryEdit.maxOrderQuantity">
+              <div [hidden]="inventoryEditForm.controls['maxOrderQuantity'].valid || inventoryEditForm.controls['maxOrderQuantity'].pristine" class="alert alert-danger">
+                {{ 'POS_DECIMAL_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'PRODUCT_ORDER_STEP' | translate }}</div>
+            <div class="col-xs-9">
+              <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_STEP' | translate }}" formControlName="stepOrderQuantity" name="stepOrderQuantity" type="text" [(ngModel)]="inventoryEdit.stepOrderQuantity">
+              <div [hidden]="inventoryEditForm.controls['stepOrderQuantity'].valid || inventoryEditForm.controls['stepOrderQuantity'].pristine" class="alert alert-danger">
+                {{ 'POS_DECIMAL_REQUIRED' | translate }}
+              </div>
             </div>
           </div>
         </fieldset>

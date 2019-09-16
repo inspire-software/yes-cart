@@ -22,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
@@ -37,6 +34,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.service.rest.impl.BookmarkMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
+import org.yes.cart.web.service.rest.impl.SearchSupportMixin;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.service.CurrencySymbolService;
@@ -78,10 +76,11 @@ public class ProductController {
     private RoMappingMixin mappingMixin;
     @Autowired
     private BookmarkMixin bookmarkMixin;
+    @Autowired
+    private SearchSupportMixin searchSupportMixin;
 
 
-
-    private ProductRO viewProductInternal(final String product, final boolean recordViewed) {
+    private ProductRO viewProductInternal(final String product, final String supplier, final boolean recordViewed) {
 
         final long productId = bookmarkMixin.resolveProductId(product);
 
@@ -105,7 +104,7 @@ public class ProductController {
             final Brand brand = brandService.findById(prodRO.getBrandId());
             prodRO.setBrandName(brand.getName());
 
-            final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productEntity, cart.getShoppingContext().getCustomerShopId());
+            final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productEntity, cart.getShoppingContext().getCustomerShopId(), supplier);
 
             final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
             prodRO.setProductAvailabilityModel(amRo);
@@ -114,7 +113,8 @@ public class ProductController {
                     cart,
                     productEntity.getProductId(),
                     null,
-                    BigDecimal.ONE
+                    BigDecimal.ONE,
+                    supplier
             );
 
             final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, PriceModel.class);
@@ -126,20 +126,22 @@ public class ProductController {
             final List<ProductSkuRO> skuRo = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(productEntity.getSku())) {
                 for (final ProductSku sku : productEntity.getSku()) {
-                    final ProductSkuRO skuRoItem = viewSkuInternal(sku, cart, symbol);
+                    final ProductSkuRO skuRoItem = viewSkuInternal(sku, supplier, cart, symbol);
                     if (skuRoItem != null) {
                         skuRo.add(skuRoItem);
                     }
                 }
             }
-            prodRO.setSkus(skuRo);
 
-            if (recordViewed) {
-                executeViewProductCommand(productEntity);
+            if (!skuRo.isEmpty()) {
+                prodRO.setSkus(skuRo);
+
+                if (recordViewed) {
+                    executeViewProductCommand(skuRo.get(0).getCode(), supplier);
+                }
+
+                return prodRO;
             }
-
-            return prodRO;
-
         }
 
         return null;
@@ -155,7 +157,7 @@ public class ProductController {
 
 
     /**
-     * Interface: GET /product/{id}
+     * Interface: GET /product/{id}/supplier/{supplier}
      * <p>
      * <p>
      * Display full product details.
@@ -471,31 +473,34 @@ public class ProductController {
      * @return product
      */
     @RequestMapping(
-            value = "/product/{id}",
+            value = "/product/{id}/supplier/{supplier}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody ProductRO viewProduct(@PathVariable(value = "id") final String product,
+                                               @PathVariable(value = "supplier") final String supplier,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
-        final ProductRO ro = viewProductInternal(product, true);
+        final ProductRO ro = viewProductInternal(product, supplier,true);
         cartMixin.persistShoppingCart(request, response);
         return ro;
 
     }
 
 
-    private List<ProductRO> viewProductsInternal(final String products) {
+    private List<ProductRO> viewProductsInternal(final ProductReferenceListRO products) {
 
-        final String[] productsIds = StringUtils.split(products, '|');
+        if (products == null || products.getReferences() == null) {
+            return new ArrayList<>(0);
+        }
 
-        final List<ProductRO> ros = new ArrayList<>(productsIds.length);
+        final List<ProductRO> ros = new ArrayList<>(products.getReferences().size());
 
-        for (final String productId : productsIds) {
+        for (final ProductReferenceRO ref : products.getReferences()) {
 
-            final ProductRO ro = viewProductInternal(productId, false);
+            final ProductRO ro = viewProductInternal(ref.getReference(), ref.getSupplier(), false);
             if (ro != null) {
                 ros.add(ro);
             }
@@ -505,7 +510,7 @@ public class ProductController {
     }
 
     /**
-     * Interface: GET /products/{id}
+     * Interface: POST /products/list
      * <p>
      * <p>
      * Display full product details.
@@ -520,7 +525,25 @@ public class ProductController {
      * <p>
      * <h3>Parameters for operation</h3><p>
      * <table border="1">
-     *     <tr><td>ids</td><td>SEO URI or product PK separated by pipe character ('|')</td></tr>
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * [ {
+     *           "id": 9999,
+     *           "supplier": WAREHOUSE_1
+     * }, {
+     *           "id": 9998,
+     *           "supplier": WAREHOUSE_1
+     * } ]
+     * </pre></code>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;product-references&gt;
+     *     &lt;parameter reference="9999" supplier="WAREHOUSE_1"/&gt;
+     *     &lt;parameter reference="9998" supplier="WAREHOUSE_1"/&gt;
+     * &lt;/search&gt;
+     * </pre></code>
+     *     </td></tr>
      * </table>
      * <p>
      * <p>
@@ -694,11 +717,11 @@ public class ProductController {
      * @return product
      */
     @RequestMapping(
-            value = "/products/{ids}",
-            method = RequestMethod.GET,
+            value = "/products/list",
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductRO> viewProducts(@PathVariable(value = "ids") final String products,
+    public @ResponseBody List<ProductRO> viewProducts(@RequestBody final ProductReferenceListRO products,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -709,7 +732,7 @@ public class ProductController {
     }
 
     /**
-     * Interface: GET /products/{id}
+     * Interface: POST /products/list
      * <p>
      * <p>
      * Display full product details.
@@ -724,7 +747,25 @@ public class ProductController {
      * <p>
      * <h3>Parameters for operation</h3><p>
      * <table border="1">
-     *     <tr><td>ids</td><td>SEO URI or product PK separated by pipe character ('|')</td></tr>
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * [ {
+     *           "id": 9999,
+     *           "supplier": WAREHOUSE_1
+     * }, {
+     *           "id": 9998,
+     *           "supplier": WAREHOUSE_1
+     * } ]
+     * </pre></code>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;product-references&gt;
+     *     &lt;parameter reference="9999" supplier="WAREHOUSE_1"/&gt;
+     *     &lt;parameter reference="9998" supplier="WAREHOUSE_1"/&gt;
+     * &lt;/search&gt;
+     * </pre></code>
+     *     </td></tr>
      * </table>
      * <p>
      * <p>
@@ -868,11 +909,11 @@ public class ProductController {
      * @return product
      */
     @RequestMapping(
-            value = "/products/{ids}",
-            method = RequestMethod.GET,
+            value = "/products/list",
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductListRO viewProductsXML(@PathVariable(value = "ids") final String products,
+    public @ResponseBody ProductListRO viewProductsXML(@RequestBody final ProductReferenceListRO products,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -892,43 +933,7 @@ public class ProductController {
 
         final List<ProductSearchResultDTO> productAssociations = productServiceFacade.getProductAssociations(productId, shopId, browsingShopId, type);
 
-        final List<ProductSearchResultRO> ros = new ArrayList<>();
-
-        if (CollectionUtils.isNotEmpty(productAssociations)) {
-
-            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
-
-            for (final ProductSearchResultDTO hit : productAssociations) {
-
-                final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(hit, cart.getShoppingContext().getCustomerShopId());
-
-                final ProductSearchResultRO ro = mappingMixin.map(hit, ProductSearchResultRO.class, ProductSearchResultDTO.class);
-
-                final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
-                ro.setProductAvailabilityModel(amRo);
-
-                final PriceModel price = productServiceFacade.getSkuPrice(
-                        cart,
-                        null,
-                        skuPam.getFirstAvailableSkuCode(),
-                        BigDecimal.ONE
-                );
-
-                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, PriceModel.class);
-                priceRo.setSymbol(symbol.getFirst());
-                priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
-
-                ro.setPrice(priceRo);
-
-                ros.add(ro);
-
-            }
-
-            return ros;
-
-        }
-
-        return ros;
+        return searchSupportMixin.map(productAssociations, cart);
 
     }
 
@@ -1134,7 +1139,14 @@ public class ProductController {
 
     }
 
-    private ProductSkuRO viewSkuInternal(final ProductSku productSku, final ShoppingCart cart, final Pair<String, Boolean> symbol) {
+    private ProductSkuRO viewSkuInternal(final ProductSku productSku, final String supplier, final ShoppingCart cart, final Pair<String, Boolean> symbol) {
+
+        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productSku, cart.getShoppingContext().getCustomerShopId(), supplier);
+        if (SkuWarehouse.AVAILABILITY_NA == skuPam.getAvailability()) {
+            return null;
+        }
+        final BigDecimal cartQty = cart.getProductSkuQuantity(supplier, productSku.getCode());
+        final QuantityModel skuQm = productServiceFacade.getProductQuantity(cartQty, productSku, cart.getShoppingContext().getCustomerShopId(), supplier);
 
         final ProductSkuRO skuRO = mappingMixin.map(productSku, ProductSkuRO.class, ProductSku.class);
 
@@ -1144,16 +1156,18 @@ public class ProductController {
             skuRO.setUitemplateFallback(templates.getSecond());
         }
 
-        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productSku, cart.getShoppingContext().getCustomerShopId());
-
         final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
-        skuRO.setProductAvailabilityModel(amRo);
+        skuRO.setSkuAvailabilityModel(amRo);
+
+        final ProductQuantityModelRO qmRo = mappingMixin.map(skuQm, ProductQuantityModelRO.class, QuantityModel.class);
+        skuRO.setSkuQuantityModel(qmRo);
 
         final PriceModel price = productServiceFacade.getSkuPrice(
                 cart,
                 null,
                 skuPam.getFirstAvailableSkuCode(),
-                BigDecimal.ONE
+                BigDecimal.ONE,
+                supplier
         );
 
         final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, PriceModel.class);
@@ -1174,7 +1188,7 @@ public class ProductController {
     }
 
 
-    private ProductSkuRO viewSkuInternal(final String sku, final boolean recordViewed) {
+    private ProductSkuRO viewSkuInternal(final String sku, final String supplier, final boolean recordViewed) {
         final long productId = bookmarkMixin.resolveSkuId(sku);
 
         final ProductSku skuEntity;
@@ -1190,10 +1204,10 @@ public class ProductController {
             final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
 
             if (recordViewed) {
-                executeViewProductCommand(skuEntity.getProduct());
+                executeViewProductCommand(skuEntity.getCode(), supplier);
             }
 
-            return viewSkuInternal(skuEntity, cart, symbol);
+            return viewSkuInternal(skuEntity, supplier, cart, symbol);
 
         }
 
@@ -1202,7 +1216,7 @@ public class ProductController {
 
 
     /**
-     * Interface: GET /sku/{id}
+     * Interface: GET /sku/{id}/supplier/{supplier}
      * <p>
      * <p>
      * Display full product details.
@@ -1353,31 +1367,34 @@ public class ProductController {
      * @return product sku
      */
     @RequestMapping(
-            value = "/sku/{id}",
+            value = "/sku/{id}/supplier/{supplier}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody ProductSkuRO viewSku(@PathVariable(value = "id") final String sku,
+                                              @PathVariable(value = "supplier") final String supplier,
                                               final HttpServletRequest request,
                                               final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
-        final ProductSkuRO ro = viewSkuInternal(sku, true);
+        final ProductSkuRO ro = viewSkuInternal(sku, supplier, true);
         cartMixin.persistShoppingCart(request, response);
         return ro;
 
     }
 
 
-    private List<ProductSkuRO> viewProductSkusInternal(final String skus) {
+    private List<ProductSkuRO> viewProductSkusInternal(final ProductReferenceListRO skus) {
 
-        final String[] skuIds = StringUtils.split(skus, '|');
+        if (skus == null || skus.getReferences() == null) {
+            return new ArrayList<>(0);
+        }
 
-        final List<ProductSkuRO> ros = new ArrayList<>(skuIds.length);
+        final List<ProductSkuRO> ros = new ArrayList<>(skus.getReferences().size());
 
-        for (final String skuId : skuIds) {
+        for (final ProductReferenceRO ref : skus.getReferences()) {
 
-            final ProductSkuRO ro = viewSkuInternal(skuId, false);
+            final ProductSkuRO ro = viewSkuInternal(ref.getReference(), ref.getSupplier(), false);
             if (ro != null) {
                 ros.add(ro);
             }
@@ -1388,7 +1405,7 @@ public class ProductController {
 
 
     /**
-     * Interface: GET /skus/{id}
+     * Interface: POST /skus/list
      * <p>
      * <p>
      * Display full product details.
@@ -1403,7 +1420,25 @@ public class ProductController {
      * <p>
      * <h3>Parameters for operation</h3><p>
      * <table border="1">
-     *     <tr><td>ids</td><td>SEO URI or sku PK or sku code separated by pipe character ('|')</td></tr>
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * [ {
+     *           "id": 9999,
+     *           "supplier": WAREHOUSE_1
+     * }, {
+     *           "id": 9998,
+     *           "supplier": WAREHOUSE_1
+     * } ]
+     * </pre></code>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;product-references&gt;
+     *     &lt;parameter reference="9999" supplier="WAREHOUSE_1"/&gt;
+     *     &lt;parameter reference="9998" supplier="WAREHOUSE_1"/&gt;
+     * &lt;/search&gt;
+     * </pre></code>
+     *     </td></tr>
      * </table>
      * <p>
      * <p>
@@ -1486,11 +1521,11 @@ public class ProductController {
      * @return product sku
      */
     @RequestMapping(
-            value = "/skus/{ids}",
-            method = RequestMethod.GET,
+            value = "/skus/list",
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductSkuRO> viewSkus(@PathVariable(value = "ids") final String skus,
+    public @ResponseBody List<ProductSkuRO> viewSkus(@RequestBody final ProductReferenceListRO skus,
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
@@ -1501,7 +1536,7 @@ public class ProductController {
     }
 
     /**
-     * Interface: GET /skus/{id}
+     * Interface: POST /skus/list
      * <p>
      * <p>
      * Display full product details.
@@ -1516,7 +1551,25 @@ public class ProductController {
      * <p>
      * <h3>Parameters for operation</h3><p>
      * <table border="1">
-     *     <tr><td>ids</td><td>SEO URI or sku PK or sku code separated by pipe character ('|')</td></tr>
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * [ {
+     *           "id": 9999,
+     *           "supplier": WAREHOUSE_1
+     * }, {
+     *           "id": 9998,
+     *           "supplier": WAREHOUSE_1
+     * } ]
+     * </pre></code>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;product-references&gt;
+     *     &lt;parameter reference="9999" supplier="WAREHOUSE_1"/&gt;
+     *     &lt;parameter reference="9998" supplier="WAREHOUSE_1"/&gt;
+     * &lt;/search&gt;
+     * </pre></code>
+     *     </td></tr>
      * </table>
      * <p>
      * <p>
@@ -1586,11 +1639,11 @@ public class ProductController {
      * @return product sku
      */
     @RequestMapping(
-            value = "/skus/{ids}",
+            value = "/skus/list",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductSkuListRO viewSkusXML(@PathVariable(value = "ids") final String skus,
+    public @ResponseBody ProductSkuListRO viewSkusXML(@RequestBody final ProductReferenceListRO skus,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -1604,12 +1657,14 @@ public class ProductController {
     /**
      * Execute view product command.
      *
-     * @param product product.
+     * @param sku       SKU
+     * @param supplier  supplier
      */
-    protected void executeViewProductCommand(final Product product) {
+    protected void executeViewProductCommand(final String sku, final String supplier) {
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, cartMixin.getCurrentCart(),
                 new HashMap<String, Object>() {{
-                    put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, product);
+                    put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, sku);
+                    put(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
                 }}
         );
     }

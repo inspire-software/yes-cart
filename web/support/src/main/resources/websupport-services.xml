@@ -40,26 +40,8 @@
 
     <!-- ################################## Category , Product and Sku image services begin ######################## -->
 
-    <bean id="categoryImageAttributeStrategy"
-          class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyAttributeImpl">
-        <constructor-arg index="0" value="CATEGORY_IMAGE"/>
-    </bean>
-
-    <bean id="categoryImageRandomProduct"
-          class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyRandomProductImpl">
-        <constructor-arg index="0" ref="productService"/>
-        <constructor-arg index="1" value="IMAGE0"/>
-    </bean>
-
     <bean id="categoryImageService" class="org.yes.cart.web.support.service.impl.CategoryImageServiceImpl">
-        <constructor-arg index="0">
-            <map>
-                <entry key="ATTRIBUTE" value-ref="categoryImageAttributeStrategy"/>
-                <entry key="RANDOM_PRODUCT" value-ref="categoryImageRandomProduct"/>
-            </map>
-        </constructor-arg>
-        <constructor-arg index="1" value="ATTRIBUTE"/>
-        <constructor-arg index="2" ref="cacheManager"/>
+        <constructor-arg index="0" ref="cacheManager"/>
     </bean>
 
     <bean id="categoryFileService" class="org.yes.cart.web.support.service.impl.CategoryFileServiceImpl">

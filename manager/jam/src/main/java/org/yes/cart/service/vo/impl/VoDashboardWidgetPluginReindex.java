@@ -20,6 +20,7 @@ import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
@@ -29,8 +30,10 @@ import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
+import org.yes.cart.utils.TimeContext;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,6 +53,7 @@ public class VoDashboardWidgetPluginReindex extends AbstractVoDashboardWidgetPlu
     private AsyncContextFactory asyncContextFactory;
 
     private ProductService productService;
+    private SkuWarehouseService skuWarehouseService;
 
     public VoDashboardWidgetPluginReindex(final AttributeService attributeService,
                                           final String widgetName) {
@@ -102,10 +106,16 @@ public class VoDashboardWidgetPluginReindex extends AbstractVoDashboardWidgetPlu
             data.put("ftNodes", "-");
         }
 
-        final Pair<Integer, Integer> totalAndActive = this.productService.findProductQtyAll();
+        final int total = this.productService.findCountByCriteria(null);
+        final int offersTotal = this.skuWarehouseService.findCountByCriteria(null);
+        final int offersActive = this.skuWarehouseService.findCountByCriteria(
+                " where e.disabled = ?1 and (e.availablefrom is null or e.availablefrom <= ?2) and (e.availableto is null or e.availableto >= ?2)",
+                Boolean.FALSE, TimeContext.getLocalDateTime()
+        );
 
-        data.put("productCountTotal", totalAndActive.getFirst());
-        data.put("productCountActive", totalAndActive.getSecond());
+        data.put("productCountTotal", total);
+        data.put("offerCountTotal", offersActive);
+        data.put("offerCountActive", offersActive);
 
         widget.setData(data);
 
@@ -145,6 +155,15 @@ public class VoDashboardWidgetPluginReindex extends AbstractVoDashboardWidgetPlu
      */
     public void setProductService(final ProductService productService) {
         this.productService = productService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param skuWarehouseService sku warehouse service
+     */
+    public void setSkuWarehouseService(final SkuWarehouseService skuWarehouseService) {
+        this.skuWarehouseService = skuWarehouseService;
     }
 
     /**

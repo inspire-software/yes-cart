@@ -225,4 +225,16 @@ public class NavigationContextImpl<T> implements NavigationContext<T> {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "NavigationContextImpl{" +
+                "shopId=" + shopId +
+                ", customerShopId=" + customerShopId +
+                ", customerLanguage='" + customerLanguage + '\'' +
+                ", categories=" + categories +
+                ", includeSubCategories=" + includeSubCategories +
+                ", navigationParameters=" + navigationParameters +
+                '}';
+    }
 }

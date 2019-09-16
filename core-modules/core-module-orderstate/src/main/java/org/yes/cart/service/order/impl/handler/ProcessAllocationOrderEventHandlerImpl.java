@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -114,49 +113,44 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
             for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
-                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+                final String skuCode = det.getProductSkuCode();
+                final BigDecimal toAllocate = det.getQty();
+                final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
-                if (product == null || Product.AVAILABILITY_ALWAYS != product.getAvailability()) {
+                if (selected == null) {
+                    LOG.error(
+                            "Warehouse is not found for delivery detail {}:{}",
+                            orderDelivery.getDeliveryNum(), det.getProductSkuCode()
+                    );
 
-                    final String skuCode = det.getProductSkuCode();
-                    final BigDecimal toAllocate = det.getQty();
-                    final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
-
-                    if (selected == null) {
-                        LOG.error(
-                                "Warehouse is not found for delivery detail {}:{}",
-                                orderDelivery.getDeliveryNum(), det.getProductSkuCode()
-                        );
-
-                        /*
-                         * For allocation we always must have stock items with inventory supported availability
-                         */
-                        throw new OrderItemAllocationException(
-                                skuCode,
-                                toAllocate,
-                                "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
-                                        + " for sku = " + skuCode
-                                        + " in delivery " + orderDelivery.getDeliveryNum());
-                    }
-
-                    final BigDecimal rem = inventoryResolver.debit(selected, skuCode, toAllocate);
-
-                    if (MoneyUtils.isPositive(rem)) {
-                        /*
-                         * For allocation we always must have stock items with inventory supported availability
-                         */
-                        throw new OrderItemAllocationException(
-                                skuCode,
-                                toAllocate,
-                                "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
-                                        + " for sku = " + skuCode
-                                        + " in delivery " + orderDelivery.getDeliveryNum());
-                    }
-
-                    // Then if we have taken something that is how much we void in reserve
-                    inventoryResolver.voidReservation(selected, skuCode, toAllocate);
-
+                    /*
+                     * For allocation we always must have stock items with inventory supported availability
+                     */
+                    throw new OrderItemAllocationException(
+                            skuCode,
+                            toAllocate,
+                            "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
+                                    + " for sku = " + skuCode
+                                    + " in delivery " + orderDelivery.getDeliveryNum());
                 }
+
+                final BigDecimal rem = inventoryResolver.debit(selected, skuCode, toAllocate);
+
+                if (MoneyUtils.isPositive(rem)) {
+                    /*
+                     * For allocation we always must have stock items with inventory supported availability
+                     */
+                    throw new OrderItemAllocationException(
+                            skuCode,
+                            toAllocate,
+                            "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
+                                    + " for sku = " + skuCode
+                                    + " in delivery " + orderDelivery.getDeliveryNum());
+                }
+
+                // Void reservation on quantity debited
+                inventoryResolver.voidReservation(selected, skuCode, toAllocate);
+
             }
         }
 

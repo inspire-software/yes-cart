@@ -93,7 +93,7 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
             assertTrue("At lest one item in shipment must be present", !dto.getDetail().isEmpty());
             deliveryNumsSet.add(dto.getDeliveryNum());
         }
-        assertEquals(5, deliveryNumsSet.size());
+        assertEquals(4, deliveryNumsSet.size());
     }
 
     @Test
@@ -109,7 +109,7 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
             assertEquals("ds.fullfillment", det.getDeliveryStatusLabel());
             deliveryNumsSet.add(det.getDeliveryNum());
         }
-        assertEquals(5, deliveryNumsSet.size());
+        assertEquals(4, deliveryNumsSet.size());
 
 
     }

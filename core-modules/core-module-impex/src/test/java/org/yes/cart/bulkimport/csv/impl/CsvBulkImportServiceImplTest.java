@@ -980,22 +980,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             ResultSet rs;
 
             rs = getConnection().getConnection().createStatement().executeQuery(
-                    "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
-                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='SKU-ASIMO'");
+                    "select SKU_CODE, AVAILABILITY, FEATURED, RELEASEDATE from TSKUWAREHOUSE where SKU_CODE='L2708A#BEA' and WAREHOUSE_ID=1");
             rs.next();
-            assertEquals("GUID-ASIMO", rs.getString(1));
-            assertEquals("SKU-ASIMO", rs.getString(2));
-            assertEquals("ASIMO", rs.getString(3));
-            assertEquals(100L, rs.getLong(4)); // Unknown
-            assertEquals(1L, rs.getLong(5)); // Robots
-            assertEquals("Robot ASIMO", rs.getString(6));
-            final I18NModel model = new StringI18NModel(rs.getString(7));
-            assertEquals(2, model.getAllValues().size());
-            assertEquals("Robot ASIMO", model.getValue("en"));
-            assertEquals("Робот ASIMO", model.getValue("ru"));
-            assertEquals(1, rs.getInt(8));
-            assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
-            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10).toLocalDate()));
+            assertEquals("L2708A#BEA", rs.getString(1));
+            assertEquals(1, rs.getInt(2));
+            assertEquals(1, rs.getInt(3)); // Derby dialect creates smallint instead of Boolean
+            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(4).toLocalDate()));
             rs.close();
 
 
@@ -1033,7 +1023,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             rs = getConnection().getConnection().createStatement().executeQuery(
                     "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
-                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM, VERSION from TPRODUCT where code='SKU-ASIMO-INSERT'");
+                            "NAME, DISPLAYNAME, VERSION from TPRODUCT where code='SKU-ASIMO-INSERT'");
             rs.next();
             assertEquals("GUID-ASIMO-INSERT", rs.getString(1));
             assertEquals("SKU-ASIMO-INSERT", rs.getString(2));
@@ -1045,10 +1035,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(2, model.getAllValues().size());
             assertEquals("Robot ASIMO", model.getValue("en"));
             assertEquals("Робот ASIMO", model.getValue("ru"));
-            assertEquals(1, rs.getInt(8));
-            assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
-            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10).toLocalDate()));
-            version = rs.getLong(11);
+            version = rs.getLong(8);
             rs.close();
 
 
@@ -1067,7 +1054,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             rs = getConnection().getConnection().createStatement().executeQuery(
                     "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
-                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM, VERSION from TPRODUCT where code='SKU-ASIMO-INSERT'");
+                            "NAME, DISPLAYNAME, VERSION from TPRODUCT where code='SKU-ASIMO-INSERT'");
             rs.next();
             assertEquals("GUID-ASIMO-INSERT", rs.getString(1));
             assertEquals("SKU-ASIMO-INSERT", rs.getString(2));
@@ -1079,10 +1066,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(2, model.getAllValues().size());
             assertEquals("Different Robot ASIMO", model.getValue("en")); // Display name modified to prove something has changed
             assertEquals("Другой Робот ASIMO", model.getValue("ru"));
-            assertEquals(1, rs.getInt(8));
-            assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
-            assertEquals("2015-06-12", DateUtils.formatSD(rs.getDate(10).toLocalDate()));
-            assertTrue(version < rs.getLong(11)); // version is updated
+            assertTrue(version < rs.getLong(8)); // version is updated
             rs.close();
 
 
@@ -1121,7 +1105,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             rs = getConnection().getConnection().createStatement().executeQuery(
                     "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
-                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='ASIMO-SKIP'");
+                            "NAME, DISPLAYNAME from TPRODUCT where code='ASIMO-SKIP'");
             assertFalse(rs.next()); // No rows
             rs.close();
 
@@ -1169,7 +1153,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             rs = getConnection().getConnection().createStatement().executeQuery(
                     "select GUID, VERSION, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
-                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='ASIMO-NOCHANGE'");
+                            "NAME, DISPLAYNAME from TPRODUCT where code='ASIMO-NOCHANGE'");
             assertTrue(rs.next()); // Imported
             version = rs.getLong(2);
             rs.close();
@@ -1190,7 +1174,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             rs = getConnection().getConnection().createStatement().executeQuery(
                     "select GUID, VERSION, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
-                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='ASIMO-NOCHANGE'");
+                            "NAME, DISPLAYNAME from TPRODUCT where code='ASIMO-NOCHANGE'");
             assertTrue(rs.next()); // Already imported
             assertEquals(version, rs.getLong(2)); // but no update (no version change)
             rs.close();

@@ -60,18 +60,20 @@ public class ViewProductSkuInternalCommandImplTest extends BaseCoreDBTestCase {
 
         Map<String, Object> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, "1");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "s01");
         commands.execute(shoppingCart, (Map) params);
 
         List<String> skus = shoppingCart.getShoppingContext().getLatestViewedSkus();
         assertNotNull(skus);
         assertEquals(1, skus.size());
-        assertEquals("1", skus.get(0));
+        assertEquals("1|s01", skus.get(0));
 
         // Test adding duplicate sku 1 and 9 others to have full 10 items
 
         for (int i = 1; i <= 10; i++) {
 
             params.put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, String.valueOf(i));
+            params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "s01");
             commands.execute(shoppingCart, (Map) params);
 
         }
@@ -81,12 +83,13 @@ public class ViewProductSkuInternalCommandImplTest extends BaseCoreDBTestCase {
         assertEquals(10, skus.size());
         for (int i = 1; i <= 10; i++) {
 
-            assertEquals(String.valueOf(i), skus.get(i - 1));
+            assertEquals(String.valueOf(i) + "|s01", skus.get(i - 1));
 
         }
 
         // Test adding 11th item
         params.put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, "11");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "s01");
         commands.execute(shoppingCart, (Map) params);
 
         skus = shoppingCart.getShoppingContext().getLatestViewedSkus();
@@ -94,13 +97,14 @@ public class ViewProductSkuInternalCommandImplTest extends BaseCoreDBTestCase {
         assertEquals(10, skus.size());
         for (int i = 1; i <= 10; i++) {
 
-            assertEquals(String.valueOf(i + 1), skus.get(i - 1));
+            assertEquals(String.valueOf(i + 1) + "|s01", skus.get(i - 1));
 
         }
 
         // Test adding multiple items
 
         params.put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, Arrays.asList("12", "13"));
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "s01");
         commands.execute(shoppingCart, (Map) params);
 
         skus = shoppingCart.getShoppingContext().getLatestViewedSkus();
@@ -108,7 +112,7 @@ public class ViewProductSkuInternalCommandImplTest extends BaseCoreDBTestCase {
         assertEquals(10, skus.size());
         for (int i = 1; i <= 10; i++) {
 
-            assertEquals(String.valueOf(i + 3), skus.get(i - 1));
+            assertEquals(String.valueOf(i + 3) + "|s01", skus.get(i - 1));
 
         }
 

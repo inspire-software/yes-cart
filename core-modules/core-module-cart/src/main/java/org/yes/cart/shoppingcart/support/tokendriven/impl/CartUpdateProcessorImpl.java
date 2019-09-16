@@ -206,12 +206,12 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
         for (final CartItem cartItem : oldCart.getCartItemList()) {
             // Only merge non gifts and items that are NOT already in the cart
-            if (!cartItem.isGift() && shoppingCart.indexOfProductSku(cartItem.getProductSkuCode()) == -1) {
+            if (!cartItem.isGift() && shoppingCart.indexOfProductSku(cartItem.getSupplierCode(), cartItem.getProductSkuCode()) == -1) {
 
                 cmdParams.clear();
 
                 cmdParams.put(ShoppingCartCommand.CMD_ADDTOCART, cartItem.getProductSkuCode());
-                cmdParams.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, cartItem.getQty().toPlainString());
+                cmdParams.put(ShoppingCartCommand.CMD_P_QTY, cartItem.getQty().toPlainString());
 
                 shoppingCartCommandFactory.execute(shoppingCart, cmdParams);
 

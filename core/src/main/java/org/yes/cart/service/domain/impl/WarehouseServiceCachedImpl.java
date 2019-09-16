@@ -80,7 +80,6 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public void assignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
@@ -94,7 +93,6 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public void unassignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
@@ -135,7 +133,6 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public Warehouse create(final Warehouse instance) {
@@ -148,7 +145,6 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public Warehouse update(final Warehouse instance) {
@@ -161,7 +157,6 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public void delete(final Warehouse instance) {

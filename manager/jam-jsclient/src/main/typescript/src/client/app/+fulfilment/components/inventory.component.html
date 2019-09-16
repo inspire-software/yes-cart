@@ -8,6 +8,11 @@
         <th>{{ 'NAME' | translate }}</th>
         <th>{{ 'INVENTORY_STOCK' | translate }}</th>
         <th>{{ 'INVENTORY_RESERVED' | translate }}</th>
+        <th>{{ 'PRODUCT_AVAILABILITY' | translate }}</th>
+        <th>{{ 'PRODUCT_RELEASE' | translate }}</th>
+        <th>{{ 'PRODUCT_FROM' | translate }}</th>
+        <th>{{ 'PRODUCT_TO' | translate }}</th>
+        <th>{{ 'PRODUCT_ENABLED' | translate }}</th>
       </tr>
       </thead>
       <tbody>
@@ -17,6 +22,11 @@
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuName}}</a>&nbsp;</td>
           <td title="{{ 'INVENTORY_STOCK' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.quantity | ycquantity}}</a>&nbsp;</td>
           <td title="{{ 'INVENTORY_RESERVED' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.reserved | ycquantity}}</a>&nbsp;</td>
+          <td title="{{ 'PRODUCT_AVAILABILITY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ 'PRODUCT_AVAILABILITY_' + row.availability | translate }}</a></td>
+          <td title="{{ 'PRODUCT_RELEASE' | translate }}" class="{{ isReleasedNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.releaseDate | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PRODUCT_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PRODUCT_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PRODUCT_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{!row.disabled && isAvailableFromNow(row) && isAvailableToNow(row) ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
         </ng-template>
       </tr>
       </tbody>

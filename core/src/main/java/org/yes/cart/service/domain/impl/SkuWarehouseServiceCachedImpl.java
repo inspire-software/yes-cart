@@ -22,14 +22,12 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.SkuWarehouseService;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Collection;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -57,40 +55,7 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
      * {@inheritDoc}
      */
     @Override
-    @Cacheable(value = "skuWarehouseService-productOnWarehouse")
-    public Map<String, BigDecimal> getProductAvailableToSellQuantity(final long productId, final Collection<Warehouse> warehouses) {
-        return skuWarehouseService.getProductAvailableToSellQuantity(productId, warehouses);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Cacheable(value = "skuWarehouseService-productOnWarehouse")
-    public Map<String, BigDecimal> getProductSkuAvailableToSellQuantity(final String productSku, final Collection<Warehouse> warehouses) {
-        return skuWarehouseService.getProductSkuAvailableToSellQuantity(productSku, warehouses);
-    }
-
-    /**
-     * Get the sku's Quantity - Reserved quantity pair.
-     *
-     *
-     * @param warehouses list of warehouses where
-     * @param productSkuCode sku
-     * @return pair of available and reserved quantity
-     */
-    @Override
-    public Pair<BigDecimal, BigDecimal> findQuantity(final Collection<Warehouse> warehouses, final String productSkuCode) {
-        return skuWarehouseService.findQuantity(warehouses, productSkuCode);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty) {
@@ -102,7 +67,6 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
      */
     @Override
     @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty, final boolean allowBackorder) {
@@ -114,7 +78,6 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
      */
     @Override
     @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public BigDecimal voidReservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal voidQty) {
@@ -126,7 +89,6 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
      */
     @Override
     @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public BigDecimal credit(final Warehouse warehouse, final String productSkuCode, final BigDecimal addQty) {
@@ -138,7 +100,6 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
      */
     @Override
     @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public BigDecimal debit(final Warehouse warehouse, final String productSkuCode, final BigDecimal debitQty) {
@@ -148,7 +109,6 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /** {@inheritDoc}*/
     @Override
     @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public SkuWarehouse create(final SkuWarehouse instance) {
@@ -158,7 +118,6 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     /** {@inheritDoc}*/
     @Override
     @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public SkuWarehouse update(final SkuWarehouse instance) {
@@ -179,8 +138,8 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
 
     /** {@inheritDoc} */
     @Override
-    public boolean isSkuAvailabilityPreorderOrBackorder(final String productSkuCode, final boolean checkAvailabilityDates) {
-        return skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuCode, checkAvailabilityDates);
+    public List<String> findProductSkuByUnavailableBefore(final LocalDateTime before) {
+        return skuWarehouseService.findProductSkuByUnavailableBefore(before);
     }
 
     /** {@inheritDoc} */

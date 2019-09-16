@@ -69,7 +69,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -118,13 +118,13 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(null));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -175,7 +175,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 345L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 345L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(null));
             allowing(shopService).getById(345L); will(returnValue(b2b));
             allowing(b2b).isB2BStrictPriceActive(); will(returnValue(true));
         }});
@@ -183,7 +183,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -235,7 +235,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 345L, 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 345L, 234L, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(null));
             allowing(shopService).getById(345L); will(returnValue(b2b));
             allowing(b2b).isB2BStrictPriceActive(); will(returnValue(false));
         }});
@@ -243,7 +243,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -295,7 +295,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(null, null)));
@@ -306,7 +306,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -358,7 +358,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(null, null)));
@@ -371,7 +371,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -423,7 +423,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new Pair<>(null, null)));
@@ -436,7 +436,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -489,7 +489,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -502,7 +502,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -554,7 +554,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -567,7 +567,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, null, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -623,7 +623,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -633,7 +633,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
-            allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
+            allowing(calculator).calculatePrice(cart, "s01", "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
             allowing(priceModel).getGrossPrice(); will(returnValue(new BigDecimal("120.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("GROSS"));
             allowing(priceModel).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -644,7 +644,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -698,7 +698,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -708,7 +708,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
-            allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
+            allowing(calculator).calculatePrice(cart, "s01", "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
             allowing(priceModel).getNetPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("GROSS"));
             allowing(priceModel).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -719,7 +719,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -776,7 +776,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -786,7 +786,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
-            allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
+            allowing(calculator).calculatePrice(cart, "s01", "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
             allowing(priceModel).getGrossPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("NET"));
             allowing(priceModel).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -797,7 +797,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -853,7 +853,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -863,7 +863,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
-            allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
+            allowing(calculator).calculatePrice(cart, "s01", "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
             allowing(priceModel).getNetPrice(); will(returnValue(new BigDecimal("83.33")));
             allowing(priceModel).getTaxCode(); will(returnValue("NET"));
             allowing(priceModel).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -874,7 +874,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -931,7 +931,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -941,7 +941,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
-            allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
+            allowing(calculator).calculatePrice(cart, "s01", "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
             allowing(priceModel).getGrossPrice(); will(returnValue(new BigDecimal("96.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("GROSS"));
             allowing(priceModel).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -952,7 +952,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -1006,7 +1006,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -1016,7 +1016,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
-            allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
+            allowing(calculator).calculatePrice(cart, "s01", "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
             allowing(priceModel).getNetPrice(); will(returnValue(new BigDecimal("80.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("GROSS"));
             allowing(priceModel).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -1027,7 +1027,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -1084,7 +1084,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -1094,7 +1094,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
-            allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
+            allowing(calculator).calculatePrice(cart, "s01", "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
             allowing(priceModel).getGrossPrice(); will(returnValue(new BigDecimal("80.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("NET"));
             allowing(priceModel).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -1105,7 +1105,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -1161,7 +1161,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceResolver).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1", "s01"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).isPriceUponRequest(); will(returnValue(false));
@@ -1171,7 +1171,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
             allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
-            allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
+            allowing(calculator).calculatePrice(cart, "s01", "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
             allowing(priceModel).getNetPrice(); will(returnValue(new BigDecimal("66.67")));
             allowing(priceModel).getTaxCode(); will(returnValue("NET"));
             allowing(priceModel).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -1182,7 +1182,7 @@ public class ProductServiceFacadeImplTest {
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceResolver, calculator, null, null, shopService, null);
 
 
-        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+        final PriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE, "s01");
 
         assertNotNull(model);
 
@@ -2199,7 +2199,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2208,8 +2207,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
             allowing(priceNow).getRegularPrice(); will(returnValue(null));
@@ -2219,20 +2218,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertNull(listPrice);
                 assertNull(salePrice);
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2262,7 +2263,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2271,8 +2271,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("9.99")));
@@ -2282,20 +2282,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertTrue(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertNull(listPrice);
                 assertNull(salePrice);
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2325,7 +2327,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2334,8 +2335,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("USD"));
             allowing(priceNow).getRegularPrice(); will(returnValue(new BigDecimal("9.99")));
@@ -2346,20 +2347,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
                 assertNull(salePrice);
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2389,7 +2392,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2398,8 +2400,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
@@ -2411,20 +2413,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
                 assertNull(salePrice);
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2454,7 +2458,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2463,8 +2466,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
@@ -2476,20 +2479,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("12.99", listPrice.toPlainString());
                 assertEquals("9.99", salePrice.toPlainString());
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2519,7 +2524,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2528,8 +2532,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
@@ -2541,20 +2545,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
                 assertEquals("8.99", salePrice.toPlainString());
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2584,7 +2590,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2593,8 +2598,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
@@ -2606,20 +2611,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("9.99", listPrice.toPlainString());
                 assertEquals("8.99", salePrice.toPlainString());
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2650,7 +2657,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2659,8 +2665,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
@@ -2672,20 +2678,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("12.99", listPrice.toPlainString());
                 assertNull(salePrice);
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2716,7 +2724,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2725,8 +2732,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("9.99")));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
@@ -2738,20 +2745,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("14.99", listPrice.toPlainString());
                 assertEquals("12.99", salePrice.toPlainString());
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2783,7 +2792,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2792,8 +2800,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("0.00")));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
@@ -2805,20 +2813,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("12.99", listPrice.toPlainString());
                 assertNull(salePrice);
+                assertEquals("s01", supplier);
                 return model;
             }
         };
@@ -2849,7 +2859,6 @@ public class ProductServiceFacadeImplTest {
         final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
 
         final CustomerWishList wishList = context.mock(CustomerWishList.class, "wishList");
-        final ProductSku productSku = context.mock(ProductSku.class, "productSku");
 
         final SkuPrice priceNow = context.mock(SkuPrice.class, "priceNow");
         final PriceModel model = context.mock(PriceModel.class, "model");
@@ -2858,8 +2867,8 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).isHidePrices(); will(returnValue(false));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
-            allowing(wishList).getSkus(); will(returnValue(productSku));
-            allowing(productSku).getCode(); will(returnValue("ABC"));
+            allowing(wishList).getSkuCode(); will(returnValue("ABC"));
+            allowing(wishList).getSupplierCode(); will(returnValue("s01"));
             allowing(wishList).getQuantity(); will(returnValue(BigDecimal.TEN));
             allowing(wishList).getRegularPriceWhenAdded(); will(returnValue(new BigDecimal("0.00")));
             allowing(wishList).getRegularPriceCurrencyWhenAdded(); will(returnValue("EUR"));
@@ -2871,20 +2880,22 @@ public class ProductServiceFacadeImplTest {
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, null, null) {
             @Override
-            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty) {
+            protected SkuPrice resolveMinimalPrice(final ShoppingCart cart, final Long productId, final String sku, final BigDecimal qty, final String supplier) {
                 assertNull(productId);
                 assertEquals("ABC", sku);
                 assertEquals(BigDecimal.TEN, qty);
+                assertEquals("s01", supplier);
                 return priceNow;
             }
 
             @Override
-            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice) {
+            public PriceModel getSkuPrice(final ShoppingCart cart, final String ref, final BigDecimal quantity, final boolean pur, final boolean pof, final BigDecimal listPrice, final BigDecimal salePrice, final String supplier) {
                 assertFalse(pur);
                 assertEquals("ABC", ref);
                 assertEquals(BigDecimal.ONE, quantity);
                 assertEquals("14.99", listPrice.toPlainString());
                 assertEquals("12.99", salePrice.toPlainString());
+                assertEquals("s01", supplier);
                 return model;
             }
         };

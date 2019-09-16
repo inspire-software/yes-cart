@@ -146,7 +146,7 @@ public class PromotionTesterImpl implements PromotionTester {
                 final Map<String, Object> params = new HashMap<>();
                 params.put(ShoppingCartCommand.CMD_ADDTOCART, product.getKey());
                 if (product.getValue() != null) {
-                    params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, product.getValue().toPlainString());
+                    params.put(ShoppingCartCommand.CMD_P_QTY, product.getValue().toPlainString());
                 }
                 cartCommandFactory.execute(ShoppingCartCommand.CMD_ADDTOCART, cart, params);
             }

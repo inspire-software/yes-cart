@@ -16,10 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.PriceService;
@@ -37,8 +33,6 @@ import java.math.BigDecimal;
 public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20100313L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractRecalculatePriceCartCommandImpl.class);
 
     private final PriceResolver priceResolver;
 
@@ -93,7 +87,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
             for (final CartItem cartItem : shoppingCart.getCartItemList()) {
 
-                setProductSkuPrice(shoppingCart, customerShopId, fallbackShopId, cartItem.getProductSkuCode(), cartItem.getQty(), policy);
+                setProductSkuPrice(shoppingCart, customerShopId, fallbackShopId, cartItem.getSupplierCode(), cartItem.getProductSkuCode(), cartItem.getQty(), policy);
 
             }
 
@@ -106,6 +100,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
     /**
      * Determine price for SKU.
      *
+     * @param supplier     supplier
      * @param shoppingCart shopping cart
      * @param skuCode      SKU code
      * @param qty          quantity tier
@@ -113,6 +108,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
      * @return sku price or null
      */
     protected SkuPrice determineSkuPrice(final MutableShoppingCart shoppingCart,
+                                         final String supplier,
                                          final String skuCode,
                                          final BigDecimal qty) {
 
@@ -137,7 +133,9 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                     shoppingCart.getCurrencyCode(),
                     qty,
                     false,
-                    policy.getID());
+                    policy.getID(),
+                    supplier
+            );
 
             if (skuPrice.getRegularPrice() != null && !skuPrice.isPriceUponRequest()) {
 
@@ -158,12 +156,13 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
         );
     }
 
-    private void setProductSkuPrice(final MutableShoppingCart shoppingCart,
-                                    final long customerShopId,
-                                    final Long masterShopId,
-                                    final String skuCode,
-                                    final BigDecimal qty,
-                                    final PricingPolicyProvider.PricingPolicy policy) {
+    protected void setProductSkuPrice(final MutableShoppingCart shoppingCart,
+                                      final long customerShopId,
+                                      final Long masterShopId,
+                                      final String supplier,
+                                      final String skuCode,
+                                      final BigDecimal qty,
+                                      final PricingPolicyProvider.PricingPolicy policy) {
 
         final SkuPrice skuPrice = getPriceResolver().getMinimalPrice(
                 null,
@@ -173,30 +172,19 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                 shoppingCart.getCurrencyCode(),
                 qty,
                 false,
-                policy.getID());
+                policy.getID(),
+                supplier
+        );
 
         final Pair<BigDecimal, BigDecimal> listAndSale = skuPrice.getSalePriceForCalculation();
         final BigDecimal list = skuPrice.isPriceUponRequest() ? null : listAndSale.getFirst();
         final BigDecimal sale = skuPrice.isPriceUponRequest() ? null : listAndSale.getSecond();
         if (skuPrice.isPriceOnOffer()) {
-            if (shoppingCart.setProductSkuOffer(skuCode, MoneyUtils.minPositive(list, sale), skuPrice.getRef())) {
-                setSkuPriceRef(shoppingCart, skuCode, skuPrice);
-            } else {
-                LOG.warn("Can not set offer {} to sku with code {}", skuPrice.getSkuPriceId(), skuCode);
+            if (!shoppingCart.setProductSkuOffer(supplier, skuCode, MoneyUtils.minPositive(list, sale), skuPrice.getRef())) {
+                LOG.warn("Can not set offer {} to sku with code {} for supplier {}", skuPrice.getSkuPriceId(), skuCode, supplier);
             }
-        } else if (shoppingCart.setProductSkuPrice(skuCode, sale != null ? sale : list, list)) {
-            setSkuPriceRef(shoppingCart, skuCode, skuPrice);
-        } else {
-            LOG.warn("Can not set price {} to sku with code {}", skuPrice.getSkuPriceId(), skuCode);
-        }
-    }
-
-    private void setSkuPriceRef(final MutableShoppingCart shoppingCart, final String skuCode, final SkuPrice skuPrice) {
-        final String key = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + skuCode;
-        if (StringUtils.isNotBlank(skuPrice.getRef())) {
-            shoppingCart.getOrderInfo().putDetail(key, skuPrice.getRef());
-        } else {
-            shoppingCart.getOrderInfo().putDetail(key, null);
+        } else if (!shoppingCart.setProductSkuPrice(supplier, skuCode, sale != null ? sale : list, list)) {
+            LOG.warn("Can not set price {} to sku with code {} for supplier {}", skuPrice.getSkuPriceId(), skuCode, supplier);
         }
     }
 

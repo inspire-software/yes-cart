@@ -52,11 +52,18 @@
     <quantity type="ats">-1.00</quantity>
 </stock>
 <stock sku="XML_BENDER-ua" warehouse="WAREHOUSE_2">
+    <availability disabled="false">
+        <available-from>2010-04-08 11:15:17</available-from>
+        <available-to>2040-04-08 11:15:17</available-to>
+    </availability>
+    <inventory-config type="1"/>
     <quantity type="stock">1.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">1.00</quantity>
 </stock>
 <stock sku="XML_BENDER" warehouse="WAREHOUSE_2">
+    <availability disabled="false"/>
+    <inventory-config type="16"/>
     <quantity type="stock">1.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">1.00</quantity>
@@ -77,16 +84,24 @@
     <quantity type="ats">0.00</quantity>
 </stock>
 <stock sku="XML_PAT_PRODUCT_PREORDER" warehouse="WAREHOUSE_2">
+    <availability disabled="false">
+        <release-date>2099-01-01 00:00:00</release-date>
+    </availability>
+    <inventory-config type="4"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>
 </stock>
 <stock sku="XML_PAT_PRODUCT_BACKORDER" warehouse="WAREHOUSE_2">
+    <availability disabled="false"/>
+    <inventory-config type="4"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>
 </stock>
 <stock sku="XML_PAT_PRODUCT_ALWAYS2" warehouse="WAREHOUSE_2">
+    <availability disabled="false"/>
+    <inventory-config type="8"/>
     <quantity type="stock">1.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">1.00</quantity>
@@ -122,16 +137,24 @@
     <quantity type="ats">3.00</quantity>
 </stock>
 <stock sku="XML_CC_TEST5" warehouse="WAREHOUSE_1">
+    <availability disabled="false"/>
+    <inventory-config type="4"/>
     <quantity type="stock">5.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">5.00</quantity>
 </stock>
 <stock sku="XML_CC_TEST6" warehouse="WAREHOUSE_1">
+    <availability disabled="false">
+        <release-date>2099-01-01 00:00:00</release-date>
+    </availability>
+    <inventory-config type="4"/>
     <quantity type="stock">500.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">500.00</quantity>
 </stock>
 <stock sku="XML_CC_TEST10-SKU" warehouse="WAREHOUSE_1">
+    <availability disabled="false"/>
+    <inventory-config type="8"/>
     <quantity type="stock">23.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">23.00</quantity>
@@ -147,6 +170,8 @@
     <quantity type="ats">2.00</quantity>
 </stock>
 <stock sku="XML_CC_TEST5-NOINV" warehouse="WAREHOUSE_1">
+    <availability disabled="false"/>
+    <inventory-config type="4"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>
@@ -162,11 +187,19 @@
     <quantity type="ats">4.00</quantity>
 </stock>
 <stock sku="XML_PREORDER-BACK-TO-FLOW0" warehouse="WAREHOUSE_1">
+    <availability disabled="false">
+        <release-date>2099-01-01 00:00:00</release-date>
+    </availability>
+    <inventory-config type="4"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>
 </stock>
 <stock sku="XML_PREORDER-BACK-TO-FLOW1" warehouse="WAREHOUSE_1">
+    <availability disabled="false">
+        <release-date>2099-01-01 00:00:00</release-date>
+    </availability>
+    <inventory-config type="4"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>
@@ -177,26 +210,42 @@
     <quantity type="ats">0.00</quantity>
 </stock>
 <stock sku="XML_PREORDER-BACK-TO-FLOW3" warehouse="WAREHOUSE_1">
+    <availability disabled="false">
+        <release-date>2099-01-01 00:00:00</release-date>
+    </availability>
+    <inventory-config type="2"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>
 </stock>
 <stock sku="XML_PREORDER-BACK-TO-FLOW4" warehouse="WAREHOUSE_1">
+    <availability disabled="false">
+        <release-date>2099-01-01 00:00:00</release-date>
+    </availability>
+    <inventory-config type="2"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>
 </stock>
 <stock sku="XML_PREORDER-BACK-TO-FLOW5" warehouse="WAREHOUSE_1">
+    <availability disabled="false">
+        <release-date>2099-01-01 00:00:00</release-date>
+    </availability>
+    <inventory-config type="2"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>
 </stock>
 <stock sku="XML_BACKORDER-BACK-TO-FLOW1" warehouse="WAREHOUSE_1">
+    <availability disabled="false"/>
+    <inventory-config type="4"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>
 </stock>
 <stock sku="XML_BACKORDER-BACK-TO-FLOW2" warehouse="WAREHOUSE_1">
+    <availability disabled="false"/>
+    <inventory-config type="4"/>
     <quantity type="stock">0.00</quantity>
     <quantity type="reserved">0.00</quantity>
     <quantity type="ats">0.00</quantity>

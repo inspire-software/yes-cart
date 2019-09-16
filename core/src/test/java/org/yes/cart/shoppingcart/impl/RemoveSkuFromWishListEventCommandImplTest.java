@@ -23,7 +23,6 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerWishListService;
-import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 
@@ -51,7 +50,6 @@ public class RemoveSkuFromWishListEventCommandImplTest extends BaseCoreDBTestCas
 
         final Customer customer = createCustomer();
 
-        final ProductSkuService skuService = ctx().getBean("productSkuService", ProductSkuService.class);
         final CustomerWishListService customerWishListService = ctx().getBean("customerWishListService", CustomerWishListService.class);
 
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
@@ -83,6 +81,7 @@ public class RemoveSkuFromWishListEventCommandImplTest extends BaseCoreDBTestCas
         params.clear();
 
         params.put(ShoppingCartCommand.CMD_ADDTOWISHLIST, "CC_TEST1");
+        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         params.put(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TAGS, "mine");
 
         commands.execute(shoppingCart, (Map) params);
@@ -94,7 +93,7 @@ public class RemoveSkuFromWishListEventCommandImplTest extends BaseCoreDBTestCas
         CustomerWishList item1 = wishList.get(0);
         assertEquals(CustomerWishList.PRIVATE, item1.getVisibility());
         assertEquals(CustomerWishList.SIMPLE_WISH_ITEM, item1.getWlType());
-        assertEquals(skuService.getProductSkuBySkuCode("CC_TEST1").getSkuId(),  item1.getSkus().getSkuId());
+        assertEquals("CC_TEST1",  item1.getSkuCode());
         assertEquals("mine", item1.getTag());
         assertEquals(1, item1.getQuantity().intValue());
         assertEquals("19.99", item1.getRegularPriceWhenAdded().toString());

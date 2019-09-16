@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -100,6 +101,8 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
                            final String skuCode,
+                           final String supplier,
+                           final BigDecimal qty,
                            final Map<String, Object> parameters) {
 
         if (productSku != null && ShoppingCart.LOGGED_IN == shoppingCart.getLogonState()) {

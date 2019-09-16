@@ -167,6 +167,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link StockType }
+     * 
+     */
+    public StockType createStockType() {
+        return new StockType();
+    }
+
+    /**
      * Create an instance of {@link PriceType }
      * 
      */
@@ -276,14 +284,6 @@ public class ObjectFactory {
      */
     public PaymentGatewayCallbackType createPaymentGatewayCallbackType() {
         return new PaymentGatewayCallbackType();
-    }
-
-    /**
-     * Create an instance of {@link StockType }
-     * 
-     */
-    public StockType createStockType() {
-        return new StockType();
     }
 
     /**
@@ -1767,22 +1767,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ProductType.Availability }
-     * 
-     */
-    public ProductType.Availability createProductTypeAvailability() {
-        return new ProductType.Availability();
-    }
-
-    /**
-     * Create an instance of {@link ProductType.InventoryConfig }
-     * 
-     */
-    public ProductType.InventoryConfig createProductTypeInventoryConfig() {
-        return new ProductType.InventoryConfig();
-    }
-
-    /**
      * Create an instance of {@link ContentType.Availability }
      * 
      */
@@ -1804,6 +1788,22 @@ public class ObjectFactory {
      */
     public SkuType.Supplier createSkuTypeSupplier() {
         return new SkuType.Supplier();
+    }
+
+    /**
+     * Create an instance of {@link StockType.Availability }
+     * 
+     */
+    public StockType.Availability createStockTypeAvailability() {
+        return new StockType.Availability();
+    }
+
+    /**
+     * Create an instance of {@link StockType.InventoryConfig }
+     * 
+     */
+    public StockType.InventoryConfig createStockTypeInventoryConfig() {
+        return new StockType.InventoryConfig();
     }
 
     /**

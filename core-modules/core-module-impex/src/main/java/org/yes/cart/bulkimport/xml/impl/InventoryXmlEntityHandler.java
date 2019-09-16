@@ -53,6 +53,22 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockTyp
 
     @Override
     protected void saveOrUpdate(final JobStatusListener statusListener, final SkuWarehouse domain, final StockType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+
+        if (xmlType.getAvailability() != null) {
+            domain.setDisabled(xmlType.getAvailability().isDisabled());
+            domain.setAvailablefrom(processLDT(xmlType.getAvailability().getAvailableFrom()));
+            domain.setAvailableto(processLDT(xmlType.getAvailability().getAvailableTo()));
+            domain.setReleaseDate(processLDT(xmlType.getAvailability().getReleaseDate()));
+        }
+
+        if (xmlType.getInventoryConfig() != null) {
+            domain.setAvailability(xmlType.getInventoryConfig().getType());
+            domain.setMinOrderQuantity(xmlType.getInventoryConfig().getMin());
+            domain.setMaxOrderQuantity(xmlType.getInventoryConfig().getMax());
+            domain.setStepOrderQuantity(xmlType.getInventoryConfig().getStep());
+            domain.setFeatured(xmlType.getInventoryConfig().isFeatured());
+        }
+
         for (final QuantityType qt : xmlType.getQuantity()) {
             if (qt.getType() == QuantityTypeType.STOCK) {
                 domain.setQuantity(qt.getValue());
@@ -75,6 +91,8 @@ public class InventoryXmlEntityHandler extends AbstractXmlEntityHandler<StockTyp
         }
         inventory = this.skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
         inventory.setSkuCode(xmlType.getSku());
+        inventory.setAvailability(SkuWarehouse.AVAILABILITY_STANDARD);
+        inventory.setFeatured(false);
         inventory.setWarehouse(this.warehouseService.findSingleByCriteria(" where e.code = ?1", xmlType.getWarehouse()));
         return inventory;
     }

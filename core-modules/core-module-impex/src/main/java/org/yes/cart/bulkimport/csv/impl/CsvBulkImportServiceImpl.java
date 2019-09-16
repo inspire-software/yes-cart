@@ -458,11 +458,11 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
                 }
             } catch (Exception exp) {
 
-                final String propName = propertyDescriptor != null ? propertyDescriptor.getName() : null;
-                final String propType = propertyDescriptor != null ? propertyDescriptor.getPropertyType().getName() : null;
+                final String propName = importColumn.getName();
+                final String propType = importColumn.getDataType();
 
                 throw new Exception(MessageFormatUtils.format(
-                        "Failed to process property name {} type {} object is {}",
+                        "Failed to process property name '{}' type '{}' object is '{}'",
                         propName,
                         propType,
                         object
@@ -583,7 +583,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
             final String propType = propertyDescriptor != null ? propertyDescriptor.getPropertyType().getName() : null;
 
             throw new Exception(MessageFormatUtils.format(
-                    "Failed to process property name {} type {} object is {} caused by column {} with value {}",
+                    "Failed to process property name '{}' type '{}' object is '{}' caused by column '{}' with value '{}'",
                     propName,
                     propType,
                     object,

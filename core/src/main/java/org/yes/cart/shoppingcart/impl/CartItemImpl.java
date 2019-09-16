@@ -383,6 +383,8 @@ public class CartItemImpl implements CartItem {
     public String toString() {
         return "CartItemImpl{" +
                 "productSkuCode='" + productSkuCode + '\'' +
+                ", supplierCode='" + supplierCode + '\'' +
+                ", deliveryGroup='" + deliveryGroup + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 '}';

@@ -175,6 +175,20 @@ public interface ProductSkuDTO extends Identifiable, Guidable {
     void setProductId(final long productId);
 
     /**
+     * Get product tags.
+     *
+     * @return tag line.
+     */
+    String getTag();
+
+    /**
+     * Set product tag.
+     *
+     * @param tag product tag line
+     */
+    void setTag(String tag);
+
+    /**
      * Get rank
      *
      * @return rank of sku

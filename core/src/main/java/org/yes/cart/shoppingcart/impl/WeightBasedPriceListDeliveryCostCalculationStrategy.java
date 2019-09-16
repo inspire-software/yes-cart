@@ -78,10 +78,12 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
 
             for (final Map.Entry<String, Long> supplierCarrierSla : cart.getCarrierSlaId().entrySet()) {
 
+                final String supplier = supplierCarrierSla.getKey();
+
                 final Map<DeliveryBucket, List<CartItem>> cartBuckets = new HashMap<>();
                 for (final Map.Entry<DeliveryBucket, List<CartItem>> bucket : cart.getCartItemMap().entrySet()) {
                     // Add shipping line for every bucket by this supplier (e.g. if we have multi delivery)
-                    if (bucket.getKey().getSupplier().equals(supplierCarrierSla.getKey())) {
+                    if (bucket.getKey().getSupplier().equals(supplier)) {
                         cartBuckets.put(bucket.getKey(), bucket.getValue());
                     }
 
@@ -115,10 +117,10 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
                         final boolean useWeight = MoneyUtils.isPositive(weightAndVolume.getFirst());
                         final boolean useVolume = MoneyUtils.isPositive(weightAndVolume.getSecond());
 
-                        final SkuPrice priceByWeightMax = useWeight ? getSkuPrice(cart, carrierSlaGUID + "_KGMAX", policy, MAX) : null;
-                        final SkuPrice priceByWeight = useWeight && isValidPrice(priceByWeightMax) && MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceByWeightMax.getQuantity(), weightAndVolume.getFirst()) ? getSkuPrice(cart, carrierSlaGUID + "_KG", policy, weightAndVolume.getFirst()) : null;
-                        final SkuPrice priceByVolumeMax = useVolume ? getSkuPrice(cart, carrierSlaGUID + "_M3MAX", policy, MAX) : null;
-                        final SkuPrice priceByVolume = useVolume && isValidPrice(priceByVolumeMax) && MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceByVolumeMax.getQuantity(), weightAndVolume.getSecond()) ? getSkuPrice(cart, carrierSlaGUID + "_M3", policy, weightAndVolume.getSecond()) : null;
+                        final SkuPrice priceByWeightMax = useWeight ? getSkuPrice(cart, carrierSlaGUID + "_KGMAX", policy, supplier, MAX) : null;
+                        final SkuPrice priceByWeight = useWeight && isValidPrice(priceByWeightMax) && MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceByWeightMax.getQuantity(), weightAndVolume.getFirst()) ? getSkuPrice(cart, carrierSlaGUID + "_KG", policy, supplier, weightAndVolume.getFirst()) : null;
+                        final SkuPrice priceByVolumeMax = useVolume ? getSkuPrice(cart, carrierSlaGUID + "_M3MAX", policy, supplier, MAX) : null;
+                        final SkuPrice priceByVolume = useVolume && isValidPrice(priceByVolumeMax) && MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceByVolumeMax.getQuantity(), weightAndVolume.getSecond()) ? getSkuPrice(cart, carrierSlaGUID + "_M3", policy, supplier, weightAndVolume.getSecond()) : null;
 
                         SkuPrice price = null;
                         if (useWeight && useVolume) {
@@ -237,9 +239,13 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
         return new Pair<>(weight, volume);
     }
 
-    protected SkuPrice getSkuPrice(final MutableShoppingCart cart, final String carrierSlaId, final PricingPolicyProvider.PricingPolicy policy, final BigDecimal qty) {
+    protected SkuPrice getSkuPrice(final MutableShoppingCart cart,
+                                   final String carrierSlaId,
+                                   final PricingPolicyProvider.PricingPolicy policy,
+                                   final String supplier,
+                                   final BigDecimal qty) {
 
-        return deliveryCostRegionalPriceResolver.getSkuPrice(cart, carrierSlaId, policy, qty);
+        return deliveryCostRegionalPriceResolver.getSkuPrice(cart, carrierSlaId, policy, supplier, qty);
 
     }
 

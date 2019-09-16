@@ -71,7 +71,7 @@ public class OrderAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
             param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
 
             assertEquals(1, shoppingCart.getCartItemList().size());
@@ -131,13 +131,13 @@ public class OrderAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             // add qualifying items
             Map<String, String> paramQ = new HashMap<>();
             paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+            paramQ.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) paramQ);
 
             // add non-qualifying items
             Map<String, String> paramNQ = new HashMap<>();
             paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+            paramNQ.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) paramNQ);
 
             assertEquals(2, shoppingCart.getCartItemList().size());
@@ -223,13 +223,13 @@ public class OrderAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             // add qualifying items
             Map<String, String> paramQ = new HashMap<>();
             paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            paramQ.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) paramQ);
 
             // add non-qualifying items
             Map<String, String> paramNQ = new HashMap<>();
             paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+            paramNQ.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) paramNQ);
 
             assertEquals(2, shoppingCart.getCartItemList().size());
@@ -316,13 +316,13 @@ public class OrderAmountOffPromotionActionTest extends BaseCoreDBTestCase {
             // add qualifying items
             Map<String, String> paramQ = new HashMap<>();
             paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            paramQ.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) paramQ);
 
             // add non-qualifying items
             Map<String, String> paramNQ = new HashMap<>();
             paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+            paramNQ.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) paramNQ);
 
             assertEquals(2, shoppingCart.getCartItemList().size());

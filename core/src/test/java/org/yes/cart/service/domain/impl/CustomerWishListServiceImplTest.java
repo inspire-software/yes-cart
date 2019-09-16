@@ -70,7 +70,8 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(4, skus.size());
         CustomerWishList customerWishList = service.getGenericDao().getEntityFactory().getByIface(CustomerWishList.class);
         customerWishList.setCustomer(customer);
-        customerWishList.setSkus(skus.iterator().next());
+        customerWishList.setSkuCode(skus.iterator().next().getCode());
+        customerWishList.setSupplierCode("Main");
         customerWishList.setWlType(CustomerWishList.REMIND_WHEN_PRICE_CHANGED);
         customerWishList.setVisibility(CustomerWishList.PRIVATE);
         customerWishList.setQuantity(BigDecimal.ONE);

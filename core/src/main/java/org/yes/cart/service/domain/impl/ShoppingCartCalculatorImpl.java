@@ -70,19 +70,20 @@ public class ShoppingCartCalculatorImpl implements ShoppingCartCalculator {
      */
     @Override
     public PriceModel calculatePrice(final ShoppingCart currentCart,
+                                     final String supplier,
                                      final String skuCode,
                                      final BigDecimal minimalPrice) {
 
         final MutableShoppingCart cart = createNewCart(currentCart, true, false, true);
 
-        cart.addProductSkuToCart(skuCode, skuCode, BigDecimal.ONE);
-        cart.setProductSkuPrice(skuCode, minimalPrice, minimalPrice);
+        cart.addProductSkuToCart(supplier, skuCode, skuCode, BigDecimal.ONE);
+        cart.setProductSkuPrice(supplier, skuCode, minimalPrice, minimalPrice);
 
         cart.recalculate();
 
         PriceModel model = null;
         for (final CartItem item : cart.getCartItemList()) {
-            if (item.getProductSkuCode().equals(skuCode)) {
+            if (item.getProductSkuCode().equals(skuCode) && item.getSupplierCode().equals(supplier)) {
                 model = new DefaultPriceModel(
                         item.getGrossPrice(),
                         item.getNetPrice(),

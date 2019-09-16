@@ -44,16 +44,18 @@ public interface CustomerWishListDTO extends Identifiable {
 
 
     /**
-     * @return sku primary key
+     * Get supplier.
+     *
+     * @return supplier
      */
-    long getSkuId();
+    String getSupplierCode();
 
     /**
-     * Set primary key value.
+     * Set supplier.
      *
-     * @param skuId primary key value.
+     * @param supplierCode supplier
      */
-    void setSkuId(long skuId);
+    void setSupplierCode(String supplierCode);
 
     /**
      * Get the sku code.

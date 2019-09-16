@@ -28,7 +28,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.log.Markers;
 
@@ -232,7 +231,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         final LocalDateTime now = now();
         for (final ShopCategory shopCategory : top) {
             final Category category = categoryService.getById(shopCategory.getCategory().getCategoryId());
-            if (DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+            if (category.isAvailable(now)) {
                 cats.add(category);
             }
         }

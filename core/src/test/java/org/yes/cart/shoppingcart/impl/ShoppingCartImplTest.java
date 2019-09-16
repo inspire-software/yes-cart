@@ -42,42 +42,56 @@ public class ShoppingCartImplTest {
     @Test
     public void testIndexOfSkuInexistent() {
         assertEquals("Size should be 0", 0, cart.getCartItemsCount());
-        assertEquals("Index must be -1 for inexistent sku", -1, cart.indexOfProductSku("sku"));
+        assertEquals("Index must be -1 for inexistent sku", -1, cart.indexOfProductSku("s01","sku"));
     }
 
     @Test
     public void testAddProductSkuDTOToCartInexistent() {
-        boolean newItem = cart.addProductSkuToCart("sku", "SKU name", BigDecimal.TEN);
+        boolean newItem = cart.addProductSkuToCart("s01","sku", "SKU name", BigDecimal.TEN);
         assertTrue("Must create new item", newItem);
         assertEquals("Size should be 10", 10, cart.getCartItemsCount());
-        assertEquals("Index must be 0 for sku", 0, cart.indexOfProductSku("sku"));
+        assertEquals("Index must be 0 for sku", 0, cart.indexOfProductSku("s01", "sku"));
         assertEquals("Items must have 1 element", 1, cart.getCartItemList().size());
         assertEquals("1st element must be sku", "sku", cart.getCartItemList().get(0).getProductSkuCode());
     }
 
     @Test
     public void testAddProductSkuDTOToCartExistent() {
-        boolean newItem1 = cart.addProductSkuToCart("sku", "SKU name", BigDecimal.TEN);
-        boolean newItem2 = cart.addProductSkuToCart("sku", "SKU name", BigDecimal.TEN);
+        boolean newItem1 = cart.addProductSkuToCart("s01", "sku", "SKU name", BigDecimal.TEN);
+        boolean newItem2 = cart.addProductSkuToCart("s01", "sku", "SKU name", BigDecimal.TEN);
         assertTrue("Must create new item", newItem1);
         assertFalse("Must not create new item", newItem2);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
-        assertEquals("Index must be 0 for sku", 0, cart.indexOfProductSku("sku"));
+        assertEquals("Index must be 0 for sku", 0, cart.indexOfProductSku("s01", "sku"));
         assertEquals("Items must have 1 element", 1, cart.getCartItemList().size());
         assertEquals("1st element must be sku", "sku", cart.getCartItemList().get(0).getProductSkuCode());
     }
 
     @Test
+    public void testAddProductSkuDTOToCartExistentDifferentSupplier() {
+        boolean newItem1 = cart.addProductSkuToCart("s01", "sku", "SKU name", BigDecimal.TEN);
+        boolean newItem2 = cart.addProductSkuToCart("s02", "sku", "SKU name", BigDecimal.TEN);
+        assertTrue("Must create new item", newItem1);
+        assertTrue("Must create new item", newItem2);
+        assertEquals("Size should be 20", 20, cart.getCartItemsCount());
+        assertEquals("Index must be 0 for sku", 0, cart.indexOfProductSku("s01", "sku"));
+        assertEquals("Index must be 1 for sku", 1, cart.indexOfProductSku("s02", "sku"));
+        assertEquals("Items must have 2 elements", 2, cart.getCartItemList().size());
+        assertEquals("1st element must be sku", "sku", cart.getCartItemList().get(0).getProductSkuCode());
+        assertEquals("2nd element must be sku", "sku", cart.getCartItemList().get(1).getProductSkuCode());
+    }
+
+    @Test
     public void testAddProductSkuToCartExistentAndInexistent() {
-        boolean newItem1 = cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        boolean newItem2 = cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        boolean newItem3 = cart.addProductSkuToCart("sku02", "SKU name", BigDecimal.TEN);
+        boolean newItem1 = cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        boolean newItem2 = cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        boolean newItem3 = cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
         assertTrue("Must create new item", newItem1);
         assertFalse("Must not create new item", newItem2);
         assertTrue("Must create new item", newItem3);
         assertEquals("Size should be 30", 30, cart.getCartItemsCount());
-        assertEquals("Index must be 0 for sku01", 0, cart.indexOfProductSku("sku01"));
-        assertEquals("Index must be 1 for sku02", 1, cart.indexOfProductSku("sku02"));
+        assertEquals("Index must be 0 for sku01", 0, cart.indexOfProductSku("s01", "sku01"));
+        assertEquals("Index must be 1 for sku02", 1, cart.indexOfProductSku("s01", "sku02"));
         assertEquals("Items must have 2 elements", 2, cart.getCartItemList().size());
         assertEquals("1st element must be sku01", "sku01", cart.getCartItemList().get(0).getProductSkuCode());
         assertEquals("1st element must be sku02", "sku02", cart.getCartItemList().get(1).getProductSkuCode());
@@ -85,18 +99,18 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testAddGiftToCart() throws Exception {
-        boolean newItem1 = cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        boolean newItem2 = cart.addGiftToCart("sku01", "SKU name", BigDecimal.ONE, "TEST01");
-        boolean newItem3 = cart.addProductSkuToCart("sku02", "SKU name", BigDecimal.TEN);
-        boolean newItem4 = cart.addGiftToCart("sku01", "SKU name", BigDecimal.ONE, "TEST02");
+        boolean newItem1 = cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        boolean newItem2 = cart.addGiftToCart("s01", "sku01", "SKU name", BigDecimal.ONE, "TEST01");
+        boolean newItem3 = cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
+        boolean newItem4 = cart.addGiftToCart("s01", "sku01", "SKU name", BigDecimal.ONE, "TEST02");
         assertTrue("Must create new item", newItem1);
         assertTrue("Must not create new item", newItem2);
         assertTrue("Must create new item", newItem3);
         assertFalse("Must not create new item", newItem4);
         assertEquals("Size should be 30", 22, cart.getCartItemsCount());
-        assertEquals("Index must be 0 for sku01", 0, cart.indexOfProductSku("sku01"));
-        assertEquals("Index must be 0 for sku01", 0, cart.indexOfGift("sku01")); // gift index is separate from product
-        assertEquals("Index must be 1 for sku02", 1, cart.indexOfProductSku("sku02"));
+        assertEquals("Index must be 0 for sku01", 0, cart.indexOfProductSku("s01", "sku01"));
+        assertEquals("Index must be 0 for sku01", 0, cart.indexOfGift("s01", "sku01")); // gift index is separate from product
+        assertEquals("Index must be 1 for sku02", 1, cart.indexOfProductSku("s01", "sku02"));
         assertEquals("Items must have 2 elements", 3, cart.getCartItemList().size());
         assertEquals("1st element must be sku01", "sku01", cart.getCartItemList().get(0).getProductSkuCode());
         assertEquals("2nd element must be sku02", "sku02", cart.getCartItemList().get(1).getProductSkuCode());
@@ -107,67 +121,89 @@ public class ShoppingCartImplTest {
 
     @Test
     public void testRemoveCartItemInexistent() {
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku02", "SKU name", BigDecimal.TEN);
-        boolean removed = cart.removeCartItem("sku03");
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
+        boolean removed = cart.removeCartItem("s01", "sku03");
         assertFalse("Must not be removed", removed);
         assertEquals("Size should be 30", 30, cart.getCartItemsCount());
     }
 
     @Test
     public void testRemoveCartItemExistent() {
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku02", "SKU name", BigDecimal.TEN);
-        boolean removed = cart.removeCartItem("sku02");
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
+        boolean removed = cart.removeCartItem("s01", "sku02");
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
-        assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("sku02"));
+        assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("s01", "sku02"));
+    }
+
+    @Test
+    public void testRemoveCartItemExistentWrongSupplier() {
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
+        boolean removed = cart.removeCartItem("s02", "sku02");
+        assertFalse("Must be removed", removed);
+        assertEquals("Size should be 30", 30, cart.getCartItemsCount());
+        assertEquals("Index of sku should be 1", 1, cart.indexOfProductSku("s01", "sku02"));
     }
 
     @Test
     public void testRemoveCartItemQuantityInexistent() {
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku02", "SKU name", BigDecimal.TEN);
-        boolean removed = cart.removeCartItemQuantity("sku03", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
+        boolean removed = cart.removeCartItemQuantity("s01", "sku03", BigDecimal.TEN);
         assertFalse("Must not be removed", removed);
         assertEquals("Size should be 30", 30, cart.getCartItemsCount());
     }
 
     @Test
     public void testRemoveCartItemQuantityExistent() {
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku02", "SKU name", BigDecimal.TEN);
-        boolean removed = cart.removeCartItemQuantity("sku02", BigDecimal.ONE);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
+        boolean removed = cart.removeCartItemQuantity("s01", "sku02", BigDecimal.ONE);
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 29", 29, cart.getCartItemsCount());
-        assertEquals("Index of removed should be 1", 1, cart.indexOfProductSku("sku02"));
+        assertEquals("Index of removed should be 1", 1, cart.indexOfProductSku("s01", "sku02"));
         assertTrue("Quantity should change to 9", MoneyUtils.isFirstEqualToSecond(new BigDecimal(9), cart.getCartItemList().get(1).getQty()));
     }
 
     @Test
+    public void testRemoveCartItemQuantityExistentWrongSupplier() {
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
+        boolean removed = cart.removeCartItemQuantity("s02", "sku02", BigDecimal.ONE);
+        assertFalse("Must not be removed", removed);
+        assertEquals("Size should be 30", 30, cart.getCartItemsCount());
+        assertEquals("Index of removed should be 1", 1, cart.indexOfProductSku("s01", "sku02"));
+    }
+
+    @Test
     public void testRemoveCartItemQuantityExistentFull() {
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku02", "SKU name", BigDecimal.TEN);
-        boolean removed = cart.removeCartItemQuantity("sku02", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
+        boolean removed = cart.removeCartItemQuantity("s01", "sku02", BigDecimal.TEN);
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
-        assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("sku02"));
+        assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("s01", "sku02"));
     }
 
     @Test
     public void testRemoveCartItemQuantityExistentMoreThanInCart() {
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku01", "SKU name", BigDecimal.TEN);
-        cart.addProductSkuToCart("sku02", "SKU name", BigDecimal.TEN);
-        boolean removed = cart.removeCartItemQuantity("sku02", new BigDecimal(100));
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku01", "SKU name", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01", "sku02", "SKU name", BigDecimal.TEN);
+        boolean removed = cart.removeCartItemQuantity("s01", "sku02", new BigDecimal(100));
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
-        assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("sku02"));
+        assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("s01", "sku02"));
     }
 
     @Test
@@ -198,14 +234,14 @@ public class ShoppingCartImplTest {
         assertNotNull(applied);
         assertEquals(0, applied.size());
 
-        cart.addGiftToCart("gift-001", "SKU name", BigDecimal.ONE, "PROMO-001:ABC");
+        cart.addGiftToCart("s01", "gift-001", "SKU name", BigDecimal.ONE, "PROMO-001:ABC");
 
         applied = cart.getAppliedCoupons();
         assertNotNull(applied);
         assertEquals(1, applied.size());
         assertEquals("ABC", applied.get(0));
 
-        cart.addGiftToCart("gift-002", "SKU name", BigDecimal.ONE, "PROMO-001:CDE");
+        cart.addGiftToCart("s01", "gift-002", "SKU name", BigDecimal.ONE, "PROMO-001:CDE");
 
         applied = cart.getAppliedCoupons();
         assertNotNull(applied);
@@ -245,16 +281,16 @@ public class ShoppingCartImplTest {
     @Test
     public void testRemoveItemPromotions() throws Exception {
 
-        cart.addProductSkuToCart("ABC001", "SKU name", BigDecimal.ONE);
-        cart.setProductSkuPrice("ABC001", new BigDecimal("9.99"), new BigDecimal("10.99"));
-        cart.setProductSkuPromotion("ABC001", new BigDecimal("5.99"), "-50");
+        cart.addProductSkuToCart("s01", "ABC001", "SKU name", BigDecimal.ONE);
+        cart.setProductSkuPrice("s01", "ABC001", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuPromotion("s01", "ABC001", new BigDecimal("5.99"), "-50");
 
-        cart.addGiftToCart("G001", "SKU name", BigDecimal.ONE, "G001");
-        cart.setGiftPrice("G001", new BigDecimal("4.99"), new BigDecimal("4.99"));
+        cart.addGiftToCart("s01", "G001", "SKU name", BigDecimal.ONE, "G001");
+        cart.setGiftPrice("s01", "G001", new BigDecimal("4.99"), new BigDecimal("4.99"));
 
-        cart.addProductSkuToCart("ABC002", "SKU name", BigDecimal.ONE);
-        cart.setProductSkuPrice("ABC002", new BigDecimal("9.99"), new BigDecimal("10.99"));
-        cart.setProductSkuOffer("ABC002", new BigDecimal("5.99"), "AUTH001");
+        cart.addProductSkuToCart("s01", "ABC002", "SKU name", BigDecimal.ONE);
+        cart.setProductSkuPrice("s01", "ABC002", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuOffer("s01", "ABC002", new BigDecimal("5.99"), "AUTH001");
 
         assertEquals(3, cart.getCartItemList().size());
 
@@ -312,16 +348,16 @@ public class ShoppingCartImplTest {
     @Test
     public void testRemoveItemOffers() throws Exception {
 
-        cart.addProductSkuToCart("ABC001", "SKU name", BigDecimal.ONE);
-        cart.setProductSkuPrice("ABC001", new BigDecimal("9.99"), new BigDecimal("10.99"));
-        cart.setProductSkuPromotion("ABC001", new BigDecimal("5.99"), "-50");
+        cart.addProductSkuToCart("s01", "ABC001", "SKU name", BigDecimal.ONE);
+        cart.setProductSkuPrice("s01", "ABC001", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuPromotion("s01", "ABC001", new BigDecimal("5.99"), "-50");
 
-        cart.addGiftToCart("G001", "SKU name", BigDecimal.ONE, "G001");
-        cart.setGiftPrice("G001", new BigDecimal("4.99"), new BigDecimal("4.99"));
+        cart.addGiftToCart("s01", "G001", "SKU name", BigDecimal.ONE, "G001");
+        cart.setGiftPrice("s01", "G001", new BigDecimal("4.99"), new BigDecimal("4.99"));
 
-        cart.addProductSkuToCart("ABC002", "SKU name", BigDecimal.ONE);
-        cart.setProductSkuPrice("ABC002", new BigDecimal("9.99"), new BigDecimal("10.99"));
-        cart.setProductSkuOffer("ABC002", new BigDecimal("5.99"), "AUTH001");
+        cart.addProductSkuToCart("s01", "ABC002", "SKU name", BigDecimal.ONE);
+        cart.setProductSkuPrice("s01", "ABC002", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuOffer("s01", "ABC002", new BigDecimal("5.99"), "AUTH001");
 
         assertEquals(3, cart.getCartItemList().size());
 
@@ -384,7 +420,7 @@ public class ShoppingCartImplTest {
     @Test
     public void testSetProductSkuPrice() throws Exception {
 
-        cart.addProductSkuToCart("ABC", "SKU name", BigDecimal.ONE);
+        cart.addProductSkuToCart("s01", "ABC", "SKU name", BigDecimal.ONE);
 
         final CartItem noPrice = cart.getCartItemList().get(0);
 
@@ -395,7 +431,7 @@ public class ShoppingCartImplTest {
         assertFalse(noPrice.isFixedPrice());
         assertNull(noPrice.getAppliedPromo());
 
-        cart.setProductSkuPrice("ABC", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuPrice("s01", "ABC", new BigDecimal("9.99"), new BigDecimal("10.99"));
 
         final CartItem hasPrice = cart.getCartItemList().get(0);
 
@@ -407,7 +443,7 @@ public class ShoppingCartImplTest {
         assertNull(hasPrice.getAppliedPromo());
 
         // Do promotion
-        cart.setProductSkuPromotion("ABC", new BigDecimal("4.99"), "50OFF");
+        cart.setProductSkuPromotion("s01", "ABC", new BigDecimal("4.99"), "50OFF");
 
         final CartItem promoPrice = cart.getCartItemList().get(0);
 
@@ -419,7 +455,7 @@ public class ShoppingCartImplTest {
         assertEquals("50OFF", promoPrice.getAppliedPromo());
 
         // Perform set price
-        cart.setProductSkuPrice("ABC", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuPrice("s01", "ABC", new BigDecimal("9.99"), new BigDecimal("10.99"));
 
         final CartItem promoPriceAfterReset = cart.getCartItemList().get(0);
 
@@ -431,7 +467,7 @@ public class ShoppingCartImplTest {
         assertNull(promoPriceAfterReset.getAppliedPromo());
 
         // Do offer
-        cart.setProductSkuOffer("ABC", new BigDecimal("8.99"), "AUTH001");
+        cart.setProductSkuOffer("s01", "ABC", new BigDecimal("8.99"), "AUTH001");
 
         final CartItem offerPrice = cart.getCartItemList().get(0);
 
@@ -443,7 +479,7 @@ public class ShoppingCartImplTest {
         assertEquals("AUTH001", offerPrice.getAppliedPromo());
 
         // Perform set price higher than offer
-        cart.setProductSkuPrice("ABC", new BigDecimal("11.99"), new BigDecimal("12.99"));
+        cart.setProductSkuPrice("s01", "ABC", new BigDecimal("11.99"), new BigDecimal("12.99"));
 
         final CartItem offerPriceAfterResetHigher = cart.getCartItemList().get(0);
 
@@ -455,7 +491,7 @@ public class ShoppingCartImplTest {
         assertEquals("AUTH001", offerPriceAfterResetHigher.getAppliedPromo());
 
         // Perform set price lower than offer
-        cart.setProductSkuPrice("ABC", new BigDecimal("4.99"), new BigDecimal("5.99"));
+        cart.setProductSkuPrice("s01", "ABC", new BigDecimal("4.99"), new BigDecimal("5.99"));
 
         final CartItem offerPriceAfterResetLower = cart.getCartItemList().get(0);
 

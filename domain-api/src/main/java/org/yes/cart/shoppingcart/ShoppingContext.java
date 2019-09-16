@@ -136,8 +136,9 @@ public interface ShoppingContext extends Serializable {
 
     /**
      * Get last viewed sku codes.
+     * E.g. SKU001|FC01,SKU002|FC01,SKU003|FC02
      *
-     * @return comma separated string of viewed skus.
+     * @return comma separated string of viewed skus and suppliers.
      */
     List<String> getLatestViewedSkus();
 

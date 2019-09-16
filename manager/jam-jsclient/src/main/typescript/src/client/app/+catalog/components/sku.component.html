@@ -178,6 +178,27 @@
 
       </tab>
 
+      <tab heading="{{ 'TAB_SEARCH' | translate }}"  (select)="tabSelected('Search')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TAG' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="sku.tag">
+                  <div [hidden]="skuForm.controls['tag'].valid || skuForm.controls['tag'].pristine" class="alert alert-danger">
+                    {{ 'TAGS_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
       <tab heading="{{ 'TAB_EXTERNAL' | translate }}"  (select)="tabSelected('External')">
 
         <div class="panel-body">

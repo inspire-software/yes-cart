@@ -83,19 +83,6 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
             domain.setBrand(brand);
         }
 
-        if (xmlType.getAvailability() != null) {
-            domain.setDisabled(xmlType.getAvailability().isDisabled());
-            domain.setAvailablefrom(processLDT(xmlType.getAvailability().getAvailableFrom()));
-            domain.setAvailableto(processLDT(xmlType.getAvailability().getAvailableTo()));
-        }
-
-        if (xmlType.getInventoryConfig() != null) {
-            domain.setAvailability(xmlType.getInventoryConfig().getType());
-            domain.setMinOrderQuantity(xmlType.getInventoryConfig().getMin());
-            domain.setMaxOrderQuantity(xmlType.getInventoryConfig().getMax());
-            domain.setStepOrderQuantity(xmlType.getInventoryConfig().getStep());
-        }
-
         if (xmlType.getProductType() != null) {
             ProductType productType = this.productTypeService.findSingleByCriteria(" where e.guid = ?1", xmlType.getProductType().getGuid());
             if (productType == null) {
@@ -178,7 +165,6 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
         product = this.productService.getGenericDao().getEntityFactory().getByIface(Product.class);
         product.setCode(xmlType.getCode());
         product.setGuid(xmlType.getCode());
-        product.setAvailability(Product.AVAILABILITY_STANDARD);
         return product;
     }
 

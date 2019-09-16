@@ -22,9 +22,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -50,26 +48,18 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private boolean pimOutdated;
     private Instant pimUpdated;
 
-    private boolean disabled;
-    private LocalDateTime availablefrom;
-    private LocalDateTime availableto;
     private String name;
     private String displayName;
     private String description;
     private String tag;
     private Brand brand;
     private ProductType producttype;
-    private int availability;
     private Set<AttrValueProduct> attributes = new HashSet<>(0);
     private Set<ProductCategory> productCategory = new HashSet<>(0);
     private Collection<ProductSku> sku = new ArrayList<>(0);
     private Set<ProductEnsembleOption> ensebleOption = new HashSet<>(0);
     private Set<ProductAssociation> productAssociations = new HashSet<>(0);
-    private Boolean featured;
     private SeoEntity seoInternal;
-    private BigDecimal minOrderQuantity;
-    private BigDecimal maxOrderQuantity;
-    private BigDecimal stepOrderQuantity;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -169,38 +159,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @Override
     public void setPimUpdated(final Instant pimUpdated) {
         this.pimUpdated = pimUpdated;
-    }
-
-    @Override
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    @Override
-    public void setDisabled(final boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    @Override
-    public LocalDateTime getAvailablefrom() {
-        return this.availablefrom;
-    }
-
-    @Override
-    public void setAvailablefrom(LocalDateTime availablefrom) {
-        this.availablefrom = availablefrom;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public LocalDateTime getAvailableto() {
-        return this.availableto;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setAvailableto(LocalDateTime availableto) {
-        this.availableto = availableto;
     }
 
     /** {@inheritDoc} */
@@ -304,16 +262,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     @Override
-    public int getAvailability() {
-        return this.availability;
-    }
-
-    @Override
-    public void setAvailability(int availability) {
-        this.availability = availability;
-    }
-
-    @Override
     public Set<AttrValueProduct> getAttributes() {
         return this.attributes;
     }
@@ -361,16 +309,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @Override
     public void setProductAssociations(Set<ProductAssociation> productAssociations) {
         this.productAssociations = productAssociations;
-    }
-
-    @Override
-    public Boolean getFeatured() {
-        return this.featured;
-    }
-
-    @Override
-    public void setFeatured(Boolean featured) {
-        this.featured = featured;
     }
 
     public SeoEntity getSeoInternal() {
@@ -483,9 +421,9 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         if (defaultProductSku == null) {
             if (this.getSku() != null && !this.getSku().isEmpty()) {
                 if (isMultiSkuProduct()) { //multisku
-                    int rank = Integer.MIN_VALUE;
+                    int rank = Integer.MAX_VALUE;
                     for (ProductSku productSku : this.getSku()) {
-                        if (productSku.getRank() > rank) {
+                        if (productSku.getRank() < rank) {
                             defaultProductSku = productSku;
                             rank = productSku.getRank();
                         }
@@ -565,7 +503,14 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     @Override
     public ProductSku getSku(final String skuCode) {
-        return getDefaultSku();
+        if (getSku() != null) {
+            for (final ProductSku sku : getSku()) {
+                if (sku.getCode().equals(skuCode)) {
+                    return sku;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
@@ -594,36 +539,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @Override
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
-    }
-
-    @Override
-    public BigDecimal getMinOrderQuantity() {
-        return minOrderQuantity;
-    }
-
-    @Override
-    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
-        this.minOrderQuantity = minOrderQuantity;
-    }
-
-    @Override
-    public BigDecimal getMaxOrderQuantity() {
-        return maxOrderQuantity;
-    }
-
-    @Override
-    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
-        this.maxOrderQuantity = maxOrderQuantity;
-    }
-
-    @Override
-    public BigDecimal getStepOrderQuantity() {
-        return stepOrderQuantity;
-    }
-
-    @Override
-    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
-        this.stepOrderQuantity = stepOrderQuantity;
     }
 
 }

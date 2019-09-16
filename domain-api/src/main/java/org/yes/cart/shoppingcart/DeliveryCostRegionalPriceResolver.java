@@ -36,13 +36,19 @@ public interface DeliveryCostRegionalPriceResolver {
      * For example if CarrierSla.SlaType is R (Free) SkuPrice can be defined as 1EUR to denote that this carrier sla
      * is available for EUR currency.
      *
-     * @param cart current cart
-     * @param carrierSlaBaseCode currently this is CarrierSla.GUID
-     * @param policy pricing policy to enforce
-     * @param qty quantity tier (this is an arbitrary figure, default use is the number of deliveries, however it
-     *            is possible to treat this as other tier, such as parcel weight calculated from product attributes)
+     * @param cart                  current cart
+     * @param carrierSlaBaseCode    currently this is CarrierSla.GUID
+     * @param policy                pricing policy to enforce
+     * @param supplier              supplier
+     * @param qty                   quantity tier (this is an arbitrary figure, default use is the number of deliveries,
+     *                              however it is possible to treat this as other tier, such as parcel weight calculated
+     *                              from product attributes)
      *
      */
-    SkuPrice getSkuPrice(final ShoppingCart cart, final String carrierSlaBaseCode, final PricingPolicyProvider.PricingPolicy policy, final BigDecimal qty);
+    SkuPrice getSkuPrice(ShoppingCart cart,
+                         String carrierSlaBaseCode,
+                         PricingPolicyProvider.PricingPolicy policy,
+                         String supplier,
+                         BigDecimal qty);
 
 }

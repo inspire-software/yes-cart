@@ -18,6 +18,7 @@ package org.yes.cart.web.service.rest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.groovy.util.ListHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +27,22 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.*;
+import org.yes.cart.service.domain.CustomerOrderComparator;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.RegExUtils;
 import org.yes.cart.utils.TimeContext;
-import org.yes.cart.service.domain.CustomerOrderComparator;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
+import org.yes.cart.web.service.rest.impl.SearchSupportMixin;
 import org.yes.cart.web.support.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -85,6 +88,8 @@ public class CustomerController {
     private RoMappingMixin mappingMixin;
     @Autowired
     private AddressSupportMixin addressSupportMixin;
+    @Autowired
+    private SearchSupportMixin searchSupportMixin;
 
 
     /**
@@ -1155,16 +1160,16 @@ public class CustomerController {
 
         if (CollectionUtils.isNotEmpty(wishList)) {
 
-            final List<String> productIds = new ArrayList<>();
+            final List<String> skuCodes = new ArrayList<>();
 
             for (final CustomerWishList item : wishList) {
 
-                productIds.add(String.valueOf(item.getSkus().getProduct().getProductId()));
+                skuCodes.add(String.valueOf(item.getSkuCode()));
 
             }
 
-            final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProducts(
-                    productIds, -1L, shop.getShopId(), browsingShopId);
+            final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProductSKUs(
+                    skuCodes, -1L, shop.getShopId(), browsingShopId);
 
             final List<ProductWishlistRO> wlRo = new ArrayList<>();
 
@@ -1172,40 +1177,61 @@ public class CustomerController {
 
                 final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
 
+                final String symbolAbr = symbol.getFirst();
+                final String symbolPos = symbol.getSecond() != null && symbol.getSecond() ? "after" : "before";
+
                 for (final ProductSearchResultDTO uniqueProduct : uniqueProducts) {
 
-                    if (uniqueProduct.getId() == item.getSkus().getProduct().getProductId()) {
-                        final ProductWishlistRO wl = mappingMixin.map(uniqueProduct, ProductWishlistRO.class, ProductSearchResultDTO.class);
-                        wl.setDefaultSkuCode(item.getSkus().getCode());
-                        wl.setQuantity(item.getQuantity());
+                    if (uniqueProduct.getSearchSkus() != null) {
+                        for (final ProductSkuSearchResultDTO sku : uniqueProduct.getSearchSkus()) {
 
-                        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(uniqueProduct, browsingShopId);
-                        final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
-                        wl.setProductAvailabilityModel(amRo);
+                            if (sku.getCode().equals(item.getSkuCode()) && sku.getFulfilmentCentreCode().equals(item.getSupplierCode())) {
+                                final ProductWishlistRO wl = mappingMixin.map(uniqueProduct, ProductWishlistRO.class, ProductSearchResultDTO.class);
+                                wl.setDefaultSkuCode(item.getSkuCode());
+                                wl.setQuantity(item.getQuantity());
 
-                        final PriceModel price = productServiceFacade.getSkuPrice(
-                                cart,
-                                null,
-                                skuPam.getFirstAvailableSkuCode(),
-                                BigDecimal.ONE
-                        );
+                                final ProductAvailabilityModel wlPam = productServiceFacade.getProductAvailability(sku, browsingShopId);
+                                final ProductAvailabilityModelRO wlAmRo = mappingMixin.map(wlPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
+                                wl.setProductAvailabilityModel(wlAmRo);
 
-                        final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, PriceModel.class);
-                        priceRo.setSymbol(symbol.getFirst());
-                        priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
+                                final PriceModel currentWlPrice = productServiceFacade.getSkuPrice(
+                                        cart,
+                                        null,
+                                        item.getSkuCode(),
+                                        BigDecimal.ONE,
+                                        item.getSupplierCode()
+                                );
 
-                        wl.setPrice(priceRo);
+                                final SkuPriceRO currentWlPriceRo = mappingMixin.map(currentWlPrice, SkuPriceRO.class, PriceModel.class);
+                                currentWlPriceRo.setSymbol(symbolAbr);
+                                currentWlPriceRo.setSymbolPosition(symbolPos);
 
-                        final SkuPriceRO wlPrice = new SkuPriceRO();
-                        wlPrice.setQuantity(BigDecimal.ONE);
-                        wlPrice.setCurrency(item.getRegularPriceCurrencyWhenAdded());
-                        wlPrice.setRegularPrice(item.getRegularPriceWhenAdded());
-                        wl.setPriceWhenAdded(wlPrice);
-                        final Pair<String, Boolean> wlSymbol = currencySymbolService.getCurrencySymbol(wlPrice.getCurrency());
-                        wlPrice.setSymbol(wlSymbol.getFirst());
-                        wlPrice.setSymbolPosition(wlSymbol.getSecond() != null && wlSymbol.getSecond() ? "after" : "before");
+                                wl.setPrice(currentWlPriceRo);
 
-                        wlRo.add(wl);
+                                final SkuPriceRO wlPrice = new SkuPriceRO();
+                                wlPrice.setQuantity(BigDecimal.ONE);
+                                wlPrice.setCurrency(item.getRegularPriceCurrencyWhenAdded());
+                                wlPrice.setRegularPrice(item.getRegularPriceWhenAdded());
+                                wl.setPriceWhenAdded(wlPrice);
+                                final Pair<String, Boolean> wlSymbol = currencySymbolService.getCurrencySymbol(wlPrice.getCurrency());
+                                wlPrice.setSymbol(wlSymbol.getFirst());
+                                wlPrice.setSymbolPosition(wlSymbol.getSecond() != null && wlSymbol.getSecond() ? "after" : "before");
+
+                                final ProductSkuSearchResultRO rvs = mappingMixin.map(sku, ProductSkuSearchResultRO.class, ProductSkuSearchResultDTO.class);
+                                rvs.setSkuAvailabilityModel(wlAmRo);
+                                rvs.setPrice(currentWlPriceRo);
+
+                                final BigDecimal cartQty = cart.getProductSkuQuantity(sku.getFulfilmentCentreCode(), sku.getCode());
+                                final QuantityModel wlQm = productServiceFacade.getProductQuantity(cartQty, sku, browsingShopId);
+                                final ProductQuantityModelRO wlQmRo = mappingMixin.map(wlQm, ProductQuantityModelRO.class, QuantityModel.class);
+                                rvs.setSkuQuantityModel(wlQmRo);
+
+                                wl.setSkus(new ArrayList<>(Collections.singletonList(rvs)));
+
+                                wlRo.add(wl);
+                            }
+
+                        }
                     }
 
                 }
@@ -1643,41 +1669,20 @@ public class CustomerController {
         final long shopId = cartMixin.getCurrentShopId();
         final long browsingShopId = cartMixin.getCurrentCustomerShopId();
 
-        final List<String> productIds = cart.getShoppingContext().getLatestViewedSkus();
-
-        final List<ProductSearchResultDTO> viewedProducts = productServiceFacade.getListProducts(
-                productIds, -1L, shopId, browsingShopId);
-
-        final List<ProductSearchResultRO> rvRo = new ArrayList<>();
-
-        final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
-
-        for (final ProductSearchResultDTO viewedProduct : viewedProducts) {
-
-            final ProductSearchResultRO rv = mappingMixin.map(viewedProduct, ProductSearchResultRO.class, ProductSearchResultDTO.class);
-
-            final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(viewedProduct, browsingShopId);
-            final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
-            rv.setProductAvailabilityModel(amRo);
-
-            final PriceModel price = productServiceFacade.getSkuPrice(
-                    cart,
-                    null,
-                    skuPam.getFirstAvailableSkuCode(),
-                    BigDecimal.ONE
-            );
-
-            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, PriceModel.class);
-            priceRo.setSymbol(symbol.getFirst());
-            priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
-
-            rv.setPrice(priceRo);
-
-            rvRo.add(rv);
-
+        final List<String> viewedSkus = cart.getShoppingContext().getLatestViewedSkus();
+        final Map<String, String> skuAndSupplier = new ListHashMap<>();
+        for (final String viewedSku : viewedSkus) {
+            final int pos = viewedSku.indexOf("|");
+            if (pos != -1) {
+                skuAndSupplier.put(viewedSku.substring(0, pos), viewedSku.substring(pos + 1));
+            }
         }
 
-        return rvRo;
+        final List<ProductSearchResultDTO> viewedProducts = new ArrayList<>(productServiceFacade.getListProductSKUs(
+                new ArrayList<>(skuAndSupplier.keySet()), -1L, shopId, browsingShopId));
+        viewedProducts.removeIf(viewed -> viewed.getFulfilmentCentreCode().equals(skuAndSupplier.get(viewed.getFulfilmentCentreCode())));
+
+        return searchSupportMixin.map(viewedProducts, cart);
 
     }
 

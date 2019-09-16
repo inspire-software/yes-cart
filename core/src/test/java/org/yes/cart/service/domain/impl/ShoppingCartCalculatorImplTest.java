@@ -96,7 +96,7 @@ public class ShoppingCartCalculatorImplTest {
         final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
-        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
+        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "Main", "SKU0001", new BigDecimal("9.99"));
 
         assertNotNull(model);
         assertEquals("9.99", model.getGrossPrice().toPlainString());
@@ -170,7 +170,7 @@ public class ShoppingCartCalculatorImplTest {
         final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
-        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
+        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "Main", "SKU0001", new BigDecimal("9.99"));
 
         assertNotNull(model);
         assertEquals("9.99", model.getGrossPrice().toPlainString());
@@ -250,7 +250,7 @@ public class ShoppingCartCalculatorImplTest {
         final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
-        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
+        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "Main", "SKU0001", new BigDecimal("9.99"));
 
         assertNotNull(model);
         assertEquals("9.99", model.getGrossPrice().toPlainString());
@@ -324,7 +324,7 @@ public class ShoppingCartCalculatorImplTest {
         final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
-        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
+        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "Main", "SKU0001", new BigDecimal("9.99"));
 
         assertNotNull(model);
         assertEquals("9.99", model.getGrossPrice().toPlainString());
@@ -406,7 +406,7 @@ public class ShoppingCartCalculatorImplTest {
         final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
-        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
+        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "Main", "SKU0001", new BigDecimal("9.99"));
 
         assertNotNull(model);
         assertEquals("11.19", model.getGrossPrice().toPlainString());
@@ -480,7 +480,7 @@ public class ShoppingCartCalculatorImplTest {
         final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
-        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
+        final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "Main", "SKU0001", new BigDecimal("9.99"));
 
         assertNotNull(model);
         assertEquals("11.19", model.getGrossPrice().toPlainString());

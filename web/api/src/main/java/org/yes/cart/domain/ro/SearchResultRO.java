@@ -108,6 +108,8 @@ public class SearchResultRO implements Serializable {
         this.pageAvailableSort = pageAvailableSort;
     }
 
+    @XmlElementWrapper(name = "products")
+    @XmlElement(name = "product")
     public List<ProductSearchResultRO> getProducts() {
         return products;
     }

@@ -145,7 +145,8 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(content.contains("#IMAGE0#\t#sobot-picture.jpeg#"));
             assertTrue(content.contains(";\"sobot-picture.jpeg\";\"#101#\t#Big Boys Gadgets#\""));
             assertTrue(content.contains(";\"sobot-picture.jpeg\";;")); // AVC
-            assertTrue(content.contains(";;\"12.11\";\"11.10\"")); // PRICES
+            assertTrue(content.contains("\"PREORDER-BACK-TO-FLOW0\";\"PREORDER-BACK-TO-FLOW0\";;;\"Brand is: PreorderCompany\";\"\";\"\";\"\";;\"11.10\";\"11.10\"\n")); // PRICES
+            assertTrue(content.contains("\"PREORDER-BACK-TO-FLOW2\";\"PREORDER-BACK-TO-FLOW2\";;;\"Brand is: PreorderCompany\";\"\";\"\";\"\";;\"12.11\";\"12.11\"\n")); // PRICES
 
             mockery.assertIsSatisfied();
 

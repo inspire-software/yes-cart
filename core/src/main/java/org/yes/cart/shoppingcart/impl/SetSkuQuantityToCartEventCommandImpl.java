@@ -75,14 +75,19 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
 
 
 
-    private BigDecimal getQuantityValue(final Map parameters, final ProductSku productSku, final BigDecimal quantityInCart) {
-        final Object strQty = parameters.get(CMD_SETQTYSKU_P_QTY);
+    private BigDecimal getQuantityValue(final Map parameters,
+                                        final long shopId,
+                                        final ProductSku productSku,
+                                        final String supplier,
+                                        final BigDecimal quantityInCart) {
+
+        final Object strQty = parameters.get(CMD_P_QTY);
 
         if (strQty instanceof String) {
             try {
                 final BigDecimal qty = new BigDecimal((String) strQty);
                 if (productSku != null) {
-                    final QuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+                    final QuantityModel pqm = productQuantityStrategy.getQuantityModel(shopId, quantityInCart, productSku, supplier);
                     return pqm.getValidSetQty(qty);
                 }
                 if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(qty, BigDecimal.ZERO)) {
@@ -95,7 +100,7 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
             }
         }
         if (productSku != null) {
-            final QuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+            final QuantityModel pqm = productQuantityStrategy.getQuantityModel(shopId, quantityInCart, productSku, supplier);
             return pqm.getValidSetQty(null);
         }
         return BigDecimal.ONE;
@@ -107,23 +112,27 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
                            final String skuCode,
+                           final String supplier,
+                           final BigDecimal qty,
                            final Map<String, Object> parameters) {
+
+        final long shopId = shoppingCart.getShoppingContext().getCustomerShopId();
 
         if (productSku != null) {
 
-            final BigDecimal validQuantity = getQuantityValue(parameters, productSku, shoppingCart.getProductSkuQuantity(productSku.getCode()));
+            final BigDecimal validQuantity = getQuantityValue(parameters, shopId, productSku, supplier, shoppingCart.getProductSkuQuantity(supplier, skuCode));
             final String skuName = new FailoverStringI18NModel(
                     productSku.getDisplayName(),
                     productSku.getName()
             ).getValue(shoppingCart.getCurrentLocale());
-            shoppingCart.setProductSkuToCart(productSku.getCode(), skuName, validQuantity);
+            shoppingCart.setProductSkuToCart(supplier, skuCode, skuName, validQuantity);
             recalculatePricesInCart(shoppingCart);
             LOG.debug("Set product sku with code {} to qty {}", productSku.getCode(), validQuantity);
             markDirty(shoppingCart);
-        } else if (determineSkuPrice(shoppingCart, skuCode, BigDecimal.ONE) != null) {
+        } else if (determineSkuPrice(shoppingCart, supplier, skuCode, BigDecimal.ONE) != null) {
             // if we have no product for SKU, make sure we have price for this SKU
-            final BigDecimal validQuantity = getQuantityValue(parameters, null, shoppingCart.getProductSkuQuantity(skuCode));
-            shoppingCart.setProductSkuToCart(skuCode, skuCode, validQuantity);
+            final BigDecimal validQuantity = getQuantityValue(parameters, shopId, null, supplier, shoppingCart.getProductSkuQuantity(supplier, skuCode));
+            shoppingCart.setProductSkuToCart(supplier, skuCode, skuCode, validQuantity);
             recalculatePricesInCart(shoppingCart);
             LOG.debug("Set product sku with code {} to qty {}", skuCode, validQuantity);
             markDirty(shoppingCart);

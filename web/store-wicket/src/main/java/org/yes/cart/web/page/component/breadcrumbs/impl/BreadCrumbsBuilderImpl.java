@@ -31,7 +31,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.TimeContext;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsBuilder;
 import org.yes.cart.web.page.component.breadcrumbs.Crumb;
@@ -152,7 +151,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
             final Content content = contentService.getById(contentId);
             if (!content.isRoot() && !CentralViewLabel.INCLUDE.equals(content.getUitemplate())) {
 
-                if (!DomainApiUtils.isObjectAvailableNow(!content.isDisabled(), content.getAvailablefrom(), content.getAvailableto(), now)) {
+                if (!content.isAvailable(now)) {
                     return false; // Not available
                 }
 
@@ -196,7 +195,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
             final Category category = categoryService.getById(categoryId);
             if (!category.isRoot()) {
 
-                if (!DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+                if (!category.isAvailable(now)) {
                     return false; // Not available
                 }
 
@@ -308,7 +307,8 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                 pageParameters,
                 allowedAttributeNames);
 
-        //If we are on display product page, we have to remove for filtering  as well as sku
+        //If we are on display product page, we have to remove for filtering FC, product and sku
+        base.remove(WebParametersKeys.FULFILMENT_CENTRE_ID);
         base.remove(WebParametersKeys.PRODUCT_ID);
         base.remove(WebParametersKeys.SKU_ID);
 

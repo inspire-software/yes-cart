@@ -387,6 +387,7 @@
   "PRODUCT_ENABLED": "Доступен",
   "PRODUCT_FROM": "Доступен с",
   "PRODUCT_TO": "Доступен по",
+  "PRODUCT_RELEASE": "В продаже",
   "PRODUCT_AVAILABILITY": "Заказ",
   "PRODUCT_AVAILABILITY_1": "Стандарт (наличие обязательно)",
   "PRODUCT_AVAILABILITY_2": "Пред-заказ (ожидание даты 'Доступен с')",

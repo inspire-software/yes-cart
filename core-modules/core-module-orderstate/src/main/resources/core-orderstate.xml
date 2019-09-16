@@ -138,7 +138,9 @@
     <!-- Transition from time wait to inventory wait state -->
     <bean id="deliveryAllowedByTimeoutOrderEventHandler"
           class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByTimeoutOrderEventHandlerImpl">
-        <constructor-arg index="0" ref="productService"/>
+        <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="inventoryResolver"/>
+        <constructor-arg index="2" ref="productService"/>
     </bean>
 
     <!-- Transition from inventory wait state to inventory allocation -->

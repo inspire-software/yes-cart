@@ -71,10 +71,13 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
 
 
-    private BigDecimal getQuantityValue(final ProductSku productSku, final BigDecimal quantityInCart) {
+    private BigDecimal getQuantityValue(final long shopId,
+                                        final String productSku,
+                                        final String supplier,
+                                        final BigDecimal quantityInCart) {
 
         if (productSku != null) {
-            final QuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+            final QuantityModel pqm = productQuantityStrategy.getQuantityModel(shopId, quantityInCart, productSku, supplier);
             return pqm.getValidRemoveQty(null);
         }
 
@@ -89,24 +92,20 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
                            final String skuCode,
+                           final String supplier,
+                           final BigDecimal qty,
                            final Map<String, Object> parameters) {
-        if (productSku != null) {
-            if(!shoppingCart.removeCartItemQuantity(productSku.getCode(),
-                    getQuantityValue(productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())))) {
-                LOG.warn("Can not remove one sku with code {} from cart", productSku.getCode());
-            }
 
-            recalculatePricesInCart(shoppingCart);
-            markDirty(shoppingCart);
-        } else {
-            if(!shoppingCart.removeCartItemQuantity(skuCode,
-                    getQuantityValue(null, shoppingCart.getProductSkuQuantity(skuCode)))) {
-                LOG.warn("Can not remove one sku with code {} from cart", skuCode);
-            }
+        final long shopId = shoppingCart.getShoppingContext().getCustomerShopId();
 
-            recalculatePricesInCart(shoppingCart);
-            markDirty(shoppingCart);
+        if(!shoppingCart.removeCartItemQuantity(supplier, skuCode,
+                getQuantityValue(shopId, skuCode, supplier, shoppingCart.getProductSkuQuantity(supplier, skuCode)))) {
+            LOG.warn("Can not remove one sku with code {} from cart", skuCode);
         }
+
+        recalculatePricesInCart(shoppingCart);
+        markDirty(shoppingCart);
+
     }
 
 }

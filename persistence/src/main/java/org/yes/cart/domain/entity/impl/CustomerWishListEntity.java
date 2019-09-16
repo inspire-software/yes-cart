@@ -33,8 +33,9 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     private long customerwishlistId;
     private long version;
 
-    private ProductSku skus;
     private Customer customer;
+    private String skuCode;
+    private String supplierCode;
     private String wlType;
     private String visibility;
     private String tag;
@@ -53,13 +54,23 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
 
 
     @Override
-    public ProductSku getSkus() {
-        return this.skus;
+    public String getSkuCode() {
+        return this.skuCode;
     }
 
     @Override
-    public void setSkus(ProductSku skus) {
-        this.skus = skus;
+    public void setSkuCode(String skuCode) {
+        this.skuCode = skuCode;
+    }
+
+    @Override
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    @Override
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
     }
 
     @Override

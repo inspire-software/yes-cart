@@ -110,7 +110,7 @@ public class DtoShoppingCartServiceImplTezt extends BaseCoreDBTestCase {
 
         for (final CartItem orderItem : customerOrder.getOrderDetail()) {
 
-            final int index = reassembledCart.indexOfProductSku(orderItem.getProductSkuCode());
+            final int index = reassembledCart.indexOfProductSku(orderItem.getSupplierCode(), orderItem.getProductSkuCode());
             assertTrue(index != -1);
 
             final CartItem cartItem = reassembledCart.getCartItemList().get(index);
@@ -183,13 +183,14 @@ public class DtoShoppingCartServiceImplTezt extends BaseCoreDBTestCase {
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 
+        final String removedSkuSupplier = reassembledCart.getCartItemList().get(0).getSupplierCode();
         final String removedSku = reassembledCart.getCartItemList().get(0).getProductSkuCode();
         final BigDecimal removedQuantity = reassembledCart.getCartItemList().get(0).getQty();
 
 
         // 2. Test removal
 
-        dtoShoppingCartService.removeLine(reassembledCart.getGuid(), removedSku);
+        dtoShoppingCartService.removeLine(reassembledCart.getGuid(), removedSkuSupplier, removedSku);
 
         final ShoppingCart afterRemove = dtoShoppingCartService.getById(reassembledCart.getGuid());
         assertEquals(customerOrder.getOrderDetail().size() - 1, afterRemove.getCartItemList().size());
@@ -221,7 +222,7 @@ public class DtoShoppingCartServiceImplTezt extends BaseCoreDBTestCase {
 
         // 3. Test addition
 
-        dtoShoppingCartService.updateLineQuantity(reassembledCart.getGuid(), removedSku, removedQuantity);
+        dtoShoppingCartService.updateLineQuantity(reassembledCart.getGuid(), removedSkuSupplier, removedSku, removedQuantity);
 
 
         final ShoppingCart afterAdd = dtoShoppingCartService.getById(reassembledCart.getGuid());
@@ -254,7 +255,7 @@ public class DtoShoppingCartServiceImplTezt extends BaseCoreDBTestCase {
 
         // 4. Test change price
 
-        dtoShoppingCartService.updateLinePrice(reassembledCart.getGuid(), removedSku, new BigDecimal("150.00"), "AUTH001");
+        dtoShoppingCartService.updateLinePrice(reassembledCart.getGuid(), removedSkuSupplier, removedSku, new BigDecimal("150.00"), "AUTH001");
 
 
         final ShoppingCart afterChange = dtoShoppingCartService.getById(reassembledCart.getGuid());

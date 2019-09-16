@@ -14,29 +14,38 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.bulkjob.product;
+package org.yes.cart.domain.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 16/07/2016
- * Time: 22:18
+ * Date: 03/12/2014
+ * Time: 21:40
  */
-public interface ProductsPassedAvailabilityDateIndexProcessorInternal extends Runnable {
+public interface ProductSkuSearchResultPageDTO extends Serializable {
 
     /**
-     * List of discontinued products at the time of running this method.
+     * Results for a single page.
      *
-     * @return list of pk's
+     * @return list all results
      */
-    List<Long> findDiscontinuedProductsIds();
+    List<ProductSkuSearchResultDTO> getResults();
 
     /**
-     * Reindex SKU.
+     * Count of total possible results.
      *
-     * @param skuCodes SKU codes
+     * @return total results count
      */
-    void reindexBatch(List<Long> skuCodes);
+    int getTotalHits();
+
+    /**
+     * Creates copy of this object
+     *
+     * @return copy
+     */
+    ProductSkuSearchResultPageDTO copy();
+
 
 }

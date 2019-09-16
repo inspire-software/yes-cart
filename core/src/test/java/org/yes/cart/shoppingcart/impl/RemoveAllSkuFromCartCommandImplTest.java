@@ -53,7 +53,7 @@ public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         Map<String, String> params = new HashMap<>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST2");
-        params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "10");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "10");
         commands.execute(shoppingCart, (Map) params);
 
         assertTrue("Expected 221.70 but was " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("221.70")).equals(shoppingCart.getTotal().getSubTotal()));

@@ -26,7 +26,11 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.StoredAttributesDTO;
+import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
+import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
@@ -57,7 +61,10 @@ public class AdapterUtils {
 
         MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        final SimpleModule module = new SimpleModule("search", new Version(3, 4, 0, null, "org.yes", "search"));
+        // 3.7.0 keep this marker for easier version changes
+        final SimpleModule module = new SimpleModule("search", new Version(3, 7, 0, null, "org.yes", "search"));
+        module.addAbstractTypeMapping(ProductSearchResultDTO.class, ProductSearchResultDTOImpl.class);
+        module.addAbstractTypeMapping(ProductSkuSearchResultDTO.class, ProductSkuSearchResultDTOImpl.class);
         module.addAbstractTypeMapping(StoredAttributesDTO.class, StoredAttributesDTOImpl.class);
         module.addAbstractTypeMapping(I18NModel.class, StringI18NModel.class);
 

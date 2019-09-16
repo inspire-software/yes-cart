@@ -31,7 +31,6 @@ import org.yes.cart.service.domain.CategoryRankDisplayNameComparator;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.TimeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
@@ -74,7 +73,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     public Category getCategory(final long categoryId, final long customerShopId) {
         if (categoryId > 0L && shopService.getShopCategoriesIds(customerShopId).contains(categoryId)) {
             final Category category = categoryService.getById(categoryId);
-            if (DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now())) {
+            if (category.isAvailable(now())) {
                 return category;
             }
         }
@@ -140,7 +139,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
             boolean available = true;
             while (category != null && !category.isRoot()) { // while enabled and not reached root
 
-                if (!DomainApiUtils.isObjectAvailableNow(!category.isDisabled(), category.getAvailablefrom(), category.getAvailableto(), now)) {
+                if (!category.isAvailable(now)) {
                     available = false; // not available
                     break;
                 }

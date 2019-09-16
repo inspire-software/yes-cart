@@ -83,7 +83,6 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
-                product.setAvailability(Product.AVAILABILITY_STANDARD);
                 Brand brand = brandDao.findById(100L);
                 assertNotNull(brand);
                 product.setBrand(brand);
@@ -102,7 +101,6 @@ public class ProductDAOTest extends AbstractTestDAO {
                 long pk = productDao.create(product).getProductId();
                 assertTrue(pk > 0L);
                 product = new ProductEntity();
-                product.setAvailability(Product.AVAILABILITY_STANDARD);
                 brand = brandDao.findById(100L);
                 assertNotNull(brand);
                 product.setBrand(brand);
@@ -148,7 +146,6 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
-                product.setAvailability(Product.AVAILABILITY_STANDARD);
                 Brand brand = brandDao.findById(100L);
                 assertNotNull(brand);
                 product.setBrand(brand);
@@ -219,7 +216,6 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
-                product.setAvailability(Product.AVAILABILITY_STANDARD);
                 Brand brand = brandDao.findById(100L);
                 assertNotNull(brand);
                 product.setBrand(brand);
@@ -303,15 +299,12 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
-                product.setAvailability(Product.AVAILABILITY_PREORDER);
                 Brand brand = brandDao.findById(100L);
                 assertNotNull(brand);
                 product.setBrand(brand);
                 product.setCode("SONY_PRODUCT_CODE");
                 product.setName("product sony name");
                 product.setDescription("Description ");
-                // Preorders are only preorders if available to date is in future, otherwise standard
-                product.setAvailablefrom(DateUtils.ldtParseSDT("2099-01-01"));
 
                 ProductType productType = productTypeDao.findById(1L);
                 assertNotNull(productType);
@@ -342,15 +335,25 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // add quantity on warehouses
                 SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
                 skuWarehouse.setSkuCode(productSku.getCode());
-                skuWarehouse.setQuantity(BigDecimal.ZERO);
+                skuWarehouse.setQuantity(BigDecimal.ONE);
                 skuWarehouse.setWarehouse(warehouseDao.findById(2L));
+                skuWarehouse.setAvailability(SkuWarehouse.AVAILABILITY_STANDARD);
+                // Preorders are only preorders if available to date is in future, otherwise standard
+                skuWarehouse.setReleaseDate(DateUtils.ldtParseSDT("2099-01-01"));
 
                 skuWarehouse = skuWareHouseDao.create(skuWarehouse);
                 productDao.fullTextSearchReindex(product.getProductId());
 
                 products = productDao.fullTextSearch(query.get(0));
-                assertEquals("Product must be found because although products are out of stock it is preorderable. Failed query [" + query + "]", 1, products.size());
+                assertEquals("Product must be found because although products are not yet available they are preorderable. Failed query [" + query + "]", 1, products.size());
                 assertEquals(pk, products.get(0).getProductId());
+
+                skuWarehouse.setQuantity(BigDecimal.ZERO);
+                skuWarehouse = skuWareHouseDao.update(skuWarehouse);
+                productDao.fullTextSearchReindex(product.getProductId());
+
+                products = productDao.fullTextSearch(query.get(0));
+                assertEquals("Product must not be found because preorderable product must be in stock. Failed query [" + query + "]", 0, products.size());
 
                 status.setRollbackOnly();
 
@@ -369,7 +372,6 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
-                product.setAvailability(Product.AVAILABILITY_BACKORDER);
                 Brand brand = brandDao.findById(100L);
                 assertNotNull(brand);
                 product.setBrand(brand);
@@ -401,19 +403,20 @@ public class ProductDAOTest extends AbstractTestDAO {
                 final List<Query> query = queryBuilder.createQueryChain(null, null, Collections.singletonList("SONY_PRODUCT_CODE"));
 
                 products = productDao.fullTextSearch(query.get(0));
-                assertEquals("Product must not be found because back order items. Failed query [" + query + "]", 0, products.size());
+                assertEquals("Product must not be found because back order items must have inventory record. Failed query [" + query + "]", 0, products.size());
 
                 // add quantity on warehouses
                 SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
                 skuWarehouse.setSkuCode(productSku.getCode());
                 skuWarehouse.setQuantity(BigDecimal.ZERO);
                 skuWarehouse.setWarehouse(warehouseDao.findById(2L));
+                skuWarehouse.setAvailability(SkuWarehouse.AVAILABILITY_BACKORDER);
 
                 skuWarehouse = skuWareHouseDao.create(skuWarehouse);
                 productDao.fullTextSearchReindex(product.getProductId());
 
                 products = productDao.fullTextSearch(query.get(0));
-                assertEquals("Product must be found because although products are out of stock it is backorderable. Failed query [" + query + "]", 1, products.size());
+                assertEquals("Product must be found because although products are out of stock they are backorderable. Failed query [" + query + "]", 1, products.size());
                 assertEquals(pk, products.get(0).getProductId());
 
                 status.setRollbackOnly();
@@ -433,7 +436,6 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
-                product.setAvailability(Product.AVAILABILITY_ALWAYS);
                 Brand brand = brandDao.findById(100L);
                 assertNotNull(brand);
                 product.setBrand(brand);
@@ -464,9 +466,25 @@ public class ProductDAOTest extends AbstractTestDAO {
                 final SearchQueryBuilder queryBuilder = new ProductSkuCodeSearchQueryBuilder();
                 final List<Query> query = queryBuilder.createQueryChain(null, null, Collections.singletonList("SONY_PRODUCT_CODE"));
 
+
                 products = productDao.fullTextSearch(query.get(0));
-                assertEquals("Product must be found because although products are out of stock it is preorderable. Failed query [" + query + "]", 1, products.size());
+                assertEquals("Product must not be found because perpetual items must have inventory record. Failed query [" + query + "]", 0, products.size());
+
+                // add quantity on warehouses
+                SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
+                skuWarehouse.setSkuCode(productSku.getCode());
+                skuWarehouse.setQuantity(BigDecimal.ZERO);
+                skuWarehouse.setWarehouse(warehouseDao.findById(2L));
+                skuWarehouse.setAvailability(SkuWarehouse.AVAILABILITY_ALWAYS);
+
+                skuWarehouse = skuWareHouseDao.create(skuWarehouse);
+                productDao.fullTextSearchReindex(product.getProductId());
+
+                products = productDao.fullTextSearch(query.get(0));
+                assertEquals("Product must be found because although products have no stock they are always available. Failed query [" + query + "]", 1, products.size());
                 assertEquals(pk, products.get(0).getProductId());
+
+
 
                 status.setRollbackOnly();
 
@@ -489,47 +507,6 @@ public class ProductDAOTest extends AbstractTestDAO {
         productDao.fullTextSearchReindex(product.getProductId());
 
         return productCategory;
-    }
-
-    private long createProduct(long brandId, String productCode, String productName, long productTypeId, long productCategoryId) {
-        Product product = new ProductEntity();
-        product.setAvailability(Product.AVAILABILITY_STANDARD);
-        Brand brand = brandDao.findById(brandId);
-        assertNotNull(brand);
-        product.setBrand(brand);
-        product.setCode(productCode);
-        product.setName(productName);
-        ProductType productType = productTypeDao.findById(productTypeId);
-        assertNotNull(productType);
-        product.setProducttype(productType);
-        long pk = productDao.create(product).getProductId();
-        assertTrue(pk > 0L);
-        ProductCategory productCategory = new ProductCategoryEntity();
-        productCategory.setProduct(product);
-        productCategory.setCategory(categoryDao.findById(productCategoryId));
-        productCategory.setRank(0);
-        product.getProductCategory().add(productCategory);
-        productCategory = productCategoryDao.create(productCategory);
-
-        productDao.saveOrUpdate(product);
-        assertNotNull(productCategory);
-        ProductSku productSku = new ProductSkuEntity();
-        productSku.setCode(product.getCode());
-        productSku.setName(product.getName());
-        productSku.setProduct(product);
-        product.getSku().add(productSku);
-        productDao.saveOrUpdate(product);
-        productSkuDao.saveOrUpdate(productSku);
-        productSkuDao.saveOrUpdate(productSku);
-        // add quantity on warehouses
-        SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
-        skuWarehouse.setSkuCode(productSku.getCode());
-        skuWarehouse.setQuantity(BigDecimal.ONE);
-        skuWarehouse.setWarehouse(warehouseDao.findById(2L));
-        skuWareHouseDao.create(skuWarehouse);
-        productDao.fullTextSearchReindex(product.getProductId());
-        skuWareHouseDao.flushClear();
-        return pk;
     }
 
 }

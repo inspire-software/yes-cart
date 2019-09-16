@@ -28,8 +28,9 @@ import { DashboardWidgetVO } from '../../shared/model/index';
             </div>
             <div class="col-xs-9 text-right">
               <div>{{ widget.data.ftNodes }}</div>
-              <div>{{ widget.data.productCountTotal }} <i class="fa fa-database"></i></div>
-              <div>{{ widget.data.productCountActive }} <i class="fa fa-calendar-check-o"></i></div>
+              <div><i class="fa fa-database"></i> {{ widget.data.productCountTotal }}</div>
+              <div><i class="fa fa-cubes"></i> {{ widget.data.offerCountTotal }}</div>
+              <div><i class="fa fa-calendar-check-o"></i> {{ widget.data.offerCountActive }}</div>
             </div>
           </div>
         </div>

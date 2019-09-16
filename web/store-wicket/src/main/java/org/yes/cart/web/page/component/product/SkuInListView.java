@@ -38,6 +38,7 @@ public class SkuInListView extends BaseComponent {
     // ------------------------------------- MARKUP IDs END ------------------------------------ //
 
     private final ProductSku sku;
+    private final String supplier;
 
 
     /**
@@ -46,9 +47,12 @@ public class SkuInListView extends BaseComponent {
      * @param id  component id
      * @param sku given {@link ProductSku} to show
      */
-    public SkuInListView(final String id, final ProductSku sku) {
+    public SkuInListView(final String id,
+                         final ProductSku sku,
+                         final String supplier) {
         super(id);
         this.sku = sku;
+        this.supplier = supplier;
     }
 
     /**
@@ -62,7 +66,7 @@ public class SkuInListView extends BaseComponent {
         final I18NModel nameModel = getI18NSupport().getFailoverModel(sku.getDisplayName(), sku.getName());
 
         add(
-                getWicketSupportFacade().links().newProductSkuLink(SKU_LINK, sku.getId(), getPage().getPageParameters())
+                getWicketSupportFacade().links().newProductSkuLink(SKU_LINK, supplier, sku.getId(), getPage().getPageParameters())
                         .add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(getCurrentShop(), sku)))
                         .add(new Label(SKU_NAME_LABEL, nameModel.getValue(selectedLocale)))
         );

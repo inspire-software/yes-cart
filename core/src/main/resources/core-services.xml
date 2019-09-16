@@ -225,7 +225,7 @@
 
     <bean id="productAvailabilityStrategyDefault" class="org.yes.cart.shoppingcart.impl.ProductAvailabilityStrategyDefaultImpl">
         <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="skuWarehouseService"/>
+        <constructor-arg index="1" ref="inventoryResolver"/>
         <property name="cfgContext">
             <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
                 <property name="functionalArea" value="inventory"/>
@@ -246,7 +246,7 @@
 
     <bean id="productAvailabilityStrategyBackorderInStockOnly" class="org.yes.cart.shoppingcart.impl.ProductAvailabilityStrategyBackorderInStockOnlyImpl">
         <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="skuWarehouseService"/>
+        <constructor-arg index="1" ref="inventoryResolver"/>
         <property name="cfgContext">
             <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
                 <property name="functionalArea" value="inventory"/>
@@ -270,8 +270,31 @@
         <constructor-arg index="0" ref="productAvailabilityStrategyDefault"/>
     </bean>
 
+
+    <bean id="productQuantityStrategyDefault" class="org.yes.cart.shoppingcart.impl.ProductQuantityStrategyDefaultImpl">
+        <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="inventoryResolver"/>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="inventory"/>
+                <property name="name" value="productAvailabilityStrategyDefault"/>
+                <property name="cfgInterface" value="ProductAvailabilityStrategy"/>
+                <property name="cfgDefault" value="true"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.productAvailabilityStrategy=configurationBeanName, where SHOPCODE is the code of the shop and configurationBeanName is custom implementation</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="productQuantityStrategy"
-          class="org.yes.cart.shoppingcart.impl.ProductQuantityStrategyDefaultImpl"/>
+          class="org.yes.cart.shoppingcart.impl.ProductQuantityStrategyImpl">
+        <constructor-arg index="0" ref="productQuantityStrategyDefault"/>
+    </bean>
 
     <bean id="addressService" parent="txProxyTemplate">
         <property name="target">
@@ -1265,9 +1288,11 @@
     <bean id="promoActionItemAmountOff" class="org.yes.cart.promotion.impl.action.ItemAmountOffPromotionAction"/>
     <bean id="promoActionItemGift" class="org.yes.cart.promotion.impl.action.ItemGiftPromotionAction">
         <constructor-arg index="0" ref="priceResolver"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="orderSplittingStrategy"/>
+        <constructor-arg index="1" ref="inventoryResolver"/>
+        <constructor-arg index="2" ref="shopService"/>
+        <constructor-arg index="3" ref="warehouseService"/>
+        <constructor-arg index="4" ref="productService"/>
+        <constructor-arg index="5" ref="orderSplittingStrategy"/>
     </bean>
 
     <bean id="promoActionOrderDiscount" class="org.yes.cart.promotion.impl.action.OrderDiscountPromotionAction"/>
@@ -1275,9 +1300,11 @@
     <bean id="promoActionOrderAmountOff" class="org.yes.cart.promotion.impl.action.OrderAmountOffPromotionAction"/>
     <bean id="promoActionOrderGift" class="org.yes.cart.promotion.impl.action.OrderGiftPromotionAction">
         <constructor-arg index="0" ref="priceResolver"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="orderSplittingStrategy"/>
+        <constructor-arg index="1" ref="inventoryResolver"/>
+        <constructor-arg index="2" ref="shopService"/>
+        <constructor-arg index="3" ref="warehouseService"/>
+        <constructor-arg index="4" ref="productService"/>
+        <constructor-arg index="5" ref="orderSplittingStrategy"/>
     </bean>
 
     <bean id="promoActionShippingDiscount" class="org.yes.cart.promotion.impl.action.ShippingDiscountPromotionAction"/>
@@ -1670,10 +1697,12 @@
                 <constructor-arg index="3" ref="productService"/>
                 <constructor-arg index="4" ref="productSkuService"/>
                 <constructor-arg index="5" ref="priceResolver"/>
-                <constructor-arg index="6" ref="orderAddressFormatter"/>
-                <constructor-arg index="7" ref="promotionCouponService"/>
-                <constructor-arg index="8" ref="addressService"/>
-                <constructor-arg index="9" ref="attributeService"/>
+                <constructor-arg index="6" ref="inventoryResolver"/>
+                <constructor-arg index="7" ref="orderAddressFormatter"/>
+                <constructor-arg index="8" ref="promotionCouponService"/>
+                <constructor-arg index="9" ref="addressService"/>
+                <constructor-arg index="10" ref="attributeService"/>
+                <constructor-arg index="11" ref="warehouseService"/>
             </bean>
         </property>
     </bean>

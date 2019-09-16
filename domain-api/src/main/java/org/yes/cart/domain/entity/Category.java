@@ -170,6 +170,15 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
     void setAvailableto(LocalDateTime availableto);
 
     /**
+     * Returns true if product is enabled and now is within from/to date range.
+     *
+     * @param now    time now
+     *
+     * @return true if the product is available now
+     */
+    boolean isAvailable(LocalDateTime now);
+
+    /**
      * Get all category attributes.
      *
      * @return collection of category attributes.

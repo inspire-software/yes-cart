@@ -59,19 +59,35 @@ public interface CustomerWishList extends Auditable {
      */
     void setCustomerwishlistId(long customerwishlistId);
 
-    /**
-     * Product sku
-     *
-     * @return {@link ProductSku}
-     */
-    ProductSku getSkus();
 
     /**
-     * Set {@link ProductSku}
+     * Get SKU code.
      *
-     * @param skus Product Sku
+     * @return sku
      */
-    void setSkus(ProductSku skus);
+    String getSkuCode();
+
+    /**
+     * Set SKU code.
+     *
+     * @param skuCode SKU code
+     */
+    void setSkuCode(String skuCode);
+
+
+    /**
+     * Get supplier.
+     *
+     * @return supplier
+     */
+    String getSupplierCode();
+
+    /**
+     * Set supplier.
+     *
+     * @param supplierCode supplier
+     */
+    void setSupplierCode(String supplierCode);
 
     /**
      * Get customer

@@ -102,3 +102,97 @@ VALUES (10750, 'noPaymentRequired', 'priority', '100', 'Gateway priority', 'Gate
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (10751, 'noPaymentRequired', 'restrictToCustomerTags', null, 'Gateway restrictions (Customer tags)', 'Gateway restrictions (Customer tags)');
+
+--
+-- YC-668 Allow configuration of fulfilment centres for Products
+--
+
+alter table TSKUWAREHOUSE add column DISABLED bit default 0;
+alter table TSKUWAREHOUSE add column AVAILABLEFROM datetime;
+alter table TSKUWAREHOUSE add column AVAILABLETO datetime;
+alter table TSKUWAREHOUSE add column RELEASEDATE datetime;
+alter table TSKUWAREHOUSE add column AVAILABILITY integer default 1 not null;
+alter table TSKUWAREHOUSE add column FEATURED bit;
+alter table TSKUWAREHOUSE add column TAG varchar(255);
+alter table TSKUWAREHOUSE add column MIN_ORDER_QUANTITY decimal(19,2);
+alter table TSKUWAREHOUSE add column MAX_ORDER_QUANTITY decimal(19,2);
+alter table TSKUWAREHOUSE add column STEP_ORDER_QUANTITY decimal(19,2);
+alter table TSKU add column TAG varchar(255);
+
+
+-- Derby
+-- alter table TSKUWAREHOUSE add column DISABLED smallint not null default 0;
+-- alter table TSKUWAREHOUSE add column AVAILABLEFROM timestamp;
+-- alter table TSKUWAREHOUSE add column AVAILABLETO timestamp;
+-- alter table TSKUWAREHOUSE add column RELEASEDATE timestamp;
+-- alter table TSKUWAREHOUSE add column AVAILABILITY integer default 1 not null;
+-- alter table TSKUWAREHOUSE add column FEATURED smallint;
+-- alter table TSKUWAREHOUSE add column TAG varchar(255);
+-- alter table TSKUWAREHOUSE add column MIN_ORDER_QUANTITY numeric(19,2);
+-- alter table TSKUWAREHOUSE add column MAX_ORDER_QUANTITY numeric(19,2);
+-- alter table TSKUWAREHOUSE add column STEP_ORDER_QUANTITY numeric(19,2);
+-- alter table TSKU add column TAG varchar(255);
+
+update TSKUWAREHOUSE w, TPRODUCT p, TSKU s set
+  w.DISABLED = p.DISABLED,
+  w.AVAILABLEFROM = p.AVAILABLEFROM,
+  w.AVAILABLETO = p.AVAILABLETO,
+  w.AVAILABILITY = p.AVAILABILITY,
+  w.FEATURED = p.FEATURED,
+  w.MIN_ORDER_QUANTITY = p.MIN_ORDER_QUANTITY,
+  w.MAX_ORDER_QUANTITY = p.MAX_ORDER_QUANTITY,
+  w.STEP_ORDER_QUANTITY = p.STEP_ORDER_QUANTITY
+  where w.SKU_CODE = s.CODE and s.PRODUCT_ID = p.PRODUCT_ID;
+
+-- Derby
+-- update TSKUWAREHOUSE set
+--   DISABLED = case when (select DISABLED from TPRODUCT, TSKU where  TSKU.PRODUCT_ID = TPRODUCT.PRODUCT_ID and SKU_CODE = TSKU.CODE) = 1 then 1 else 0 end,
+--   AVAILABLEFROM = (select AVAILABLEFROM from TPRODUCT, TSKU where  TSKU.PRODUCT_ID = TPRODUCT.PRODUCT_ID and SKU_CODE = TSKU.CODE),
+--   AVAILABLETO = (select AVAILABLETO from TPRODUCT, TSKU where  TSKU.PRODUCT_ID = TPRODUCT.PRODUCT_ID and SKU_CODE = TSKU.CODE),
+--   AVAILABILITY = case when (select AVAILABILITY from TPRODUCT, TSKU where  TSKU.PRODUCT_ID = TPRODUCT.PRODUCT_ID and SKU_CODE = TSKU.CODE) is not null then (select AVAILABILITY from TPRODUCT, TSKU where  TSKU.PRODUCT_ID = TPRODUCT.PRODUCT_ID and SKU_CODE = TSKU.CODE) else 1 end,
+--   FEATURED = case when (select FEATURED from TPRODUCT, TSKU where  TSKU.PRODUCT_ID = TPRODUCT.PRODUCT_ID and SKU_CODE = TSKU.CODE) = 1 then 1 else 0 end,
+--   MIN_ORDER_QUANTITY = (select MIN_ORDER_QUANTITY from TPRODUCT, TSKU where  TSKU.PRODUCT_ID = TPRODUCT.PRODUCT_ID and SKU_CODE = TSKU.CODE),
+--   MAX_ORDER_QUANTITY = (select MAX_ORDER_QUANTITY from TPRODUCT, TSKU where  TSKU.PRODUCT_ID = TPRODUCT.PRODUCT_ID and SKU_CODE = TSKU.CODE),
+--   STEP_ORDER_QUANTITY = (select STEP_ORDER_QUANTITY from TPRODUCT, TSKU where  TSKU.PRODUCT_ID = TPRODUCT.PRODUCT_ID and SKU_CODE = TSKU.CODE);
+
+alter table TPRODUCT drop column DISABLED;
+alter table TPRODUCT drop column AVAILABLEFROM;
+alter table TPRODUCT drop column AVAILABLETO;
+alter table TPRODUCT drop column AVAILABILITY;
+alter table TPRODUCT drop column FEATURED;
+alter table TPRODUCT drop column MIN_ORDER_QUANTITY;
+alter table TPRODUCT drop column MAX_ORDER_QUANTITY;
+alter table TPRODUCT drop column STEP_ORDER_QUANTITY;
+
+
+alter table TCUSTOMERWISHLIST add column SKU_CODE varchar(255);
+alter table TCUSTOMERWISHLIST add column SUPPLIER_CODE varchar(255);
+
+update TCUSTOMERWISHLIST l, TSKU s set
+  l.SKU_CODE = s.CODE,
+  l.SUPPLIER_CODE = 'Main',
+  where l.SKU_ID = s.SKU_ID;
+
+-- Derby
+-- update TCUSTOMERWISHLIST set
+--   SKU_CODE = (select CODE from TSKU where TCUSTOMERWISHLIST.SKU_ID = TSKU.SKU_ID),
+--   SUPPLIER_CODE = 'Main';
+
+
+alter table TCUSTOMERWISHLIST modify column SKU_CODE varchar(255) not null;
+alter table TCUSTOMERWISHLIST modify column SUPPLIER_CODE varchar(255) not null;
+-- Derby
+-- alter table TCUSTOMERWISHLIST alter column SKU_CODE not null;
+-- alter table TCUSTOMERWISHLIST alter column SUPPLIER_CODE not null;
+
+alter table TCUSTOMERWISHLIST drop foreign key constraint FK_WL_SKU;
+-- Derby
+-- alter table TCUSTOMERWISHLIST drop constraint FK_WL_SKU;
+alter table TCUSTOMERWISHLIST drop column SKU_ID;
+
+
+
+
+
+
+

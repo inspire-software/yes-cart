@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -428,6 +429,7 @@ public class CartController {
      * <pre><code>
      * {
      *     "addToCartCmd": "BENDER-ua",
+     *     "supplier": "WAREHOUSE_1",
      *     "qty": "1"
      * }
      * </code></pre>
@@ -646,6 +648,7 @@ public class CartController {
      *    &lt;parameters&gt;
      *    &lt;entries&gt;
      *        &lt;parameter key="addToCartCmd"&gt;BENDER-ua&lt;/entry&gt;
+     *        &lt;parameter key="supplier"&gt;WAREHOUSE_1&lt;/entry&gt;
      *        &lt;parameter key="qty"&gt;1&lt;/entry&gt;
      *    &lt;/entries&gt;
      *    &lt;/parameters&gt;
@@ -1033,7 +1036,15 @@ public class CartController {
      *     <tr><td>JSON example (see {@link ShippingOptionRO})</td><td>
      * <pre><code>
      * {
-     *     "carrierslaId": "4-WAREHOUSE_2|1-WAREHOUSE_1",
+     *     "shippingMethods": {
+     *         "selected": [ {
+     *           "carrierSlaId": 4,
+     *           "supplier": "WAREHOUSE_2"
+     *         }, {
+     *           "carrierSlaId": 1,
+     *           "supplier": "WAREHOUSE_1"
+     *         } ]
+     *     },
      *     "billingAddressId": null,
      *     "deliveryAddressId": null
      * }
@@ -1042,9 +1053,12 @@ public class CartController {
      *     <tr><td>XML example (see {@link ShippingOptionRO})</td><td>
      * <pre><code>
      * 	&lt;shipping-option/&gt;
-     * 	&lt;carriersla-id/&gt;4&lt;/carriersla-id/&gt;
-     * 	&lt;billing-address-id/&gt;4&lt;/billing-address-id/&gt;
-     * 	&lt;delivery-address-id/&gt;4&lt;/delivery-address-id/&gt;
+     * 	   &lt;shipping-methods&gt;
+     * 	      &lt;selected carrier-sla-id="1" supplier="WAREHOUSE_1"&gt;
+     * 	      &lt;selected carrier-sla-id="4" supplier="WAREHOUSE_2"&gt;
+     * 	   &lt;/shipping-methods&gt;
+     * 	   &lt;billing-address-id&gt;4&lt;/billing-address-id&gt;
+     * 	   &lt;delivery-address-id&gt;4&lt;/delivery-address-id&gt;
      * 	&lt;/shipping-option/&gt;
      * </code></pre>
      *     </td></tr>
@@ -1234,115 +1248,107 @@ public class CartController {
                                                       final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
-        final String carriersla = shippingOption.getCarriersla();
+        final ShippingOptionCarrierSelectionsRO carriersla = shippingOption.getShippingMethods();
 
-        if (StringUtils.isNotBlank(carriersla)) {
+        if (carriersla != null && CollectionUtils.isNotEmpty(carriersla.getSelected())) {
 
-            final String[] slaIds = StringUtils.split(carriersla, '|');
+            final ShoppingCart cart = cartMixin.getCurrentCart();
 
-            if (slaIds != null && slaIds.length > 0) {
+            final Map<String, Long> selection = new HashMap<>();
+            for (final ShippingOptionCarrierSelectionRO slaIdRaw : carriersla.getSelected()) {
 
-                final ShoppingCart cart = cartMixin.getCurrentCart();
+                final long slaPkvalue = NumberUtils.toLong(slaIdRaw.getCarrierSlaId());
+                final String supplier = slaIdRaw.getSupplier();
 
-                final Map<String, Long> selection = new HashMap<>();
-                for (final String slaIdRaw : slaIds) {
+                CarrierSla carrierSla = null;
+                if (slaPkvalue > 0) {
+                    final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart, supplier);
+                    carrierSla = shippingServiceFacade.getCarrierSla(slaPkvalue, carriers).getSecond();
+                }
 
-                    final int sepPos = slaIdRaw.indexOf('-');
-                    final String[] slaId = sepPos == -1 ? new String[] { slaIdRaw } : new String[] { slaIdRaw.substring(0, sepPos), slaIdRaw.substring(sepPos + 1) };
+                if (slaPkvalue <= 0 || carrierSla != null) {
+                    final Long current = cart.getCarrierSlaId().get(supplier);
 
-                    final long slaPkvalue = NumberUtils.toLong(slaId[0]);
-                    final String supplier = slaId.length > 1 ? slaId[1] : "";
-
-                    CarrierSla carrierSla = null;
-                    if (slaPkvalue > 0) {
-                        final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart, supplier);
-                        carrierSla = shippingServiceFacade.getCarrierSla(slaPkvalue, carriers).getSecond();
+                    if ((slaPkvalue <= 0L && current != null && current > 0L) ||
+                            (slaPkvalue > 0L && (current == null || !current.equals(slaPkvalue)))) {
+                        selection.put(supplier, slaPkvalue);
                     }
+                }
 
-                    if (slaPkvalue <= 0 || carrierSla != null) {
-                        final Long current = cart.getCarrierSlaId().get(supplier);
+            }
 
-                        if ((slaPkvalue <= 0L && current != null && current > 0L) ||
-                                (slaPkvalue > 0L && (current == null || !current.equals(slaPkvalue)))) {
-                            selection.put(supplier, slaPkvalue);
-                        }
+            if (!selection.isEmpty()) {
+
+                final Map<String, Long> slaSelection = new HashMap<>();
+                slaSelection.putAll(cart.getCarrierSlaId());
+                final StringBuilder slaSelectionParam = new StringBuilder();
+                for (final Map.Entry<String, Long> one : selection.entrySet()) {
+                    if (slaSelectionParam.length() > 0) {
+                        slaSelectionParam.append('|');
+                    }
+                    if (one.getValue() <= 0) {
+                        slaSelection.remove(one.getKey());
+                    } else {
+                        slaSelection.put(one.getKey(), one.getValue());
+                    }
+                    slaSelectionParam.append(one.getValue());
+                    if (StringUtils.isNotBlank(one.getKey())) {
+                        slaSelectionParam.append('-').append(one.getKey());
                     }
 
                 }
 
-                if (!selection.isEmpty()) {
+                final Pair<Boolean, Boolean> notRequired = shippingServiceFacade.isAddressNotRequired(slaSelection.values());
 
-                    final Map<String, Long> slaSelection = new HashMap<>();
-                    slaSelection.putAll(cart.getCarrierSlaId());
-                    final StringBuilder slaSelectionParam = new StringBuilder();
-                    for (final Map.Entry<String, Long> one : selection.entrySet()) {
-                        if (slaSelectionParam.length() > 0) {
-                            slaSelectionParam.append('|');
-                        }
-                        if (one.getValue() <= 0) {
-                            slaSelection.remove(one.getKey());
-                        } else {
-                            slaSelection.put(one.getKey(), one.getValue());
-                        }
-                        slaSelectionParam.append(one.getValue());
-                        if (StringUtils.isNotBlank(one.getKey())) {
-                            slaSelectionParam.append('-').append(one.getKey());
-                        }
+                final boolean billingNotRequired = notRequired.getFirst();
+                final boolean deliveryNotRequired = notRequired.getSecond();
 
-                    }
+                final long billingAddressId = NumberUtils.toLong(shippingOption.getBillingAddressId(),
+                        cart.getOrderInfo().getBillingAddressId() != null ? cart.getOrderInfo().getBillingAddressId() : 0L);
+                final long deliveryAddressId = NumberUtils.toLong(shippingOption.getDeliveryAddressId(),
+                        cart.getOrderInfo().getDeliveryAddressId() != null ? cart.getOrderInfo().getDeliveryAddressId() : 0L);
 
-                    final Pair<Boolean, Boolean> notRequired = shippingServiceFacade.isAddressNotRequired(slaSelection.values());
+                Address billing = null;
+                Address delivery = null;
 
-                    final boolean billingNotRequired = notRequired.getFirst();
-                    final boolean deliveryNotRequired = notRequired.getSecond();
+                if (billingAddressId > 0L || deliveryAddressId > 0L) {
 
-                    final long billingAddressId = NumberUtils.toLong(shippingOption.getBillingAddressId(),
-                            cart.getOrderInfo().getBillingAddressId() != null ? cart.getOrderInfo().getBillingAddressId() : 0L);
-                    final long deliveryAddressId = NumberUtils.toLong(shippingOption.getDeliveryAddressId(),
-                            cart.getOrderInfo().getDeliveryAddressId() != null ? cart.getOrderInfo().getDeliveryAddressId() : 0L);
+                    final Customer customer = customerServiceFacade.getCheckoutCustomer(cartMixin.getCurrentShop(), cart);
 
-                    Address billing = null;
-                    Address delivery = null;
+                    if (customer != null) {
 
-                    if (billingAddressId > 0L || deliveryAddressId > 0L) {
+                        final Shop customerShop = cartMixin.getCurrentCustomerShop();
+                        final List<Address> optionAddress = new ArrayList<>();
+                        optionAddress.addAll(addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_SHIPPING));
+                        optionAddress.addAll(addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_BILLING));
 
-                        final Customer customer = customerServiceFacade.getCheckoutCustomer(cartMixin.getCurrentShop(), cart);
-
-                        if (customer != null) {
-
-                            final Shop customerShop = cartMixin.getCurrentCustomerShop();
-                            final List<Address> optionAddress = new ArrayList<>();
-                            optionAddress.addAll(addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_SHIPPING));
-                            optionAddress.addAll(addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_BILLING));
-
-                            for (final Address address : optionAddress) {
-                                if (address.getAddressId() == billingAddressId) {
-                                    billing = address;
-                                }
-                                if (address.getAddressId() == deliveryAddressId) {
-                                    delivery = address;
-                                }
+                        for (final Address address : optionAddress) {
+                            if (address.getAddressId() == billingAddressId) {
+                                billing = address;
+                            }
+                            if (address.getAddressId() == deliveryAddressId) {
+                                delivery = address;
                             }
                         }
                     }
+                }
 
-                    if ((billing != null || billingNotRequired) && (delivery != null || deliveryNotRequired)) {
+                if ((billing != null || billingNotRequired) && (delivery != null || deliveryNotRequired)) {
 
-                        final Map<String, Object> params = new HashMap<>();
-                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, slaSelectionParam.toString());
-                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, billingNotRequired);
-                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billing);
-                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, deliveryNotRequired);
-                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
+                    final Map<String, Object> params = new HashMap<>();
+                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, slaSelectionParam.toString());
+                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, billingNotRequired);
+                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billing);
+                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, deliveryNotRequired);
+                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
 
-                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, cart, params);
+                    shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, cart, params);
 
-                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
-                                cart,
-                                Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+                    shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                            cart,
+                            Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
 
 
-                    }
                 }
             }
 

@@ -601,4 +601,35 @@ public class LuceneDocumentAdapterUtils {
             document.add(new NumericDocValuesField(name, value));
         }
     }
+
+    /**
+     * Determine boost value.
+     *
+     * @param rank      rank of the object
+     * @param origin    rank at which boost should be 1.0
+     * @param step      step for 1.0 boost
+     * @param min       min boost allowed
+     * @param max       max boost allowed
+     *
+     * @return boost
+     */
+    public static double determineBoots(final double rank,
+                                        final double origin,
+                                        final double step,
+                                        final double min,
+                                        final double max) {
+        if (rank == origin) {
+            return 1.0d;
+        }
+
+        final double calc = 1.0d + (origin - rank) / step;
+        if (calc < min) {
+            return min;
+        }
+        if (calc > max) {
+            return max;
+        }
+        return calc;
+        
+    }
 }

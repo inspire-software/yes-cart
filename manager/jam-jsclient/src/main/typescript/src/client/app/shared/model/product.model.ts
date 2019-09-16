@@ -60,6 +60,8 @@ export interface ProductSkuVO {
 
   rank : number;
 
+  tag : string;
+
   name : string;
   description : string;
   displayNames : Pair<string, string>[];
@@ -122,12 +124,6 @@ export interface ProductVO {
 
   tag : string;
 
-  disabled : boolean;
-  availablefrom : Date;
-  availableto : Date;
-
-  availability : number;
-
   brand : BrandVO;
   productType : ProductTypeInfoVO;
 
@@ -136,12 +132,6 @@ export interface ProductVO {
   name : string;
   description : string;
   displayNames : Pair<string, string>[];
-
-  featured : boolean;
-
-  minOrderQuantity : number;
-  maxOrderQuantity : number;
-  stepOrderQuantity : number;
 
   uri : string;
 

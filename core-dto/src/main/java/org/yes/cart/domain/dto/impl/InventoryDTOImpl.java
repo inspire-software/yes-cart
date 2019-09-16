@@ -22,6 +22,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.InventoryDTO;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
 * User: Igor Azarny iazarny@yahoo.com
@@ -54,12 +55,35 @@ public class InventoryDTOImpl implements InventoryDTO {
     @DtoField(value = "reserved", readOnly = true)
     private BigDecimal reserved;
 
+    @DtoField(value = "disabled")
+    private boolean disabled;
 
-    /** {@inheritDoc} */
-    @Override
-    public long getId() {
-        return getSkuWarehouseId();
-    }
+    @DtoField(value = "availablefrom")
+    private LocalDateTime availablefrom;
+
+    @DtoField(value = "availableto")
+    private LocalDateTime availableto;
+
+    @DtoField(value = "availability")
+    private int availability;
+
+    @DtoField(value = "featured")
+    private Boolean featured;
+
+    @DtoField(value = "tag")
+    private String tag;
+
+    @DtoField(value = "minOrderQuantity")
+    private BigDecimal minOrderQuantity;
+
+    @DtoField(value = "maxOrderQuantity")
+    private BigDecimal maxOrderQuantity;
+
+    @DtoField(value = "stepOrderQuantity")
+    private BigDecimal stepOrderQuantity;
+
+    @DtoField(value = "releaseDate")
+    private LocalDateTime releaseDate;
 
     /** {@inheritDoc} */
     @Override
@@ -71,6 +95,11 @@ public class InventoryDTOImpl implements InventoryDTO {
     @Override
     public void setSkuWarehouseId(final long skuWarehouseId) {
         this.skuWarehouseId = skuWarehouseId;
+    }
+     /** {@inheritDoc}*/
+    @Override
+    public long getId() {
+        return skuWarehouseId;
     }
 
     /** {@inheritDoc} */
@@ -145,6 +174,166 @@ public class InventoryDTOImpl implements InventoryDTO {
         this.reserved = reserved;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public LocalDateTime getAvailablefrom() {
+        return availablefrom;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
+        this.availablefrom = availablefrom;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public LocalDateTime getAvailableto() {
+        return availableto;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAvailableto(final LocalDateTime availableto) {
+        this.availableto = availableto;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getAvailability() {
+        return availability;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAvailability(final int availability) {
+        this.availability = availability;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setFeatured(final Boolean featured) {
+        this.featured = featured;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BigDecimal getMinOrderQuantity() {
+        return minOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
+        this.minOrderQuantity = minOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BigDecimal getMaxOrderQuantity() {
+        return maxOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
+        this.maxOrderQuantity = maxOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BigDecimal getStepOrderQuantity() {
+        return stepOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
+        this.stepOrderQuantity = stepOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public LocalDateTime getReleaseDate() {
+        return releaseDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setReleaseDate(final LocalDateTime releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setTag(final String tag) {
+        this.tag = tag;
+    }
+
     @Override
     public String toString() {
         return "SkuWarehouseDTOImpl{" +
@@ -154,6 +343,11 @@ public class InventoryDTOImpl implements InventoryDTO {
                 ", warehouseCode='" + warehouseCode + '\'' +
                 ", warehouseName='" + warehouseName + '\'' +
                 ", quantity=" + quantity +
+                ", availablefrom=" + availablefrom +
+                ", availableto=" + availableto +
+                ", availability=" + availability +
+                ", featured=" + featured +
+                ", releaseDate=" + releaseDate +
                 '}';
     }
 }

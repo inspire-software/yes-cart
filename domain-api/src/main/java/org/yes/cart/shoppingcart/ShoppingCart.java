@@ -72,10 +72,12 @@ public interface ShoppingCart extends Serializable {
     /**
      * Get quantity of given SKU in cart (excluding gifts).
      *
-     * @param sku sku to check
+     * @param supplier  supplier
+     * @param sku       sku to check
+     *
      * @return quantity of given sku
      */
-    BigDecimal getProductSkuQuantity(String sku);
+    BigDecimal getProductSkuQuantity(String supplier, String sku);
 
 
     /**
@@ -199,10 +201,12 @@ public interface ShoppingCart extends Serializable {
     /**
      * Is sku code present in cart
      *
-     * @param skuCode product sku code
+     * @param supplier  supplier
+     * @param skuCode   product sku code
+     *
      * @return true if sku code present in cart
      */
-    boolean contains(String skuCode);
+    boolean contains(String supplier, String skuCode);
 
     /**
      * This method only searches for shipping indexes.
@@ -216,18 +220,22 @@ public interface ShoppingCart extends Serializable {
     /**
      * This method only searches for non-gift items indexes.
      *
-     * @param skuCode sku code
+     * @param supplier  supplier
+     * @param skuCode   sku code
+     *
      * @return index of cart item for this sku
      */
-    int indexOfProductSku(final String skuCode);
+    int indexOfProductSku(String supplier, String skuCode);
 
     /**
      * This method only searches for gift items indexes.
      *
-     * @param skuCode sku code
+     * @param supplier  supplier
+     * @param skuCode   sku code
+     *
      * @return index of cart item for this sku
      */
-    int indexOfGift(final String skuCode);
+    int indexOfGift(String supplier, String skuCode);
 
     /**
      * Get shopping context

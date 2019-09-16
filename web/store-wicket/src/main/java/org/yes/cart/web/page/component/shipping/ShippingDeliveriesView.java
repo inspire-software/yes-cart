@@ -167,7 +167,7 @@ public class ShippingDeliveriesView extends BaseComponent {
 
                                                 customerOrderDeliveryDetListItem
                                                         .add(
-                                                                links.newProductSkuLink(ITEM_NAME_LINK, productSkuDecorator.getId())
+                                                                links.newProductSkuLink(ITEM_NAME_LINK, det.getSupplierCode(), productSkuDecorator.getId())
                                                                         .add(new Label(ITEM_NAME_LINK_NAME, productSkuDecorator.getName(selectedLocale)))
                                                                         .setVisible(enableProductLinks)
                                                         ).add(

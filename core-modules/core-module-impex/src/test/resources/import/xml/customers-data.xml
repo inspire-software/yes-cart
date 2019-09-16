@@ -68,14 +68,14 @@
         </address>
     </customer-addresses>
     <customer-wishlist>
-        <wishlist-item wishlist-type="W" visibility="P" sku-code="BACKORDER-BACK-TO-FLOW1">
+        <wishlist-item wishlist-type="W" visibility="P" sku-code="BACKORDER-BACK-TO-FLOW1" fulfilment-centre-code="WAREHOUSE_1">
             <tags><tag>MyWishList</tag></tags>
             <quantity>2.00</quantity>
             <price currency="GBP" quantity="2.00">
                 <list-price>9.99</list-price>
             </price>
         </wishlist-item>
-        <wishlist-item wishlist-type="W" visibility="P" sku-code="BACKORDER-BACK-TO-FLOW2">
+        <wishlist-item wishlist-type="W" visibility="P" sku-code="BACKORDER-BACK-TO-FLOW2" fulfilment-centre-code="WAREHOUSE_3">
             <tags><tag>MyWishList</tag></tags>
             <quantity>1.00</quantity>
             <price currency="USD" quantity="1.00">

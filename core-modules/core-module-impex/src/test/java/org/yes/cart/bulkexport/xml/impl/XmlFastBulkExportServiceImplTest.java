@@ -215,7 +215,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(content.contains("<name><![CDATA[Bender Bending Rodriguez]]></name>"));
             assertTrue(content.contains("<custom-value><![CDATA[sobot-picture.jpeg]]></custom-value>"));
             assertTrue(content.contains("<sku id=\""));
-            assertTrue(content.contains("guid=\"SOBOT-BEER\" code=\"SOBOT-BEER\" product-code=\"SOBOT\" rank=\"1\""));
+            assertTrue(content.contains("guid=\"SOBOT-BEER\" code=\"SOBOT-BEER\" product-code=\"SOBOT\" rank=\"4\""));
 
             validateXmlFile(xml);
 
@@ -647,7 +647,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             assertTrue(content.contains("<firstname>John</firstname>"));
             assertTrue(content.contains("<pricing-policy>TEST</pricing-policy>"));
             assertTrue(content.contains("<address id=\"10101\" guid=\"10101\" address-type=\"S\" default-address=\"true\" customer-code=\"10001\" customer-email=\"reg@test.com\">"));
-            assertTrue(content.contains("<wishlist-item id=\"10101\" guid=\"10101\" wishlist-type=\"W\" visibility=\"P\" sku-code=\"BACKORDER-BACK-TO-FLOW1\">"));
+            assertTrue(content.contains("<wishlist-item id=\"10101\" guid=\"10101\" wishlist-type=\"W\" visibility=\"P\" sku-code=\"BACKORDER-BACK-TO-FLOW1\" fulfilment-centre-code=\"WAREHOUSE_1\">"));
             assertTrue(content.contains("<price currency=\"GBP\" quantity=\"2.00\">"));
             assertTrue(content.contains("<list-price>9.99</list-price>"));
 

@@ -249,9 +249,6 @@
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
 
-    <cache name="skuWarehouseService-productOnWarehouse" maxElementsInMemory="5000" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="120"/>
-
     <cache name="skuWarehouseService-productSkusOnWarehouse" maxElementsInMemory="15000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
@@ -273,9 +270,6 @@
 
     <cache name="productService-defaultImage" maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
-    <cache name="productService-randomProductByCategory" maxElementsInMemory="100" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
     <cache name="productService-productAttributes" maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
@@ -315,9 +309,6 @@
 
     <cache name="productService-brandById" maxElementsInMemory="500" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
-    <cache name="productService-productQtyByCategoryId" maxElementsInMemory="2000" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
 
     <cache name="productTypeAttrService-viewGroupsByProductTypeId" maxElementsInMemory="200" overflowToDisk="false"

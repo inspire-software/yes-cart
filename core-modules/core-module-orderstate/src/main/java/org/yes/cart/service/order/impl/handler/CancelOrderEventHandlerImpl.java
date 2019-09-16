@@ -18,7 +18,10 @@ package org.yes.cart.service.order.impl.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
@@ -124,40 +127,35 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                 final String skuCode = det.getProductSkuCode();
                 final BigDecimal toCredit = det.getQty();
 
-                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+                final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
-                if (product == null || Product.AVAILABILITY_ALWAYS != product.getAvailability()) {
+                if (selected == null) {
+                    LOG.warn(Markers.alert(),
+                            "Warehouse is not found for delivery detail {}:{}",
+                            delivery.getDeliveryNum(), det.getProductSkuCode()
+                    );
+                } else {
 
-                    final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
-
-                    if (selected == null) {
-                        LOG.warn(Markers.alert(),
-                                "Warehouse is not found for delivery detail {}:{}",
-                                delivery.getDeliveryNum(), det.getProductSkuCode()
-                        );
-                    } else {
-
-                        if (voidReservation) {
-                            // this delivery was not completed, so can just void reservation
-                            final BigDecimal rem = inventoryResolver.voidReservation(selected, skuCode, toCredit);
-                            if (MoneyUtils.isPositive(rem)) {
-                                LOG.warn(
-                                        "Could not void all reservation {}:{}",
-                                        delivery.getDeliveryNum(), det.getProductSkuCode()
-                                );
-                            }
-                        } else if (voidCredit) {
-                            // this delivery is completed, so need to credit qty
-                            final BigDecimal rem = inventoryResolver.credit(selected, skuCode, toCredit);
-                            if (MoneyUtils.isPositive(rem)) {
-                                LOG.warn(
-                                        "Could not credit all reservation {}:{}",
-                                        delivery.getDeliveryNum(), det.getProductSkuCode()
-                                );
-                            }
+                    if (voidReservation) {
+                        // this delivery was not completed, so can just void reservation
+                        final BigDecimal rem = inventoryResolver.voidReservation(selected, skuCode, toCredit);
+                        if (MoneyUtils.isPositive(rem)) {
+                            LOG.warn(
+                                    "Could not void all reservation {}:{}",
+                                    delivery.getDeliveryNum(), det.getProductSkuCode()
+                            );
                         }
-
+                    } else if (voidCredit) {
+                        // this delivery is completed, so need to credit qty
+                        final BigDecimal rem = inventoryResolver.credit(selected, skuCode, toCredit);
+                        if (MoneyUtils.isPositive(rem)) {
+                            LOG.warn(
+                                    "Could not credit all reservation {}:{}",
+                                    delivery.getDeliveryNum(), det.getProductSkuCode()
+                            );
+                        }
                     }
+
                 }
 
             }

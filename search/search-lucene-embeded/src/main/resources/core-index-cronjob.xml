@@ -33,7 +33,6 @@
                 <value>productService-productBySkuCode</value>
                 <value>productSkuService-productSkuBySkuCode</value>
                 <value>skuWarehouseService-productSkusOnWarehouse</value>
-                <value>skuWarehouseService-productOnWarehouse</value>
                 <value>web.bookmarkService-seoProduct</value>
                 <value>web.bookmarkService-seoSku</value>
             </set>
@@ -88,64 +87,6 @@
     </bean>
 
 
-    <bean id="productsPassedAvailabilityDateIndexProcessorInternal" parent="txJobProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.bulkjob.product.ProductsPassedAvailabilityDateIndexProcessorImpl">
-                <constructor-arg index="0" ref="productService"/>
-                <constructor-arg index="1" ref="nodeService"/>
-                <constructor-arg index="2" ref="systemService"/>
-                <constructor-arg index="3" ref="sfProductCacheHelper"/>
-                <property name="numberOfDays" value="2"/>
-                <lookup-method name="getSelf" bean="productsPassedAvailabilityDateIndexProcessorInternal"/>
-            </bean>
-        </property>
-        <property name="transactionAttributes">
-            <props>
-                <prop key="findDiscontinuedProductsIds">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
-                <prop key="reindexBatch">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
-                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
-            </props>
-        </property>
-    </bean>
-
-    <bean id="productsPassedAvailabilityDateIndexProcessor" class="org.yes.cart.bulkjob.cron.ConfiguredPausableProcessorWrapperImpl">
-        <property name="processor" ref="productsPassedAvailabilityDateIndexProcessorInternal"/>
-        <property name="systemService" ref="systemService"/>
-        <property name="pausePreferenceKey" value="JOB_EXPIREREINDEX_PAUSE"/>
-        <property name="pausePreferenceDefault" value="true"/>
-        <property name="cfgContext">
-            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="search"/>
-                <property name="name" value="productsPassedAvailabilityDateIndexProcessor"/>
-                <property name="cfgInterface" value="Runnable"/>
-                <property name="cfgDefault" value="false"/>
-                <property name="properties">
-                    <props>
-                        <prop key="extension">Pausable cron job</prop>
-                        <prop key="description">Recurring expired product reindex job (alternative to global, which only reindexes expired products)</prop>
-                        <prop key="SYSTEM[JOB_EXPIREREINDEX_PAUSE]">Pause</prop>
-                    </props>
-                </property>
-            </bean>
-        </property>
-    </bean>
-
-
-    <bean name="reindexDiscontinuedProductsJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="jobName" value="Reindex Discontinued Products" />
-                <entry key="job" value-ref="productsPassedAvailabilityDateIndexProcessor" />
-                <entry key="nodeService" value-ref="nodeService" />
-            </map>
-        </property>
-    </bean>
-
-    <bean id="reindexDiscontinuedProductsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="reindexDiscontinuedProductsJob" />
-        <property name="cronExpression" value="${ws.cron.reindexDiscontinuedProductsJob}" />
-    </bean>
 
     <!-- ################################ Inventory updates products indexing  ############################# -->
 

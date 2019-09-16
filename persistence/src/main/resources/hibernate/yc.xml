@@ -1163,10 +1163,6 @@
         <property name="pimOutdated" column="PIM_OUTDATED" type="boolean" index="PRODUCT_POUTDATED" not-null="true"/>
         <property name="pimUpdated" column="PIM_UPDATED" type="java.time.Instant" not-null="false"/>
 
-        <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="PRODUCT_DISABLED"/>
-        <property name="availablefrom" column="AVAILABLEFROM" type="java.time.LocalDateTime" not-null="false"/>
-        <property name="availableto" column="AVAILABLETO" type="java.time.LocalDateTime" not-null="false"/>
-
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME" length="255" not-null="true"/>
         </property>
@@ -1193,10 +1189,6 @@
         <many-to-one name="producttype" class="org.yes.cart.domain.entity.impl.ProductTypeEntity" foreign-key="FK_PROD_PRODTYPE" lazy="false">
             <column name="PRODUCTTYPE_ID" not-null="true"/>
         </many-to-one>
-
-        <property name="availability" type="int">
-            <column name="AVAILABILITY" not-null="true" default="1"/>
-        </property>
 
         <set name="attributes" inverse="true" lazy="true" cascade="all-delete-orphan">
             <key>
@@ -1234,12 +1226,6 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ProductAssociationEntity"/>
         </set>
 
-        <property name="featured" length="1" type="java.lang.Boolean" not-null="false">
-            <column name="FEATURED" length="1" not-null="false">
-                <comment>Is product featured?</comment>
-            </column>
-        </property>
-
         <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
             <property name="uri" type="string" column="URI" length="255" not-null="false" unique-key="PRODUCT_URI"/>
             <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
@@ -1249,10 +1235,6 @@
             <property name="displayMetakeywords" type="string" column="DISPLAY_METAKEYWORDS" length="4000" not-null="false"/>
             <property name="displayMetadescription" type="string" column="DISPLAY_METADESCRIPTION" length="4000" not-null="false"/>
         </component>
-
-        <property name="minOrderQuantity" column="MIN_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
-        <property name="maxOrderQuantity" column="MAX_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
-        <property name="stepOrderQuantity" column="STEP_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -1325,6 +1307,14 @@
 
         <property name="barCode" length="128" type="string" index="SKU_BCODE">
             <column name="BARCODE" length="128"/>
+        </property>
+
+        <property name="tag" type="string" length="255">
+            <column name="TAG">
+                <comment>
+                    Set of space separated product tags
+                </comment>
+            </column>
         </property>
 
         <bag name="attributes" inverse="true" lazy="false" cascade="all,delete-orphan">
@@ -1719,6 +1709,32 @@
             </column>
         </property>
 
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="PRODUCT_DISABLED"/>
+        <property name="availablefrom" column="AVAILABLEFROM" type="java.time.LocalDateTime" not-null="false"/>
+        <property name="availableto" column="AVAILABLETO" type="java.time.LocalDateTime" not-null="false"/>
+        <property name="releaseDate" column="RELEASEDATE" type="java.time.LocalDateTime" not-null="false"/>
+
+        <property name="availability" type="int">
+            <column name="AVAILABILITY" not-null="true" default="1"/>
+        </property>
+
+        <property name="featured" length="1" type="java.lang.Boolean" not-null="false">
+            <column name="FEATURED" length="1" not-null="false" default="false">
+                <comment>Is product featured?</comment>
+            </column>
+        </property>
+
+        <property name="tag" type="string" length="255">
+            <column name="TAG">
+                <comment>
+                    Set of space separated product tags
+                </comment>
+            </column>
+        </property>
+
+        <property name="minOrderQuantity" column="MIN_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
+        <property name="maxOrderQuantity" column="MAX_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
+        <property name="stepOrderQuantity" column="STEP_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -1981,9 +1997,8 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <many-to-one name="skus" class="org.yes.cart.domain.entity.impl.ProductSkuEntity" foreign-key="FK_WL_SKU">
-            <column name="SKU_ID" not-null="true"/>
-        </many-to-one>
+        <property name="skuCode" column="SKU_CODE" type="string" length="255" not-null="true"/>
+        <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255" not-null="true"/>
 
         <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity" foreign-key="FK_WL_CUSTOMER">
             <column name="CUSTOMER_ID" not-null="true"/>
@@ -3054,42 +3069,12 @@
        ]]>
     </query>
 
-    <query name="PRODUCTS.BY.CATEGORYIDS.ALL">
+    <query name="PRODUCTS.BY.CATEGORYIDS">
         <![CDATA[
        select p from ProductEntity p, ProductCategoryEntity pc
             where p.productId = pc.product.productId
             and pc.category.categoryId in (?1)
             order by pc.rank, p.code
-       ]]>
-    </query>
-
-    <query name="PRODUCTS.BY.CATEGORYID">
-        <![CDATA[
-       select p from ProductEntity p, ProductCategoryEntity pc
-            where p.productId = pc.product.productId
-            and pc.category.categoryId = ?1
-            and p.disabled = ?3
-            and (p.availablefrom < ?2 OR p.availablefrom IS NULL)
-            and (p.availableto > ?2 OR p.availableto IS NULL)
-            order by pc.rank
-       ]]>
-    </query>
-
-    <query name="PRODUCTS.QTY.BY.CATEGORYID">
-        <![CDATA[
-       select count(p) from ProductEntity p, ProductCategoryEntity pc
-            where p.productId = pc.product.productId
-            and pc.category.categoryId = ?1
-            and p.disabled = ?3
-            and (p.availablefrom < ?2 OR p.availablefrom IS NULL)
-            and (p.availableto > ?2 OR p.availableto IS NULL)
-       ]]>
-    </query>
-
-    <query name="PRODUCT.IN.CATEGORY.ONE">
-        <![CDATA[
-       select pc from  ProductCategoryEntity pc
-            where  pc.category.categoryId = ?1
        ]]>
     </query>
 
@@ -3112,13 +3097,6 @@
         <![CDATA[
        select pc.category.categoryId from  ProductCategoryEntity pc
             where  pc.product.productId =?1
-       ]]>
-    </query>
-
-    <query name="DISCONTINUED.PRODUCTS.AFTER.DATE.CHANGED.AFTER">
-        <![CDATA[
-       select p.productId from ProductEntity p
-            where p.disabled = ?3 or (p.availableto IS NOT NULL and p.availableto <= ?1 and  p.availableto > ?2)
        ]]>
     </query>
 
@@ -3590,12 +3568,6 @@
         ]]>
     </query>
 
-    <query name="PRODUCT.IDS.BY.AVAILABLETO">
-        <![CDATA[
-                 select p.productId from ProductEntity p   where (p.availableto is null and p.disabled = ?2) or (p.availableto is not null and p.availableto < ?1) order by p.availableto
-        ]]>
-    </query>
-
     <query name="PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE">
         <![CDATA[
                  select avp.product.productId from AttrValueEntityProduct avp   where avp.attributeCode = ?1 and avp.val = ?2
@@ -3769,24 +3741,6 @@
             select sw from SkuWarehouseEntity sw
             where sw.skuCode = ?1
              and sw.warehouse.warehouseId in (?2)
-        ]]>
-    </query>
-
-    <query name="SKU.QTY.ON.WAREHOUSES.IN.WAREHOUSEID.BY.SKUCODE">
-        <![CDATA[
-            select sum(sw.quantity), sum(sw.reserved)
-            from SkuWarehouseEntity sw
-            where sw.warehouse.warehouseId IN (?2)
-            and sw.skuCode = ?1
-        ]]>
-    </query>
-
-    <query name="PRODUCT.SKU.QTY.ON.WAREHOUSES.IN.SKUCODE.IN.WAREHOUSEID">
-        <![CDATA[
-            select sw.skuCode, sw.quantity, sw.reserved
-            from SkuWarehouseEntity sw
-            where sw.warehouse.warehouseId IN (?2)
-            and sw.skuCode IN (?1)
         ]]>
     </query>
 
@@ -4046,7 +4000,7 @@
 
     <query name="REMOVE.ALL.WISHLIST.BY.SKUID">
         <![CDATA[
-            delete from CustomerWishListEntity  wl   where wl.skus.skuId  = ?1
+            delete from CustomerWishListEntity  wl   where wl.skuCode  = ?1
         ]]>
     </query>
 
@@ -4071,7 +4025,14 @@
         ]]>
     </query>
 
-   <query name="TOP.SELLER.SHOP.CALCULATE">
+    <query name="SKUWAREHOUSE.SKU.DISCONTINUED">
+        <![CDATA[
+                 select w.skuCode from SkuWarehouseEntity w
+                 where w.disabled = ?2 or (w.availableto is not null and w.availableto < ?1)
+        ]]>
+    </query>
+
+    <query name="TOP.SELLER.SHOP.CALCULATE">
         <![CDATA[
             select cod.productSkuCode, sum(cod.qty) from CustomerOrderDetEntity  cod
             where cod.customerOrder.shop = ?1

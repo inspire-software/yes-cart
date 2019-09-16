@@ -81,7 +81,7 @@ public class ItemAmountOffPromotionAction extends AbstractItemPromotionAction im
                 promoPrice = cartItem.getPrice().subtract(amountOff);
             }
 
-            cart.setProductSkuPromotion(cartItem.getProductSkuCode(), promoPrice, getPromotionCode(context));
+            cart.setProductSkuPromotion(cartItem.getSupplierCode(), cartItem.getProductSkuCode(), promoPrice, getPromotionCode(context));
 
         }
     }

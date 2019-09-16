@@ -108,8 +108,8 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public BigDecimal getProductSkuQuantity(final String sku) {
-        return original.getProductSkuQuantity(sku);
+    public BigDecimal getProductSkuQuantity(final String supplier, final String sku) {
+        return original.getProductSkuQuantity(supplier, sku);
     }
 
     @Override
@@ -198,8 +198,8 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean contains(final String skuCode) {
-        return original.contains(skuCode);
+    public boolean contains(final String supplier, final String skuCode) {
+        return original.contains(supplier, skuCode);
     }
 
     @Override
@@ -208,13 +208,13 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public int indexOfProductSku(final String skuCode) {
-        return original.indexOfProductSku(skuCode);
+    public int indexOfProductSku(final String supplier, final String skuCode) {
+        return original.indexOfProductSku(supplier, skuCode);
     }
 
     @Override
-    public int indexOfGift(final String skuCode) {
-        return original.indexOfGift(skuCode);
+    public int indexOfGift(final String supplier, final String skuCode) {
+        return original.indexOfGift(supplier, skuCode);
     }
 
     @Override
@@ -269,7 +269,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean addProductSkuToCart(final String sku, final String skuName, final BigDecimal quantity) {
+    public boolean addProductSkuToCart(final String supplier, final String sku, final String skuName, final BigDecimal quantity) {
         return false;
     }
 
@@ -279,12 +279,12 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean addGiftToCart(final String sku, final String skuName, final BigDecimal quantity, final String promotionCode) {
+    public boolean addGiftToCart(final String supplier, final String sku, final String skuName, final BigDecimal quantity, final String promotionCode) {
         return false;
     }
 
     @Override
-    public boolean setProductSkuToCart(final String sku, final String skuName, final BigDecimal quantity) {
+    public boolean setProductSkuToCart(final String supplier, final String sku, final String skuName, final BigDecimal quantity) {
         return false;
     }
 
@@ -299,7 +299,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean removeCartItem(final String productSku) {
+    public boolean removeCartItem(final String supplier, final String productSku) {
         return false;
     }
 
@@ -314,7 +314,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean removeCartItemQuantity(final String productSku, final BigDecimal quantity) {
+    public boolean removeCartItemQuantity(final String supplier, final String productSku, final BigDecimal quantity) {
         return false;
     }
 
@@ -329,7 +329,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean setProductSkuPrice(final String productSkuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
+    public boolean setProductSkuPrice(final String supplier, final String productSkuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
         return false;
     }
 
@@ -339,17 +339,17 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean setGiftPrice(final String productSkuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
+    public boolean setGiftPrice(final String supplier, final String productSkuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
         return false;
     }
 
     @Override
-    public boolean setProductSkuPromotion(final String productSkuCode, final BigDecimal promoPrice, final String promoCode) {
+    public boolean setProductSkuPromotion(final String supplier, final String productSkuCode, final BigDecimal promoPrice, final String promoCode) {
         return false;
     }
 
     @Override
-    public boolean setProductSkuOffer(final String productSkuCode, final BigDecimal fixedPrice, final String authCode) {
+    public boolean setProductSkuOffer(final String supplier, final String productSkuCode, final BigDecimal fixedPrice, final String authCode) {
         return false;
     }
 
@@ -359,7 +359,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean setProductSkuTax(final String productSkuCode, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
+    public boolean setProductSkuTax(final String supplier, final String productSkuCode, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
         return false;
     }
 

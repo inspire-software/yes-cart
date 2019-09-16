@@ -20,7 +20,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultPageDTO;
 import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
+import org.yes.cart.domain.dto.impl.ProductSkuSearchResultPageDTOImpl;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
@@ -91,7 +93,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     @Override
-    public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final NavigationContext context) {
+    public ProductSkuSearchResultPageDTO getProductSkuSearchResultDTOByQuery(final NavigationContext context) {
 
         final Pair<List<Object[]>, Integer> searchRez = ((GenericFTSCapableDAO) getGenericDao()).fullTextSearch(
                 context.getProductSkuQuery(),
@@ -110,7 +112,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
             rez.add(dto);
         }
 
-        return rez;
+        return new ProductSkuSearchResultPageDTOImpl(rez, searchRez.getSecond());
 
     }
 
@@ -190,7 +192,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      */
     @Override
     public void removeAllWishLists(final ProductSku sku) {
-        getGenericDao().executeUpdate("REMOVE.ALL.WISHLIST.BY.SKUID", sku.getSkuId());
+        getGenericDao().executeUpdate("REMOVE.ALL.WISHLIST.BY.SKUID", sku.getCode());
     }
 
     /**

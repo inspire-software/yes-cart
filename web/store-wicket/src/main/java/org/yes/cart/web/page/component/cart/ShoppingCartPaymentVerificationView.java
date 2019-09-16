@@ -255,7 +255,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                                                 customerOrderDeliveryDetListItem
                                                         .add(
-                                                                links.newProductSkuLink(ITEM_NAME_LINK, linkId)
+                                                                links.newProductSkuLink(ITEM_NAME_LINK, det.getSupplierCode(), linkId)
                                                                         .add(new Label(ITEM_NAME_LINK_NAME, name))
                                                                         .setVisible(linkToProduct)
                                                         ).add(

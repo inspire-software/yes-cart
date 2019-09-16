@@ -38,22 +38,6 @@ import java.util.Map;
  */
 public interface ProductService extends GenericService<Product> {
 
-    /**
-     * Get the all products in category
-     *
-     * @param categoryId category id
-     * @return list of products
-     */
-    List<Product> findProductByCategory(long categoryId);
-
-    /**
-     * Get random product from category
-     *
-     * @param category category id
-     * @return random product.
-     */
-    Product getRandomProductByCategory(Category category);
-
 
     /**
      * Get product sku by his id
@@ -197,14 +181,6 @@ public interface ProductService extends GenericService<Product> {
      * @return list of product, that satisfy given list of ids.
      */
     List<Product> getProductByIdList(List idList);
-
-    /**
-     * Get the quantity of products in particular category.
-     *
-     * @param categoryId category id
-     * @return quantity of products
-     */
-    int getProductQty(long categoryId);
 
     /**
      * Get the all products , that match the given query
@@ -399,14 +375,6 @@ public interface ProductService extends GenericService<Product> {
      * @return product id if found otherwise null
      */
     List<Long> findProductIdsByPimCode(String code);
-
-    /**
-     * Get product id for products with availableto < before
-     *
-     * @param before before date
-     * @return product id if found otherwise null
-     */
-    List<Long> findProductIdsByUnavailableBefore(LocalDateTime before);
 
 
     /**

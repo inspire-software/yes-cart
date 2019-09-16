@@ -178,30 +178,5 @@
             </import-descriptor>
         </column-descriptor>
 
-        <!-- availability type -->
-        <column-descriptor>
-            <column-index>9</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>INT</data-type>
-            <name>availability</name>
-        </column-descriptor>
-
-        <!--featured-->
-        <column-descriptor>
-            <column-index>-1</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>BOOLEAN</data-type>
-            <name>featured</name>
-            <value-constant>true</value-constant>
-        </column-descriptor>
-
-        <!--availablefrom-->
-        <column-descriptor>
-            <column-index>10</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>DATETIME</data-type>
-            <name>availablefrom</name>
-        </column-descriptor>
-
     </import-columns>
 </import-descriptor>

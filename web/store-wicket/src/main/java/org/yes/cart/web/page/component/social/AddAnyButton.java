@@ -18,16 +18,18 @@ import javax.servlet.http.HttpServletRequest;
 public class AddAnyButton extends BaseComponent {
 
     private final Product product;
+    private final String supplier;
 
-    public AddAnyButton(final String id, final Product product) {
+    public AddAnyButton(final String id, final Product product, final String supplier) {
         super(id);
         this.product = product;
+        this.supplier = supplier;
     }
 
     @Override
     protected void onBeforeRender() {
 
-        final BookmarkablePageLink link = (BookmarkablePageLink) getWicketSupportFacade().links().newProductLink("link", product.getProductId());
+        final BookmarkablePageLink link = (BookmarkablePageLink) getWicketSupportFacade().links().newProductLink("link", supplier, product.getProductId());
 
         final String lang = getLocale().getLanguage();
 

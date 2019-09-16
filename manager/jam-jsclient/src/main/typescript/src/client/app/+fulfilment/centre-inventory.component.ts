@@ -92,6 +92,15 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
       'warehouseName': [''],
       'quantity': ['', YcValidators.requiredPositiveNumber],
       'reserved': [''],
+      'tag': ['', YcValidators.nonBlankTrimmed],
+      'disabled': [''],
+      'availablefrom': ['', YcValidators.validDate],
+      'availableto': ['', YcValidators.validDate],
+      'releaseDate': ['', YcValidators.validDate],
+      'availability': ['', YcValidators.requiredPositiveNumber],
+      'minOrderQuantity': ['', YcValidators.positiveNumber],
+      'maxOrderQuantity': ['', YcValidators.positiveNumber],
+      'stepOrderQuantity': ['', YcValidators.positiveNumber],
     });
   }
 
@@ -103,8 +112,47 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     CentreInventoryComponent._selectedCentre = selectedCentre;
   }
 
+
+  get availableto():string {
+    return UiUtil.dateInputGetterProxy(this.inventoryEdit, 'availableto');
+  }
+
+  set availableto(availableto:string) {
+    UiUtil.dateInputSetterProxy(this.inventoryEdit, 'availableto', availableto);
+  }
+
+  get availablefrom():string {
+    return UiUtil.dateInputGetterProxy(this.inventoryEdit, 'availablefrom');
+  }
+
+  set availablefrom(availablefrom:string) {
+    UiUtil.dateInputSetterProxy(this.inventoryEdit, 'availablefrom', availablefrom);
+  }
+
+  get releaseDate():string {
+    return UiUtil.dateInputGetterProxy(this.inventoryEdit, 'releaseDate');
+  }
+
+  set releaseDate(releaseDate:string) {
+    UiUtil.dateInputSetterProxy(this.inventoryEdit, 'releaseDate', releaseDate);
+  }
+
+
   newInventoryInstance():InventoryVO {
-    return { skuWarehouseId: 0, skuCode: '', skuName: '', warehouseCode: this.selectedCentre.code, warehouseName: this.selectedCentre.name, quantity: 0, reserved: 0};
+    return {
+      skuWarehouseId: 0,
+      skuCode: '',
+      skuName: '',
+      warehouseCode: this.selectedCentre.code,
+      warehouseName: this.selectedCentre.name,
+      quantity: 0,
+      reserved: 0,
+      tag: null,
+      disabled: false, availablefrom: null, availableto: null, releaseDate: null,
+      availability: 1,
+      featured: false,
+      minOrderQuantity: undefined, maxOrderQuantity: undefined, stepOrderQuantity: undefined
+    };
   }
 
   ngOnInit() {

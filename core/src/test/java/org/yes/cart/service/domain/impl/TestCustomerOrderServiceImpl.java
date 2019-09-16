@@ -93,7 +93,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart(true);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
-        assertEquals(5, order.getDelivery().size());
+        assertEquals(4, order.getDelivery().size());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart(false);
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
-        assertEquals(3, order.getDelivery().size());
+        assertEquals(2, order.getDelivery().size());
     }
 
     @Test
@@ -133,13 +133,15 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         // this digital product available
         Map<String, String> param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart,
                 (Map) param);
 
         param = new HashMap<>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
+        param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
+        param.put(ShoppingCartCommand.CMD_P_QTY, "200.00");
         commands.execute(shoppingCart,
                 (Map) param);
 

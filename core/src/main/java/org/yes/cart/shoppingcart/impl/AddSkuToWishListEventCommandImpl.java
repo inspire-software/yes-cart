@@ -47,6 +47,8 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
     private final CustomerWishListService customerWishListService;
     private final ProductQuantityStrategy productQuantityStrategy;
 
+    private boolean forceRecalculateCart = false;
+
     /**
      * Construct sku command.
      *
@@ -79,20 +81,6 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
     @Override
     public String getCmdKey() {
         return CMD_ADDTOWISHLIST;
-    }
-
-
-    private BigDecimal getQuantityValue(final Map parameters) {
-        final Object strQty = parameters.get(CMD_ADDTOWISHLIST_P_QTY);
-
-        if (strQty instanceof String) {
-            try {
-                return new BigDecimal((String) strQty);
-            } catch (Exception exp) {
-                LOG.error("Invalid quantity {} in add to cart command", strQty);
-            }
-        }
-        return BigDecimal.ONE; // if no parameter specified assume 1 unit
     }
 
 
@@ -138,32 +126,43 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
                            final String skuCode,
+                           final String supplier,
+                           final BigDecimal qty,
                            final Map<String, Object> parameters) {
 
-        if (productSku != null && ShoppingCart.LOGGED_IN == shoppingCart.getLogonState()) {
+        if (ShoppingCart.LOGGED_IN == shoppingCart.getLogonState()) {
 
             final String type = getTypeValue(parameters);
             final String tags = getTagsValue(parameters);
             final boolean tagsr = isTagsValueReplace(parameters);
             final String visibility = getVisibilityValue(parameters);
 
-            createWishListItem(shoppingCart, productSku, type, tags, tagsr, visibility, parameters);
-            if (CustomerWishList.CART_SAVE_FOR_LATER.equals(type)) {
-                getRemoveAllSku().execute(shoppingCart, (Map) Collections.singletonMap(ShoppingCartCommand.CMD_REMOVEALLSKU, productSku.getCode()));
-            }
-            /*
-                We do not need it for demo but if we have dependency of promotions on wish list items
-                then this is how:
-             */
-            // recalculatePrice(shoppingCart, null);
-            // markDirty(shoppingCart);
+            createWishListItem(shoppingCart, skuCode, supplier, qty, type, tags, tagsr, visibility, parameters);
 
-            LOG.debug("Added one item of sku code {} to wishlist", productSku.getCode());
+            if (CustomerWishList.CART_SAVE_FOR_LATER.equals(type)) {
+
+                LOG.debug("[{}] Added item of sku code {} to save for later, removing sku from cart", shoppingCart.getGuid(), skuCode);
+
+                final Map removeParams = new HashMap();
+                removeParams.put(ShoppingCartCommand.CMD_REMOVEALLSKU, skuCode);
+                removeParams.put(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
+                getRemoveAllSku().execute(shoppingCart, removeParams);
+
+            } else if (forceRecalculateCart) {
+                recalculatePricesInCart(shoppingCart);
+                markDirty(shoppingCart);
+            }
+
+            LOG.debug("[{}] Added item of sku code {} to wishlist", shoppingCart.getGuid(), skuCode);
+        } else {
+            LOG.debug("[{}] Unable to added item of sku code {} to wishlist, user is not logged in", shoppingCart.getGuid(), skuCode);
         }
     }
 
     private void createWishListItem(final ShoppingCart shoppingCart,
-                                    final ProductSku productSku,
+                                    final String skuCode,
+                                    final String supplier,
+                                    final BigDecimal qty,
                                     final String type,
                                     final String tags,
                                     final boolean tagsr,
@@ -172,18 +171,27 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
         final Shop shop = getShopService().getById(shoppingCart.getShoppingContext().getShopId());
         if (shop == null) {
+            LOG.debug("[{}] Unable to add item of sku code {} to wishlist, shop undefined", shoppingCart.getGuid(), skuCode);
             return;
         }
         final Customer customer = customerService.getCustomerByEmail(shoppingCart.getCustomerEmail(), shop);
         if (customer == null) {
+            LOG.debug("[{}] Unable to add item of sku code {} to wishlist, customer undefined", shoppingCart.getGuid(), skuCode);
             return;
         }
+        if (supplier == null) {
+            LOG.debug("[{}] Unable to add item of sku code {} to wishlist, supplier undefined", shoppingCart.getGuid(), skuCode);
+            return;
+        }
+
+        final long customerShopId = shoppingCart.getShoppingContext().getCustomerShopId();
+        final long masterShopId = shoppingCart.getShoppingContext().getShopId();
 
         final List<CustomerWishList> wishList = customerWishListService.findWishListByCustomerId(customer.getCustomerId());
 
         for (final CustomerWishList item : wishList) {
 
-            if (item.getSkus().getSkuId() == productSku.getSkuId()
+            if (item.getSkuCode().equals(skuCode) && item.getSupplierCode().equals(supplier)
                     && item.getWlType().equals(type)) {
 
                 if (CustomerWishList.SHOPPING_LIST_ITEM.equals(type) && !tags.equals(item.getTag())) {
@@ -191,12 +199,14 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                 }
 
                 // duplicate item, so just update quantity
-                final QuantityModel pqm = productQuantityStrategy.getQuantityModel(item.getQuantity(), productSku);
+                final QuantityModel pqm = productQuantityStrategy.getQuantityModel(customerShopId, item.getQuantity(), skuCode, supplier);
                 if (!pqm.canOrderMore()) {
+                    LOG.debug("[{}] Unable to add item of sku code {} to wishlist, cannot add more", shoppingCart.getGuid(), skuCode);
                     return; // cannot add more
                 }
 
-                final BigDecimal quantity = pqm.getValidSetQty(item.getQuantity().add(getQuantityValue(parameters)));
+                final BigDecimal qtyAdd = pqm.getValidAddQty(qty);
+                final BigDecimal quantity = pqm.getValidSetQty(item.getQuantity().add(qtyAdd));
                 item.setQuantity(quantity);
 
                 if (!CustomerWishList.SHOPPING_LIST_ITEM.equals(type)) {
@@ -224,17 +234,14 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         }
 
         // not found so need to create one
-        final String skuCode = productSku.getCode();
 
-        final QuantityModel pqm = productQuantityStrategy.getQuantityModel(BigDecimal.ZERO, productSku);
+        final QuantityModel pqm = productQuantityStrategy.getQuantityModel(customerShopId, BigDecimal.ZERO, skuCode, supplier);
         if (!pqm.canOrderMore()) {
             return; // cannot add more
         }
 
-        final BigDecimal quantity = pqm.getValidAddQty(getQuantityValue(parameters));
+        final BigDecimal quantity = pqm.getValidAddQty(qty);
 
-        final long customerShopId = shoppingCart.getShoppingContext().getCustomerShopId();
-        final long masterShopId = shoppingCart.getShoppingContext().getShopId();
         // Fallback only if we have a B2B non-strict mode
         final Long fallbackShopId = masterShopId == customerShopId || getShopService().getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
         final String shopCode = shoppingCart.getShoppingContext().getShopCode();
@@ -256,13 +263,16 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                 currency,
                 quantity,
                 false,
-                policy.getID());
+                policy.getID(),
+                supplier
+        );
 
         final BigDecimal price = skuPrice.isPriceUponRequest() ? MoneyUtils.ZERO : MoneyUtils.secondOrFirst(skuPrice.getSalePriceForCalculation());
 
         final CustomerWishList customerWishList = customerWishListService.getGenericDao().getEntityFactory().getByIface(CustomerWishList.class);
         customerWishList.setCustomer(customer);
-        customerWishList.setSkus(productSku);
+        customerWishList.setSkuCode(skuCode);
+        customerWishList.setSupplierCode(supplier);
         customerWishList.setWlType(type);
         customerWishList.setTag(tags);
         customerWishList.setVisibility(visibility);
@@ -281,5 +291,17 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
      */
     public ShoppingCartCommand getRemoveAllSku() {
         return null;
+    }
+
+
+    /**
+     * Configuration point.
+     *
+     * @param forceRecalculateCart set to true to force cart recalculation after wish list items are added,
+     *                             default is false - not to recalculate since wish list has no influence on cart
+     *                             in core code.
+     */
+    public void setForceRecalculateCart(final boolean forceRecalculateCart) {
+        this.forceRecalculateCart = forceRecalculateCart;
     }
 }

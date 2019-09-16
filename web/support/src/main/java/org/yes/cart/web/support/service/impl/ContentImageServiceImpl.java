@@ -32,15 +32,20 @@ public class ContentImageServiceImpl extends AbstractImageServiceImpl implements
         super(cacheManager);
     }
 
-    /** {@inheritDoc}
-     * @param attributableOrStrategy*/
+    /**
+     * {@inheritDoc}
+     * @param attributableOrStrategy
+     */
     @Override
     protected String getRepositoryUrlPattern(final Object attributableOrStrategy) {
         return Constants.CONTENT_IMAGE_REPOSITORY_URL_PATTERN;
     }
 
-    /** {@inheritDoc}
-     * @param attributableOrStrategy*/
+
+    /**
+     * {@inheritDoc}
+     * @param attributableOrStrategy
+     */
     @Override
     protected String getAttributePrefix(final Object attributableOrStrategy) {
         return AttributeNamesKeys.Category.CATEGORY_IMAGE_PREFIX;

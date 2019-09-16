@@ -16,6 +16,8 @@
 
 package org.yes.cart.bulkjob.product;
 
+import java.time.LocalDateTime;
+
 /**
  * User: denispavlov
  * Date: 16/07/2016
@@ -26,8 +28,8 @@ public interface RemoveObsoleteProductProcessorInternal extends Runnable {
     /**
      * Remove all product data.
      *
-     * @param productId PK
+     * @param skuCode SKU
      */
-    void removeProduct(Long productId);
+    boolean removeProductSkuIfInventoryDisabledSince(String skuCode, LocalDateTime time);
 
 }

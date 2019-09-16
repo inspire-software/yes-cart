@@ -92,6 +92,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 ((GenericFTSCapableDAO<Product, Long, Object>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO)).fullTextSearchReindex(false, 1000);
+                ((GenericFTSCapableDAO<Product, Long, Object>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_SKU_DAO)).fullTextSearchReindex(false, 1000);
 
             }
         });

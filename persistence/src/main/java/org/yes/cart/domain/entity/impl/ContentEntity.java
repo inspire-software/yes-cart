@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueContent;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.utils.DomainApiUtils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -158,6 +159,10 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
         this.availableto = availableto;
     }
 
+    @Override
+    public boolean isAvailable(final LocalDateTime now) {
+        return DomainApiUtils.isObjectAvailableNow(!this.disabled, this.availablefrom, this.availableto, now);
+    }
 
     @Override
     public Map<String, String> getBodies() {

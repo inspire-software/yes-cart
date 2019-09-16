@@ -71,7 +71,8 @@ public class DtoShoppingCartServiceImpl implements DtoShoppingCartService {
 
     /** {@inheritDoc} */
     @Override
-    public ShoppingCart create(final String ref, final boolean recalculate) {
+    public ShoppingCart create(final String ref,
+                               final boolean recalculate) {
 
         final CustomerOrder order = customerOrderService.findByReference(ref);
         if (order != null) {
@@ -105,12 +106,15 @@ public class DtoShoppingCartServiceImpl implements DtoShoppingCartService {
 
     /** {@inheritDoc} */
     @Override
-    public void removeLine(final String guid, final String sku) {
+    public void removeLine(final String guid,
+                           final String supplier,
+                           final String sku) {
 
         final ShoppingCart cart = cartRepository.getShoppingCart(guid);
         if (cart != null) {
             final Map<String, String> params = new HashMap<>();
             params.put(ShoppingCartCommand.CMD_REMOVEALLSKU, sku);
+            params.put(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
             shoppingCartCommandFactory.execute(cart, (Map) params);
             cartRepository.storeShoppingCart(cart);
         }
@@ -119,13 +123,17 @@ public class DtoShoppingCartServiceImpl implements DtoShoppingCartService {
 
     /** {@inheritDoc} */
     @Override
-    public void updateLineQuantity(final String guid, final String sku, final BigDecimal quantity) {
+    public void updateLineQuantity(final String guid,
+                                   final String supplier,
+                                   final String sku,
+                                   final BigDecimal quantity) {
 
         final ShoppingCart cart = cartRepository.getShoppingCart(guid);
         if (cart != null) {
             final Map<String, String> params = new HashMap<>();
             params.put(ShoppingCartCommand.CMD_SETQTYSKU, sku);
-            params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, quantity.toPlainString());
+            params.put(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
+            params.put(ShoppingCartCommand.CMD_P_QTY, quantity.toPlainString());
             shoppingCartCommandFactory.execute(cart, (Map) params);
             cartRepository.storeShoppingCart(cart);
         }
@@ -134,12 +142,17 @@ public class DtoShoppingCartServiceImpl implements DtoShoppingCartService {
 
     /** {@inheritDoc} */
     @Override
-    public void updateLinePrice(final String guid, final String sku, final BigDecimal offer, final String auth) {
+    public void updateLinePrice(final String guid,
+                                final String supplier,
+                                final String sku,
+                                final BigDecimal offer,
+                                final String auth) {
 
         final ShoppingCart cart = cartRepository.getShoppingCart(guid);
         if (cart != null) {
             final Map<String, String> params = new HashMap<>();
             params.put(ShoppingCartCommand.CMD_SETPRICE, sku);
+            params.put(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
             params.put(ShoppingCartCommand.CMD_SETPRICE_P_PRICE, offer.toPlainString());
             params.put(ShoppingCartCommand.CMD_SETPRICE_P_AUTH, auth);
             shoppingCartCommandFactory.execute(cart, (Map) params);

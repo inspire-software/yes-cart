@@ -19,12 +19,15 @@ package org.yes.cart.domain.ro;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
+import org.yes.cart.domain.ro.xml.impl.LocalDateTimeAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -48,11 +51,38 @@ public class ProductSkuSearchResultRO implements Serializable {
     @DtoField(readOnly = true)
     private String manufacturerCode;
     @DtoField(readOnly = true)
+    private String fulfilmentCentreCode;
+    @DtoField(readOnly = true)
     private String name;
-    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(readOnly = true, converter = "i18nStringConverter")
     private Map<String, String> displayName;
     @DtoField(readOnly = true)
+    private String description;
+    @DtoField(readOnly = true, converter = "i18nStringConverter")
+    private Map<String, String> displayDescription;
+    @DtoField(readOnly = true)
+    private String tag;
+    @DtoField(readOnly = true)
+    private LocalDateTime availablefrom;
+    @DtoField(readOnly = true)
+    private LocalDateTime availableto;
+    @DtoField(readOnly = true)
+    private LocalDateTime releaseDate;
+    @DtoField(readOnly = true)
+    private int availability;
+    private ProductAvailabilityModelRO skuAvailabilityModel;
+    private ProductQuantityModelRO skuQuantityModel;
+    private SkuPriceRO price;
+    @DtoField(readOnly = true)
     private String defaultImage;
+    @DtoField(readOnly = true)
+    private Boolean featured;
+    @DtoField(readOnly = true)
+    private BigDecimal minOrderQuantity;
+    @DtoField(readOnly = true)
+    private BigDecimal maxOrderQuantity;
+    @DtoField(readOnly = true)
+    private BigDecimal stepOrderQuantity;
 
     @DtoField(readOnly = true, converter = "storedAttributesConverter")
     private List<ProductSearchResultAttributeRO> attributes;
@@ -66,6 +96,58 @@ public class ProductSkuSearchResultRO implements Serializable {
         this.defaultImage = defaultImage;
     }
 
+    @XmlElement(name = "sku-availability")
+    public ProductAvailabilityModelRO getSkuAvailabilityModel() {
+        return skuAvailabilityModel;
+    }
+
+    public void setSkuAvailabilityModel(final ProductAvailabilityModelRO skuAvailabilityModel) {
+        this.skuAvailabilityModel = skuAvailabilityModel;
+    }
+
+    @XmlElement(name = "sku-quantity")
+    public ProductQuantityModelRO getSkuQuantityModel() {
+        return skuQuantityModel;
+    }
+
+    public void setSkuQuantityModel(final ProductQuantityModelRO skuQuantityModel) {
+        this.skuQuantityModel = skuQuantityModel;
+    }
+
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    public LocalDateTime getAvailableto() {
+        return availableto;
+    }
+
+    public void setAvailableto(final LocalDateTime availableto) {
+        this.availableto = availableto;
+    }
+
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    public LocalDateTime getAvailablefrom() {
+        return availablefrom;
+    }
+
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
+        this.availablefrom = availablefrom;
+    }
+
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    public LocalDateTime getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(final LocalDateTime releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public int getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(final int availability) {
+        this.availability = availability;
+    }
 
     public long getId() {
         return id;
@@ -101,6 +183,15 @@ public class ProductSkuSearchResultRO implements Serializable {
         this.manufacturerCode = manufacturerCode;
     }
 
+    @XmlElement(name = "supplier-code")
+    public String getFulfilmentCentreCode() {
+        return fulfilmentCentreCode;
+    }
+
+    public void setFulfilmentCentreCode(final String fulfilmentCentreCode) {
+        this.fulfilmentCentreCode = fulfilmentCentreCode;
+    }
+
     @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "display-names")
     public Map<String, String> getDisplayName() {
@@ -117,6 +208,82 @@ public class ProductSkuSearchResultRO implements Serializable {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
+    @XmlElement(name = "display-descriptions")
+    public Map<String, String> getDisplayDescription() {
+        return displayDescription;
+    }
+
+    public void setDisplayDescription(final Map<String, String> displayDescription) {
+
+        this.displayDescription = displayDescription;
+    }
+
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(final String tag) {
+        this.tag = tag;
+    }
+
+
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(final Boolean featured) {
+        this.featured = featured;
+    }
+
+    @XmlElement(name = "min-order-quantity")
+    public BigDecimal getMinOrderQuantity() {
+        return minOrderQuantity;
+    }
+
+    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
+        this.minOrderQuantity = minOrderQuantity;
+    }
+
+    @XmlElement(name = "max-order-quantity")
+    public BigDecimal getMaxOrderQuantity() {
+        return maxOrderQuantity;
+    }
+
+    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
+        this.maxOrderQuantity = maxOrderQuantity;
+    }
+
+    @XmlElement(name = "step-order-quantity")
+    public BigDecimal getStepOrderQuantity() {
+        return stepOrderQuantity;
+    }
+
+    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
+        this.stepOrderQuantity = stepOrderQuantity;
+    }
+
+
+    public SkuPriceRO getPrice() {
+        return price;
+    }
+
+    public void setPrice(final SkuPriceRO price) {
+        this.price = price;
     }
 
     @XmlElementWrapper(name = "attributes")

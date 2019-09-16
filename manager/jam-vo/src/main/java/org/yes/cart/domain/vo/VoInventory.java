@@ -20,6 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * User: denispavlov
@@ -48,6 +49,35 @@ public class VoInventory {
     @DtoField(value = "reserved", readOnly = true)
     private BigDecimal reserved;
 
+    @DtoField(value = "disabled")
+    private boolean disabled;
+
+    @DtoField(value = "availablefrom")
+    private LocalDateTime availablefrom;
+
+    @DtoField(value = "availableto")
+    private LocalDateTime availableto;
+
+    @DtoField(value = "availability")
+    private int availability;
+
+    @DtoField(value = "featured")
+    private Boolean featured;
+
+    @DtoField(value = "tag")
+    private String tag;
+
+    @DtoField(value = "minOrderQuantity")
+    private BigDecimal minOrderQuantity;
+
+    @DtoField(value = "maxOrderQuantity")
+    private BigDecimal maxOrderQuantity;
+
+    @DtoField(value = "stepOrderQuantity")
+    private BigDecimal stepOrderQuantity;
+
+    @DtoField(value = "releaseDate")
+    private LocalDateTime releaseDate;
 
     public long getSkuWarehouseId() {
         return skuWarehouseId;
@@ -103,5 +133,85 @@ public class VoInventory {
 
     public void setReserved(final BigDecimal reserved) {
         this.reserved = reserved;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public LocalDateTime getAvailablefrom() {
+        return availablefrom;
+    }
+
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
+        this.availablefrom = availablefrom;
+    }
+
+    public LocalDateTime getAvailableto() {
+        return availableto;
+    }
+
+    public void setAvailableto(final LocalDateTime availableto) {
+        this.availableto = availableto;
+    }
+
+    public int getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(final int availability) {
+        this.availability = availability;
+    }
+
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(final Boolean featured) {
+        this.featured = featured;
+    }
+
+    public BigDecimal getMinOrderQuantity() {
+        return minOrderQuantity;
+    }
+
+    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
+        this.minOrderQuantity = minOrderQuantity;
+    }
+
+    public BigDecimal getMaxOrderQuantity() {
+        return maxOrderQuantity;
+    }
+
+    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
+        this.maxOrderQuantity = maxOrderQuantity;
+    }
+
+    public BigDecimal getStepOrderQuantity() {
+        return stepOrderQuantity;
+    }
+
+    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
+        this.stepOrderQuantity = stepOrderQuantity;
+    }
+
+    public LocalDateTime getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(final LocalDateTime releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(final String tag) {
+        this.tag = tag;
     }
 }

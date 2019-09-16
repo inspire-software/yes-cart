@@ -79,6 +79,7 @@
         <property name="clusterService" ref="clusterService"/>
         <property name="asyncContextFactory" ref="webAppManagerAsyncContextFactory"/>
         <property name="productService" ref="productService"/>
+        <property name="skuWarehouseService" ref="skuWarehouseService"/>
     </bean>
 
     <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginAlerts">

@@ -3100,10 +3100,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Authorisation failed for last one so we reverse all
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                     "259.74",                   "84.77",                        "444.95",                       "689.74",                     "259.74",                         "444.95"),
-                Arrays.asList(PaymentGateway.AUTH,          PaymentGateway.AUTH,        PaymentGateway.AUTH,            PaymentGateway.AUTH,            PaymentGateway.REVERSE_AUTH,  PaymentGateway.REVERSE_AUTH,      PaymentGateway.REVERSE_AUTH),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_FAILED,  Payment.PAYMENT_STATUS_OK,      Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,        Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,              Boolean.FALSE,                  Boolean.FALSE,                  Boolean.FALSE,                Boolean.FALSE,                    Boolean.FALSE)
+                Arrays.asList("689.74",                     "259.74",                   "84.77",                        "444.95",                       "689.74",                     "259.74"),
+                Arrays.asList(PaymentGateway.AUTH,          PaymentGateway.AUTH,        PaymentGateway.AUTH,            PaymentGateway.AUTH,            PaymentGateway.REVERSE_AUTH,  PaymentGateway.REVERSE_AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_FAILED,  Payment.PAYMENT_STATUS_FAILED,  Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,              Boolean.FALSE,                  Boolean.FALSE,                  Boolean.FALSE,                Boolean.FALSE)
         );
         assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());

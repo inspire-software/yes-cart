@@ -146,7 +146,9 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             SimpleBindings bindings = new SimpleBindings();
             bindings.add("score", DoubleValuesSource.SCORES);
             bindings.add("rank_boost", DoubleValuesSource.fromIntField("rank_boost"));
-            return JavascriptCompiler.compile("score * (rank_boost)").getDoubleValuesSource(bindings);
+            bindings.add("instock_boost", DoubleValuesSource.fromIntField(ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD + "_boost"));
+            bindings.add("feature_boost", DoubleValuesSource.fromIntField("featured_boost"));
+            return JavascriptCompiler.compile("score * (feature_boost + instock_boost + rank_boost)").getDoubleValuesSource(bindings);
         } catch (Exception exp) {
             throw new RuntimeException("Unable to compile SKU_BOOST_FIELDS");
         }
@@ -227,14 +229,31 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             }
 
             SearchQueryBuilder<Query> builder = skuBuilders.get(ProductSearchQueryBuilder.PRODUCT_ID_FIELD);
-            final List<Long> productIds = new ArrayList<>();
+            final Set<Long> productIds = new TreeSet<>();
+            final List<String> navParam = new ArrayList<>();
             for (final ProductSearchResultDTO product : products) {
                 productIds.add(product.getId());
+                navParam.add(String.valueOf(product.getId()));
             }
+            navigationParameters.put("__sku__", navParam);
 
             final List<Query> chain = builder.createQueryChain(navigationContext, ProductSearchQueryBuilder.PRODUCT_ID_FIELD, productIds);
             if (!CollectionUtils.isEmpty(chain)) {
                 snowball.add(chain.get(0), BooleanClause.Occur.MUST);
+            }
+
+            final long customerShopId = navigationContext.getCustomerShopId();
+
+            // Enforce in stock SKU
+            final  List<Query> inStock = productShopStockBuilder.createQueryChain(navigationContext, ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD, customerShopId);
+            if (inStock != null) {
+                snowball.add(inStock.get(0), BooleanClause.Occur.MUST);
+            }
+
+            // Enforce SKU with price
+            final  List<Query> hasPrice = productShopPriceBuilder.createQueryChain(navigationContext, ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD, customerShopId);
+            if (hasPrice != null) {
+                snowball.add(hasPrice.get(0), BooleanClause.Occur.MUST);
             }
 
         }

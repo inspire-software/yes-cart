@@ -16,10 +16,9 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
@@ -62,27 +61,23 @@ public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl i
             final Shop shop = this.shopService.getById(shoppingCart.getShoppingContext().getShopId());
             final int max = NumberUtils.toInt(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_MAX_LAST_VIEWED_SKU), maxProductHistory);
             final Object skus = parameters.get(getCmdKey());
-            if (skus instanceof Collection) {
-                for (final Object sku : (Collection) skus) {
-                    executeOneItem(shoppingCart, sku, max);
+            final String supplier = (String) parameters.get(CMD_P_SUPPLIER);
+            if (StringUtils.isNotBlank(supplier)) {
+                if (skus instanceof Collection) {
+                    for (final Object sku : (Collection) skus) {
+                        updateViewedSku(shoppingCart, (String) sku, supplier, max);
+                    }
+                } else {
+                    updateViewedSku(shoppingCart, (String) skus, supplier, max);
                 }
-            } else {
-                executeOneItem(shoppingCart, skus, max);
             }
         }
     }
 
-    private void executeOneItem(final MutableShoppingCart shoppingCart, final Object sku, final int max) {
-        if (sku instanceof ProductSku) {
-            updateViewedSku(shoppingCart, String.valueOf(((ProductSku) sku).getProduct().getProductId()), max);
-        } else if (sku instanceof Product) {
-            updateViewedSku(shoppingCart, String.valueOf(((Product) sku).getProductId()), max);
-        } else if (sku instanceof String) {
-            updateViewedSku(shoppingCart, (String) sku, max);
-        }
-    }
-
-    private void updateViewedSku(final MutableShoppingCart shoppingCart, final String skuCode, final int max) {
+    private void updateViewedSku(final MutableShoppingCart shoppingCart,
+                                 final String skuCode,
+                                 final String supplier,
+                                 final int max) {
 
         List<String> skus = shoppingCart.getShoppingContext().getLatestViewedSkus();
 
@@ -92,14 +87,16 @@ public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl i
             skus = new LinkedList<>(skus);
         }
 
-        if (!skus.contains(skuCode)) {
+        final String thisSku = skuCode + "|" + supplier;
+
+        if (!skus.contains(thisSku)) {
             if (skus.size() >= max) {
                 // if maxed out remove the first element
                 final List<String> last = new LinkedList<>(skus.subList(1, skus.size()));
                 skus.clear();
                 skus.addAll(last);
             }
-            skus.add(skuCode);
+            skus.add(thisSku);
             shoppingCart.getShoppingContext().setLatestViewedSkus(skus);
             shoppingCart.markDirty();
         }

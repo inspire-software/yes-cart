@@ -16,7 +16,7 @@
 
 package org.yes.cart.service.domain;
 
-import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultPageDTO;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.SkuWarehouse;
@@ -66,7 +66,7 @@ public interface ProductSkuService extends GenericService<ProductSku> {
      *
      * @return list of products SKU
      */
-    List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(NavigationContext navigationContext);
+    ProductSkuSearchResultPageDTO getProductSkuSearchResultDTOByQuery(NavigationContext navigationContext);
 
 
     /**

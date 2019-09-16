@@ -59,7 +59,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
         setIPAddress(shoppingCart, "127.0.0.1");
         setCustomOrderDetail(shoppingCart, "someDetail", "order detail");
-        setCustomItemDetail(shoppingCart, "CC_TEST1", "someDetail", "item detail");
+        setCustomItemDetail(shoppingCart, "WAREHOUSE_1", "CC_TEST1", "someDetail", "item detail");
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart, RandomStringUtils.random(10));
         assertNotNull(customerOrder);

@@ -119,6 +119,10 @@ public class ContentCategoryAdapter implements org.yes.cart.domain.entity.Conten
         category.setAvailableto(availableto);
     }
 
+    @Override
+    public boolean isAvailable(final LocalDateTime now) {
+        return category.isAvailable(now);
+    }
 
     @Override
     public Map<String, String> getBodies() {

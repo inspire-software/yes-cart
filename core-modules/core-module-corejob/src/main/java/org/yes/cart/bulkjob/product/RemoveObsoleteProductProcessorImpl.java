@@ -26,14 +26,13 @@ import org.yes.cart.service.async.JobStatusAware;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
 import org.yes.cart.service.async.model.JobStatus;
-import org.yes.cart.service.domain.ProductCategoryService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.domain.*;
+import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -51,6 +50,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
     private final ProductSkuService productSkuService;
     private final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
     private final GenericDAO<ProductAssociation, Long> productAssociationDao;
+    private final SkuWarehouseService skuWarehouseService;
     private final SystemService systemService;
 
     private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
@@ -61,6 +61,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
                                               final ProductSkuService productSkuService,
                                               final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao,
                                               final GenericDAO<ProductAssociation, Long> productAssociationDao,
+                                              final SkuWarehouseService skuWarehouseService,
                                               final SystemService systemService) {
         this.productService = productService;
         this.productCategoryService = productCategoryService;
@@ -68,6 +69,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         this.productSkuService = productSkuService;
         this.attrValueEntityProductSkuDao = attrValueEntityProductSkuDao;
         this.productAssociationDao = productAssociationDao;
+        this.skuWarehouseService = skuWarehouseService;
         this.systemService = systemService;
     }
 
@@ -89,41 +91,118 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         LOG.info("Remove obsolete products unavailable before {} (min days {}), batch: {}",
                 time, minDays, batchSize);
 
-        final List<Long> obsoleteIds = productService.findProductIdsByUnavailableBefore(time);
+        final List<String> potentialObsoleteSku = skuWarehouseService.findProductSkuByUnavailableBefore(time);
 
-        int toIndex = batchSize > obsoleteIds.size() ? obsoleteIds.size() : batchSize;
-        final List<Long> batch = new ArrayList<>(obsoleteIds.subList(0, toIndex));
+        LOG.info("Potentially obsolete SKU count: {}", potentialObsoleteSku.size());
 
-        LOG.info("Remove obsolete products {}", batch);
-
-        for (final Long id : batch) {
-            self().removeProduct(id);
+        int count = 0;
+        for (final String skuCode : potentialObsoleteSku) {
+            if (self().removeProductSkuIfInventoryDisabledSince(skuCode, time)) {
+                count++;
+                if (count >= batchSize) {
+                    break; // Do not remove more than necessary
+                }
+            }
         }
 
-        listener.notifyPing("Removed " + toIndex + " obsolete products in last run");
+        listener.notifyPing("Removed " + count + " obsolete product SKU in last run");
 
     }
 
     @Override
-    public void removeProduct(final Long productId) {
+    public boolean removeProductSkuIfInventoryDisabledSince(final String skuCode, final LocalDateTime time) {
+
+        final List<SkuWarehouse> allInventory = skuWarehouseService.findByCriteria(" where e.skuCode = ?1", skuCode);
+
+        final Iterator<SkuWarehouse> allIterator = allInventory.iterator();
+        while (allIterator.hasNext()) {
+
+            final SkuWarehouse inventory = allIterator.next();
+
+            if (/* Is not available for a long time */
+                    (inventory.getAvailableto() != null && !inventory.isAvailable(time))
+                    ||
+                /* Id diabled and was not updated for a long time */
+                    (inventory.getAvailableto() == null && inventory.isDisabled() &&
+                        inventory.getUpdatedTimestamp() == null || inventory.getUpdatedTimestamp().isBefore(DateUtils.iFrom(time)))
+                ) {
+
+                LOG.warn("Removing obsolete inventory record for {} in fulfilment centre {}", skuCode, inventory.getWarehouse().getWarehouseId());
+
+                skuWarehouseService.delete(inventory);
+                allIterator.remove();
+
+            }
+
+        }
+
+        if (!allInventory.isEmpty()) {
+            LOG.warn("Keeping SKU {} as inventory records exist for other fulfilment centres {}", skuCode, allInventory.size());
+            return false; // we still have valid inventory for this SKU
+        }
+
+        Product product = productService.getProductBySkuCode(skuCode);
+        if (product == null) {
+            LOG.warn("Product for SKU {} not found", skuCode);
+            return false;
+        }
+
+        final long productId = product.getProductId();
+        final String productCode = product.getCode();
+
+        // Find fresh record
+        product = productService.findById(productId);
+
+        ProductSku sku = product.getSku(skuCode);
+        if (sku == null) {
+            LOG.warn("SKU {} not found", skuCode);
+            return false;
+        }
+
+        final boolean multiSku = product.isMultiSkuProduct();
+
+        LOG.info("Remove obsolete product SKU {}/{}/{}", product.getProductId(), product.getCode(), skuCode);
+
+        productSkuService.removeAllInventory(sku);
+        productSkuService.removeAllPrices(sku);
+        productSkuService.removeAllWishLists(sku);
+        productSkuService.removeAllEnsembleOptions(sku);
+
+        final List<Long> sAvIds = new ArrayList<>();
+        for (final AttrValueProductSku av : sku.getAttributes()) {
+            sAvIds.add(av.getAttrvalueId());
+        }
+
+        long skuId = sku.getSkuId();
+        sku = null;
+        productSkuService.getGenericDao().clear(); // clear session
+
+        for (final Long avId : sAvIds) {
+            attrValueEntityProductSkuDao.delete(attrValueEntityProductSkuDao.findById(avId));
+        }
+        productSkuService.getGenericDao().flushClear(); // ensure we flush delete and clear session
+
+        sku = productSkuService.findById(skuId); // get sku again (should be without attributes)
+        final Product prod = sku.getProduct();
+        prod.getSku().remove(sku);
+        sku.setProduct(null);
+        productSkuService.delete(sku);
+
+        LOG.warn("SKU {} removed as it is obsolete", skuCode);
+
+        if (multiSku) {
+            return true;
+        }
 
         productCategoryService.removeByProductIds(productId);
 
-        Product product = productService.findById(productId);
-
-        if (product == null) {
-            return;
-        }
+        product = productService.findById(productId);
 
         LOG.info("Remove obsolete product {}/{}", product.getProductId(), product.getCode());
 
         final List<Long> pAvIds = new ArrayList<>();
         for (final AttrValueProduct av : product.getAttributes()) {
             pAvIds.add(av.getAttrvalueId());
-        }
-        final List<Long> skus = new ArrayList<>();
-        for (final ProductSku sku : product.getSku()) {
-            skus.add(sku.getSkuId());
         }
         final List<Long> assoc = new ArrayList<>();
         for (final ProductAssociation productAssociation : product.getProductAssociations()) {
@@ -144,41 +223,11 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
 
         productService.getGenericDao().flushClear(); // ensure we flush delete and clear session
 
-        for (final Long skuId : skus) {
-            ProductSku sku =  productSkuService.findById(skuId);
-
-            if (sku == null) {
-                return;
-            }
-
-            productSkuService.removeAllInventory(sku);
-            productSkuService.removeAllPrices(sku);
-            productSkuService.removeAllWishLists(sku);
-            productSkuService.removeAllEnsembleOptions(sku);
-
-            final List<Long> sAvIds = new ArrayList<>();
-            for (final AttrValueProductSku av : sku.getAttributes()) {
-                sAvIds.add(av.getAttrvalueId());
-            }
-            sku = null;
-            productSkuService.getGenericDao().clear(); // clear session
-
-            for (final Long avId : sAvIds) {
-                attrValueEntityProductSkuDao.delete(attrValueEntityProductSkuDao.findById(avId));
-            }
-            productSkuService.getGenericDao().flushClear(); // ensure we flush delete and clear session
-
-            sku = productSkuService.findById(skuId); // get sku again (should be without attributes)
-            final Product prod = sku.getProduct();
-            prod.getSku().remove(sku);
-            sku.setProduct(null);
-            productSkuService.delete(sku);
-        }
-
-        productSkuService.getGenericDao().flushClear(); // ensure we flush delete and clear session
-
         productService.delete(productService.findById(productId));
 
+        LOG.warn("Product {} removed as it is obsolete", productCode);
+
+        return true;
     }
 
     protected int getObsoleteMinDays() {

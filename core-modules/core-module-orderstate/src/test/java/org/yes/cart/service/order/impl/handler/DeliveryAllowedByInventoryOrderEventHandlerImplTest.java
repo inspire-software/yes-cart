@@ -297,7 +297,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
 
         String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
 
-        changeAvailabilityDatesAndAssert("CC_TEST6", DateUtils.ldtFrom(0L), true);
+        changeAvailabilityDatesAndAssert(WAREHOUSE_ID, "CC_TEST6", DateUtils.ldtFrom(0L), true);
         assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");
 
         CustomerOrder customerOrder = createTestOrder(TestOrderType.MIXED, label, true);

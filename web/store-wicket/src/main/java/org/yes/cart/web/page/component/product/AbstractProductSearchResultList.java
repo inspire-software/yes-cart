@@ -161,7 +161,7 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
         final String prodName = prod.getName(selectedLocale);
 
         listItem.add(
-                links.newProductLink(PRODUCT_LINK_IMAGE, prod.getId(), getPage().getPageParameters())
+                links.newProductLink(PRODUCT_LINK_IMAGE, prod.getFulfilmentCentreCode(), prod.getId(), getPage().getPageParameters())
                         .add(
                                 new ContextImage(PRODUCT_IMAGE, getDefaultImage(prod, width, height, selectedLocale))
                                         .add(new AttributeModifier(HTML_TITLE, prodName))
@@ -169,7 +169,7 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
                         )
         );
         listItem.add(
-                links.newProductLink(PRODUCT_NAME_LINK, prod.getId(), getPage().getPageParameters())
+                links.newProductLink(PRODUCT_NAME_LINK, prod.getFulfilmentCentreCode(), prod.getId(), getPage().getPageParameters())
                         .add(new Label(NAME, prodName).setEscapeModelStrings(false))
                         .setVisible(nameLinkVisible)
         );

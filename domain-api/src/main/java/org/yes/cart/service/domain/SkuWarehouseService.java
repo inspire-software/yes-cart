@@ -18,13 +18,11 @@ package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Collection;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -38,29 +36,10 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      *
      * @param productId   given product id
      * @param warehouseId given warehouse id.
+     *
      * @return list of founded {@link SkuWarehouse}
      */
     List<SkuWarehouse> getProductSkusOnWarehouse(long productId, long warehouseId);
-
-    /**
-     * Find ATS value per product sku for product.
-     *
-     * @param productId product PK
-     * @param warehouses warehouses to consider (pass cached collection from {@link WarehouseService#getByShopId(long, boolean)}})
-     *
-     * @return SKU code -> ATS map
-     */
-    Map<String, BigDecimal> getProductAvailableToSellQuantity(long productId, Collection<Warehouse> warehouses);
-
-    /**
-     * Find ATS value per product sku for product.
-     *
-     * @param productSku product sku
-     * @param warehouses warehouses to consider (pass cached collection from {@link WarehouseService#getByShopId(long, boolean)})
-     *
-     * @return SKU code -> ATS map
-     */
-    Map<String, BigDecimal> getProductSkuAvailableToSellQuantity(String productSku, Collection<Warehouse> warehouses);
 
     /**
      * Reserve quantity of skus on warehouse. Method returns the rest to reserve if quantity of skus is not enough
@@ -68,9 +47,10 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      * but need to reserve 9 skus. In this case return value will be 4 if first warehouse to reserve was with 5 skus.
      * Second example 10 skus on warehouse and 3 reserved will allow to reserve 7 skus only
      *
-     * @param warehouse  warehouse
-     * @param productSkuCode sku to reserve
-     * @param reserveQty quantity to reserve
+     * @param warehouse         warehouse
+     * @param productSkuCode    sku to reserve
+     * @param reserveQty        quantity to reserve
+     *
      * @return the rest to reserve or BigDecimal.ZERO if was reserved successful.
      */
     BigDecimal reservation(Warehouse warehouse, String productSkuCode, BigDecimal reserveQty);
@@ -81,11 +61,12 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      * but need to reserve 9 skus. In this case return value will be 4 if first warehouse to reserve was with 5 skus.
      * Second example 10 skus on warehouse and 3 reserved will allow to reserve 7 skus only
      *
-     * @param warehouse  warehouse
-     * @param productSkuCode sku to reserve
-     * @param reserveQty quantity to reserve
-     * @param allowBackorder true indicates that we allow over-reservation as this is backorderable sku, false indicates
-     *                       that reserve will not exceed inventory.
+     * @param warehouse         warehouse
+     * @param productSkuCode    sku to reserve
+     * @param reserveQty        quantity to reserve
+     * @param allowBackorder    true indicates that we allow over-reservation as this is backorderable sku, false indicates
+     *                          that reserve will not exceed inventory.
+     *
      * @return the rest to reserve or BigDecimal.ZERO if was reserved successful.
      */
     BigDecimal reservation(Warehouse warehouse, String productSkuCode, BigDecimal reserveQty, boolean allowBackorder);
@@ -93,9 +74,10 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
     /**
      * Credit quantity on warehouse after order cancel.
      *
-     * @param warehouse  warehouse
-     * @param productSkuCode sku to credit
-     * @param voidQty    quantity to credit
+     * @param warehouse         warehouse
+     * @param productSkuCode    sku to credit
+     * @param voidQty           quantity to credit
+     *
      * @return the rest of quantity to adjust on other warehouse, that belong to the same shop. Ten items to
      *         void reservation on warehouse, that has 100 qty and 2 reserved will return 8 and update sku quantity to 100 and 0.
      *         <p/>
@@ -107,9 +89,10 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
     /**
      * Update quantity on warehouse .
      *
-     * @param warehouse  warehouse
-     * @param productSkuCode sku to reserve
-     * @param debitQty   quantity to reserve
+     * @param warehouse         warehouse
+     * @param productSkuCode    sku to reserve
+     * @param debitQty          quantity to reserve
+     *
      * @return remainder of unallocated quantity.
      */
     BigDecimal debit(Warehouse warehouse, String productSkuCode, BigDecimal debitQty);
@@ -118,23 +101,14 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
     /**
      * Add quantity on warehouse.
      *
-     * @param warehouse  warehouse
-     * @param productSkuCode sku to credit
-     * @param addQty     quantity to add
+     * @param warehouse         warehouse
+     * @param productSkuCode    sku to credit
+     * @param addQty            quantity to add
+     *
      * @return BigDecimal.ZERO
      *         If no records was on warehouse ten will be returned, and 10, 0 record will be created
      */
     BigDecimal credit(Warehouse warehouse, String productSkuCode, BigDecimal addQty);
-
-    /**
-     * Get the sku's Quantity - Reserved quantity pair.
-     *
-     *
-     * @param warehouses list of warehouses where
-     * @param productSkuCode sku code
-     * @return pair of available and reserved quantity
-     */
-    Pair<BigDecimal, BigDecimal> findQuantity(Collection<Warehouse> warehouses, String productSkuCode);
 
 
     /**
@@ -147,17 +121,6 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
     SkuWarehouse findByWarehouseSku(Warehouse warehouse, String productSkuCode);
 
     /**
-     * Check if sku has pre-order availability.
-     *
-     *
-     * @param productSkuCode sku warehouse entity
-     * @param checkAvailabilityDates check availability date
-     *
-     * @return true, if sku has pre-order availability (and optionally within availability dates).
-     */
-    boolean isSkuAvailabilityPreorderOrBackorder(String productSkuCode, final boolean checkAvailabilityDates);
-
-    /**
      * Find PK of product sku's inventory of which had changed since given date (i.e. updateDate >= lastUpdate)
      *
      * @param lastUpdate last modification of sku warehouse (inclusive)
@@ -165,5 +128,13 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      * @return list of PKs
      */
     List<String> findProductSkuForWhichInventoryChangedAfter(Instant lastUpdate);
+
+    /**
+     * Get product SKU for products with availableto < before
+     *
+     * @param before before date
+     * @return product SKU if found otherwise null
+     */
+    List<String> findProductSkuByUnavailableBefore(LocalDateTime before);
 
 }

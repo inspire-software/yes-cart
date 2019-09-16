@@ -109,5 +109,16 @@ export class InventoryComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected isAvailableFromNow(row:InventoryVO) {
+    return row.availablefrom === null || (row.availablefrom < new Date());
+  }
+
+  protected isAvailableToNow(row:InventoryVO) {
+    return row.availableto === null || (row.availableto > new Date());
+  }
+
+  protected isReleasedNow(row:InventoryVO) {
+    return row.releaseDate === null || (row.releaseDate > new Date());
+  }
 
 }

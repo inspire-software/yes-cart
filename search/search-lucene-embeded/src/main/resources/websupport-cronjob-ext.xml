@@ -26,19 +26,6 @@
         <constructor-arg ref="webCronScheduleTriggers"/>
         <property name="extension">
             <list>
-                <!--
-                      reindexDiscontinuedProductsTrigger and productsGlobalIndexProcessorTrigger are two alternatives
-                      that perform full reindex.
-
-                      Only one of these should be enabled. reindexDiscontinuedProductsTrigger is aimed at locating
-                      items that are no longer available and then removing them out of the search index.
-                      productsGlobalIndexProcessorTrigger simply does full reindex (that includes removing outdated).
-
-                      The enable/disable should be controlled by cron schedule set to far future (say 2099). By default
-                      only reindexDiscontinuedProductsTrigger is set to 5am daily and productsGlobalIndexProcessorTrigger
-                      is set to 2099 (i.e. disabled)
-                  -->
-                <ref bean="reindexDiscontinuedProductsTrigger" />
                 <ref bean="productsGlobalIndexProcessorTrigger" />
                 <!--
                      Cron job that detect inventory changes between job runs and then

@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.CustomerWishListDTO;
 
 /**
@@ -31,13 +32,13 @@ public class CustomerWishListDTOImpl implements CustomerWishListDTO {
     @DtoField(value = "customerwishlistId", readOnly = true)
     private long customerwishlistId;
 
-    @DtoField(value = "skus.skuId", readOnly = true)
-    private long skuId;
-
-    @DtoField(value = "skus.code", readOnly = true)
+    @DtoField(value = "skuCode", readOnly = true)
     private String skuCode;
 
-    @DtoField(value = "skus.name", readOnly = true)
+    @DtoField(value = "supplierCode", readOnly = true)
+    private String supplierCode;
+
+    @DtoVirtualField(converter = "customerWishListSkuCodeToName", readOnly = true)
     private String skuName;
 
     @DtoField(value = "wlType")
@@ -68,14 +69,14 @@ public class CustomerWishListDTOImpl implements CustomerWishListDTO {
 
     /** {@inheritDoc} */
     @Override
-    public long getSkuId() {
-        return skuId;
+    public String getSupplierCode() {
+        return supplierCode;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setSkuId(final long skuId) {
-        this.skuId = skuId;
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
     }
 
     /** {@inheritDoc} */
@@ -130,7 +131,7 @@ public class CustomerWishListDTOImpl implements CustomerWishListDTO {
     public String toString() {
         return "CustomerWishListDTOImpl{" +
                 "customerwishlistId=" + customerwishlistId +
-                ", skuId=" + skuId +
+                ", supplierCode='" + supplierCode + '\'' +
                 ", skuCode='" + skuCode + '\'' +
                 ", skuName='" + skuName + '\'' +
                 ", wlType='" + wlType + '\'' +

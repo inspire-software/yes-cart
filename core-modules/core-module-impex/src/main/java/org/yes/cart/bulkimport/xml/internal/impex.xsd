@@ -414,6 +414,29 @@
 
     <xsd:complexType name="stockType">
         <xsd:sequence>
+            <xsd:element name="availability" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="dateTimeType" name="available-from" minOccurs="0"/>
+                        <xsd:element type="dateTimeType" name="available-to" minOccurs="0"/>
+                        <xsd:element type="dateTimeType" name="release-date" minOccurs="0"/>
+                    </xsd:sequence>
+                    <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="inventory-config" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute type="xsd:int" name="type" use="required"/>
+                            <xsd:attribute type="xsd:decimal" name="min"/>
+                            <xsd:attribute type="xsd:decimal" name="max"/>
+                            <xsd:attribute type="xsd:decimal" name="step"/>
+                            <xsd:attribute type="xsd:boolean" name="featured"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
             <xsd:element type="quantityType" name="quantity" maxOccurs="unbounded" minOccurs="0"/>
             <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
@@ -534,27 +557,6 @@
                     <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element name="availability">
-                <xsd:complexType>
-                    <xsd:sequence>
-                        <xsd:element type="dateTimeType" name="available-from" minOccurs="0"/>
-                        <xsd:element type="dateTimeType" name="available-to" minOccurs="0"/>
-                    </xsd:sequence>
-                    <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
-                </xsd:complexType>
-            </xsd:element>
-            <xsd:element name="inventory-config" minOccurs="0">
-                <xsd:complexType>
-                    <xsd:simpleContent>
-                        <xsd:extension base="xsd:string">
-                            <xsd:attribute type="xsd:int" name="type" use="required"/>
-                            <xsd:attribute type="xsd:decimal" name="min"/>
-                            <xsd:attribute type="xsd:decimal" name="max"/>
-                            <xsd:attribute type="xsd:decimal" name="step"/>
-                        </xsd:extension>
-                    </xsd:simpleContent>
-                </xsd:complexType>
-            </xsd:element>
             <xsd:element type="xsd:string" name="name"/>
             <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
             <xsd:element type="xsd:string" name="description" minOccurs="0"/>
@@ -572,7 +574,6 @@
         <xsd:attribute type="xsd:long" name="id"/>
         <xsd:attribute type="xsd:string" name="guid"/>
         <xsd:attribute type="xsd:string" name="code" use="required"/>
-        <xsd:attribute type="xsd:boolean" name="featured"/>
         <xsd:attribute type="entityImportModeType" name="import-mode"/>
     </xsd:complexType>
 
@@ -1663,6 +1664,7 @@
         <xsd:attribute type="xsd:string" name="wishlist-type" use="required"/>
         <xsd:attribute type="xsd:string" name="visibility" use="required"/>
         <xsd:attribute type="xsd:string" name="sku-code" use="required"/>
+        <xsd:attribute type="xsd:string" name="fulfilment-centre-code" use="required"/>
         <xsd:attribute type="entityImportModeType" name="import-mode"/>
     </xsd:complexType>
 

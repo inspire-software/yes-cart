@@ -174,12 +174,8 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
         final CustomerWishList wlist = this.customerWishListService.getGenericDao().getEntityFactory().getByIface(CustomerWishList.class);
         wlist.setCustomer(domain);
         wlist.setGuid(wli.getGuid());
-        ProductSku sku = this.productSkuService.getProductSkuBySkuCode(wli.getSkuCode());
-        if (sku == null) {
-            statusListener.notifyWarning("Wishlist skipped for SKU {} ... not found", wli.getSkuCode());
-            return;
-        }
-        wlist.setSkus(sku);
+        wlist.setSkuCode(wli.getSkuCode());
+        wlist.setSupplierCode(wli.getFulfilmentCentreCode());
         processWishListSaveBasic(wli, wlist);
         domain.getWishList().add(wlist);
 

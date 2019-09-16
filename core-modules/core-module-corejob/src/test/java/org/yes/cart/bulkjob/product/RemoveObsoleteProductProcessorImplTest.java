@@ -23,10 +23,7 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.AttrValueProduct;
-import org.yes.cart.domain.entity.AttrValueProductSku;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductAssociation;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.utils.DateUtils;
@@ -46,7 +43,7 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
 
         final long _1999_01_01 = DateUtils.iParseSDT("1999-01-01").toEpochMilli();
 
-        final int days = (int) Math.ceil(((double) (System.currentTimeMillis() - _1999_01_01)) / ((double) (1000*60*60*24)));
+        final int days = (int) Math.ceil(((double) (java.lang.System.currentTimeMillis() - _1999_01_01)) / ((double) (1000*60*60*24)));
 
         final ProductService productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         final ProductSkuService productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
@@ -120,6 +117,7 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
 
         final ProductService productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         final ProductSkuService productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
+        final SkuWarehouseService skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
         final ProductCategoryService productCategoryService = (ProductCategoryService) ctx().getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
         final GenericDAO<AttrValueProduct, Long> productAvDao = (GenericDAO<AttrValueProduct, Long>) ctx().getBean("attrValueEntityProductDao");
         final GenericDAO<AttrValueProductSku, Long> productSkuAvDao = (GenericDAO<AttrValueProductSku, Long>) ctx().getBean("attrValueEntityProductSkuDao");
@@ -131,7 +129,9 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
                 productAvDao,
                 productSkuService,
                 productSkuAvDao,
-                productAssociationDao, null
+                productAssociationDao,
+                skuWarehouseService,
+                null
         ) {
 
             @Override
@@ -158,19 +158,20 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
         ProductTypeService productTypeService = (ProductTypeService) ctx().getBean(ServiceSpringKeys.PRODUCT_TYPE_SERVICE);
         BrandService brandService = (BrandService) ctx().getBean(ServiceSpringKeys.BRAND_SERVICE);
         ProductService productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+        WarehouseService warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
+        SkuWarehouseService skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
         GenericDAO<AttrValueProduct, Long> productAvDao = (GenericDAO<AttrValueProduct, Long>) ctx().getBean("attrValueEntityProductDao");
         GenericDAO<AttrValueProductSku, Long> productSkuAvDao = (GenericDAO<AttrValueProductSku, Long>) ctx().getBean("attrValueEntityProductSkuDao");
+        final EntityFactory productEntityFactory = productService.getGenericDao().getEntityFactory();
+        final EntityFactory inventoryEntityFactory = skuWarehouseService.getGenericDao().getEntityFactory();
 
         for (final Pair<String, String> pair : namesAndAvailabilities) {
 
-            EntityFactory entityFactory = productService.getGenericDao().getEntityFactory();
-            Product product = entityFactory.getByIface(Product.class);
+            Product product = productEntityFactory.getByIface(Product.class);
             product.setCode(pair.getFirst());
             product.setName(pair.getFirst());
             product.setDescription("description");
             product.setProducttype(productTypeService.findById(1L));
-            product.setAvailability(Product.AVAILABILITY_ALWAYS);
-            product.setAvailableto(DateUtils.ldtParseSDT(pair.getSecond()));
             product.setBrand(brandService.findById(101L));
             product = productService.create(product);
             assertTrue(product.getProductId() > 0);
@@ -179,17 +180,25 @@ public class RemoveObsoleteProductProcessorImplTest extends BaseCoreDBTestCase {
             //code the same
             assertEquals(product.getCode(), product.getSku().iterator().next().getCode());
 
-            AttrValueProduct avp = entityFactory.getByIface(AttrValueProduct.class);
+            AttrValueProduct avp = productEntityFactory.getByIface(AttrValueProduct.class);
             avp.setProduct(product);
             avp.setAttributeCode("CODE1");
             avp.setVal("VAL1");
             productAvDao.saveOrUpdate(avp);
 
-            AttrValueProductSku avps = entityFactory.getByIface(AttrValueProductSku.class);
+            AttrValueProductSku avps = productEntityFactory.getByIface(AttrValueProductSku.class);
             avps.setProductSku(product.getDefaultSku());
             avps.setAttributeCode("CODE2");
             avps.setVal("VAL2");
             productSkuAvDao.saveOrUpdate(avps);
+
+            final SkuWarehouse inventory = inventoryEntityFactory.getByIface(SkuWarehouse.class);
+            inventory.setWarehouse(warehouseService.findAll().get(0));
+            inventory.setSkuCode(product.getDefaultSku().getCode());
+            inventory.setAvailability(SkuWarehouse.AVAILABILITY_ALWAYS);
+            inventory.setAvailableto(DateUtils.ldtParseSDT(pair.getSecond()));
+            skuWarehouseService.create(inventory);
+
         }
     }
 

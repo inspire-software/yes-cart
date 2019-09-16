@@ -95,8 +95,8 @@ public class ProductInListView extends BaseComponent {
     }
 
     private ProductSkuSearchResultDTO resolveDefaultSku(final ProductSearchResultDTO product) {
-        if (product.isMultisku() && !CollectionUtils.isEmpty(product.getSkus())) {
-            for (final ProductSkuSearchResultDTO sku : product.getSkus()) {
+        if (product.isMultisku() && !CollectionUtils.isEmpty(product.getSearchSkus())) {
+            for (final ProductSkuSearchResultDTO sku : product.getSearchSkus()) {
                 if (sku.getCode().equals(product.getDefaultSkuCode())) {
                     return sku;
                 }
@@ -123,9 +123,9 @@ public class ProductInListView extends BaseComponent {
 
         final Link skuCodeLink;
         if (sku != null) {
-            skuCodeLink = links.newProductSkuLink(PRODUCT_LINK_SKU, sku.getId(), getPage().getPageParameters());
+            skuCodeLink = links.newProductSkuLink(PRODUCT_LINK_SKU, product.getFulfilmentCentreCode(), sku.getId(), getPage().getPageParameters());
         } else {
-            skuCodeLink = links.newProductLink(PRODUCT_LINK_SKU, product.getId(), getPage().getPageParameters());
+            skuCodeLink = links.newProductLink(PRODUCT_LINK_SKU, product.getFulfilmentCentreCode(), product.getId(), getPage().getPageParameters());
         }
         add(skuCodeLink.add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(getCurrentShop(), product))));
 
@@ -133,17 +133,17 @@ public class ProductInListView extends BaseComponent {
 
         final Link nameLink;
         if (sku != null) {
-            nameLink = links.newProductSkuLink(PRODUCT_LINK_NAME, sku.getId(), getPage().getPageParameters());
+            nameLink = links.newProductSkuLink(PRODUCT_LINK_NAME, product.getFulfilmentCentreCode(), sku.getId(), getPage().getPageParameters());
         } else {
-            nameLink = links.newProductLink(PRODUCT_LINK_NAME, product.getId(), getPage().getPageParameters());
+            nameLink = links.newProductLink(PRODUCT_LINK_NAME, product.getFulfilmentCentreCode(), product.getId(), getPage().getPageParameters());
         }
         add(nameLink.add(new Label(NAME_LABEL, product.getName(selectedLocale))));
 
         final Link imageLink;
         if (sku != null) {
-            imageLink = links.newProductSkuLink(PRODUCT_LINK_IMAGE, sku.getId(), getPage().getPageParameters());
+            imageLink = links.newProductSkuLink(PRODUCT_LINK_IMAGE, product.getFulfilmentCentreCode(), sku.getId(), getPage().getPageParameters());
         } else {
-            imageLink = links.newProductLink(PRODUCT_LINK_IMAGE, product.getId(), getPage().getPageParameters());
+            imageLink = links.newProductLink(PRODUCT_LINK_IMAGE, product.getFulfilmentCentreCode(), product.getId(), getPage().getPageParameters());
         }
         add(imageLink.add(
                         new ContextImage(PRODUCT_IMAGE, getDefaultImage(width, height, selectedLocale))
@@ -155,18 +155,24 @@ public class ProductInListView extends BaseComponent {
         final long browsingShopId = getCurrentCustomerShopId();
         final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(product, browsingShopId);
         final ShoppingCart cart = getCurrentCart();
-        final PriceModel model = productServiceFacade.getSkuPrice(cart, null, skuPam.getDefaultSkuCode(), BigDecimal.ONE);
+        final PriceModel model = productServiceFacade.getSkuPrice(
+                cart,
+                null,
+                skuPam.getDefaultSkuCode(),
+                BigDecimal.ONE,
+                product.getFulfilmentCentreCode()
+        );
 
         final boolean ableToAddDefault = !model.isPriceUponRequest() && skuPam.isAvailable() && skuPam.getDefaultSkuCode().equals(skuPam.getFirstAvailableSkuCode());
 
-        add(links.newAddToCartLink(ADD_TO_CART_LINK, skuPam.getDefaultSkuCode(), null, getPage().getPageParameters())
+        add(links.newAddToCartLink(ADD_TO_CART_LINK, product.getFulfilmentCentreCode(), skuPam.getDefaultSkuCode(), null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_CART_LINK_LABEL, skuPam.isInStock() || skuPam.isPerpetual() ?
                                 getLocalizer().getString("addToCart", this) :
                                 getLocalizer().getString("preorderCart", this)))
                         .setVisible(ableToAddDefault)
         );
 
-        add(links.newProductLink(PRODUCT_LINK_ALT, product.getId(), getPage().getPageParameters())
+        add(links.newProductLink(PRODUCT_LINK_ALT, product.getFulfilmentCentreCode(), product.getId(), getPage().getPageParameters())
                         .add(new Label(VIEW_ALT_LABEL, getLocalizer().getString("viewAllVariants", this)))
                         .setVisible(!ableToAddDefault)
         );

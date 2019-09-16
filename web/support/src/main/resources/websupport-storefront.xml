@@ -195,6 +195,7 @@
                 <value>setPriceCmd</value>
                 <value>recalculatePriceCmd</value>
                 <value>qty</value>
+                <value>supplier</value>
                 <value>type</value>
                 <value>wlv</value>
                 <value>sku</value>
@@ -434,8 +435,10 @@
         <constructor-arg index="1" ref="categoryService"/>
         <constructor-arg index="2" ref="contentService"/>
         <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="languageService"/>
-        <constructor-arg index="5" ref="runtimeConstants"/>
+        <constructor-arg index="4" ref="warehouseService"/>
+        <constructor-arg index="5" ref="skuWarehouseService"/>
+        <constructor-arg index="6" ref="languageService"/>
+        <constructor-arg index="7" ref="runtimeConstants"/>
     </bean>
 
     <bean id="i18nSupport" class="org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl"/>

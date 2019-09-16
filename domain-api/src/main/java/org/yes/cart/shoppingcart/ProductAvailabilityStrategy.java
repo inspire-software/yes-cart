@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.ProductSku;
@@ -34,36 +35,65 @@ public interface ProductAvailabilityStrategy {
 
 
     /**
+     * Get availability model for given supplier for all SKU available for product.
      *
-     * @param shopId shop PK
-     * @param product product
+     * @param shopId   shop PK
+     * @param product  product
+     * @param supplier supplier
+     *
      * @return availability of this product
      */
-    ProductAvailabilityModel getAvailabilityModel(final long shopId, final Product product);
+    ProductAvailabilityModel getAvailabilityModel(long shopId,
+                                                  Product product,
+                                                  String supplier);
 
     /**
-     *
-     * @param shopId shop PK
-     * @param product product
-     * @return availability of this product
-     */
-    ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSearchResultDTO product);
-
-    /**
+     * Get availability model for given supplier for given SKU.
      *
      * @param shopId shop PK
      * @param sku product sku
+     * @param supplier supplier
+     *
      * @return availability of this sku
      */
-    ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSku sku);
+    ProductAvailabilityModel getAvailabilityModel(long shopId,
+                                                  ProductSku sku,
+                                                  String supplier);
 
     /**
+     * Get availability model for given supplier for all SKU available for product.
+     *
+     * @param shopId   shop PK
+     * @param product  product
+     *
+     * @return availability of this product
+     */
+    ProductAvailabilityModel getAvailabilityModel(long shopId,
+                                                  ProductSearchResultDTO product);
+
+    /**
+     * Get availability model for given supplier for all SKU available for product.
+     *
+     * @param shopId   shop PK
+     * @param sku      product
+     *
+     * @return availability of this product
+     */
+    ProductAvailabilityModel getAvailabilityModel(long shopId,
+                                                  ProductSkuSearchResultDTO sku);
+
+    /**
+     * Get availability model for given supplier for given SKU.
      *
      * @param shopId shop PK
      * @param skuCode SKU code (not product code)
+     * @param supplier supplier
+     *
      * @return availability of this sku
      */
-    ProductAvailabilityModel getAvailabilityModel(final long shopId, final String skuCode);
+    ProductAvailabilityModel getAvailabilityModel(long shopId,
+                                                  String skuCode,
+                                                  String supplier);
 
 
 }

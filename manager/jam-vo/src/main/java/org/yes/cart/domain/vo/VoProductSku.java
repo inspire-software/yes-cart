@@ -50,6 +50,9 @@ public class VoProductSku {
     @DtoField(value = "supplierCatalogCode")
     private String supplierCatalogCode;
 
+    @DtoField(value = "tag")
+    private String tag;
+
     @DtoField(value = "name")
     private String name;
 
@@ -176,6 +179,14 @@ public class VoProductSku {
 
     public void setProductId(final long productId) {
         this.productId = productId;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(final String tag) {
+        this.tag = tag;
     }
 
     public int getRank() {

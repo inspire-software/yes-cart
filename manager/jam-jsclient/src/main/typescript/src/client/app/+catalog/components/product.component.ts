@@ -133,18 +133,9 @@ export class ProductComponent implements OnInit, OnDestroy {
       'pimOutdated': [''],
       'pimUpdated': [''],
       'tag': ['', YcValidators.nonBlankTrimmed],
-      'disabled': [''],
-      'availablefrom': ['', YcValidators.validDate],
-      'availableto': ['', YcValidators.validDate],
-      'availability': ['', YcValidators.requiredPositiveNumber],
       'brandName': ['', YcValidators.requiredNonBlankTrimmed],
       'productTypeName': ['', YcValidators.requiredNonBlankTrimmed],
       'description': [''],
-      'featured': [''],
-      'minOrderQuantity': ['', YcValidators.positiveNumber],
-      'maxOrderQuantity': ['', YcValidators.positiveNumber],
-      'stepOrderQuantity': ['', YcValidators.positiveNumber
-      ],
       'uri': ['', validUri],
       'uitemplate': [''],
       'uisearchtemplate': [''],
@@ -196,22 +187,6 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   get product():ProductWithLinksVO {
     return this._product;
-  }
-
-  get availableto():string {
-    return UiUtil.dateInputGetterProxy(this._product, 'availableto');
-  }
-
-  set availableto(availableto:string) {
-    UiUtil.dateInputSetterProxy(this._product, 'availableto', availableto);
-  }
-
-  get availablefrom():string {
-    return UiUtil.dateInputGetterProxy(this._product, 'availablefrom');
-  }
-
-  set availablefrom(availablefrom:string) {
-    UiUtil.dateInputSetterProxy(this._product, 'availablefrom', availablefrom);
   }
 
   onNameDataChange(event:FormValidationEvent<any>) {

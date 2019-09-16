@@ -245,23 +245,6 @@
             </import-descriptor>
         </column-descriptor>
 
-        <!-- availability type -->
-        <column-descriptor>
-            <column-index>16</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>INT</data-type>
-            <name>availability</name>
-            <!--<value-constant>1</value-constant>-->
-        </column-descriptor>
-
-        <!--featured-->
-        <column-descriptor>
-            <column-index>17</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>BOOLEAN</data-type>
-            <name>featured</name>
-        </column-descriptor>
-
         <!--tags for demo-->
         <column-descriptor>
             <column-index>18</column-index>

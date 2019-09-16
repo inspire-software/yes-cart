@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.xml.CategoryPriceNavigationXStreamProvider;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.stream.xml.XStreamProvider;
+import org.yes.cart.utils.DomainApiUtils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -173,6 +174,11 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     @Override
     public void setAvailableto(LocalDateTime availableto) {
         this.availableto = availableto;
+    }
+
+    @Override
+    public boolean isAvailable(final LocalDateTime now) {
+        return DomainApiUtils.isObjectAvailableNow(!this.disabled, this.availablefrom, this.availableto, now);
     }
 
     @Override

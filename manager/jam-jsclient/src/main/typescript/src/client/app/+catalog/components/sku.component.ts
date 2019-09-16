@@ -113,6 +113,7 @@ export class SKUComponent implements OnInit, OnDestroy {
       'supplierCatalogCode': ['', YcValidators.noWhitespace],
       'barCode': ['', YcValidators.noWhitespace],
       'rank': ['', YcValidators.requiredRank],
+      'tag': ['', YcValidators.nonBlankTrimmed],
       'description': [''],
       'uri': ['', validUri],
       'name': [''],

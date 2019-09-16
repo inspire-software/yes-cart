@@ -132,70 +132,6 @@
         </div>
       </tab>
 
-      <tab heading="{{ 'PRODUCT_TAB_AVAILABILITY' | translate }}"  (select)="tabSelected('Availability')">
-
-        <div class="panel-body">
-
-          <div class="row">
-            <div class="col-md-9 col-lg-6">
-              <fieldset>
-                <div class="form-group">
-                  <label>{{ 'PRODUCT_AVAILABILITY' | translate }}</label>
-                  <select class="form-control" formControlName="availability" name="availability" [(ngModel)]="product.availability">
-                    <option value="1">{{ 'PRODUCT_AVAILABILITY_1' | translate }}</option>
-                    <option value="2">{{ 'PRODUCT_AVAILABILITY_2' | translate }}</option>
-                    <option value="4">{{ 'PRODUCT_AVAILABILITY_4' | translate }}</option>
-                    <option value="8">{{ 'PRODUCT_AVAILABILITY_8' | translate }}</option>
-                    <option value="16">{{ 'PRODUCT_AVAILABILITY_16' | translate }}</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <input formControlName="disabled" name="disabled" type="checkbox" [(ngModel)]="product.disabled">
-                  <label>{{ 'PRODUCT_DISABLED' | translate }}</label>
-                </div>
-                <div class="form-group">
-                  <label>{{ 'PRODUCT_FROM' | translate }}</label>
-                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom">
-                  <div [hidden]="productForm.controls['availablefrom'].valid || productForm.controls['availablefrom'].pristine" class="alert alert-danger">
-                    {{ 'DATE_REQUIRED' | translate }}
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>{{ 'PRODUCT_TO' | translate }}</label>
-                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto">
-                  <div [hidden]="productForm.controls['availableto'].valid || productForm.controls['availableto'].pristine" class="alert alert-danger">
-                    {{ 'DATE_REQUIRED' | translate }}
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>{{ 'PRODUCT_ORDER_MIN' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_MIN' | translate }}" formControlName="minOrderQuantity" name="minOrderQuantity" type="text" [(ngModel)]="product.minOrderQuantity">
-                  <div [hidden]="productForm.controls['minOrderQuantity'].valid || productForm.controls['minOrderQuantity'].pristine" class="alert alert-danger">
-                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>{{ 'PRODUCT_ORDER_MAX' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_MAX' | translate }}" formControlName="maxOrderQuantity" name="maxOrderQuantity" type="text" [(ngModel)]="product.maxOrderQuantity">
-                  <div [hidden]="productForm.controls['maxOrderQuantity'].valid || productForm.controls['maxOrderQuantity'].pristine" class="alert alert-danger">
-                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>{{ 'PRODUCT_ORDER_STEP' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_STEP' | translate }}" formControlName="stepOrderQuantity" name="stepOrderQuantity" type="text" [(ngModel)]="product.stepOrderQuantity">
-                  <div [hidden]="productForm.controls['stepOrderQuantity'].valid || productForm.controls['stepOrderQuantity'].pristine" class="alert alert-danger">
-                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-
-        </div>
-
-      </tab>
-
       <tab heading="{{ 'SKU' | translate }}"  (select)="tabSelected('SKU')">
 
         <ng-template [ngIf]="!(product.productId > 0)">
@@ -329,10 +265,6 @@
           <div class="row">
             <div class="col-md-9 col-lg-6">
               <fieldset>
-                <div class="form-group">
-                  <input formControlName="featured" name="featured" type="checkbox" [(ngModel)]="product.featured">
-                  <label>{{ 'PRODUCT_FEATURED' | translate }}</label>
-                </div>
                 <div class="form-group">
                   <label>{{ 'PRODUCT_TAG' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'PRODUCT_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="product.tag">

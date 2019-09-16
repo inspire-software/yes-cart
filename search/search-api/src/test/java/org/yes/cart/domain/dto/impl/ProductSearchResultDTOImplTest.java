@@ -18,12 +18,13 @@ package org.yes.cart.domain.dto.impl;
 
 import org.junit.Test;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -35,6 +36,27 @@ import static org.junit.Assert.*;
 public class ProductSearchResultDTOImplTest {
     @Test
     public void testCopy() throws Exception {
+
+        final ProductSkuSearchResultDTO firstSKU = new ProductSkuSearchResultDTOImpl();
+        firstSKU.setId(2);
+        firstSKU.setCode("First SKU");
+        firstSKU.setManufacturerCode("ManFirst SKU");
+        firstSKU.setFulfilmentCentreCode("Main");
+        firstSKU.setName("FirstName SKU");
+        firstSKU.setDisplayName("FirstDisplayName SKU");
+        firstSKU.setDescription("FirstDescription SKU");
+        firstSKU.setDisplayDescription("FirstDisplayDescription SKU");
+        firstSKU.setAvailablefrom(LocalDateTime.now());
+        firstSKU.setAvailableto(LocalDateTime.now());
+        firstSKU.setCreatedTimestamp(Instant.now());
+        firstSKU.setUpdatedTimestamp(Instant.now());
+        firstSKU.setAvailability(2);
+        firstSKU.setQtyOnWarehouse(new HashMap<Long, BigDecimal>() {{
+            put(10L, BigDecimal.ONE);
+        }});
+        firstSKU.setFeatured(true);
+        firstSKU.setTag("tag1 tag2");
+        firstSKU.setDefaultImage("FirstDefaultImageSKU.jpg");
 
         final ProductSearchResultDTOImpl first = new ProductSearchResultDTOImpl();
         first.setId(1);
@@ -54,16 +76,11 @@ public class ProductSearchResultDTOImplTest {
         first.setDownloadable(true);
         first.setTag("tag");
         first.setBrand("brand");
-        first.setAvailablefrom(LocalDateTime.now());
-        first.setAvailableto(LocalDateTime.now());
         first.setCreatedTimestamp(Instant.now());
         first.setUpdatedTimestamp(Instant.now());
-        first.setAvailability(1);
-        first.setQtyOnWarehouse(new HashMap<Long, Map<String, BigDecimal>>() {{
-            put(10L, new HashMap<>());
-        }});
-        first.setDefaultImage("FirstDefaultImage");
-        first.setFeatured(true);
+        first.setDefaultImage("FirstDefaultImage.jpg");
+
+        first.setBaseSkus(Collections.singletonMap(firstSKU.getId(), firstSKU));
 
         final ProductSearchResultDTO copy = first.copy();
 
@@ -85,20 +102,64 @@ public class ProductSearchResultDTOImplTest {
         assertTrue(copy.isDownloadable());
         assertEquals(first.getTag(), copy.getTag());
         assertEquals(first.getBrand(), copy.getBrand());
+        assertNull(first.getAvailablefrom());
         assertEquals(first.getAvailablefrom(), copy.getAvailablefrom());
+        assertNull(first.getAvailableto());
         assertEquals(first.getAvailableto(), copy.getAvailableto());
         assertEquals(first.getCreatedTimestamp(), copy.getCreatedTimestamp());
         assertEquals(first.getUpdatedTimestamp(), copy.getUpdatedTimestamp());
+        assertEquals(1, first.getAvailability());
         assertEquals(first.getAvailability(), copy.getAvailability());
-        assertEquals(first.getQtyOnWarehouse(10L), copy.getQtyOnWarehouse(10L));
+        assertNotNull(first.getQtyOnWarehouse(10L));
+        assertNull(first.getQtyOnWarehouse(10L).get("First SKU"));
+        assertNull(copy.getQtyOnWarehouse(10L).get("First SKU"));
         assertEquals(first.getDefaultImage(), copy.getDefaultImage());
-        assertEquals(first.getFeatured(), copy.getFeatured());
-
+        assertFalse(first.isFeatured());
+        assertEquals(first.isFeatured(), copy.isFeatured());
+        assertNull("Search SKU will be set on a copy by search service", copy.getSearchSkus());
 
         // Do not override equals and hash code for ProductSearchResultDTO because we can have
         // multiple copies in memory used by hash maps and hash sets
         assertFalse(first.equals(copy));
         assertFalse(first.hashCode() == copy.hashCode());
+
+        // Check SKU dependent defaults
+        copy.setSearchSkus(Collections.singletonList(copy.getBaseSku(2)));
+        assertEquals(first.getId(), copy.getId());
+        assertEquals(first.getCode(), copy.getCode());
+        assertEquals(first.getManufacturerCode(), copy.getManufacturerCode());
+        assertEquals(first.isMultisku(), copy.isMultisku());
+        assertEquals(firstSKU.getCode(), copy.getDefaultSkuCode());
+        assertEquals(first.getName(), copy.getName());
+        assertEquals(first.getDisplayName(), copy.getDisplayName());
+        assertEquals(first.getDescription(), copy.getDescription());
+        assertEquals(first.getDisplayDescription(), copy.getDisplayDescription());
+        assertEquals(first.getType(), copy.getType());
+        assertEquals(first.getDisplayType(), copy.getDisplayType());
+        assertTrue(copy.isService());
+        assertTrue(copy.isEnsemble());
+        assertTrue(copy.isShippable());
+        assertTrue(copy.isDigital());
+        assertTrue(copy.isDownloadable());
+        assertEquals(first.getTag(), copy.getTag());
+        assertEquals(first.getBrand(), copy.getBrand());
+        assertNull(first.getAvailablefrom());
+        assertNotNull(copy.getAvailablefrom());
+        assertEquals(firstSKU.getAvailablefrom(), copy.getAvailablefrom());
+        assertNull(first.getAvailableto());
+        assertNotNull(copy.getAvailableto());
+        assertEquals(firstSKU.getAvailableto(), copy.getAvailableto());
+        assertEquals(first.getCreatedTimestamp(), copy.getCreatedTimestamp());
+        assertEquals(first.getUpdatedTimestamp(), copy.getUpdatedTimestamp());
+        assertEquals(1, first.getAvailability());
+        assertEquals(firstSKU.getAvailability(), copy.getAvailability());
+        assertNotNull(first.getQtyOnWarehouse(10L));
+        assertNull(first.getQtyOnWarehouse(10L).get("First SKU"));
+        assertNotNull(copy.getQtyOnWarehouse(10L).get("First SKU"));
+        assertEquals("FirstDefaultImage.jpg", first.getDefaultImage());
+        assertEquals(firstSKU.getDefaultImage(), copy.getDefaultImage());
+        assertFalse(first.isFeatured());
+        assertTrue(copy.isFeatured());
 
     }
 

@@ -29,12 +29,14 @@ import java.util.Map;
  */
 public interface ShoppingCartCommand extends Serializable {
 
+    String CMD_P_QTY = "qty";
+    String CMD_P_SUPPLIER = "supplier";
+
     String CMD_ADDTOWISHLIST = "addToWishListCmd";
     String CMD_ADDTOWISHLIST_P_TYPE = "type";
     String CMD_ADDTOWISHLIST_P_TAGS = "tags";
     String CMD_ADDTOWISHLIST_P_TAGS_REPLACE = "tagsr";
     String CMD_ADDTOWISHLIST_P_VISIBILITY = "wlv";
-    String CMD_ADDTOWISHLIST_P_QTY = "qty";
     String CMD_REMOVEFROMWISHLIST = "removeFromWishListCmd";
     String CMD_REMOVEFROMWISHLIST_P_ID = "i";
 
@@ -42,11 +44,9 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_REMOVECOUPON = "removeCouponCmd";
 
     String CMD_ADDTOCART = "addToCartCmd";
-    String CMD_ADDTOCART_P_QTY = "qty";
     String CMD_REMOVEALLSKU = "removeAllSkuCmd";
     String CMD_REMOVEONESKU = "removeOneSkuCmd";
     String CMD_SETQTYSKU = "setQuantityToCartCmd";
-    String CMD_SETQTYSKU_P_QTY = "qty";
 
     String CMD_RECALCULATEPRICE = "recalculatePriceCmd";
 

@@ -66,6 +66,28 @@
             <name>quantity</name>
         </column-descriptor>
 
+        <!-- availability type -->
+        <column-descriptor>
+            <column-index>4</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>INT</data-type>
+            <name>availability</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>DATETIME</data-type>
+            <name>releaseDate</name>
+        </column-descriptor>
+
+        <!--featured-->
+        <column-descriptor>
+            <column-index>6</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>featured</name>
+        </column-descriptor>
 
     </import-columns>
 </import-descriptor>

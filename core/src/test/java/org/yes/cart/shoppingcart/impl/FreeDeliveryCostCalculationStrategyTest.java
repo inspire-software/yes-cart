@@ -113,7 +113,7 @@ public class FreeDeliveryCostCalculationStrategyTest {
             oneOf(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, "Main", new BigDecimal("1.00")); will(returnValue(cost));
             oneOf(cost).getSkuPriceId(); will(returnValue(345L));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
             oneOf(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("0.00"), new BigDecimal("0.00"));
@@ -205,7 +205,7 @@ public class FreeDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(bucket2).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, "Main", new BigDecimal("1.00")); will(returnValue(cost));
             oneOf(cost).getSkuPriceId(); will(returnValue(345L));
             oneOf(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
             oneOf(cart).addShippingToCart(bucket2, "CSL001", "CSL001", new BigDecimal("1.00"));
@@ -275,7 +275,7 @@ public class FreeDeliveryCostCalculationStrategyTest {
             oneOf(bucket1).getSupplier(); will(returnValue("Main"));
             oneOf(bucket2).getSupplier(); will(returnValue("Main"));
             oneOf(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
+            oneOf(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, "Main", new BigDecimal("1.00")); will(returnValue(cost));
             oneOf(cost).getSkuPriceId(); will(returnValue(0L));
         }});
 

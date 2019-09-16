@@ -26,6 +26,7 @@ import org.yes.cart.shoppingcart.PriceResolver;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -70,8 +71,10 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
                            final String skuCode,
+                           final String supplier,
+                           final BigDecimal qty,
                            final Map<String, Object> parameters) {
-        if(!shoppingCart.removeCartItem(skuCode)) {
+        if(!shoppingCart.removeCartItem(supplier, skuCode)) {
             LOG.warn("Cannot remove all skus with code {} from cart", skuCode);
 
         } else  {

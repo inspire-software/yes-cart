@@ -27,11 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.ProductAvailabilityModel;
-import org.yes.cart.domain.entity.PriceModel;
 import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.*;
@@ -46,6 +43,7 @@ import org.yes.cart.web.page.component.filterednavigation.PriceFilteredNavigatio
 import org.yes.cart.web.service.rest.impl.BookmarkMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
+import org.yes.cart.web.service.rest.impl.SearchSupportMixin;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CentralViewResolver;
@@ -56,7 +54,10 @@ import org.yes.cart.web.support.utils.ProductSortingUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -91,9 +92,11 @@ public class SearchController {
     private RoMappingMixin mappingMixin;
     @Autowired
     private BookmarkMixin bookmarkMixin;
+    @Autowired
+    private SearchSupportMixin searchSupportMixin;
 
     /**
-     * Interface: PUT /api/rest/search
+     * Interface: POST /api/rest/search
      * <p>
      * <p>
      * Perform a product search.
@@ -469,7 +472,7 @@ public class SearchController {
      */
     @RequestMapping(
             value = "",
-            method = RequestMethod.PUT,
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
@@ -707,38 +710,7 @@ public class SearchController {
 
         result.setTotalResults(products.getTotalHits());
 
-        final List<ProductSearchResultRO> ros = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(products.getResults())) {
-
-            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
-
-            for (final ProductSearchResultDTO hit : products.getResults()) {
-
-                final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(hit, context.getCustomerShopId());
-
-                final ProductSearchResultRO ro = mappingMixin.map(hit, ProductSearchResultRO.class, ProductSearchResultDTO.class);
-
-                final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
-                ro.setProductAvailabilityModel(amRo);
-
-                final PriceModel price = productServiceFacade.getSkuPrice(
-                        cart,
-                        null,
-                        skuPam.getFirstAvailableSkuCode(),
-                        BigDecimal.ONE
-                );
-
-                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, PriceModel.class);
-                priceRo.setSymbol(symbol.getFirst());
-                priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
-
-                ro.setPrice(priceRo);
-
-                ros.add(ro);
-
-            }
-        }
-        result.setProducts(ros);
+        result.setProducts(searchSupportMixin.map(products.getResults(), cart));
 
     }
 

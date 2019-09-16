@@ -76,7 +76,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
                         ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD,
                         false
                 );
-                assertEquals("Failed [" + context.toString() + "]", 2, searchRes.getResults().size());
+                assertEquals("Failed [" + context.toString() + "]", 3, searchRes.getResults().size());
                 ProductSearchResultDTO bender = searchRes.getResults().get(0);
                 assertEquals("Бендер Згибатель Родригес", bender.getName("ru"));
                 assertEquals("Бендер Згинач Родріґес", bender.getName("ua"));

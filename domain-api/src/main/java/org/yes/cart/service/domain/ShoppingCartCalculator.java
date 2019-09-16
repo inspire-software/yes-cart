@@ -51,13 +51,15 @@ public interface ShoppingCartCalculator {
     /**
      * Calculate price model for given SKU with minimal price ( {@link PriceService#getMinimalPrice(Long, String, long, Long, String, BigDecimal, boolean, String)}).
      *
-     * @param currentCart current cart (to provide additional data such as location)
-     * @param skuCode SKU code to calculate price for
-     * @param minimalPrice price determined by price service
+     * @param currentCart   current cart (to provide additional data such as location)
+     * @param supplier      supplier
+     * @param skuCode       SKU code to calculate price for
+     * @param minimalPrice  price determined by price service
      *
      * @return price model
      */
     PriceModel calculatePrice(ShoppingCart currentCart,
+                              String supplier,
                               String skuCode,
                               BigDecimal minimalPrice);
 

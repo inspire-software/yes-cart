@@ -25,8 +25,10 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.CategoryRelationDTO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
+import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -46,6 +48,7 @@ import java.util.*;
 
 import static org.yes.cart.search.dao.entity.LuceneDocumentAdapterUtils.*;
 import static org.yes.cart.search.query.ProductSearchQueryBuilder.*;
+
 /**
  * User: denispavlov
  * Date: 07/04/2017
@@ -54,8 +57,6 @@ import static org.yes.cart.search.query.ProductSearchQueryBuilder.*;
 public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Product, Long> {
 
     private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
-
-    private static final String NO_FC_CODE = "";
 
     private ShopWarehouseRelationshipSupport shopWarehouseSupport;
     private SkuWarehouseRelationshipSupport skuWarehouseSupport;
@@ -76,7 +77,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
         final LocalDateTime now = now();
 
-        if (isProductInCategoryHasSkuAndAvailableNow(entity, now)) {
+        if (isProductInCategoryHasSku(entity)) {
 
             try {
 
@@ -113,17 +114,25 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     addSimpleField(document, PRODUCT_MULTISKU, String.valueOf(entity.isMultiSkuProduct()));
 
                     for (final ProductSku sku : entity.getSku()) {
-                        addSimpleField(document, SKU_PRODUCT_CODE_FIELD, sku.getCode());
-                        addSearchField(document, SKU_PRODUCT_CODE_FIELD_SEARCH, sku.getCode());
-                        addSimpleField(document, SKU_ID_FIELD, String.valueOf(sku.getSkuId()));
-                        addStemFields(document, SKU_PRODUCT_CODE_STEM_FIELD, sku.getCode(), sku.getManufacturerCode(), sku.getManufacturerPartCode(), sku.getSupplierCode());
-                        addSearchField(document, PRODUCT_NAME_FIELD, sku.getName());
-                        addStemFields(document, PRODUCT_NAME_STEM_FIELD, sku.getName(), sku.getSeo().getTitle(), sku.getSeo().getMetakeywords());
-                        final I18NModel displayName = new StringI18NModel(sku.getDisplayName());
-                        addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, displayName);
-                        addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(sku.getSeo().getDisplayTitle()));
-                        addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(sku.getSeo().getDisplayMetakeywords()));
-                        addSearchFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
+                        if (result.getBaseSku(sku.getSkuId()) != null) {
+                            // Only enhance with available SKU
+                            addSimpleField(document, SKU_PRODUCT_CODE_FIELD, sku.getCode());
+                            addSearchField(document, SKU_PRODUCT_CODE_FIELD_SEARCH, sku.getCode());
+                            addSimpleField(document, SKU_ID_FIELD, String.valueOf(sku.getSkuId()));
+                            addStemFields(document, SKU_PRODUCT_CODE_STEM_FIELD, sku.getCode(), sku.getManufacturerCode(), sku.getManufacturerPartCode(), sku.getSupplierCode());
+                            addSearchField(document, PRODUCT_NAME_FIELD, sku.getName());
+                            addStemFields(document, PRODUCT_NAME_STEM_FIELD, sku.getName(), sku.getSeo().getTitle(), sku.getSeo().getMetakeywords());
+                            final I18NModel displayName = new StringI18NModel(sku.getDisplayName());
+                            addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, displayName);
+                            addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(sku.getSeo().getDisplayTitle()));
+                            addStemFields(document, PRODUCT_DISPLAYNAME_STEM_FIELD, new StringI18NModel(sku.getSeo().getDisplayMetakeywords()));
+                            addSearchFields(document, PRODUCT_DISPLAYNAME_FIELD, displayName);
+
+                        } else if (sku.getCode().equals(result.getDefaultSkuCode())) {
+                            // ensure that default SKU is relevant
+                            result.setDefaultSkuCode(result.getBaseSkus().values().iterator().next().getCode());
+
+                        }
                     }
                     addSortField(document, SKU_PRODUCT_CODE_SORT_FIELD, entity.getDefaultSku().getCode());
 
@@ -162,11 +171,20 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 //                    final I18NModel desc = new StringI18NModel(descAsIs);
 //                    addStemFields(document, "description_stem", desc);
 
-                    if (entity.getTag() != null) {
-                        for (final String tag : StringUtils.split(entity.getTag(), ' ')) {
-                            addSimpleField(document, PRODUCT_TAG_FIELD, tag);
-                            addFacetField(document, "facet_tag", tag);
+                    final Set<String> uniqueTags = new TreeSet<>();
+                    if (result.getTag() != null) {
+                        Collections.addAll(uniqueTags, StringUtils.split(entity.getTag(), ' '));
+                    }
+                    if (result.getBaseSkus() != null) {
+                        for (final ProductSkuSearchResultDTO sku : result.getBaseSkus().values()) {
+                            if (sku.getTag() != null) {
+                                Collections.addAll(uniqueTags, StringUtils.split(sku.getTag(), ' '));
+                            }
                         }
+                    }
+                    for (final String tag : uniqueTags) {
+                        addSimpleField(document, PRODUCT_TAG_FIELD, tag);
+                        addFacetField(document, "facet_tag", tag);
                     }
 
                     final String brand = cleanFacetValue(entity.getBrand().getName());
@@ -176,11 +194,12 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     addStemField(document, BRAND_STEM_FIELD, brand);
                     addSortField(document, BRAND_SORT_FIELD, brand);
 
-                    addSimpleField(document, PRODUCT_FEATURED_FIELD, entity.getFeatured() != null && entity.getFeatured() ? "true" : "false");
+                    final Boolean atLeastOneFeatured = result.isFeatured();
+                    addSimpleField(document, PRODUCT_FEATURED_FIELD, atLeastOneFeatured != null && atLeastOneFeatured ? "true" : "false");
                     if (LOGFTQ.isTraceEnabled()) {
-                        addStoredField(document, "featured_boost_debug", entity.getFeatured() != null && entity.getFeatured() ? 1.25d : 1.0d);
+                        addStoredField(document, "featured_boost_debug", atLeastOneFeatured != null && atLeastOneFeatured ? 1.25d : 1.0d);
                     }
-                    addBoostField(document, "featured_boost", entity.getFeatured() != null && entity.getFeatured() ? 1.25d : 1.0d);
+                    addBoostField(document, "featured_boost", atLeastOneFeatured != null && atLeastOneFeatured ? 1.25d : 1.0d);
                     // Created timestamp is used to determine ranges
                     addInstantField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
                     addSortField(document, PRODUCT_CREATED_SORT_FIELD, entity.getCreatedTimestamp(), false);
@@ -236,7 +255,9 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
         final List<AttrValue> attributes = new ArrayList<>(entity.getAttributes());
         for (final ProductSku sku : entity.getSku()) {
-            attributes.addAll(sku.getAttributes());
+            if (result.getBaseSku(sku.getSkuId()) != null) { // ignore attributes for SKU in other FCs
+                attributes.addAll(sku.getAttributes());
+            }
         }
 
         final Map<String, String> sortFields = new HashMap<>();
@@ -386,6 +407,12 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
     /**
      * Determine lowest price and set it as facet field.
+     *
+     * Sets:
+     * PRODUCT_SHOP_HASOFFER_FIELD + currency: shopID, used by has offer searches
+     * PRODUCT_SHOP_HASPRICE_FIELD + currency: shopID, used as one of core criteria for search in shop
+     * PRODUCT_SHOP_FIELD + currency: shopID, used to be category reachability via shop, now it is synonym for HASPRICE
+     *
      * @param document    index document
      * @param entity      product
      * @param allPrices   all prices for all SKU in all shops
@@ -395,25 +422,44 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      */
     protected void addPriceFields(final Document document, final Product entity, final List<SkuPrice> allPrices, final ProductSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
 
-        final boolean isShowRoom = entity.getAvailability() == Product.AVAILABILITY_SHOWROOM;
+        final boolean isShowRoom = result.getAvailability() == SkuWarehouse.AVAILABILITY_SHOWROOM;
+
+        Set<Long> availableInShowroom = null;
+        if (isShowRoom) {
+            availableInShowroom = new TreeSet<>();
+
+            for (final Long shopId : available) {
+
+                availableInShowroom.add(shopId);
+
+                final Set<Shop> subs = skuPriceSupport.getAllShopsAndSubs().get(shopId);
+
+                if (CollectionUtils.isNotEmpty(subs)) {
+                    for (final Shop subShop : subs) {
+                        availableInShowroom.add(subShop.getShopId());
+                    }
+                }
+            }
+        }
 
         Set<Long> availableIn = null;
+
         if (!allPrices.isEmpty()) {
 
             final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<>();
             for (final SkuPrice skuPrice : allPrices) {
+
+                if (!skuPrice.isAvailable(now)) {
+                    continue; // This price is not active
+                }
 
                 if (!available.contains(skuPrice.getShop().getShopId())) {
                     continue; // This product is not in stock in this shop
                 }
 
                 final Map<String, BigDecimal> stock = result.getQtyOnWarehouse(skuPrice.getShop().getShopId());
-                if (stock != null && !stock.containsKey(skuPrice.getSkuCode())) {
+                if (stock == null || !stock.containsKey(skuPrice.getSkuCode())) {
                     continue; // This SKU is not available in this shop
-                }
-
-                if (!DomainApiUtils.isObjectAvailableNow(true, skuPrice.getSalefrom(), skuPrice.getSaleto(), now)) {
-                    continue; // This price is not active
                 }
 
                 final Map<String, SkuPrice> lowestQuantityPriceByShop = lowestQuantityPrice.get(skuPrice.getShop().getShopId());
@@ -499,37 +545,42 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             }
 
             if (isShowRoom) {
-                for (final Shop shop : skuPriceSupport.getAll()) {
+                for (final Long shopId : availableInShowroom) {
                     // Fill in PK's for all shops as showroom products are visible regardless of price.
                     if (LOGFTQ.isTraceEnabled()) {
-                        addStoredField(document, PRODUCT_SHOP_HASPRICE_FIELD + "_debug", String.valueOf(shop.getShopId()));
+                        addStoredField(document, PRODUCT_SHOP_HASPRICE_FIELD + "_debug", String.valueOf(shopId));
                     }
-                    addNumericField(document, PRODUCT_SHOP_HASPRICE_FIELD, shop.getShopId(), false);
+                    addNumericField(document, PRODUCT_SHOP_HASPRICE_FIELD, shopId, false);
                 }
             } else if (CollectionUtils.isNotEmpty(availableIn)) {
 
                 for (final Long shopId : availableIn) {
                     // Fill in PK's for all shops that have price entries.
                     if (LOGFTQ.isTraceEnabled()) {
-                        addStoredField(document, PRODUCT_SHOP_HASPRICE_FIELD + "_debug", shopId.toString());
+                        addStoredField(document, PRODUCT_SHOP_HASPRICE_FIELD + "_debug", String.valueOf(shopId));
                     }
                     addNumericField(document, PRODUCT_SHOP_HASPRICE_FIELD, shopId, false);
                 }
 
             }
         } else if (isShowRoom) {
-            for (final Shop shop : skuPriceSupport.getAll()) {
+            for (final Long shopId : availableInShowroom) {
                 // Fill in PK's for all shops as showroom products are visible regardless of price.
                 if (LOGFTQ.isTraceEnabled()) {
-                    addStoredField(document, PRODUCT_SHOP_HASPRICE_FIELD + "_debug", String.valueOf(shop.getShopId()));
+                    addStoredField(document, PRODUCT_SHOP_HASPRICE_FIELD + "_debug", String.valueOf(shopId));
                 }
-                addNumericField(document, PRODUCT_SHOP_HASPRICE_FIELD, shop.getShopId(), false);
+                addNumericField(document, PRODUCT_SHOP_HASPRICE_FIELD, shopId, false);
             }
         }
     }
 
     /**
      * Add category field.
+     *
+     * Sets:
+     * PRODUCT_CATEGORY_FIELD: categoryID, used to perform category listing searches
+     * PRODUCT_CATEGORY_INC_PARENTS_FIELD: categoryID, used to perform category listing searches including parents
+     * PRODUCT_SHOP_FIELD: shopID, used to perform global searches
      *
      * @param document   document
      * @param entity     entity
@@ -566,18 +617,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             }
 
         }
-        double boost = 1d;
-        if (count > 0) {
-            // 500 is base rank, anything lower increases boost, higher decreases boost
-            double score = (500d - ((double) rank / (double) count));
-            if (score != 0f) {
-                // 1pt == 0.001d boost
-                boost += score / 1000d;
-            }
-            if (boost < 0.25) {
-                boost = 0.25d; // does not make any sense to have it lower
-            }
-        }
+
+        final double boost = LuceneDocumentAdapterUtils.determineBoots((double) rank / (double) count, 500d, 1000d, 0.25d, 2d);
 
         if (LOGFTQ.isTraceEnabled()) {
             addStoredField(document, PRODUCT_CATEGORY_FIELD + "_boost_debug", boost);
@@ -590,18 +631,16 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
             // shop the product will become reachable in category search but will still be unavailable in global searches
             // since it is done on shop field below. So full reindexing is required to synchronise fully
 
-            final List<Shop> shops = shopCategorySupport.getAll();
+            for (final Long shopId : available) {
 
-            for (final Long availableCategory : availableCategories) {
+                for (final Long availableCategory : availableCategories) {
 
-                for (final Shop shop : shops) {
-
-                    if (shopCategorySupport.getShopCategoriesIds(shop.getShopId()).contains(availableCategory)) {
+                    if (shopCategorySupport.getShopCategoriesIds(shopId).contains(availableCategory)) {
 
                         if (LOGFTQ.isTraceEnabled()) {
-                            addStoredField(document, PRODUCT_SHOP_FIELD + "_debug", String.valueOf(shop.getShopId()));
+                            addStoredField(document, PRODUCT_SHOP_FIELD + "_debug", String.valueOf(shopId));
                         }
-                        addNumericField(document, PRODUCT_SHOP_FIELD, shop.getShopId(), false);
+                        addNumericField(document, PRODUCT_SHOP_FIELD, shopId, false);
 
                     }
 
@@ -710,6 +749,10 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
     /**
      * Populate inventory related flags so that we can restrict result hits which should be available in shop by inventory.
      *
+     * Sets:
+     * PRODUCT_SHOP_INSTOCK_FIELD: shopID, used as core criteria for searches
+     * PRODUCT_SHOP_INSTOCK_FLAG_FIELD[1|0]: shopID, used for seraching for "in stock" VS "out of stock"
+     *
      * @param document   index document
      * @param result     current supplier specific result hit
      * @param available  shop PKs where this result is available
@@ -723,13 +766,12 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 addStoredField(document, PRODUCT_SHOP_INSTOCK_FIELD + "_debug", shop.toString());
             }
             addNumericField(document, PRODUCT_SHOP_INSTOCK_FIELD, shop, false);
-            if (result.getAvailability() == Product.AVAILABILITY_ALWAYS) {
+            if (result.getAvailability() == SkuWarehouse.AVAILABILITY_ALWAYS) {
                 boost = 0.95d; // Always = -5% boost (stocked items must be first)
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "095");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + "1", shop, false);
                 addSortField(document, PRODUCT_SHOP_INSTOCK_FLAG_SORT_FIELD + shop.toString(), "1");
-            } else if (result.getAvailability() == Product.AVAILABILITY_PREORDER &&
-                    DomainApiUtils.isObjectAvailableNow(true, result.getAvailablefrom(), null, now)) {
+            } else if (result.getReleaseDate() != null && result.getReleaseDate().isAfter(now)) {
                 boost = 1.25d; // Preorder is 1.25f = 25% boost
                 addSortField(document, PRODUCT_AVAILABILITY_SORT_FIELD + shop.toString(), "125");
                 addNumericField(document, PRODUCT_SHOP_INSTOCK_FLAG_FIELD + "1", shop, false);
@@ -757,38 +799,42 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
     }
 
     /**
-     * Generate result hit result for product for each supplier.
+     * Generate result hit for product for each supplier.
+     *
+     * Only products that have stock records will be available in shop that have corresponding suppliers assigned
+     * to them. Further filter is applied that only products that are available to sell will be cosidered for indexing.
      *
      * @param entity      product entity
      * @param now         time now (used for pre-ordered items)
      * @param resultsByFc hit results by supplier code
      * @param availableIn shop PK for which given product is available (determined by supplier link to shop)
      */
-    protected void populateResultsByFc(final Product entity, final LocalDateTime now, final Map<String, ProductSearchResultDTO> resultsByFc, final Map<ProductSearchResultDTO, Set<Long>> availableIn) {
+    protected void populateResultsByFc(final Product entity,
+                                       final LocalDateTime now,
+                                       final Map<String, ProductSearchResultDTO> resultsByFc,
+                                       final Map<ProductSearchResultDTO, Set<Long>> availableIn) {
 
         final ProductSearchResultDTO base = createBaseResultObject(entity);
 
-        final List<Shop> shops = shopWarehouseSupport.getAll();
         final Map<Long, Set<Long>> shopsByFulfilment = shopWarehouseSupport.getShopsByFulfilmentMap();
-
-        final Map<ProductSearchResultDTO, Map<Long, Map<String, BigDecimal>>> qtyOnWarehouse = new HashMap<>();
 
         // Stock and prices are per SKU so need to determine if we have valid ones
         for (final ProductSku sku : entity.getSku()) {
 
-            final boolean preorderInSale = sku.getProduct().getAvailability() == Product.AVAILABILITY_PREORDER &&
-                    DomainApiUtils.isObjectAvailableNow(!sku.getProduct().isDisabled(), sku.getProduct().getAvailablefrom(), null, now);
 
-            if (sku.getProduct().getAvailability() != Product.AVAILABILITY_ALWAYS) {
-                final List<SkuWarehouse> inventory = skuWarehouseSupport.getQuantityOnWarehouse(sku.getCode());
+            final List<SkuWarehouse> inventory = skuWarehouseSupport.getQuantityOnWarehouse(sku.getCode());
 
-                if (CollectionUtils.isNotEmpty(inventory)) {
-                    for (final SkuWarehouse stock : inventory) {
+            if (CollectionUtils.isNotEmpty(inventory)) {
+                for (final SkuWarehouse stock : inventory) {
 
+                    if (isInventoryAvailableNow(stock, now)) {
+
+                        final boolean availableToSell = stock.isAvailableToSell(true);
+                        final boolean showroom = stock.getAvailability() == SkuWarehouse.AVAILABILITY_SHOWROOM;
                         final BigDecimal ats = stock.getAvailableToSell();
+
                         // if standard with zero stock then not available
-                        if ((sku.getProduct().getAvailability() != Product.AVAILABILITY_STANDARD && !preorderInSale)
-                                || MoneyUtils.isPositive(ats)) {
+                        if (availableToSell || showroom) {
                             final long ff = stock.getWarehouse().getWarehouseId();
                             final Set<Long> shs = shopsByFulfilment.get(ff);
                             if (shs != null) {
@@ -798,11 +844,25 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                                     ProductSearchResultDTO withFc = resultsByFc.get(code);
                                     if (withFc == null) {
+
                                         withFc = base.copy();
                                         withFc.setFulfilmentCentreCode(code);
-                                        final Map<Long, Map<String, BigDecimal>> qty = new HashMap<>();
-                                        withFc.setQtyOnWarehouse(qty);
-                                        qtyOnWarehouse.put(withFc, qty);
+                                        withFc.setBaseSkus(new HashMap<>());
+                                        withFc.setSearchSkus(new ArrayList<>());
+                                        if (sku.getTag() != null || stock.getTag() != null) {
+                                            final Set<String> uniqueTags = new TreeSet<>();
+                                            if (entity.getTag() != null) {
+                                                Collections.addAll(uniqueTags, StringUtils.split(entity.getTag(), ' '));
+                                            }
+                                            if (sku.getTag() != null) {
+                                                Collections.addAll(uniqueTags, StringUtils.split(sku.getTag(), ' '));
+                                            }
+                                            if (stock.getTag() != null) {
+                                                Collections.addAll(uniqueTags, StringUtils.split(stock.getTag(), ' '));
+                                            }
+                                            withFc.setTag(StringUtils.join(uniqueTags, ' '));
+                                        }
+
                                         resultsByFc.put(code, withFc);
                                         availableIn.put(withFc, new HashSet<>());
                                     }
@@ -810,14 +870,32 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                                     final BigDecimal atsAdd = MoneyUtils.isPositive(ats) ? ats : BigDecimal.ZERO;
 
+                                    final ProductSkuSearchResultDTO withFcSku = createSKUResultObject(sku, stock);
+                                    withFcSku.setFulfilmentCentreCode(code);
+                                    if (stock.getTag() != null) {
+                                        final Set<String> uniqueTags = new TreeSet<>();
+                                        if (entity.getTag() != null) {
+                                            Collections.addAll(uniqueTags, StringUtils.split(entity.getTag(), ' '));
+                                        }
+                                        if (stock.getTag() != null) {
+                                            Collections.addAll(uniqueTags, StringUtils.split(stock.getTag(), ' '));
+                                        }
+                                        withFc.setTag(StringUtils.join(uniqueTags, ' '));
+                                    }
+
+                                    // Populate both base and search SKU when indexing as some values are dynamic
+                                    // and search result dependent
+                                    withFc.getBaseSkus().put(withFcSku.getId(), withFcSku);
+                                    withFc.getSearchSkus().add(withFcSku);
+
+                                    final Map<Long, BigDecimal> skuQtyByShopId = new HashMap<>();
                                     for (final Long sh : shs) {
 
                                         withFcAvailableIn.add(sh);
-                                        final Map<Long, Map<String, BigDecimal>> qtyByShop = qtyOnWarehouse.get(withFc);
-                                        final Map<String, BigDecimal> qtyBySku = qtyByShop.computeIfAbsent(sh, k -> new HashMap<>());
-                                        qtyBySku.put(sku.getCode(), atsAdd);
+                                        skuQtyByShopId.put(sh, atsAdd);
 
                                     }
+                                    withFcSku.setQtyOnWarehouse(skuQtyByShopId);
 
                                 }
 
@@ -825,29 +903,6 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                         }
 
                     }
-
-                }
-            } else {
-
-                ProductSearchResultDTO noFc = resultsByFc.get(NO_FC_CODE);
-                if (noFc == null) {
-                    noFc = base.copy();
-                    noFc.setFulfilmentCentreCode(NO_FC_CODE);
-                    final Map<Long, Map<String, BigDecimal>> qty = new HashMap<>();
-                    noFc.setQtyOnWarehouse(qty);
-                    qtyOnWarehouse.put(noFc, qty);
-                    resultsByFc.put(NO_FC_CODE, noFc);
-                    availableIn.put(noFc, new HashSet<>());
-                }
-                final Set<Long> noFcAvailableIn = availableIn.get(noFc);
-
-                for (final Shop shop : shops) {
-
-                    // Available as perpetual (preorder/backorder must have stock)
-                    noFcAvailableIn.add(shop.getShopId());
-                    final Map<Long, Map<String, BigDecimal>> qtyByShop = qtyOnWarehouse.get(noFc);
-                    final Map<String, BigDecimal> qtyBySku = qtyByShop.computeIfAbsent(shop.getShopId(), k -> new HashMap<>());
-                    qtyBySku.put(sku.getCode(), BigDecimal.ONE);
 
                 }
 
@@ -876,7 +931,6 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         baseResult.setId(entity.getProductId());
         baseResult.setCode(entity.getCode());
         baseResult.setManufacturerCode(entity.getManufacturerCode());
-        baseResult.setMultisku(entity.isMultiSkuProduct());
         final ProductSku sku = entity.getDefaultSku();
         baseResult.setDefaultSkuCode(sku != null ? sku.getCode() : null);
         baseResult.setName(entity.getName());
@@ -892,27 +946,88 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         baseResult.setDisplayType(entity.getProducttype().getDisplayName());
         baseResult.setTag(entity.getTag());
         baseResult.setBrand(entity.getBrand().getName());
-        baseResult.setAvailablefrom(entity.getAvailablefrom());
-        baseResult.setAvailableto(entity.getAvailableto());
-        baseResult.setAvailability(entity.getAvailability());
         final String image0 = entity.getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
         if (StringUtils.isBlank(image0)) {
             baseResult.setDefaultImage(Constants.NO_IMAGE);
         } else {
             baseResult.setDefaultImage(image0);
         }
-        baseResult.setFeatured(entity.getFeatured());
-        baseResult.setMinOrderQuantity(entity.getMinOrderQuantity());
-        baseResult.setMaxOrderQuantity(entity.getMaxOrderQuantity());
-        baseResult.setStepOrderQuantity(entity.getStepOrderQuantity());
         baseResult.setCreatedTimestamp(entity.getCreatedTimestamp());
         baseResult.setUpdatedTimestamp(entity.getUpdatedTimestamp());
         baseResult.setAttributes(new StoredAttributesDTOImpl());
-        baseResult.setQtyOnWarehouse(null); // this will be now per warehouse (i.e. result per supplier)
 
         return baseResult;
     }
 
+    /**
+     * Each SKU is dependent of fulfilment centre inventory record defined for it, which gives flexibility
+     * in setting up different availability and fulfilment options depending of warehouse.
+     *
+     * @param entity    SKU
+     * @param inventory inventory record
+     *
+     * @return base SKU DTO
+     */
+    protected ProductSkuSearchResultDTO createSKUResultObject(final ProductSku entity, SkuWarehouse inventory) {
+
+        final ProductSkuSearchResultDTO baseResult = new ProductSkuSearchResultDTOImpl();
+        baseResult.setId(entity.getSkuId());
+        baseResult.setProductId(entity.getProduct().getProductId());
+        baseResult.setCode(entity.getCode());
+        baseResult.setManufacturerCode(entity.getManufacturerCode());
+        baseResult.setName(entity.getName());
+        baseResult.setDisplayName(entity.getDisplayName());
+        baseResult.setDescription(entity.getDescription());
+        baseResult.setDisplayDescription(entity.getDescriptionAsIs());
+        final String image0 = entity.getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
+        if (StringUtils.isBlank(image0)) {
+            baseResult.setDefaultImage(Constants.NO_IMAGE);
+        } else {
+            baseResult.setDefaultImage(image0);
+        }
+        baseResult.setCreatedTimestamp(entity.getCreatedTimestamp());
+        baseResult.setUpdatedTimestamp(entity.getUpdatedTimestamp());
+        baseResult.setAttributes(new StoredAttributesDTOImpl());
+        baseResult.setQtyOnWarehouse(new HashMap<>()); // this will be now per warehouse (i.e. result per supplier)
+        baseResult.setFeatured(inventory.getFeatured() != null && inventory.getFeatured());
+        baseResult.setAvailability(inventory.getAvailability());
+        baseResult.setAvailablefrom(inventory.getAvailablefrom());
+        baseResult.setAvailableto(inventory.getAvailableto());
+        baseResult.setReleaseDate(inventory.getReleaseDate());
+        baseResult.setMinOrderQuantity(inventory.getMinOrderQuantity());
+        baseResult.setMinOrderQuantity(inventory.getMaxOrderQuantity());
+        baseResult.setStepOrderQuantity(inventory.getStepOrderQuantity());
+
+        return baseResult;
+    }
+
+
+
+
+    /**
+     * Check is product need to be in index.
+     * Product will be added to index:
+     * in case if product available for pre/back order;
+     * or always available (for example digital products);
+     *
+     *
+     * @param entity entity to check
+     *
+     * @return true if entity need to be in lucene index.
+     */
+    public boolean isProductInCategoryHasSku(final Product entity) {
+        if (entity != null) {
+            if (entity.getProductCategory().isEmpty()) {
+                return false; // if it is not assigned to category, no way to determine the shop
+            }
+            if (entity.getSku().isEmpty()) {
+                return false; // if there are no SKU then it makes no sense to have it in index
+            }
+
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Check is product need to be in index.
@@ -926,31 +1041,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      *
      * @return true if entity need to be in lucene index.
      */
-    public boolean isProductInCategoryHasSkuAndAvailableNow(final Product entity, final LocalDateTime now) {
-        if (entity != null) {
-            if (entity.getProductCategory().isEmpty()) {
-                return false; // if it is not assigned to category, no way to determine the shop
-            }
-            if (entity.getSku().isEmpty()) {
-                return false; // if there are no SKU then it makes no sense to have it in index
-            }
-
-            final int availability = entity.getAvailability();
-            switch (availability) {
-                case Product.AVAILABILITY_PREORDER:
-                    // For preorders check only available to date since that is the whole point of preorders
-                    return DomainApiUtils.isObjectAvailableNow(!entity.isDisabled(), null, entity.getAvailableto(), now);
-                case Product.AVAILABILITY_STANDARD:
-                case Product.AVAILABILITY_BACKORDER:
-                case Product.AVAILABILITY_ALWAYS:
-                case Product.AVAILABILITY_SHOWROOM:
-                default:
-                    // standard, showroom, always and backorder must be in product date range
-                    return DomainApiUtils.isObjectAvailableNow(!entity.isDisabled(), entity.getAvailablefrom(), entity.getAvailableto(), now);
-            }
-
-        }
-        return false;
+    public boolean isInventoryAvailableNow(final SkuWarehouse entity, final LocalDateTime now) {
+        return entity != null && entity.isAvailable(now);
     }
 
     /**

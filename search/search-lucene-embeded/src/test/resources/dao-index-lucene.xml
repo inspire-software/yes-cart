@@ -77,6 +77,9 @@
         <constructor-arg index="0">
             <bean class="org.yes.cart.search.dao.entity.ProductSkuLuceneDocumentAdapter">
                 <property name="attributesSupport" ref="navigatableAttributesSupport"/>
+                <property name="shopWarehouseSupport" ref="shopWarehouseRelationshipSupport"/>
+                <property name="skuPriceSupport" ref="skuPriceRelationshipSupport"/>
+                <property name="skuWarehouseSupport" ref="skuWarehouseRelationshipSupport"/>
             </bean>
         </constructor-arg>
         <constructor-arg index="1" ref="productSkuIndexProvider"/>

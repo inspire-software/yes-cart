@@ -53,18 +53,16 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testGetInventoryList() throws Exception {
 
-        final WarehouseDTO wh = dtoService.getWarehouses().get(0);
-
         // Test no stock when no warehouse
         List<InventoryDTO> stock = dtoService.findBy(0L, null, 0, 10);
         assertTrue(stock.isEmpty());
 
         // Has stock when warehouse selected
-        stock = dtoService.findBy(wh.getWarehouseId(), null, 0, 10);
+        stock = dtoService.findBy(1L, null, 0, 10);
         assertFalse(stock.isEmpty());
 
         // Test partial SKU match
-        stock = dtoService.findBy(wh.getWarehouseId(), "CC_TEST", 0, 10);
+        stock = dtoService.findBy(1L, "CC_TEST", 0, 10);
         assertFalse(stock.isEmpty());
 
         Set<String> sku = new HashSet<String>();
@@ -77,7 +75,7 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(sku.contains("CC_TEST3"));
 
         // Test name SKU match
-        stock = dtoService.findBy(wh.getWarehouseId(), "cc test 11", 0, 10);
+        stock = dtoService.findBy(1L, "cc test 11", 0, 10);
         assertFalse(stock.isEmpty());
 
         for (final InventoryDTO inventory : stock) {
@@ -85,7 +83,7 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
         }
 
         // Test exact SKU match
-        stock = dtoService.findBy(wh.getWarehouseId(), "!CC_TEST1", 0, 10);
+        stock = dtoService.findBy(1L, "!CC_TEST1", 0, 10);
         assertFalse(stock.isEmpty());
 
         for (final InventoryDTO inventory : stock) {
@@ -93,15 +91,21 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
         }
 
         // Test SKU no match
-        stock = dtoService.findBy(wh.getWarehouseId(), "!something really weird not matching", 0, 10);
+        stock = dtoService.findBy(1L, "!something really weird not matching", 0, 10);
         assertTrue(stock.isEmpty());
 
         // Test high reserved stock reserved >= X
-        stock = dtoService.findBy(wh.getWarehouseId(), "+1", 0, 10);
+        stock = dtoService.findBy(1L, "+1", 0, 10);
         assertTrue(stock.isEmpty());
         // Test low stock qty <= X
-        stock = dtoService.findBy(wh.getWarehouseId(), "-5", 0, 10);
+        stock = dtoService.findBy(1L, "-5", 0, 10);
         assertFalse(stock.isEmpty());
+
+        // Dates
+        stock = dtoService.findBy(2L, "2010-04-09<2040-04-08", 0, 10);
+        assertEquals(1, stock.size());
+        assertEquals("BENDER-ua", stock.get(0).getSkuCode());
+
 
     }
 

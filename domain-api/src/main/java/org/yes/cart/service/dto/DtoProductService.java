@@ -61,19 +61,6 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
             ObjectNotFoundException, UnableToWrapObjectException;
 
     /**
-     * Get products, that assigned to given category id.
-     *
-     * @param categoryId given category id
-     * @return List of assigned product DTOs
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException
-     *          in case of reflection problem
-     * @throws org.yes.cart.exception.UnmappedInterfaceException
-     *          in case of configuration problem
-     */
-    List<ProductDTO> getProductByCategory(long categoryId)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-    /**
      * Get the all products in category.
      *
      * @param categoryId  category id

@@ -20,16 +20,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

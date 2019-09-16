@@ -18,13 +18,15 @@ package org.yes.cart.search.dao.entity;
 
 import org.junit.Test;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
+import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -37,20 +39,26 @@ public class AdapterUtilsTest {
     @Test
     public void readObjectFieldValue() throws Exception {
 
+        final ProductSkuSearchResultDTO dtoSKU = new ProductSkuSearchResultDTOImpl();
+        dtoSKU.setAttributes(new StoredAttributesDTOImpl());
+        dtoSKU.setCode("CODE");
+        dtoSKU.setAvailability(2);
+        dtoSKU.setAvailablefrom(LocalDateTime.now());
+        dtoSKU.setMaxOrderQuantity(BigDecimal.ONE);
+        dtoSKU.setQtyOnWarehouse(new HashMap<Long, BigDecimal>() {{
+            put(123L, BigDecimal.TEN);
+        }});
+        dtoSKU.getAttributes().putValue("attr1", "val1", "en#~#name1");
+
         final ProductSearchResultDTOImpl dto = new ProductSearchResultDTOImpl();
         dto.setAttributes(new StoredAttributesDTOImpl());
         dto.setCode("CODE");
-        dto.setAvailability(1);
-        dto.setAvailablefrom(LocalDateTime.now());
         dto.setShippable(true);
         dto.setEnsemble(true);
-        dto.setMaxOrderQuantity(BigDecimal.ONE);
-        dto.setQtyOnWarehouse(new HashMap<Long, Map<String, BigDecimal>>() {{
-            put(123L, new HashMap<String, BigDecimal>() {{
-                put("ABC", BigDecimal.TEN);
-            }});
-        }});
         dto.getAttributes().putValue("attr1", "val1", "en#~#name1");
+        dto.setBaseSkus(new HashMap<Long, ProductSkuSearchResultDTO>() {{
+            put(dtoSKU.getId(), dtoSKU);
+        }});
 
         final String json = AdapterUtils.writeObjectFieldValue(dto);
 
@@ -59,11 +67,10 @@ public class AdapterUtilsTest {
         assertNotNull(dtoCopy);
         assertEquals("CODE", dtoCopy.getCode());
         assertEquals(1, dtoCopy.getAvailability());
-        assertNotNull(dtoCopy.getAvailablefrom());
-        assertEquals(BigDecimal.ONE, dtoCopy.getMaxOrderQuantity());
-        assertNotNull(((ProductSearchResultDTOImpl) dtoCopy).getQtyOnWarehouse());
+        assertNull(dtoCopy.getAvailablefrom());
+        assertNull(dtoCopy.getMaxOrderQuantity());
         assertNotNull(dtoCopy.getQtyOnWarehouse(123L));
-        assertEquals(BigDecimal.TEN, dtoCopy.getQtyOnWarehouse(123L).get("ABC"));
+        assertTrue(dtoCopy.getQtyOnWarehouse(123L).isEmpty());
         assertNotNull(dtoCopy.getAttributes());
         assertNotNull(dtoCopy.getAttributes().getValue("attr1"));
         assertEquals("val1", dtoCopy.getAttributes().getValue("attr1").getFirst());
@@ -74,6 +81,23 @@ public class AdapterUtilsTest {
         assertFalse(dtoCopy.isDigital());
         assertFalse(dtoCopy.isDownloadable());
         assertTrue(dtoCopy.isEnsemble());
+
+        final ProductSkuSearchResultDTO dtoSkuCopy = dtoCopy.getBaseSku(dtoSKU.getId());
+        assertNotNull(dtoSkuCopy);
+        assertNotSame(dtoSKU, dtoSkuCopy);
+
+        assertNotNull(dtoSkuCopy.getAvailablefrom());
+        assertEquals(BigDecimal.ONE, dtoSkuCopy.getMaxOrderQuantity());
+        assertNotNull(dtoCopy.getQtyOnWarehouse(123L));
+        assertNull(dtoCopy.getQtyOnWarehouse(123L).get("ABC"));
+
+        dtoCopy.setSearchSkus(Collections.singletonList(dtoSkuCopy));
+
+        assertNotNull(dtoCopy.getAvailablefrom());
+        assertEquals(BigDecimal.ONE, dtoCopy.getMaxOrderQuantity());
+        assertNotNull(dtoCopy.getQtyOnWarehouse(123L));
+        assertEquals(BigDecimal.TEN, dtoCopy.getQtyOnWarehouse(123L).get("CODE"));
+
 
     }
 

@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -180,6 +181,12 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     @Override
     public void setSaleto(LocalDateTime saleto) {
         this.saleto = saleto;
+    }
+
+
+    @Override
+    public boolean isAvailable(final LocalDateTime now) {
+        return DomainApiUtils.isObjectAvailableNow(true, this.salefrom, this.saleto, now);
     }
 
     @Override

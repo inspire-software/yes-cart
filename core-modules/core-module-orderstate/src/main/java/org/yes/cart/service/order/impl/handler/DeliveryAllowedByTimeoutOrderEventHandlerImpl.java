@@ -21,17 +21,21 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Perform transition from time  wait to inventory wait state.
@@ -45,9 +49,24 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;
 
+    private final WarehouseService warehouseService;
+
+    private final InventoryResolver inventoryResolver;
+
     private final ProductService productService;
 
-    public DeliveryAllowedByTimeoutOrderEventHandlerImpl(final ProductService productService) {
+    /**
+     * Construct transition
+     *
+     * @param warehouseService    warehouse service
+     * @param inventoryResolver   sku on warehouse service to change quantity
+     * @param productService      product service
+     */
+    public DeliveryAllowedByTimeoutOrderEventHandlerImpl(final WarehouseService warehouseService,
+                                                         final InventoryResolver inventoryResolver,
+                                                         final ProductService productService) {
+        this.warehouseService = warehouseService;
+        this.inventoryResolver = inventoryResolver;
         this.productService = productService;
     }
 
@@ -61,15 +80,19 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
 
             final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderEvent.getCustomerOrderDelivery().getDetail();
 
+            final Map<String, Warehouse> warehouseByCode = warehouseService.getByShopIdMapped(
+                    orderEvent.getCustomerOrder().getShop().getShopId(), false);
+
             for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
-                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
-                if (product.isDisabled()) {
-                    return false; // no transition, because it is disabled (manual cancel order flow)
+                final Warehouse warehouse = warehouseByCode.get(det.getSupplierCode());
+                if (warehouse == null) {
+                    return false; // no transition, because warehouse no longer available (manual cancel order flow)
                 }
-                final LocalDateTime availableFrom = product.getAvailablefrom();
-                if ((availableFrom != null) && (availableFrom.isAfter(now))) {
-                    return false; // no transition, because need to wait
+
+                final SkuWarehouse inventory = inventoryResolver.findByWarehouseSku(warehouse, det.getProductSkuCode());
+                if (inventory == null || !inventory.isAvailable(now) || !inventory.isReleased(now)) {
+                    return false; // no transition, because need to wait for preorder or it is disabled (or manual cancel order flow)
                 }
             }
 

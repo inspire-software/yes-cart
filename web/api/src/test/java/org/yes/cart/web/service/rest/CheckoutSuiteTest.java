@@ -28,15 +28,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import org.yes.cart.domain.entity.ShoppingCartState;
-import org.yes.cart.domain.ro.AddressOptionRO;
-import org.yes.cart.domain.ro.OrderDeliveryOptionRO;
-import org.yes.cart.domain.ro.PaymentGatewayOptionRO;
-import org.yes.cart.domain.ro.ShippingOptionRO;
+import org.yes.cart.domain.ro.*;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -179,6 +177,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
+            put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
         mockMvc.perform(put("/cart")
@@ -279,7 +278,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
+        shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
+        shippingOptionRO.getShippingMethods().setSelected(new ArrayList<>());
+        final ShippingOptionCarrierSelectionRO shippingOptionCarrierSelectionRO = new ShippingOptionCarrierSelectionRO();
+        shippingOptionCarrierSelectionRO.setCarrierSlaId("4");
+        shippingOptionCarrierSelectionRO.setSupplier("WAREHOUSE_2");
+        shippingOptionRO.getShippingMethods().getSelected().add(shippingOptionCarrierSelectionRO);
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -510,6 +514,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
+            put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
         mockMvc.perform(put("/cart")
@@ -609,7 +614,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
+        shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
+        shippingOptionRO.getShippingMethods().setSelected(new ArrayList<>());
+        final ShippingOptionCarrierSelectionRO shippingOptionCarrierSelectionRO = new ShippingOptionCarrierSelectionRO();
+        shippingOptionCarrierSelectionRO.setCarrierSlaId("4");
+        shippingOptionCarrierSelectionRO.setSupplier("WAREHOUSE_2");
+        shippingOptionRO.getShippingMethods().getSelected().add(shippingOptionCarrierSelectionRO);
+
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -820,6 +831,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
+            put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
         mockMvc.perform(put("/cart")
@@ -916,7 +928,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
+        shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
+        shippingOptionRO.getShippingMethods().setSelected(new ArrayList<>());
+        final ShippingOptionCarrierSelectionRO shippingOptionCarrierSelectionRO = new ShippingOptionCarrierSelectionRO();
+        shippingOptionCarrierSelectionRO.setCarrierSlaId("4");
+        shippingOptionCarrierSelectionRO.setSupplier("WAREHOUSE_2");
+        shippingOptionRO.getShippingMethods().getSelected().add(shippingOptionCarrierSelectionRO);
+
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -1152,6 +1170,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
+            put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
         mockMvc.perform(put("/cart")
@@ -1250,7 +1269,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
+        shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
+        shippingOptionRO.getShippingMethods().setSelected(new ArrayList<>());
+        final ShippingOptionCarrierSelectionRO shippingOptionCarrierSelectionRO = new ShippingOptionCarrierSelectionRO();
+        shippingOptionCarrierSelectionRO.setCarrierSlaId("4");
+        shippingOptionCarrierSelectionRO.setSupplier("WAREHOUSE_2");
+        shippingOptionRO.getShippingMethods().getSelected().add(shippingOptionCarrierSelectionRO);
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -1462,6 +1486,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
+            put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
         mockMvc.perform(put("/cart")
@@ -1557,7 +1582,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
+        shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
+        shippingOptionRO.getShippingMethods().setSelected(new ArrayList<>());
+        final ShippingOptionCarrierSelectionRO shippingOptionCarrierSelectionRO = new ShippingOptionCarrierSelectionRO();
+        shippingOptionCarrierSelectionRO.setCarrierSlaId("4");
+        shippingOptionCarrierSelectionRO.setSupplier("WAREHOUSE_2");
+        shippingOptionRO.getShippingMethods().getSelected().add(shippingOptionCarrierSelectionRO);
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -1792,6 +1822,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
+            put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
         mockMvc.perform(put("/cart")
@@ -1886,7 +1917,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
+        shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
+        shippingOptionRO.getShippingMethods().setSelected(new ArrayList<>());
+        final ShippingOptionCarrierSelectionRO shippingOptionCarrierSelectionRO = new ShippingOptionCarrierSelectionRO();
+        shippingOptionCarrierSelectionRO.setCarrierSlaId("4");
+        shippingOptionCarrierSelectionRO.setSupplier("WAREHOUSE_2");
+        shippingOptionRO.getShippingMethods().getSelected().add(shippingOptionCarrierSelectionRO);
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -2086,6 +2122,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
+            put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
         mockMvc.perform(put("/cart")
@@ -2175,7 +2212,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
+        shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
+        shippingOptionRO.getShippingMethods().setSelected(new ArrayList<>());
+        final ShippingOptionCarrierSelectionRO shippingOptionCarrierSelectionRO = new ShippingOptionCarrierSelectionRO();
+        shippingOptionCarrierSelectionRO.setCarrierSlaId("4");
+        shippingOptionCarrierSelectionRO.setSupplier("WAREHOUSE_2");
+        shippingOptionRO.getShippingMethods().getSelected().add(shippingOptionCarrierSelectionRO);
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -2415,6 +2457,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
+            put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
         mockMvc.perform(put("/cart")
@@ -2510,7 +2553,12 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
+        shippingOptionRO.setShippingMethods(new ShippingOptionCarrierSelectionsRO());
+        shippingOptionRO.getShippingMethods().setSelected(new ArrayList<>());
+        final ShippingOptionCarrierSelectionRO shippingOptionCarrierSelectionRO = new ShippingOptionCarrierSelectionRO();
+        shippingOptionCarrierSelectionRO.setCarrierSlaId("4");
+        shippingOptionCarrierSelectionRO.setSupplier("WAREHOUSE_2");
+        shippingOptionRO.getShippingMethods().getSelected().add(shippingOptionCarrierSelectionRO);
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 

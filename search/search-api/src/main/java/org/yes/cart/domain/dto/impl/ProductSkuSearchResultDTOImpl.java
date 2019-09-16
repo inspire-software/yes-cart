@@ -22,6 +22,12 @@ import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 04/12/2014
@@ -33,13 +39,33 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
     private long productId;
     private String code;
     private String manufacturerCode;
+    private String fulfilmentCentreCode;
     private String name;
     private String displayName;
+    private String description;
+    private String displayDescription;
     private String defaultImage;
 
     private I18NModel i18NModelName;
+    private I18NModel i18NModelDescription;
 
     private StoredAttributesDTO attributes;
+
+    private Instant createdTimestamp;
+    private Instant updatedTimestamp;
+
+    private LocalDateTime availablefrom;
+    private LocalDateTime availableto;
+    private LocalDateTime releaseDate;
+    private int availability;
+    private Map<Long, BigDecimal> qtyOnWarehouse;
+
+    private boolean featured;
+    private BigDecimal minOrderQuantity;
+    private BigDecimal maxOrderQuantity;
+    private BigDecimal stepOrderQuantity;
+    private String tag;
+
 
     /** {@inheritDoc} */
     @Override
@@ -104,6 +130,18 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
 
     /** {@inheritDoc} */
     @Override
+    public String getFulfilmentCentreCode() {
+        return fulfilmentCentreCode;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setFulfilmentCentreCode(final String fulfilmentCentreCode) {
+        this.fulfilmentCentreCode = fulfilmentCentreCode;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public String getDisplayName() {
         return displayName;
     }
@@ -137,6 +175,48 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
         this.name = name;
     }
 
+
+
+    /** {@inheritDoc} */
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getDescription(final String locale) {
+        if (this.i18NModelDescription != null) {
+            final String desc = this.i18NModelDescription.getValue(locale);
+            if (desc != null) {
+                return desc;
+            }
+        }
+        return this.description;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public String getDisplayDescription() {
+        return displayDescription;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setDisplayDescription(final String displayDescription) {
+
+        this.displayDescription = displayDescription;
+
+        i18NModelDescription = new StringI18NModel(this.displayDescription);
+    }
+
     /** {@inheritDoc} */
     @Override
     public StoredAttributesDTO getAttributes() {
@@ -149,6 +229,156 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
         this.attributes = attributes;
     }
 
+
+    /** {@inheritDoc} */
+    @Override
+    public BigDecimal getQtyOnWarehouse(final long shopId) {
+        return qtyOnWarehouse != null ? qtyOnWarehouse.get(shopId) : null;
+    }
+
+    // JSON serialization accessor
+    public Map<Long, BigDecimal> getQtyOnWarehouse() {
+        return qtyOnWarehouse;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setQtyOnWarehouse(final Map<Long, BigDecimal> qtyOnWarehouse) {
+        this.qtyOnWarehouse = qtyOnWarehouse;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public LocalDateTime getAvailableto() {
+        return availableto;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setAvailableto(final LocalDateTime availableto) {
+        this.availableto = availableto;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public LocalDateTime getAvailablefrom() {
+        return availablefrom;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
+        this.availablefrom = availablefrom;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public LocalDateTime getReleaseDate() {
+        return releaseDate;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setReleaseDate(final LocalDateTime releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getAvailability() {
+        return availability;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setAvailability(final int availability) {
+        this.availability = availability;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setFeatured(final boolean featured) {
+        this.featured = featured;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setTag(final String tag) {
+        this.tag = tag;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public BigDecimal getMinOrderQuantity() {
+        return minOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
+        this.minOrderQuantity = minOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public BigDecimal getMaxOrderQuantity() {
+        return maxOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
+        this.maxOrderQuantity = maxOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public BigDecimal getStepOrderQuantity() {
+        return stepOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
+        this.stepOrderQuantity = stepOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
     /** {@inheritDoc} */
     @Override
     public ProductSkuSearchResultDTO copy() {
@@ -157,13 +387,43 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
         copy.setProductId(this.productId);
         copy.setCode(this.code);
         copy.setManufacturerCode(this.manufacturerCode);
+        copy.setFulfilmentCentreCode(this.fulfilmentCentreCode);
         copy.setName(this.name);
         copy.setDisplayName(this.displayName);
+        copy.setDescription(this.description);
+        copy.setDisplayDescription(this.displayDescription);
         copy.setDefaultImage(this.defaultImage);
+        copy.setCreatedTimestamp(this.createdTimestamp);
+        copy.setUpdatedTimestamp(this.updatedTimestamp);
+        copy.setAvailablefrom(this.availablefrom);
+        copy.setAvailableto(this.availableto);
+        copy.setReleaseDate(this.releaseDate);
+        copy.setAvailability(this.availability);
+        if (this.qtyOnWarehouse != null) {
+            copy.setQtyOnWarehouse(new HashMap<>(this.qtyOnWarehouse));
+        }
+        copy.setFeatured(this.featured);
+        copy.setMinOrderQuantity(this.minOrderQuantity);
+        copy.setMaxOrderQuantity(this.maxOrderQuantity);
+        copy.setStepOrderQuantity(this.stepOrderQuantity);
+        copy.setTag(this.tag);
         if (this.attributes != null) {
             copy.setAttributes(new StoredAttributesDTOImpl(this.attributes.toString()));
         }
         return copy;
     }
 
+    @Override
+    public String toString() {
+        return "ProductSkuSearchResultDTOImpl{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", code='" + code + '\'' +
+                ", fulfilmentCentreCode='" + fulfilmentCentreCode + '\'' +
+                ", availablefrom=" + availablefrom +
+                ", availableto=" + availableto +
+                ", releaseDate=" + releaseDate +
+                ", availability=" + availability +
+                '}';
+    }
 }

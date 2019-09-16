@@ -26,10 +26,12 @@ import org.yes.cart.domain.dto.ProductDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl;
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.dto.*;
+import org.yes.cart.service.dto.DtoAttributeService;
+import org.yes.cart.service.dto.DtoBrandService;
+import org.yes.cart.service.dto.DtoProductService;
+import org.yes.cart.service.dto.DtoProductTypeService;
 import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
@@ -49,9 +51,6 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     private DtoBrandService dtoBrandService;
     private DtoAttributeService dtoAttrService;
     private DtoFactory dtoFactory;
-    private DtoProductTypeAttrService dtoProductTypeAttrService;
-    private DtoProductCategoryService dtoProductCategoryService;
-    //private DtoCategoryService dtoCategoryService;
 
     @Before
     public void setUp() {
@@ -60,8 +59,6 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dtoProductTypeService = (DtoProductTypeService) ctx().getBean(DtoServiceSpringKeys.DTO_PRODUCT_TYPE_SERVICE);
         dtoAttrService = (DtoAttributeService) ctx().getBean(DtoServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         dtoFactory = (DtoFactory) ctx().getBean(DtoServiceSpringKeys.DTO_FACTORY);
-        dtoProductTypeAttrService = (DtoProductTypeAttrService) ctx().getBean(DtoServiceSpringKeys.DTO_PRODUCT_TYPE_ATTR_SERVICE);
-        dtoProductCategoryService = (DtoProductCategoryService) ctx().getBean(/*ServiceSpringKeys.DTO_PRODUCT_CATEGORY_SERVICE*/ "dtoProductCategoryService");
         super.setUp();
 
     }
@@ -104,38 +101,17 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(dto.getProductId() > 0);
         long pk = dto.getProductId();
         LocalDateTime availableFrom = TimeContext.getLocalDateTime();
-        dto.setDisabled(true);
-        dto.setAvailablefrom(availableFrom);
-        dto.setAvailableto(availableFrom);
         dto.setName("new-name");
         dto.setDescription("new desciption");
         dto.setBrandDTO(dtoBrandService.getById(102L));
         dto.setProductTypeDTO(dtoProductTypeService.getById(2L));
-        dto.setAvailability(Product.AVAILABILITY_ALWAYS);
         dtoService.update(dto);
         dto = dtoService.getById(pk);
-        assertTrue(dto.isDisabled());
-        assertEquals(availableFrom, dto.getAvailablefrom());
-        assertEquals(availableFrom, dto.getAvailableto());
         assertEquals("new-name", dto.getName());
         assertEquals("new desciption", dto.getDescription());
         assertEquals(102L, dto.getBrandDTO().getBrandId());
         assertEquals(2L, dto.getProductTypeDTO().getProducttypeId());
-        assertEquals(Product.AVAILABILITY_ALWAYS, dto.getAvailability());
     }
-
-
-    @Test
-    public void testGetProductByCategory() throws Exception {
-        List<ProductDTO> list = dtoService.getProductByCategory(211L);
-        assertEquals(8, list.size()); //FEATURED-PRODUCT3 AVAILABLEFROM="2000-04-08 11:15:17.451" AVAILABLETO="2001-04-08 11:15:17.451"
-        for (ProductDTO dto : list) {
-            assertFalse(dto.getCode().equals("FEATURED-PRODUCT3"));
-        }
-        list = dtoService.getProductByCategory(208L);
-        assertTrue(list.isEmpty());
-    }
-
 
 
     @Test
@@ -247,7 +223,6 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dto.setName("test-name");
         dto.setBrandDTO(dtoBrandService.getById(101L));
         dto.setProductTypeDTO(dtoProductTypeService.getById(1L));
-        dto.setAvailability(Product.AVAILABILITY_STANDARD);
         return dto;
     }
 
@@ -257,7 +232,6 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dto.setName("test-name" + suffix);
         dto.setBrandDTO(dtoBrandService.getById(101L));
         dto.setProductTypeDTO(dtoProductTypeService.getById(1L));
-        dto.setAvailability(Product.AVAILABILITY_STANDARD);
         return dto;
     }
 
@@ -277,11 +251,6 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
 
         // PK
         list = dtoService.findBy("*15053", 0, 10);
-        assertEquals(1, list.size());
-        assertEquals("FEATURED-PRODUCT3", list.get(0).getCode());
-
-        // Dates
-        list = dtoService.findBy("2000-04-09<2001-04-08", 0, 10);
         assertEquals(1, list.size());
         assertEquals("FEATURED-PRODUCT3", list.get(0).getCode());
 

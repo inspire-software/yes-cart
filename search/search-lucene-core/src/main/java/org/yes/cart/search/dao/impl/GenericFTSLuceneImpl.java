@@ -91,7 +91,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
     @Override
     public List<Long> fullTextSearch(final Query query) {
 
-        LOGFTQ.debug("Run count query {}", query);
+        LOGFTQ.debug("Run query {}", query);
 
         final List<Long> pks = new ArrayList<>();
 
@@ -124,7 +124,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
     @Override
     public List<Long> fullTextSearch(final Query query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse) {
 
-        LOGFTQ.debug("Run count query {}", query);
+        LOGFTQ.debug("Run query {}", query);
 
         final List<Long> pks = new ArrayList<>();
 
@@ -167,7 +167,7 @@ public class GenericFTSLuceneImpl implements GenericFTS<Long, org.apache.lucene.
     @Override
     public Pair<List<Object[]>, Integer> fullTextSearch(final Query query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse, final String... fields) {
 
-        LOGFTQ.debug("Run count query {}", query);
+        LOGFTQ.debug("Run query {}", query);
 
         Pair<List<Object[]>, Integer> result = EMPTY;
         int lastResult = maxResults < 0 ? Integer.MAX_VALUE : firstResult + maxResults;

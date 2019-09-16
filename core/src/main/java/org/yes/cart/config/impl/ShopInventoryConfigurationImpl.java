@@ -22,6 +22,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.DeliveryTimeEstimationVisitor;
 import org.yes.cart.shoppingcart.ProductAvailabilityStrategy;
+import org.yes.cart.shoppingcart.ProductQuantityStrategy;
 
 import java.util.List;
 import java.util.Properties;
@@ -50,6 +51,18 @@ public class ShopInventoryConfigurationImpl extends AbstractShopConfigurationImp
         }
     }
 
+    void registerCustomProductQuantityStrategy(final Shop shop, final List<Shop> subs, final Properties properties) {
+
+        final ProductQuantityStrategy pqs = determineConfiguration(properties, shop.getCode() + ".productQuantityStrategy", ProductQuantityStrategy.class);
+
+        customise(shop.getCode(), shop.getShopId(), "productQuantityStrategy", ProductQuantityStrategy.class, pqs);
+        if (CollectionUtils.isNotEmpty(subs)) {
+            for (final Shop sub : subs) {
+                customise(sub.getCode(), sub.getShopId(), "productQuantityStrategy", ProductQuantityStrategy.class, pqs);
+            }
+        }
+    }
+
     void registerCustomDeliveryTimeEstimationVisitor(final Shop shop, final List<Shop> subs, final Properties properties) {
 
         final DeliveryTimeEstimationVisitor dtev = determineConfiguration(properties, shop.getCode() + ".deliveryTimeEstimationVisitor", DeliveryTimeEstimationVisitor.class);
@@ -63,6 +76,7 @@ public class ShopInventoryConfigurationImpl extends AbstractShopConfigurationImp
     protected void doConfigurations(final Shop shop, final List<Shop> subs, final Properties properties) {
 
         this.registerCustomProductAvailabilityStrategy(shop, subs, properties);
+        this.registerCustomProductQuantityStrategy(shop, subs, properties);
         this.registerCustomDeliveryTimeEstimationVisitor(shop, subs, properties);
 
     }

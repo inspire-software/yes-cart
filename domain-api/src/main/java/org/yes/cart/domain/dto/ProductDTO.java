@@ -259,65 +259,6 @@ public interface ProductDTO extends Identifiable, Guidable {
     void setDescription(String description);
 
     /**
-     * Flag to denote if object is disabled on not.
-     *
-     * @return true if object is disabled
-     */
-    boolean isDisabled();
-
-    /**
-     * Flag to denote if object is disabled on not.
-     *
-     * @param disabled true if object is disabled
-     */
-    void setDisabled(boolean disabled);
-
-    /**
-     * Get start of product availability.
-     * Null - product has not start date, means no limitation.
-     *
-     * @return start of product availability.
-     */
-    LocalDateTime getAvailablefrom();
-
-    /**
-     * Set start of product availability.
-     *
-     * @param availablefrom start of product availability.
-     */
-    void setAvailablefrom(LocalDateTime availablefrom);
-
-    /**
-     * Get end of product availability.
-     * Null - product has not end date, means no limitation.
-     *
-     * @return end of product availability.
-     */
-    LocalDateTime getAvailableto();
-
-    /**
-     * Set end of product availability.
-     *
-     * @param availableto end of product availability.
-     */
-    void setAvailableto(LocalDateTime availableto);
-
-    /**
-     * Get product availability
-     *
-     * @return availability
-     */
-    int getAvailability();
-
-    /**
-     * Set productavailability
-     *
-     * @param availability product
-     */
-    void setAvailability(int availability);
-
-
-    /**
      * Get the assigned categories to product.
      *
      * @return assigned categories
@@ -423,19 +364,6 @@ public interface ProductDTO extends Identifiable, Guidable {
      */
     void setDisplayMetadescriptions(Map<String, String> metadescription);
 
-    /**
-     * Get the featured flag for product.
-     *
-     * @return set featured flag.
-     */
-    Boolean getFeatured();
-
-    /**
-     * Set product featured flag.
-     *
-     * @param featured featured flag.
-     */
-    void setFeatured(Boolean featured);
 
 
     /**
@@ -466,42 +394,6 @@ public interface ProductDTO extends Identifiable, Guidable {
      */
     void setTag(String tag);
 
-    /**
-     * Get minimal quantity for order. E.g. 5.0 means customer can only buy 5 or more.
-     *
-     * @return minimal order quantity
-     */
-    BigDecimal getMinOrderQuantity();
-
-    /**
-     * @param minOrderQuantity minimal quantity for order.
-     */
-    void setMinOrderQuantity(BigDecimal minOrderQuantity);
-
-    /**
-     * Get maximum quantity for order. E.g. 5.0 means customer can only buy up to 5
-     *
-     * @return maximum order quantity
-     */
-    BigDecimal getMaxOrderQuantity();
-
-    /**
-     * @param maxOrderQuantity maximum quantity for order.
-     */
-    void setMaxOrderQuantity(BigDecimal maxOrderQuantity);
-
-    /**
-     * Get step quantity for order. E.g. 5.0 means customer can only buy in batches of 5 - 5, 10, 15
-     * but not say 11.
-     *
-     * @return step order quantity
-     */
-    BigDecimal getStepOrderQuantity();
-
-    /**
-     * @param stepOrderQuantity step quantity for order.
-     */
-    void setStepOrderQuantity(BigDecimal stepOrderQuantity);
 
     /**
      * List of SKU associated with product.

@@ -23,9 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.utils.DomainApiUtils;
-import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.HQLUtils;
+import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -170,7 +169,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (withAvailability) {
 
             final LocalDateTime now = now();
-            cats.removeIf(cat -> !DomainApiUtils.isObjectAvailableNow(!cat.isDisabled(), cat.getAvailablefrom(), cat.getAvailableto(), now));
+            cats.removeIf(cat -> !cat.isAvailable(now));
 
         }
         return cats;

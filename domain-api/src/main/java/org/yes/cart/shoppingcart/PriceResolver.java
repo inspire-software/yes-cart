@@ -42,17 +42,19 @@ public interface PriceResolver {
      * @param quantity       quantity tier
      * @param enforceTier    force to pick closest tier price rather than cheapest
      * @param pricingPolicy  optional pricing policy
+     * @param supplier       optional supplier specific
      *
      * @return lowest available sku price
      */
-    SkuPrice getMinimalPrice(final Long productId,
-                             final String selectedSku,
-                             final long customerShopId,
-                             final Long masterShopId,
-                             final String currencyCode,
-                             final BigDecimal quantity,
-                             final boolean enforceTier,
-                             final String pricingPolicy);
+    SkuPrice getMinimalPrice(Long productId,
+                             String selectedSku,
+                             long customerShopId,
+                             Long masterShopId,
+                             String currencyCode,
+                             BigDecimal quantity,
+                             boolean enforceTier,
+                             String pricingPolicy,
+                             String supplier);
 
     /**
      * Get all prices for given product skus (all), shop, currency and quantity.
@@ -64,15 +66,17 @@ public interface PriceResolver {
      * @param masterShopId   optional fallback shop (if specified the result will be a merge of prices available in both shops)
      * @param currencyCode   desirable currency
      * @param pricingPolicy  optional pricing policy
+     * @param supplier       optional supplier specific
      *
      * @return lowest available sku price
      */
-    List<SkuPrice> getAllCurrentPrices(final Long productId,
-                                       final String selectedSku,
-                                       final long customerShopId,
-                                       final Long masterShopId,
-                                       final String currencyCode,
-                                       final String pricingPolicy);
+    List<SkuPrice> getAllCurrentPrices(Long productId,
+                                       String selectedSku,
+                                       long customerShopId,
+                                       Long masterShopId,
+                                       String currencyCode,
+                                       String pricingPolicy,
+                                       String supplier);
 
 
 }
