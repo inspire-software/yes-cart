@@ -16,8 +16,8 @@ VALUES (15105, 'postFinancePaymentGateway', 'name_de', 'PostFinance', 'Gateway-N
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15150, 'postFinancePaymentGateway', 'PF_POST_URL', 'https://e-payment.postfinance.ch/ncol/test/orderstandard.asp', 'Form action',
-'In the production (PROD) environment, the URL for the action will be https://e- payment.postfinance.ch/ncol/prod/orderstandard.asp.');
+VALUES (15150, 'postFinancePaymentGateway', 'PF_POST_URL', 'https://e-payment.postfinance.ch/ncol/test/orderstandard_utf8.asp', 'Form action',
+'In the production (PROD) environment, the URL for the action will be https://e-payment.postfinance.ch/ncol/prod/orderstandard_utf8.asp.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (15151, 'postFinancePaymentGateway', 'PF_RESULT_URL_HOME', 'http://@domain@/', '(Absolute) URL of your home page',
@@ -188,8 +188,8 @@ VALUES (15205, 'postFinanceManualPaymentGateway', 'name_de', 'PostFinance (Manue
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15250, 'postFinanceManualPaymentGateway', 'PF_POST_URL', 'https://e-payment.postfinance.ch/ncol/test/orderstandard.asp', 'Form action',
-'In the production (PROD) environment, the URL for the action will be https://e- payment.postfinance.ch/ncol/prod/orderstandard.asp.');
+VALUES (15250, 'postFinanceManualPaymentGateway', 'PF_POST_URL', 'https://e-payment.postfinance.ch/ncol/test/orderstandard_utf8.asp', 'Form action',
+'In the production (PROD) environment, the URL for the action will be https://e-payment.postfinance.ch/ncol/prod/orderstandard_utf8.asp.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (15251, 'postFinanceManualPaymentGateway', 'PF_RESULT_URL_HOME', 'http://@domain@/', '(Absolute) URL of your home page',
