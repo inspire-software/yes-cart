@@ -1072,6 +1072,8 @@
         AVAILABLETO timestamp,
         RELEASEDATE timestamp,
         AVAILABILITY integer default 1 not null,
+        RESTOCKDATE timestamp,
+        RESTOCKNOTE varchar(255),
         FEATURED smallint,
         TAG varchar(255),
         MIN_ORDER_QUANTITY numeric(19,2),

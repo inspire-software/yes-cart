@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.StoredAttributesDTO;
 import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
@@ -74,8 +73,8 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
             try {
 
-                final Map<String, ProductSkuSearchResultDTO> resultsByFc = new HashMap<>();
-                final Map<ProductSkuSearchResultDTO, Set<Long>> availableIn = new HashMap<>();
+                final Map<String, ProductSkuSearchResultDTOImpl> resultsByFc = new HashMap<>();
+                final Map<ProductSkuSearchResultDTOImpl, Set<Long>> availableIn = new HashMap<>();
 
                 populateResultsByFc(entity, now, resultsByFc, availableIn);
 
@@ -84,9 +83,9 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                 final Document[] documents = new Document[resultsByFc.size()];
                 int count = 0;
 
-                for (final Map.Entry<String, ProductSkuSearchResultDTO> resultByFc : resultsByFc.entrySet()) {
+                for (final Map.Entry<String, ProductSkuSearchResultDTOImpl> resultByFc : resultsByFc.entrySet()) {
 
-                    final ProductSkuSearchResultDTO result = resultByFc.getValue();
+                    final ProductSkuSearchResultDTOImpl result = resultByFc.getValue();
                     final Set<Long> available = availableIn.get(result);
 
                     if (CollectionUtils.isEmpty(available)) {
@@ -191,9 +190,9 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
      *
      * @return basic search result object containing common information
      */
-    protected ProductSkuSearchResultDTO createBaseResultObject(final ProductSku entity) {
+    protected ProductSkuSearchResultDTOImpl createBaseResultObject(final ProductSku entity) {
 
-        final ProductSkuSearchResultDTO baseResult = new ProductSkuSearchResultDTOImpl();
+        final ProductSkuSearchResultDTOImpl baseResult = new ProductSkuSearchResultDTOImpl();
         baseResult.setId(entity.getSkuId());
         baseResult.setProductId(entity.getProduct().getProductId());
         baseResult.setCode(entity.getCode());
@@ -223,7 +222,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
      * @param entity   entity
      * @param result   result to store attributes in
      */
-    protected void addAttributeFields(final Document document, final ProductSku entity, final ProductSkuSearchResultDTO result) {
+    protected void addAttributeFields(final Document document, final ProductSku entity, final ProductSkuSearchResultDTOImpl result) {
 
         final Set<String> navAttrs = attributesSupport.getAllNavigatableAttributeCodes();
         final Set<String> searchAttrs = attributesSupport.getAllSearchableAttributeCodes();
@@ -378,7 +377,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
      * @param available   shop PK's
      * @param now         time now to filter out inactive price records
      */
-    protected void addPriceFields(final Document document, final ProductSku entity, final List<SkuPrice> allPrices, final ProductSkuSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
+    protected void addPriceFields(final Document document, final ProductSku entity, final List<SkuPrice> allPrices, final ProductSkuSearchResultDTOImpl result, final Set<Long> available, final LocalDateTime now) {
 
         final boolean isShowRoom = result.getAvailability() == SkuWarehouse.AVAILABILITY_SHOWROOM;
 
@@ -540,7 +539,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
      * @param available  shop PKs where this result is available
      * @param now        time now (used for pre-ordered items)
      */
-    protected void addInventoryFields(final Document document, final ProductSkuSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
+    protected void addInventoryFields(final Document document, final ProductSkuSearchResultDTOImpl result, final Set<Long> available, final LocalDateTime now) {
 
         double boost = 1.0d;
         for (final Long shop : available) {
@@ -587,10 +586,10 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
      */
     protected void populateResultsByFc(final ProductSku entity,
                                        final LocalDateTime now,
-                                       final Map<String, ProductSkuSearchResultDTO> resultsByFc,
-                                       final Map<ProductSkuSearchResultDTO, Set<Long>> availableIn) {
+                                       final Map<String, ProductSkuSearchResultDTOImpl> resultsByFc,
+                                       final Map<ProductSkuSearchResultDTOImpl, Set<Long>> availableIn) {
 
-        final ProductSkuSearchResultDTO base = createBaseResultObject(entity);
+        final ProductSkuSearchResultDTOImpl base = createBaseResultObject(entity);
 
         final Map<Long, Set<Long>> shopsByFulfilment = shopWarehouseSupport.getShopsByFulfilmentMap();
 
@@ -617,7 +616,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                             final String code = skuWarehouseSupport.getWarehouseCode(stock);
                             if (code != null) {
 
-                                ProductSkuSearchResultDTO withFc = resultsByFc.get(code);
+                                ProductSkuSearchResultDTOImpl withFc = resultsByFc.get(code);
                                 if (withFc == null) {
 
                                     withFc = base.copy();
@@ -653,6 +652,10 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                                 withFc.setAvailablefrom(stock.getAvailablefrom());
                                 withFc.setAvailableto(stock.getAvailableto());
                                 withFc.setReleaseDate(stock.getReleaseDate());
+                                withFc.setRestockDate(stock.getRestockDate());
+                                if (stock.getRestockNote() != null) {
+                                    withFc.setRestockNotes(new StringI18NModel(stock.getRestockNote().getAllValues()));
+                                }
                                 withFc.setMinOrderQuantity(stock.getMinOrderQuantity());
                                 withFc.setMinOrderQuantity(stock.getMaxOrderQuantity());
                                 withFc.setStepOrderQuantity(stock.getStepOrderQuantity());

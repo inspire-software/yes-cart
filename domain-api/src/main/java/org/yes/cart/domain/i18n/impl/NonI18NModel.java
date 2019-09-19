@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.i18n.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.i18n.I18NModel;
 
 import java.util.Collections;
@@ -31,24 +32,55 @@ import java.util.Map;
  */
 public class NonI18NModel implements I18NModel {
 
-    private final String value;
+    private String value;
 
     public NonI18NModel(final String value) {
         this.value = value;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getValue(final String locale) {
         return this.value;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void putValue(final String locale, final String value) {
-        // do nothing
+        if (DEFAULT.equals(locale)) {
+            this.value = value;
+        }
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<String, String> getAllValues() {
-        return Collections.emptyMap();
+        if (StringUtils.isBlank(value)) {
+            return Collections.emptyMap();
+        }
+        return Collections.singletonMap(DEFAULT, value);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public I18NModel copy() {
+        return new NonI18NModel(value);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NonI18NModel)) return false;
+
+        final NonI18NModel that = (NonI18NModel) o;
+
+        return value != null ? value.equals(that.value) : that.value == null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
     }
 }

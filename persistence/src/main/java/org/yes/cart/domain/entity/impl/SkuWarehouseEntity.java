@@ -18,6 +18,8 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.MoneyUtils;
 
@@ -50,6 +52,10 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     private LocalDateTime availableto;
     private LocalDateTime releaseDate;
     private int availability = AVAILABILITY_STANDARD;
+
+    private LocalDateTime restockDate;
+    private I18NModel restockNote;
+    private String restockNoteInternal;
 
     private BigDecimal minOrderQuantity;
     private BigDecimal maxOrderQuantity;
@@ -316,6 +322,43 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     @Override
     public void setReleaseDate(final LocalDateTime releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    @Override
+    public LocalDateTime getRestockDate() {
+        return restockDate;
+    }
+
+    @Override
+    public void setRestockDate(final LocalDateTime restockDate) {
+        this.restockDate = restockDate;
+    }
+
+    public String getRestockNoteInternal() {
+        return restockNoteInternal;
+    }
+
+    public void setRestockNoteInternal(final String restockNoteInternal) {
+        this.restockNoteInternal = restockNoteInternal;
+        this.restockNote = null;
+    }
+
+    @Override
+    public I18NModel getRestockNote() {
+        if (this.restockNote == null) {
+            this.restockNote = new StringI18NModel(this.restockNoteInternal);
+        }
+        return this.restockNote;
+    }
+
+    @Override
+    public void setRestockNote(final I18NModel restockNote) {
+        if (restockNote instanceof StringI18NModel) {
+            this.restockNoteInternal = restockNote.toString();
+            this.restockNote = restockNote.copy();
+        } else {
+            throw new IllegalArgumentException("Only StringI18NModel is supported");
+        }
     }
 }
 

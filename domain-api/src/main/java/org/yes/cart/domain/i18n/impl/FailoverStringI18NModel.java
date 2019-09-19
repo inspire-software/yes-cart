@@ -42,6 +42,13 @@ public class FailoverStringI18NModel implements I18NModel {
         this.failover = modelFailover == null || modelFailover.length() == 0 ? failover : modelFailover;
     }
 
+    private FailoverStringI18NModel(final I18NModel model, final String failover) {
+        this.model = model;
+        final String modelFailover = this.model.getValue(I18NModel.DEFAULT);
+        this.failover = modelFailover == null || modelFailover.length() == 0 ? failover : modelFailover;
+    }
+
+    /** {@inheritDoc} */
     @Override
     public String getValue(final String locale) {
         final String val = model.getValue(locale);
@@ -51,13 +58,41 @@ public class FailoverStringI18NModel implements I18NModel {
         return val;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void putValue(final String locale, final String value) {
         model.putValue(locale, value);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<String, String> getAllValues() {
         return model.getAllValues();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public I18NModel copy() {
+        return new FailoverStringI18NModel(model.copy(), failover);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FailoverStringI18NModel)) return false;
+
+        final FailoverStringI18NModel that = (FailoverStringI18NModel) o;
+
+        if (model != null ? !model.equals(that.model) : that.model != null) return false;
+        return failover != null ? failover.equals(that.failover) : that.failover == null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        int result = model != null ? model.hashCode() : 0;
+        result = 31 * result + (failover != null ? failover.hashCode() : 0);
+        return result;
     }
 }

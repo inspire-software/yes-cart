@@ -119,6 +119,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     @JsonIgnore
     public LocalDateTime getReleaseDate() {
@@ -136,6 +137,36 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
             return searchSkus.get(0).getAvailability();
         }
         return SkuWarehouse.AVAILABILITY_STANDARD;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @JsonIgnore
+    public LocalDateTime getRestockDate() {
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getRestockDate();
+        }
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @JsonIgnore
+    public String getRestockNote(final String locale) {
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getRestockNote(locale);
+        }
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @JsonIgnore
+    public I18NModel getRestockNotes() {
+        if (searchSkus != null && !searchSkus.isEmpty()) {
+            return searchSkus.get(0).getRestockNotes();
+        }
+        return null;
     }
 
     /** {@inheritDoc} */
@@ -538,7 +569,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     @Override
-    public ProductSearchResultDTO copy() {
+    public ProductSearchResultDTOImpl copy() {
         /*
             DO NOT copy skus as this must be set through FT search - we need them to be
             sorted by relevancy

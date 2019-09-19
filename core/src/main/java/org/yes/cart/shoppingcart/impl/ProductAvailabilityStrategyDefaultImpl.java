@@ -23,6 +23,7 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.ProductAvailabilityModelImpl;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.shoppingcart.ProductAvailabilityStrategy;
@@ -93,7 +94,9 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
                             first.getAvailability(),
                             availableNow,
                             first.getReleaseDate(),
-                            qty
+                            qty,
+                            first.getRestockDate(),
+                            first.getRestockNote()
                     );
                 }
             }
@@ -105,7 +108,9 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
                 SkuWarehouse.AVAILABILITY_NA,
                 false,
                 null,
-                qty
+                qty,
+                null,
+                null
         );
     }
 
@@ -130,7 +135,9 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
                 product.getAvailability(),
                 availableNow,
                 product.getReleaseDate(),
-                skuInventory
+                skuInventory,
+                product.getRestockDate(),
+                product.getRestockNotes()
         );
     }
 
@@ -166,7 +173,9 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
                 sku.getAvailability(),
                 availableNow,
                 sku.getReleaseDate(),
-                skuInventory
+                skuInventory,
+                sku.getRestockDate(),
+                sku.getRestockNotes()
         );
     }
 
@@ -182,6 +191,8 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
         boolean availableNow = false;
         LocalDateTime releaseDate = null;
         final Map<String, BigDecimal> qty = new HashMap<>();
+        LocalDateTime restockDate = null;
+        I18NModel restockNotes = null;
 
         if (warehouse != null) {
             final SkuWarehouse inventory = inventoryResolver.findByWarehouseSku(warehouse, skuCode);
@@ -197,6 +208,8 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
                         qty
                 );
                 releaseDate = inventory.getReleaseDate();
+                restockDate = inventory.getRestockDate();
+                restockNotes = inventory.getRestockNote();
             }
         }
 
@@ -206,7 +219,9 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
                 availability,
                 availableNow,
                 releaseDate,
-                qty
+                qty,
+                restockDate,
+                restockNotes
         );
     }
 

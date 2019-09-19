@@ -17,6 +17,7 @@
 package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.domain.i18n.I18NModel;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -113,10 +114,12 @@ public interface ProductSkuSearchResultDTO extends Identifiable {
 
     /**
      * Get product name by specified locale.
+     *
      * @param locale given locale
+     *
      * @return product name.
      */
-    String getName(final String locale);
+    String getName(String locale);
 
     /**
      * Get product name.
@@ -159,7 +162,9 @@ public interface ProductSkuSearchResultDTO extends Identifiable {
 
     /**
      * Get localized description.
+     *
      * @param locale locale.
+     *
      * @return localized description
      */
     String getDescription(String locale);
@@ -266,6 +271,29 @@ public interface ProductSkuSearchResultDTO extends Identifiable {
      * @param availability product availability.
      */
     void setAvailability(int availability);
+
+    /**
+     * Get restock date.
+     *
+     * @return product restock date.
+     */
+    LocalDateTime getRestockDate();
+
+    /**
+     * Get restock note.
+     *
+     * @param locale locale
+     *
+     * @return restock note
+     */
+    String getRestockNote(String locale);
+
+    /**
+     * Get restock notes.
+     *
+     * @return restock notes
+     */
+    I18NModel getRestockNotes();
 
     /**
      * Get available quantity on warehouses.

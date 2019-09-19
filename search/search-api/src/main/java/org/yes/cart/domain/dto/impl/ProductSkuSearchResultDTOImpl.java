@@ -60,6 +60,9 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
     private int availability;
     private Map<Long, BigDecimal> qtyOnWarehouse;
 
+    private LocalDateTime restockDate;
+    private StringI18NModel restockNotes;
+
     private boolean featured;
     private BigDecimal minOrderQuantity;
     private BigDecimal maxOrderQuantity;
@@ -297,6 +300,36 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
 
     /** {@inheritDoc} */
     @Override
+    public LocalDateTime getRestockDate() {
+        return restockDate;
+    }
+
+    // JSON serialization accessor
+    public void setRestockDate(final LocalDateTime restockDate) {
+        this.restockDate = restockDate;
+    }
+
+    // JSON serialization accessor
+    public StringI18NModel getRestockNotes() {
+        return restockNotes;
+    }
+
+    // JSON serialization accessor
+    public void setRestockNotes(final StringI18NModel restockNotes) {
+        this.restockNotes = restockNotes;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getRestockNote(final String locale) {
+        if (this.restockNotes != null) {
+            return this.restockNotes.getValue(locale);
+        }
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public boolean isFeatured() {
         return featured;
     }
@@ -381,7 +414,8 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
 
     /** {@inheritDoc} */
     @Override
-    public ProductSkuSearchResultDTO copy() {
+    public ProductSkuSearchResultDTOImpl copy() {
+
         final ProductSkuSearchResultDTOImpl copy = new ProductSkuSearchResultDTOImpl();
         copy.setId(this.id);
         copy.setProductId(this.productId);
@@ -398,6 +432,10 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
         copy.setAvailablefrom(this.availablefrom);
         copy.setAvailableto(this.availableto);
         copy.setReleaseDate(this.releaseDate);
+        copy.setRestockDate(this.restockDate);
+        if (this.restockNotes != null) {
+            copy.setRestockNotes(this.restockNotes.copy());
+        }
         copy.setAvailability(this.availability);
         if (this.qtyOnWarehouse != null) {
             copy.setQtyOnWarehouse(new HashMap<>(this.qtyOnWarehouse));

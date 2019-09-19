@@ -1072,6 +1072,8 @@
         AVAILABLETO datetime,
         RELEASEDATE datetime,
         AVAILABILITY integer default 1 not null,
+        RESTOCKDATE datetime,
+        RESTOCKNOTE varchar(255),
         FEATURED bit,
         TAG varchar(255),
         MIN_ORDER_QUANTITY decimal(19,2),

@@ -70,4 +70,19 @@ public class FailoverStringI18NModelTest {
         assertEquals("model failover", model.getValue("UK"));
         assertEquals("model failover", model.getValue("CA"));
     }
+
+
+    @Test
+    public void testCopy() throws Exception {
+
+        final I18NModel model = new FailoverStringI18NModel("EN#~#Some text#~#RU#~#Текст#~#UK#~##~#xx#~#model failover", "failover");
+        final I18NModel copy = model.copy();
+
+        assertEquals(copy, model);
+
+        copy.putValue("EN", "Changed");
+        assertEquals("Some text", model.getValue("EN"));
+        assertEquals("Changed", copy.getValue("EN"));
+
+    }
 }

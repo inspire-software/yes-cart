@@ -120,4 +120,23 @@ public class StringI18NModelTest {
         assertNotEquals(m2.hashCode(), m3.hashCode());
 
     }
+
+
+    @Test
+    public void testCopy() throws Exception {
+
+        final I18NModel model = new StringI18NModel("EN#~#Some text#~#RU#~#Текст#~#UK#~##~#xx#~#model failover");
+        final I18NModel copy = model.copy();
+
+        assertEquals(copy, model);
+
+        copy.putValue("EN", "Changed");
+        copy.putValue(I18NModel.DEFAULT, "Changed default");
+        assertEquals("Some text", model.getValue("EN"));
+        assertEquals("model failover", model.getValue(I18NModel.DEFAULT));
+        assertEquals("Changed default", copy.getValue(I18NModel.DEFAULT));
+
+
+    }
+
 }

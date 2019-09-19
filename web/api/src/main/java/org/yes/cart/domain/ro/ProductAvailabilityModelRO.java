@@ -19,6 +19,7 @@ package org.yes.cart.domain.ro;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
+import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 import org.yes.cart.domain.ro.xml.impl.QuantityMapAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -53,6 +54,10 @@ public class ProductAvailabilityModelRO implements Serializable {
     private String defaultSkuCode;
     @DtoField(readOnly = true)
     private LocalDateTime releaseDate;
+    @DtoField(readOnly = true)
+    private LocalDateTime restockDate;
+    @DtoField(readOnly = true, converter = "i18nModelConverter")
+    private Map<String, String> restockNote;
     @DtoField(readOnly = true)
     private String firstAvailableSkuCode;
     @DtoField(readOnly = true)
@@ -137,5 +142,24 @@ public class ProductAvailabilityModelRO implements Serializable {
 
     public void setAvailableToSellQuantity(final Map<String, BigDecimal> availableToSellQuantity) {
         this.availableToSellQuantity = availableToSellQuantity;
+    }
+
+    @XmlElement(name = "restock-date")
+    public LocalDateTime getRestockDate() {
+        return restockDate;
+    }
+
+    public void setRestockDate(final LocalDateTime restockDate) {
+        this.restockDate = restockDate;
+    }
+
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
+    @XmlElement(name = "restock-note")
+    public Map<String, String> getRestockNote() {
+        return restockNote;
+    }
+
+    public void setRestockNote(final Map<String, String> restockNote) {
+        this.restockNote = restockNote;
     }
 }

@@ -193,6 +193,13 @@ alter table TCUSTOMERWISHLIST drop column SKU_ID;
 
 
 
+--
+-- YC-828 Extend ProductAvailabilityModel to include next delivery information
+--
 
+alter table TSKUWAREHOUSE add column RESTOCKDATE datetime;
+alter table TSKUWAREHOUSE add column RESTOCKNOTE varchar(255);
 
+-- alter table TSKUWAREHOUSE add column RESTOCKDATE timestamp;
+-- alter table TSKUWAREHOUSE add column RESTOCKNOTE varchar(255);
 

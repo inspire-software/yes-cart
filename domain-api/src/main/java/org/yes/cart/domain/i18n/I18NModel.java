@@ -46,4 +46,11 @@ public interface I18NModel extends Serializable {
      */
     Map<String, String> getAllValues();
 
+    /**
+     * Create copy of this model.
+     *
+     * @return model copy
+     */
+    I18NModel copy();
+
 }

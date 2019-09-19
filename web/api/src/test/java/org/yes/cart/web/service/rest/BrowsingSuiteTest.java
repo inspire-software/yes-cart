@@ -217,6 +217,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("productAvailabilityModel")))
                 .andExpect(content().string(StringContains.containsString("skuAvailabilityModel")))
                 .andExpect(content().string(StringContains.containsString("skuQuantityModel")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
         final ProductReferenceListRO pRefs = new ProductReferenceListRO();
@@ -249,6 +250,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("productAvailabilityModel")))
                 .andExpect(content().string(StringContains.containsString("skuAvailabilityModel")))
                 .andExpect(content().string(StringContains.containsString("skuQuantityModel")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -264,6 +266,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("9998")))
                 .andExpect(content().string(StringContains.containsString("skuAvailabilityModel")))
                 .andExpect(content().string(StringContains.containsString("skuQuantityModel")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/sku/BENDER-ua/supplier/WAREHOUSE_2")
@@ -278,6 +281,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("9998")))
                 .andExpect(content().string(StringContains.containsString("skuAvailabilityModel")))
                 .andExpect(content().string(StringContains.containsString("skuQuantityModel")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
         final ProductReferenceListRO sRefs = new ProductReferenceListRO();
@@ -309,6 +313,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("9999")))
                 .andExpect(content().string(StringContains.containsString("skuAvailabilityModel")))
                 .andExpect(content().string(StringContains.containsString("skuQuantityModel")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/product/9999/supplier/WAREHOUSE_2")
@@ -358,6 +363,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("9998")))
                 .andExpect(content().string(StringContains.containsString("skuAvailabilityModel")))
                 .andExpect(content().string(StringContains.containsString("skuQuantityModel")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -404,6 +410,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("product-availability")))
                 .andExpect(content().string(StringContains.containsString("sku-availability")))
                 .andExpect(content().string(StringContains.containsString("sku-quantity")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -438,6 +445,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("product-availability")))
                 .andExpect(content().string(StringContains.containsString("sku-availability")))
                 .andExpect(content().string(StringContains.containsString("sku-quantity")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -453,6 +461,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("9998")))
                 .andExpect(content().string(StringContains.containsString("sku-availability")))
                 .andExpect(content().string(StringContains.containsString("sku-quantity")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/sku/BENDER-ua/supplier/WAREHOUSE_2")
@@ -467,6 +476,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("9998")))
                 .andExpect(content().string(StringContains.containsString("sku-availability")))
                 .andExpect(content().string(StringContains.containsString("sku-quantity")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -499,6 +509,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("9999")))
                 .andExpect(content().string(StringContains.containsString("sku-availability")))
                 .andExpect(content().string(StringContains.containsString("sku-quantity")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/product/9999/supplier/WAREHOUSE_2")
@@ -548,6 +559,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("9998")))
                 .andExpect(content().string(StringContains.containsString("sku-availability")))
                 .andExpect(content().string(StringContains.containsString("sku-quantity")))
+                .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
 

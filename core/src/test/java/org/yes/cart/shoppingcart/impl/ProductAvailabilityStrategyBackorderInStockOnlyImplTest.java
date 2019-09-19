@@ -317,6 +317,8 @@ public class ProductAvailabilityStrategyBackorderInStockOnlyImplTest {
             allowing(skuWarehouse).getAvailability(); will(returnValue(availability));
             allowing(skuWarehouse).getSkuCode(); will(returnValue(skuCode));
             allowing(skuWarehouse).getAvailableToSell(); will(returnValue(qty));
+            allowing(skuWarehouse).getRestockDate(); will(returnValue(null));
+            allowing(skuWarehouse).getRestockNote(); will(returnValue(null));
             // Search
             allowing(productSearch).getFulfilmentCentreCode(); will(returnValue(supplier));
             allowing(productSearch).getQtyOnWarehouse(shopId); will(returnValue(Collections.singletonMap(skuCode, qty)));
@@ -324,6 +326,8 @@ public class ProductAvailabilityStrategyBackorderInStockOnlyImplTest {
             allowing(productSearch).getAvailablefrom(); will(returnValue(null));
             allowing(productSearch).getAvailableto(); will(returnValue(null));
             allowing(productSearch).getReleaseDate(); will(returnValue(releaseDate));
+            allowing(productSearch).getRestockDate(); will(returnValue(null));
+            allowing(productSearch).getRestockNotes(); will(returnValue(null));
             allowing(productSearch).getDefaultSkuCode(); will(returnValue(skuCode));
             allowing(skuSearch).getFulfilmentCentreCode(); will(returnValue(supplier));
             allowing(skuSearch).getQtyOnWarehouse(shopId); will(returnValue(qty));
@@ -332,6 +336,8 @@ public class ProductAvailabilityStrategyBackorderInStockOnlyImplTest {
             allowing(skuSearch).getAvailableto(); will(returnValue(null));
             allowing(skuSearch).getReleaseDate(); will(returnValue(releaseDate));
             allowing(skuSearch).getCode(); will(returnValue(skuCode));
+            allowing(skuSearch).getRestockDate(); will(returnValue(null));
+            allowing(skuSearch).getRestockNotes(); will(returnValue(null));
         }});
 
     }

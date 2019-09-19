@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.domain.i18n.I18NModel;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -171,8 +172,6 @@ public interface ProductSearchResultDTO extends Identifiable {
      */
     void setDescription(String description);
 
-
-
     /**
      * Get display name, which is hold localization failover.
      * @return display name.
@@ -230,11 +229,34 @@ public interface ProductSearchResultDTO extends Identifiable {
 
     /**
      * Get product release date.
-     * Null - product has no release date (alrady available).
+     * Null - product has no release date (already available).
      *
      * @return product release date.
      */
     LocalDateTime getReleaseDate();
+
+    /**
+     * Get restock date.
+     *
+     * @return product restock date.
+     */
+    LocalDateTime getRestockDate();
+
+    /**
+     * Get restock note.
+     *
+     * @param locale locale
+     *
+     * @return restock note
+     */
+    String getRestockNote(String locale);
+
+    /**
+     * Get restock notes.
+     *
+     * @return restock notes
+     */
+    I18NModel getRestockNotes();
 
     /**
      * Set product availability. See ProductEntity fields for more details.

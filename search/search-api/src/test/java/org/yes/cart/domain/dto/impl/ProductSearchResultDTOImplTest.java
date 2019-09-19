@@ -19,6 +19,7 @@ package org.yes.cart.domain.dto.impl;
 import org.junit.Test;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -37,7 +38,7 @@ public class ProductSearchResultDTOImplTest {
     @Test
     public void testCopy() throws Exception {
 
-        final ProductSkuSearchResultDTO firstSKU = new ProductSkuSearchResultDTOImpl();
+        final ProductSkuSearchResultDTOImpl firstSKU = new ProductSkuSearchResultDTOImpl();
         firstSKU.setId(2);
         firstSKU.setCode("First SKU");
         firstSKU.setManufacturerCode("ManFirst SKU");
@@ -48,6 +49,9 @@ public class ProductSearchResultDTOImplTest {
         firstSKU.setDisplayDescription("FirstDisplayDescription SKU");
         firstSKU.setAvailablefrom(LocalDateTime.now());
         firstSKU.setAvailableto(LocalDateTime.now());
+        firstSKU.setReleaseDate(LocalDateTime.now());
+        firstSKU.setRestockDate(LocalDateTime.now());
+        firstSKU.setRestockNotes(new StringI18NModel("EN#~#Some text"));
         firstSKU.setCreatedTimestamp(Instant.now());
         firstSKU.setUpdatedTimestamp(Instant.now());
         firstSKU.setAvailability(2);
@@ -106,6 +110,12 @@ public class ProductSearchResultDTOImplTest {
         assertEquals(first.getAvailablefrom(), copy.getAvailablefrom());
         assertNull(first.getAvailableto());
         assertEquals(first.getAvailableto(), copy.getAvailableto());
+        assertNull(first.getReleaseDate());
+        assertEquals(first.getReleaseDate(), copy.getReleaseDate());
+        assertNull(first.getRestockDate());
+        assertEquals(first.getRestockDate(), copy.getRestockDate());
+        assertNull(first.getRestockNote("EN"));
+        assertEquals(first.getRestockNote("EN"), copy.getRestockNote("EN"));
         assertEquals(first.getCreatedTimestamp(), copy.getCreatedTimestamp());
         assertEquals(first.getUpdatedTimestamp(), copy.getUpdatedTimestamp());
         assertEquals(1, first.getAvailability());
@@ -149,6 +159,15 @@ public class ProductSearchResultDTOImplTest {
         assertNull(first.getAvailableto());
         assertNotNull(copy.getAvailableto());
         assertEquals(firstSKU.getAvailableto(), copy.getAvailableto());
+        assertNull(first.getReleaseDate());
+        assertNotNull(copy.getReleaseDate());
+        assertEquals(firstSKU.getReleaseDate(), copy.getReleaseDate());
+        assertNull(first.getRestockDate());
+        assertNotNull(copy.getRestockDate());
+        assertEquals(firstSKU.getRestockDate(), copy.getRestockDate());
+        assertNull(first.getRestockNote("EN"));
+        assertNotNull(copy.getRestockNote("EN"));
+        assertEquals(firstSKU.getRestockNote("EN"), copy.getRestockNote("EN"));
         assertEquals(first.getCreatedTimestamp(), copy.getCreatedTimestamp());
         assertEquals(first.getUpdatedTimestamp(), copy.getUpdatedTimestamp());
         assertEquals(1, first.getAvailability());

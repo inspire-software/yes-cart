@@ -1718,6 +1718,9 @@
             <column name="AVAILABILITY" not-null="true" default="1"/>
         </property>
 
+        <property name="restockDate" column="RESTOCKDATE" type="java.time.LocalDateTime" not-null="false"/>
+        <property name="restockNoteInternal" column="RESTOCKNOTE" type="string" length="255"/>
+
         <property name="featured" length="1" type="java.lang.Boolean" not-null="false">
             <column name="FEATURED" length="1" not-null="false" default="false">
                 <comment>Is product featured?</comment>

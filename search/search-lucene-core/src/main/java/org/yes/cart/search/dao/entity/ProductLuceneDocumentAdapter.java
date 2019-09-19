@@ -81,8 +81,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
             try {
 
-                final Map<String, ProductSearchResultDTO> resultsByFc = new HashMap<>();
-                final Map<ProductSearchResultDTO, Set<Long>> availableIn = new HashMap<>();
+                final Map<String, ProductSearchResultDTOImpl> resultsByFc = new HashMap<>();
+                final Map<ProductSearchResultDTOImpl, Set<Long>> availableIn = new HashMap<>();
 
                 populateResultsByFc(entity, now, resultsByFc, availableIn);
 
@@ -91,9 +91,9 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                 final Document[] documents = new Document[resultsByFc.size()];
                 int count = 0;
 
-                for (final Map.Entry<String, ProductSearchResultDTO> resultByFc : resultsByFc.entrySet()) {
+                for (final Map.Entry<String, ProductSearchResultDTOImpl> resultByFc : resultsByFc.entrySet()) {
 
-                    final ProductSearchResultDTO result = resultByFc.getValue();
+                    final ProductSearchResultDTOImpl result = resultByFc.getValue();
                     final Set<Long> available = availableIn.get(result);
 
                     if (CollectionUtils.isEmpty(available)) {
@@ -244,7 +244,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * @param entity   entity
      * @param result   result to store attributes in
      */
-    protected void addAttributeFields(final Document document, final Product entity, final ProductSearchResultDTO result) {
+    protected void addAttributeFields(final Document document, final Product entity, final ProductSearchResultDTOImpl result) {
 
         final Set<String> navAttrs = attributesSupport.getAllNavigatableAttributeCodes();
         final Set<String> searchAttrs = attributesSupport.getAllSearchableAttributeCodes();
@@ -420,7 +420,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * @param available   shop PK's
      * @param now         time now to filter out inactive price records
      */
-    protected void addPriceFields(final Document document, final Product entity, final List<SkuPrice> allPrices, final ProductSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
+    protected void addPriceFields(final Document document, final Product entity, final List<SkuPrice> allPrices, final ProductSearchResultDTOImpl result, final Set<Long> available, final LocalDateTime now) {
 
         final boolean isShowRoom = result.getAvailability() == SkuWarehouse.AVAILABILITY_SHOWROOM;
 
@@ -758,7 +758,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      * @param available  shop PKs where this result is available
      * @param now        time now (used for pre-ordered items)
      */
-    protected void addInventoryFields(final Document document, final ProductSearchResultDTO result, final Set<Long> available, final LocalDateTime now) {
+    protected void addInventoryFields(final Document document, final ProductSearchResultDTOImpl result, final Set<Long> available, final LocalDateTime now) {
 
         double boost = 1.0d;
         for (final Long shop : available) {
@@ -811,10 +811,10 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      */
     protected void populateResultsByFc(final Product entity,
                                        final LocalDateTime now,
-                                       final Map<String, ProductSearchResultDTO> resultsByFc,
-                                       final Map<ProductSearchResultDTO, Set<Long>> availableIn) {
+                                       final Map<String, ProductSearchResultDTOImpl> resultsByFc,
+                                       final Map<ProductSearchResultDTOImpl, Set<Long>> availableIn) {
 
-        final ProductSearchResultDTO base = createBaseResultObject(entity);
+        final ProductSearchResultDTOImpl base = createBaseResultObject(entity);
 
         final Map<Long, Set<Long>> shopsByFulfilment = shopWarehouseSupport.getShopsByFulfilmentMap();
 
@@ -842,7 +842,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                                 final String code = skuWarehouseSupport.getWarehouseCode(stock);
                                 if (code != null) {
 
-                                    ProductSearchResultDTO withFc = resultsByFc.get(code);
+                                    ProductSearchResultDTOImpl withFc = resultsByFc.get(code);
                                     if (withFc == null) {
 
                                         withFc = base.copy();
@@ -870,7 +870,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                                     final BigDecimal atsAdd = MoneyUtils.isPositive(ats) ? ats : BigDecimal.ZERO;
 
-                                    final ProductSkuSearchResultDTO withFcSku = createSKUResultObject(sku, stock);
+                                    final ProductSkuSearchResultDTOImpl withFcSku = createSKUResultObject(sku, stock);
                                     withFcSku.setFulfilmentCentreCode(code);
                                     if (stock.getTag() != null) {
                                         final Set<String> uniqueTags = new TreeSet<>();
@@ -925,9 +925,9 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      *
      * @return basic search result object containing common information
      */
-    protected ProductSearchResultDTO createBaseResultObject(final Product entity) {
+    protected ProductSearchResultDTOImpl createBaseResultObject(final Product entity) {
 
-        final ProductSearchResultDTO baseResult = new ProductSearchResultDTOImpl();
+        final ProductSearchResultDTOImpl baseResult = new ProductSearchResultDTOImpl();
         baseResult.setId(entity.getProductId());
         baseResult.setCode(entity.getCode());
         baseResult.setManufacturerCode(entity.getManufacturerCode());
@@ -968,9 +968,9 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
      *
      * @return base SKU DTO
      */
-    protected ProductSkuSearchResultDTO createSKUResultObject(final ProductSku entity, SkuWarehouse inventory) {
+    protected ProductSkuSearchResultDTOImpl createSKUResultObject(final ProductSku entity, SkuWarehouse inventory) {
 
-        final ProductSkuSearchResultDTO baseResult = new ProductSkuSearchResultDTOImpl();
+        final ProductSkuSearchResultDTOImpl baseResult = new ProductSkuSearchResultDTOImpl();
         baseResult.setId(entity.getSkuId());
         baseResult.setProductId(entity.getProduct().getProductId());
         baseResult.setCode(entity.getCode());
@@ -994,6 +994,10 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         baseResult.setAvailablefrom(inventory.getAvailablefrom());
         baseResult.setAvailableto(inventory.getAvailableto());
         baseResult.setReleaseDate(inventory.getReleaseDate());
+        baseResult.setRestockDate(inventory.getRestockDate());
+        if (inventory.getRestockNote() != null) {
+            baseResult.setRestockNotes(new StringI18NModel(inventory.getRestockNote().getAllValues()));
+        }
         baseResult.setMinOrderQuantity(inventory.getMinOrderQuantity());
         baseResult.setMinOrderQuantity(inventory.getMaxOrderQuantity());
         baseResult.setStepOrderQuantity(inventory.getStepOrderQuantity());

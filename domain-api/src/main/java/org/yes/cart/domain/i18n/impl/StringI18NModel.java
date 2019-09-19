@@ -62,7 +62,11 @@ public class StringI18NModel implements I18NModel {
     @Override
     public String getValue(final String locale) {
         if (locale != null) {
-            return values.get(locale);
+            final String value = values.get(locale);
+            if (value == null) {
+                return values.get(DEFAULT);
+            }
+            return value;
         }
         return null;
     }
@@ -89,6 +93,12 @@ public class StringI18NModel implements I18NModel {
         final StringI18NModel that = (StringI18NModel) o;
 
         return toString().equals(that.toString());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public StringI18NModel copy() {
+        return new StringI18NModel(values);
     }
 
     /** {@inheritDoc} */

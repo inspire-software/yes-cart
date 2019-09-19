@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -300,5 +302,33 @@ public interface SkuWarehouse extends Auditable, Taggable {
      * @param releaseDate when product is to be released.
      */
     void setReleaseDate(LocalDateTime releaseDate);
+
+    /**
+     * Get restock date.
+     *
+     * @return product restock date.
+     */
+    LocalDateTime getRestockDate();
+
+    /**
+     * Set product restock date.
+     *
+     * @param restockDate when product is to be restocked.
+     */
+    void setRestockDate(LocalDateTime restockDate);
+
+    /**
+     * Get restock note.
+     *
+     * @return product restock note.
+     */
+    I18NModel getRestockNote();
+
+    /**
+     * Set product restock note (customer facing).
+     *
+     * @param restockNote when product is to be restocked.
+     */
+    void setRestockNote(I18NModel restockNote);
 
 }

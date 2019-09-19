@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import org.junit.Test;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -45,6 +46,9 @@ public class ProductSkuSearchResultDTOImplTest {
         first.setDefaultImage("FirstDefaultImage");
         first.setAvailablefrom(LocalDateTime.now());
         first.setAvailableto(LocalDateTime.now());
+        first.setReleaseDate(LocalDateTime.now());
+        first.setRestockDate(LocalDateTime.now());
+        first.setRestockNotes(new StringI18NModel("EN#~#Some text"));
         first.setCreatedTimestamp(Instant.now());
         first.setUpdatedTimestamp(Instant.now());
         first.setAvailability(1);
@@ -72,6 +76,10 @@ public class ProductSkuSearchResultDTOImplTest {
         assertEquals(first.getDisplayDescription(), copy.getDisplayDescription());
         assertEquals(first.getAvailablefrom(), copy.getAvailablefrom());
         assertEquals(first.getAvailableto(), copy.getAvailableto());
+        assertEquals(first.getReleaseDate(), copy.getReleaseDate());
+        assertEquals(first.getRestockDate(), copy.getRestockDate());
+        assertEquals("Some text", first.getRestockNote("EN"));
+        assertEquals(first.getRestockNote("EN"), copy.getRestockNote("EN"));
         assertEquals(first.getCreatedTimestamp(), copy.getCreatedTimestamp());
         assertEquals(first.getUpdatedTimestamp(), copy.getUpdatedTimestamp());
         assertEquals(first.getAvailability(), copy.getAvailability());
