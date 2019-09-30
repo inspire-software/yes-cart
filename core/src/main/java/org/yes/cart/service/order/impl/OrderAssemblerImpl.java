@@ -223,7 +223,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
                     }
 
                     final PromotionCouponUsage usage = entityFactory.getByIface(PromotionCouponUsage.class);
-                    usage.setCoupon(coupon);
+                    usage.setCouponCode(coupon.getCode());
                     usage.setCustomerEmail(shoppingCart.getCustomerEmail());
                     usage.setCustomerOrder(customerOrder);
 

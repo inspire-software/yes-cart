@@ -110,7 +110,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
 
         //coupons
         for(PromotionCouponUsage coupons : customerOrder.getCoupons()) {
-            shoppingCart.addCoupon(coupons.getCoupon().getCode());
+            shoppingCart.addCoupon(coupons.getCouponCode());
         }
 
         shoppingCart.setCurrentLocale(customerOrder.getLocale());

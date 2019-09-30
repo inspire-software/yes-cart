@@ -2604,10 +2604,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" not-null="true" index="PROMOTIONCOUPONUSAGE_EMAIL"/>
-
-        <many-to-one name="coupon" class="org.yes.cart.domain.entity.impl.PromotionCouponEntity" foreign-key="FK_COUPON_USAGE">
-            <column name="COUPON_ID" not-null="true"/>
-        </many-to-one>
+        <property name="couponCode" column="COUPON_CODE" type="string" length="255" not-null="true" index="PROMOTIONCOUPONUSAGE_CODE"/>
 
         <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ORD_COUPON_USAGE">
             <column name="CUSTOMERORDER_ID" not-null="true"/>
@@ -4084,6 +4081,13 @@
         ]]>
     </query>
 
+    <query name="COUPON.BY.CODE">
+        <![CDATA[
+            select c from PromotionCouponEntity c
+            where c.code = ?1
+        ]]>
+    </query>
+
     <query name="ENABLED.COUPON.BY.CODE">
         <![CDATA[
             select c from PromotionCouponEntity c
@@ -4093,17 +4097,17 @@
         ]]>
     </query>
 
-    <query name="COUPON.USAGE.BY.ID.AND.EMAIL">
+    <query name="COUPON.USAGE.BY.CODE.AND.EMAIL">
         <![CDATA[
             select count(c.id) from PromotionCouponUsageEntity c
-            where c.coupon.promotioncouponId = ?1 and c.customerEmail = ?2 and c.customerOrder.orderStatus <> ?3
+            where c.couponCode = ?1 and c.customerEmail = ?2 and c.customerOrder.orderStatus <> ?3
         ]]>
     </query>
 
-    <query name="COUPON.USAGE.BY.COUPON.ID">
+    <query name="COUPON.USAGE.BY.COUPON.CODE">
         <![CDATA[
             select count(c.promotioncouponusageId) from PromotionCouponUsageEntity c
-            where c.coupon.promotioncouponId = ?1 and c.customerOrder.orderStatus <> ?2
+            where c.couponCode = ?1 and c.customerOrder.orderStatus <> ?2
         ]]>
     </query>
 

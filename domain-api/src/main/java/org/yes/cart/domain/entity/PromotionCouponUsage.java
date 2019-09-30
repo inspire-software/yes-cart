@@ -36,12 +36,12 @@ public interface PromotionCouponUsage extends Auditable {
     /**
      * @return coupon for this usage
      */
-    PromotionCoupon getCoupon();
+    String getCouponCode();
 
     /**
-     * @param promotionCoupon coupon for this usage
+     * @param couponCode coupon for this usage
      */
-    void setCoupon(PromotionCoupon promotionCoupon);
+    void setCouponCode(String couponCode);
 
     /**
      * @return customer email for customer who used the coupon

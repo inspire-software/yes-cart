@@ -136,10 +136,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
                 if (CollectionUtils.isNotEmpty(customerOrder.getCoupons())) {
                     final Tag adpcTag = adpTag.tag("coupons");
                     for (final PromotionCouponUsage usage : customerOrder.getCoupons()) {
-                        final PromotionCoupon coupon = this.promotionCouponService.findById(usage.getCoupon().getPromotioncouponId());
-                        if (coupon != null) {
-                            adpcTag.tagChars("code", coupon.getCode());
-                        }
+                        adpcTag.tagChars("code", usage.getCouponCode());
                     }
                     adpcTag.end();
                 }

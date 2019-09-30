@@ -37,6 +37,15 @@ public interface PromotionCouponService extends GenericService<PromotionCoupon> 
     List<PromotionCoupon> findByPromotionId(Long promotionId);
 
     /**
+     * Get all coupons for given promotion.
+     *
+     * @param couponCode coupon code
+     *
+     * @return coupon
+     */
+    PromotionCoupon findByCode(String couponCode);
+
+    /**
      * Create named coupon for given promotion with limits provided.
      *
      * @param promotionId promotion PK

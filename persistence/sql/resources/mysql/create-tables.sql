@@ -1205,7 +1205,7 @@
         PROMOTIONCOUPONUSAGE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         CUSTOMER_EMAIL varchar(255) not null,
-        COUPON_ID bigint not null,
+        COUPON_CODE varchar(255) not null,
         CUSTOMERORDER_ID bigint not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
@@ -1752,12 +1752,6 @@
         add constraint FK_PROMO_COUPON
         foreign key (PROMOTION_ID)
         references TPROMOTION (PROMOTION_ID);
-
-    alter table TPROMOTIONCOUPONUSAGE
-        add index FK_COUPON_USAGE (COUPON_ID),
-        add constraint FK_COUPON_USAGE
-        foreign key (COUPON_ID)
-        references TPROMOTIONCOUPON (PROMOTIONCOUPON_ID);
 
     alter table TPROMOTIONCOUPONUSAGE
         add index FK_ORD_COUPON_USAGE (CUSTOMERORDER_ID),

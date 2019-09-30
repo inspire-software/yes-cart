@@ -32,7 +32,7 @@ public class PromotionCouponUsageEntity implements PromotionCouponUsage, java.io
     private long promotioncouponusageId;
     private long version;
 
-    private PromotionCoupon coupon;
+    private String couponCode;
     private String customerEmail;
     private CustomerOrder customerOrder;
 
@@ -66,13 +66,13 @@ public class PromotionCouponUsageEntity implements PromotionCouponUsage, java.io
     }
 
     @Override
-    public PromotionCoupon getCoupon() {
-        return coupon;
+    public String getCouponCode() {
+        return couponCode;
     }
 
     @Override
-    public void setCoupon(final PromotionCoupon coupon) {
-        this.coupon = coupon;
+    public void setCouponCode(final String couponCode) {
+        this.couponCode = couponCode;
     }
 
     @Override

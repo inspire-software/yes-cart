@@ -48,7 +48,7 @@ public class CouponUsageTrackingListenerImpl implements OrderStateTransitionList
             for (final PromotionCouponUsage usage : customerOrder.getCoupons()) {
 
                 promotionCouponService.updateUsage(
-                        promotionCouponService.findById(usage.getCoupon().getPromotioncouponId()),
+                        promotionCouponService.findByCode(usage.getCouponCode()),
                         usageOffset);
 
             }

@@ -56,6 +56,11 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
         return getGenericDao().findByNamedQuery("COUPONS.BY.PROMOTION.ID", promotionId);
     }
 
+    @Override
+    public PromotionCoupon findByCode(final String couponCode) {
+        return getGenericDao().findSingleByNamedQuery("COUPON.BY.CODE", couponCode);
+    }
+
     /** {@inheritDoc} */
     @Override
     public void create(Long promotionId, String couponCode, int limit, int limitPerUser) {
@@ -134,8 +139,8 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
         // if we have customer usage limit
         if (couponEntity.getUsageLimitPerCustomer() > 0) {
             final List<Object> count = getGenericDao()
-                    .findQueryObjectByNamedQuery("COUPON.USAGE.BY.ID.AND.EMAIL",
-                            couponEntity.getPromotioncouponId(), customerEmail, CustomerOrder.ORDER_STATUS_NONE);
+                    .findQueryObjectByNamedQuery("COUPON.USAGE.BY.CODE.AND.EMAIL",
+                            couponEntity.getCode(), customerEmail, CustomerOrder.ORDER_STATUS_NONE);
             if (!count.isEmpty()) {
 
                 final Number usage = (Number) count.get(0);
@@ -160,8 +165,8 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
     public void updateUsage(final PromotionCoupon promotionCoupon, final int offset) {
 
         final List<Object> count = getGenericDao()
-                .findQueryObjectByNamedQuery("COUPON.USAGE.BY.COUPON.ID",
-                        promotionCoupon.getPromotioncouponId(), CustomerOrder.ORDER_STATUS_NONE);
+                .findQueryObjectByNamedQuery("COUPON.USAGE.BY.COUPON.CODE",
+                        promotionCoupon.getCode(), CustomerOrder.ORDER_STATUS_NONE);
 
         int usage = offset;
         if (!count.isEmpty()) {

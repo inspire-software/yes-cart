@@ -23,7 +23,6 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.*;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.domain.i18n.impl.NonI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.utils.DateUtils;
@@ -381,9 +380,8 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
             }
             if (xmlType.getAmountDue().getOrderPromotions().getCoupons() != null) {
                 for (final String couponCode : xmlType.getAmountDue().getOrderPromotions().getCoupons().getCode()) {
-                    final PromotionCoupon coupon = promotionCouponService.findSingleByCriteria(" where e.code = ?1", couponCode);
                     final PromotionCouponUsage usage = promotionCouponService.getGenericDao().getEntityFactory().getByIface(PromotionCouponUsage.class);
-                    usage.setCoupon(coupon);
+                    usage.setCouponCode(couponCode);
                     usage.setCustomerEmail(xmlType.getContactDetails().getEmail());
                     usage.setCustomerOrder(customerOrder);
                     customerOrder.getCoupons().add(usage); // Usage is tracked by order state manager listener

@@ -203,3 +203,30 @@ alter table TSKUWAREHOUSE add column RESTOCKNOTE varchar(255);
 -- alter table TSKUWAREHOUSE add column RESTOCKDATE timestamp;
 -- alter table TSKUWAREHOUSE add column RESTOCKNOTE varchar(255);
 
+--
+-- YC-996 Refactor PromotionCouponUsageEntity to use code
+--
+
+alter table TPROMOTIONCOUPONUSAGE add column COUPON_CODE varchar(255);
+
+update TPROMOTIONCOUPONUSAGE u, TPROMOTIONCOUPON c set
+  u.COUPON_CODE = c.CODE
+  where u.COUPON_ID = c.PROMOTIONCOUPON_ID;
+
+-- Derby
+-- update TPROMOTIONCOUPONUSAGE set
+--   COUPON_CODE = (select CODE from TPROMOTIONCOUPON where TPROMOTIONCOUPONUSAGE.COUPON_ID = TPROMOTIONCOUPON.PROMOTIONCOUPON_ID);
+
+alter table TPROMOTIONCOUPONUSAGE modify column COUPON_CODE varchar(255) not null;
+-- Derby
+-- alter table TPROMOTIONCOUPONUSAGE alter column COUPON_CODE not null;
+
+
+alter table TPROMOTIONCOUPONUSAGE drop foreign key constraint FK_COUPON_USAGE;
+-- Derby
+-- alter table TPROMOTIONCOUPONUSAGE drop constraint FK_COUPON_USAGE;
+alter table TPROMOTIONCOUPONUSAGE drop column COUPON_ID;
+
+create index PROMOTIONCOUPONUSAGE_CODE on TPROMOTIONCOUPONUSAGE (COUPON_CODE);
+
+
