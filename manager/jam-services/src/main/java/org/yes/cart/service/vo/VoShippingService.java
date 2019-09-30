@@ -30,23 +30,31 @@ public interface VoShippingService {
 
     /**
      * Get all vo in the system, filtered according to rights
+     *
      * @return all carriers
+     *
      * @throws Exception errors
      */
     List<VoCarrier> getAllCarriers() throws Exception;
 
     /**
      * Get all vo in the system, filtered according to rights
+     *
      * @param shopId pk
+     *
      * @return all carriers for shop
+     *
      * @throws Exception errors
      */
     List<VoShopCarrier> getShopCarriers(long shopId) throws Exception;
 
     /**
      * Get all vo in the system, filtered according to rights
+     *
      * @param shopId pk
+     *
      * @return all carriers for shop
+     *
      * @throws Exception errors
      */
     List<VoShopCarrierAndSla> getShopCarriersAndSla(long shopId) throws Exception;
@@ -68,23 +76,31 @@ public interface VoShippingService {
      * Get vo by id.
      *
      * @param id id
+     *
      * @return vo
+     *
      * @throws Exception errors
      */
     VoCarrier getCarrierById(long id) throws Exception;
 
     /**
      * Create new vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoCarrier createCarrier(VoCarrier vo)  throws Exception;
 
     /**
      * Create new vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoCarrier createShopCarrier(VoCarrierInfo vo, long shopId)  throws Exception;
@@ -92,8 +108,11 @@ public interface VoShippingService {
 
     /**
      * Create new vo
+     *
      * @param vo carrier
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoCarrier updateCarrier(VoCarrier vo)  throws Exception;
@@ -101,8 +120,11 @@ public interface VoShippingService {
 
     /**
      * Create new vo
+     *
      * @param vo carrier
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     List<VoShopCarrier> updateShopCarriers(List<VoShopCarrier> vo)  throws Exception;
@@ -110,8 +132,11 @@ public interface VoShippingService {
 
     /**
      * Create new vo
+     *
      * @param vo carrier
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     List<VoShopCarrierAndSla> updateShopCarriersAndSla(List<VoShopCarrierAndSla> vo)  throws Exception;
@@ -121,15 +146,19 @@ public interface VoShippingService {
      * Remove vo.
      *
      * @param id carrier id
+     *
      * @throws Exception errors
      */
     void removeCarrier(long id) throws Exception;
 
 
     /**
-     * Get all vo in the system, filtered according to rights
+     * Get all vo in the system
+     *
      * @param carrierId pk
-     * @return all carriers for shop
+     *
+     * @return all SLA for carrier
+     *
      * @throws Exception errors
      */
     List<VoCarrierSla> getCarrierSlas(long carrierId) throws Exception;
@@ -137,7 +166,9 @@ public interface VoShippingService {
 
     /**
      * Get all vo in the system, filtered according to rights
+     *
      * @return all carriers for shop
+     *
      * @throws Exception errors
      */
     List<VoCarrierSla> getFilteredCarrierSlas(String filter, int max) throws Exception;
@@ -146,15 +177,20 @@ public interface VoShippingService {
      * Get vo by id.
      *
      * @param id id
+     *
      * @return vo
+     *
      * @throws Exception errors
      */
     VoCarrierSla getCarrierSlaById(long id) throws Exception;
 
     /**
      * Create new vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoCarrierSla createCarrierSla(VoCarrierSla vo)  throws Exception;
@@ -162,8 +198,11 @@ public interface VoShippingService {
 
     /**
      * Create new vo
+     *
      * @param vo carrier
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoCarrierSla updateCarrierSla(VoCarrierSla vo)  throws Exception;
@@ -173,6 +212,7 @@ public interface VoShippingService {
      * Remove vo.
      *
      * @param id carrier sla id
+     *
      * @throws Exception errors
      */
     void removeCarrierSla(long id) throws Exception;

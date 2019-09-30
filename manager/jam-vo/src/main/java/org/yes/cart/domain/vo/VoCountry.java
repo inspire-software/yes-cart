@@ -18,6 +18,9 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.misc.MutablePair;
+
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -26,8 +29,6 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
  */
 @Dto
 public class VoCountry {
-
-    private static final long serialVersionUID = 20101108L;
 
     @DtoField(value = "countryId", readOnly = true)
     private long countryId;
@@ -41,9 +42,8 @@ public class VoCountry {
     @DtoField(value = "name")
     private String name;
 
-    @DtoField(value = "displayName")
-    private String displayName;
-
+    @DtoField(value = "displayNames", converter = "DisplayValues")
+    private List<MutablePair<String, String>> displayNames;
 
     public long getCountryId() {
         return countryId;
@@ -77,12 +77,12 @@ public class VoCountry {
         this.name = name;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public List<MutablePair<String, String>> getDisplayNames() {
+        return displayNames;
     }
 
-    public void setDisplayName(final String displayName) {
-        this.displayName = displayName;
+    public void setDisplayNames(final List<MutablePair<String, String>> displayNames) {
+        this.displayNames = displayNames;
     }
 
 }

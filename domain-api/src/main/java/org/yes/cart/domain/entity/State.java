@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -70,14 +72,14 @@ public interface State extends Auditable {
      *
      * @return name.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Set name.
      *
      * @param name name to set.
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * Get state pk value.

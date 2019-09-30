@@ -18,6 +18,9 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.misc.MutablePair;
+
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -37,8 +40,8 @@ public class VoState {
     @DtoField(value = "name")
     private String name;
 
-    @DtoField(value = "displayName")
-    private String displayName;
+    @DtoField(value = "displayNames", converter = "DisplayValues")
+    private List<MutablePair<String, String>> displayNames;
 
     public long getStateId() {
         return stateId;
@@ -68,16 +71,16 @@ public class VoState {
         return name;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(final String displayName) {
-        this.displayName = displayName;
-    }
-
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public List<MutablePair<String, String>> getDisplayNames() {
+        return displayNames;
+    }
+
+    public void setDisplayNames(final List<MutablePair<String, String>> displayNames) {
+        this.displayNames = displayNames;
     }
 
 }

@@ -19,6 +19,8 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductTypeAttr;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -35,7 +37,8 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     private long version;
 
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String description;
     private Collection<ProdTypeAttributeViewGroup> attributeViewGroup = new ArrayList<>(0);
     private Collection<ProductTypeAttr> attributes = new ArrayList<>(0);
@@ -63,18 +66,28 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Override
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
     }
 
     @Override
-    public void setDisplayName(final String displayName) {
+    public I18NModel getDisplayName() {
+        return this.displayName;
+    }
+
+    @Override
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -83,7 +96,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -93,7 +106,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setAttributeViewGroup(Collection<ProdTypeAttributeViewGroup> attributeViewGroup) {
+    public void setAttributeViewGroup(final Collection<ProdTypeAttributeViewGroup> attributeViewGroup) {
         this.attributeViewGroup = attributeViewGroup;
     }
 
@@ -103,7 +116,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setAttributes(Collection<ProductTypeAttr> attributes) {
+    public void setAttributes(final Collection<ProductTypeAttr> attributes) {
         this.attributes = attributes;
     }
 
@@ -113,7 +126,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setUitemplate(String uitemplate) {
+    public void setUitemplate(final String uitemplate) {
         this.uitemplate = uitemplate;
     }
 
@@ -123,7 +136,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setUisearchtemplate(String uisearchtemplate) {
+    public void setUisearchtemplate(final String uisearchtemplate) {
         this.uisearchtemplate = uisearchtemplate;
     }
 
@@ -133,7 +146,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setService(boolean service) {
+    public void setService(final boolean service) {
         this.service = service;
     }
 
@@ -143,7 +156,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setEnsemble(boolean ensemble) {
+    public void setEnsemble(final boolean ensemble) {
         this.ensemble = ensemble;
     }
 
@@ -153,7 +166,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setShippable(boolean shippable) {
+    public void setShippable(final boolean shippable) {
         this.shippable = shippable;
     }
 
@@ -163,7 +176,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setDigital(boolean digital) {
+    public void setDigital(final boolean digital) {
         this.digital = digital;
     }
 
@@ -173,7 +186,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setDownloadable(boolean downloadable) {
+    public void setDownloadable(final boolean downloadable) {
         this.downloadable = downloadable;
     }
 
@@ -183,7 +196,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -193,7 +206,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -203,7 +216,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -213,7 +226,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -223,7 +236,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -238,7 +251,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     }
 
     @Override
-    public void setProducttypeId(long producttypeId) {
+    public void setProducttypeId(final long producttypeId) {
         this.producttypeId = producttypeId;
     }
 

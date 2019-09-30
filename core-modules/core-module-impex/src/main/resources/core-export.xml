@@ -92,7 +92,7 @@
         <property name="extensions" ref="exportCsvExportValueAdapterMap"/>
     </bean>
 
-    <bean id="exportCsvLanguageValueAdapter"  class="org.yes.cart.bulkexport.csv.impl.CsvAsIsValueAdapter"/>
+    <bean id="exportCsvLanguageValueAdapter"  class="org.yes.cart.bulkexport.csv.impl.CsvI18nLanguageAdapter"/>
 
     <bean id="csvBulkExportService" parent="txProxyTemplate">
         <property name="target">

@@ -17,6 +17,8 @@
 package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Promotion;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -46,9 +48,11 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
     private int rank;
 
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String description;
-    private String displayDescription;
+    private String displayDescriptionInternal;
+    private I18NModel displayDescription;
 
     private boolean couponTriggered;
     private boolean canBeCombined;
@@ -176,14 +180,25 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
         this.name = name;
     }
 
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
+    }
+
+
     @Override
-    public String getDisplayName() {
-        return displayName;
+    public I18NModel getDisplayName() {
+        return this.displayName;
     }
 
     @Override
-    public void setDisplayName(final String displayName) {
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -196,14 +211,24 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
         this.description = description;
     }
 
-    @Override
-    public String getDisplayDescription() {
-        return displayDescription;
+    public String getDisplayDescriptionInternal() {
+        return displayDescriptionInternal;
+    }
+
+    public void setDisplayDescriptionInternal(final String displayDescriptionInternal) {
+        this.displayDescriptionInternal = displayDescriptionInternal;
+        this.displayDescription = new StringI18NModel(displayDescriptionInternal);
     }
 
     @Override
-    public void setDisplayDescription(final String displayDescription) {
+    public I18NModel getDisplayDescription() {
+        return this.displayDescription;
+    }
+
+    @Override
+    public void setDisplayDescription(final I18NModel displayDescription) {
         this.displayDescription = displayDescription;
+        this.displayDescriptionInternal = displayDescription != null ? displayDescription.toString() : null;
     }
 
     @Override

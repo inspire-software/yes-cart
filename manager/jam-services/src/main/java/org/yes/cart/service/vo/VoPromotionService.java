@@ -35,7 +35,9 @@ public interface VoPromotionService {
 
     /**
      * Get all promotions in the system, filtered by criteria and according to rights, up to max
+     *
      * @return list of promotions
+     *
      * @throws Exception errors
      */
     List<VoPromotion> getFilteredPromotion(String shopCode, String currency, String filter, List<String> types, List<String> actions, int max) throws Exception;
@@ -44,7 +46,9 @@ public interface VoPromotionService {
      * Get promotion by id.
      *
      * @param id promotion id
+     *
      * @return promotion vo
+     *
      * @throws Exception errors
      */
     VoPromotion getPromotionById(long id) throws Exception;
@@ -53,7 +57,9 @@ public interface VoPromotionService {
      * Update given promotion.
      *
      * @param vo promotion to update
+     *
      * @return updated instance
+     *
      * @throws Exception errors
      */
     VoPromotion updatePromotion(VoPromotion vo) throws Exception;
@@ -62,7 +68,9 @@ public interface VoPromotionService {
      * Create new promotion
      *
      * @param vo given instance to persist
+     *
      * @return persisted instance
+     *
      * @throws Exception errors
      */
     VoPromotion createPromotion(VoPromotion vo) throws Exception;
@@ -71,6 +79,7 @@ public interface VoPromotionService {
      * Remove promotion by id.
      *
      * @param id promotion id
+     *
      * @throws Exception errors
      */
     void removePromotion(long id) throws Exception;
@@ -80,6 +89,7 @@ public interface VoPromotionService {
      *
      * @param id promotion id
      * @param disabled true if promotion is disabled
+     *
      * @throws Exception errors
      */
     void updateDisabledFlag(long id, boolean disabled) throws Exception;
@@ -89,7 +99,9 @@ public interface VoPromotionService {
 
     /**
      * Get all promotion coupons in the system, filtered by criteria and according to rights, up to max
+     *
      * @return list of promotions
+     *
      * @throws Exception errors
      */
     List<VoPromotionCoupon> getFilteredPromotionCoupons(long promotionId, String filter, int max) throws Exception;
@@ -98,7 +110,9 @@ public interface VoPromotionService {
      * Create new promotion coupons.
      *
      * @param vo given instance template to persist
+     *
      * @return persisted instance
+     *
      * @throws Exception errors
      */
     List<VoPromotionCoupon> createPromotionCoupons(VoPromotionCoupon vo) throws Exception;
@@ -107,6 +121,7 @@ public interface VoPromotionService {
      * Remove promotion coupon by id.
      *
      * @param id promotion coupon id
+     *
      * @throws Exception errors
      */
     void removePromotionCoupon(long id) throws Exception;

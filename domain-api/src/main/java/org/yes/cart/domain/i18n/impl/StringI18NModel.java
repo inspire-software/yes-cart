@@ -36,6 +36,14 @@ public class StringI18NModel implements I18NModel {
 
     private String toStringCache = null;
 
+
+    public StringI18NModel(final I18NModel values) {
+        if (values != null && values.getAllValues() != null) {
+            this.values.putAll(values.getAllValues());
+        }
+    }
+
+
     public StringI18NModel(final Map<String, String> values) {
         if (values != null && !values.isEmpty()) {
             this.values.putAll(values);
@@ -44,13 +52,17 @@ public class StringI18NModel implements I18NModel {
 
     public StringI18NModel(final String raw) {
         if (raw != null && raw.length() > 0) {
-            final String[] valuePairs = StringUtils.splitByWholeSeparatorPreserveAllTokens(raw, SEPARATOR);
-            for (int i = 0; i < valuePairs.length - 1; i+=2)  {
-                final String key = valuePairs[i];
-                final String value = valuePairs[i + 1];
-                if (value != null && value.length() > 0) {
-                    values.put(key, value);
+            if (raw.contains(SEPARATOR)) {
+                final String[] valuePairs = StringUtils.splitByWholeSeparatorPreserveAllTokens(raw, SEPARATOR);
+                for (int i = 0; i < valuePairs.length - 1; i += 2) {
+                    final String key = valuePairs[i];
+                    final String value = valuePairs[i + 1];
+                    if (value != null && value.length() > 0) {
+                        values.put(key, value);
+                    }
                 }
+            } else { // fallback if we have plain value
+                values.put(DEFAULT, raw);
             }
         }
     }

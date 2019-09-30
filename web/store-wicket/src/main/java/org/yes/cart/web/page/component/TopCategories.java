@@ -123,7 +123,7 @@ public class TopCategories extends BaseComponent {
 
                         final String selectedLocale = getLocale().getLanguage();
                         final Identifiable category = categoryListItem.getModelObject();
-                        final String displayName = category instanceof Category ? ((Category) category).getDisplayName() : ((Content) category).getDisplayName();
+                        final I18NModel displayName = category instanceof Category ? ((Category) category).getDisplayName() : ((Content) category).getDisplayName();
                         final String name = category instanceof Category ? ((Category) category).getName() : ((Content) category).getName();
                         final I18NModel nameModel = getI18NSupport().getFailoverModel(displayName, name);
 

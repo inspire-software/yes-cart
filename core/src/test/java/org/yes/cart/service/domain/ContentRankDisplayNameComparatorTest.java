@@ -21,6 +21,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Content;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.util.*;
 
@@ -44,7 +45,7 @@ public class ContentRankDisplayNameComparatorTest {
 
         context.checking(new Expectations() {{
             allowing(cn1).getRank(); will(returnValue(0));
-            allowing(cn1).getDisplayName(); will(returnValue("en#~#Name 1#~#ru#~#Name 1"));
+            allowing(cn1).getDisplayName(); will(returnValue(new StringI18NModel("en#~#Name 1#~#ru#~#Name 1")));
             allowing(cn1).getName(); will(returnValue("name 1"));
             allowing(cn1).getContentId(); will(returnValue(1L));
         }});
@@ -66,7 +67,7 @@ public class ContentRankDisplayNameComparatorTest {
 
         context.checking(new Expectations() {{
             allowing(cn1).getRank(); will(returnValue(0));
-            allowing(cn1).getDisplayName(); will(returnValue("en#~#Name 1#~#ru#~#Name 1"));
+            allowing(cn1).getDisplayName(); will(returnValue(new StringI18NModel("en#~#Name 1#~#ru#~#Name 1")));
             allowing(cn1).getName(); will(returnValue("name 1"));
             allowing(cn1).getContentId(); will(returnValue(1L));
             allowing(cn2).getRank(); will(returnValue(1));
@@ -114,11 +115,11 @@ public class ContentRankDisplayNameComparatorTest {
 
         context.checking(new Expectations() {{
             allowing(cn1).getRank(); will(returnValue(0));
-            allowing(cn1).getDisplayName(); will(returnValue("en#~#Name 2#~#ru#~#Name 2"));
+            allowing(cn1).getDisplayName(); will(returnValue(new StringI18NModel("en#~#Name 2#~#ru#~#Name 2")));
             allowing(cn1).getName(); will(returnValue("name 2"));
             allowing(cn1).getContentId(); will(returnValue(1L));
             allowing(cn2).getRank(); will(returnValue(0));
-            allowing(cn2).getDisplayName(); will(returnValue("en#~#name 1#~#ru#~#Name 1"));
+            allowing(cn2).getDisplayName(); will(returnValue(new StringI18NModel("en#~#name 1#~#ru#~#Name 1")));
             allowing(cn2).getName(); will(returnValue("name 1"));
         }});
 
@@ -139,11 +140,11 @@ public class ContentRankDisplayNameComparatorTest {
 
         context.checking(new Expectations() {{
             allowing(cn1).getRank(); will(returnValue(0));
-            allowing(cn1).getDisplayName(); will(returnValue("en#~#Name 1#~#ru#~#Name 1"));
+            allowing(cn1).getDisplayName(); will(returnValue(new StringI18NModel("en#~#Name 1#~#ru#~#Name 1")));
             allowing(cn1).getName(); will(returnValue("name 2"));
             allowing(cn1).getContentId(); will(returnValue(1L));
             allowing(cn2).getRank(); will(returnValue(0));
-            allowing(cn2).getDisplayName(); will(returnValue("en#~#name 1#~#ru#~#Name 1"));
+            allowing(cn2).getDisplayName(); will(returnValue(new StringI18NModel("en#~#name 1#~#ru#~#Name 1")));
             allowing(cn2).getName(); will(returnValue("name 1"));
             allowing(cn2).getContentId(); will(returnValue(2L));
         }});

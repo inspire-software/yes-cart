@@ -75,7 +75,7 @@
                     <td title="{{ 'NAME' | translate }}">
                       <div>{{row.skuCode}}<br/>{{row.skuName}}</div>
                       <div *ngIf="row.b2bRemarks"><i class="fa fa-user"></i> {{ row.b2bRemarks }}</div>
-                      <div *ngFor="let oneValue of getCustomValuesExclude(row.allValues, ['AUDITEXPORT', 'SUPPLIER'])" title="{{ oneValue.first }}: {{ oneValue.second.first }}">{{ oneValue.second.second ? oneValue.second.second : oneValue.second.first }}</div>
+                      <div *ngFor="let oneValue of getCustomValuesExclude(row.allValues, ['AUDITEXPORT', 'SUPPLIER'])" title="{{ oneValue.attribute.code }}: {{ oneValue.val }}">{{ getDisplayValue(oneValue) }}</div>
                     </td>
                     <td title="{{ 'QUANTITY' | translate }}" class="text-right">
                       <span class="{{ row.deliveryRejected ? 'text-danger' : (row.deliveryDifferent ? 'text-warning' : '') }}">{{row.qty | ycquantity}}</span>
@@ -178,8 +178,8 @@
                 </div>
               </div>
               <div *ngFor="let allValue of getCustomValuesExclude(customerorder.allValues, ['AUDITEXPORT', 'SUPPLIER'])" class="row">
-                <div class="col-xs-3"><strong>{{ allValue.first }}</strong></div>
-                <div class="col-xs-9">{{ allValue.second.first }} {{ allValue.second.second }}</div>
+                <div class="col-xs-3"><strong>{{ allValue.attribute.code }}</strong></div>
+                <div class="col-xs-9">{{ allValue.val }} {{ getDisplayValue(allValue, false) }}</div>
               </div>
             </div>
           </div>
@@ -255,7 +255,7 @@
                       </td>
                       <td title="{{ 'COST' | translate }}" class="text-right">&nbsp;{{ getLineCost(row) | ycprice}}</td>
                       <td title="{{ 'CUSTOMERORDER_TAB_EXTRADETAILS' | translate }}">
-                        <div *ngFor="let oneValue of getCustomValuesInclude(row.allValues, ['SUPPLIER'])" title="{{ oneValue.second.second }}">{{ oneValue.first }}: {{ oneValue.second.first }}</div>
+                        <div *ngFor="let oneValue of getCustomValuesInclude(row.allValues, ['SUPPLIER'])" title="{{ getDisplayValue(oneValue, false) }}">{{ oneValue.attribute.code }}: {{ oneValue.val }}</div>
                         &nbsp;
                       </td>
                     </tr>
@@ -376,8 +376,8 @@
                 </div>
               </div>
               <div *ngFor="let allValue of getCustomValuesInclude(customerorder.allValues, ['AUDITEXPORT', 'SUPPLIER'])" class="row">
-                <div class="col-xs-3"><strong>{{ allValue.first }}</strong></div>
-                <div class="col-xs-9">{{ allValue.second.first }}</div>
+                <div class="col-xs-3"><strong>{{ allValue.attribute.code }}</strong></div>
+                <div class="col-xs-9">{{ allValue.val }}</div>
               </div>
             </div>
           </div>

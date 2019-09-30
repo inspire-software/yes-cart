@@ -18,11 +18,14 @@ package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -59,12 +62,12 @@ public class AddressRO implements Serializable {
     @DtoField(value = "countryCode", readOnly = true)
     private String countryCode;
     private String countryName;
-    private String countryLocalName;
+    private Map<String, String> countryLocalName;
 
     @DtoField(value = "stateCode", readOnly = true)
     private String stateCode;
     private String stateName;
-    private String stateLocalName;
+    private Map<String, String> stateLocalName;
 
     @DtoField(value = "salutation", readOnly = true)
     private String salutation;
@@ -218,12 +221,13 @@ public class AddressRO implements Serializable {
         this.countryName = countryName;
     }
 
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "country-local-name")
-    public String getCountryLocalName() {
+    public Map<String, String> getCountryLocalName() {
         return countryLocalName;
     }
 
-    public void setCountryLocalName(final String countryLocalName) {
+    public void setCountryLocalName(final Map<String, String> countryLocalName) {
         this.countryLocalName = countryLocalName;
     }
 
@@ -245,12 +249,13 @@ public class AddressRO implements Serializable {
         this.stateName = stateName;
     }
 
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "state-local-name")
-    public String getStateLocalName() {
+    public Map<String, String> getStateLocalName() {
         return stateLocalName;
     }
 
-    public void setStateLocalName(final String stateLocalName) {
+    public void setStateLocalName(final Map<String, String> stateLocalName) {
         this.stateLocalName = stateLocalName;
     }
 

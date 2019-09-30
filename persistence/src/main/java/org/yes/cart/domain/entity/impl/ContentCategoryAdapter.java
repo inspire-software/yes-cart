@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModel;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -70,12 +71,12 @@ public class ContentCategoryAdapter implements org.yes.cart.domain.entity.Conten
     }
 
     @Override
-    public String getDisplayName() {
+    public I18NModel getDisplayName() {
         return category.getDisplayName();
     }
 
     @Override
-    public void setDisplayName(final String name) {
+    public void setDisplayName(final I18NModel name) {
         category.setDisplayName(name);
     }
 

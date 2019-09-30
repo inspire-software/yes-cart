@@ -21,6 +21,7 @@
 
 import { Pair } from './common.model';
 import { AttrValueVO } from './attribute.model';
+import { LocationVO } from './location.model';
 
 /**
  * Represent simple data about shop
@@ -115,7 +116,7 @@ export interface ShopLanguagesVO {
  */
 export interface ShopLocationsVO {
   shopId : number;
-  all : Array<Pair<string, string>>;
+  all : Array<LocationVO>;
   supportedBilling : Array<string>;
   supportedShipping : Array<string>;
 }

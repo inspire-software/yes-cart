@@ -32,9 +32,10 @@
     <import resource="persistence.xml"/>
     <import resource="classpath:dao-index-none.xml"/>
     <import resource="io.xml"/>
-    <import resource="classpath:core-dto-services.xml"/>
-    <import resource="manager-services.xml"/>
+
     <import resource="classpath:core-services-commands.xml"/>
+    <import resource="classpath:core-services-commands-utils.xml"/>
+
     <import resource="classpath:core-orderstate.xml"/>
 
     <import resource="classpath:core-aspects.xml"/>
@@ -42,5 +43,8 @@
     <import resource="classpath:core-payments.xml"/>
     <import resource="classpath:test-payment-api.xml"/>
     <import resource="classpath:test-payment-module-base.xml"/>
+
+    <import resource="classpath:core-dto-services.xml"/>
+    <import resource="manager-services.xml"/>
 
 </beans>

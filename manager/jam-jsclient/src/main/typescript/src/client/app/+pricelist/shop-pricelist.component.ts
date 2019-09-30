@@ -94,6 +94,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   @ViewChild('runTestModalDialog')
   private runTestModalDialog:PromotionTestConfigComponent;
 
+  private userSub:any;
 
   constructor(private _priceService:PricingService,
               fb: FormBuilder) {
@@ -174,16 +175,24 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
     this.onRefreshHandler();
 
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      this.presetFromCookie();
+    });
+
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.getFilteredPricelist();
     }, this.delayedFilteringMs);
     this.formBind();
+
   }
 
   ngOnDestroy() {
     LogUtil.debug('ShopPriceListComponent ngOnDestroy');
     this.formUnbind();
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
   }
 
   formBind():void {

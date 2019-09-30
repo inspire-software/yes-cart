@@ -83,5 +83,8 @@ export interface InventoryVO {
   maxOrderQuantity : number;
   stepOrderQuantity : number;
 
+  restockDate : Date;
+  restockNotes : Pair<string, string>[];
+
 }
 

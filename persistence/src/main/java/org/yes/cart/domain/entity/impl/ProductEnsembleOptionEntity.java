@@ -54,7 +54,7 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public void setQty(int qty) {
+    public void setQty(final int qty) {
         this.qty = qty;
     }
 
@@ -64,7 +64,7 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public void setProduct(Product product) {
+    public void setProduct(final Product product) {
         this.product = product;
     }
 
@@ -74,7 +74,7 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public void setSku(ProductSku sku) {
+    public void setSku(final ProductSku sku) {
         this.sku = sku;
     }
 
@@ -84,7 +84,7 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -94,7 +94,7 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -104,7 +104,7 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -114,7 +114,7 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -124,7 +124,7 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -139,7 +139,7 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public void setEnsembleOptId(long ensembleOptId) {
+    public void setEnsembleOptId(final long ensembleOptId) {
         this.ensembleOptId = ensembleOptId;
     }
 

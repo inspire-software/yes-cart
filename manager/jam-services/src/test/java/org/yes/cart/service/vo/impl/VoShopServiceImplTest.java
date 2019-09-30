@@ -22,18 +22,18 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.vo.VoShopService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 /**
  * Created by iazarnyi on 1/20/16.
  */
-//@ContextConfiguration("/testApplicationContext.xml")
-public class VoShopServiceDerivedImplTest extends BaseCoreDBTestCase {
+public class VoShopServiceImplTest extends BaseCoreDBTestCase {
 
     VoShopService voShopService = null;
 
@@ -49,27 +49,27 @@ public class VoShopServiceDerivedImplTest extends BaseCoreDBTestCase {
         voShop = voShopService.create(voShop);
 
         VoShopSeo voShopSeo = voShopService.getShopLocale(voShop.getShopId());
-        assertThat(voShopSeo.getDisplayMetadescriptions().size(), equalTo(0));
-        assertThat(voShopSeo.getDisplayMetakeywords().size(), equalTo(0));
-        assertThat(voShopSeo.getDisplayTitles().size(), equalTo(0));
+        assertNull(voShopSeo.getDisplayMetadescriptions());
+        assertNull(voShopSeo.getDisplayMetakeywords());
+        assertNull(voShopSeo.getDisplayTitles());
 
-        voShopSeo.getDisplayMetadescriptions().add(MutablePair.of("en", "Meta description"));
-        voShopSeo.getDisplayMetakeywords().add(MutablePair.of("en", "Meta, key, word"));
-        voShopSeo.getDisplayTitles().add(MutablePair.of("en", "Title"));
+        voShopSeo.setDisplayMetadescriptions(new ArrayList(Collections.singletonList(MutablePair.of("en", "Meta description"))));
+        voShopSeo.setDisplayMetakeywords(new ArrayList(Collections.singletonList(MutablePair.of("en", "Meta, key, word"))));
+        voShopSeo.setDisplayTitles(new ArrayList(Collections.singletonList(MutablePair.of("en", "Title"))));
 
         voShopSeo = voShopService.update(voShopSeo);
-        assertThat(voShopSeo.getDisplayMetadescriptions().size(), equalTo(1));
-        assertThat(voShopSeo.getDisplayMetakeywords().size(), equalTo(1));
-        assertThat(voShopSeo.getDisplayTitles().size(), equalTo(1));
+        assertEquals(1, voShopSeo.getDisplayMetadescriptions().size());
+        assertEquals(1, voShopSeo.getDisplayMetakeywords().size());
+        assertEquals(1, voShopSeo.getDisplayTitles().size());
 
         voShopSeo.getDisplayMetadescriptions().clear();
         voShopSeo.getDisplayMetakeywords().clear();
         voShopSeo.getDisplayTitles().clear();
 
         voShopSeo = voShopService.update(voShopSeo);
-        assertThat(voShopSeo.getDisplayMetadescriptions().size(), equalTo(0));
-        assertThat(voShopSeo.getDisplayMetakeywords().size(), equalTo(0));
-        assertThat(voShopSeo.getDisplayTitles().size(), equalTo(0));
+        assertEquals(0, voShopSeo.getDisplayMetadescriptions().size());
+        assertEquals(0, voShopSeo.getDisplayMetakeywords().size());
+        assertEquals(0, voShopSeo.getDisplayTitles().size());
     }
 
 
@@ -84,14 +84,14 @@ public class VoShopServiceDerivedImplTest extends BaseCoreDBTestCase {
         voShopUrl.getUrls().add(new VoShopUrlDetail(0, "url", "theme", true));
 
         voShopUrl = voShopService.update(voShopUrl);
-        assertThat(voShopUrl.getUrls().size(), equalTo(1));
+        assertEquals(1, voShopUrl.getUrls().size());
 
         voShopUrl.getUrls().get(0).setUrl("url0");
         voShopUrl.getUrls().get(0).setTheme("theme0");
         voShopUrl = voShopService.update(voShopUrl);
 
-        assertThat(voShopUrl.getUrls().get(0).getTheme(), equalTo("theme0"));
-        assertThat(voShopUrl.getUrls().get(0).getUrl(), equalTo("url0"));
+        assertEquals("theme0", voShopUrl.getUrls().get(0).getTheme());
+        assertEquals("url0", voShopUrl.getUrls().get(0).getUrl());
 
         voShopUrl.getUrls().clear();
 
@@ -109,14 +109,14 @@ public class VoShopServiceDerivedImplTest extends BaseCoreDBTestCase {
         voShop = voShopService.create(voShop);
 
         VoShopSupportedCurrencies voSsc = voShopService.getShopCurrencies(voShop.getShopId());
-        assertThat(voSsc.getSupported().size(), equalTo(0));
+        assertEquals(0, voSsc.getSupported().size());
 
         voSsc.setSupported(Arrays.asList(MutablePair.of("USD", "US Dollar"), MutablePair.of("EUR", "Euro")));
         voSsc = voShopService.update(voSsc);
 
-        assertThat(voSsc.getSupported().size(), equalTo(2));
-        assertThat(voSsc.getSupported().get(0).getFirst(), equalTo("USD"));
-        assertThat(voSsc.getSupported().get(1).getFirst(), equalTo("EUR"));
+        assertEquals(2, voSsc.getSupported().size());
+        assertEquals("USD", voSsc.getSupported().get(0).getFirst());
+        assertEquals("EUR", voSsc.getSupported().get(1).getFirst());
     }
 
     private VoShop getTestVoShop(String suf) {

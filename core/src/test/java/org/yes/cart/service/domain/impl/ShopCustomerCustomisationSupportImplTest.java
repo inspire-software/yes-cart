@@ -24,6 +24,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 
 import java.util.List;
@@ -111,7 +112,7 @@ public class ShopCustomerCustomisationSupportImplTest {
         context.checking(new Expectations() {{
             oneOf(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(av));
             allowing(av).getVal(); will(returnValue("B2B,B2C"));
-            allowing(av).getDisplayVal(); will(returnValue("en#~#Private#~#de#~#Private DE,Company DE"));
+            allowing(av).getDisplayVal(); will(returnValue(new StringI18NModel("en#~#Private#~#de#~#Private DE,Company DE")));
         }});
 
         final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null, null).getSupportedCustomerTypes(shop);

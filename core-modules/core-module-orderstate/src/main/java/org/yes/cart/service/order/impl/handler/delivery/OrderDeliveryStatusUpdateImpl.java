@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl.handler.delivery;
 
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class OrderDeliveryStatusUpdateImpl implements OrderDeliveryStatusUpdate 
     private final String orderNumber;
     private final String supplierCode;
     private final List<OrderDeliveryLineStatusUpdate> lineStatus;
-    private final Map<String, Pair<String, String>> additionalData = new HashMap<>();
+    private final Map<String, Pair<String, I18NModel>> additionalData = new HashMap<>();
 
     public OrderDeliveryStatusUpdateImpl(final String orderNumber,
                                          final String supplierCode,
@@ -45,7 +46,7 @@ public class OrderDeliveryStatusUpdateImpl implements OrderDeliveryStatusUpdate 
     public OrderDeliveryStatusUpdateImpl(final String orderNumber,
                                          final String supplierCode,
                                          final List<OrderDeliveryLineStatusUpdate> lineStatus,
-                                         final Map<String, Pair<String, String>> additionalData) {
+                                         final Map<String, Pair<String, I18NModel>> additionalData) {
         this.orderNumber = orderNumber;
         this.supplierCode = supplierCode;
         this.lineStatus = lineStatus;
@@ -68,7 +69,7 @@ public class OrderDeliveryStatusUpdateImpl implements OrderDeliveryStatusUpdate 
     }
 
     @Override
-    public Map<String, Pair<String, String>> getAdditionalData() {
+    public Map<String, Pair<String, I18NModel>> getAdditionalData() {
         return additionalData;
     }
 

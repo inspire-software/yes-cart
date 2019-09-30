@@ -34,7 +34,6 @@ export interface ManagerInfoVO {
 export interface ManagerShopLinkVO {
 
   managerId : number;
-
   shopId : number;
 
 }
@@ -42,9 +41,6 @@ export interface ManagerShopLinkVO {
 export interface ManagerRoleLinkVO {
 
   managerId : number;
-
-  roleId : number;
-
   code : string;
 
 }

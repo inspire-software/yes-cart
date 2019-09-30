@@ -17,6 +17,8 @@
 package org.yes.cart.domain.entity;
 
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 /**
  * Attribute.
  * <p/>
@@ -120,14 +122,14 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
      *
      * @return attribute name.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Get attribute name
      *
      * @param name name
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * Get description.
@@ -219,14 +221,14 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
      *
      * @return validation failed message.
      */
-    String getValidationFailedMessage();
+    I18NModel getValidationFailedMessage();
 
     /**
      * Set validation failed message.
      *
      * @param validationFailedMessage validation failed message.
      */
-    void setValidationFailedMessage(String validationFailedMessage);
+    void setValidationFailedMessage(I18NModel validationFailedMessage);
 
 
     /**
@@ -251,14 +253,14 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
      *
      * @return comma separated choices.
      */
-    String getChoiceData();
+    I18NModel getChoiceData();
 
     /**
      * Set comma separated choices.
      *
      * @param choiceData comma separated choices.
      */
-    void setChoiceData(String choiceData);
+    void setChoiceData(I18NModel choiceData);
 
 
     /**

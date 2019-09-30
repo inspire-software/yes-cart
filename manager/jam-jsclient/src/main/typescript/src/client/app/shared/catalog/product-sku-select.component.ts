@@ -54,6 +54,10 @@ export class ProductSkuSelectComponent implements OnInit, OnDestroy {
 
   constructor (private _productService : PIMService) {
     LogUtil.debug('ProductSkuSelectComponent constructed');
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.getAllProductSkus();
+    }, this.delayedFilteringMs);
   }
 
   ngOnDestroy() {
@@ -62,11 +66,6 @@ export class ProductSkuSelectComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('ProductSkuSelectComponent ngOnInit');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.getAllProductSkus();
-    }, this.delayedFilteringMs);
-
   }
 
   onSelectClick(producttype: ProductSkuVO) {

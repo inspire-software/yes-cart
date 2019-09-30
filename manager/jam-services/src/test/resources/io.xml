@@ -22,7 +22,7 @@
     <bean id="ioProviderFactory" class="org.yes.cart.stream.io.impl.IOProviderFactoryImpl">
         <constructor-arg index="0">
             <array>
-                <bean id="localFileSystemIoProvider" class="org.yes.cart.stream.io.impl.LocalFileSystemIOProviderImpl"/>
+                <bean id="localFileSystemIoProvider" class="org.yes.cart.service.vo.impl.TestIOProviderImpl"/>
             </array>
         </constructor-arg>
     </bean>

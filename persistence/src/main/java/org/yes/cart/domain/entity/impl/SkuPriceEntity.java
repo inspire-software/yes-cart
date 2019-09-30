@@ -76,7 +76,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setShop(Shop shop) {
+    public void setShop(final Shop shop) {
         this.shop = shop;
     }
 
@@ -86,7 +86,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setCurrency(String currency) {
+    public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
@@ -96,7 +96,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setQuantity(BigDecimal quantity) {
+    public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
     }
 
@@ -126,7 +126,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setRegularPrice(BigDecimal regularPrice) {
+    public void setRegularPrice(final BigDecimal regularPrice) {
         this.regularPrice = regularPrice;
     }
 
@@ -149,7 +149,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setSalePrice(BigDecimal salePrice) {
+    public void setSalePrice(final BigDecimal salePrice) {
         this.salePrice = salePrice;
     }
 
@@ -159,7 +159,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setMinimalPrice(BigDecimal minimalPrice) {
+    public void setMinimalPrice(final BigDecimal minimalPrice) {
         this.minimalPrice = minimalPrice;
     }
 
@@ -169,7 +169,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setSalefrom(LocalDateTime salefrom) {
+    public void setSalefrom(final LocalDateTime salefrom) {
         this.salefrom = salefrom;
     }
 
@@ -179,7 +179,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setSaleto(LocalDateTime saleto) {
+    public void setSaleto(final LocalDateTime saleto) {
         this.saleto = saleto;
     }
 
@@ -195,7 +195,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -205,7 +205,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -215,7 +215,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -225,7 +225,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -235,7 +235,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -290,7 +290,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
     @Override
-    public void setSkuPriceId(long skuPriceId) {
+    public void setSkuPriceId(final long skuPriceId) {
         this.skuPriceId = skuPriceId;
     }
 

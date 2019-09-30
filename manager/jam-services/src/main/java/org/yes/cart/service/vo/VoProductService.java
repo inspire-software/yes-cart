@@ -35,7 +35,9 @@ public interface VoProductService {
 
     /**
      * Get all products in the system, filtered by criteria and according to rights, up to max
+     *
      * @return list of products
+     *
      * @throws Exception errors
      */
     List<VoProduct> getFilteredProducts(String filter, int max) throws Exception;
@@ -44,7 +46,9 @@ public interface VoProductService {
      * Get product by id.
      *
      * @param id product id
+     *
      * @return product vo
+     *
      * @throws Exception errors
      */
     VoProductWithLinks getProductById(long id) throws Exception;
@@ -53,7 +57,9 @@ public interface VoProductService {
      * Update given product.
      *
      * @param vo product to update
+     *
      * @return updated instance
+     *
      * @throws Exception errors
      */
     VoProductWithLinks updateProduct(VoProductWithLinks vo) throws Exception;
@@ -62,7 +68,9 @@ public interface VoProductService {
      * Create new product
      *
      * @param vo given instance to persist
+     *
      * @return persisted instance
+     *
      * @throws Exception errors
      */
     VoProductWithLinks createProduct(VoProduct vo) throws Exception;
@@ -71,6 +79,7 @@ public interface VoProductService {
      * Remove product by id.
      *
      * @param id product id
+     *
      * @throws Exception errors
      */
     void removeProduct(long id) throws Exception;
@@ -78,8 +87,11 @@ public interface VoProductService {
 
     /**
      * Get supported attributes by given product
+     *
      * @param productId given product id
+     *
      * @return attributes
+     *
      * @throws Exception errors
      */
     List<VoAttrValueProduct> getProductAttributes(long productId) throws Exception;
@@ -89,16 +101,20 @@ public interface VoProductService {
      * Update the product attributes.
      *
      * @param vo product attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     *
      * @return product attributes.
+     *
      * @throws Exception errors
      */
-    List<VoAttrValueProduct> updateProduct(List<MutablePair<VoAttrValueProduct, Boolean>> vo) throws Exception;
+    List<VoAttrValueProduct> updateProductAttributes(List<MutablePair<VoAttrValueProduct, Boolean>> vo) throws Exception;
 
 
 
     /**
      * Get all products in the system, filtered by criteria and according to rights, up to max
+     *
      * @return list of products
+     *
      * @throws Exception errors
      */
     List<VoProductSku> getProductSkuAll(long productId) throws Exception;
@@ -106,7 +122,9 @@ public interface VoProductService {
 
     /**
      * Get all products in the system, filtered by criteria and according to rights, up to max
+     *
      * @return list of products
+     *
      * @throws Exception errors
      */
     List<VoProductSku> getFilteredProductSkus(String filter, int max) throws Exception;
@@ -115,7 +133,9 @@ public interface VoProductService {
      * Get product by id.
      *
      * @param id product id
+     *
      * @return product vo
+     *
      * @throws Exception errors
      */
     VoProductSku getSkuById(long id) throws Exception;
@@ -124,7 +144,9 @@ public interface VoProductService {
      * Update given product.
      *
      * @param vo product to update
+     *
      * @return updated instance
+     *
      * @throws Exception errors
      */
     VoProductSku updateSku(VoProductSku vo) throws Exception;
@@ -133,7 +155,9 @@ public interface VoProductService {
      * Create new product
      *
      * @param vo given instance to persist
+     *
      * @return persisted instance
+     *
      * @throws Exception errors
      */
     VoProductSku createSku(VoProductSku vo) throws Exception;
@@ -142,6 +166,7 @@ public interface VoProductService {
      * Remove product by id.
      *
      * @param id product id
+     *
      * @throws Exception errors
      */
     void removeSku(long id) throws Exception;
@@ -149,8 +174,11 @@ public interface VoProductService {
 
     /**
      * Get supported attributes by given product
+     *
      * @param productId given product id
+     *
      * @return attributes
+     *
      * @throws Exception errors
      */
     List<VoAttrValueProductSku> getSkuAttributes(long productId) throws Exception;
@@ -160,10 +188,12 @@ public interface VoProductService {
      * Update the product attributes.
      *
      * @param vo product attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     *
      * @return product attributes.
+     *
      * @throws Exception errors
      */
-    List<VoAttrValueProductSku> updateSku(List<MutablePair<VoAttrValueProductSku, Boolean>> vo) throws Exception;
+    List<VoAttrValueProductSku> updateSkuAttributes(List<MutablePair<VoAttrValueProductSku, Boolean>> vo) throws Exception;
 
 
 }

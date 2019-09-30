@@ -17,6 +17,8 @@
 package org.yes.cart.domain.dto.impl;
 
 import org.yes.cart.domain.dto.CategoryRelationDTO;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.LocalDateTime;
 
@@ -40,7 +42,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
 
     private String guid;
 
-    private String displayName;
+    private I18NModel displayName;
 
     private boolean disabled;
 
@@ -67,7 +69,7 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         this.rank = rank;
         this.name = name;
         this.guid = guid;
-        this.displayName = displayName;
+        this.displayName = new StringI18NModel(displayName);
         this.disabled = disabled;
         this.availablefrom = availablefrom;
         this.availableto = availableto;
@@ -89,10 +91,6 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         return categoryId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
     }
@@ -105,10 +103,6 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         return parentId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setParentId(final long parentId) {
         this.parentId = parentId;
     }
@@ -121,10 +115,6 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         return linkToId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setLinkToId(final Long linkToId) {
         this.linkToId = linkToId;
     }
@@ -137,10 +127,6 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         return rank;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setRank(final int rank) {
         this.rank = rank;
     }
@@ -153,10 +139,6 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         return disabled;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setDisabled(final boolean disabled) {
         this.disabled = disabled;
     }
@@ -169,10 +151,6 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         return availablefrom;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
@@ -185,10 +163,6 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         return availableto;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
@@ -217,10 +191,6 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
         return name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setName(final String name) {
         this.name = name;
     }
@@ -229,15 +199,11 @@ public class CategoryRelationDTOImpl implements CategoryRelationDTO {
      * {@inheritDoc}
      */
     @Override
-    public String getDisplayName() {
+    public I18NModel getDisplayName() {
         return displayName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDisplayName(final String displayName) {
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
     }
 

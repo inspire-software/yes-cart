@@ -102,8 +102,8 @@ public class CustomerOrderDetailDTOImpl implements CustomerOrderDeliveryDetailDT
 
     private String deliveryStatusLabel;
 
-    @DtoField(value = "allValues", readOnly = true)
-    private Map<String, Pair<String, String>> allValues;
+    @DtoField(value = "allValues", readOnly = true, converter = "customValuesMapConverter")
+    private Map<String, Pair<String, Map<String, String>>> allValues;
 
     @Override
     public BigDecimal getLineTotal() {
@@ -475,12 +475,12 @@ public class CustomerOrderDetailDTOImpl implements CustomerOrderDeliveryDetailDT
     }
 
     @Override
-    public Map<String, Pair<String, String>> getAllValues() {
+    public Map<String, Pair<String, Map<String, String>>> getAllValues() {
         return allValues;
     }
 
     @Override
-    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+    public void setAllValues(final Map<String, Pair<String, Map<String, String>>> allValues) {
         this.allValues = allValues;
     }
 

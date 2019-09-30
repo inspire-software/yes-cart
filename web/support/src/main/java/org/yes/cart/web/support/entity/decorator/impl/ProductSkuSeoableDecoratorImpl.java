@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class ProductSkuSeoableDecoratorImpl extends AbstractSeoableDecoratorImpl
             }
 
             @Override
-            protected String getDisplayTitle(final ProductSku seoable) {
+            protected I18NModel getDisplayTitle(final ProductSku seoable) {
                 return seoable.getDisplayName();
             }
 
@@ -57,14 +58,14 @@ public class ProductSkuSeoableDecoratorImpl extends AbstractSeoableDecoratorImpl
             }
 
             @Override
-            protected String getDisplayMetadescription(final ProductSku seoable) {
+            protected I18NModel getDisplayMetadescription(final ProductSku seoable) {
 
                 final String av = seoable.getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + lang);
 
                 if (StringUtils.isNotBlank(av)) {
                     final Map<String, String> values = new HashMap<>();
                     values.put(lang, removeTags(av));
-                    return new StringI18NModel(values).toString();
+                    return new StringI18NModel(values);
                 }
 
                 return pd.getSeo().getDisplayMetadescription();

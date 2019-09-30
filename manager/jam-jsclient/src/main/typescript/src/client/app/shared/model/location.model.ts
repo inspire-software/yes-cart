@@ -14,17 +14,28 @@
  *    limitations under the License.
  */
 
+import { Pair } from './common.model';
+
+export interface LocationVO {
+
+  code: string;
+
+  name: string;
+  displayNames :  Pair<string, string>[];
+
+  subLocations: LocationVO[];
+
+}
+
 export interface CountryVO {
 
   countryId : number;
 
   countryCode : string;
-
   isoCode  : string;
 
   name  : string;
-
-  displayName  : string;
+  displayNames :  Pair<string, string>[];
 
 }
 
@@ -33,12 +44,10 @@ export interface StateVO {
   stateId : number;
 
   countryCode : string;
-
   stateCode : string;
 
   name  : string;
-
-  displayName  : string;
+  displayNames :  Pair<string, string>[];
 
 }
 

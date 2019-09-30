@@ -18,6 +18,7 @@ package org.yes.cart.web.support.entity.decorator.impl;
 
 import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 
 /**
@@ -54,12 +55,12 @@ public class BrandSeoDecoratorImpl implements Seo {
     }
 
     @Override
-    public String getDisplayTitle() {
+    public I18NModel getDisplayTitle() {
         return null;
     }
 
     @Override
-    public void setDisplayTitle(final String title) {
+    public void setDisplayTitle(final I18NModel title) {
         throw new UnsupportedOperationException("Read only");
     }
 
@@ -74,12 +75,12 @@ public class BrandSeoDecoratorImpl implements Seo {
     }
 
     @Override
-    public String getDisplayMetakeywords() {
+    public I18NModel getDisplayMetakeywords() {
         return null;
     }
 
     @Override
-    public void setDisplayMetakeywords(final String metakeywords) {
+    public void setDisplayMetakeywords(final I18NModel metakeywords) {
         throw new UnsupportedOperationException("Read only");
     }
 
@@ -94,12 +95,12 @@ public class BrandSeoDecoratorImpl implements Seo {
     }
 
     @Override
-    public String getDisplayMetadescription() {
+    public I18NModel getDisplayMetadescription() {
         return null;
     }
 
     @Override
-    public void setDisplayMetadescription(final String metadescription) {
+    public void setDisplayMetadescription(final I18NModel metadescription) {
         throw new UnsupportedOperationException("Read only");
     }
 }

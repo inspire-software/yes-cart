@@ -391,7 +391,7 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     }
 
     @Override
-    public void setDefaultAddress(boolean defaultAddress) {
+    public void setDefaultAddress(final boolean defaultAddress) {
         this.defaultAddress = defaultAddress;
     }
 
@@ -401,7 +401,7 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     }
 
     @Override
-    public void setCustomer(Customer customer) {
+    public void setCustomer(final Customer customer) {
         this.customer = customer;
     }
 
@@ -411,7 +411,7 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -421,7 +421,7 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -466,7 +466,7 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     }
 
     @Override
-    public void setAddressId(long addressId) {
+    public void setAddressId(final long addressId) {
         this.addressId = addressId;
     }
 

@@ -23,6 +23,7 @@ import org.yes.cart.domain.dto.InventoryDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
 * User: Igor Azarny iazarny@yahoo.com
@@ -84,6 +85,12 @@ public class InventoryDTOImpl implements InventoryDTO {
 
     @DtoField(value = "releaseDate")
     private LocalDateTime releaseDate;
+
+    @DtoField(value = "restockDate")
+    private LocalDateTime restockDate;
+
+    @DtoField(value = "restockNote", converter = "i18nModelConverter")
+    private Map<String, String> restockNotes;
 
     /** {@inheritDoc} */
     @Override
@@ -332,6 +339,38 @@ public class InventoryDTOImpl implements InventoryDTO {
     @Override
     public void setTag(final String tag) {
         this.tag = tag;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public LocalDateTime getRestockDate() {
+        return restockDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setRestockDate(final LocalDateTime restockDate) {
+        this.restockDate = restockDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, String> getRestockNotes() {
+        return restockNotes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setRestockNotes(final Map<String, String> restockNotes) {
+        this.restockNotes = restockNotes;
     }
 
     @Override

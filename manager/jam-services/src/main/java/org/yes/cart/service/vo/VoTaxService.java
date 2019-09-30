@@ -28,7 +28,9 @@ public interface VoTaxService {
 
     /**
      * Get all taxes in the system, filtered by criteria and according to rights, up to max
+     *
      * @return list of taxes
+     *
      * @throws Exception errors
      */
     List<VoTax> getFilteredTax(String shopCode, String currency, String filter, int max) throws Exception;
@@ -37,7 +39,9 @@ public interface VoTaxService {
      * Get tax by id.
      *
      * @param id tax id
+     *
      * @return tax vo
+     *
      * @throws Exception errors
      */
     VoTax getTaxById(long id) throws Exception;
@@ -46,7 +50,9 @@ public interface VoTaxService {
      * Update given tax.
      *
      * @param vo tax to update
+     *
      * @return updated instance
+     *
      * @throws Exception errors
      */
     VoTax updateTax(VoTax vo) throws Exception;
@@ -55,7 +61,9 @@ public interface VoTaxService {
      * Create new tax
      *
      * @param vo given instance to persist
+     *
      * @return persisted instance
+     *
      * @throws Exception errors
      */
     VoTax createTax(VoTax vo) throws Exception;
@@ -64,6 +72,7 @@ public interface VoTaxService {
      * Remove tax by id.
      *
      * @param id tax id
+     *
      * @throws Exception errors
      */
     void removeTax(long id) throws Exception;
@@ -74,7 +83,9 @@ public interface VoTaxService {
 
     /**
      * Get all taxes in the system, filtered by criteria and according to rights, up to max
+     *
      * @return list of taxes
+     *
      * @throws Exception errors
      */
     List<VoTaxConfig> getFilteredTaxConfig(long taxId, String filter, int max) throws Exception;
@@ -83,7 +94,9 @@ public interface VoTaxService {
      * Get tax by id.
      *
      * @param id tax id
+     *
      * @return tax vo
+     *
      * @throws Exception errors
      */
     VoTaxConfig getTaxConfigById(long id) throws Exception;
@@ -92,7 +105,9 @@ public interface VoTaxService {
      * Create new tax
      *
      * @param vo given instance to persist
+     *
      * @return persisted instance
+     *
      * @throws Exception errors
      */
     VoTaxConfig createTaxConfig(VoTaxConfig vo) throws Exception;
@@ -101,6 +116,7 @@ public interface VoTaxService {
      * Remove tax by id.
      *
      * @param id tax id
+     *
      * @throws Exception errors
      */
     void removeTaxConfig(long id) throws Exception;

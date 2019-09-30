@@ -27,10 +27,22 @@ import org.yes.cart.domain.entity.Country;
 
 public class CountryRenderer extends ChoiceRenderer<Country> {
 
+    private final String language;
+
+    public CountryRenderer(final String language) {
+        this.language = language;
+    }
+
     /** {@inheritDoc} */
     @Override
     public Object getDisplayValue(final Country country) {
-        return country.getDisplayName();
+
+        final String i18n = country.getDisplayName() != null ? country.getDisplayName().getValue(language) : null;
+        if (i18n != null) {
+            return i18n;
+        }
+        return country.getName();
+
     }
 
     /** {@inheritDoc} */

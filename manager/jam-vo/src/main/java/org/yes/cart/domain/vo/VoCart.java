@@ -43,8 +43,6 @@ public class VoCart {
             readOnly = true
     )
     private List<VoCartItem> cartItems = new ArrayList<>();
-    private List<VoCartItem> items = new ArrayList<>();
-    private List<VoCartItem> gifts = new ArrayList<>();
     @DtoField(readOnly = true)
     private List<String> coupons = new ArrayList<>();
     @DtoField(readOnly = true)
@@ -99,22 +97,6 @@ public class VoCart {
 
     public void setCartItems(final List<VoCartItem> cartItems) {
         this.cartItems = cartItems;
-    }
-
-    public List<VoCartItem> getItems() {
-        return items;
-    }
-
-    public void setItems(final List<VoCartItem> items) {
-        this.items = items;
-    }
-
-    public List<VoCartItem> getGifts() {
-        return gifts;
-    }
-
-    public void setGifts(final List<VoCartItem> gifts) {
-        this.gifts = gifts;
     }
 
     public List<String> getCoupons() {

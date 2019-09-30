@@ -1,0 +1,197 @@
+<ng-template [ngIf]="inventory">
+
+  <form role="form" [formGroup]="inventoryForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+
+        <div>
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <div class="input-group">
+                    <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="inventory.skuCode"/>
+                    <span class="input-group-btn">
+                      <button type="button" (click)="onSearchSKU()" class="btn btn-default">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </span>
+                  </div>
+                  <div [hidden]="inventoryForm.controls['skuCode'].valid || inventoryForm.controls['skuCode'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>{{ 'NAME' | translate }}</label>
+                  <input class="form-control" formControlName="skuName" name="skuName" type="text" [ngModel]="inventory.skuName" [readonly]="true">
+                </div>
+
+                <div class="form-group">
+                  <label>{{ 'INVENTORY_CENTRE' | translate }}</label>
+                  <input class="form-control" formControlName="centreAndName" name="centreAndName" type="text" [ngModel]="centreAndName" [readonly]="true">
+                </div>
+
+                <div class="form-group">
+                  <label>{{ 'INVENTORY_STOCK' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'INVENTORY_STOCK' | translate }}" formControlName="quantity" name="quantity" type="text" [(ngModel)]="inventory.quantity">
+                  <div [hidden]="inventoryForm.controls['quantity'].valid || inventoryForm.controls['quantity'].pristine" class="alert alert-danger">
+                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>{{ 'INVENTORY_RESERVED' | translate }}</label>
+                  <input class="form-control" formControlName="reserved" name="reserved" type="text" [(ngModel)]="inventory.reserved" [readonly]="true">
+                </div>
+
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'PRODUCT_TAB_AVAILABILITY' | translate }}"  (select)="tabSelected('Availability')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_AVAILABILITY' | translate }}</label>
+                  <select class="form-control" formControlName="availability" name="availability" [(ngModel)]="inventory.availability">
+                    <option value="1">{{ 'PRODUCT_AVAILABILITY_1' | translate }}</option>
+                    <option value="2">{{ 'PRODUCT_AVAILABILITY_2' | translate }}</option>
+                    <option value="4">{{ 'PRODUCT_AVAILABILITY_4' | translate }}</option>
+                    <option value="8">{{ 'PRODUCT_AVAILABILITY_8' | translate }}</option>
+                    <option value="16">{{ 'PRODUCT_AVAILABILITY_16' | translate }}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_RELEASE' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="releaseDate" name="releaseDate" type="text" [(ngModel)]="releaseDate">
+                  <div [hidden]="inventoryForm.controls['releaseDate'].valid || inventoryForm.controls['releaseDate'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input formControlName="disabled" name="disabled" type="checkbox" [(ngModel)]="inventory.disabled">
+                  <label>{{ 'PRODUCT_DISABLED' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_FROM' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom">
+                  <div [hidden]="inventoryForm.controls['availablefrom'].valid || inventoryForm.controls['availablefrom'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TO' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto">
+                  <div [hidden]="inventoryForm.controls['availableto'].valid || inventoryForm.controls['availableto'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_ORDER_MIN' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_MIN' | translate }}" formControlName="minOrderQuantity" name="minOrderQuantity" type="text" [(ngModel)]="inventory.minOrderQuantity">
+                  <div [hidden]="inventoryForm.controls['minOrderQuantity'].valid || inventoryForm.controls['minOrderQuantity'].pristine" class="alert alert-danger">
+                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_ORDER_MAX' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_MAX' | translate }}" formControlName="maxOrderQuantity" name="maxOrderQuantity" type="text" [(ngModel)]="inventory.maxOrderQuantity">
+                  <div [hidden]="inventoryForm.controls['maxOrderQuantity'].valid || inventoryForm.controls['maxOrderQuantity'].pristine" class="alert alert-danger">
+                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_ORDER_STEP' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_STEP' | translate }}" formControlName="stepOrderQuantity" name="stepOrderQuantity" type="text" [(ngModel)]="inventory.stepOrderQuantity">
+                  <div [hidden]="inventoryForm.controls['stepOrderQuantity'].valid || inventoryForm.controls['stepOrderQuantity'].pristine" class="alert alert-danger">
+                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'PRODUCT_RESTOCK' | translate }}"  (select)="tabSelected('I18n')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_RESTOCK' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="restockDate" name="restockDate" type="text" [(ngModel)]="restockDate">
+                  <div [hidden]="inventoryForm.controls['restockDate'].valid || inventoryForm.controls['restockDate'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'PRODUCT_RESTOCK_NOTES' | translate }}"
+                             [source]="inventory"
+                             noDefault="true"
+                             value="skuCode"
+                             valueI18n="restockNotes"
+                             (dataChanged)="onRestockNotesDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_SEARCH' | translate }}"  (select)="tabSelected('Search')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <input formControlName="featured" name="featured" type="checkbox" [(ngModel)]="inventory.featured">
+                  <label>{{ 'PRODUCT_FEATURED' | translate }}</label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TAG' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="inventory.tag">
+                  <div [hidden]="inventoryForm.controls['tag'].valid || inventoryForm.controls['tag'].pristine" class="alert alert-danger">
+                    {{ 'TAGS_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+
+    </tabset>
+  </form>
+
+</ng-template>
+
+<yc-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>

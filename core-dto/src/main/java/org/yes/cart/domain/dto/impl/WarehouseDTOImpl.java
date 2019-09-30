@@ -65,7 +65,7 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     @DtoField(value = "multipleShippingSupported")
     private boolean multipleShippingSupported;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nModelConverter")
     private Map<String, String> displayNames;
 
 

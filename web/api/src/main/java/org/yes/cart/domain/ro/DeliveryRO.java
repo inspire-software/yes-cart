@@ -59,13 +59,13 @@ public class DeliveryRO implements Serializable {
     private long carrierSlaId;
     @DtoField(value = "carrierSla.name", readOnly = true)
     private String carrierSlaName;
-    @DtoField(value = "carrierSla.displayName", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "carrierSla.displayName", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> carrierSlaDisplayNames;
     @DtoField(value = "carrierSla.carrier.carrierId", readOnly = true)
     private long carrierId;
     @DtoField(value = "carrierSla.carrier.name", readOnly = true)
     private String carrierName;
-    @DtoField(value = "carrierSla.carrier.displayName", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "carrierSla.carrier.displayName", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> carrierDisplayNames;
 
     @DtoField(value = "deliveryStatus", readOnly = true)

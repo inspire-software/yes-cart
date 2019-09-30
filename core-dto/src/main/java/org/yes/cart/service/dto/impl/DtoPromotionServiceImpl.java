@@ -401,11 +401,12 @@ public class DtoPromotionServiceImpl
                                        final String currency,
                                        final String language,
                                        final String customer,
+                                       final String supplier,
                                        final Map<String, BigDecimal> products,
                                        final String shipping,
                                        final List<String> coupons,
                                        final Instant time) {
-        return promotionTester.testPromotions(shopCode, currency, language, customer, products, shipping, coupons, time);
+        return promotionTester.testPromotions(shopCode, currency, language, customer, supplier, products, shipping, coupons, time);
     }
 
     /** {@inheritDoc} */

@@ -83,4 +83,10 @@ public class NonI18NModel implements I18NModel {
     public int hashCode() {
         return value != null ? value.hashCode() : 0;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return value;
+    }
 }

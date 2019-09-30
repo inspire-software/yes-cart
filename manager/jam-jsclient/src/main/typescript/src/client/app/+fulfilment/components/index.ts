@@ -4,3 +4,4 @@
 export * from './fulfilment-centres.component';
 export * from './fulfilment-centre.component';
 export * from './inventory.component';
+export * from './offer.component';

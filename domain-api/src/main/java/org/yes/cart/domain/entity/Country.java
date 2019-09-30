@@ -17,6 +17,8 @@
 package org.yes.cart.domain.entity;
 
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 /**
  * Country.
  * <p/>
@@ -74,14 +76,14 @@ public interface Country extends Auditable {
      *
      * @return country name.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Set country name.
      *
      * @param name country name.
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * Get iso country code.

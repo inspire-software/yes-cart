@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * Represent sku quantity on particular warehouse.
@@ -242,7 +243,7 @@ public interface InventoryDTO extends Identifiable {
 
     /**
      * Get product release date.
-     * Null - product has no release date (alrady available).
+     * Null - product has no release date (already available).
      *
      * @return product release date.
      */
@@ -268,5 +269,34 @@ public interface InventoryDTO extends Identifiable {
      * @param tag product tag line
      */
     void setTag(String tag);
+
+    /**
+     * Get product release date.
+     * Null - product has no re-stock date.
+     *
+     * @return product re-stock date.
+     */
+    LocalDateTime getRestockDate();
+
+    /**
+     * Set product re-stock date.
+     *
+     * @param releaseDate when product is to be re-stocked.
+     */
+    void setRestockDate(LocalDateTime releaseDate);
+
+    /**
+     * Re-stock notes.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getRestockNotes();
+
+    /**
+     * Re-stock notes
+     *
+     * @param notes localised locale => name pairs
+     */
+    void setRestockNotes(Map<String, String> notes);
 
 }

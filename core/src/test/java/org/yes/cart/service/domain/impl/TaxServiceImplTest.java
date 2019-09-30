@@ -93,10 +93,10 @@ public class TaxServiceImplTest extends BaseCoreDBTestCase {
 
         final TaxService taxService = ctx().getBean("taxService", TaxService.class);
 
-        final List<Long> expectedEur = Arrays.asList(1010L, 1011L, 1012L, 1013L, 1014L, 1015L);
+        final List<Long> expectedEur = Arrays.asList(1010L, 1011L, 1012L, 1013L, 1014L, 1015L, 1016L);
         final List<Tax> eurTaxes = taxService.getTaxesByShopCode("SHOIP1", "EUR");
         assertFalse(eurTaxes.isEmpty());
-        assertEquals(6, eurTaxes.size());
+        assertEquals(7, eurTaxes.size());
         for (final Tax tax : eurTaxes) {
             assertTrue(expectedEur.contains(tax.getTaxId()));
         }

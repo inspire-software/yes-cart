@@ -73,7 +73,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -111,7 +111,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setFirstname(String firstname) {
+    public void setFirstname(final String firstname) {
         this.firstname = firstname;
     }
 
@@ -121,7 +121,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setLastname(String lastname) {
+    public void setLastname(final String lastname) {
         this.lastname = lastname;
     }
 
@@ -131,7 +131,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setMiddlename(String middlename) {
+    public void setMiddlename(final String middlename) {
         this.middlename = middlename;
     }
 
@@ -151,7 +151,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -191,7 +191,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setTag(String tag) {
+    public void setTag(final String tag) {
         this.tag = tag;
     }
 
@@ -261,7 +261,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setOrders(Collection<CustomerOrder> orders) {
+    public void setOrders(final Collection<CustomerOrder> orders) {
         this.orders = orders;
     }
 
@@ -271,7 +271,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setWishList(Collection<CustomerWishList> wishList) {
+    public void setWishList(final Collection<CustomerWishList> wishList) {
         this.wishList = wishList;
     }
 
@@ -281,7 +281,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setAttributes(Collection<AttrValueCustomer> attributes) {
+    public void setAttributes(final Collection<AttrValueCustomer> attributes) {
         this.attributes = attributes;
     }
 
@@ -291,7 +291,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setAddress(Collection<Address> address) {
+    public void setAddress(final Collection<Address> address) {
         this.address = address;
     }
 
@@ -301,7 +301,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setShops(Collection<CustomerShop> shops) {
+    public void setShops(final Collection<CustomerShop> shops) {
         this.shops = shops;
     }
 
@@ -311,7 +311,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -321,7 +321,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -331,7 +331,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -341,7 +341,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -351,7 +351,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -366,7 +366,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     }
 
     @Override
-    public void setCustomerId(long customerId) {
+    public void setCustomerId(final long customerId) {
         this.customerId = customerId;
     }
 

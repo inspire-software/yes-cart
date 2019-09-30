@@ -18,6 +18,8 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.ProductType;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.Instant;
 
@@ -35,7 +37,8 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     private String attrCodeList;
     private int rank;
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -52,7 +55,7 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setProducttype(ProductType producttype) {
+    public void setProducttype(final ProductType producttype) {
         this.producttype = producttype;
     }
 
@@ -62,7 +65,7 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setAttrCodeList(String attrCodeList) {
+    public void setAttrCodeList(final String attrCodeList) {
         this.attrCodeList = attrCodeList;
     }
 
@@ -72,7 +75,7 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(final int rank) {
         this.rank = rank;
     }
 
@@ -82,18 +85,28 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
+    }
+
     @Override
-    public String getDisplayName() {
+    public I18NModel getDisplayName() {
         return this.displayName;
     }
 
     @Override
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -102,7 +115,7 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -112,7 +125,7 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -122,7 +135,7 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -132,7 +145,7 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -142,7 +155,7 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -157,7 +170,7 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
     @Override
-    public void setProdTypeAttributeViewGroupId(long prodTypeAttributeViewGroupId) {
+    public void setProdTypeAttributeViewGroupId(final long prodTypeAttributeViewGroupId) {
         this.prodTypeAttributeViewGroupId = prodTypeAttributeViewGroupId;
     }
 

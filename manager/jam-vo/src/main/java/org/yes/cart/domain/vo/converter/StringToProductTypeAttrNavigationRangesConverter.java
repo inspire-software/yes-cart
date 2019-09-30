@@ -80,7 +80,7 @@ public class StringToProductTypeAttrNavigationRangesConverter implements ValueCo
 
         final VoProductTypeAttrNavigationRanges ranges = (VoProductTypeAttrNavigationRanges) object;
         final RangeList rangeList = new RangeListImpl();
-        if (ranges.getRanges() != null) {
+        if (ranges != null && ranges.getRanges() != null) {
             final List<RangeNode> rangeNodes = new ArrayList<>();
             for (final VoProductTypeAttrNavigationRange range : ranges.getRanges()) {
                 if (StringUtils.isNotBlank(range.getRange()) && range.getRange().contains("-")) {

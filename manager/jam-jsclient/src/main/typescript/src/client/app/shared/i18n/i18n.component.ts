@@ -41,6 +41,8 @@ export class I18nComponent {
 
   private   _value:string = null;
 
+  private   _noDefault:boolean = false;
+
   private dataI18n:Array<Pair<string, string>> = [];
   private dataValue:string = '';
 
@@ -115,6 +117,15 @@ export class I18nComponent {
 
   get value(): string {
     return this._value;
+  }
+
+  @Input()
+  set noDefault(value: boolean) {
+    this._noDefault = value;
+  }
+
+  get noDefault(): boolean {
+    return this._noDefault;
   }
 
   reloadModel():void {

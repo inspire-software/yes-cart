@@ -62,7 +62,7 @@ public class CategoryRO implements Serializable {
     @DtoField(value = "name", readOnly = true)
     private String name;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "displayName", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> displayNames;
 
     @DtoField(value = "description", readOnly = true)
@@ -93,13 +93,13 @@ public class CategoryRO implements Serializable {
     @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo", readOnly = true)
     private String metadescription;
 
-    @DtoField(value = "seo.displayTitle", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "seo.displayTitle", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> displayTitles;
 
-    @DtoField(value = "seo.displayMetakeywords", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "seo.displayMetakeywords", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> displayMetakeywords;
 
-    @DtoField(value = "seo.displayMetadescription", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "seo.displayMetadescription", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> displayMetadescriptions;
 
 

@@ -15,8 +15,6 @@
  */
 package org.yes.cart.domain.vo;
 
-import org.yes.cart.domain.misc.MutablePair;
-
 import java.util.List;
 
 /**
@@ -31,7 +29,7 @@ public class VoShopLocations {
     private List<String> supportedBilling;
     private List<String> supportedShipping;
 
-    private List<MutablePair<String, String>>  all;
+    private List<VoLocation>  all;
 
 
     public long getShopId() {
@@ -58,11 +56,11 @@ public class VoShopLocations {
         this.supportedShipping = supportedShipping;
     }
 
-    public List<MutablePair<String, String>> getAll() {
+    public List<VoLocation> getAll() {
         return all;
     }
 
-    public void setAll(List<MutablePair<String, String>> all) {
+    public void setAll(List<VoLocation> all) {
         this.all = all;
     }
 }

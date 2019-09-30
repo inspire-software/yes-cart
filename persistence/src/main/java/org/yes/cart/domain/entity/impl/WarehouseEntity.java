@@ -17,6 +17,8 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.ShopWarehouse;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -34,7 +36,8 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
 
     private String code;
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String description;
     private String countryCode;
     private String stateCode;
@@ -72,7 +75,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -82,18 +85,28 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Override
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
     }
 
     @Override
-    public void setDisplayName(final String displayName) {
+    public I18NModel getDisplayName() {
+        return this.displayName;
+    }
+
+    @Override
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -102,7 +115,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -112,7 +125,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setCountryCode(String countryCode) {
+    public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
 
@@ -122,7 +135,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setStateCode(String stateCode) {
+    public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
     }
 
@@ -132,7 +145,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setCity(String city) {
+    public void setCity(final String city) {
         this.city = city;
     }
 
@@ -142,7 +155,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setPostcode(String postcode) {
+    public void setPostcode(final String postcode) {
         this.postcode = postcode;
     }
 
@@ -182,7 +195,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -192,7 +205,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -202,7 +215,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -212,7 +225,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -222,7 +235,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -238,7 +251,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
 
 
     @Override
-    public void setWarehouseId(long warehouseId) {
+    public void setWarehouseId(final long warehouseId) {
         this.warehouseId = warehouseId;
     }
 

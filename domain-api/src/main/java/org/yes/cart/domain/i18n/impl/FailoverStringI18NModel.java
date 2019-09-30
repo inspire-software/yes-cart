@@ -42,8 +42,8 @@ public class FailoverStringI18NModel implements I18NModel {
         this.failover = modelFailover == null || modelFailover.length() == 0 ? failover : modelFailover;
     }
 
-    private FailoverStringI18NModel(final I18NModel model, final String failover) {
-        this.model = model;
+    public FailoverStringI18NModel(final I18NModel model, final String failover) {
+        this.model = model != null ? model.copy() : new StringI18NModel();
         final String modelFailover = this.model.getValue(I18NModel.DEFAULT);
         this.failover = modelFailover == null || modelFailover.length() == 0 ? failover : modelFailover;
     }

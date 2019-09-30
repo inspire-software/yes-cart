@@ -198,9 +198,9 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
         baseResult.setCode(entity.getCode());
         baseResult.setManufacturerCode(entity.getManufacturerCode());
         baseResult.setName(entity.getName());
-        baseResult.setDisplayName(entity.getDisplayName());
+        baseResult.setDisplayName(new StringI18NModel(entity.getDisplayName()));
         baseResult.setDescription(entity.getDescription());
-        baseResult.setDisplayDescription(entity.getDescriptionAsIs());
+        baseResult.setDisplayDescription(new StringI18NModel(entity.getDisplayDescription()));
         final String image0 = entity.getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
         if (StringUtils.isBlank(image0)) {
             baseResult.setDefaultImage(Constants.NO_IMAGE);
@@ -259,24 +259,21 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
                     } else {
 
-                        final I18NModel displayValue = StringUtils.isNotBlank(attrValue.getDisplayVal()) ? new StringI18NModel(attrValue.getDisplayVal()) : null;
-
                         // searchable and navigatable terms for global search tokenised
                         addStemField(document, ATTRIBUTE_VALUE_SEARCH_FIELD, searchValue);
 
                         // searchable and navigatable terms for global search full phrase
                         addSearchField(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, searchValue);
-                        addSearchFields(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, displayValue);
+                        addSearchFields(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, attrValue.getDisplayVal());
 
                         if (isEnabledFlagAttributeValue(searchValue)) {
 
                             final Attribute attribute = attributesSupport.getByAttributeCode(attrValue.getAttributeCode());
                             if (attribute != null) {
 
-                                final I18NModel attrName = StringUtils.isNotBlank(attribute.getDisplayName()) ? new StringI18NModel(attribute.getDisplayName()) : null;
-
                                 addSearchField(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, attribute.getName());
-                                addSearchFields(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, attrName);
+                                addSearchFields(document, ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, attribute.getDisplayName());
+                                
                             }
                         }
 
@@ -653,9 +650,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                                 withFc.setAvailableto(stock.getAvailableto());
                                 withFc.setReleaseDate(stock.getReleaseDate());
                                 withFc.setRestockDate(stock.getRestockDate());
-                                if (stock.getRestockNote() != null) {
-                                    withFc.setRestockNotes(new StringI18NModel(stock.getRestockNote().getAllValues()));
-                                }
+                                withFc.setRestockNotes(new StringI18NModel(stock.getRestockNote()));
                                 withFc.setMinOrderQuantity(stock.getMinOrderQuantity());
                                 withFc.setMinOrderQuantity(stock.getMaxOrderQuantity());
                                 withFc.setStepOrderQuantity(stock.getStepOrderQuantity());

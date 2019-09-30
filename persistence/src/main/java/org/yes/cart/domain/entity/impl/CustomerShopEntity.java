@@ -51,7 +51,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
     }
 
     @Override
-    public void setCustomer(Customer customer) {
+    public void setCustomer(final Customer customer) {
         this.customer = customer;
     }
 
@@ -61,7 +61,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
     }
 
     @Override
-    public void setShop(Shop shop) {
+    public void setShop(final Shop shop) {
         this.shop = shop;
     }
 
@@ -79,7 +79,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         return this.createdTimestamp;
     }
 
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -87,7 +87,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         return this.updatedTimestamp;
     }
 
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -95,7 +95,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         return this.createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -103,7 +103,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         return this.updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -113,7 +113,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -128,7 +128,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
     }
 
     @Override
-    public void setCustomerShopId(long customerShopId) {
+    public void setCustomerShopId(final long customerShopId) {
         this.customerShopId = customerShopId;
     }
 

@@ -61,9 +61,9 @@ public class PromotionDTOImpl implements PromotionDTO {
     private String name;
     @DtoField(value = "description")
     private String description;
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nModelConverter")
     private Map<String, String> displayNames;
-    @DtoField(value = "displayDescription", converter = "i18nStringConverter")
+    @DtoField(value = "displayDescription", converter = "i18nModelConverter")
     private Map<String, String> displayDescriptions;
 
     @DtoField(value = "couponTriggered", readOnly = true)

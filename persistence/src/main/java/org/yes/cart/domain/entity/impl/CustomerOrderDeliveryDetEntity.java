@@ -17,6 +17,7 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.impl.DeliveryBucketImpl;
@@ -89,7 +90,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public void setQty(BigDecimal qty) {
+    public void setQty(final BigDecimal qty) {
         this.qty = qty;
     }
 
@@ -99,7 +100,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public void setPrice(BigDecimal price) {
+    public void setPrice(final BigDecimal price) {
         this.price = price;
     }
 
@@ -300,7 +301,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public void setDelivery(CustomerOrderDelivery delivery) {
+    public void setDelivery(final CustomerOrderDelivery delivery) {
         this.delivery = delivery;
     }
 
@@ -310,7 +311,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -320,7 +321,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -330,7 +331,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -340,7 +341,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -350,7 +351,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -429,12 +430,12 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public Pair<String, String> getValue(final String code) {
+    public Pair<String, I18NModel> getValue(final String code) {
         return storedAttributes != null ? storedAttributes.getValue(code) : null;
     }
 
     @Override
-    public void putValue(final String code, final String value, final String displayValue) {
+    public void putValue(final String code, final String value, final I18NModel displayValue) {
         if (storedAttributes == null) {
             storedAttributes = new CustomerOrderDetAttributesImpl();
         }
@@ -442,12 +443,12 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public Map<String, Pair<String, String>> getAllValues() {
+    public Map<String, Pair<String, I18NModel>> getAllValues() {
         return storedAttributes != null ? storedAttributes.getAllValues() : Collections.emptyMap();
     }
 
     @Override
-    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+    public void setAllValues(final Map<String, Pair<String, I18NModel>> allValues) {
         this.storedAttributes = new CustomerOrderDetAttributesImpl(allValues);
     }
 
@@ -457,7 +458,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     }
 
     @Override
-    public void setCustomerOrderDeliveryDetId(long customerOrderDeliveryDetId) {
+    public void setCustomerOrderDeliveryDetId(final long customerOrderDeliveryDetId) {
         this.customerOrderDeliveryDetId = customerOrderDeliveryDetId;
     }
 

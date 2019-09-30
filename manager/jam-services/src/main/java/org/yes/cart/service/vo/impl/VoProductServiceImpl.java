@@ -367,7 +367,7 @@ public class VoProductServiceImpl implements VoProductService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoAttrValueProduct> updateProduct(final List<MutablePair<VoAttrValueProduct, Boolean>> vo) throws Exception {
+    public List<VoAttrValueProduct> updateProductAttributes(final List<MutablePair<VoAttrValueProduct, Boolean>> vo) throws Exception {
 
         final long productId = this.voProductAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 
@@ -484,7 +484,7 @@ public class VoProductServiceImpl implements VoProductService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoAttrValueProductSku> updateSku(final List<MutablePair<VoAttrValueProductSku, Boolean>> vo) throws Exception {
+    public List<VoAttrValueProductSku> updateSkuAttributes(final List<MutablePair<VoAttrValueProductSku, Boolean>> vo) throws Exception {
 
         final long skuId = this.voSkuAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 

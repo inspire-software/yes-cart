@@ -27,44 +27,53 @@ public interface VoPriceService {
 
     /**
      * Get all price lists in the system, filtered by criteria and according to rights, up to max
+     *
      * @return list of price lists
+     *
      * @throws Exception errors
      */
-    List<VoPriceList> getFiltered(long shopId, String currency, String filter, int max) throws Exception;
+    List<VoPriceList> getFilteredPrices(long shopId, String currency, String filter, int max) throws Exception;
 
     /**
      * Get price list by id.
      *
      * @param id price list id
+     *
      * @return price list vo
+     *
      * @throws Exception errors
      */
-    VoPriceList getById(long id) throws Exception;
+    VoPriceList getPriceById(long id) throws Exception;
 
     /**
      * Update given price list.
      *
      * @param vo price list to update
+     *
      * @return updated instance
+     *
      * @throws Exception errors
      */
-    VoPriceList update(VoPriceList vo) throws Exception;
+    VoPriceList updatePrice(VoPriceList vo) throws Exception;
 
     /**
      * Create new price list
      *
      * @param vo given instance to persist
+     *
      * @return persisted instance
+     *
      * @throws Exception errors
      */
-    VoPriceList create(VoPriceList vo) throws Exception;
+    VoPriceList createPrice(VoPriceList vo) throws Exception;
 
     /**
      * Remove price list by id.
      *
      * @param id price list id
+     *
      * @throws Exception errors
      */
-    void remove(long id) throws Exception;
+    void removePrice(long id) throws Exception;
 
 }

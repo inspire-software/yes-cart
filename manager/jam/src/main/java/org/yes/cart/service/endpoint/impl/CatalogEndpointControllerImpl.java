@@ -57,31 +57,31 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     @Override
     public @ResponseBody
     List<VoBrand> getFilteredBrands(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voBrandService.getFiltered(filter, max);
+        return voBrandService.getFilteredBrands(filter, max);
     }
 
     @Override
     public @ResponseBody
     VoBrand getBrandById(@PathVariable("id") final long id) throws Exception {
-        return voBrandService.getById(id);
+        return voBrandService.getBrandById(id);
     }
 
     @Override
     public @ResponseBody
     VoBrand createBrand(@RequestBody final VoBrand vo) throws Exception {
-        return voBrandService.create(vo);
+        return voBrandService.createBrand(vo);
     }
 
     @Override
     public @ResponseBody
     VoBrand updateBrand(@RequestBody final VoBrand vo) throws Exception {
-        return voBrandService.update(vo);
+        return voBrandService.updateBrand(vo);
     }
 
     @Override
     public @ResponseBody
     void removeBrand(@PathVariable("id") final long id) throws Exception {
-       voBrandService.remove(id);
+       voBrandService.removeBrand(id);
     }
 
     @Override
@@ -93,37 +93,37 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     @Override
     public @ResponseBody
     List<VoAttrValueBrand> updateBrand(@RequestBody final List<MutablePair<VoAttrValueBrand, Boolean>> vo) throws Exception {
-        return voBrandService.update(vo);
+        return voBrandService.updateBrandAttributes(vo);
     }
 
     @Override
     public @ResponseBody
     List<VoProductTypeInfo> getFilteredProductTypes(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voProductTypeService.getFiltered(filter, max);
+        return voProductTypeService.getFilteredTypes(filter, max);
     }
 
     @Override
     public @ResponseBody
     VoProductType getProductTypeById(@PathVariable("id") final long id) throws Exception {
-        return voProductTypeService.getById(id);
+        return voProductTypeService.getTypeById(id);
     }
 
     @Override
     public @ResponseBody
     VoProductType createProductType(@RequestBody final VoProductType vo) throws Exception {
-        return voProductTypeService.create(vo);
+        return voProductTypeService.createType(vo);
     }
 
     @Override
     public @ResponseBody
     VoProductType updateProductType(@RequestBody final VoProductType vo) throws Exception {
-        return voProductTypeService.update(vo);
+        return voProductTypeService.updateType(vo);
     }
 
     @Override
     public @ResponseBody
     void removeProductType(@PathVariable("id") final long id) throws Exception {
-        voProductTypeService.remove(id);
+        voProductTypeService.removeType(id);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     @Override
     public @ResponseBody
     List<VoProductTypeAttr> updateProductType(@RequestBody final List<MutablePair<VoProductTypeAttr, Boolean>> vo) throws Exception {
-        return voProductTypeService.update(vo);
+        return voProductTypeService.updateTypeAttributes(vo);
     }
 
 
@@ -175,31 +175,31 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     public @ResponseBody
     List<VoCategory> getFilteredCategories(@RequestBody(required = false) final String filter,
                                            @PathVariable("max") final int max) throws Exception {
-        return voCategoryService.getFiltered(filter, max);
+        return voCategoryService.getFilteredCategories(filter, max);
     }
 
     @Override
     public @ResponseBody
     VoCategory createCategory(@RequestBody VoCategory voCategory) throws Exception {
-        return voCategoryService.create(voCategory);
+        return voCategoryService.createCategory(voCategory);
     }
 
     @Override
     public @ResponseBody
     VoCategory getCategoryById(@PathVariable("id") final long id) throws Exception {
-        return voCategoryService.getById(id);
+        return voCategoryService.getCategoryById(id);
     }
 
     @Override
     public @ResponseBody
     VoCategory updateCategory(@RequestBody final VoCategory voCategory) throws Exception {
-        return voCategoryService.update(voCategory);
+        return voCategoryService.updateCategory(voCategory);
     }
 
     @Override
     public @ResponseBody
     void removeCategory(@PathVariable("id") final long id) throws Exception {
-        voCategoryService.remove(id);
+        voCategoryService.removeCategory(id);
     }
 
     @Override
@@ -211,6 +211,6 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     @Override
     public @ResponseBody
     List<VoAttrValueCategory> updateCategory(@RequestBody final List<MutablePair<VoAttrValueCategory, Boolean>> vo) throws Exception {
-        return voCategoryService.update(vo);
+        return voCategoryService.updateCategoryAttributes(vo);
     }
 }

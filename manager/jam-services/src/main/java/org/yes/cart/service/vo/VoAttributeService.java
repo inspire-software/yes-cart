@@ -32,40 +32,53 @@ public interface VoAttributeService {
 
     /**
      * Get all attribute etypes.
+     *
      * @return etypes
+     *
      * @throws Exception errors
      */
     List<VoEtype> getAllEtypes() throws Exception;
 
     /**
      * Get all attribute groups.
+     *
      * @return groups
+     *
      * @throws Exception errors
      */
     List<VoAttributeGroup> getAllGroups() throws Exception;
 
     /**
      * Get all attributes in group
+     *
      * @param group group
+     *
      * @return list of attributes
+     *
      * @throws Exception errors
      */
     List<VoAttribute> getAllAttributes(String group) throws Exception;
 
     /**
      * Get all attributes in group
+     *
      * @param group group
      * @param filter filter
      * @param max max
+     *
      * @return list of attributes
+     *
      * @throws Exception errors
      */
     List<VoAttribute> getFilteredAttributes(String group, String filter, int max) throws Exception;
 
     /**
      * Product types that use this attribute.
+     *
      * @param code attribute code
+     *
      * @return product types
+     *
      * @throws Exception errors
      */
     List<MutablePair<Long, String>> getProductTypesByAttributeCode(String code) throws Exception;
@@ -76,7 +89,9 @@ public interface VoAttributeService {
      * Get vo by id.
      *
      * @param id id
+     *
      * @return vo
+     *
      * @throws Exception errors
      */
     VoAttribute getAttributeById(long id) throws Exception;
@@ -85,8 +100,11 @@ public interface VoAttributeService {
 
     /**
      * Create new vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoAttribute createAttribute(VoAttribute vo)  throws Exception;
@@ -94,8 +112,11 @@ public interface VoAttributeService {
 
     /**
      * Create new vo
+     *
      * @param vo carrier
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoAttribute updateAttribute(VoAttribute vo)  throws Exception;
@@ -105,6 +126,7 @@ public interface VoAttributeService {
      * Remove vo.
      *
      * @param id id
+     *
      * @throws Exception errors
      */
     void removeAttribute(long id) throws Exception;

@@ -88,7 +88,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setDeliveryNum(String deliveryNum) {
+    public void setDeliveryNum(final String deliveryNum) {
         this.deliveryNum = deliveryNum;
     }
 
@@ -98,7 +98,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setRefNo(String refNo) {
+    public void setRefNo(final String refNo) {
         this.refNo = refNo;
     }
 
@@ -108,7 +108,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setPrice(BigDecimal price) {
+    public void setPrice(final BigDecimal price) {
         this.price = price;
     }
 
@@ -198,7 +198,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setDeliveryStatus(String deliveryStatus) {
+    public void setDeliveryStatus(final String deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
     }
 
@@ -318,7 +318,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setDetail(Collection<CustomerOrderDeliveryDet> detail) {
+    public void setDetail(final Collection<CustomerOrderDeliveryDet> detail) {
         this.detail = detail;
     }
 
@@ -328,7 +328,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setCarrierSla(CarrierSla carrierSla) {
+    public void setCarrierSla(final CarrierSla carrierSla) {
         this.carrierSla = carrierSla;
     }
 
@@ -338,7 +338,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setCustomerOrder(CustomerOrder customerOrder) {
+    public void setCustomerOrder(final CustomerOrder customerOrder) {
         this.customerOrder = customerOrder;
     }
 
@@ -348,7 +348,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setDeliveryGroup(String deliveryGroup) {
+    public void setDeliveryGroup(final String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
     }
 
@@ -358,7 +358,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -368,7 +368,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -378,7 +378,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -388,7 +388,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -398,7 +398,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -413,7 +413,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     }
 
     @Override
-    public void setCustomerOrderDeliveryId(long customerOrderDeliveryId) {
+    public void setCustomerOrderDeliveryId(final long customerOrderDeliveryId) {
         this.customerOrderDeliveryId = customerOrderDeliveryId;
     }
 

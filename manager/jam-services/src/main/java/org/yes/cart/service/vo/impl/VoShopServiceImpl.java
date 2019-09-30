@@ -30,6 +30,7 @@ import org.yes.cart.domain.dto.ShopUrlDTO;
 import org.yes.cart.domain.dto.impl.ShopAliasDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopUrlDTOImpl;
 import org.yes.cart.domain.entity.Country;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.*;
@@ -308,7 +309,7 @@ public class VoShopServiceImpl implements VoShopService {
 
             addShopCurrencies(summary, configShopId);
 
-            addShopLocations(summary, configShopId);
+            addShopLocations(summary, configShopId, lang);
 
             addShopUrls(summary, configShopId);
 
@@ -588,16 +589,31 @@ public class VoShopServiceImpl implements VoShopService {
         }
     }
 
-    protected void addShopLocations(final VoShopSummary summary, final long shopId) throws Exception {
+    protected void addShopLocations(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
         final VoShopLocations loc = getShopLocationsInternal(shopId);
-        for (final MutablePair<String, String> codeAndName : loc.getAll()) {
-            if (loc.getSupportedBilling().contains(codeAndName.getFirst())) {
-                summary.getBillingLocations().add(codeAndName);
+        for (final VoLocation country : loc.getAll()) {
+            if (loc.getSupportedBilling().contains(country.getCode())) {
+                summary.getBillingLocations().add(getSimpleLocationName(country, lang));
             }
-            if (loc.getSupportedShipping().contains(codeAndName.getFirst())) {
-                summary.getShippingLocations().add(codeAndName);
+            if (loc.getSupportedShipping().contains(country.getCode())) {
+                summary.getShippingLocations().add(getSimpleLocationName(country, lang));
             }
         }
+    }
+
+    private MutablePair<String, String> getSimpleLocationName(final VoLocation loc, final String lang) {
+        String i18n = null;
+        if (loc.getDisplayNames() != null) {
+            for (final MutablePair<String, String> name : loc.getDisplayNames()) {
+                if (I18NModel.DEFAULT.equals(name.getFirst())) {
+                    i18n = name.getSecond(); // retain default
+                } else if (lang.equals(name.getFirst())) {
+                    i18n = name.getSecond();
+                    break; // this is exact match
+                }
+            }
+        }
+        return MutablePair.of(loc.getCode(), loc.getName() + (i18n != null ? " (" + i18n + ")" : ""));
     }
 
     protected void addShopCurrencies(final VoShopSummary summary, final long shopId) throws Exception {
@@ -1017,11 +1033,21 @@ public class VoShopServiceImpl implements VoShopService {
         shopLocations.setSupportedShipping(shipping == null ? Collections.emptyList() : Arrays.asList(shipping.split(",")));
 
         final List<Country> countries = countryService.findAll();
-        final List<MutablePair<String, String>> all = new ArrayList<>();
+        final List<VoLocation> all = new ArrayList<>();
         for (final Country country : countries) {
-            all.add(MutablePair.of(
-                    country.getCountryCode(),
-                    country.getName() + (StringUtils.isNotBlank(country.getDisplayName()) ? " (" + country.getDisplayName() + ")" : "")));
+
+            final VoLocation loc = new VoLocation();
+            loc.setCode(country.getCountryCode());
+            loc.setName(country.getName());
+            final List<MutablePair<String, String>> names = new ArrayList<>();
+            if (country.getDisplayName() != null) {
+                for (final Map.Entry<String, String> name : country.getDisplayName().getAllValues().entrySet()) {
+                    names.add(MutablePair.of(name.getKey(), name.getValue()));
+                }
+            }
+            loc.setDisplayNames(names);
+
+            all.add(loc);
         }
 
         shopLocations.setAll(all);

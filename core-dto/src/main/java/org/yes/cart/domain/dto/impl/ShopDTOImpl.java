@@ -74,13 +74,13 @@ public class ShopDTOImpl implements ShopDTO {
     @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
     private String metadescription;
 
-    @DtoField(value = "seo.displayTitle", converter = "i18nStringConverter")
+    @DtoField(value = "seo.displayTitle", converter = "i18nModelConverter")
     private Map<String, String> displayTitles;
 
-    @DtoField(value = "seo.displayMetakeywords", converter = "i18nStringConverter")
+    @DtoField(value = "seo.displayMetakeywords", converter = "i18nModelConverter")
     private Map<String, String> displayMetakeywords;
 
-    @DtoField(value = "seo.displayMetadescription", converter = "i18nStringConverter")
+    @DtoField(value = "seo.displayMetadescription", converter = "i18nModelConverter")
     private Map<String, String> displayMetadescriptions;
 
 

@@ -72,16 +72,16 @@ public class AttributeRO implements Serializable {
     @DtoField(value = "regexp", readOnly=true)
     private String regexp;
 
-    @DtoField(value = "validationFailedMessage", converter = "i18nStringConverter", readOnly=true)
+    @DtoField(value = "validationFailedMessage", converter = "i18nModelConverter", readOnly=true)
     private Map<String, String> validationFailedMessage;
 
     @DtoField(value = "rank")
     private int rank;
 
-    @DtoField(value = "choiceData", converter = "i18nStringConverter", readOnly=true)
+    @DtoField(value = "choiceData", converter = "i18nModelConverter", readOnly=true)
     private Map<String, String> choiceData;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly=true)
+    @DtoField(value = "displayName", converter = "i18nModelConverter", readOnly=true)
     private Map<String, String> displayNames;
 
     public int getRank() {

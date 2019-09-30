@@ -46,6 +46,10 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
 
   constructor (private _attributeService : AttributeService) {
     LogUtil.debug('ProductAttributeSelectComponent constructed');
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.getAllAttributes();
+    }, this.delayedFilteringMs);
   }
 
   ngOnDestroy() {
@@ -54,11 +58,6 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('ProductAttributeSelectComponent ngOnInit');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.getAllAttributes();
-    }, this.delayedFilteringMs);
-
   }
 
   onSelectClick(attribute: AttributeVO) {

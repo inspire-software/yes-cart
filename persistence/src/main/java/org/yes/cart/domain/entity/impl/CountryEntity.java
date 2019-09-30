@@ -17,6 +17,9 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
+
 import java.time.Instant;
 
 /**
@@ -32,7 +35,8 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     private String countryCode;
     private String isoCode;
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -51,7 +55,7 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     }
 
     @Override
-    public void setCountryCode(String countryCode) {
+    public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
 
@@ -61,7 +65,7 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     }
 
     @Override
-    public void setIsoCode(String isoCode) {
+    public void setIsoCode(final String isoCode) {
         this.isoCode = isoCode;
     }
 
@@ -71,18 +75,28 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Override
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
     }
 
     @Override
-    public void setDisplayName(final String displayName) {
+    public I18NModel getDisplayName() {
+        return this.displayName;
+    }
+
+    @Override
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -91,7 +105,7 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -101,7 +115,7 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -111,7 +125,7 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -121,7 +135,7 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -131,7 +145,7 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -147,7 +161,7 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
 
 
     @Override
-    public void setCountryId(long countryId) {
+    public void setCountryId(final long countryId) {
         this.countryId = countryId;
     }
 

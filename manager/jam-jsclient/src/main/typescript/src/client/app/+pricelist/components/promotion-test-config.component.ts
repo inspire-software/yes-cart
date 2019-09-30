@@ -15,12 +15,13 @@
  */
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
 import { I18nEventBus } from './../../shared/services/index';
-import { FormBuilder } from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { PromotionTestVO, ProductSkuVO, CarrierSlaVO } from './../../shared/model/index';
+import { PromotionTestVO, ProductSkuVO, CarrierSlaVO, FulfilmentCentreInfoVO } from './../../shared/model/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { ProductSkuSelectComponent } from './../../shared/catalog/index';
 import { CarrierSlaSelectComponent } from './../../shared/shipping/index';
+import { FulfilmentCentreSelectComponent } from './../../shared/fulfilment/index';
 import { FormValidationEvent } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
@@ -40,6 +41,9 @@ export class PromotionTestConfigComponent implements OnInit, OnDestroy {
   @ViewChild('testConfigModalDialog')
   private testConfigModalDialog:ModalComponent;
 
+  @ViewChild('selectCentreModalDialog')
+  private selectCentreModalDialog:FulfilmentCentreSelectComponent;
+
   @ViewChild('productSkuSelectDialog')
   private productSkuSelectDialog:ProductSkuSelectComponent;
 
@@ -53,12 +57,13 @@ export class PromotionTestConfigComponent implements OnInit, OnDestroy {
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('PromotionTestConfigComponent constructed');
-    this.testConfig = { customer: null, shipping: null, coupons: null, sku: null, language: null, time: null };
+    this.testConfig = { supplier: null, customer: null, shipping: null, coupons: null, sku: null, language: null, time: null };
     this.testRulesForm = fb.group({
+      'testSupplier': ['', Validators.required],
       'testCustomer': [''],
       'testShipping': [''],
       'testCoupons': [''],
-      'testSku': [''],
+      'testSku': ['', Validators.required],
       'testTime': ['', YcValidators.validDate],
     });
   }
@@ -125,6 +130,18 @@ export class PromotionTestConfigComponent implements OnInit, OnDestroy {
     LogUtil.debug('PromotionTestConfigComponent onCarrierSlaSelected');
     if (event.valid) {
       this.testConfig.shipping = event.source.code;
+      this.formChange();
+    }
+  }
+
+  protected onSearchFC() {
+    this.selectCentreModalDialog.showDialog();
+  }
+
+  protected onFulfilmentCentreSelected(event:FormValidationEvent<FulfilmentCentreInfoVO>) {
+    LogUtil.debug('CentreInventoryComponent onFulfilmentCentreSelected');
+    if (event.valid) {
+      this.testConfig.supplier = event.source.code;
       this.formChange();
     }
   }

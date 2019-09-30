@@ -16,7 +16,8 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
-import { CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO, Pair } from './../../shared/model/index';
+import { I18nEventBus } from './../../shared/services/index';
+import { CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO, AttrValueVO, Pair } from './../../shared/model/index';
 import { CookieUtil } from './../../shared/cookies/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -109,12 +110,12 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     let flags = '';
     if (row.price < row.salePrice) {
       // promotion
-      flags += '<i title="' + row.salePrice.toFixed(2) + '" class="fa fa-dollar"></i>&nbsp;';
+      flags += '<i title="' + row.salePrice.toFixed(2) + '" class="fa fa-cart-arrow-down"></i>&nbsp;';
     }
 
     if (row.salePrice < row.listPrice) {
       // sale
-      flags += '<i title="' + row.listPrice.toFixed(2) + '" class="fa fa-tag"></i>&nbsp;';
+      flags += '<i title="' + row.listPrice.toFixed(2) + '" class="fa fa-clock-o"></i>&nbsp;';
     }
 
     return flags;
@@ -124,10 +125,10 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
 
     if (row.allValues != null) {
       let idx = row.allValues.findIndex(val => {
-        return val.first === 'ItemCostPrice';
+        return val.attribute.code === 'ItemCostPrice';
       });
       if (idx != -1) {
-        return +(row.allValues[idx].second.first);
+        return +(row.allValues[idx].val);
       }
     }
     return 0;
@@ -138,31 +139,62 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     let flags = '';
     if (order.price < order.listPrice) {
       // sale
-      flags += '<i title="' + order.listPrice.toFixed(2) + '" class="fa fa-tag"></i>&nbsp;';
+      flags += '<i title="' + order.listPrice.toFixed(2) + '" class="fa fa-cart-arrow-down"></i>&nbsp;';
     }
 
     return flags;
   }
 
-  getCustomValuesExclude(allValues: Pair<string, Pair<string, string>>[], exclude:string[]):Pair<string, Pair<string, string>>[] {
-    let vals:Pair<string, Pair<string, string>>[] = [];
-    allValues.forEach(_pair => {
-      if (_pair.second.second == null || exclude.indexOf(_pair.second.second) == -1) {
-        vals.push(_pair);
+  getXXDisplayValue(val: AttrValueVO): string {
+    if (val.displayVals != null && val.displayVals.length == 1 && val.displayVals[0].first == 'xx') {
+      return val.displayVals[0].second;
+    }
+    return null;
+  }
+
+  getCustomValuesExclude(allValues: AttrValueVO[], exclude:string[]):AttrValueVO[] {
+    let vals:AttrValueVO[] = [];
+    allValues.forEach(_val => {
+      let _xxValue = this.getXXDisplayValue(_val);
+      if (_xxValue == null || exclude.indexOf(_xxValue) == -1) {
+        vals.push(_val);
       }
     });
     return vals;
   }
 
-  getCustomValuesInclude(allValues: Pair<string, Pair<string, string>>[], include:string[]):Pair<string, Pair<string, string>>[] {
-    let vals:Pair<string, Pair<string, string>>[] = [];
-    allValues.forEach(_pair => {
-      if (_pair.second.second != null && include.indexOf(_pair.second.second) != -1) {
-        vals.push(_pair);
+  getCustomValuesInclude(allValues: AttrValueVO[], include:string[]):AttrValueVO[] {
+    let vals:AttrValueVO[] = [];
+    allValues.forEach(_val => {
+      let _xxValue = this.getXXDisplayValue(_val);
+      if (_xxValue != null && include.indexOf(_xxValue) != -1) {
+        vals.push(_val);
       }
     });
     return vals;
   }
+
+  getDisplayValue(attr:AttrValueVO, useDefault:boolean = true):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = attr.displayVals;
+    let def = useDefault ? attr.attribute.code + ': ' + attr.val : '';
+
+    if (i18n == null) {
+      return def;
+    }
+
+    let namePair = i18n.find(_name => {
+      return _name.first == lang;
+    });
+
+    if (namePair != null) {
+      return namePair.second;
+    }
+
+    return def;
+  }
+
 
   getPromotions(codes:string[]):PromotionVO[] {
     let promos:PromotionVO[] = [];

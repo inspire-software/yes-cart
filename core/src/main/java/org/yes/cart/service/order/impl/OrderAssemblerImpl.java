@@ -27,6 +27,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.NonI18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.*;
@@ -365,9 +367,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 if (entry.getKey().startsWith(attributeIdPrefix)) {
                     final String avCode = entry.getKey().substring(attributeIdPrefix.length());
                     final I18NModel nameModel = attrI18n.get(avCode);
-                    final String name = nameModel != null ? nameModel.getValue(customerOrder.getLocale()) : avCode;
-                    customerOrder.putValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + ":" + avCode,
-                            entry.getValue(), name + ": " + entry.getValue());
+                    customerOrder.putValue(
+                            AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + ":" + avCode,
+                            entry.getValue(),
+                            convertToValueI18nModel(nameModel, new NonI18NModel(entry.getValue()), avCode)
+                    );
                 }
             }
         }
@@ -530,9 +534,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 if (entry.getKey().startsWith(attributeIdPrefix)) {
                     final String avCode = entry.getKey().substring(attributeIdPrefix.length());
                     final I18NModel nameModel = attrI18n.get(avCode);
-                    final String name = nameModel != null ? nameModel.getValue(customerOrder.getLocale()) : avCode;
-                    customerOrderDet.putValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + ":" + avCode,
-                            entry.getValue(), name + ": " + entry.getValue());
+                    customerOrderDet.putValue(
+                            AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + ":" + avCode,
+                            entry.getValue(),
+                            convertToValueI18nModel(nameModel, new NonI18NModel(entry.getValue()), avCode)
+                    );
                 }
             }
         }
@@ -558,20 +564,24 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 for (final AttrValue av : product.getAttributes()) {
                     if (storedAttributes.contains(av.getAttributeCode())) {
                         final I18NModel nameModel = attrI18n.get(av.getAttributeCode());
-                        final String name = nameModel != null ? nameModel.getValue(customerOrder.getLocale()) : av.getAttributeCode();
-                        final String displayValue =
-                                new FailoverStringI18NModel(av.getDisplayVal(), av.getVal()).getValue(customerOrder.getLocale());
-                        customerOrderDet.putValue(av.getAttributeCode(), av.getVal(), name + ": " + displayValue);
+                        final I18NModel displayValue = new FailoverStringI18NModel(av.getDisplayVal(), av.getVal());
+                        customerOrderDet.putValue(
+                                av.getAttributeCode(),
+                                av.getVal(),
+                                convertToValueI18nModel(nameModel, displayValue, av.getAttributeCode())
+                        );
                     }
                 }
                 // fill SKU specific (will override product ones)
                 for (final AttrValue av : sku.getAttributes()) {
                     if (storedAttributes.contains(av.getAttributeCode())) {
                         final I18NModel nameModel = attrI18n.get(av.getAttributeCode());
-                        final String name = nameModel != null ? nameModel.getValue(customerOrder.getLocale()) : av.getAttributeCode();
-                        final String displayValue =
-                                new FailoverStringI18NModel(av.getDisplayVal(), av.getVal()).getValue(customerOrder.getLocale());
-                        customerOrderDet.putValue(av.getAttributeCode(), av.getVal(), name + ": " + displayValue);
+                        final I18NModel displayValue = new FailoverStringI18NModel(av.getDisplayVal(), av.getVal());
+                        customerOrderDet.putValue(
+                                av.getAttributeCode(),
+                                av.getVal(),
+                                convertToValueI18nModel(nameModel, displayValue, av.getAttributeCode())
+                        );
                     }
                 }
             }
@@ -614,13 +624,21 @@ public class OrderAssemblerImpl implements OrderAssembler {
             
             if (price != null && price.getSkuPriceId() > 0L) {
                 final BigDecimal cost = MoneyUtils.secondOrFirst(price.getSalePriceForCalculation());
-                customerOrderDet.putValue("ItemCostPrice", cost.toPlainString(), "SUPPLIER");
+                customerOrderDet.putValue(
+                        "ItemCostPrice",
+                        cost.toPlainString(),
+                        new StringI18NModel("SUPPLIER")
+                );
             }
 
             final String priceRef = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + item.getSupplierCode() + "_" + item.getProductSkuCode();
             final String priceRefVal = shoppingCart.getOrderInfo().getDetailByKey(priceRef);
             if (StringUtils.isNotBlank(priceRefVal)) {
-                customerOrderDet.putValue("ItemPriceRef", priceRefVal, "SUPPLIER");
+                customerOrderDet.putValue(
+                        "ItemPriceRef",
+                        priceRefVal,
+                        new StringI18NModel("SUPPLIER")
+                );
             }
 
         }
@@ -685,4 +703,17 @@ public class OrderAssemblerImpl implements OrderAssembler {
         return addressFormatter.formatAddress(address, format);
 
     }
+
+
+    private I18NModel convertToValueI18nModel(final I18NModel nameModel, final I18NModel value, final String defaultPrefix) {
+        final I18NModel display = new StringI18NModel();
+        display.putValue(I18NModel.DEFAULT, defaultPrefix + ": " + value.getValue(I18NModel.DEFAULT));
+        if (nameModel != null) {
+            for (final Map.Entry<String, String> name : nameModel.getAllValues().entrySet()) {
+                display.putValue(name.getKey(), name.getValue() + ": " + value.getValue(name.getKey()));
+            }
+        }
+        return display;
+    }
+
 }

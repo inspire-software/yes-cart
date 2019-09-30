@@ -118,7 +118,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
   }
 
   protected isReleasedNow(row:InventoryVO) {
-    return row.releaseDate === null || (row.releaseDate > new Date());
+    return row.releaseDate === null || (row.releaseDate < new Date());
   }
 
 }

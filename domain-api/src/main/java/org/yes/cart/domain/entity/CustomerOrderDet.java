@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.CartItem;
 
@@ -364,24 +365,24 @@ public interface CustomerOrderDet extends Auditable, CartItem {
      *
      * @return string value and display value for that code
      */
-    Pair<String, String> getValue(String code);
+    Pair<String, I18NModel> getValue(String code);
 
     /**
      * @param code attribute code
      * @param value string value for that code
      * @param displayValue display value object
      */
-    void putValue(String code, String value, String displayValue);
+    void putValue(String code, String value, I18NModel displayValue);
 
     /**
      * @return all values mapped to codes
      */
-    Map<String, Pair<String, String>> getAllValues();
+    Map<String, Pair<String, I18NModel>> getAllValues();
 
     /**
      * @param allValues all values
      */
-    void setAllValues(Map<String, Pair<String, String>> allValues);
+    void setAllValues(Map<String, Pair<String, I18NModel>> allValues);
 
     /**
      * @return order holding this detail

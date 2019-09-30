@@ -44,23 +44,31 @@ public interface VoDataGroupService {
      * Get vo by id.
      *
      * @param id group id
+     *
      * @return vo
+     *
      * @throws Exception errors
      */
     VoDataGroup getDataGroupById(@PathVariable("id") long id) throws Exception;
 
     /**
      * Create new vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoDataGroup createDataGroup(@RequestBody VoDataGroup vo)  throws Exception;
 
     /**
      * Update vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoDataGroup updateDataGroup(@RequestBody VoDataGroup vo)  throws Exception;
@@ -69,6 +77,7 @@ public interface VoDataGroupService {
      * Remove vo.
      *
      * @param id group id
+     *
      * @throws Exception errors
      */
     void removeDataGroup(@PathVariable("id") long id) throws Exception;
@@ -88,23 +97,31 @@ public interface VoDataGroupService {
      * Get vo by id.
      *
      * @param id descriptor id
+     *
      * @return vo
+     *
      * @throws Exception errors
      */
     VoDataDescriptor getDataDescriptorById(@PathVariable("id") long id) throws Exception;
 
     /**
      * Create new vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoDataDescriptor createDataDescriptor(@RequestBody VoDataDescriptor vo)  throws Exception;
 
     /**
      * Update vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoDataDescriptor updateDataDescriptor(@RequestBody VoDataDescriptor vo)  throws Exception;
@@ -113,6 +130,7 @@ public interface VoDataGroupService {
      * Remove vo.
      *
      * @param id descriptor id
+     *
      * @throws Exception errors
      */
     void removeDataDescriptor(@PathVariable("id") long id) throws Exception;

@@ -19,6 +19,7 @@ package org.yes.cart.web.support.entity.decorator.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class CategorySeoableDecoratorImpl extends AbstractSeoableDecoratorImpl<C
             }
 
             @Override
-            protected String getDisplayTitle(final Category seoable) {
+            protected I18NModel getDisplayTitle(final Category seoable) {
                 return seoable.getDisplayName();
             }
 
@@ -49,14 +50,14 @@ public class CategorySeoableDecoratorImpl extends AbstractSeoableDecoratorImpl<C
             }
 
             @Override
-            protected String getDisplayMetadescription(final Category seoable) {
+            protected I18NModel getDisplayMetadescription(final Category seoable) {
 
                 final String av = seoable.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_DESCRIPTION_PREFIX + lang);
 
                 if (StringUtils.isNotBlank(av)) {
                     final Map<String, String> values = new HashMap<>();
                     values.put(lang, removeTags(av));
-                    return new StringI18NModel(values).toString();
+                    return new StringI18NModel(values);
                 }
                 return null;
             }

@@ -30,6 +30,7 @@ public interface VoShopCategoryService {
      * Get all assigned to shop categories.
      *
      * @param shopId shop id
+     *
      * @return list of assigned categories
      */
     List<VoCategory> getAllByShopId(final long shopId) throws Exception;
@@ -50,6 +51,7 @@ public interface VoShopCategoryService {
      *
      * @param shopId shop id
      * @param voCategories all shop categories
+     *
      * @return list of assigned categories
      */
     List<VoCategory> update(final long shopId, List<VoCategory> voCategories) throws Exception;

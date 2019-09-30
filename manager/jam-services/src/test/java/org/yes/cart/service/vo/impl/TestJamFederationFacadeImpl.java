@@ -16,17 +16,9 @@
 package org.yes.cart.service.vo.impl;
 
 import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.domain.vo.VoShop;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by iazarnyi on 1/20/16.
@@ -86,17 +78,7 @@ public class TestJamFederationFacadeImpl implements FederationFacade {
    * {@inheritDoc}
    */
   public void applyFederationFilter(final Collection list, final Class objectType) {
-    if (objectType == ShopDTO.class) {
-      Iterator iter = list.iterator();
-      while(iter.hasNext()) {
-        ShopDTO shopDTO = (ShopDTO) iter.next();
-        if (shopDTO.getShopId() % 2 == 0) {
-          iter.remove();
-        }
-      }
-      return;
-    }
-    throw new UnsupportedOperationException("Import can only work with individual objects");
+
   }
 
   /**

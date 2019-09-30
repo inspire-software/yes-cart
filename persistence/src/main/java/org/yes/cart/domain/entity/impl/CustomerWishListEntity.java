@@ -59,7 +59,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setSkuCode(String skuCode) {
+    public void setSkuCode(final String skuCode) {
         this.skuCode = skuCode;
     }
 
@@ -79,7 +79,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setCustomer(Customer customer) {
+    public void setCustomer(final Customer customer) {
         this.customer = customer;
     }
 
@@ -89,7 +89,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setWlType(String wlType) {
+    public void setWlType(final String wlType) {
         this.wlType = wlType;
     }
 
@@ -149,7 +149,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -159,7 +159,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -169,7 +169,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -179,7 +179,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -189,7 +189,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -204,7 +204,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setCustomerwishlistId(long customerwishlistId) {
+    public void setCustomerwishlistId(final long customerwishlistId) {
         this.customerwishlistId = customerwishlistId;
     }
 

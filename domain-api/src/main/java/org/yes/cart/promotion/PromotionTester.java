@@ -38,6 +38,7 @@ public interface PromotionTester {
      * @param currency currency
      * @param language language
      * @param customer customer (optional)
+     * @param supplier supplier
      * @param products products SKU and corresponding quantities
      * @param shipping shipping SLA
      * @param coupons  coupon codes
@@ -49,6 +50,7 @@ public interface PromotionTester {
                                 String currency,
                                 String language,
                                 String customer,
+                                String supplier,
                                 Map<String, BigDecimal> products,
                                 String shipping,
                                 List<String> coupons,

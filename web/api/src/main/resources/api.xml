@@ -71,6 +71,7 @@
             <map>
                 <entry key="i18nStringConverter"                    value-ref="i18nStringConverter"/>
                 <entry key="i18nModelConverter"                     value-ref="i18nModelConverter"/>
+                <entry key="customValuesMapConverter"               value-ref="customValuesMapConverter"/>
                 <entry key="attributeCodeConverter"                 value-ref="attributeCodeConverter"/>
                 <entry key="productAvailabilityModelATSConverter"   value-ref="productAvailabilityModelATSConverter"/>
                 <entry key="storedAttributesConverter"              value-ref="storedAttributesConverter"/>
@@ -92,6 +93,8 @@
     <bean id="i18nStringConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NStringConverter"/>
 
     <bean id="i18nModelConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NModelConverter"/>
+
+    <bean id="customValuesMapConverter" class="org.yes.cart.domain.dto.adapter.impl.CustomValuesMapConverter"/>
 
     <bean id="attributeCodeConverter" class="org.yes.cart.domain.dto.adapter.impl.AttributeFromCodeValueConverter">
         <constructor-arg index="0" ref="attributeDao"/>

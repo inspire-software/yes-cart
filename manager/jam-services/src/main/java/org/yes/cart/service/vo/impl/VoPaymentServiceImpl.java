@@ -48,7 +48,7 @@ public class VoPaymentServiceImpl implements VoPaymentService {
     }
 
     @Override
-    public List<VoPayment> getFiltered(final String filter, final List<String> operations, final List<String> statuses, final int max) throws Exception {
+    public List<VoPayment> getFilteredPayments(final String filter, final List<String> operations, final List<String> statuses, final int max) throws Exception {
 
         final List<VoPayment> results = new ArrayList<>();
 

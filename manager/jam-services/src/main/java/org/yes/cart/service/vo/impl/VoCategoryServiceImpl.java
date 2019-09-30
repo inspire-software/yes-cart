@@ -127,8 +127,10 @@ public class VoCategoryServiceImpl implements VoCategoryService {
 
             final CategoryService service = (CategoryService) dtoCategoryService.getService();
             for (final Long linked : service.getCategoryLinks(categoryId)) {
-                // Check links with access
-                path.addAll(getBranchPathsInternal(linked, true));
+                if (!linked.equals(categoryId)) {
+                    // Check links with access
+                    path.addAll(getBranchPathsInternal(linked, true));
+                }
             }
         }
         return path;
@@ -181,10 +183,8 @@ public class VoCategoryServiceImpl implements VoCategoryService {
 
     /**
      * Adapt dto to vo recursively.
-     * @param categoryDTOs list of dto
-     * @param voCategories list of vo
      */
-    private void adaptCategories(List<CategoryDTO> categoryDTOs, List<VoCategory> voCategories) {
+    private void adaptCategories(final List<CategoryDTO> categoryDTOs, final List<VoCategory> voCategories) {
         for(CategoryDTO dto : categoryDTOs) {
             VoCategory voCategory =
                     voAssemblySupport.assembleVo(VoCategory.class, CategoryDTO.class, new VoCategory(), dto);
@@ -198,7 +198,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoCategory> getFiltered(final String filter, final int max) throws Exception {
+    public List<VoCategory> getFilteredCategories(final String filter, final int max) throws Exception {
 
         final List<VoCategory> results = new ArrayList<>();
 
@@ -218,7 +218,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
 
     /** {@inheritDoc} */
     @Override
-    public VoCategory getById(final long id) throws Exception {
+    public VoCategory getCategoryById(final long id) throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getById(id);
         if (categoryDTO != null && federationFacade.isManageable(id, CategoryDTO.class)){
             return voAssemblySupport.assembleVo(VoCategory.class, CategoryDTO.class, new VoCategory(), categoryDTO);
@@ -232,7 +232,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
      * {@inheritDoc}
      */
     @Override
-    public VoCategory update(final VoCategory vo) throws Exception {
+    public VoCategory updateCategory(final VoCategory vo) throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getById(vo.getCategoryId());
         final long categoryId = categoryDTO != null && categoryDTO.getParentId() == vo.getParentId() ? vo.getCategoryId() : vo.getParentId();
         if (categoryDTO != null && federationFacade.isManageable(categoryId, CategoryDTO.class)) {
@@ -242,19 +242,19 @@ public class VoCategoryServiceImpl implements VoCategoryService {
         } else {
             throw new AccessDeniedException("Access is denied");
         }
-        return getById(vo.getCategoryId());
+        return getCategoryById(vo.getCategoryId());
     }
 
     /** {@inheritDoc} */
     @Override
-    public VoCategory create(VoCategory voCategory)  throws Exception {
+    public VoCategory createCategory(final VoCategory voCategory)  throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getNew();
         if (voCategory != null && federationFacade.isManageable(voCategory.getParentId(), CategoryDTO.class)) {
 
             CategoryDTO persistent = voAssemblySupport.assembleDto(CategoryDTO.class, VoCategory.class, categoryDTO, voCategory);
             ensureValidNullValues(persistent);
             persistent = dtoCategoryService.create(persistent);
-            return getById(persistent.getId());
+            return getCategoryById(persistent.getId());
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -273,7 +273,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
      * {@inheritDoc}
      */
     @Override
-    public void remove(final long id) throws Exception {
+    public void removeCategory(final long id) throws Exception {
         if (federationFacade.isManageable(id, CategoryDTO.class)) {
             dtoCategoryService.remove(id);
         } else {
@@ -295,7 +295,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoAttrValueCategory> update(final List<MutablePair<VoAttrValueCategory, Boolean>> vo) throws Exception {
+    public List<VoAttrValueCategory> updateCategoryAttributes(final List<MutablePair<VoAttrValueCategory, Boolean>> vo) throws Exception {
 
         final long categoryId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 
@@ -307,7 +307,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
      *
      * @param attributes attributes to skip
      */
-    public void setSkipAttributesInView(List<String> attributes) {
+    public void setSkipAttributesInView(final List<String> attributes) {
         this.skipAttributesInView = new HashSet<>(attributes);
     }
 
@@ -316,7 +316,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
      *
      * @param contentPrefix attributes to skip
      */
-    public void setSkipContentAttributesInView(String contentPrefix) {
+    public void setSkipContentAttributesInView(final String contentPrefix) {
         this.skipContentAttributesInView = contentPrefix;
     }
 }

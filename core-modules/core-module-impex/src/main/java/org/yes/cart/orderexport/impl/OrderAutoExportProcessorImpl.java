@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.i18n.impl.NonI18NModel;
 import org.yes.cart.orderexport.ExportProcessorException;
 import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.orderexport.OrderExporter;
@@ -165,7 +166,11 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
             LOG.info("Order {}/{} was marked as blocked", customerOrder.getOrdernum(), prevEligibility);
         }
         for (final Map.Entry<String, String> auditEntry : audit.entrySet()) {
-            customerOrder.putValue(auditEntry.getKey(), auditEntry.getValue(), "AUDITEXPORT");
+            customerOrder.putValue(
+                    auditEntry.getKey(),
+                    auditEntry.getValue(),
+                    new NonI18NModel("AUDITEXPORT")
+            );
         }
         customerOrderService.update(customerOrder);
     }
@@ -191,7 +196,11 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         customerOrder.setLastExportStatus(error);
         // Key is Exporter+Suffix because we want to overwrite this with last error by this exporter (in case this error
         // is persistent, so that we do not flood the audit table)
-        customerOrder.putValue(exporter + ": ERROR", DateUtils.formatSDT() + ": " + error, "AUDITEXPORT");
+        customerOrder.putValue(
+                exporter + ": ERROR",
+                DateUtils.formatSDT() + ": " + error,
+                new NonI18NModel("AUDITEXPORT")
+        );
         customerOrderService.update(customerOrder);
 
     }

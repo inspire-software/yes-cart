@@ -18,6 +18,8 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Map;
+
 /**
  * Area, state or county.
  * <p/>
@@ -74,14 +76,14 @@ public interface StateDTO extends Identifiable {
      *
      * @return name.
      */
-    String getDisplayName();
+    Map<String, String> getDisplayNames();
 
     /**
      * Set name.
      *
      * @param name name to set.
      */
-    void setDisplayName(String name);
+    void setDisplayNames(Map<String, String> name);
 
     /**
      * Get state pk value.

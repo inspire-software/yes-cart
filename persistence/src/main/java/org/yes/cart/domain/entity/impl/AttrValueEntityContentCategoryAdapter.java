@@ -19,6 +19,7 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.AttrValueCategory;
 import org.yes.cart.domain.entity.AttrValueContent;
 import org.yes.cart.domain.entity.Content;
+import org.yes.cart.domain.i18n.I18NModel;
 
 import java.time.Instant;
 
@@ -87,12 +88,12 @@ public class AttrValueEntityContentCategoryAdapter implements AttrValueContent {
     }
 
     @Override
-    public String getDisplayVal() {
+    public I18NModel getDisplayVal() {
         return attrValueCategory.getDisplayVal();
     }
 
     @Override
-    public void setDisplayVal(final String displayVal) {
+    public void setDisplayVal(final I18NModel displayVal) {
         attrValueCategory.setDisplayVal(displayVal);
     }
 

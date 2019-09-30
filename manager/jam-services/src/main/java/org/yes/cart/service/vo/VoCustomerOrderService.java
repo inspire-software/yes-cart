@@ -40,7 +40,7 @@ public interface VoCustomerOrderService {
      *
      * @throws Exception errors
      */
-    List<VoCustomerOrderInfo> getFiltered(String lang, String filter, int max) throws Exception;
+    List<VoCustomerOrderInfo> getFilteredOrders(String lang, String filter, int max) throws Exception;
 
     /**
      * Get all orders for given filter
@@ -54,7 +54,7 @@ public interface VoCustomerOrderService {
      *
      * @throws Exception errors
      */
-    List<VoCustomerOrderInfo> getFiltered(String lang, String filter, List<String> statuses, int max) throws Exception;
+    List<VoCustomerOrderInfo> getFilteredOrders(String lang, String filter, List<String> statuses, int max) throws Exception;
 
     /**
      * Get order by id
@@ -66,7 +66,7 @@ public interface VoCustomerOrderService {
      *
      * @throws Exception errors
      */
-    VoCustomerOrder getById(String lang, long orderId) throws Exception;
+    VoCustomerOrder getOrderById(String lang, long orderId) throws Exception;
 
     /**
      * Perform order transition.

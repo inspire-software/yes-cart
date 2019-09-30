@@ -74,7 +74,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setWarehouse(Warehouse warehouse) {
+    public void setWarehouse(final Warehouse warehouse) {
         this.warehouse = warehouse;
     }
 
@@ -94,7 +94,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setQuantity(BigDecimal quantity) {
+    public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
     }
 
@@ -104,7 +104,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setReserved(BigDecimal reserved) {
+    public void setReserved(final BigDecimal reserved) {
         this.reserved = reserved;
     }
 
@@ -114,7 +114,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -124,7 +124,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -134,7 +134,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -144,7 +144,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -154,7 +154,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -169,7 +169,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setSkuWarehouseId(long skuWarehouseId) {
+    public void setSkuWarehouseId(final long skuWarehouseId) {
         this.skuWarehouseId = skuWarehouseId;
     }
 
@@ -238,7 +238,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setAvailablefrom(LocalDateTime availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
@@ -250,7 +250,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
 
     /** {@inheritDoc} */
     @Override
-    public void setAvailableto(LocalDateTime availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
@@ -260,7 +260,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setAvailability(int availability) {
+    public void setAvailability(final int availability) {
         this.availability = availability;
     }
 
@@ -270,7 +270,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setFeatured(Boolean featured) {
+    public void setFeatured(final Boolean featured) {
         this.featured = featured;
     }
 
@@ -280,7 +280,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
     @Override
-    public void setTag(String tag) {
+    public void setTag(final String tag) {
         this.tag = tag;
     }
 
@@ -353,12 +353,8 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
 
     @Override
     public void setRestockNote(final I18NModel restockNote) {
-        if (restockNote instanceof StringI18NModel) {
-            this.restockNoteInternal = restockNote.toString();
-            this.restockNote = restockNote.copy();
-        } else {
-            throw new IllegalArgumentException("Only StringI18NModel is supported");
-        }
+        this.restockNote = restockNote;
+        this.restockNoteInternal = restockNote != null ? restockNote.toString() : null;
     }
 }
 

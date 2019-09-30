@@ -18,11 +18,14 @@ package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -47,8 +50,8 @@ public class CountryRO implements Serializable {
     @DtoField(value = "name", readOnly = true)
     private String name;
 
-    @DtoField(value = "displayName", readOnly = true)
-    private String displayName;
+    @DtoField(value = "displayName", converter = "i18nModelConverter", readOnly = true)
+    private Map<String, String> displayName;
 
     @XmlAttribute(name = "country-id")
     public long getCountryId() {
@@ -85,12 +88,13 @@ public class CountryRO implements Serializable {
         this.name = name;
     }
 
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "display-name")
-    public String getDisplayName() {
+    public Map<String, String> getDisplayName() {
         return displayName;
     }
 
-    public void setDisplayName(final String displayName) {
+    public void setDisplayName(final Map<String, String> displayName) {
         this.displayName = displayName;
     }
 

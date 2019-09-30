@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 import java.util.Collection;
 
 /**
@@ -173,14 +175,14 @@ public interface ProductSku extends Auditable, Attributable, Rankable, Nameable,
      *
      * @return display name.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Get display name
      *
      * @param name display name
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
 
     /**
@@ -204,7 +206,7 @@ public interface ProductSku extends Auditable, Attributable, Rankable, Nameable,
      *
      * @return as is description
      */
-    String getDescriptionAsIs();
+    I18NModel getDisplayDescription();
 
     /**
      * {@inheritDoc}

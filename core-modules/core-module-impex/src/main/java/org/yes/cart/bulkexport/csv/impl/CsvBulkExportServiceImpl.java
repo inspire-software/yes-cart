@@ -213,8 +213,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
 
                     if (column.getLanguage() != null) {
                         final String data = (String) tuple.getColumnValue(column, valueLanguageAdapter);
-                        final I18NModel model = new StringI18NModel(data);
-                        csv[i] = model.getValue(column.getLanguage());
+                        csv[i] = data;
                     } else {
                         final String data = (String) tuple.getColumnValue(column, valueDataAdapter);
                         csv[i] = data;

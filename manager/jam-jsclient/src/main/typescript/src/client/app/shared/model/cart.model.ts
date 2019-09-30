@@ -124,8 +124,6 @@ export interface CartItemVO {
 export interface CartVO {
 
   cartItems: CartItemVO[];
-  items: CartItemVO[];
-  gifts: CartItemVO[];
 
   shipping: CartItemVO[];
 

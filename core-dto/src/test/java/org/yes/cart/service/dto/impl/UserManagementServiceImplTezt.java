@@ -109,7 +109,7 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testAddRole() throws Exception {
         managementService.addRole("ROLE_ZZZ", null);
-        assertEquals(1, managementService.getRolesList().size());
+        assertEquals(3, managementService.getRolesList().size());
         managementService.deleteRole("ROLE_ZZZ");
     }
 
@@ -120,9 +120,9 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     managementService.addRole("ROLE_XXX", null);
-                    assertEquals(1, managementService.getRolesList().size());
+                    assertEquals(3, managementService.getRolesList().size());
                     managementService.updateRole("ROLE_XXX", "xxx");
-                    assertEquals("xxx", managementService.getRolesList().get(0).getDescription());
+                    assertEquals("xxx", managementService.getRolesList().stream().filter(role -> "ROLE_XXX".equals(role.getCode())).findFirst().get().getDescription());
                 }   catch (Exception e) {
                     assertTrue(e.getMessage(), false);
 

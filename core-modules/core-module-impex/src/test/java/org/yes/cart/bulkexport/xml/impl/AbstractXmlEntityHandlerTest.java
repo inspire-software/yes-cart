@@ -22,10 +22,13 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
-import org.yes.cart.bulkcommon.xml.XmlImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Attributable;
+import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.entity.Seoable;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 
@@ -144,7 +147,7 @@ public class AbstractXmlEntityHandlerTest {
         final Map<String, String> names = new HashMap<>();
         names.put("en", "english");
         names.put("de", "deutch");
-        final String displayName = new StringI18NModel(names).toString();
+        final I18NModel displayName = new StringI18NModel(names);
 
         assertEquals("<root><display-name><i18n lang=\"de\"><![CDATA[deutch]]></i18n><i18n lang=\"en\"><![CDATA[english]]></i18n></display-name></root>",
                 this.handler
@@ -260,7 +263,7 @@ public class AbstractXmlEntityHandlerTest {
         final Map<String, String> names = new HashMap<>();
         names.put("en", "english");
         names.put("de", "deutch");
-        final String displayName = new StringI18NModel(names).toString();
+        final I18NModel displayName = new StringI18NModel(names);
 
         assertEquals("<root>\n" +
                         "    <display-name>\n" +

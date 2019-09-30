@@ -47,7 +47,7 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     }
 
     @Override
-    public void setJavatype(String javatype) {
+    public void setJavatype(final String javatype) {
         this.javatype = javatype;
     }
 
@@ -57,7 +57,7 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     }
 
     @Override
-    public void setBusinesstype(String businesstype) {
+    public void setBusinesstype(final String businesstype) {
         this.businesstype = businesstype;
     }
 
@@ -67,7 +67,7 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -77,7 +77,7 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -87,7 +87,7 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -97,7 +97,7 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -107,7 +107,7 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -123,7 +123,7 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
 
 
     @Override
-    public void setEtypeId(long etypeId) {
+    public void setEtypeId(final long etypeId) {
         this.etypeId = etypeId;
     }
 

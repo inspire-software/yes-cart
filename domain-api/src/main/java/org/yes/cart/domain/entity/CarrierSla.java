@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -105,14 +107,14 @@ public interface CarrierSla extends Auditable {
      *
      * @return localisable name of carrier SLA.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Set name of carrier SLA.
      *
      * @param name localisable name.
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * Get SLA description.
@@ -133,14 +135,14 @@ public interface CarrierSla extends Auditable {
      *
      * @return localisable description of carrier SLA.
      */
-    String getDisplayDescription();
+    I18NModel getDisplayDescription();
 
     /**
      * Set description of carrier SLA.
      *
      * @param description localisable description.
      */
-    void setDisplayDescription(String description);
+    void setDisplayDescription(I18NModel description);
 
     /**
      * Get external script to calculate delivery cost.

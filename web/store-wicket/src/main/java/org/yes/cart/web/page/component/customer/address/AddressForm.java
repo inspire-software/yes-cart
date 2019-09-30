@@ -143,7 +143,7 @@ public class AddressForm extends Form<Address> {
         final AbstractChoice<State, State> stateDropDownChoice = new DropDownChoice<>(
                 STATE,
                 new StateModel(new PropertyModel(stateCode, "val"), stateList),
-                stateList).setChoiceRenderer(new StateRenderer());
+                stateList).setChoiceRenderer(new StateRenderer(getLocale().getLanguage()));
         final boolean needState = !stateList.isEmpty();
         stateDropDownChoice.setRequired(needState);
         stateDropDownChoice.setVisible(needState);
@@ -165,7 +165,7 @@ public class AddressForm extends Form<Address> {
                 }
             }
         });
-        countryDropDownChoice.setChoiceRenderer(new CountryRenderer());
+        countryDropDownChoice.setChoiceRenderer(new CountryRenderer(getLocale().getLanguage()));
         countryDropDownChoice.setRequired(true);
 
 

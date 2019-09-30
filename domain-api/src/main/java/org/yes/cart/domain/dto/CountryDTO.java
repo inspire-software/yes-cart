@@ -18,6 +18,8 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Map;
+
 /**
  * Country DTO.
  * <p/>
@@ -74,14 +76,14 @@ public interface CountryDTO extends Identifiable {
      *
      * @return country name.
      */
-    String getDisplayName();
+    Map<String, String> getDisplayNames();
 
     /**
      * Set country name.
      *
      * @param name country name.
      */
-    void setDisplayName(String name);
+    void setDisplayNames(Map<String, String> name);
 
     /**
      * Get iso country code.

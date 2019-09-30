@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -289,14 +291,14 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @return display name.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Get display name
      *
      * @param name display name
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * Get product description.
@@ -319,7 +321,7 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      *
      * @return as is description
      */
-    String getDescriptionAsIs();
+    I18NModel getDisplayDescription();
 
     /**
      * Get the default sku. For single sku product it will be only one sku.

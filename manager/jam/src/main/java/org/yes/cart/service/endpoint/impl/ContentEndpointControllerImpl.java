@@ -87,31 +87,31 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
     @Override
     public @ResponseBody
     List<VoContent> getFilteredContent(@PathVariable("shopId") final long shopId, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voContentService.getFiltered(shopId, filter, max);
+        return voContentService.getFilteredContent(shopId, filter, max);
     }
 
     @Override
     public @ResponseBody
     VoContentWithBody getContentById(@PathVariable("id") final long id) throws Exception {
-        return voContentService.getById(id);
+        return voContentService.getContentById(id);
     }
 
     @Override
     public @ResponseBody
     VoContentWithBody createContent(@RequestBody final VoContent voContent) throws Exception {
-        return voContentService.create(voContent);
+        return voContentService.createContent(voContent);
     }
 
     @Override
     public @ResponseBody
     VoContentWithBody updateContent(@RequestBody final VoContentWithBody voContent) throws Exception {
-        return voContentService.update(voContent);
+        return voContentService.updateContent(voContent);
     }
 
     @Override
     public @ResponseBody
     void removeContent(@PathVariable("id") final long id) throws Exception {
-        voContentService.remove(id);
+        voContentService.removeContent(id);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
     @Override
     public @ResponseBody
     List<VoAttrValueContent> updateContent(@RequestBody final List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception {
-        return voContentService.update(vo);
+        return voContentService.updateContentAttributes(vo);
     }
 
     @Override

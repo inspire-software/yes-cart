@@ -199,7 +199,7 @@
             <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].countryCode.label }}</div>
             <div class="col-xs-9">
               <select class="form-control" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="addressEdit.countryCode" (ngModelChange)="onCountryChange($event)">
-                <option *ngFor="let country of countries" value="{{ country.first }}">{{ country.second }}</option>
+                <option *ngFor="let country of countries" value="{{ country.code }}">{{ country.name }}</option>
               </select>
             </div>
           </div>
@@ -207,7 +207,7 @@
             <div class="col-xs-3">{{ addressFormConfig[addressEdit.addressType].stateCode.label }}</div>
             <div class="col-xs-9">
               <select class="form-control" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="addressEdit.stateCode">
-                <option *ngFor="let state of states" value="{{ state.first }}">{{ state.second }}</option>
+                <option *ngFor="let state of states" value="{{ state.code }}">{{ state.name }}</option>
               </select>
             </div>
           </div>

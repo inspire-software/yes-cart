@@ -43,7 +43,7 @@ public class AttrValueCategoryDTOImpl implements AttrValueCategoryDTO {
     @DtoField(value = "indexedVal")
     private String indexedVal;
 
-    @DtoField(value = "displayVal", converter = "i18nStringConverter")
+    @DtoField(value = "displayVal", converter = "i18nModelConverter")
     private Map<String, String> displayVals;
 
 

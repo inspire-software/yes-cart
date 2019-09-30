@@ -19,6 +19,7 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.domain.i18n.I18NModel;
 
 import java.time.LocalDateTime;
 
@@ -37,13 +38,6 @@ public interface CategoryRelationDTO extends Identifiable, Guidable {
     long getCategoryId();
 
     /**
-     * Set category pk value.
-     *
-     * @param categoryId pk value
-     */
-    void setCategoryId(long categoryId);
-
-    /**
      * Get parent pk value.
      *
      * @return parent pk value.
@@ -51,25 +45,11 @@ public interface CategoryRelationDTO extends Identifiable, Guidable {
     long getParentId();
 
     /**
-     * Set parent pk value.
-     *
-     * @param parentId parent pk value.
-     */
-    void setParentId(long parentId);
-
-    /**
      * Get link to pk value.
      *
      * @return link to pk value.
      */
     Long getLinkToId();
-
-    /**
-     * Set link to pk value.
-     *
-     * @param linkToId link to pk value.
-     */
-    void setLinkToId(Long linkToId);
 
 
     /**
@@ -80,25 +60,11 @@ public interface CategoryRelationDTO extends Identifiable, Guidable {
     int getRank();
 
     /**
-     * Set category rank.
-     *
-     * @param rank category rank
-     */
-    void setRank(int rank);
-
-    /**
      * Flag to denote if object is disabled on not.
      *
      * @return true if object is disabled
      */
     boolean isDisabled();
-
-    /**
-     * Flag to denote if object is disabled on not.
-     *
-     * @param disabled true if object is disabled
-     */
-    void setDisabled(boolean disabled);
 
     /**
      * Get available from date.  Null value means no start.
@@ -108,25 +74,11 @@ public interface CategoryRelationDTO extends Identifiable, Guidable {
     LocalDateTime getAvailablefrom();
 
     /**
-     * Set available from date.
-     *
-     * @param availablefrom available from date.
-     */
-    void setAvailablefrom(LocalDateTime availablefrom);
-
-    /**
      * Get available to date.  Null value means no end date.
      *
      * @return available to date.
      */
     LocalDateTime getAvailableto();
-
-    /**
-     * Set available to date.
-     *
-     * @param availableto available to date.
-     */
-    void setAvailableto(LocalDateTime availableto);
 
     /**
      * Get category name.
@@ -136,23 +88,11 @@ public interface CategoryRelationDTO extends Identifiable, Guidable {
     String getName();
 
     /**
-     * Set category name.
-     *
-     * @param name category name.
-     */
-    void setName(String name);
-
-    /**
      * Get display name, which is hold localization failover.
+     *
      * @return display name.
      */
-    String getDisplayName();
-
-    /**
-     * Set display name.
-     * @param displayName display name.
-     */
-    void setDisplayName(String displayName);
+    I18NModel getDisplayName();
 
     /**
      * This method check if current category is root of catalog or content root

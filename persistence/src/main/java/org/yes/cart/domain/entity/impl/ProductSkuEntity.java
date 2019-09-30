@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.Instant;
@@ -49,7 +50,8 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     private String supplierCode;
     private String supplierCatalogCode;
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String description;
     private String tag;
     private Product product;
@@ -74,7 +76,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -124,18 +126,28 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
+    }
+
     @Override
-    public String getDisplayName() {
+    public I18NModel getDisplayName() {
         return this.displayName;
     }
 
     @Override
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -144,24 +156,21 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getDescriptionAsIs() {
-        final StringBuilder builder = new StringBuilder();
+    public I18NModel getDisplayDescription() {
+        final StringI18NModel model = new StringI18NModel();
         for (AttrValue attr : attributes) {
             if (attr.getAttributeCode() != null &&
                     attr.getAttributeCode().startsWith(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX)) {
-                builder.append(getLocale(attr.getAttributeCode()));
-                builder.append(StringI18NModel.SEPARATOR);
-                builder.append(attr.getVal());
-                builder.append(StringI18NModel.SEPARATOR);
+                model.putValue(getLocale(attr.getAttributeCode()), attr.getVal());
             }
         }
-        return builder.toString();
+        return model;
     }
 
     String getLocale(final String attrCode) {
@@ -174,7 +183,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setTag(String tag) {
+    public void setTag(final String tag) {
         this.tag = tag;
     }
 
@@ -184,7 +193,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setProduct(Product product) {
+    public void setProduct(final Product product) {
         this.product = product;
     }
 
@@ -194,7 +203,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(final int rank) {
         this.rank = rank;
     }
 
@@ -204,7 +213,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setBarCode(String barCode) {
+    public void setBarCode(final String barCode) {
         this.barCode = barCode;
     }
 
@@ -214,7 +223,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setAttributes(Collection<AttrValueProductSku> attributes) {
+    public void setAttributes(final Collection<AttrValueProductSku> attributes) {
         this.attributes = attributes;
     }
 
@@ -222,7 +231,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         return this.seoInternal;
     }
 
-    public void setSeoInternal(SeoEntity seo) {
+    public void setSeoInternal(final SeoEntity seo) {
         this.seoInternal = seo;
     }
 
@@ -232,7 +241,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -242,7 +251,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -252,7 +261,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -262,7 +271,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -272,7 +281,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -287,7 +296,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Override
-    public void setSkuId(long skuId) {
+    public void setSkuId(final long skuId) {
         this.skuId = skuId;
     }
 

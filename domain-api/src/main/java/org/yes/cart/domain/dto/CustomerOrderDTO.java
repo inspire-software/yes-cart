@@ -675,12 +675,12 @@ public interface CustomerOrderDTO extends Identifiable {
     /**
      * @return all values mapped to codes
      */
-    Map<String, Pair<String, String>> getAllValues();
+    Map<String, Pair<String, Map<String, String>>> getAllValues();
 
     /**
      * @param allValues all values
      */
-    void setAllValues(Map<String, Pair<String, String>> allValues);
+    void setAllValues(Map<String, Pair<String, Map<String, String>>> allValues);
 
 
 }

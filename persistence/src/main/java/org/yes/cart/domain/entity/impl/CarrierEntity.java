@@ -19,6 +19,8 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.CarrierShop;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -35,9 +37,11 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     private long version;
 
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String description;
-    private String displayDescription;
+    private String displayDescriptionInternal;
+    private I18NModel displayDescription;
     private boolean worldwide;
     private boolean country;
     private boolean state;
@@ -61,18 +65,28 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Override
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
     }
 
     @Override
-    public void setDisplayName(final String displayName) {
+    public I18NModel getDisplayName() {
+        return this.displayName;
+    }
+
+    @Override
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -81,18 +95,28 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
-    @Override
-    public String getDisplayDescription() {
-        return displayDescription;
+    public String getDisplayDescriptionInternal() {
+        return displayDescriptionInternal;
+    }
+
+    public void setDisplayDescriptionInternal(final String displayDescriptionInternal) {
+        this.displayDescriptionInternal = displayDescriptionInternal;
+        this.displayDescription = new StringI18NModel(displayDescriptionInternal);
     }
 
     @Override
-    public void setDisplayDescription(final String displayDescription) {
+    public I18NModel getDisplayDescription() {
+        return this.displayDescription;
+    }
+
+    @Override
+    public void setDisplayDescription(final I18NModel displayDescription) {
         this.displayDescription = displayDescription;
+        this.displayDescriptionInternal = displayDescription != null ? displayDescription.toString() : null;
     }
 
     @Override
@@ -101,7 +125,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setWorldwide(boolean worldwide) {
+    public void setWorldwide(final boolean worldwide) {
         this.worldwide = worldwide;
     }
 
@@ -111,7 +135,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setCountry(boolean country) {
+    public void setCountry(final boolean country) {
         this.country = country;
     }
 
@@ -121,7 +145,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setState(boolean state) {
+    public void setState(final boolean state) {
         this.state = state;
     }
 
@@ -131,7 +155,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setLocal(boolean local) {
+    public void setLocal(final boolean local) {
         this.local = local;
     }
 
@@ -141,7 +165,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setCarrierSla(Collection<CarrierSla> carrierSla) {
+    public void setCarrierSla(final Collection<CarrierSla> carrierSla) {
         this.carrierSla = carrierSla;
     }
 
@@ -161,7 +185,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -171,7 +195,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -181,7 +205,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -191,7 +215,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -201,7 +225,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -216,7 +240,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     }
 
     @Override
-    public void setCarrierId(long carrierId) {
+    public void setCarrierId(final long carrierId) {
         this.carrierId = carrierId;
     }
 

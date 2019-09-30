@@ -18,9 +18,11 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.misc.MutablePair;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -78,6 +80,12 @@ public class VoInventory {
 
     @DtoField(value = "releaseDate")
     private LocalDateTime releaseDate;
+
+    @DtoField(value = "restockDate")
+    private LocalDateTime restockDate;
+
+    @DtoField(value = "restockNotes", converter = "DisplayValues")
+    private List<MutablePair<String, String>> restockNotes;
 
     public long getSkuWarehouseId() {
         return skuWarehouseId;
@@ -213,5 +221,21 @@ public class VoInventory {
 
     public void setTag(final String tag) {
         this.tag = tag;
+    }
+
+    public LocalDateTime getRestockDate() {
+        return restockDate;
+    }
+
+    public void setRestockDate(final LocalDateTime restockDate) {
+        this.restockDate = restockDate;
+    }
+
+    public List<MutablePair<String, String>> getRestockNotes() {
+        return restockNotes;
+    }
+
+    public void setRestockNotes(final List<MutablePair<String, String>> restockNotes) {
+        this.restockNotes = restockNotes;
     }
 }

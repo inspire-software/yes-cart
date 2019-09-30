@@ -120,8 +120,8 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @DtoField(value = "delivery.deliveryStatus", readOnly = true)
     private String deliveryStatusLabel;
 
-    @DtoField(value = "allValues", readOnly = true)
-    private Map<String, Pair<String, String>> allValues;
+    @DtoField(value = "allValues", readOnly = true, converter = "customValuesMapConverter")
+    private Map<String, Pair<String, Map<String, String>>> allValues;
 
 
     @Override
@@ -484,12 +484,12 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     }
 
     @Override
-    public Map<String, Pair<String, String>> getAllValues() {
+    public Map<String, Pair<String, Map<String, String>>> getAllValues() {
         return allValues;
     }
 
     @Override
-    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+    public void setAllValues(final Map<String, Pair<String, Map<String, String>>> allValues) {
         this.allValues = allValues;
     }
 

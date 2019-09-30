@@ -75,4 +75,11 @@ public interface PromotionCouponService extends GenericService<PromotionCoupon> 
      */
     void updateUsage(PromotionCoupon promotionCoupon, int offset);
 
+    /**
+     * Remove all coupons by promotion ID
+     *
+     * @param promotionId promo ID
+     */
+    void removeAll(long promotionId);
+
 }

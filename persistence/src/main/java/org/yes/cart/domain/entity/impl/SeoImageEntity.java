@@ -17,6 +17,9 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
+
 import java.time.Instant;
 
 /**
@@ -33,7 +36,8 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     private String alt;
     private String displayAlt;
     private String title;
-    private String displayTitle;
+    private String displayTitleInternal;
+    private I18NModel displayTitle;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -51,7 +55,7 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     }
 
     @Override
-    public void setImageName(String imageName) {
+    public void setImageName(final String imageName) {
         this.imageName = imageName;
     }
 
@@ -61,7 +65,7 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     }
 
     @Override
-    public void setAlt(String alt) {
+    public void setAlt(final String alt) {
         this.alt = alt;
     }
 
@@ -81,18 +85,28 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
+    public String getDisplayTitleInternal() {
+        return displayTitleInternal;
+    }
+
+    public void setDisplayTitleInternal(final String displayTitleInternal) {
+        this.displayTitleInternal = displayTitleInternal;
+        this.displayTitle = new StringI18NModel(displayTitleInternal);
+    }
+
     @Override
-    public String getDisplayTitle() {
+    public I18NModel getDisplayTitle() {
         return displayTitle;
     }
 
     @Override
-    public void setDisplayTitle(final String displayTitle) {
+    public void setDisplayTitle(final I18NModel displayTitle) {
         this.displayTitle = displayTitle;
+        this.displayTitleInternal = displayTitle != null ? displayTitle.toString() : null;
     }
 
     @Override
@@ -101,7 +115,7 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -111,7 +125,7 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -121,7 +135,7 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -131,7 +145,7 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -141,7 +155,7 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -157,7 +171,7 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     }
 
     @Override
-    public void setSeoImageId(long seoImageId) {
+    public void setSeoImageId(final long seoImageId) {
         this.seoImageId = seoImageId;
     }
 

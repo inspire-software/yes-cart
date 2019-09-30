@@ -70,7 +70,7 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
                 null);
 
         assertNotNull(taxes);
-        assertEquals(9, taxes.size());
+        assertEquals(10, taxes.size());
 
         // retrieve non-existent
         taxes = dtoTaxService.findByParameters(
@@ -110,7 +110,7 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
                 10);
 
         assertNotNull(taxes);
-        assertEquals(7, taxes.size());
+        assertEquals(8, taxes.size());
 
 
         // retrieve exclusive EUR
@@ -133,7 +133,7 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
                 10);
 
         assertNotNull(taxes);
-        assertEquals(1, taxes.size());
+        assertEquals(2, taxes.size());
 
 
         // retrieve exclusive EUR 10%
@@ -158,7 +158,7 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
                 10);
 
         assertNotNull(taxes);
-        assertEquals(3, taxes.size());
+        assertEquals(4, taxes.size());
         assertEquals(5, taxes.get(0).getTaxRate().setScale(0, RoundingMode.HALF_UP).intValue());
 
 

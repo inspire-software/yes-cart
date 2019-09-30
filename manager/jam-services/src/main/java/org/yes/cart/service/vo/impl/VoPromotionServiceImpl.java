@@ -21,6 +21,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.vo.VoCart;
 import org.yes.cart.domain.vo.VoPromotion;
 import org.yes.cart.domain.vo.VoPromotionCoupon;
@@ -129,8 +130,13 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     @Override
     public void removePromotion(final long id) throws Exception {
 
-        getPromotionById(id); // check access
-        dtoPromotionService.remove(id);
+        final PromotionDTO dto = dtoPromotionService.getById(id);
+        if (dto != null && !dto.isEnabled() && federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {
+            dtoPromotionCouponService.removeAll(id);
+            dtoPromotionService.remove(id);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
 
     }
 
@@ -230,6 +236,7 @@ public class VoPromotionServiceImpl implements VoPromotionService {
                     shopCode, currency,
                     testData.getLanguage(),
                     testData.getCustomer(),
+                    testData.getSupplier(),
                     skuCodes,
                     testData.getShipping(),
                     couponCodes,

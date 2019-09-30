@@ -160,13 +160,15 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
             return this;
         }
 
-        private Tag i18n(final String value) {
-            if (value.contains(StringI18NModel.SEPARATOR)) {
-                for (final Map.Entry<String, String> i18n : new StringI18NModel(value).getAllValues().entrySet()) {
-                    tag("i18n").attr("lang", i18n.getKey()).cdata(i18n.getValue()).end();
+        private Tag i18n(final I18NModel value) {
+            if (value != null) {
+                if (!value.getAllValues().isEmpty()) {
+                    for (final Map.Entry<String, String> i18n : value.getAllValues().entrySet()) {
+                        tag("i18n").attr("lang", i18n.getKey()).cdata(i18n.getValue()).end();
+                    }
+                } else if (value.getValue(I18NModel.DEFAULT) != null) {
+                    tag("i18n").attr("lang", I18NModel.DEFAULT).cdata(value.getValue(I18NModel.DEFAULT)).end();
                 }
-            } else { // fake value
-                tag("i18n").attr("lang", I18NModel.DEFAULT).cdata(value).end();
             }
             return this;
         }
@@ -189,10 +191,10 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
             return this;
         }
 
-        private Tag ext(final Map<String, Pair<String, String>> attributes) {
+        private Tag ext(final Map<String, Pair<String, I18NModel>> attributes) {
             if (!attributes.isEmpty()) {
                 final Tag custom = tag("custom-attributes");
-                for (final Map.Entry<String, Pair<String, String>> attrValue : attributes.entrySet()) {
+                for (final Map.Entry<String, Pair<String, I18NModel>> attrValue : attributes.entrySet()) {
                     custom.tag("custom-attribute")
                             .attr("attribute", attrValue.getKey())
                                 .tagCdata("custom-value", attrValue.getValue().getFirst())
@@ -295,7 +297,7 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
             return this;
         }
 
-        public Tag tagI18n(final String name, final String value) {
+        public Tag tagI18n(final String name, final I18NModel value) {
             if (value != null) {
                 this.hasTextOrTag = true;
                 return new Tag(this, name).i18n(value).end();
@@ -311,7 +313,7 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
             return this;
         }
 
-        public Tag tagExt(final Map<String, Pair<String, String>> value) {
+        public Tag tagExt(final Map<String, Pair<String, I18NModel>> value) {
             if (value != null) {
                 this.hasTextOrTag = true;
                 return ext(value);

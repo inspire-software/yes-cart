@@ -57,7 +57,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(final int rank) {
         this.rank = rank;
     }
 
@@ -67,7 +67,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -77,7 +77,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -87,7 +87,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setAvailablefrom(LocalDateTime availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
@@ -97,7 +97,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setAvailableto(LocalDateTime availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
@@ -107,7 +107,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setRule(String rule) {
+    public void setRule(final String rule) {
         this.rule = rule;
     }
 
@@ -117,7 +117,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setShopAdvPlace(ShopAdvPlace shopAdvPlace) {
+    public void setShopAdvPlace(final ShopAdvPlace shopAdvPlace) {
         this.shopAdvPlace = shopAdvPlace;
     }
 
@@ -127,7 +127,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -137,7 +137,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -147,7 +147,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -157,7 +157,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -167,7 +167,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -183,7 +183,7 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
     }
 
     @Override
-    public void setShopadvrulesId(long shopadvrulesId) {
+    public void setShopadvrulesId(final long shopadvrulesId) {
         this.shopadvrulesId = shopadvrulesId;
     }
 

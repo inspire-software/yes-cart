@@ -23,6 +23,7 @@ import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.*;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.NonI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.utils.DateUtils;
@@ -416,16 +417,11 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         customerOrder.setOrderMessage(xmlType.getContactDetails().getRemarks());
     }
 
-    private String getI18nForCustomAttribute(final CustomAttributeType ca) {
+    private I18NModel getI18nForCustomAttribute(final CustomAttributeType ca) {
 
         if (ca.getCustomDisplayValue() != null
                 && CollectionUtils.isNotEmpty(ca.getCustomDisplayValue().getI18N())) {
-            if (ca.getCustomDisplayValue().getI18N().size() == 1
-                    && I18NModel.DEFAULT.equals(ca.getCustomDisplayValue().getI18N().get(0).getLang())) {
-                return ca.getCustomDisplayValue().getI18N().get(0).getValue();
-            } else {
-                return processI18n(ca.getCustomDisplayValue(), null);
-            }
+            return processI18n(ca.getCustomDisplayValue(), null);
         }
         return null;
     }

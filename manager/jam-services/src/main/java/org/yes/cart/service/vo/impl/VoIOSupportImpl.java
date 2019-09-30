@@ -192,10 +192,12 @@ public class VoIOSupportImpl implements VoIOSupport {
 
     static byte[] getByteArray(final String base64) {
         final String[] parts = StringUtils.splitByWholeSeparator(base64, ";base64,");
-        if (parts.length == 1) {
-            return Base64.decodeBase64(parts[0]);
-        } else if (parts.length == 2) {
-            return Base64.decodeBase64(parts[1]);
+        if (parts != null) {
+            if (parts.length == 1) {
+                return Base64.decodeBase64(parts[0]);
+            } else if (parts.length == 2) {
+                return Base64.decodeBase64(parts[1]);
+            }
         }
         return null;
     }

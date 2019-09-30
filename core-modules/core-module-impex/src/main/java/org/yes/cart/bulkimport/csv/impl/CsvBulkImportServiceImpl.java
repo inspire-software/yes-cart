@@ -430,12 +430,14 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
 
                     Object singleObjectValue = tuple.getColumnValue(importColumn, valueDataAdapter);
                     if (importColumn.getLanguage() != null) {
-                        final I18NModel model = new StringI18NModel((String) propertyDescriptor.getReadMethod().invoke(object));
-                        model.putValue(importColumn.getLanguage(), singleObjectValue != null ? String.valueOf(singleObjectValue) : null);
-                        final String i18nString = model.toString();
-                        singleObjectValue = i18nString.length() > 0 ? i18nString : null;
+                        final I18NModel current = (I18NModel) propertyDescriptor.getReadMethod().invoke(object);
+                        final I18NModel model = current == null ? new StringI18NModel() : current.copy();
+                        model.putValue(importColumn.getLanguage(),
+                                singleObjectValue instanceof String && StringUtils.isNotBlank((String) singleObjectValue) ? (String) singleObjectValue : null);
+
+                        singleObjectValue = model.getAllValues().size() > 0 ? model : null;
                     }
-                    if (singleObjectValue != null && !singleObjectValue.getClass().equals(propertyDescriptor.getPropertyType())) {
+                    if (singleObjectValue != null && !propertyDescriptor.getPropertyType().isAssignableFrom(singleObjectValue.getClass())) {
                         // if we have mismatch try on the fly conversion - this happens if someone omits <data-type> for non String values
                         singleObjectValue =
                                 extendedConversionService.convert(

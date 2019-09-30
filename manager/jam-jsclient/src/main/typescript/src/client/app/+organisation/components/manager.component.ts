@@ -115,7 +115,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
   @Input()
   set roles(roles:Array<RoleVO>) {
     roles.forEach(role => {
-      this._roles['R' + role.roleId] = role;
+      this._roles[role.code] = role;
     });
     LogUtil.debug('ManagerComponent mapped roles', this._roles);
   }
@@ -157,7 +157,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
   onSupportedRoleClick(supported:Pair<RoleVO, ManagerRoleLinkVO>) {
     LogUtil.debug('ManagerComponent remove supported role', supported);
     let idx = this._manager.managerRoles.findIndex(link =>
-      link.roleId == supported.first.roleId
+      link.code == supported.first.code
     );
     if (idx != -1) {
       this._manager.managerRoles.splice(idx, 1);
@@ -268,7 +268,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
     let skipKeys = <Array<string>>[];
     if (supported) {
       supported.forEach(managerrole => {
-        skipKeys.push('R' + managerrole.roleId);
+        skipKeys.push(managerrole.code);
       });
     }
     LogUtil.debug('ManagerComponent supported roles', skipKeys);
@@ -279,7 +279,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
         let role = this._roles[key];
         labels.push({
           first: role,
-          second: { managerId: this._manager != null ? this._manager.managerId : 0, roleId: role.roleId, code: '-' }
+          second: { managerId: this._manager != null ? this._manager.managerId : 0, code: role.code }
         });
       }
     }
@@ -297,7 +297,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
     let keepKeys = <Array<string>>[];
     if (supported) {
       supported.forEach(managerrole => {
-        keepKeys.push('R' + managerrole.roleId);
+        keepKeys.push(managerrole.code);
       });
     }
     LogUtil.debug('ManagerComponent supported roles', keepKeys);

@@ -35,7 +35,7 @@ public class VoDataGroup {
     @DtoField(value = "name")
     private String name;
 
-    @DtoField(value = "displayName", converter = "DisplayValue")
+    @DtoField(value = "displayName", converter = "DisplayValuesI18n")
     private List<MutablePair<String, String>> displayNames;
 
     @DtoField(value = "qualifier")

@@ -26,12 +26,24 @@ import org.yes.cart.domain.entity.State;
  */
 public class StateRenderer extends ChoiceRenderer<State> {
 
+    private final String language;
+
+    public StateRenderer(final String language) {
+        this.language = language;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public Object getDisplayValue(final State state) {
-        return state.getDisplayName();
+
+        final String i18n = state.getDisplayName() != null ? state.getDisplayName().getValue(language) : null;
+        if (i18n != null) {
+            return i18n;
+        }
+        return state.getName();
+
     }
 
     /**

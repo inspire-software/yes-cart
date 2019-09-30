@@ -578,7 +578,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             xml = new File(fileToExport);
             content = FileUtils.readFileToString(xml, "UTF-8");
             assertTrue(content.contains("<name><![CDATA[Promo 001]]></name>"));
-            assertTrue(content.contains("<configuration action=\"F\" type=\"I\" coupon-triggered=\"true\" can-be-combined=\"true\"><![CDATA[true]]></configuration>"));
+            assertTrue(content.contains("<configuration action=\"F\" action-context=\"5\" type=\"I\" coupon-triggered=\"true\" can-be-combined=\"true\"><![CDATA[true]]></configuration>"));
             assertTrue(content.contains("guid=\"PROMO001-001\" code=\"PROMO001-001\" promotion=\"PROMO001\" usage-count=\"0\">"));
             assertTrue(content.contains("<configuration max-limit=\"100\" customer-limit=\"1\"/>"));
 

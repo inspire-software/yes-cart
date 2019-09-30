@@ -712,6 +712,8 @@
 
     <bean id="i18nModelConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NModelConverter"/>
 
+    <bean id="customValuesMapConverter" class="org.yes.cart.domain.dto.adapter.impl.CustomValuesMapConverter"/>
+
     <bean id="dtoAssemblerAdaptersRepositoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
@@ -734,7 +736,9 @@
                 <entry key="attributeDTO2Code"                  value-ref="attributeDTO2Code"/>
 
                 <entry key="i18nStringConverter"                value-ref="i18nStringConverter"/>
-                <entry key="i18nModelConverter"                value-ref="i18nModelConverter"/>
+                <entry key="i18nModelConverter"                 value-ref="i18nModelConverter"/>
+
+                <entry key="customValuesMapConverter"           value-ref="customValuesMapConverter"/>
 
             </map>
         </constructor-arg>

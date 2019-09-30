@@ -559,8 +559,8 @@ public class LuceneDocumentAdapterUtils {
      */
     public static void addFacetField(final Document document, final String name, final String value, final I18NModel model) {
         if (value != null) {
-            if (model != null) {
-                addFacetField(document, name, value + "|" + model.toString());
+            if (model != null && !model.getAllValues().isEmpty()) {
+                addFacetField(document, name, value + Constants.FACET_NAVIGATION_DELIMITER + model.toString());
             } else {
                 addFacetField(document, name, value);
             }

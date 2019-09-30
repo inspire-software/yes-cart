@@ -112,7 +112,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -122,7 +122,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -132,7 +132,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -142,7 +142,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setFspointer(String fspointer) {
+    public void setFspointer(final String fspointer) {
         this.fspointer = fspointer;
     }
 
@@ -172,7 +172,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setShopUrl(Set<ShopUrl> shopUrl) {
+    public void setShopUrl(final Set<ShopUrl> shopUrl) {
         this.shopUrl = shopUrl;
     }
 
@@ -192,7 +192,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setAdvertisingPlaces(Collection<ShopAdvPlace> advertisingPlaces) {
+    public void setAdvertisingPlaces(final Collection<ShopAdvPlace> advertisingPlaces) {
         this.advertisingPlaces = advertisingPlaces;
     }
 
@@ -202,7 +202,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setAttributes(Collection<AttrValueShop> attributes) {
+    public void setAttributes(final Collection<AttrValueShop> attributes) {
         this.attributes = attributes;
     }
 
@@ -251,7 +251,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.seoInternal;
     }
 
-    public void setSeoInternal(SeoEntity seo) {
+    public void setSeoInternal(final SeoEntity seo) {
         this.seoInternal = seo;
     }
 
@@ -261,7 +261,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setShopCategory(Collection<ShopCategory> shopCategory) {
+    public void setShopCategory(final Collection<ShopCategory> shopCategory) {
         this.shopCategory = shopCategory;
     }
 
@@ -271,7 +271,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -281,7 +281,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -291,7 +291,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -301,7 +301,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -311,7 +311,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -326,7 +326,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     @Override
-    public void setShopId(long shopId) {
+    public void setShopId(final long shopId) {
         this.shopId = shopId;
     }
 

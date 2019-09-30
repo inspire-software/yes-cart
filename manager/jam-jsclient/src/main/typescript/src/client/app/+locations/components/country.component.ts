@@ -45,8 +45,7 @@ export class CountryComponent implements OnInit, OnDestroy {
     this.countryForm = fb.group({
       'countryCode': ['', YcValidators.requiredValidCountryCode],
       'isoCode': ['', YcValidators.requiredValidCountryIsoCode],
-      'name': ['', YcValidators.requiredNonBlankTrimmed64],
-      'displayName': ['', YcValidators.nonBlankTrimmed],
+      'name': ['']
     });
 
     let that = this;
@@ -67,6 +66,10 @@ export class CountryComponent implements OnInit, OnDestroy {
   formChange():void {
     LogUtil.debug('CountryComponent formChange', this.countryForm.valid, this._country);
     this.dataChanged.emit({ source: this._country, valid: this.countryForm.valid });
+  }
+
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'countryForm', 'name', event);
   }
 
   @Input()

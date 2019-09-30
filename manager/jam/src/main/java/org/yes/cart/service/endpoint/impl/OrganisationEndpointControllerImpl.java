@@ -40,7 +40,7 @@ public class OrganisationEndpointControllerImpl implements OrganisationEndpointC
     @Override
     public @ResponseBody
     VoManager getManagerByEmail(@PathVariable("email") final String email) throws Exception {
-        return voManagementService.getByEmail(email);
+        return voManagementService.getManagerByEmail(email);
     }
 
     @Override

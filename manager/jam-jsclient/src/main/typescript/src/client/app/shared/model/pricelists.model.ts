@@ -123,6 +123,7 @@ export interface TaxConfigVO {
 
 export interface PromotionTestVO {
 
+  supplier: string;
   customer: string;
   shipping: string;
   coupons: string;

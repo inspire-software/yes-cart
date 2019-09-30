@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Promotion;
@@ -34,6 +36,8 @@ import java.util.List;
  * Time: 18:35
  */
 public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<PromotionCoupon> implements PromotionCouponService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PromotionCouponServiceImpl.class);
 
     private final GenericDAO<Promotion, Long> promotionDao;
     private final PromotionCouponCodeGenerator couponCodeGenerator;
@@ -123,6 +127,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
         final PromotionCoupon couponEntity = getGenericDao().findSingleByNamedQuery("ENABLED.COUPON.BY.CODE",
                 coupon, true, now, now);
         if (couponEntity == null) {
+            LOG.debug("Coupon {}, is not yet active", coupon);
             return null;
         }
 
@@ -136,6 +141,7 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
                 final Number usage = (Number) count.get(0);
                 // valid coupon only when we have not exceeded the limit
                 if (usage.intValue() >= couponEntity.getUsageLimitPerCustomer()) {
+                    LOG.debug("Coupon {} usage limit is exceeded", coupon);
                     return null;
                 }
 
@@ -167,6 +173,14 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
 
         promotionCoupon.setUsageCount(usage);
         getGenericDao().saveOrUpdate(promotionCoupon);
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void removeAll(final long promotionId) {
+
+        getGenericDao().executeUpdate("REMOVE.ALL.COUPONS.BY.PROMOTION.ID", promotionId);
 
     }
 }

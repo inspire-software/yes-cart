@@ -210,6 +210,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
+        allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TYPE_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_INSTOCK_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_HASOFFER_FIELD);

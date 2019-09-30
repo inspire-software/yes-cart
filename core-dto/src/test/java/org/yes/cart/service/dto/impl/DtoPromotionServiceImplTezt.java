@@ -50,6 +50,7 @@ public class DtoPromotionServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testFindByParameters() throws Exception {
+
         PromotionDTO promotionDTO = getDto();
         promotionDTO = dtoPromotionService.create(promotionDTO);
 
@@ -111,7 +112,7 @@ public class DtoPromotionServiceImplTezt extends BaseCoreDBTestCase {
                 10);
 
         assertNotNull(promos);
-        assertEquals(1, promos.size());
+        assertEquals(3, promos.size());
 
 
         // basic

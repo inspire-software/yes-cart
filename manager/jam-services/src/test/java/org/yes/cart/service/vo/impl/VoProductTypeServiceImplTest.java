@@ -1,0 +1,144 @@
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the 'License');
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an 'AS IS' BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.yes.cart.service.vo.impl;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.domain.entity.ProductTypeAttr;
+import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.vo.*;
+import org.yes.cart.service.vo.VoProductTypeService;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+/**
+ * User: denispavlov
+ * Date: 27/09/2019
+ * Time: 17:18
+ */
+public class VoProductTypeServiceImplTest extends BaseCoreDBTestCase {
+
+    private VoProductTypeService voProductTypeService;
+
+    @Before
+    public void setUp() {
+        voProductTypeService = (VoProductTypeService) ctx().getBean("voProductTypeService");
+        super.setUp();
+    }
+
+    @Test
+    public void testGetProductTypes() throws Exception {
+
+        List<VoProductTypeInfo> ptNoFilter = voProductTypeService.getFilteredTypes(null, 10);
+        assertNotNull(ptNoFilter);
+        assertFalse(ptNoFilter.isEmpty());
+
+        List<VoProductTypeInfo> ptFind = voProductTypeService.getFilteredTypes("Laser", 10);
+        assertNotNull(ptFind);
+        assertFalse(ptFind.isEmpty());
+
+        final VoProductTypeInfo pt6 = ptFind.get(0);
+        assertEquals("6", pt6.getGuid());
+        assertEquals("Blaster", pt6.getName());
+
+        List<VoProductTypeInfo> ptExact = voProductTypeService.getFilteredTypes("!MP3 Player", 10);
+        assertNotNull(ptExact);
+        assertEquals(1, ptExact.size());
+        assertEquals("2", ptExact.get(0).getGuid());
+
+        List<VoProductTypeInfo> ptByAttrCode = voProductTypeService.getFilteredTypes("#POWERSUPPLY", 10);
+        assertNotNull(ptByAttrCode);
+        assertFalse(ptByAttrCode.isEmpty());
+        assertTrue(ptByAttrCode.stream().allMatch(pt -> Arrays.asList("6").contains(pt.getGuid())));
+
+    }
+
+    @Test
+    public void testProductTypeCRUD() throws Exception {
+
+        final VoProductType productType = new VoProductType();
+        productType.setName("TEST CRUD");
+        productType.setDisplayNames(Collections.singletonList(MutablePair.of("en", "Test")));
+
+        final VoProductType created = voProductTypeService.createType(productType);
+        assertTrue(created.getProducttypeId() > 0L);
+
+        final VoProductType afterCreated = voProductTypeService.getTypeById(created.getProducttypeId());
+        assertNotNull(afterCreated);
+        assertEquals("TEST CRUD", afterCreated.getName());
+        assertNotNull(afterCreated.getViewGroups());
+        assertTrue(afterCreated.getViewGroups().isEmpty());
+
+        afterCreated.setName("TEST CRUD UPDATE");
+        final VoProductTypeViewGroup grp = new VoProductTypeViewGroup();
+        grp.setName("Test");
+        grp.setDisplayNames(Collections.singletonList(MutablePair.of("en", "Test")));
+        grp.setAttrCodeList(Arrays.asList("MATERIAL", "POWERSUPPLY"));
+        afterCreated.setViewGroups(Collections.singletonList(grp));
+
+        final VoProductType updated = voProductTypeService.updateType(afterCreated);
+        assertEquals("TEST CRUD UPDATE", updated.getName());
+        assertNotNull(afterCreated.getViewGroups());
+        assertEquals(1, afterCreated.getViewGroups().size());
+
+        assertFalse(voProductTypeService.getFilteredTypes("!TEST CRUD UPDATE", 10).isEmpty());
+
+        final List<VoProductTypeAttr> attributesEmpty = voProductTypeService.getTypeAttributes(updated.getProducttypeId());
+        assertNotNull(attributesEmpty);
+        assertTrue(attributesEmpty.isEmpty());
+
+        final VoProductTypeAttr attr1 = new VoProductTypeAttr();
+        final VoAttribute attribute1 = new VoAttribute();
+        attribute1.setAttributeId(2003L);
+        attribute1.setCode("MATERIAL");
+        attr1.setProducttypeId(updated.getProducttypeId());
+        attr1.setAttribute(attribute1);
+        attr1.setNavigationType(ProductTypeAttr.NAVIGATION_TYPE_RANGE);
+        final VoProductTypeAttrNavigationRanges ranges = new VoProductTypeAttrNavigationRanges();
+        final VoProductTypeAttrNavigationRange range = new VoProductTypeAttrNavigationRange();
+        range.setRange("1-1000");
+        range.setDisplayVals(Collections.singletonList(MutablePair.of("en", "Test")));
+        ranges.setRanges(Collections.singletonList(range));
+        attr1.setRangeNavigation(ranges);
+
+        final VoProductTypeAttr attr2 = new VoProductTypeAttr();
+        final VoAttribute attribute2 = new VoAttribute();
+        attribute2.setAttributeId(2004L);
+        attribute2.setCode("BATTERY_TYPE");
+        attr2.setProducttypeId(updated.getProducttypeId());
+        attr2.setAttribute(attribute2);
+        attr2.setNavigationType(ProductTypeAttr.NAVIGATION_TYPE_SINGLE);
+
+        final List<VoProductTypeAttr> attributes = voProductTypeService.updateTypeAttributes(Arrays.asList(MutablePair.of(attr1, Boolean.FALSE), MutablePair.of(attr2, Boolean.FALSE)));
+
+        final VoProductTypeAttr updateAttribute = attributes.stream().filter(
+                att2 -> "MATERIAL".equals(att2.getAttribute().getCode())
+        ).findFirst().get();
+
+        final List<VoProductTypeAttr> attributesAfterRemove = voProductTypeService.updateTypeAttributes(Collections.singletonList(MutablePair.of(updateAttribute, Boolean.TRUE)));
+        assertTrue(attributesAfterRemove.stream().noneMatch(att2 -> att2.getAttribute().getCode().equals(updateAttribute.getAttribute().getCode())));
+
+        voProductTypeService.removeType(updated.getProducttypeId());
+
+        assertTrue(voProductTypeService.getFilteredTypes("!TEST CRUD UPDATE", 10).isEmpty());
+
+    }
+}

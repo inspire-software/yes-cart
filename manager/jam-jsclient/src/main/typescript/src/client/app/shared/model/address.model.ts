@@ -16,6 +16,7 @@
 
 import { Pair } from './common.model';
 import { AttrValueVO } from './attribute.model';
+import { LocationVO } from './location.model';
 
 export interface AddressVO {
 
@@ -72,7 +73,7 @@ export interface AddressBookVO {
 
   addressForm: Pair<string, AttrValueVO[]>[];
 
-  countries: Pair<string, Pair<string, string>[]>[];
-  states: Pair<string, Pair<string, string>[]>[];
+  billingCountries: LocationVO[];
+  shippingCountries: LocationVO[];
 
 }

@@ -74,16 +74,16 @@ public class AttributeDTOImpl implements AttributeDTO {
     @DtoField(value = "regexp")
     private String regexp;
 
-    @DtoField(value = "validationFailedMessage", converter = "i18nStringConverter")
+    @DtoField(value = "validationFailedMessage", converter = "i18nModelConverter")
     private Map<String, String> validationFailedMessage;
 
     @DtoField(value = "rank")
     private int rank;
 
-    @DtoField(value = "choiceData", converter = "i18nStringConverter")
+    @DtoField(value = "choiceData", converter = "i18nModelConverter")
     private Map<String, String> choiceData;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nModelConverter")
     private Map<String, String> displayNames;
 
     @DtoField(value = "store")

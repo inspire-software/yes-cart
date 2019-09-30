@@ -134,10 +134,12 @@ public interface VoPaymentGatewayService {
      * @param pgLabel PG label
      * @param vo PG attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
      * @param includeSecure include secure attributes (false to filter out)
+     *
      * @return PG attributes.
+     *
      * @throws Exception errors
      */
-    List<VoPaymentGatewayParameter> update(String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo, boolean includeSecure) throws Exception;
+    List<VoPaymentGatewayParameter> updateParameters(String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo, boolean includeSecure) throws Exception;
 
     /**
      * Update the PG attributes.
@@ -146,10 +148,12 @@ public interface VoPaymentGatewayService {
      * @param pgLabel PG label
      * @param vo PG attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
      * @param includeSecure include secure attributes (false to filter out)
+     *
      * @return PG attributes.
+     *
      * @throws Exception errors
      */
-    List<VoPaymentGatewayParameter> update(String shopCode, String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo, boolean includeSecure) throws Exception;
+    List<VoPaymentGatewayParameter> updateParameters(String shopCode, String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo, boolean includeSecure) throws Exception;
 
 
     /**
@@ -157,6 +161,7 @@ public interface VoPaymentGatewayService {
      *
      * @param pgLabel PG label
      * @param disabled true if shop is disabled
+     *
      * @throws Exception errors
      */
     void updateDisabledFlag(String pgLabel, boolean disabled) throws Exception;
@@ -167,6 +172,7 @@ public interface VoPaymentGatewayService {
      * @param shopCode shop code for which to set flag
      * @param pgLabel PG label
      * @param disabled true if shop is disabled
+     *
      * @throws Exception errors
      */
     void updateDisabledFlag(String shopCode, String pgLabel, boolean disabled) throws Exception;

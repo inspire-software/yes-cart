@@ -19,6 +19,8 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.AttributeGroup;
 import org.yes.cart.domain.entity.Etype;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -44,11 +46,14 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     private boolean navigation;
     private String val;
     private String regexp;
-    private String validationFailedMessage;
+    private String validationFailedMessageInternal;
+    private I18NModel validationFailedMessage;
     private int rank;
-    private String choiceData;
+    private String choiceDataInternal;
+    private I18NModel choiceData;
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String description;
     private Etype etype;
     private AttributeGroup attributeGroup;
@@ -68,7 +73,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setMandatory(boolean mandatory) {
+    public void setMandatory(final boolean mandatory) {
         this.mandatory = mandatory;
     }
 
@@ -88,7 +93,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setAllowduplicate(boolean allowduplicate) {
+    public void setAllowduplicate(final boolean allowduplicate) {
         this.allowduplicate = allowduplicate;
     }
 
@@ -98,7 +103,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setAllowfailover(boolean allowfailover) {
+    public void setAllowfailover(final boolean allowfailover) {
         this.allowfailover = allowfailover;
     }
 
@@ -108,7 +113,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setVal(String val) {
+    public void setVal(final String val) {
         this.val = val;
     }
 
@@ -118,18 +123,28 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setRegexp(String regexp) {
+    public void setRegexp(final String regexp) {
         this.regexp = regexp;
     }
 
+    public String getValidationFailedMessageInternal() {
+        return validationFailedMessageInternal;
+    }
+
+    public void setValidationFailedMessageInternal(final String validationFailedMessageInternal) {
+        this.validationFailedMessageInternal = validationFailedMessageInternal;
+        this.validationFailedMessage = new StringI18NModel(validationFailedMessageInternal);
+    }
+
     @Override
-    public String getValidationFailedMessage() {
+    public I18NModel getValidationFailedMessage() {
         return this.validationFailedMessage;
     }
 
     @Override
-    public void setValidationFailedMessage(String validationFailedMessage) {
+    public void setValidationFailedMessage(final I18NModel validationFailedMessage) {
         this.validationFailedMessage = validationFailedMessage;
+        this.validationFailedMessageInternal = validationFailedMessage != null ? validationFailedMessage.toString() : null;
     }
 
     @Override
@@ -138,18 +153,28 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(final int rank) {
         this.rank = rank;
     }
 
+    public String getChoiceDataInternal() {
+        return choiceDataInternal;
+    }
+
+    public void setChoiceDataInternal(final String choiceDataInternal) {
+        this.choiceDataInternal = choiceDataInternal;
+        this.choiceData = new StringI18NModel(choiceDataInternal);
+    }
+
     @Override
-    public String getChoiceData() {
+    public I18NModel getChoiceData() {
         return this.choiceData;
     }
 
     @Override
-    public void setChoiceData(String choiceData) {
+    public void setChoiceData(final I18NModel choiceData) {
         this.choiceData = choiceData;
+        this.choiceDataInternal = choiceData != null ? choiceData.toString() : null;
     }
 
     @Override
@@ -158,18 +183,28 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
+    }
+
     @Override
-    public String getDisplayName() {
+    public I18NModel getDisplayName() {
         return this.displayName;
     }
 
     @Override
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -178,7 +213,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -188,7 +223,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setEtype(Etype etype) {
+    public void setEtype(final Etype etype) {
         this.etype = etype;
     }
 
@@ -198,7 +233,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setAttributeGroup(AttributeGroup attributeGroup) {
+    public void setAttributeGroup(final AttributeGroup attributeGroup) {
         this.attributeGroup = attributeGroup;
     }
 
@@ -208,7 +243,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -218,7 +253,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -228,7 +263,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -238,7 +273,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -248,7 +283,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -264,7 +299,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
 
 
     @Override
-    public void setAttributeId(long attributeId) {
+    public void setAttributeId(final long attributeId) {
         this.attributeId = attributeId;
     }
 
@@ -283,7 +318,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -354,11 +389,11 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
                 this.isAllowfailover(),
                 this.getVal(),
                 this.getRegexp(),
-                this.getValidationFailedMessage(),
+                this.getValidationFailedMessageInternal(),
                 this.getRank(),
-                this.getChoiceData(),
+                this.getChoiceDataInternal(),
                 this.getName(),
-                this.getDisplayName(),
+                this.getDisplayNameInternal(),
                 this.getDescription(),
                 this.getEtype(),
                 this.getAttributeGroup(),
@@ -377,21 +412,43 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
 
-    public AttributeEntity(boolean mandatory, boolean allowduplicate, boolean allowfailover, String val,
-                           String regexp, String validationFailedMessage, int rank, String choiceData, String name,
-                           String displayName, String description, Etype etype, AttributeGroup attributeGroup,
-                           Instant createdTimestamp, Instant updatedTimestamp, String createdBy, String updatedBy,
-                           String guid, long attributeId, String code, boolean store, boolean search, boolean primary, boolean navigation) {
+    public AttributeEntity(final boolean mandatory,
+                           final boolean allowduplicate,
+                           final boolean allowfailover,
+                           final String val,
+                           final String regexp,
+                           final String validationFailedMessage,
+                           final int rank,
+                           final String choiceData,
+                           final String name,
+                           final String displayName,
+                           final String description,
+                           final Etype etype,
+                           final AttributeGroup attributeGroup,
+                           final Instant createdTimestamp,
+                           final Instant updatedTimestamp,
+                           final String createdBy,
+                           final String updatedBy,
+                           final String guid,
+                           final long attributeId,
+                           final String code,
+                           final boolean store,
+                           final boolean search,
+                           final boolean primary,
+                           final boolean navigation) {
         this.mandatory = mandatory;
         this.allowduplicate = allowduplicate;
         this.allowfailover = allowfailover;
         this.val = val;
         this.regexp = regexp;
-        this.validationFailedMessage = validationFailedMessage;
+        this.validationFailedMessageInternal = validationFailedMessage;
+        this.validationFailedMessage = new StringI18NModel(validationFailedMessage);
         this.rank = rank;
-        this.choiceData = choiceData;
+        this.choiceDataInternal = choiceData;
+        this.choiceData = new StringI18NModel(choiceData);
         this.name = name;
-        this.displayName = displayName;
+        this.displayNameInternal = displayName;
+        this.displayName = new StringI18NModel(displayName);
         this.description = description;
         this.etype = etype;
         this.attributeGroup = attributeGroup;

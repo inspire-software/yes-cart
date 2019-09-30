@@ -45,10 +45,11 @@
             <map>
                 <entry key="DisplayValue"                       value-ref="voDisplayValue"/>
                 <entry key="DisplayValues"                      value-ref="voDisplayValues"/>
+                <entry key="DisplayValuesI18n"                  value-ref="voDisplayValuesI18n"/>
                 <entry key="MapToListPairs"                     value-ref="voMapToListPairs"/>
                 <entry key="CSVToList"                          value-ref="voCSVToList"/>
                 <entry key="CSVToListDatesPairs"                value-ref="voCSVToListDatesPairs"/>
-                <entry key="PairMapToPairList"                  value-ref="voPairMapToPairList"/>
+                <entry key="CustomValuesList"                   value-ref="voCustomValuesList"/>
                 <entry key="ProductTypeAttrNavigationRanges"    value-ref="voProductTypeAttrNavigationRanges"/>
                 <entry key="CategoryNavigationPriceTiers"       value-ref="voCategoryNavigationPriceTiers"/>
                 <entry key="StringToMappingConverter"           value-ref="voStringToMappingConverter"/>
@@ -67,15 +68,16 @@
         <constructor-arg ref="voAssemblerAdaptersRepositoryMapping"/>
     </bean>
 
-    <bean id="voDisplayValues" class="org.yes.cart.domain.vo.converter.DisplayValueMapToListMutablePairConverter"/>
-    <bean id="voDisplayValue" class="org.yes.cart.domain.vo.converter.DisplayValueToListMutablePairConverter"/>
-    <bean id="voMapToListPairs" class="org.yes.cart.domain.vo.converter.MapToMutablePairListConverter"/>
-    <bean id="voCSVToList" class="org.yes.cart.domain.vo.converter.CSVToListConverter"/>
-    <bean id="voCSVToListDatesPairs" class="org.yes.cart.domain.vo.converter.CSVToListDatesPairsConverter"/>
-    <bean id="voPairMapToPairList" class="org.yes.cart.domain.vo.converter.PairMapToPairListConverter"/>
-    <bean id="voProductTypeAttrNavigationRanges" class="org.yes.cart.domain.vo.converter.StringToProductTypeAttrNavigationRangesConverter"/>
-    <bean id="voCategoryNavigationPriceTiers" class="org.yes.cart.domain.vo.converter.StringToCategoryNavigationPriceTiersConverter"/>
-    <bean id="voStringToMappingConverter" class="org.yes.cart.domain.vo.converter.StringToMappingConverter"/>
+    <bean id="voDisplayValues"                      class="org.yes.cart.domain.vo.converter.DisplayValueMapToListMutablePairConverter"/>
+    <bean id="voDisplayValuesI18n"                  class="org.yes.cart.domain.vo.converter.DisplayValueI18nToListMutablePairConverter"/>
+    <bean id="voDisplayValue"                       class="org.yes.cart.domain.vo.converter.DisplayValueToListMutablePairConverter"/>
+    <bean id="voMapToListPairs"                     class="org.yes.cart.domain.vo.converter.MapToMutablePairListConverter"/>
+    <bean id="voCSVToList"                          class="org.yes.cart.domain.vo.converter.CSVToListConverter"/>
+    <bean id="voCSVToListDatesPairs"                class="org.yes.cart.domain.vo.converter.CSVToListDatesPairsConverter"/>
+    <bean id="voCustomValuesList"                   class="org.yes.cart.domain.vo.converter.CustomValuesListConverter"/>
+    <bean id="voProductTypeAttrNavigationRanges"    class="org.yes.cart.domain.vo.converter.StringToProductTypeAttrNavigationRangesConverter"/>
+    <bean id="voCategoryNavigationPriceTiers"       class="org.yes.cart.domain.vo.converter.StringToCategoryNavigationPriceTiersConverter"/>
+    <bean id="voStringToMappingConverter"           class="org.yes.cart.domain.vo.converter.StringToMappingConverter"/>
 
     <bean id="voAssemblySupport" class="org.yes.cart.service.vo.impl.VoAssemblySupportImpl">
         <constructor-arg index="0" ref="voKeyToClassFactory"/>

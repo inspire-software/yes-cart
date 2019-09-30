@@ -20,6 +20,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.StateDTO;
 
+import java.util.Map;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -42,8 +44,9 @@ public class StateDTOImpl implements StateDTO {
     @DtoField(value = "name")
     private String name;
 
-    @DtoField(value = "displayName")
-    private String displayName;
+    @DtoField(value = "displayName", converter = "i18nModelConverter")
+    private Map<String, String> displayNames;
+
 
     /**
      * {@inheritDoc}
@@ -53,7 +56,9 @@ public class StateDTOImpl implements StateDTO {
         return stateId;
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long getId() {
         return stateId;
@@ -111,24 +116,24 @@ public class StateDTOImpl implements StateDTO {
      * {@inheritDoc}
      */
     @Override
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDisplayName(final String displayName) {
-        this.displayName = displayName;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
     }
 
     @Override

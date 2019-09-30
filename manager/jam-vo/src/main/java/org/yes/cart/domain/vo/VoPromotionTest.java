@@ -26,11 +26,20 @@ import java.time.Instant;
 public class VoPromotionTest {
 
     private String customer;
+    private String supplier;
     private String shipping;
     private String coupons;
     private String sku;
     private String language;
     private Instant time;
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(final String supplier) {
+        this.supplier = supplier;
+    }
 
     public String getCustomer() {
         return customer;

@@ -36,7 +36,7 @@ public class GenericIdToEntityConverter<T> implements ValueConverter {
     /** {@inheritDoc} */
     @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
-        throw new RuntimeException(this.getClass().getCanonicalName() + " not support conversion from id to entity " + object.getClass());
+        throw new RuntimeException(this.getClass().getCanonicalName() + " does not support conversion from entity to ID " + object.getClass());
     }
 
     /** {@inheritDoc} */

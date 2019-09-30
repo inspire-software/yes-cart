@@ -47,7 +47,7 @@ public class BreadcrumbRO implements Serializable {
     @DtoField(value = "name", readOnly = true)
     private String name;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "displayName", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> displayNames;
 
     public long getTargetId() {

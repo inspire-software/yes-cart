@@ -17,6 +17,8 @@
 package org.yes.cart.domain.entity;
 
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 /**
  * Attr value object.
  * User: Igor Azarny iazarny@yahoo.com
@@ -69,21 +71,17 @@ public interface AttrValue extends Auditable {
     void setIndexedVal(String val);
 
     /**
-     * Get display value to show on the web. The some
-     * correct attributes value does not look good on the web,
-     * so need to use display value to eliminate this situation.
-     * Need to use val in case if displayVal is empty.
-     * Affect UI only.
+     * Get display value.
      *
      * @return display value.
      */
-    String getDisplayVal();
+    I18NModel getDisplayVal();
 
     /**
      * Set display value.
      * @param displayVal display value.
      */
-    void setDisplayVal(String displayVal);
+    void setDisplayVal(I18NModel displayVal);
 
     /**
      * Get the attribute.

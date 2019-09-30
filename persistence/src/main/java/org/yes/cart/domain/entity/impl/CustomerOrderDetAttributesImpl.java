@@ -17,6 +17,8 @@
 package org.yes.cart.domain.entity.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 
 import java.io.Serializable;
@@ -32,9 +34,9 @@ public class CustomerOrderDetAttributesImpl implements Serializable {
 
     public static final String SEPARATOR = "#$#";
 
-    private final Map<String, Pair<String, String>> values = new LinkedHashMap<>();
+    private final Map<String, Pair<String, I18NModel>> values = new LinkedHashMap<>();
 
-    public CustomerOrderDetAttributesImpl(final Map<String, Pair<String, String>> values) {
+    public CustomerOrderDetAttributesImpl(final Map<String, Pair<String, I18NModel>> values) {
         if (values != null && !values.isEmpty()) {
             this.values.putAll(values);
         }
@@ -49,7 +51,7 @@ public class CustomerOrderDetAttributesImpl implements Serializable {
                 final String displayValue = valueTriplets[i + 2];
                 if (value != null && value.length() > 0) {
                     if (displayValue != null && displayValue.length() > 0) {
-                        values.put(key, new Pair<>(value, displayValue));
+                        values.put(key, new Pair<>(value, new StringI18NModel(displayValue)));
                         continue;
                     }
                     values.put(key, new Pair<>(value, null));
@@ -61,11 +63,11 @@ public class CustomerOrderDetAttributesImpl implements Serializable {
     public CustomerOrderDetAttributesImpl() {
     }
 
-    public Pair<String, String> getValue(final String code) {
+    public Pair<String, I18NModel> getValue(final String code) {
         return values.get(code);
     }
 
-    public void putValue(final String code, final String value, final String displayValue) {
+    public void putValue(final String code, final String value, final I18NModel displayValue) {
         if (value != null && value.length() > 0) {
             values.put(code, new Pair<>(value, displayValue));
         } else {
@@ -73,14 +75,14 @@ public class CustomerOrderDetAttributesImpl implements Serializable {
         }
     }
 
-    public Map<String, Pair<String, String>> getAllValues() {
+    public Map<String, Pair<String, I18NModel>> getAllValues() {
         return values;
     }
 
     @Override
     public String toString() {
         final StringBuilder out = new StringBuilder();
-        for (final Map.Entry<String, Pair<String, String>> entry : values.entrySet()) {
+        for (final Map.Entry<String, Pair<String, I18NModel>> entry : values.entrySet()) {
             if (StringUtils.isNotBlank(entry.getValue().getFirst())) {
                 out.append(entry.getKey()).append(SEPARATOR).append(entry.getValue().getFirst()).append(SEPARATOR);
                 if (entry.getValue().getSecond() != null) {

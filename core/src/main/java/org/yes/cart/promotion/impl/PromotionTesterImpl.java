@@ -72,6 +72,7 @@ public class PromotionTesterImpl implements PromotionTester {
                                        final String currency,
                                        final String language,
                                        final String customer,
+                                       final String supplier,
                                        final Map<String, BigDecimal> products,
                                        final String shipping,
                                        final List<String> coupons,
@@ -92,7 +93,7 @@ public class PromotionTesterImpl implements PromotionTester {
 
             prepareDefaults(cart, shop.getMaster() != null ? shop.getMaster() : shop, currency, language);
             loginCustomer(cart, customer);
-            addProductsToCart(cart, products);
+            addProductsToCart(cart, supplier, products);
             addCouponsToCart(cart, coupons);
             prepareShipping(cart);
             setShippingMethod(cart, shipping);
@@ -139,13 +140,16 @@ public class PromotionTesterImpl implements PromotionTester {
 
     }
 
-    private void addProductsToCart(final ShoppingCart cart, final Map<String, BigDecimal> products) {
+    private void addProductsToCart(final ShoppingCart cart, final String supplier, final Map<String, BigDecimal> products) {
 
         if (products != null) {
             for (final Map.Entry<String, BigDecimal> product : products.entrySet()) {
                 final Map<String, Object> params = new HashMap<>();
                 params.put(ShoppingCartCommand.CMD_ADDTOCART, product.getKey());
                 if (product.getValue() != null) {
+                    if (StringUtils.isNotBlank(supplier)) {
+                        params.put(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
+                    }
                     params.put(ShoppingCartCommand.CMD_P_QTY, product.getValue().toPlainString());
                 }
                 cartCommandFactory.execute(ShoppingCartCommand.CMD_ADDTOCART, cart, params);

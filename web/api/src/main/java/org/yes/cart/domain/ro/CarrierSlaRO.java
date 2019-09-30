@@ -77,10 +77,10 @@ public class CarrierSlaRO implements Serializable {
     @DtoField(value = "carrier.carrierId", readOnly = true)
     private long carrierId;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "displayName", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> displayNames;
 
-    @DtoField(value = "displayDescription", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "displayDescription", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> displayDescriptions;
 
     @DtoField(value = "supportedPaymentGateways", readOnly = true)

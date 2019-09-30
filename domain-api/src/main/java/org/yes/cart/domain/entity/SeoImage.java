@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 /**
  * Search engine optimizations on images.
  * <p/>
@@ -88,14 +90,14 @@ public interface SeoImage extends Auditable {
      *
      * @return image title
      */
-    String getDisplayTitle();
+    I18NModel getDisplayTitle();
 
     /**
      * Set image title.
      *
      * @param title image title.
      */
-    void setDisplayTitle(String title);
+    void setDisplayTitle(I18NModel title);
 
     /**
      * Get pk value.

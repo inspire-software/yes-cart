@@ -152,8 +152,8 @@ public class VoCustomerOrderInfo {
     @DtoField(value = "requestedDeliveryDate", readOnly = true)
     private LocalDateTime requestedDeliveryDate;
 
-    @DtoField(value = "allValues", converter = "PairMapToPairList", readOnly = true)
-    private List<MutablePair<String, MutablePair<String, String>>> allValues;
+    @DtoField(value = "allValues", converter = "CustomValuesList", readOnly = true)
+    private List<VoAttrValue> allValues;
 
     public long getCustomerorderId() {
         return customerorderId;
@@ -531,11 +531,11 @@ public class VoCustomerOrderInfo {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
-    public List<MutablePair<String, MutablePair<String, String>>> getAllValues() {
+    public List<VoAttrValue> getAllValues() {
         return allValues;
     }
 
-    public void setAllValues(final List<MutablePair<String, MutablePair<String, String>>> allValues) {
+    public void setAllValues(final List<VoAttrValue> allValues) {
         this.allValues = allValues;
     }
 }

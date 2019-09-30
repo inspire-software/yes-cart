@@ -20,6 +20,8 @@ package org.yes.cart.domain.entity.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.xml.CategoryPriceNavigationXStreamProvider;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.stream.xml.XStreamProvider;
 import org.yes.cart.utils.DomainApiUtils;
@@ -43,7 +45,8 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     private int rank;
     private ProductType productType;
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String description;
     private String uitemplate;
     private boolean disabled;
@@ -72,7 +75,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setParentId(long parentId) {
+    public void setParentId(final long parentId) {
         this.parentId = parentId;
     }
 
@@ -92,7 +95,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(final int rank) {
         this.rank = rank;
     }
 
@@ -102,7 +105,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setProductType(ProductType productType) {
+    public void setProductType(final ProductType productType) {
         this.productType = productType;
     }
 
@@ -112,18 +115,28 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
+    }
+
     @Override
-    public String getDisplayName() {
+    public I18NModel getDisplayName() {
         return this.displayName;
     }
 
     @Override
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -132,7 +145,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -142,7 +155,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setUitemplate(String uitemplate) {
+    public void setUitemplate(final String uitemplate) {
         this.uitemplate = uitemplate;
     }
 
@@ -162,7 +175,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setAvailablefrom(LocalDateTime availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
@@ -172,7 +185,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setAvailableto(LocalDateTime availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
@@ -187,7 +200,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setAttributes(Collection<AttrValueCategory> attributes) {
+    public void setAttributes(final Collection<AttrValueCategory> attributes) {
         this.attributes = attributes;
     }
 
@@ -195,7 +208,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return this.seoInternal;
     }
 
-    public void setSeoInternal(SeoEntity seo) {
+    public void setSeoInternal(final SeoEntity seo) {
         this.seoInternal = seo;
     }
 
@@ -205,7 +218,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setProductCategory(Set<ProductCategory> productCategory) {
+    public void setProductCategory(final Set<ProductCategory> productCategory) {
         this.productCategory = productCategory;
     }
 
@@ -215,7 +228,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setNavigationByAttributes(Boolean navigationByAttributes) {
+    public void setNavigationByAttributes(final Boolean navigationByAttributes) {
         this.navigationByAttributes = navigationByAttributes;
     }
 
@@ -225,7 +238,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setNavigationByPrice(Boolean navigationByPrice) {
+    public void setNavigationByPrice(final Boolean navigationByPrice) {
         this.navigationByPrice = navigationByPrice;
     }
 
@@ -235,7 +248,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setNavigationByPriceTiers(String navigationByPriceTiers) {
+    public void setNavigationByPriceTiers(final String navigationByPriceTiers) {
         this.navigationByPriceTiers = navigationByPriceTiers;
     }
 
@@ -245,7 +258,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -255,7 +268,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -265,7 +278,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -275,7 +288,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -285,7 +298,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -300,7 +313,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     }
 
     @Override
-    public void setCategoryId(long categoryId) {
+    public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -332,7 +345,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
 
     @Override
-    public void setNavigationByPriceTree(PriceTierTree tree) {
+    public void setNavigationByPriceTree(final PriceTierTree tree) {
         setNavigationByPriceTiers(xStreamProvider.toXML(tree));
         this.priceTierTreeCache = tree;
     }

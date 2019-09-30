@@ -13,10 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component,  OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FulfilmentCentreInfoVO } from './../model/index';
 import { FulfilmentService } from './../services/index';
-import { Futures, Future } from './../event/index';
+import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
+import { Futures, Future, FormValidationEvent } from './../event/index';
 import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
 
@@ -28,7 +29,14 @@ import { LogUtil } from './../log/index';
 
 export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
 
-  @Output() dataSelected: EventEmitter<FulfilmentCentreInfoVO> = new EventEmitter<FulfilmentCentreInfoVO>();
+  @Output() dataSelected: EventEmitter<FormValidationEvent<FulfilmentCentreInfoVO>> = new EventEmitter<FormValidationEvent<FulfilmentCentreInfoVO>>();
+
+  private changed:boolean = false;
+
+  @ViewChild('centreModalDialog')
+  private centreModalDialog:ModalComponent;
+
+  private validForSelect:boolean = false;
 
   private centres : FulfilmentCentreInfoVO[] = [];
   private filteredCentres : FulfilmentCentreInfoVO[] = [];
@@ -39,10 +47,15 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
+  private loading:boolean = false;
+
   constructor (private _centreService : FulfilmentService) {
     LogUtil.debug('FulfilmentCentreSelectComponent constructed');
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.filterCentres();
+    }, this.delayedFilteringMs);
   }
-
 
   ngOnDestroy() {
     LogUtil.debug('FulfilmentCentreSelectComponent ngOnDestroy');
@@ -50,19 +63,12 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('FulfilmentCentreSelectComponent ngOnInit');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.filterCentres();
-    }, this.delayedFilteringMs);
-
-    this.getAllCentres();
-
   }
 
   protected onSelectClick(centre: FulfilmentCentreInfoVO) {
     LogUtil.debug('FulfilmentCentreSelectComponent onSelectClick', centre);
     this.selectedCentre = centre;
-    this.dataSelected.emit(this.selectedCentre);
+    this.validForSelect = true;
   }
 
   protected onFilterChange() {
@@ -76,12 +82,34 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
+  public showDialog() {
+    LogUtil.debug('CarrierSlaSelectComponent showDialog');
+    this.centreModalDialog.show();
+    if (this.centres.length == 0) {
+      this.getAllCentres();
+    }
+  }
+
+
+  protected onSelectConfirmationResult(modalresult: ModalResult) {
+    LogUtil.debug('CarrierSlaSelectComponent onSelectConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      this.dataSelected.emit({ source: this.selectedCentre, valid: true });
+      this.selectedCentre = null;
+    }
+  }
+
   private getAllCentres() {
 
+    this.loading = true;
     let _sub:any = this._centreService.getAllFulfilmentCentres().subscribe( allcentres => {
       LogUtil.debug('FulfilmentCentreSelectComponent getAllCentres', allcentres);
+      this.selectedCentre = null;
+      this.changed = false;
+      this.validForSelect = false;
       this.centres = allcentres;
       this.filterCentres();
+      this.loading = false;
       _sub.unsubscribe();
     });
   }

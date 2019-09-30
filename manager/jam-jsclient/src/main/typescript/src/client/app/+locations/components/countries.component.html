@@ -7,7 +7,6 @@
         <th>{{ 'LOCATION_COUNTRY_CODE' | translate }}</th>
         <th>{{ 'LOCATION_COUNTRY_ISO' | translate }}</th>
         <th>{{ 'NAME' | translate }}</th>
-        <th>{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}</th>
       </tr>
       </thead>
       <tbody>
@@ -16,7 +15,6 @@
           <td title="{{ 'LOCATION_COUNTRY_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.countryCode}}</a></td>
           <td title="{{ 'LOCATION_COUNTRY_ISO' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.isoCode}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.displayName}}&nbsp;</a></td>
         </ng-template>
       </tr>
       </tbody>

@@ -27,7 +27,6 @@ import java.util.List;
  */
 public interface VoPaymentService {
 
-
     /**
      * Get all payments for given filter
      *
@@ -40,6 +39,6 @@ public interface VoPaymentService {
      *
      * @throws Exception errors
      */
-    List<VoPayment> getFiltered(String filter, List<String> operations, List<String> statuses, int max) throws Exception;
+    List<VoPayment> getFilteredPayments(String filter, List<String> operations, List<String> statuses, int max) throws Exception;
 
 }

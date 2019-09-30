@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
@@ -60,14 +62,14 @@ public interface Content extends Auditable, Attributable, Rankable, Nameable, Se
      *
      * @return display name.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Get display name
      *
      * @param name display name
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * Get content UI template variation.

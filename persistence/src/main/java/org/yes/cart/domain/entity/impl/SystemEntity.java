@@ -56,7 +56,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -66,7 +66,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -76,7 +76,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -86,7 +86,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setAttributes(Map<String, AttrValueSystem> attributes) {
+    public void setAttributes(final Map<String, AttrValueSystem> attributes) {
         this.attributes = attributes;
     }
 
@@ -96,7 +96,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -106,7 +106,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -116,7 +116,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -126,7 +126,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -136,7 +136,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -151,7 +151,7 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     }
 
     @Override
-    public void setSystemId(long systemId) {
+    public void setSystemId(final long systemId) {
         this.systemId = systemId;
     }
 

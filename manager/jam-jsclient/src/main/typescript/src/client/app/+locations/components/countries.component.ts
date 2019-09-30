@@ -113,7 +113,9 @@ export class CountriesComponent implements OnInit, OnDestroy {
       this.filteredCountries = this._countries.filter(country =>
         country.countryCode.toLowerCase().indexOf(this._filter) !== -1 ||
         country.name.toLowerCase().indexOf(this._filter) !== -1 ||
-        country.displayName && country.displayName.toLowerCase().indexOf(this._filter) !== -1
+        country.displayNames && country.displayNames.findIndex(cnt =>
+          cnt.second.toLowerCase() === this._filter
+        ) !== -1
       );
       LogUtil.debug('CountriesComponent filterCountries', this._filter);
     } else {

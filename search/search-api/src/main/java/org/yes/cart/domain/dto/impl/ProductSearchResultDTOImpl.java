@@ -45,11 +45,11 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private String fulfilmentCentreCode;
     private String defaultSkuCode;
     private String name;
-    private String displayName;
+    private StringI18NModel displayName;
     private String description;
-    private String displayDescription;
+    private StringI18NModel displayDescription;
     private String type;
-    private String displayType;
+    private StringI18NModel displayType;
     private int typeMask;
     private String tag;
     private String brand;
@@ -59,10 +59,6 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     // This is dependent of FT search, so not part of the copy()
     private List<ProductSkuSearchResultDTO> searchSkus;
-
-    private I18NModel i18NModelName;
-    private I18NModel i18NModelDescription;
-    private I18NModel i18NModelType;
 
     private StoredAttributesDTO attributes;
 
@@ -80,8 +76,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return defaultImage;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setDefaultImage(final String defaultImage) {
         this.defaultImage = defaultImage;
     }
@@ -175,8 +170,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return id;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setId(final long id) {
         this.id = id;
     }
@@ -187,8 +181,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return code;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setCode(final String code) {
         this.code = code;
     }
@@ -199,8 +192,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return manufacturerCode;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
     }
@@ -211,8 +203,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return fulfilmentCentreCode;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setFulfilmentCentreCode(final String fulfilmentCentreCode) {
         this.fulfilmentCentreCode = fulfilmentCentreCode;
     }
@@ -234,31 +225,28 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return defaultSkuCode;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setDefaultSkuCode(final String defaultSkuCode) {
         this.defaultSkuCode = defaultSkuCode;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getDisplayName() {
+    public StringI18NModel getDisplayName() {
         return displayName;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void setDisplayName(final String displayName) {
+    // JSON accessor
+    public void setDisplayName(final StringI18NModel displayName) {
         this.displayName = displayName;
-        this.i18NModelName = new StringI18NModel(this.displayName);
     }
 
 
     /** {@inheritDoc} */
     @Override
     public String getName(final String locale) {
-        if (this.i18NModelName != null) {
-            final String name = this.i18NModelName.getValue(locale);
+        if (this.displayName != null) {
+            final String name = this.displayName.getValue(locale);
             if (name != null) {
                 return name;
             }
@@ -272,8 +260,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return name;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setName(final String name) {
         this.name = name;
     }
@@ -286,8 +273,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return description;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setDescription(final String description) {
         this.description = description;
     }
@@ -295,8 +281,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     /** {@inheritDoc} */
     @Override
     public String getDescription(final String locale) {
-        if (this.i18NModelDescription != null) {
-            final String desc = this.i18NModelDescription.getValue(locale);
+        if (this.displayDescription != null) {
+            final String desc = this.displayDescription.getValue(locale);
             if (desc != null) {
                 return desc;
             }
@@ -307,24 +293,22 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     @Override
-    public String getDisplayDescription() {
+    public StringI18NModel getDisplayDescription() {
         return displayDescription;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void setDisplayDescription(final String displayDescription) {
-        
+    // JSON accessor
+    public void setDisplayDescription(final StringI18NModel displayDescription) {
+
         this.displayDescription = displayDescription;
 
-        i18NModelDescription = new StringI18NModel(this.displayDescription);
     }
 
     /** {@inheritDoc} */
     @Override
     public String getType(final String locale) {
-        if (this.i18NModelType != null) {
-            final String type = this.i18NModelType.getValue(locale);
+        if (this.displayType != null) {
+            final String type = this.displayType.getValue(locale);
             if (type != null) {
                 return type;
             }
@@ -338,25 +322,21 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return type;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setType(final String type) {
         this.type = type;
     }
 
     /** {@inheritDoc} */
     @Override
-    public String getDisplayType() {
+    public StringI18NModel getDisplayType() {
         return displayType;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void setDisplayType(final String displayType) {
+    // JSON accessor
+    public void setDisplayType(final StringI18NModel displayType) {
 
         this.displayType = displayType;
-
-        i18NModelType = new StringI18NModel(this.displayType);
 
     }
 
@@ -376,8 +356,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return (this.typeMask & 2) != 0;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setService(final boolean service) {
         this.typeMask = service ? this.typeMask | 2 : this.typeMask & ~ 2;
     }
@@ -389,8 +368,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return (this.typeMask & 4) != 0;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setEnsemble(final boolean ensemble) {
         this.typeMask = ensemble ? this.typeMask | 4 : this.typeMask & ~ 4;
     }
@@ -402,8 +380,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return (this.typeMask & 8) != 0;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setShippable(final boolean shippable) {
         this.typeMask = shippable ? this.typeMask | 8 : this.typeMask & ~ 8;
     }
@@ -415,8 +392,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return (this.typeMask & 16) != 0;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setDigital(final boolean digital) {
         this.typeMask = digital ? this.typeMask | 16 : this.typeMask & ~ 16;
     }
@@ -428,8 +404,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return (this.typeMask & 32) != 0;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setDownloadable(final boolean downloadable) {
         this.typeMask = downloadable ? this.typeMask | 32 : this.typeMask & ~ 32;
     }
@@ -440,8 +415,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return tag;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setTag(final String tag) {
         this.tag = tag;
     }
@@ -452,8 +426,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return brand;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setBrand(final String brand) {
         this.brand = brand;
     }
@@ -511,8 +484,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return baseSkus;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setBaseSkus(final Map<Long, ProductSkuSearchResultDTO> baseSkus) {
         this.baseSkus = baseSkus;
     }
@@ -537,8 +509,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return attributes;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setAttributes(final StoredAttributesDTO attributes) {
         this.attributes = attributes;
     }
@@ -549,8 +520,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return createdTimestamp;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
@@ -561,8 +531,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         return updatedTimestamp;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    // JSON accessor
     public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
@@ -581,11 +550,17 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setFulfilmentCentreCode(this.fulfilmentCentreCode);
         copy.setDefaultSkuCode(this.defaultSkuCode);
         copy.setName(this.name);
-        copy.setDisplayName(this.displayName);
+        if (this.displayName != null) {
+            copy.setDisplayName(this.displayName.copy());
+        }
         copy.setDescription(this.description);
-        copy.setDisplayDescription(this.displayDescription);
+        if (this.displayDescription != null) {
+            copy.setDisplayDescription(this.displayDescription.copy());
+        }
         copy.setType(this.type);
-        copy.setDisplayType(this.displayType);
+        if (this.displayType != null) {
+            copy.setDisplayType(this.displayType.copy());
+        }
         copy.setTypeMask(this.typeMask);
         copy.setTag(this.tag);
         copy.setBrand(this.brand);

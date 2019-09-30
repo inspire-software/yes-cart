@@ -52,7 +52,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(final int rank) {
         this.rank = rank;
     }
 
@@ -62,7 +62,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     }
 
     @Override
-    public void setAssociation(Association association) {
+    public void setAssociation(final Association association) {
         this.association = association;
     }
 
@@ -72,7 +72,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     }
 
     @Override
-    public void setProduct(Product product) {
+    public void setProduct(final Product product) {
         this.product = product;
     }
 
@@ -92,7 +92,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -102,7 +102,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -112,7 +112,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -122,7 +122,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -132,7 +132,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -148,7 +148,7 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
 
 
     @Override
-    public void setProductassociationId(long productassociationId) {
+    public void setProductassociationId(final long productassociationId) {
         this.productassociationId = productassociationId;
     }
 

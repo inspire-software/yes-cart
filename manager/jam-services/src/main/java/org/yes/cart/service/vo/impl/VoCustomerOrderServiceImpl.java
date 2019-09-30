@@ -72,11 +72,11 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     }
 
     @Override
-    public List<VoCustomerOrderInfo> getFiltered(final String lang, final String filter, final int max) throws Exception {
+    public List<VoCustomerOrderInfo> getFilteredOrders(final String lang, final String filter, final int max) throws Exception {
 
         final List<VoCustomerOrderInfo> results = new ArrayList<>();
 
-        final boolean removeSupplierDetails = !isSupplierDetailsViewable();
+        final boolean removeSecureDetails = !isSecureDetailsViewable();
 
         Map<String, String> pgNames = Collections.emptyMap();
         int start = 0;
@@ -98,8 +98,8 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
                 vo.setOrderStatusNextOptions(determineOrderStatusNextOptions(vo));
                 vo.setOrderPaymentStatus(determinePaymentStatus(vo));
 
-                if (removeSupplierDetails) {
-                    removeOrderDetails(vo, "SUPPLIER");
+                if (removeSecureDetails) {
+                    removeSecureOrderDetails(vo);
                 }
 
                 results.add(vo);
@@ -112,11 +112,11 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
 
     @Override
-    public List<VoCustomerOrderInfo> getFiltered(final String lang, final String filter, final List<String> statuses, final int max) throws Exception {
+    public List<VoCustomerOrderInfo> getFilteredOrders(final String lang, final String filter, final List<String> statuses, final int max) throws Exception {
 
         final List<VoCustomerOrderInfo> results = new ArrayList<>();
 
-        final boolean removeSupplierDetails = !isSupplierDetailsViewable();
+        final boolean removeSecureDetails = !isSecureDetailsViewable();
 
         Map<String, String> pgNames = Collections.emptyMap();
         int start = 0;
@@ -138,8 +138,8 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
                 vo.setOrderStatusNextOptions(determineOrderStatusNextOptions(vo));
                 vo.setOrderPaymentStatus(determinePaymentStatus(vo));
 
-                if (removeSupplierDetails) {
-                    removeOrderDetails(vo, "SUPPLIER");
+                if (removeSecureDetails) {
+                    removeSecureOrderDetails(vo);
                 }
 
                 results.add(vo);
@@ -188,26 +188,26 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
     }
 
-    private boolean isSupplierDetailsViewable() {
+    private boolean isSecureDetailsViewable() {
         return federationFacade.isCurrentUserSystemAdmin() || federationFacade.isCurrentUser("ROLE_SMSHOPADMIN");
     }
 
-    private void removeOrderDetails(final VoCustomerOrderInfo vo, final String displayValue) {
-        vo.getAllValues().removeIf(next -> displayValue.equals(next.getSecond().getSecond()));
+    private void removeSecureOrderDetails(final VoCustomerOrderInfo vo) {
+        vo.getAllValues().removeIf(next -> next.getAttribute().isSecure());
     }
 
-    private void removeAllDetails(final VoCustomerOrder vo, final String displayValue) {
+    private void removeAllSecureDetails(final VoCustomerOrder vo) {
 
-        removeOrderDetails(vo, displayValue);
+        removeSecureOrderDetails(vo);
 
         for (final VoCustomerOrderLine line : vo.getLines()) {
-            removeLineDetails(line, displayValue);
+            removeSecureLineDetails(line);
         }
 
     }
 
-    private void removeLineDetails(final VoCustomerOrderLine vo, final String displayValue) {
-        vo.getAllValues().removeIf(next -> displayValue.equals(next.getSecond().getSecond()));
+    private void removeSecureLineDetails(final VoCustomerOrderLine vo) {
+        vo.getAllValues().removeIf(next -> next.getAttribute().isSecure());
     }
 
     private List<String> determineOrderStatusNextOptions(final VoCustomerOrderInfo vo) {
@@ -219,7 +219,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     }
 
     @Override
-    public VoCustomerOrder getById(final String lang, final long orderId) throws Exception {
+    public VoCustomerOrder getOrderById(final String lang, final long orderId) throws Exception {
 
         if (federationFacade.isManageable(orderId, CustomerOrderDTO.class)) {
 
@@ -262,9 +262,9 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
             vo.setPayments(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, customerOrderPaymentService.findBy(vo.getOrdernum(), null, (String) null, (String) null)));
 
-            final boolean removeSupplierDetails = !isSupplierDetailsViewable();
-            if (removeSupplierDetails) {
-                removeAllDetails(vo, "SUPPLIER");
+            final boolean removeSecureDetails = !isSecureDetailsViewable();
+            if (removeSecureDetails) {
+                removeAllSecureDetails(vo);
             }
 
             return vo;
@@ -315,7 +315,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
             dtoCustomerOrderService.updateOrderExportStatus(lang, id, export);
 
-            return getById(lang, id);
+            return getOrderById(lang, id);
 
         } else {
             throw new AccessDeniedException("Access is denied");

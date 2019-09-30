@@ -22,6 +22,7 @@ import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.StoredAttributesDTOImpl;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -39,8 +40,9 @@ public class AdapterUtilsTest {
     @Test
     public void readObjectFieldValue() throws Exception {
 
-        final ProductSkuSearchResultDTO dtoSKU = new ProductSkuSearchResultDTOImpl();
+        final ProductSkuSearchResultDTOImpl dtoSKU = new ProductSkuSearchResultDTOImpl();
         dtoSKU.setAttributes(new StoredAttributesDTOImpl());
+        dtoSKU.setDisplayName(new StringI18NModel("EN#~#DisplayName SKU"));
         dtoSKU.setCode("CODE");
         dtoSKU.setAvailability(2);
         dtoSKU.setAvailablefrom(LocalDateTime.now());
@@ -52,6 +54,7 @@ public class AdapterUtilsTest {
 
         final ProductSearchResultDTOImpl dto = new ProductSearchResultDTOImpl();
         dto.setAttributes(new StoredAttributesDTOImpl());
+        dto.setDisplayName(new StringI18NModel("EN#~#DisplayName"));
         dto.setCode("CODE");
         dto.setShippable(true);
         dto.setEnsemble(true);

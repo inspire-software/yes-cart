@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.impl.DeliveryBucketImpl;
@@ -85,7 +86,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setQty(BigDecimal qty) {
+    public void setQty(final BigDecimal qty) {
         this.qty = qty;
     }
 
@@ -95,7 +96,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setPrice(BigDecimal price) {
+    public void setPrice(final BigDecimal price) {
         this.price = price;
     }
 
@@ -165,7 +166,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setListPrice(BigDecimal listPrice) {
+    public void setListPrice(final BigDecimal listPrice) {
         this.listPrice = listPrice;
     }
 
@@ -309,12 +310,12 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public Pair<String, String> getValue(final String code) {
+    public Pair<String, I18NModel> getValue(final String code) {
         return storedAttributes != null ? storedAttributes.getValue(code) : null;
     }
 
     @Override
-    public void putValue(final String code, final String value, final String displayValue) {
+    public void putValue(final String code, final String value, final I18NModel displayValue) {
         if (storedAttributes == null) {
             storedAttributes = new CustomerOrderDetAttributesImpl();
         }
@@ -322,12 +323,12 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public Map<String, Pair<String, String>> getAllValues() {
+    public Map<String, Pair<String, I18NModel>> getAllValues() {
         return storedAttributes != null ? storedAttributes.getAllValues() : Collections.emptyMap();
     }
 
     @Override
-    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+    public void setAllValues(final Map<String, Pair<String, I18NModel>> allValues) {
         this.storedAttributes = new CustomerOrderDetAttributesImpl(allValues);
     }
 
@@ -337,7 +338,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setCustomerOrder(CustomerOrder customerOrder) {
+    public void setCustomerOrder(final CustomerOrder customerOrder) {
         this.customerOrder = customerOrder;
     }
 
@@ -347,7 +348,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -357,7 +358,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -367,7 +368,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -377,7 +378,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -387,7 +388,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -402,7 +403,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
-    public void setCustomerOrderDetId(long customerOrderDetId) {
+    public void setCustomerOrderDetId(final long customerOrderDetId) {
         this.customerOrderDetId = customerOrderDetId;
     }
 

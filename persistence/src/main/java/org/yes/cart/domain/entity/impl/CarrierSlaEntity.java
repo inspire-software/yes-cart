@@ -22,6 +22,8 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.Carrier;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.log.Markers;
 
@@ -42,9 +44,11 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     private long version;
 
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String description;
-    private String displayDescription;
+    private String displayDescriptionInternal;
+    private I18NModel displayDescription;
     private Integer maxDays;
     private Integer minDays;
     private String excludeWeekDays;
@@ -82,18 +86,28 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    @Override
-    public String getDisplayName() {
-        return displayName;
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
     }
 
     @Override
-    public void setDisplayName(final String displayName) {
+    public I18NModel getDisplayName() {
+        return this.displayName;
+    }
+
+    @Override
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -102,18 +116,28 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
-    @Override
-    public String getDisplayDescription() {
-        return displayDescription;
+    public String getDisplayDescriptionInternal() {
+        return displayDescriptionInternal;
+    }
+
+    public void setDisplayDescriptionInternal(final String displayDescriptionInternal) {
+        this.displayDescriptionInternal = displayDescriptionInternal;
+        this.displayDescription = new StringI18NModel(displayDescriptionInternal);
     }
 
     @Override
-    public void setDisplayDescription(final String displayDescription) {
+    public I18NModel getDisplayDescription() {
+        return this.displayDescription;
+    }
+
+    @Override
+    public void setDisplayDescription(final I18NModel displayDescription) {
         this.displayDescription = displayDescription;
+        this.displayDescriptionInternal = displayDescription != null ? displayDescription.toString() : null;
     }
 
     @Override
@@ -122,7 +146,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setMaxDays(Integer maxDays) {
+    public void setMaxDays(final Integer maxDays) {
         this.maxDays = maxDays;
     }
 
@@ -237,7 +261,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setSlaType(String slaType) {
+    public void setSlaType(final String slaType) {
         this.slaType = slaType;
     }
 
@@ -247,7 +271,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setScript(String script) {
+    public void setScript(final String script) {
         this.script = script;
     }
 
@@ -370,7 +394,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setCarrier(Carrier carrier) {
+    public void setCarrier(final Carrier carrier) {
         this.carrier = carrier;
     }
 
@@ -380,7 +404,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -390,7 +414,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -400,7 +424,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -410,7 +434,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -420,7 +444,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -436,7 +460,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     }
 
     @Override
-    public void setCarrierslaId(long carrierslaId) {
+    public void setCarrierslaId(final long carrierslaId) {
         this.carrierslaId = carrierslaId;
     }
 

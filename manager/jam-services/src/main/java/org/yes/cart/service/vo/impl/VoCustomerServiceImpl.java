@@ -107,7 +107,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoCustomerInfo> getFiltered(final String filter, final int max) throws Exception {
+    public List<VoCustomerInfo> getFilteredCustomers(final String filter, final int max) throws Exception {
 
         final List<VoCustomerInfo> results = new ArrayList<>();
 
@@ -131,7 +131,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
      * {@inheritDoc}
      */
     @Override
-    public VoCustomer getById(final long id) throws Exception {
+    public VoCustomer getCustomerById(final long id) throws Exception {
         if (federationFacade.isManageable(id, CustomerDTO.class)) {
             final CustomerDTO customerDTO = dtoCustomerService.getById(id);
             final VoCustomer vo = voAssemblySupport.assembleVo(VoCustomer.class, CustomerDTO.class, new VoCustomer(), customerDTO);
@@ -182,7 +182,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
      * {@inheritDoc}
      */
     @Override
-    public VoCustomer update(final VoCustomer vo) throws Exception {
+    public VoCustomer updateCustomer(final VoCustomer vo) throws Exception {
 
         if (federationFacade.isManageable(vo.getCustomerId(), CustomerDTO.class)) {
             final CustomerDTO customerDTO = dtoCustomerService.getById(vo.getCustomerId());
@@ -226,14 +226,14 @@ public class VoCustomerServiceImpl implements VoCustomerService {
         } else {
             throw new AccessDeniedException("Access is denied");
         }
-        return getById(vo.getCustomerId());
+        return getCustomerById(vo.getCustomerId());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public VoCustomer create(final VoCustomer vo) throws Exception {
+    public VoCustomer createCustomer(final VoCustomer vo) throws Exception {
 
         final List<CustomerDTO> existing = dtoCustomerService.findCustomer(vo.getEmail());
         final Map<String, Set<Long>> registered = new HashMap<>();
@@ -281,14 +281,14 @@ public class VoCustomerServiceImpl implements VoCustomerService {
             dtoCustomerService.grantShop(customerDTO.getCustomerId(), link.getShopId(), false);
         }
 
-        return getById(customerDTO.getCustomerId());
+        return getCustomerById(customerDTO.getCustomerId());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void remove(final long id) throws Exception {
+    public void removeCustomer(final long id) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             dtoCustomerService.remove(id);
         } else {
@@ -310,7 +310,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoAttrValueCustomer> update(final List<MutablePair<VoAttrValueCustomer, Boolean>> vo) throws Exception {
+    public List<VoAttrValueCustomer> updateCustomerAttributes(final List<MutablePair<VoAttrValueCustomer, Boolean>> vo) throws Exception {
 
         final long customerId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 

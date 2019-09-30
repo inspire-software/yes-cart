@@ -54,6 +54,10 @@ export class BrandSelectComponent implements OnInit, OnDestroy {
 
   constructor (private _brandService : CatalogService) {
     LogUtil.debug('BrandSelectComponent constructed');
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.getAllBrands();
+    }, this.delayedFilteringMs);
   }
 
   ngOnDestroy() {
@@ -62,11 +66,6 @@ export class BrandSelectComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('BrandSelectComponent ngOnInit');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.getAllBrands();
-    }, this.delayedFilteringMs);
-
   }
 
   onSelectClick(brand: BrandVO) {

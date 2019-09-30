@@ -387,18 +387,18 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoPaymentGatewayParameter> update(final String pgLabel,
-                                                  final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo,
-                                                  final boolean includeSecure) throws Exception {
-        return update(DEFAULT_SHOP_CODE, pgLabel, vo, includeSecure);
+    public List<VoPaymentGatewayParameter> updateParameters(final String pgLabel,
+                                                            final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo,
+                                                            final boolean includeSecure) throws Exception {
+        return updateParameters(DEFAULT_SHOP_CODE, pgLabel, vo, includeSecure);
     }
 
     /** {@inheritDoc} */
     @Override
-    public List<VoPaymentGatewayParameter> update(final String shopCode,
-                                                  final String pgLabel,
-                                                  final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo,
-                                                  final boolean includeSecure) throws Exception {
+    public List<VoPaymentGatewayParameter> updateParameters(final String shopCode,
+                                                            final String pgLabel,
+                                                            final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo,
+                                                            final boolean includeSecure) throws Exception {
 
         final boolean systemSettings = DEFAULT_SHOP_CODE.equals(shopCode);
 

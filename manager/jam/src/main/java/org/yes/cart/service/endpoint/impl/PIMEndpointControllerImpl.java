@@ -114,7 +114,7 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
     @Override
     public @ResponseBody
     List<VoAttrValueProduct> updateProduct(@RequestBody final List<MutablePair<VoAttrValueProduct, Boolean>> vo) throws Exception {
-        final List<VoAttrValueProduct> list = voProductService.updateProduct(vo);
+        final List<VoAttrValueProduct> list = voProductService.updateProductAttributes(vo);
         if (!list.isEmpty()) {
             clusterService.reindexProduct(createJobContext(), list.get(0).getProductId());
         }
@@ -171,7 +171,7 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
     @Override
     public @ResponseBody
     List<VoAttrValueProductSku> updateSku(@RequestBody final List<MutablePair<VoAttrValueProductSku, Boolean>> vo) throws Exception {
-        final List<VoAttrValueProductSku> list = voProductService.updateSku(vo);
+        final List<VoAttrValueProductSku> list = voProductService.updateSkuAttributes(vo);
         if (!list.isEmpty()) {
             clusterService.reindexProductSku(createJobContext(), list.get(0).getSkuId());
         }

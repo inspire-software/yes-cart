@@ -18,6 +18,8 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.time.Instant;
 
@@ -34,7 +36,8 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     private ProductSku productSku;
     private String val;
     private String indexedVal;
-    private String displayVal;
+    private String displayValInternal;
+    private I18NModel displayVal;
     private String attributeCode;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
@@ -51,7 +54,7 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     }
 
     @Override
-    public void setProductSku(ProductSku productSku) {
+    public void setProductSku(final ProductSku productSku) {
         this.productSku = productSku;
     }
 
@@ -61,7 +64,7 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     }
 
     @Override
-    public void setVal(String val) {
+    public void setVal(final String val) {
         this.val = val;
     }
 
@@ -75,14 +78,24 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
         this.indexedVal = indexedVal;
     }
 
+    public String getDisplayValInternal() {
+        return displayValInternal;
+    }
+
+    public void setDisplayValInternal(final String displayValInternal) {
+        this.displayValInternal = displayValInternal;
+        this.displayVal = new StringI18NModel(displayValInternal);
+    }
+
     @Override
-    public String getDisplayVal() {
+    public I18NModel getDisplayVal() {
         return this.displayVal;
     }
 
     @Override
-    public void setDisplayVal(String displayVal) {
+    public void setDisplayVal(final I18NModel displayVal) {
         this.displayVal = displayVal;
+        this.displayValInternal = displayVal != null ? displayVal.toString() : null;
     }
 
     @Override
@@ -101,7 +114,7 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -111,7 +124,7 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -121,7 +134,7 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -131,7 +144,7 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -141,7 +154,7 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -157,7 +170,7 @@ public class AttrValueEntityProductSku implements org.yes.cart.domain.entity.Att
 
 
     @Override
-    public void setAttrvalueId(long attrvalueId) {
+    public void setAttrvalueId(final long attrvalueId) {
         this.attrvalueId = attrvalueId;
     }
 

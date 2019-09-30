@@ -92,4 +92,10 @@ public class NonI18NModelTest {
 
     }
 
+    @Test
+    public void testToString() throws Exception {
+
+        assertEquals("some text", new NonI18NModel("some text").toString());
+
+    }
 }

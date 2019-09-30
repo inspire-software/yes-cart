@@ -25,6 +25,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
@@ -88,10 +89,10 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("4551.88"), customerOrder.getNetPrice());
         assertEquals(new BigDecimal("5463.91"), customerOrder.getGrossPrice());
 
-        final Pair<String, String> orderDetail = customerOrder.getValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + ":someDetail");
+        final Pair<String, I18NModel> orderDetail = customerOrder.getValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + ":someDetail");
         assertNotNull(orderDetail);
         assertEquals("order detail", orderDetail.getFirst());
-        assertEquals("someDetail: order detail", orderDetail.getSecond());
+        assertEquals("someDetail: order detail", orderDetail.getSecond().getValue(I18NModel.DEFAULT));
 
         CustomerOrderDet detCC_TEST1 = null;
         for (final CustomerOrderDet det : customerOrder.getOrderDetail()) {
@@ -101,10 +102,10 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
             }
         }
 
-        final Pair<String, String> orderDetCC_TEST1 = detCC_TEST1.getValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + ":someDetail");
+        final Pair<String, I18NModel> orderDetCC_TEST1 = detCC_TEST1.getValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + ":someDetail");
         assertNotNull(orderDetCC_TEST1);
         assertEquals("item detail", orderDetCC_TEST1.getFirst());
-        assertEquals("someDetail: item detail", orderDetCC_TEST1.getSecond());
+        assertEquals("someDetail: item detail", orderDetCC_TEST1.getSecond().getValue(I18NModel.DEFAULT));
 
     }
 

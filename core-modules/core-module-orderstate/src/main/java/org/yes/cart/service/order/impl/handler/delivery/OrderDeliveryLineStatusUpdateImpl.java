@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl.handler.delivery;
 
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
@@ -44,7 +45,7 @@ public class OrderDeliveryLineStatusUpdateImpl implements OrderDeliveryLineStatu
     private final boolean rejected;
     private final String supplierInvoiceNo;
     private final LocalDate supplierInvoiceDate;
-    private final Map<String, Pair<String, String>> additionalData = new HashMap<>();
+    private final Map<String, Pair<String, I18NModel>> additionalData = new HashMap<>();
 
 
     public OrderDeliveryLineStatusUpdateImpl(final Long orderLineRef,
@@ -85,7 +86,7 @@ public class OrderDeliveryLineStatusUpdateImpl implements OrderDeliveryLineStatu
                                              final boolean rejected,
                                              final String supplierInvoiceNo,
                                              final LocalDate supplierInvoiceDate,
-                                             final Map<String, Pair<String, String>> additionalData) {
+                                             final Map<String, Pair<String, I18NModel>> additionalData) {
         this.orderLineRef = orderLineRef;
         this.sku = sku;
         this.orderDeliveryStatus = orderDeliveryStatus;
@@ -162,7 +163,7 @@ public class OrderDeliveryLineStatusUpdateImpl implements OrderDeliveryLineStatu
     }
 
     @Override
-    public Map<String, Pair<String, String>> getAdditionalData() {
+    public Map<String, Pair<String, I18NModel>> getAdditionalData() {
         return additionalData;
     }
 

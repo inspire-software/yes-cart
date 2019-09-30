@@ -97,7 +97,7 @@ public class VoBrandServiceImpl implements VoBrandService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoBrand> getFiltered(final String filter, final int max) throws Exception {
+    public List<VoBrand> getFilteredBrands(final String filter, final int max) throws Exception {
 
         final List<VoBrand> results = new ArrayList<>();
 
@@ -114,7 +114,7 @@ public class VoBrandServiceImpl implements VoBrandService {
      * {@inheritDoc}
      */
     @Override
-    public VoBrand getById(final long id) throws Exception {
+    public VoBrand getBrandById(final long id) throws Exception {
         final BrandDTO brandDTO = dtoBrandService.getById(id);
         if (brandDTO != null && federationFacade.isCurrentUserSystemAdmin()) {
             return voAssemblySupport.assembleVo(VoBrand.class, BrandDTO.class, new VoBrand(), brandDTO);
@@ -127,7 +127,7 @@ public class VoBrandServiceImpl implements VoBrandService {
      * {@inheritDoc}
      */
     @Override
-    public VoBrand update(final VoBrand vo) throws Exception {
+    public VoBrand updateBrand(final VoBrand vo) throws Exception {
         final BrandDTO brandDTO = dtoBrandService.getById(vo.getBrandId());
         if (brandDTO != null && federationFacade.isCurrentUserSystemAdmin()) {
             dtoBrandService.update(
@@ -136,20 +136,20 @@ public class VoBrandServiceImpl implements VoBrandService {
         } else {
             throw new AccessDeniedException("Access is denied");
         }
-        return getById(vo.getBrandId());
+        return getBrandById(vo.getBrandId());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public VoBrand create(final VoBrand vo) throws Exception {
+    public VoBrand createBrand(final VoBrand vo) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             BrandDTO brandDTO = dtoBrandService.getNew();
             brandDTO = dtoBrandService.create(
                     voAssemblySupport.assembleDto(BrandDTO.class, VoBrand.class, brandDTO, vo)
             );
-            return getById(brandDTO.getBrandId());
+            return getBrandById(brandDTO.getBrandId());
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -159,7 +159,7 @@ public class VoBrandServiceImpl implements VoBrandService {
      * {@inheritDoc}
      */
     @Override
-    public void remove(final long id) throws Exception {
+    public void removeBrand(final long id) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             dtoBrandService.remove(id);
         } else {
@@ -181,7 +181,7 @@ public class VoBrandServiceImpl implements VoBrandService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoAttrValueBrand> update(final List<MutablePair<VoAttrValueBrand, Boolean>> vo) throws Exception {
+    public List<VoAttrValueBrand> updateBrandAttributes(final List<MutablePair<VoAttrValueBrand, Boolean>> vo) throws Exception {
 
         final long brandId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 

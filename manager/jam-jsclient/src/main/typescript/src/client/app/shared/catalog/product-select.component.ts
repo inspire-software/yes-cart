@@ -54,6 +54,10 @@ export class ProductSelectComponent implements OnInit, OnDestroy {
 
   constructor (private _productService : PIMService) {
     LogUtil.debug('ProductSelectComponent constructed');
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.getAllProducts();
+    }, this.delayedFilteringMs);
   }
 
   ngOnDestroy() {
@@ -62,11 +66,6 @@ export class ProductSelectComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('ProductSelectComponent ngOnInit');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.getAllProducts();
-    }, this.delayedFilteringMs);
-
   }
 
   onSelectClick(producttype: ProductVO) {

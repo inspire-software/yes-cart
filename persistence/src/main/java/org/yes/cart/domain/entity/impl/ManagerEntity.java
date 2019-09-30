@@ -67,7 +67,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -77,7 +77,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setFirstname(String firstname) {
+    public void setFirstname(final String firstname) {
         this.firstname = firstname;
     }
 
@@ -87,7 +87,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setLastname(String lastname) {
+    public void setLastname(final String lastname) {
         this.lastname = lastname;
     }
 
@@ -97,7 +97,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setMiddlename(String middlename) {
+    public void setMiddlename(final String middlename) {
         this.middlename = middlename;
     }
 
@@ -126,7 +126,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -206,7 +206,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -216,7 +216,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -226,7 +226,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -236,7 +236,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -246,7 +246,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -261,7 +261,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setManagerId(long managerId) {
+    public void setManagerId(final long managerId) {
         this.managerId = managerId;
     }
 
@@ -280,7 +280,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     }
 
     @Override
-    public void setShops(Collection<ManagerShop> shops) {
+    public void setShops(final Collection<ManagerShop> shops) {
         this.shops = shops;
     }
 }

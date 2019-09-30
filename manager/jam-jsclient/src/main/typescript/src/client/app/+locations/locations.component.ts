@@ -64,12 +64,12 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   newCountryInstance():CountryVO {
-    return { countryId: 0, countryCode: '',  isoCode: '', name: '', displayName: '' };
+    return { countryId: 0, countryCode: '',  isoCode: '', name: '', displayNames: [] };
   }
 
   newStateInstance():StateVO {
     let country = this.selectedCountry != null ? this.selectedCountry.countryCode : '';
-    return { stateId: 0, countryCode: country, stateCode: '', name: '', displayName: ''};
+    return { stateId: 0, countryCode: country, stateCode: '', name: '', displayNames: [] };
   }
 
   ngOnInit() {

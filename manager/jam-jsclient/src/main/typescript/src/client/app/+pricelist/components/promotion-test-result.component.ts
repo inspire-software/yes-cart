@@ -70,12 +70,12 @@ export class PromotionTestResultComponent implements OnInit, OnDestroy {
     let flags = '';
     if (row.price < row.salePrice) {
       // promotion
-      flags += '<i title="' + row.salePrice.toFixed(2) + '" class="fa fa-dollar"></i>&nbsp;';
+      flags += '<i title="' + row.salePrice.toFixed(2) + '" class="fa fa-cart-arrow-down"></i>&nbsp;';
     }
 
     if (row.salePrice < row.listPrice) {
       // sale
-      flags += '<i title="' + row.listPrice.toFixed(2) + '" class="fa fa-tag"></i>&nbsp;';
+      flags += '<i title="' + row.listPrice.toFixed(2) + '" class="fa fa-clock-o"></i>&nbsp;';
     }
 
     return flags;
@@ -87,7 +87,7 @@ export class PromotionTestResultComponent implements OnInit, OnDestroy {
     let flags = '';
     if (cart.total.priceSubTotal < cart.total.listSubTotal) {
       // sale
-      flags += '<i title="' + cart.total.listSubTotal.toFixed(2) + '" class="fa fa-tag"></i>&nbsp;';
+      flags += '<i title="' + cart.total.listSubTotal.toFixed(2) + '" class="fa fa-cart-arrow-down"></i>&nbsp;';
     }
 
     return flags;

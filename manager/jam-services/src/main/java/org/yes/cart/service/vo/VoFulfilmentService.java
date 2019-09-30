@@ -31,15 +31,20 @@ public interface VoFulfilmentService {
 
     /**
      * Get all vo in the system, filtered according to rights
+     *
      * @return all fulfilment centers
+     *
      * @throws Exception errors
      */
     List<VoFulfilmentCentre> getAllFulfilmentCentres() throws Exception;
 
     /**
      * Get all vo in the system, filtered according to rights
+     *
      * @param shopId pk
+     *
      * @return all fulfilment centers for shop
+     *
      * @throws Exception errors
      */
     List<VoShopFulfilmentCentre> getShopFulfilmentCentres(long shopId) throws Exception;
@@ -60,23 +65,31 @@ public interface VoFulfilmentService {
      * Get vo by id.
      *
      * @param id id
+     *
      * @return vo
+     *
      * @throws Exception errors
      */
     VoFulfilmentCentre getFulfilmentCentreById(long id) throws Exception;
 
     /**
      * Create new vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoFulfilmentCentre createFulfilmentCentre(VoFulfilmentCentre vo)  throws Exception;
 
     /**
      * Create new vo
+     *
      * @param vo vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoFulfilmentCentre createShopFulfilmentCentre(VoFulfilmentCentreInfo vo, long shopId)  throws Exception;
@@ -84,8 +97,11 @@ public interface VoFulfilmentService {
 
     /**
      * Create new vo
+     *
      * @param vo fulfilment center
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoFulfilmentCentre updateFulfilmentCentre(VoFulfilmentCentre vo)  throws Exception;
@@ -93,8 +109,11 @@ public interface VoFulfilmentService {
 
     /**
      * Create new vo
+     *
      * @param vo fulfilment center
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     List<VoShopFulfilmentCentre> updateShopFulfilmentCentres(List<VoShopFulfilmentCentre> vo)  throws Exception;
@@ -104,6 +123,7 @@ public interface VoFulfilmentService {
      * Remove vo.
      *
      * @param id fulfilment center id
+     *
      * @throws Exception errors
      */
     void removeFulfilmentCentre(long id) throws Exception;
@@ -114,6 +134,7 @@ public interface VoFulfilmentService {
      * @param centreId centre pk
      * @param filter filter
      * @param max max results
+     *
      * @return results
      *
      * @throws Exception errors
@@ -124,7 +145,9 @@ public interface VoFulfilmentService {
      * Get inventory by id.
      *
      * @param id inventory id
+     *
      * @return inventory vo
+     *
      * @throws Exception errors
      */
     VoInventory getInventoryById(long id) throws Exception;
@@ -133,7 +156,9 @@ public interface VoFulfilmentService {
      * Update given inventory.
      *
      * @param vo inventory to update
+     *
      * @return updated instance
+     *
      * @throws Exception errors
      */
     VoInventory updateInventory(VoInventory vo) throws Exception;
@@ -142,7 +167,9 @@ public interface VoFulfilmentService {
      * Create new inventory
      *
      * @param vo given instance to persist
+     *
      * @return persisted instance
+     *
      * @throws Exception errors
      */
     VoInventory createInventory(VoInventory vo) throws Exception;
@@ -151,6 +178,7 @@ public interface VoFulfilmentService {
      * Remove inventory by id.
      *
      * @param id inventory id
+     *
      * @throws Exception errors
      */
     void removeInventory(long id) throws Exception;

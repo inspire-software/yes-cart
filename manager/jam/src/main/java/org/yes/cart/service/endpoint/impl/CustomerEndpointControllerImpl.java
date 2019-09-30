@@ -56,7 +56,7 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
     @Override
     public @ResponseBody
     List<VoCustomerInfo> getFilteredCustomer(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voCustomerService.getFiltered(filter, max);
+        return voCustomerService.getFilteredCustomers(filter, max);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
     public List<MutablePair<String, String>> getCustomerTypes(final long customerId, final String lang) throws Exception {
 
         if (customerId > 0L) {
-            final VoCustomer voCustomer = voCustomerService.getById(customerId);
+            final VoCustomer voCustomer = voCustomerService.getCustomerById(customerId);
             final List<VoCustomerShopLink> shops = voCustomer.getCustomerShops();
             if (CollectionUtils.isNotEmpty(shops)) {
                 final List<Long> shopIds = new ArrayList<>();
@@ -86,25 +86,25 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
     @Override
     public @ResponseBody
     VoCustomer getCustomerById(@PathVariable("id") final long id) throws Exception {
-        return voCustomerService.getById(id);
+        return voCustomerService.getCustomerById(id);
     }
 
     @Override
     public @ResponseBody
     VoCustomer createCustomer(@RequestBody final VoCustomer vo) throws Exception {
-        return voCustomerService.create(vo);
+        return voCustomerService.createCustomer(vo);
     }
 
     @Override
     public  @ResponseBody
     VoCustomer updateCustomer(@RequestBody final VoCustomer vo) throws Exception {
-        return voCustomerService.update(vo);
+        return voCustomerService.updateCustomer(vo);
     }
 
     @Override
     public @ResponseBody
     void removeCustomer(@PathVariable("id") final long id) throws Exception {
-        voCustomerService.remove(id);
+        voCustomerService.removeCustomer(id);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
     @Override
     public @ResponseBody
     List<VoAttrValueCustomer> updateCustomer(@RequestBody final List<MutablePair<VoAttrValueCustomer, Boolean>> vo) throws Exception {
-        return voCustomerService.update(vo);
+        return voCustomerService.updateCustomerAttributes(vo);
     }
 
     @Override
@@ -134,18 +134,18 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
     @Override
     public @ResponseBody
     VoAddress createAddress(@RequestBody final VoAddress vo) throws Exception {
-        return voAddressBookService.create(vo);
+        return voAddressBookService.createAddress(vo);
     }
 
     @Override
     public @ResponseBody
     VoAddress updateAddress(@RequestBody final VoAddress vo) throws Exception {
-        return voAddressBookService.update(vo);
+        return voAddressBookService.updateAddress(vo);
     }
 
     @Override
     public @ResponseBody
     void removeAddress(@PathVariable("id") final long id) throws Exception {
-        voAddressBookService.remove(id);
+        voAddressBookService.removeAddress(id);
     }
 }

@@ -1,6 +1,5 @@
 package org.yes.cart.service.vo.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.AddressDTO;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
@@ -9,11 +8,13 @@ import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Country;
 import org.yes.cart.domain.entity.State;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoAddress;
 import org.yes.cart.domain.vo.VoAddressBook;
 import org.yes.cart.domain.vo.VoAttrValue;
+import org.yes.cart.domain.vo.VoLocation;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CountryService;
@@ -67,7 +68,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
 
             addressBook.setFormattingShopId(formattingShopId);
 
-            setShopLocations(addressBook, formattingShopId);
+            setShopLocations(addressBook, formattingShopId, lang);
 
             setAddressBookAddresses(addressBook, customerId);
 
@@ -83,7 +84,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
     }
 
 
-    protected void setShopLocations(final VoAddressBook addressBook, long shopId) throws Exception {
+    protected void setShopLocations(final VoAddressBook addressBook, long shopId, final String lang) throws Exception {
 
         final ShopDTO shop = this.dtoShopService.getById(shopId);
         String billing = dtoShopService.getSupportedBillingCountries(shop.getMasterId() != null ? shop.getMasterId() : shop.getShopId());
@@ -92,8 +93,10 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
         List<String> shippingCodes = shipping == null ? Collections.emptyList() : Arrays.asList(shipping.split(","));
 
         final List<Country> countries = countryService.findAll();
-        final Map<String, List<MutablePair<String, String>>> allCountries = new HashMap<>();
-        final Map<String, List<MutablePair<String, String>>> allStates = new HashMap<>();
+
+        final List<VoLocation> billingCountries = new ArrayList<>();
+        final List<VoLocation> shippingCountries = new ArrayList<>();
+
         for (final Country country : countries) {
 
             final boolean billingCountry = billingCodes.contains(country.getCountryCode());
@@ -101,46 +104,60 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
 
             if (billingCountry || shippingCountry) {
 
-                final MutablePair<String, String> countryInfo = MutablePair.of(
+                final VoLocation countryInfo = convertToLocation(
                         country.getCountryCode(),
-                        country.getName() + (StringUtils.isNotBlank(country.getDisplayName()) ? " (" + country.getDisplayName() + ")" : ""));
+                        country.getName(),
+                        country.getDisplayName()
+                );
 
                 if (billingCountry) {
-                    List<MutablePair<String, String>> allBilling = allCountries.computeIfAbsent(Address.ADDR_TYPE_BILLING, k -> new ArrayList<>());
-                    allBilling.add(countryInfo);
+                    billingCountries.add(countryInfo);
                 }
 
                 if (shippingCountry) {
-                    List<MutablePair<String, String>> allShipping = allCountries.computeIfAbsent(Address.ADDR_TYPE_SHIPPING, k -> new ArrayList<>());
-                    allShipping.add(countryInfo);
+                    shippingCountries.add(countryInfo);
                 }
 
                 final List<State> states = stateService.findByCountry(country.getCountryCode());
-                final List<MutablePair<String, String>> countryStates = new ArrayList<>();
+                final List<VoLocation> countryStates = new ArrayList<>();
                 for (final State state : states) {
-                    countryStates.add(MutablePair.of(
+
+                    final VoLocation stateInfo = convertToLocation(
                             state.getStateCode(),
-                            state.getName() + (StringUtils.isNotBlank(state.getDisplayName()) ? " (" + state.getDisplayName() + ")" : "")));
+                            state.getName(),
+                            state.getDisplayName()
+                    );
+
+                    countryStates.add(stateInfo);
+
                 }
-                allStates.put(country.getCountryCode(), countryStates);
+
+                if (!countryStates.isEmpty()) {
+                    countryInfo.setSubLocations(countryStates);
+                }
 
             }
         }
 
-        final List<MutablePair<String, List<MutablePair<String, String>>>> voCountries = new ArrayList<>();
-        for (final Map.Entry<String, List<MutablePair<String, String>>> countryEntry : allCountries.entrySet()) {
-            voCountries.add(MutablePair.of(countryEntry.getKey(), countryEntry.getValue()));
+        addressBook.setBillingCountries(billingCountries);
+        addressBook.setShippingCountries(shippingCountries);
+
+    }
+
+    private VoLocation convertToLocation(final String code, final String name, final I18NModel displayName) {
+
+        final VoLocation loc = new VoLocation();
+        loc.setCode(code);
+        loc.setName(name);
+        final List<MutablePair<String, String>> names = new ArrayList<>();
+        if (displayName != null) {
+            for (final Map.Entry<String, String> val : displayName.getAllValues().entrySet()) {
+                names.add(MutablePair.of(val.getKey(), val.getValue()));
+            }
         }
+        loc.setDisplayNames(names);
 
-        addressBook.setCountries(voCountries);
-
-        final List<MutablePair<String, List<MutablePair<String, String>>>> voStates = new ArrayList<>();
-        for (final Map.Entry<String, List<MutablePair<String, String>>> stateEntry : allStates.entrySet()) {
-            voStates.add(MutablePair.of(stateEntry.getKey(), stateEntry.getValue()));
-        }
-
-        addressBook.setStates(voStates);
-
+        return loc;
     }
 
 
@@ -184,7 +201,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
 
     /** {@inheritDoc} */
     @Override
-    public VoAddress update(final VoAddress vo) throws Exception {
+    public VoAddress updateAddress(final VoAddress vo) throws Exception {
 
         AddressDTO address = vo != null ? this.dtoAddressService.getById(vo.getAddressId()) : null;
 
@@ -202,7 +219,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
 
     /** {@inheritDoc} */
     @Override
-    public VoAddress create(final VoAddress vo) throws Exception {
+    public VoAddress createAddress(final VoAddress vo) throws Exception {
 
         if (vo != null && federationFacade.isManageable(vo.getCustomerId(), CustomerDTO.class)) {
 
@@ -222,7 +239,7 @@ public class VoAddressBookServiceImpl implements VoAddressBookService {
 
     /** {@inheritDoc} */
     @Override
-    public void remove(final long id) throws Exception {
+    public void removeAddress(final long id) throws Exception {
 
         final AddressDTO address = this.dtoAddressService.getById(id);
 

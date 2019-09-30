@@ -52,13 +52,13 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
     @Override
     public @ResponseBody
     List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") final String lang, @RequestBody(required = false) final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
-        return voCustomerOrderService.getFiltered(lang, (String) filter.get("filter"), (List) filter.get("statuses"), max);
+        return voCustomerOrderService.getFilteredOrders(lang, (String) filter.get("filter"), (List) filter.get("statuses"), max);
     }
 
     @Override
     public @ResponseBody
     VoCustomerOrder getOrderById(@PathVariable("lang") final String lang, @PathVariable("id") final long id) throws Exception {
-        return voCustomerOrderService.getById(lang, id);
+        return voCustomerOrderService.getOrderById(lang, id);
     }
 
     @Override
@@ -82,6 +82,6 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
     @Override
     public @ResponseBody
     List<VoPayment> getFilteredPayments(@RequestBody final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
-        return voPaymentService.getFiltered((String) filter.get("filter"), (List) filter.get("operations"), (List) filter.get("statuses"), max);
+        return voPaymentService.getFilteredPayments((String) filter.get("filter"), (List) filter.get("operations"), (List) filter.get("statuses"), max);
     }
 }

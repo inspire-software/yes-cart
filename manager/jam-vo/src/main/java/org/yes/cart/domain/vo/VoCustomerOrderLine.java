@@ -116,8 +116,8 @@ public class VoCustomerOrderLine {
     @DtoField(value = "deliveryStatusLabel", readOnly = true)
     private String deliveryStatusLabel;
 
-    @DtoField(value = "allValues", converter = "PairMapToPairList", readOnly = true)
-    private List<MutablePair<String, MutablePair<String, String>>> allValues;
+    @DtoField(value = "allValues", converter = "CustomValuesList", readOnly = true)
+    private List<VoAttrValue> allValues;
 
     public long getCustomerOrderDeliveryDetId() {
         return customerOrderDeliveryDetId;
@@ -383,11 +383,11 @@ public class VoCustomerOrderLine {
         this.deliveryStatusLabel = deliveryStatusLabel;
     }
 
-    public List<MutablePair<String, MutablePair<String, String>>> getAllValues() {
+    public List<VoAttrValue> getAllValues() {
         return allValues;
     }
 
-    public void setAllValues(final List<MutablePair<String, MutablePair<String, String>>> allValues) {
+    public void setAllValues(final List<VoAttrValue> allValues) {
         this.allValues = allValues;
     }
 }

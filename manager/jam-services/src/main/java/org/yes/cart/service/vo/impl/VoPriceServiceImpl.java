@@ -55,7 +55,7 @@ public class VoPriceServiceImpl implements VoPriceService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoPriceList> getFiltered(final long shopId, final String currency, final String filter, final int max) throws Exception {
+    public List<VoPriceList> getFilteredPrices(final long shopId, final String currency, final String filter, final int max) throws Exception {
 
         final List<VoPriceList> list = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public class VoPriceServiceImpl implements VoPriceService {
      * {@inheritDoc}
      */
     @Override
-    public VoPriceList getById(final long id) throws Exception {
+    public VoPriceList getPriceById(final long id) throws Exception {
         final PriceListDTO dto = dtoPriceListsService.getById(id);
         if (federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {
             return voAssemblySupport.assembleVo(VoPriceList.class, PriceListDTO.class, new VoPriceList(), dto);
@@ -86,7 +86,7 @@ public class VoPriceServiceImpl implements VoPriceService {
      * {@inheritDoc}
      */
     @Override
-    public VoPriceList update(final VoPriceList vo) throws Exception {
+    public VoPriceList updatePrice(final VoPriceList vo) throws Exception {
         final PriceListDTO dto = dtoPriceListsService.getById(vo.getSkuPriceId());
         if (dto != null && federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {
             dtoPriceListsService.updatePrice(
@@ -95,20 +95,20 @@ public class VoPriceServiceImpl implements VoPriceService {
         } else {
             throw new AccessDeniedException("Access is denied");
         }
-        return getById(vo.getSkuPriceId());
+        return getPriceById(vo.getSkuPriceId());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public VoPriceList create(final VoPriceList vo) throws Exception {
+    public VoPriceList createPrice(final VoPriceList vo) throws Exception {
         if (federationFacade.isManageable(vo.getShopCode(), ShopDTO.class)) {
             PriceListDTO dto = new PriceListDTOImpl();
             dto = dtoPriceListsService.createPrice(
                     voAssemblySupport.assembleDto(PriceListDTO.class, VoPriceList.class, dto, vo)
             );
-            return getById(dto.getSkuPriceId());
+            return getPriceById(dto.getSkuPriceId());
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -118,9 +118,9 @@ public class VoPriceServiceImpl implements VoPriceService {
      * {@inheritDoc}
      */
     @Override
-    public void remove(final long id) throws Exception {
+    public void removePrice(final long id) throws Exception {
 
-        getById(id); // check access
+        getPriceById(id); // check access
         dtoPriceListsService.removePrice(id);
 
     }

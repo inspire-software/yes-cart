@@ -31,28 +31,36 @@ public interface VoManagementService {
 
     /**
      * Get information about current user
+     *
      * @return manager vo
+     *
      * @throws Exception errors
      */
     VoManager getMyself() throws Exception;
 
     /**
      * Get license for current user
+     *
      * @return license vo
+     *
      * @throws Exception errors
      */
     VoLicenseAgreement getMyAgreement() throws Exception;
 
     /**
      * Accept license for current user.
+     *
      * @return license vo
+     *
      * @throws Exception errors
      */
     VoLicenseAgreement acceptMyAgreement() throws Exception;
 
     /**
      * Get all vo in the system, filtered according to rights
+     *
      * @return all managers
+     *
      * @throws Exception errors
      */
     List<VoManagerInfo> getManagers() throws Exception;
@@ -61,45 +69,59 @@ public interface VoManagementService {
      * Get vo by email.
      *
      * @param email email
+     *
      * @return vo
+     *
      * @throws Exception errors
      */
-    VoManager getByEmail(String email) throws Exception;
+    VoManager getManagerByEmail(String email) throws Exception;
 
     /**
      * Create new vo
+     *
      * @param voManager vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoManager createManager(VoManager voManager) throws Exception;
 
     /**
      * Update vo
+     *
      * @param voManager vo
+     *
      * @return persistent version
+     *
      * @throws Exception errors
      */
     VoManager updateManager(VoManager voManager) throws Exception;
 
     /**
      * Remove vo.
+     *
      * @param managerEmail manager email
+     *
      * @throws Exception errors
      */
     void deleteManager(String managerEmail) throws Exception;
 
     /**
      * Update dashboard to given vo.
+     *
      * @param email manager email
      * @param dashboardWidgets dashboard
+     *
      * @throws Exception errors
      */
     void updateDashboard(String email, String dashboardWidgets) throws Exception;
 
     /**
      * Reset password to given vo.
+     *
      * @param email manager email
+     *
      * @throws Exception errors
      */
     void resetPassword(String email) throws Exception;
@@ -109,6 +131,7 @@ public interface VoManagementService {
      *
      * @param manager manager user name
      * @param disabled true if manager account is disabled
+     *
      * @throws Exception errors
      */
     void updateDisabledFlag(String manager, boolean disabled) throws Exception;

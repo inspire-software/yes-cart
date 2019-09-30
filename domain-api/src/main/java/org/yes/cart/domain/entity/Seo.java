@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 /**
  * Seo interface.
  * <p/>
@@ -59,14 +61,14 @@ public interface Seo {
      *
      * @return title.
      */
-    String getDisplayTitle();
+    I18NModel getDisplayTitle();
 
     /**
      * Set title.
      *
      * @param title title
      */
-    void setDisplayTitle(String title);
+    void setDisplayTitle(I18NModel title);
 
     /**
      * Get meta keywords.
@@ -87,14 +89,14 @@ public interface Seo {
      *
      * @return meta keywords
      */
-    String getDisplayMetakeywords();
+    I18NModel getDisplayMetakeywords();
 
     /**
      * Set meta keywords
      *
      * @param metakeywords meta keywords
      */
-    void setDisplayMetakeywords(String metakeywords);
+    void setDisplayMetakeywords(I18NModel metakeywords);
 
     /**
      * Get meta description.
@@ -115,14 +117,14 @@ public interface Seo {
      *
      * @return meta description
      */
-    String getDisplayMetadescription();
+    I18NModel getDisplayMetadescription();
 
     /**
      * Set meta description.
      *
      * @param metadescription meta description.
      */
-    void setDisplayMetadescription(String metadescription);
+    void setDisplayMetadescription(I18NModel metadescription);
 
 }
 

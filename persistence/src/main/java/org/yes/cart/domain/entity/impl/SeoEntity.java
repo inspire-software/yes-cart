@@ -17,6 +17,9 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 27 0ct 2012
@@ -27,11 +30,14 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
 
     private String uri;
     private String title;
-    private String displayTitle;
+    private String displayTitleInternal;
+    private I18NModel displayTitle;
     private String metakeywords;
-    private String displayMetakeywords;
+    private String displayMetakeywordsInternal;
+    private I18NModel displayMetakeywords;
     private String metadescription;
-    private String displayMetadescription;
+    private String displayMetadescriptionInternal;
+    private I18NModel displayMetadescription;
 
     public SeoEntity() {
     }
@@ -43,7 +49,7 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
     }
 
     @Override
-    public void setUri(String uri) {
+    public void setUri(final String uri) {
         this.uri = uri;
     }
 
@@ -53,18 +59,28 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
     }
 
     @Override
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
+    public String getDisplayTitleInternal() {
+        return displayTitleInternal;
+    }
+
+    public void setDisplayTitleInternal(final String displayTitleInternal) {
+        this.displayTitleInternal = displayTitleInternal;
+        this.displayTitle = new StringI18NModel(displayTitleInternal);
+    }
+
     @Override
-    public String getDisplayTitle() {
+    public I18NModel getDisplayTitle() {
         return displayTitle;
     }
 
     @Override
-    public void setDisplayTitle(final String displayTitle) {
+    public void setDisplayTitle(final I18NModel displayTitle) {
         this.displayTitle = displayTitle;
+        this.displayTitleInternal = displayTitle != null ? displayTitle.toString() : null;
     }
 
     @Override
@@ -73,18 +89,28 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
     }
 
     @Override
-    public void setMetakeywords(String metakeywords) {
+    public void setMetakeywords(final String metakeywords) {
         this.metakeywords = metakeywords;
     }
 
+    public String getDisplayMetakeywordsInternal() {
+        return displayMetakeywordsInternal;
+    }
+
+    public void setDisplayMetakeywordsInternal(final String displayMetakeywordsInternal) {
+        this.displayMetakeywordsInternal = displayMetakeywordsInternal;
+        this.displayMetakeywords = new StringI18NModel(displayMetakeywordsInternal);
+    }
+
     @Override
-    public String getDisplayMetakeywords() {
+    public I18NModel getDisplayMetakeywords() {
         return displayMetakeywords;
     }
 
     @Override
-    public void setDisplayMetakeywords(final String displayMetakeywords) {
+    public void setDisplayMetakeywords(final I18NModel displayMetakeywords) {
         this.displayMetakeywords = displayMetakeywords;
+        this.displayMetakeywordsInternal = displayMetakeywords != null ? displayMetakeywords.toString() : null;
     }
 
     @Override
@@ -93,18 +119,28 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
     }
 
     @Override
-    public void setMetadescription(String metadescription) {
+    public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
     }
 
+    public String getDisplayMetadescriptionInternal() {
+        return displayMetadescriptionInternal;
+    }
+
+    public void setDisplayMetadescriptionInternal(final String displayMetadescriptionInternal) {
+        this.displayMetadescriptionInternal = displayMetadescriptionInternal;
+        this.displayMetadescription = new StringI18NModel(displayMetadescriptionInternal);
+    }
+
     @Override
-    public String getDisplayMetadescription() {
+    public I18NModel getDisplayMetadescription() {
         return displayMetadescription;
     }
 
     @Override
-    public void setDisplayMetadescription(final String displayMetadescription) {
+    public void setDisplayMetadescription(final I18NModel displayMetadescription) {
         this.displayMetadescription = displayMetadescription;
+        this.displayMetadescriptionInternal = displayMetadescription != null ? displayMetadescription.toString() : null;
     }
 
     @Override

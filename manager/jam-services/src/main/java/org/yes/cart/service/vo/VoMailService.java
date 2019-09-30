@@ -29,7 +29,9 @@ public interface VoMailService {
      * @param order order number
      * @param delivery delivery number
      * @param customer customer number
+     *
      * @return HTML email with inlined resources
+     *
      * @throws Exception errors
      */
     String getShopMail(long shopId, String template, String order, String delivery, String customer) throws Exception;

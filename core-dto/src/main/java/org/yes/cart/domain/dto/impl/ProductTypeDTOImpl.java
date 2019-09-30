@@ -38,7 +38,7 @@ public class ProductTypeDTOImpl implements ProductTypeDTO {
     @DtoField(value = "name")
     private String name;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nModelConverter")
     private Map<String, String> displayNames;
 
     @DtoField(value = "guid")

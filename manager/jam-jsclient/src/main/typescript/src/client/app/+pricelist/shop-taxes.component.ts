@@ -98,6 +98,8 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
   private deleteValue:String;
 
+  private userSub:any;
+
   constructor(private _taxService:PricingService,
               fb: FormBuilder) {
     LogUtil.debug('ShopTaxesComponent constructed');
@@ -147,6 +149,10 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
     this.onRefreshHandler();
 
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      this.presetFromCookie();
+    });
+
     let that = this;
     this.delayedFilteringTax = Futures.perpetual(function() {
       that.getFilteredTax();
@@ -160,6 +166,9 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     LogUtil.debug('ShopTaxesComponent ngOnDestroy');
     this.formUnbind();
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
   }
 
   formBind():void {

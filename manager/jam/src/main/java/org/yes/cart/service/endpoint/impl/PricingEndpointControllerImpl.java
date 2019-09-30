@@ -52,27 +52,27 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     @Override
     public @ResponseBody List<VoPriceList> getFilteredPriceLists(@PathVariable("shopId") final long shopId, @PathVariable("currency") final String currency, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voPriceService.getFiltered(shopId, currency, filter, max);
+        return voPriceService.getFilteredPrices(shopId, currency, filter, max);
     }
 
     @Override
     public @ResponseBody VoPriceList getPriceListById(@PathVariable("id") final long id) throws Exception {
-        return voPriceService.getById(id);
+        return voPriceService.getPriceById(id);
     }
 
     @Override
     public @ResponseBody VoPriceList createPriceList(@RequestBody final VoPriceList vo) throws Exception {
-        return voPriceService.create(vo);
+        return voPriceService.createPrice(vo);
     }
 
     @Override
     public @ResponseBody VoPriceList updatePriceList(@RequestBody final VoPriceList vo) throws Exception {
-        return voPriceService.update(vo);
+        return voPriceService.updatePrice(vo);
     }
 
     @Override
     public @ResponseBody void removePriceList(@PathVariable("id") final long id) throws Exception {
-        voPriceService.remove(id);
+        voPriceService.removePrice(id);
     }
 
 

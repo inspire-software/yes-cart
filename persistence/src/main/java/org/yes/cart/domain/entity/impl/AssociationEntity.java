@@ -48,7 +48,7 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
     @Override
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -58,7 +58,7 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -68,7 +68,7 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -78,7 +78,7 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -88,7 +88,7 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -98,7 +98,7 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -108,7 +108,7 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -118,7 +118,7 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -133,7 +133,7 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
     @Override
-    public void setAssociationId(long associationId) {
+    public void setAssociationId(final long associationId) {
         this.associationId = associationId;
     }
 

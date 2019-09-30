@@ -32,7 +32,6 @@ import org.yes.cart.utils.HQLUtils;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -175,6 +174,14 @@ public class DtoPromotionCouponServiceImpl
     public PromotionCouponDTO update(PromotionCouponDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         // Coupons must not be updated via UI because we may cripple usage integrity. Make users generate new/delete coupons instead.
         throw new UnsupportedOperationException();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void removeAll(final long promotionId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        ((PromotionCouponService) service).removeAll(promotionId);
+
     }
 
     /** {@inheritDoc} */

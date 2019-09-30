@@ -50,7 +50,7 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setProduct(Product product) {
+    public void setProduct(final Product product) {
         this.product = product;
     }
 
@@ -60,7 +60,7 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setCategory(Category category) {
+    public void setCategory(final Category category) {
         this.category = category;
     }
 
@@ -70,7 +70,7 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(final int rank) {
         this.rank = rank;
     }
 
@@ -80,7 +80,7 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -90,7 +90,7 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -100,7 +100,7 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -110,7 +110,7 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -120,7 +120,7 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -135,7 +135,7 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setProductCategoryId(long productCategoryId) {
+    public void setProductCategoryId(final long productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
 

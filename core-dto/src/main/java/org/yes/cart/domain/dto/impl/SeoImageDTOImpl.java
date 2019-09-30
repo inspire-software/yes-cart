@@ -44,10 +44,10 @@ public class SeoImageDTOImpl implements SeoImageDTO {
     @DtoField(value = "title")
     private String title;
 
-    @DtoField(value = "displayAlt", converter = "i18nStringConverter")
+    @DtoField(value = "displayAlt", converter = "i18nModelConverter")
     private Map<String, String> displayAlts;
 
-    @DtoField(value = "displayTitle", converter = "i18nStringConverter")
+    @DtoField(value = "displayTitle", converter = "i18nModelConverter")
     private Map<String, String> displayTitles;
 
 

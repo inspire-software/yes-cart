@@ -247,6 +247,13 @@ public class DtoProductServiceImpl
 
             }
 
+        } else {
+
+            entities = getService().getGenericDao().findRangeByCriteria(
+                    null,
+                    page * pageSize, pageSize
+            );
+
         }
 
         fillDTOs(entities, dtos);

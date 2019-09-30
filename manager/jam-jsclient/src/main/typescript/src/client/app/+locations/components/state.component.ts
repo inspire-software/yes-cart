@@ -45,8 +45,7 @@ export class StateComponent implements OnInit, OnDestroy {
     this.stateForm = fb.group({
       'countryCode': ['', YcValidators.requiredValidCountryCode],
       'stateCode': ['', YcValidators.requiredNonBlankTrimmed64],
-      'name': ['', YcValidators.requiredNonBlankTrimmed64],
-      'displayName': ['', YcValidators.requiredNonBlankTrimmed],
+      'name': ['']
     });
 
     let that = this;
@@ -67,6 +66,10 @@ export class StateComponent implements OnInit, OnDestroy {
   formChange():void {
     LogUtil.debug('StateComponent formChange', this.stateForm.valid, this._state);
     this.dataChanged.emit({ source: this._state, valid: this.stateForm.valid });
+  }
+
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'stateForm', 'name', event);
   }
 
   @Input()

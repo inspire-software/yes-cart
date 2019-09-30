@@ -19,6 +19,7 @@ package org.yes.cart.web.support.entity.decorator.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.entity.Seoable;
+import org.yes.cart.domain.i18n.I18NModel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -100,8 +101,9 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
 
         /** {@inheritDoc} */
         @Override
-        public String getDisplayTitle() {
-            if (StringUtils.isBlank(seo.getDisplayTitle()) && StringUtils.isBlank(seo.getTitle())) {
+        public I18NModel getDisplayTitle() {
+            if ((seo.getDisplayTitle() == null || seo.getDisplayTitle().getAllValues().isEmpty())
+                    && StringUtils.isBlank(seo.getTitle())) {
                 return getDisplayTitle(seoable);
             }
             return seo.getDisplayTitle();
@@ -114,11 +116,11 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
          *
          * @return display title
          */
-        protected abstract String getDisplayTitle(final T seoable);
+        protected abstract I18NModel getDisplayTitle(final T seoable);
 
         /** {@inheritDoc} */
         @Override
-        public void setDisplayTitle(final String title) {
+        public void setDisplayTitle(final I18NModel title) {
             throw new UnsupportedOperationException("Read only");
         }
 
@@ -136,13 +138,13 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
 
         /** {@inheritDoc} */
         @Override
-        public String getDisplayMetakeywords() {
+        public I18NModel getDisplayMetakeywords() {
             return seo.getDisplayMetakeywords();
         }
 
         /** {@inheritDoc} */
         @Override
-        public void setDisplayMetakeywords(final String metakeywords) {
+        public void setDisplayMetakeywords(final I18NModel metakeywords) {
             throw new UnsupportedOperationException("Read only");
         }
 
@@ -172,8 +174,9 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
 
         /** {@inheritDoc} */
         @Override
-        public String getDisplayMetadescription() {
-            if (StringUtils.isBlank(seo.getDisplayMetadescription()) && StringUtils.isBlank(seo.getMetadescription())) {
+        public I18NModel getDisplayMetadescription() {
+            if ((seo.getDisplayMetadescription() == null || seo.getDisplayMetadescription().getAllValues().isEmpty())
+                    && StringUtils.isBlank(seo.getMetadescription())) {
                 return getDisplayMetadescription(seoable);
             }
             return seo.getDisplayMetadescription();
@@ -187,11 +190,11 @@ public class AbstractSeoableDecoratorImpl<T extends Seoable> implements Seoable 
          *
          * @return display description
          */
-        protected abstract String getDisplayMetadescription(final T seoable);
+        protected abstract I18NModel getDisplayMetadescription(final T seoable);
 
         /** {@inheritDoc} */
         @Override
-        public void setDisplayMetadescription(final String metadescription) {
+        public void setDisplayMetadescription(final I18NModel metadescription) {
             throw new UnsupportedOperationException("Read only");
         }
 

@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
@@ -109,7 +110,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setPgLabel(String pgLabel) {
+    public void setPgLabel(final String pgLabel) {
         this.pgLabel = pgLabel;
     }
 
@@ -119,7 +120,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setOrdernum(String ordernum) {
+    public void setOrdernum(final String ordernum) {
         this.ordernum = ordernum;
     }
 
@@ -179,7 +180,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setCartGuid(String cartGuid) {
+    public void setCartGuid(final String cartGuid) {
         this.cartGuid = cartGuid;
     }
 
@@ -199,7 +200,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setCurrency(String currency) {
+    public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
@@ -209,7 +210,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setOrderMessage(String orderMessage) {
+    public void setOrderMessage(final String orderMessage) {
         this.orderMessage = orderMessage;
     }
 
@@ -219,7 +220,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(final String orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -359,7 +360,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setCustomer(Customer customer) {
+    public void setCustomer(final Customer customer) {
         this.customer = customer;
     }
 
@@ -369,7 +370,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setShop(Shop shop) {
+    public void setShop(final Shop shop) {
         this.shop = shop;
     }
 
@@ -379,7 +380,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setCoupons(Collection<PromotionCouponUsage> coupons) {
+    public void setCoupons(final Collection<PromotionCouponUsage> coupons) {
         this.coupons = coupons;
     }
 
@@ -389,7 +390,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setOrderDetail(Collection<CustomerOrderDet> orderDetail) {
+    public void setOrderDetail(final Collection<CustomerOrderDet> orderDetail) {
         this.orderDetail = orderDetail;
     }
 
@@ -399,7 +400,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setDelivery(Collection<CustomerOrderDelivery> delivery) {
+    public void setDelivery(final Collection<CustomerOrderDelivery> delivery) {
         this.delivery = delivery;
     }
 
@@ -409,7 +410,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setBillingAddress(String billingAddress) {
+    public void setBillingAddress(final String billingAddress) {
         this.billingAddress = billingAddress;
     }
 
@@ -429,7 +430,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setShippingAddress(String shippingAddress) {
+    public void setShippingAddress(final String shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 
@@ -449,7 +450,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setMultipleShipmentOption(boolean multipleShipmentOption) {
+    public void setMultipleShipmentOption(final boolean multipleShipmentOption) {
         this.multipleShipmentOption = multipleShipmentOption;
     }
 
@@ -459,7 +460,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setOrderTimestamp(LocalDateTime orderTimestamp) {
+    public void setOrderTimestamp(final LocalDateTime orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
     }
 
@@ -578,12 +579,12 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public Pair<String, String> getValue(final String code) {
+    public Pair<String, I18NModel> getValue(final String code) {
         return storedAttributes != null ? storedAttributes.getValue(code) : null;
     }
 
     @Override
-    public void putValue(final String code, final String value, final String displayValue) {
+    public void putValue(final String code, final String value, final I18NModel displayValue) {
         if (storedAttributes == null) {
             storedAttributes = new CustomerOrderDetAttributesImpl();
         }
@@ -591,12 +592,12 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public Map<String, Pair<String, String>> getAllValues() {
+    public Map<String, Pair<String, I18NModel>> getAllValues() {
         return storedAttributes != null ? storedAttributes.getAllValues() : Collections.emptyMap();
     }
 
     @Override
-    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+    public void setAllValues(final Map<String, Pair<String, I18NModel>> allValues) {
         this.storedAttributes = new CustomerOrderDetAttributesImpl(allValues);
     }
 
@@ -606,7 +607,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -616,7 +617,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -626,7 +627,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -636,7 +637,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -646,7 +647,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -662,7 +663,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     @Override
-    public void setCustomerorderId(long customerorderId) {
+    public void setCustomerorderId(final long customerorderId) {
         this.customerorderId = customerorderId;
     }
 

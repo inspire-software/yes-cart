@@ -66,7 +66,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     }
 
     @Override
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -96,7 +96,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     }
 
     @Override
-    public void setShop(Shop shop) {
+    public void setShop(final Shop shop) {
         this.shop = shop;
     }
 
@@ -106,7 +106,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -116,7 +116,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -126,7 +126,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -136,7 +136,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -146,7 +146,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -162,7 +162,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     }
 
     @Override
-    public void setStoreUrlId(long storeUrlId) {
+    public void setStoreUrlId(final long storeUrlId) {
         this.storeUrlId = storeUrlId;
     }
 

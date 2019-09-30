@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 import java.util.Collection;
 
 /**
@@ -78,14 +80,14 @@ public interface Warehouse extends Auditable, Codable {
      *
      * @return localisable name of warehouse.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Set name of warehouse.
      *
      * @param name localisable name.
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * @return description.

@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 /**
  * User: denispavlov
  * Date: 01/06/2015
@@ -59,14 +61,14 @@ public interface DataGroup extends Auditable {
      *
      * @return localisable name of carrier Data group.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Set name of carrier Data group.
      *
      * @param name localisable name.
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
 
     /**

@@ -1,8 +1,25 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.i18n.I18NModel;
 
 import java.time.Instant;
 
@@ -65,12 +82,12 @@ public class AttrValueWithAttributeAdapter implements AttrValueWithAttribute {
     }
 
     @Override
-    public String getDisplayVal() {
+    public I18NModel getDisplayVal() {
         return value.getDisplayVal();
     }
 
     @Override
-    public void setDisplayVal(final String displayVal) {
+    public void setDisplayVal(final I18NModel displayVal) {
         value.setDisplayVal(displayVal);
     }
 

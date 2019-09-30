@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -125,7 +126,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
 
 
                 if (update.getAdditionalData() != null) {
-                    for (final Map.Entry<String, Pair<String, String>> data : update.getAdditionalData().entrySet()) {
+                    for (final Map.Entry<String, Pair<String, I18NModel>> data : update.getAdditionalData().entrySet()) {
                         if (data.getValue() != null) {
                             customerOrder.putValue(data.getKey(), data.getValue().getFirst(), data.getValue().getSecond());
                         } else {
@@ -190,7 +191,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                             }
 
                             if (lineUpdate.getAdditionalData() != null) {
-                                for (final Map.Entry<String, Pair<String, String>> data : lineUpdate.getAdditionalData().entrySet()) {
+                                for (final Map.Entry<String, Pair<String, I18NModel>> data : lineUpdate.getAdditionalData().entrySet()) {
                                     if (data.getValue() != null) {
                                         detail.putValue(data.getKey(), data.getValue().getFirst(), data.getValue().getSecond());
                                     } else {

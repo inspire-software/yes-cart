@@ -151,8 +151,8 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "requestedDeliveryDate", readOnly = true)
     private LocalDateTime requestedDeliveryDate;
 
-    @DtoField(value = "allValues", readOnly = true)
-    private Map<String, Pair<String, String>> allValues;
+    @DtoField(value = "allValues", readOnly = true, converter = "customValuesMapConverter")
+    private Map<String, Pair<String, Map<String, String>>> allValues;
 
 
     /**
@@ -823,7 +823,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Pair<String, String>> getAllValues() {
+    public Map<String, Pair<String, Map<String, String>>> getAllValues() {
         return allValues;
     }
 
@@ -831,7 +831,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      * {@inheritDoc}
      */
     @Override
-    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+    public void setAllValues(final Map<String, Pair<String, Map<String, String>>> allValues) {
         this.allValues = allValues;
     }
 

@@ -76,12 +76,16 @@ public class AddressSupportMixin extends RoMappingMixin {
                 for (final Country cnt : countries) {
                     if (cnt.getCountryCode().equals(ro.getCountryCode())) {
                         ro.setCountryName(cnt.getName());
-                        ro.setCountryLocalName(cnt.getDisplayName());
+                        if (cnt.getDisplayName() != null) {
+                            ro.setCountryLocalName(cnt.getDisplayName().getAllValues());
+                        }
                         final List<State> states = addressBookFacade.getStatesByCountry(ro.getCountryCode());
                         for (final State state : states) {
                             if (state.getStateCode().equals(ro.getStateCode())) {
                                 ro.setStateName(state.getName());
-                                ro.setStateLocalName(state.getDisplayName());
+                                if (state.getDisplayName() != null) {
+                                    ro.setStateLocalName(state.getDisplayName().getAllValues());
+                                }
                                 ros.add(ro);
                                 break;
                             }

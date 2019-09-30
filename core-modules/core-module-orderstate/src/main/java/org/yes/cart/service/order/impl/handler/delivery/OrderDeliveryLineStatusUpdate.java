@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl.handler.delivery;
 
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
@@ -119,7 +120,7 @@ public interface OrderDeliveryLineStatusUpdate {
      *
      * @return line additional data key => { value, displayValue }
      */
-    Map<String, Pair<String, String>> getAdditionalData();
+    Map<String, Pair<String, I18NModel>> getAdditionalData();
 
 
 }

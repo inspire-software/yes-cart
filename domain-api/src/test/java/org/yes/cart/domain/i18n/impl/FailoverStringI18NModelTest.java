@@ -43,10 +43,11 @@ public class FailoverStringI18NModelTest {
     }
 
     @Test
-    public void testStringInvalid() throws Exception {
+    public void testStringSingle() throws Exception {
         final I18NModel model = new FailoverStringI18NModel("some text", "failover");
         assertNotNull(model.getAllValues());
-        assertTrue(model.getAllValues().isEmpty());
+        assertFalse(model.getAllValues().isEmpty());
+        assertEquals("some text", model.getValue(I18NModel.DEFAULT));
     }
 
     @Test

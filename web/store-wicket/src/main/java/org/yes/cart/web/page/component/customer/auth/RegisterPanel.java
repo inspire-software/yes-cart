@@ -280,7 +280,7 @@ public class RegisterPanel extends BaseComponent {
                  stateDropDownChoice = new DropDownChoice<>(
                         STATE,
                         new StateModel(new PropertyModel(countryAndState.get("stateCode"), "val"), stateList),
-                        stateList).setChoiceRenderer(new StateRenderer());
+                        stateList).setChoiceRenderer(new StateRenderer(getLocale().getLanguage()));
                 final boolean needState = !stateList.isEmpty();
                 stateDropDownChoice.setRequired(needState);
                 stateDropDownChoice.setVisible(needState);
@@ -307,7 +307,7 @@ public class RegisterPanel extends BaseComponent {
                         }
                     }
                 });
-                countryDropDownChoice.setChoiceRenderer(new CountryRenderer());
+                countryDropDownChoice.setChoiceRenderer(new CountryRenderer(getLocale().getLanguage()));
                 countryDropDownChoice.setRequired(true);
             } else {
                 countryDropDownChoice = null;

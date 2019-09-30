@@ -60,7 +60,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setAttribute(Attribute attribute) {
+    public void setAttribute(final Attribute attribute) {
         this.attribute = attribute;
     }
 
@@ -70,7 +70,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setProducttype(ProductType producttype) {
+    public void setProducttype(final ProductType producttype) {
         this.producttype = producttype;
     }
 
@@ -80,7 +80,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(final int rank) {
         this.rank = rank;
     }
 
@@ -90,7 +90,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public void setVisible(final boolean visible) {
         this.visible = visible;
     }
 
@@ -100,7 +100,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setSimilarity(boolean similarity) {
+    public void setSimilarity(final boolean similarity) {
         this.similarity = similarity;
     }
 
@@ -140,7 +140,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setNavigation(boolean navigation) {
+    public void setNavigation(final boolean navigation) {
         throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
@@ -160,7 +160,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setNavigationType(String navigationType) {
+    public void setNavigationType(final String navigationType) {
         this.navigationType = navigationType;
     }
 
@@ -170,7 +170,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setRangeNavigation(String rangeNavigation) {
+    public void setRangeNavigation(final String rangeNavigation) {
         this.rangeNavigation = rangeNavigation;
     }
 
@@ -180,7 +180,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -190,7 +190,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -200,7 +200,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -210,7 +210,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -220,7 +220,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -236,7 +236,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
 
 
     @Override
-    public void setProductTypeAttrId(long productTypeAttrId) {
+    public void setProductTypeAttrId(final long productTypeAttrId) {
         this.productTypeAttrId = productTypeAttrId;
     }
 

@@ -51,10 +51,10 @@ public class CarrierDTOImpl implements CarrierDTO {
     @DtoField(value = "local")
     private boolean local;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nModelConverter")
     private Map<String, String> displayNames;
 
-    @DtoField(value = "displayDescription", converter = "i18nStringConverter")
+    @DtoField(value = "displayDescription", converter = "i18nModelConverter")
     private Map<String, String> displayDescriptions;
 
     /** {@inheritDoc} */

@@ -14,16 +14,12 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../shared/validation/validators';
 import { FulfilmentService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ProductSkuSelectComponent } from './../shared/catalog/index';
-import { InventoryInfoComponent } from './../shared/fulfilment/index';
-import { InventoryVO, FulfilmentCentreInfoVO, ProductSkuVO } from './../shared/model/index';
+import { FulfilmentCentreSelectComponent, InventoryInfoComponent } from './../shared/fulfilment/index';
+import { InventoryVO, FulfilmentCentreInfoVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
-import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
 import { CookieUtil } from './../shared/cookies/index';
 
@@ -39,8 +35,12 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   private static _selectedCentre:FulfilmentCentreInfoVO;
 
+  private static OFFERS:string = 'offers';
+  private static OFFER:string = 'offer';
+
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
+  private viewMode:string = CentreInventoryComponent.OFFERS;
 
   private inventory:Array<InventoryVO> = [];
   private inventoryFilter:string;
@@ -55,25 +55,15 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   private selectedInventory:InventoryVO;
 
   private inventoryEdit:InventoryVO;
-  private inventoryEditForm:any;
-  private inventoryEditFormSub:any; // tslint:disable-line:no-unused-variable
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
-  private validForSave:boolean = false;
 
   @ViewChild('deleteConfirmationModalDialog')
   private deleteConfirmationModalDialog:ModalComponent;
 
-  @ViewChild('editInventoryModalDialog')
-  private editInventoryModalDialog:ModalComponent;
-
   @ViewChild('selectCentreModalDialog')
-  private selectCentreModalDialog:ModalComponent;
+  private selectCentreModalDialog:FulfilmentCentreSelectComponent;
 
   @ViewChild('inventoryInfoDialog')
   private inventoryInfoDialog:InventoryInfoComponent;
-
-  @ViewChild('productSkuSelectDialog')
-  private productSkuSelectDialog:ProductSkuSelectComponent;
 
   private deleteValue:String;
 
@@ -81,27 +71,11 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   private loading:boolean = false;
 
-  constructor(private _fulfilmentService:FulfilmentService,
-              fb: FormBuilder) {
-    LogUtil.debug('CentreInventoryComponent constructed');
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
-    this.inventoryEditForm = fb.group({
-      'skuCode': ['', YcValidators.requiredValidCode],
-      'skuName': [''],
-      'warehouseCode': ['', Validators.required],
-      'warehouseName': [''],
-      'quantity': ['', YcValidators.requiredPositiveNumber],
-      'reserved': [''],
-      'tag': ['', YcValidators.nonBlankTrimmed],
-      'disabled': [''],
-      'availablefrom': ['', YcValidators.validDate],
-      'availableto': ['', YcValidators.validDate],
-      'releaseDate': ['', YcValidators.validDate],
-      'availability': ['', YcValidators.requiredPositiveNumber],
-      'minOrderQuantity': ['', YcValidators.positiveNumber],
-      'maxOrderQuantity': ['', YcValidators.positiveNumber],
-      'stepOrderQuantity': ['', YcValidators.positiveNumber],
-    });
+  constructor(private _fulfilmentService:FulfilmentService) {
+    LogUtil.debug('CentreInventoryComponent constructed');
   }
 
   get selectedCentre():FulfilmentCentreInfoVO {
@@ -111,32 +85,6 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   set selectedCentre(selectedCentre:FulfilmentCentreInfoVO) {
     CentreInventoryComponent._selectedCentre = selectedCentre;
   }
-
-
-  get availableto():string {
-    return UiUtil.dateInputGetterProxy(this.inventoryEdit, 'availableto');
-  }
-
-  set availableto(availableto:string) {
-    UiUtil.dateInputSetterProxy(this.inventoryEdit, 'availableto', availableto);
-  }
-
-  get availablefrom():string {
-    return UiUtil.dateInputGetterProxy(this.inventoryEdit, 'availablefrom');
-  }
-
-  set availablefrom(availablefrom:string) {
-    UiUtil.dateInputSetterProxy(this.inventoryEdit, 'availablefrom', availablefrom);
-  }
-
-  get releaseDate():string {
-    return UiUtil.dateInputGetterProxy(this.inventoryEdit, 'releaseDate');
-  }
-
-  set releaseDate(releaseDate:string) {
-    UiUtil.dateInputSetterProxy(this.inventoryEdit, 'releaseDate', releaseDate);
-  }
-
 
   newInventoryInstance():InventoryVO {
     return {
@@ -151,7 +99,9 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
       disabled: false, availablefrom: null, availableto: null, releaseDate: null,
       availability: 1,
       featured: false,
-      minOrderQuantity: undefined, maxOrderQuantity: undefined, stepOrderQuantity: undefined
+      minOrderQuantity: undefined, maxOrderQuantity: undefined, stepOrderQuantity: undefined,
+      restockDate: null,
+      restockNotes: []
     };
   }
 
@@ -180,46 +130,24 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     this.delayedFiltering = Futures.perpetual(function() {
       that.getFilteredInventory();
     }, this.delayedFilteringMs);
-    this.formBind();
+
   }
 
   ngOnDestroy() {
     LogUtil.debug('CentreInventoryComponent ngOnDestroy');
-    this.formUnbind();
-  }
-
-  formBind():void {
-    UiUtil.formBind(this, 'inventoryEditForm', 'inventoryEditFormSub', 'formChange', 'initialising', false);
-  }
-
-  formUnbind():void {
-    UiUtil.formUnbind(this, 'inventoryEditFormSub');
-  }
-
-  formChange():void {
-    LogUtil.debug('CentreInventoryComponent formChange', this.inventoryEditForm.valid, this.inventoryEdit);
-    this.validForSave = this.inventoryEditForm.valid;
   }
 
 
   protected onFulfilmentCentreSelect() {
     LogUtil.debug('CentreInventoryComponent onFulfilmentCentreSelect');
-    this.selectCentreModalDialog.show();
+    this.selectCentreModalDialog.showDialog();
   }
 
-  protected onFulfilmentCentreSelected(event:FulfilmentCentreInfoVO) {
+  protected onFulfilmentCentreSelected(event:FormValidationEvent<FulfilmentCentreInfoVO>) {
     LogUtil.debug('CentreInventoryComponent onFulfilmentCentreSelected');
-    this.selectedCentre = event;
-    if (this.selectedCentre != null) {
+    if (event.valid) {
+      this.selectedCentre = event.source;
       CookieUtil.createCookie(CentreInventoryComponent.COOKIE_CENTRE, this.selectedCentre.code, 360);
-    }
-  }
-
-  protected onSelectCentreResult(modalresult: ModalResult) {
-    LogUtil.debug('CentreInventoryComponent onSelectCentreResult modal result is ', modalresult);
-    if (this.selectedCentre == null) {
-      this.selectCentreModalDialog.show();
-    } else {
       this.getFilteredInventory();
     }
   }
@@ -241,6 +169,13 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     LogUtil.debug('CentreInventoryComponent onInventorySelected', data);
     this.selectedInventory = data;
     this.selectedSkuCode = this.selectedInventory ? this.selectedInventory.skuCode : null;
+  }
+
+  protected onInventoryChanged(event:FormValidationEvent<InventoryVO>) {
+    LogUtil.debug('CentreInventoryComponent onInventoryChanged', event);
+    this.changed = true;
+    this.validForSave = event.valid;
+    this.inventoryEdit = event.source;
   }
 
   protected onSearchLow() {
@@ -275,12 +210,23 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onBackToList() {
+    LogUtil.debug('CentreInventoryComponent onBackToList handler');
+    if (this.viewMode === CentreInventoryComponent.OFFER) {
+      this.inventoryEdit = null;
+      this.viewMode = CentreInventoryComponent.OFFERS;
+    }
+  }
+
   protected onRowNew() {
     LogUtil.debug('CentreInventoryComponent onRowNew handler');
+    this.changed = false;
     this.validForSave = false;
+    if (this.viewMode === CentreInventoryComponent.OFFERS) {
+      this.inventoryEdit = this.newInventoryInstance();
+      this.viewMode = CentreInventoryComponent.OFFER;
+    }
     this.selectedInventory = null;
-    UiUtil.formInitialise(this, 'initialising', 'inventoryEditForm', 'inventoryEdit', this.newInventoryInstance(), false, ['skuCode']);
-    this.editInventoryModalDialog.show();
   }
 
   protected onRowDelete(row:InventoryVO) {
@@ -298,9 +244,10 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   protected onRowEditInventory(row:InventoryVO) {
     LogUtil.debug('CentreInventoryComponent onRowEditInventory handler', row);
+    this.inventoryEdit = Util.clone(row);
+    this.changed = false;
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'inventoryEditForm', 'inventoryEdit', Util.clone(row), row.skuWarehouseId > 0, ['skuCode']);
-    this.editInventoryModalDialog.show();
+    this.viewMode = CentreInventoryComponent.OFFER;
   }
 
   protected onRowEditSelected() {
@@ -309,25 +256,9 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onSearchSKU() {
-    if (this.inventoryEdit != null && this.inventoryEdit.skuWarehouseId <= 0) {
-      this.productSkuSelectDialog.showDialog();
-    }
-  }
-
-
-  protected onProductSkuSelected(event:FormValidationEvent<ProductSkuVO>) {
-    LogUtil.debug('CentreInventoryComponent onProductSkuSelected');
-    if (event.valid && this.inventoryEdit != null && this.inventoryEdit.skuWarehouseId <= 0) {
-      this.inventoryEdit.skuCode = event.source.code;
-      this.inventoryEdit.skuName = event.source.name;
-    }
-  }
-
-
   protected onSaveHandler() {
 
-    if (this.validForSave && this.inventoryEditForm.dirty) {
+    if (this.validForSave && this.changed) {
 
       if (this.inventoryEdit != null) {
 
@@ -341,11 +272,13 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
               LogUtil.debug('CentreInventoryComponent inventory changed', rez);
               this.selectedInventory = rez;
               this.validForSave = false;
-              this.inventoryEdit = this.newInventoryInstance();
+              this.inventoryEdit = null;
+              this.loading = false;
+              this.viewMode = CentreInventoryComponent.OFFERS;
+
               if (pk == 0) {
                 this.inventoryFilter = '!' + rez.skuCode;
               }
-              this.loading = false;
               this.getFilteredInventory();
           }
         );
@@ -357,19 +290,12 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   protected onDiscardEventHandler() {
     LogUtil.debug('CentreInventoryComponent discard handler');
-    if (this.selectedInventory != null) {
-      this.onRowEditSelected();
-    } else {
-      this.onRowNew();
-    }
-  }
-
-  protected onEditInventoryResult(modalresult: ModalResult) {
-    LogUtil.debug('CentreInventoryComponent onEditInventoryResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-
-      this.onSaveHandler();
-
+    if (this.viewMode === CentreInventoryComponent.OFFER) {
+      if (this.selectedInventory != null) {
+        this.onRowEditSelected();
+      } else {
+        this.onRowNew();
+      }
     }
   }
 
@@ -412,6 +338,9 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
         LogUtil.debug('CentreInventoryComponent getFilteredInventory', allinventory);
         this.inventory = allinventory;
         this.selectedInventory = null;
+        this.inventoryEdit = null;
+        this.viewMode = CentreInventoryComponent.OFFERS;
+        this.changed = false;
         this.validForSave = false;
         this.inventoryFilterCapped = this.inventory.length >= max;
         this.loading = false;
@@ -420,6 +349,9 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     } else {
       this.inventory = [];
       this.selectedInventory = null;
+      this.inventoryEdit = null;
+      this.viewMode = CentreInventoryComponent.OFFERS;
+      this.changed = false;
       this.validForSave = false;
       this.inventoryFilterCapped = false;
     }

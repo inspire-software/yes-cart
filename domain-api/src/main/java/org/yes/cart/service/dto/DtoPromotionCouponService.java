@@ -74,4 +74,12 @@ public interface DtoPromotionCouponService extends GenericDTOService<PromotionCo
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
+    /**
+     * Remove all coupons by promotion ID
+     *
+     * @param promotionId promo ID
+     */
+    void removeAll(long promotionId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 }

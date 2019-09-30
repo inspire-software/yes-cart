@@ -26,6 +26,7 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.yes.cart.domain.entity.AttrValueWithAttribute;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.misc.impl.ExtendedConversionService;
 import org.yes.cart.web.page.component.customer.dynaform.editor.*;
@@ -88,9 +89,9 @@ public class EditorFactory implements Serializable {
 
         if ("CommaSeparatedList".equals(bType)) {
 
-            final I18NModel choices = new FailoverStringI18NModel(
-                    attrValue.getAttribute().getChoiceData(),
-                    attrValue.getAttribute().getChoiceData());
+            final I18NModel choices = new StringI18NModel(
+                    attrValue.getAttribute().getChoiceData()
+            );
 
             final IModel<List<Pair<String, String>>> enumChoices = new IModel<List<Pair<String,String>>>() {
 

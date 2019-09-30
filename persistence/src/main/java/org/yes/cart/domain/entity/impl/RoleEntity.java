@@ -47,7 +47,7 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
     }
 
     @Override
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -57,7 +57,7 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -67,7 +67,7 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -77,7 +77,7 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -87,7 +87,7 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -97,7 +97,7 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -107,7 +107,7 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -123,7 +123,7 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
 
 
     @Override
-    public void setRoleId(long roleId) {
+    public void setRoleId(final long roleId) {
         this.roleId = roleId;
     }
 

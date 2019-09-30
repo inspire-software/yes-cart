@@ -54,11 +54,11 @@ public class ProductSkuSearchResultRO implements Serializable {
     private String fulfilmentCentreCode;
     @DtoField(readOnly = true)
     private String name;
-    @DtoField(readOnly = true, converter = "i18nStringConverter")
+    @DtoField(readOnly = true, converter = "i18nModelConverter")
     private Map<String, String> displayName;
     @DtoField(readOnly = true)
     private String description;
-    @DtoField(readOnly = true, converter = "i18nStringConverter")
+    @DtoField(readOnly = true, converter = "i18nModelConverter")
     private Map<String, String> displayDescription;
     @DtoField(readOnly = true)
     private String tag;

@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 import java.util.Collection;
 
 /**
@@ -59,14 +61,14 @@ public interface Carrier extends Auditable {
      *
      * @return localisable name of carrier.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Set name of carrier.
      *
      * @param name localisable name.
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * Get carrier description.
@@ -87,14 +89,14 @@ public interface Carrier extends Auditable {
      *
      * @return localisable description of carrier.
      */
-    String getDisplayDescription();
+    I18NModel getDisplayDescription();
 
     /**
      * Set description of carrier.
      *
      * @param description localisable description.
      */
-    void setDisplayDescription(String description);
+    void setDisplayDescription(I18NModel description);
 
     /**
      * Get the list of carrier SLAs.

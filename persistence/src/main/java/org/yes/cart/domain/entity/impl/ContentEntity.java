@@ -21,6 +21,8 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueContent;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.utils.DomainApiUtils;
 
 import java.time.Instant;
@@ -48,7 +50,8 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     private int rank;
     private ProductType productType;
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String description;
     private String uitemplate;
     private boolean disabled;
@@ -75,7 +78,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setParentId(long parentId) {
+    public void setParentId(final long parentId) {
         this.parentId = parentId;
     }
 
@@ -85,7 +88,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(final int rank) {
         this.rank = rank;
     }
 
@@ -95,18 +98,28 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
+    }
+
     @Override
-    public String getDisplayName() {
+    public I18NModel getDisplayName() {
         return this.displayName;
     }
 
     @Override
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override
@@ -115,7 +128,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -125,7 +138,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setUitemplate(String uitemplate) {
+    public void setUitemplate(final String uitemplate) {
         this.uitemplate = uitemplate;
     }
 
@@ -145,7 +158,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setAvailablefrom(LocalDateTime availablefrom) {
+    public void setAvailablefrom(final LocalDateTime availablefrom) {
         this.availablefrom = availablefrom;
     }
 
@@ -155,7 +168,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setAvailableto(LocalDateTime availableto) {
+    public void setAvailableto(final LocalDateTime availableto) {
         this.availableto = availableto;
     }
 
@@ -277,7 +290,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setAttributes(Collection<AttrValueContent> attributes) {
+    public void setAttributes(final Collection<AttrValueContent> attributes) {
         this.attributes = attributes;
     }
 
@@ -285,7 +298,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
         return this.seoInternal;
     }
 
-    public void setSeoInternal(SeoEntity seo) {
+    public void setSeoInternal(final SeoEntity seo) {
         this.seoInternal = seo;
     }
 
@@ -295,7 +308,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -305,7 +318,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -315,7 +328,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -325,7 +338,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -335,7 +348,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -350,7 +363,7 @@ public class ContentEntity implements org.yes.cart.domain.entity.Content, java.i
     }
 
     @Override
-    public void setContentId(long contentId) {
+    public void setContentId(final long contentId) {
         this.contentId = contentId;
     }
 

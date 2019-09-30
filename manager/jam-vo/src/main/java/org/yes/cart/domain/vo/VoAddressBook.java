@@ -36,8 +36,8 @@ public class VoAddressBook {
 
     private List<MutablePair<String, List<VoAttrValue>>> addressForm = new ArrayList<>();
 
-    private List<MutablePair<String, List<MutablePair<String, String>>>> countries = new ArrayList<>();
-    private List<MutablePair<String, List<MutablePair<String, String>>>> states = new ArrayList<>();
+    private List<VoLocation> billingCountries = new ArrayList<>();
+    private List<VoLocation> shippingCountries = new ArrayList<>();
 
 
     public List<VoAddress> getAddresses() {
@@ -72,19 +72,19 @@ public class VoAddressBook {
         this.addressForm = addressForm;
     }
 
-    public List<MutablePair<String, List<MutablePair<String, String>>>> getCountries() {
-        return countries;
+    public List<VoLocation> getBillingCountries() {
+        return billingCountries;
     }
 
-    public void setCountries(final List<MutablePair<String, List<MutablePair<String, String>>>> countries) {
-        this.countries = countries;
+    public void setBillingCountries(final List<VoLocation> billingCountries) {
+        this.billingCountries = billingCountries;
     }
 
-    public List<MutablePair<String, List<MutablePair<String, String>>>> getStates() {
-        return states;
+    public List<VoLocation> getShippingCountries() {
+        return shippingCountries;
     }
 
-    public void setStates(final List<MutablePair<String, List<MutablePair<String, String>>>> states) {
-        this.states = states;
+    public void setShippingCountries(final List<VoLocation> shippingCountries) {
+        this.shippingCountries = shippingCountries;
     }
 }

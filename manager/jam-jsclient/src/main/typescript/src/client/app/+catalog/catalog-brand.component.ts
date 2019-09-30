@@ -282,5 +282,4 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
     }
   }
 
-
 }

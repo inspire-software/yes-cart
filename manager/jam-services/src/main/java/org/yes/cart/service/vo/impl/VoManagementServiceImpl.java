@@ -39,9 +39,9 @@ import org.yes.cart.service.vo.VoManagementService;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -129,7 +129,7 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     /** {@inheritDoc} */
     @Override
-    public VoManager getByEmail(String email) throws Exception {
+    public VoManager getManagerByEmail(String email) throws Exception {
         if (federationFacade.isManageable(email, ManagerDTO.class)) {
             final VoManager voManager = getByEmailInternal(email);
             if (voManager != null) {
@@ -158,7 +158,6 @@ public class VoManagementServiceImpl implements VoManagementService {
             for (final RoleDTO role : managementService.getAssignedManagerRoles(voManager.getEmail())) {
                 final VoManagerRole link = new VoManagerRole();
                 link.setManagerId(voManager.getManagerId());
-                link.setRoleId(role.getRoleId());
                 link.setCode(role.getCode());
                 voManagerRoles.add(link);
             }
@@ -172,12 +171,11 @@ public class VoManagementServiceImpl implements VoManagementService {
     /** {@inheritDoc} */
     @Override
     public VoManager createManager(VoManager voManager) throws Exception {
+
         if (voManager != null && CollectionUtils.isNotEmpty(voManager.getManagerShops())) {
-            for (final VoManagerShop shop : voManager.getManagerShops()) {
-                if (!federationFacade.isShopAccessibleByCurrentManager(shop.getShopId())) {
-                    throw new AccessDeniedException("Access is denied");
-                }
-            }
+
+            checkShopsAndRoles(voManager);
+
             final ShopDTO shop = shopService.getById(voManager.getManagerShops().get(0).getShopId());
             managementService.addUser(
                     voManager.getEmail(),
@@ -198,40 +196,55 @@ public class VoManagementServiceImpl implements VoManagementService {
 
             if (CollectionUtils.isNotEmpty(voManager.getManagerRoles())) {
 
-                final List<RoleDTO> roles = managementService.getRolesList();
-                final Map<Long, String> roleMap = new HashMap<>();
-                for (final RoleDTO roleDTO : roles) {
-                    roleMap.put(roleDTO.getRoleId(), roleDTO.getCode());
-                }
                 for (final VoManagerRole managerRole : voManager.getManagerRoles()) {
-                    final String roleCode = roleMap.get(managerRole.getRoleId());
-                    if ("ROLE_SMADMIN".equals(roleCode) && !federationFacade.isCurrentUserSystemAdmin()) {
+
+                    if ("ROLE_SMADMIN".equals(managerRole.getCode()) && !federationFacade.isCurrentUserSystemAdmin()) {
                         throw new AccessDeniedException("Access is denied");
                     }
-                    managementService.grantRole(voManager.getEmail(), roleCode);
+                    managementService.grantRole(voManager.getEmail(), managerRole.getCode());
+
                 }
             }
 
-            final List<ManagerDTO> managers = managementService.getManagers(voManager.getEmail(), null, null);
-            if (CollectionUtils.isNotEmpty(managers)) {
-                return voAssemblySupport.assembleVo(VoManager.class, ManagerDTO.class, new VoManager(), managers.get(0));
-            }
+            return getByEmailInternal(voManager.getEmail());
+
         } else {
             throw new AccessDeniedException("Access is denied");
         }
-        return null;
+
+    }
+
+    void checkShopsAndRoles(final VoManager voManager) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        for (final VoManagerShop shop : voManager.getManagerShops()) {
+            if (!federationFacade.isShopAccessibleByCurrentManager(shop.getShopId())) {
+                throw new AccessDeniedException("Access is denied");
+            }
+        }
+
+        if (CollectionUtils.isNotEmpty(voManager.getManagerRoles())) {
+            final List<RoleDTO> roles = managementService.getRolesList();
+            final Set<String> availableRole = new HashSet<>();
+            for (final RoleDTO roleDTO : roles) {
+                availableRole.add(roleDTO.getCode());
+            }
+            for (final VoManagerRole roleVo : voManager.getManagerRoles()) {
+                if (roleVo.getCode() == null || !availableRole.contains(roleVo.getCode())) {
+                    throw new AccessDeniedException("Access is denied");
+                }
+            }
+        }
     }
 
     /** {@inheritDoc} */
     @Override
     public VoManager updateManager(VoManager voManager) throws Exception {
+
         if (voManager != null && CollectionUtils.isNotEmpty(voManager.getManagerShops())) {
+
             allowUpdateOnlyBySysAdmin(voManager.getEmail());
-            for (final VoManagerShop shop : voManager.getManagerShops()) {
-                if (!federationFacade.isShopAccessibleByCurrentManager(shop.getShopId())) {
-                    throw new AccessDeniedException("Access is denied");
-                }
-            }
+            checkShopsAndRoles(voManager);
+
             managementService.updateUser(
                     voManager.getEmail(),
                     voManager.getFirstName(),
@@ -254,12 +267,6 @@ public class VoManagementServiceImpl implements VoManagementService {
                 } // else skip updates for inaccessible shops
             }
 
-            final List<RoleDTO> roles = managementService.getRolesList();
-            final Map<Long, String> roleMap = new HashMap<>();
-            for (final RoleDTO roleDTO : roles) {
-                roleMap.put(roleDTO.getRoleId(), roleDTO.getCode());
-            }
-
             for (final RoleDTO managerRole : managementService.getAssignedManagerRoles(voManager.getEmail())) {
                 if ("ROLE_SMADMIN".equals(managerRole.getCode()) && !federationFacade.isCurrentUserSystemAdmin()) {
                     continue;
@@ -268,21 +275,18 @@ public class VoManagementServiceImpl implements VoManagementService {
             }
 
             for (final VoManagerRole managerRole : voManager.getManagerRoles()) {
-                final String roleCode = roleMap.get(managerRole.getRoleId());
-                if ("ROLE_SMADMIN".equals(roleCode) && !federationFacade.isCurrentUserSystemAdmin()) {
+                if ("ROLE_SMADMIN".equals(managerRole.getCode()) && !federationFacade.isCurrentUserSystemAdmin()) {
                     continue;
                 }
-                managementService.grantRole(voManager.getEmail(), roleCode);
+                managementService.grantRole(voManager.getEmail(), managerRole.getCode());
             }
 
-            final List<ManagerDTO> managers = managementService.getManagers(voManager.getEmail(), null, null);
-            if (CollectionUtils.isNotEmpty(managers)) {
-                return voAssemblySupport.assembleVo(VoManager.class, ManagerDTO.class, new VoManager(), managers.get(0));
-            }
+            return getByEmailInternal(voManager.getEmail());
+            
         } else {
             throw new AccessDeniedException("Access is denied");
         }
-        return null;
+
     }
 
     /** {@inheritDoc} */

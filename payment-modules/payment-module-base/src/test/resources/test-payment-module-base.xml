@@ -49,7 +49,9 @@
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 
-    <bean id="testExtFormPaymentGateway" class="org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl" scope="prototype"/>
+    <bean id="testExtFormPaymentGateway" class="org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
 
 
     <bean id="courierPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">

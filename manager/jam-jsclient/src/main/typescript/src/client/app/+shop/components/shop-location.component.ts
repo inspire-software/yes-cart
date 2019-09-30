@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, Input } from '@angular/core';
-import { ShopVO, ShopLocationsVO, Pair } from './../../shared/model/index';
+import { ShopVO, ShopLocationsVO, LocationVO, Pair } from './../../shared/model/index';
 import { ShopService, Util } from './../../shared/services/index';
 import { LogUtil } from './../../shared/log/index';
 
@@ -31,10 +31,10 @@ export class ShopLocationComponent implements OnInit {
 
   private shopLocationsVO:ShopLocationsVO;
   private locs:ShopLocationsVO;
-  private availableBilling:Array<Pair<string, string>> = [];
-  private selectedBilling:Array<Pair<string, string>> = [];
-  private availableShipping:Array<Pair<string, string>> = [];
-  private selectedShipping:Array<Pair<string, string>> = [];
+  private availableBilling:Array<LocationVO> = [];
+  private selectedBilling:Array<LocationVO> = [];
+  private availableShipping:Array<LocationVO> = [];
+  private selectedShipping:Array<LocationVO> = [];
 
   private changed:boolean = false;
 
@@ -75,26 +75,26 @@ export class ShopLocationComponent implements OnInit {
   }
 
   remapSelections() {
-    let availableBilling:Array<Pair<string, string>> = [];
-    let selectedBilling:Array<Pair<string, string>> = [];
-    let availableShipping:Array<Pair<string, string>> = [];
-    let selectedShipping:Array<Pair<string, string>> = [];
+    let availableBilling:Array<LocationVO> = [];
+    let selectedBilling:Array<LocationVO> = [];
+    let availableShipping:Array<LocationVO> = [];
+    let selectedShipping:Array<LocationVO> = [];
 
     this.locs.all.forEach(loc => {
-      if (this.locs.supportedBilling.indexOf(loc.first) === -1) {
+      if (this.locs.supportedBilling.indexOf(loc.code) === -1) {
         availableBilling.push(loc);
       } else {
         selectedBilling.push(loc);
       }
-      if (this.locs.supportedShipping.indexOf(loc.first) === -1) {
+      if (this.locs.supportedShipping.indexOf(loc.code) === -1) {
         availableShipping.push(loc);
       } else {
         selectedShipping.push(loc);
       }
     });
 
-    let _sort = function(a:Pair<string, string>, b:Pair<string, string>):number {
-      return (a.second < b.second) ? -1 : 1;
+    let _sort = function(a:LocationVO, b:LocationVO):number {
+      return (a.name < b.name) ? -1 : 1;
     };
 
     availableBilling.sort(_sort);
@@ -151,23 +151,23 @@ export class ShopLocationComponent implements OnInit {
     }
   }
 
-  onAvailableBillingClick(event:any) {
+  onAvailableBillingClick(event:LocationVO) {
     LogUtil.debug('ShopLocationComponent onAvailableBillingClick', event);
-    this.locs.supportedBilling.push(event.first);
+    this.locs.supportedBilling.push(event.code);
     this.remapSelections();
     this.changed = true;
   }
 
-  onAvailableShippingClick(event:any) {
+  onAvailableShippingClick(event:LocationVO) {
     LogUtil.debug('ShopLocationComponent onAvailableShippingClick', event);
-    this.locs.supportedShipping.push(event.first);
+    this.locs.supportedShipping.push(event.code);
     this.remapSelections();
     this.changed = true;
   }
 
-  onSupportedBillingClick(event:any) {
+  onSupportedBillingClick(event:LocationVO) {
     LogUtil.debug('ShopLocationComponent onSupportedBillingClick', event);
-    let idx = this.locs.supportedBilling.indexOf(event.first);
+    let idx = this.locs.supportedBilling.indexOf(event.code);
     if (idx != -1) {
       this.locs.supportedBilling.splice(idx, 1);
       this.remapSelections();
@@ -175,9 +175,9 @@ export class ShopLocationComponent implements OnInit {
     }
   }
 
-  onSupportedShippingClick(event:any) {
+  onSupportedShippingClick(event:LocationVO) {
     LogUtil.debug('ShopLocationComponent onSupportedBillingClick', event);
-    let idx = this.locs.supportedShipping.indexOf(event.first);
+    let idx = this.locs.supportedShipping.indexOf(event.code);
     if (idx != -1) {
       this.locs.supportedShipping.splice(idx, 1);
       this.remapSelections();

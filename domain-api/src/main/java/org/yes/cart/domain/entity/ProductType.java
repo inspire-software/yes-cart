@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
+
 import java.util.Collection;
 
 
@@ -62,14 +64,14 @@ public interface ProductType extends Auditable {
      *
      * @return name of product type.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Set product type name
      *
      * @param name name to set
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * Description of product type.

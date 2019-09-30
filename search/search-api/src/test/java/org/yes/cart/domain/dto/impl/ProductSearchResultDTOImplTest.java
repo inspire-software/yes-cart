@@ -44,9 +44,9 @@ public class ProductSearchResultDTOImplTest {
         firstSKU.setManufacturerCode("ManFirst SKU");
         firstSKU.setFulfilmentCentreCode("Main");
         firstSKU.setName("FirstName SKU");
-        firstSKU.setDisplayName("FirstDisplayName SKU");
+        firstSKU.setDisplayName(new StringI18NModel("EN#~#FirstDisplayName SKU"));
         firstSKU.setDescription("FirstDescription SKU");
-        firstSKU.setDisplayDescription("FirstDisplayDescription SKU");
+        firstSKU.setDisplayDescription(new StringI18NModel("EN#~#FirstDisplayDescription SKU"));
         firstSKU.setAvailablefrom(LocalDateTime.now());
         firstSKU.setAvailableto(LocalDateTime.now());
         firstSKU.setReleaseDate(LocalDateTime.now());
@@ -68,11 +68,11 @@ public class ProductSearchResultDTOImplTest {
         first.setManufacturerCode("ManFirst");
         first.setDefaultSkuCode("FirstCode");
         first.setName("FirstName");
-        first.setDisplayName("FirstDisplayName");
+        first.setDisplayName(new StringI18NModel("EN#~#FirstDisplayName"));
         first.setDescription("FirstDescription");
-        first.setDisplayDescription("FirstDisplayDescription");
+        first.setDisplayDescription(new StringI18NModel("EN#~#FirstDisplayDescription"));
         first.setType("typeA");
-        first.setDisplayType("displayTypeA");
+        first.setDisplayType(new StringI18NModel("EN#~#displayTypeA"));
         first.setService(true);
         first.setEnsemble(true);
         first.setShippable(true);

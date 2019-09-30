@@ -151,10 +151,8 @@ public class VoContentServiceImpl implements VoContentService {
 
     /**
      * Adapt dto to vo recursively.
-     * @param content list of dto
-     * @param voContent list of vo
      */
-    private void adaptContent(List<ContentDTO> content, List<VoContent> voContent) {
+    private void adaptContent(final List<ContentDTO> content, final List<VoContent> voContent) {
         for(ContentDTO dto : content) {
             VoContent voCategory =
                     voAssemblySupport.assembleVo(VoContent.class, ContentDTO.class, new VoContent(), dto);
@@ -168,7 +166,7 @@ public class VoContentServiceImpl implements VoContentService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoContent> getFiltered(final long shopId, final String filter, final int max) throws Exception {
+    public List<VoContent> getFilteredContent(final long shopId, final String filter, final int max) throws Exception {
         if (federationFacade.isManageable(shopId, ShopDTO.class)){
 
             final List<ContentDTO> contentDTO = dtoContentService.findBy(shopId, filter, 0, max);
@@ -202,7 +200,7 @@ public class VoContentServiceImpl implements VoContentService {
 
     /** {@inheritDoc} */
     @Override
-    public VoContentWithBody getById(final long id) throws Exception {
+    public VoContentWithBody getContentById(final long id) throws Exception {
         final ContentDTO content = dtoContentService.getById(id);
         if (content != null && federationFacade.isManageable(id, ContentDTO.class)){
             final VoContentWithBody contentWithBody = voAssemblySupport.assembleVo(VoContentWithBody.class, ContentDTO.class, new VoContentWithBody(), content);
@@ -218,29 +216,29 @@ public class VoContentServiceImpl implements VoContentService {
      * {@inheritDoc}
      */
     @Override
-    public VoContentWithBody update(final VoContentWithBody vo) throws Exception {
+    public VoContentWithBody updateContent(final VoContentWithBody vo) throws Exception {
         final ContentDTO contentDTO = dtoContentService.getById(vo.getContentId());
         final long categoryId = contentDTO != null && contentDTO.getParentId() == vo.getParentId() ? vo.getContentId() : vo.getParentId();
         if (contentDTO != null && federationFacade.isManageable(categoryId, ContentDTO.class)) {
             ContentDTO persistent = voAssemblySupport.assembleDto(ContentDTO.class, VoContent.class, contentDTO, vo);
             ensureValidNullValues(persistent);
             dtoContentService.update(persistent);
-            updateContent(vo.getContentBodies());
+            updateContentBody(vo.getContentBodies());
         } else {
             throw new AccessDeniedException("Access is denied");
         }
-        return getById(vo.getContentId());
+        return getContentById(vo.getContentId());
     }
 
     /** {@inheritDoc} */
     @Override
-    public VoContentWithBody create(final VoContent voContent) throws Exception {
+    public VoContentWithBody createContent(final VoContent voContent) throws Exception {
         final ContentDTO contentDTO = dtoContentService.getNew();
         if (voContent != null && federationFacade.isManageable(voContent.getParentId(), ContentDTO.class)){
             ContentDTO persistent = voAssemblySupport.assembleDto(ContentDTO.class, VoContent.class, contentDTO, voContent);
             ensureValidNullValues(persistent);
             persistent = dtoContentService.create(persistent);
-            return getById(persistent.getId());
+            return getContentById(persistent.getId());
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -256,7 +254,7 @@ public class VoContentServiceImpl implements VoContentService {
      * {@inheritDoc}
      */
     @Override
-    public void remove(final long id) throws Exception {
+    public void removeContent(final long id) throws Exception {
         if (federationFacade.isManageable(id, ContentDTO.class)) {
             dtoContentService.remove(id);
         } else {
@@ -277,8 +275,7 @@ public class VoContentServiceImpl implements VoContentService {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public List<VoAttrValueContent> update(final List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception {
+    public List<VoAttrValueContent> updateContentAttributes(final List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception {
 
         final long contentId = voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo, true);
 
@@ -310,7 +307,7 @@ public class VoContentServiceImpl implements VoContentService {
     }
 
     @Override
-    public List<VoContentBody> updateContent(final List<VoContentBody> vo) throws Exception {
+    public List<VoContentBody> updateContentBody(final List<VoContentBody> vo) throws Exception {
 
         long contentId = 0;
         if (vo != null) {
@@ -360,7 +357,7 @@ public class VoContentServiceImpl implements VoContentService {
      *
      * @param attributes attributes to skip
      */
-    public void setSkipAttributesInView(List<String> attributes) {
+    public void setSkipAttributesInView(final List<String> attributes) {
         this.skipAttributesInView = new HashSet<>(attributes);
     }
 
@@ -369,7 +366,7 @@ public class VoContentServiceImpl implements VoContentService {
      *
      * @param contentPrefix attributes to skip
      */
-    public void setSkipContentAttributesInView(String contentPrefix) {
+    public void setSkipContentAttributesInView(final String contentPrefix) {
         this.skipContentAttributesInView = contentPrefix;
     }
 }

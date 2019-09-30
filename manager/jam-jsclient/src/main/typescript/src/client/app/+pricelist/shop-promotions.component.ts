@@ -100,6 +100,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   @ViewChild('runTestModalDialog')
   private runTestModalDialog:PromotionTestConfigComponent;
 
+  private userSub:any;
 
   constructor(private _promotionService:PricingService) {
     LogUtil.debug('ShopPromotionsComponent constructed');
@@ -167,6 +168,10 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
     this.onRefreshHandler();
 
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      this.presetFromCookie();
+    });
+
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.getFilteredPromotions();
@@ -176,6 +181,9 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     LogUtil.debug('ShopPromotionsComponent ngOnDestroy');
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
   }
 
   protected presetFromCookie() {

@@ -20,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.order.OrderAssemblyException;
@@ -229,10 +230,10 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
     private void copyLineCustomAttributes(final ShoppingCartImpl shoppingCart,
                                           final String supplier,
                                           final String skuCode,
-                                          final Map<String, Pair<String, String>> attributes) {
+                                          final Map<String, Pair<String, I18NModel>> attributes) {
 
         final String attributeIdPrefix = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_ATTRIBUTE_ID + ":";
-        for (final Map.Entry<String, Pair<String, String>> custom : attributes.entrySet()) {
+        for (final Map.Entry<String, Pair<String, I18NModel>> custom : attributes.entrySet()) {
             if (custom.getKey().startsWith(attributeIdPrefix)) {
                 final String avCode = custom.getKey().substring(attributeIdPrefix.length());
                 shoppingCart.getOrderInfo().putDetail(
@@ -244,10 +245,10 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
 
     }
 
-    private void copyOrderCustomAttributes(final ShoppingCartImpl shoppingCart, final Map<String, Pair<String, String>> attributes) {
+    private void copyOrderCustomAttributes(final ShoppingCartImpl shoppingCart, final Map<String, Pair<String, I18NModel>> attributes) {
 
         final String attributeIdPrefix = AttributeNamesKeys.Cart.ORDER_INFO_ORDER_ATTRIBUTE_ID + ":";
-        for (final Map.Entry<String, Pair<String, String>> custom : attributes.entrySet()) {
+        for (final Map.Entry<String, Pair<String, I18NModel>> custom : attributes.entrySet()) {
             if (custom.getKey().startsWith(attributeIdPrefix)) {
                 final String avCode = custom.getKey().substring(attributeIdPrefix.length());
                 shoppingCart.getOrderInfo().putDetail(

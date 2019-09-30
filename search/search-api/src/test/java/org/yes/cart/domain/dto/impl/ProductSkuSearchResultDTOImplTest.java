@@ -42,7 +42,7 @@ public class ProductSkuSearchResultDTOImplTest {
         first.setManufacturerCode("ManFirst");
         first.setFulfilmentCentreCode("Main");
         first.setName("FirstName");
-        first.setDisplayName("FirstDisplayName");
+        first.setDisplayName(new StringI18NModel("EN#~#FirstDisplayName"));
         first.setDefaultImage("FirstDefaultImage");
         first.setAvailablefrom(LocalDateTime.now());
         first.setAvailableto(LocalDateTime.now());

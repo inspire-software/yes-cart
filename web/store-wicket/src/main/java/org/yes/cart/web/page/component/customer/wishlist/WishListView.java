@@ -148,15 +148,22 @@ public class WishListView extends AbstractProductSearchResultList {
 
                     for (final ProductSearchResultDTO uniqueProduct : uniqueProducts) {
 
+                        ProductSearchResultDTO wlProductDto = null;
+                        ProductSkuSearchResultDTO wlProductSkuDto = null;
+
                         for (final ProductSkuSearchResultDTO sku : uniqueProduct.getSearchSkus()) {
 
                             if (sku.getCode().equals(item.getSkuCode())) {
-                                final ProductSearchResultDTO copy = uniqueProduct.copy();
-                                copy.setDefaultSkuCode(item.getSkuCode());
-                                wishListProducts.add(copy);
-                                wishListDataByProduct.put(copy, item);
-
+                                wlProductDto = uniqueProduct.copy();
+                                wlProductSkuDto = sku;
+                                wlProductDto.setSearchSkus(Collections.singletonList(sku));
                             }
+
+                        }
+
+                        if (wlProductDto != null && wlProductSkuDto != null) {
+                            wishListProducts.add(wlProductDto);
+                            wishListDataByProduct.put(wlProductDto, item);
 
                         }
 

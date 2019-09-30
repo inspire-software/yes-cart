@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 
 import java.time.LocalDateTime;
@@ -104,14 +105,14 @@ public interface Category extends Auditable, Attributable, Rankable, Nameable, S
      *
      * @return display name.
      */
-    String getDisplayName();
+    I18NModel getDisplayName();
 
     /**
      * Get display name
      *
      * @param name display name
      */
-    void setDisplayName(String name);
+    void setDisplayName(I18NModel name);
 
     /**
      * Get category UI template variation.

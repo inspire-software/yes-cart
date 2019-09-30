@@ -17,6 +17,8 @@
 package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.DataGroup;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -32,7 +34,8 @@ public class DataGroupEntity implements DataGroup, Serializable {
     private long version;
 
     private String name;
-    private String displayName;
+    private String displayNameInternal;
+    private I18NModel displayName;
     private String qualifier;
     private String type;
     private String descriptors;
@@ -76,14 +79,24 @@ public class DataGroupEntity implements DataGroup, Serializable {
         this.name = name;
     }
 
+    public String getDisplayNameInternal() {
+        return displayNameInternal;
+    }
+
+    public void setDisplayNameInternal(final String displayNameInternal) {
+        this.displayNameInternal = displayNameInternal;
+        this.displayName = new StringI18NModel(displayNameInternal);
+    }
+
     @Override
-    public String getDisplayName() {
+    public I18NModel getDisplayName() {
         return displayName;
     }
 
     @Override
-    public void setDisplayName(final String displayName) {
+    public void setDisplayName(final I18NModel displayName) {
         this.displayName = displayName;
+        this.displayNameInternal = displayName != null ? displayName.toString() : null;
     }
 
     @Override

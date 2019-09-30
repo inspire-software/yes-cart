@@ -48,7 +48,7 @@ public class AttrValueCustomerRO implements Serializable {
     @DtoField(value = "val", readOnly = true)
     private String val;
 
-    @DtoField(value = "displayVal", converter = "i18nStringConverter", readOnly = true)
+    @DtoField(value = "displayVal", converter = "i18nModelConverter", readOnly = true)
     private Map<String, String> displayVals;
 
     @DtoVirtualField(converter = "attributeCodeConverter", readOnly = true)

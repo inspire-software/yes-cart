@@ -51,7 +51,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Override
-    public void setShop(Shop shop) {
+    public void setShop(final Shop shop) {
         this.shop = shop;
     }
 
@@ -61,7 +61,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Override
-    public void setWarehouse(Warehouse warehouse) {
+    public void setWarehouse(final Warehouse warehouse) {
         this.warehouse = warehouse;
     }
 
@@ -74,7 +74,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Override
-    public void setRank(Integer rank) {
+    public void setRank(final Integer rank) {
         this.rank = rank;
     }
 
@@ -94,7 +94,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -104,7 +104,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -114,7 +114,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -124,7 +124,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -134,7 +134,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -149,7 +149,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     }
 
     @Override
-    public void setShopWarehouseId(long shopWarehouseId) {
+    public void setShopWarehouseId(final long shopWarehouseId) {
         this.shopWarehouseId = shopWarehouseId;
     }
 

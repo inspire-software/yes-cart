@@ -159,12 +159,12 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
      *
      * @return updated i18n for domain object
      */
-    protected String processI18n(final I18NsType i18ns, final String existing) {
+    protected I18NModel processI18n(final I18NsType i18ns, final I18NModel existing) {
         final I18NImportModeType mode = i18ns != null && i18ns.getImportMode() != null ? i18ns.getImportMode() : I18NImportModeType.MERGE;
         return processI18nInternal(i18ns, existing, mode);
     }
 
-    private String processI18nInternal(final I18NsType i18ns, final String existing, final I18NImportModeType mode) {
+    private I18NModel processI18nInternal(final I18NsType i18ns, final I18NModel existing, final I18NImportModeType mode) {
         final I18NModel model = mode == I18NImportModeType.REPLACE ? new StringI18NModel() : new StringI18NModel(existing);
         if (i18ns != null) {
             for (final I18NType i18n : i18ns.getI18N()) {
@@ -174,7 +174,7 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
         if (model.getAllValues().isEmpty()) {
             return null;
         }
-        return model.toString();
+        return model;
     }
 
     /**

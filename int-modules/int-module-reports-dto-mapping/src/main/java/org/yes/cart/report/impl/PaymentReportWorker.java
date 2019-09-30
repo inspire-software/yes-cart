@@ -75,7 +75,7 @@ public class PaymentReportWorker implements ReportWorker {
         }
 
         try {
-            return (List) paymentService.getFiltered(filter.length() > 0 ? filter.toString() : null, null, null, Integer.MAX_VALUE);
+            return (List) paymentService.getFilteredPayments(filter.length() > 0 ? filter.toString() : null, null, null, Integer.MAX_VALUE);
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             return Collections.emptyList();

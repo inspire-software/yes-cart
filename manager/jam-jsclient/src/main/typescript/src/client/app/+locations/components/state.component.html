@@ -25,28 +25,28 @@
                       {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label>{{ 'NAME' | translate }}</label>
-                    <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  [(ngModel)]="state.name">
-                    <div [hidden]="stateForm.controls['name'].valid || stateForm.controls['name'].pristine" class="alert alert-danger">
-                      <div [hidden]="!stateForm.controls['name'].hasError('maxlength')">
-                        {{ 'MAXLENGTH_REQUIRED' | translate:{value: 64} }}
-                      </div>
-                      {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}</label>
-                    <input class="form-control" placeholder="{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}" formControlName="displayName" name="displayName" type="text" [(ngModel)]="state.displayName">
-                    <div [hidden]="stateForm.controls['displayName'].valid || stateForm.controls['displayName'].pristine" class="alert alert-danger">
-                      {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
-                    </div>
-                  </div>
                 </fieldset>
             </div>
           </div>
         </div>
       </tab>
+
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="state"
+                             value="name"
+                             valueI18n="displayNames"
+                             defaultRequired="true"
+                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+        </div>
+      </tab>
+
     </tabset>
   </form>
 

@@ -24,6 +24,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.ProductService;
@@ -118,7 +119,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -210,7 +211,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -279,7 +280,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -350,7 +351,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -418,7 +419,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -487,7 +488,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -572,7 +573,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -634,7 +635,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -696,7 +697,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -781,7 +782,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -842,7 +843,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -908,7 +909,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -1002,7 +1003,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -1074,7 +1075,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -1152,7 +1153,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -1258,7 +1259,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));
@@ -1366,7 +1367,7 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategyTest {
             oneOf(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             oneOf(carrierSla).getGuid(); will(returnValue("CSL001"));
             oneOf(carrierSla).getSlaType(); will(returnValue(CarrierSla.WEIGHT_VOLUME));
-            oneOf(carrierSla).getDisplayName(); will(returnValue(""));
+            oneOf(carrierSla).getDisplayName(); will(returnValue(new StringI18NModel()));
             oneOf(carrierSla).getName(); will(returnValue("CSL001"));
             oneOf(cart).getCurrentLocale(); will(returnValue("en"));
             oneOf(item1).getProductSkuCode(); will(returnValue("SKU001"));

@@ -52,7 +52,7 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
     }
 
     @Override
-    public void setShop(Shop shop) {
+    public void setShop(final Shop shop) {
         this.shop = shop;
     }
 
@@ -62,7 +62,7 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
     }
 
     @Override
-    public void setProduct(Product product) {
+    public void setProduct(final Product product) {
         this.product = product;
     }
 
@@ -72,7 +72,7 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
     }
 
     @Override
-    public void setCounter(BigDecimal counter) {
+    public void setCounter(final BigDecimal counter) {
         this.counter = counter;
     }
 
@@ -82,7 +82,7 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -92,7 +92,7 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -102,7 +102,7 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -112,7 +112,7 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -122,7 +122,7 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -132,7 +132,7 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
     }
 
     @Override
-    public void setShopTopsellerId(long shopTopsellerId) {
+    public void setShopTopsellerId(final long shopTopsellerId) {
         this.shopTopsellerId = shopTopsellerId;
     }
 

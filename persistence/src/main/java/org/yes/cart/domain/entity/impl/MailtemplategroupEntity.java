@@ -47,7 +47,7 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -57,7 +57,7 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     }
 
     @Override
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -67,7 +67,7 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     }
 
     @Override
-    public void setCreatedTimestamp(Instant createdTimestamp) {
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 
@@ -77,7 +77,7 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     }
 
     @Override
-    public void setUpdatedTimestamp(Instant updatedTimestamp) {
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
 
@@ -87,7 +87,7 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     }
 
     @Override
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -97,7 +97,7 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     }
 
     @Override
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -107,7 +107,7 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     }
 
     @Override
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 
@@ -122,7 +122,7 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     }
 
     @Override
-    public void setMailtemplategroupId(long mailtemplategroupId) {
+    public void setMailtemplategroupId(final long mailtemplategroupId) {
         this.mailtemplategroupId = mailtemplategroupId;
     }
 

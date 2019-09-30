@@ -184,7 +184,7 @@ public class TaxConfigServiceImplTest extends BaseCoreDBTestCase {
 
         final List<Tax> startTaxes = taxService.getTaxesByShopCode("SHOIP1", "EUR");
         assertFalse(startTaxes.isEmpty());
-        assertEquals(6, startTaxes.size());
+        assertEquals(7, startTaxes.size());
 
         final Long shopDefaultEURTax = taxConfigService.getTaxIdBy("SHOIP1", "EUR", null, null, null);
         assertEquals(Long.valueOf(1010L), shopDefaultEURTax);
