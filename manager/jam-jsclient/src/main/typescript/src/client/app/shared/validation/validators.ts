@@ -96,6 +96,8 @@ export class YcValidators {
 
   static validDate = Validators.pattern('[0-9]{4}\\-([0][1-9]|[1][0-2])\\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?');
 
+  static requiredValidDate = Validators.compose([Validators.required, YcValidators.validDate]);
+
   private static _cache:LRUCache = new LRUCache();
 
   private static topLevelDomainNames:Array<string> =

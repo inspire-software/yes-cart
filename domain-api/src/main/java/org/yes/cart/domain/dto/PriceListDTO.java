@@ -251,6 +251,20 @@ public interface PriceListDTO extends Identifiable {
     void setPricingPolicy(String pricingPolicy);
 
     /**
+     * Mark this price as supplier specific.
+     *
+     * @return supplier
+     */
+    String getSupplier();
+
+    /**
+     * Mark this price as supplier specific.
+     *
+     * @param supplier supplier
+     */
+    void setSupplier(String supplier);
+
+    /**
      * Get reference for this price list.
      *
      * @return reference

@@ -56,6 +56,7 @@ public class SkuPriceXmlEntityHandler extends AbstractXmlEntityHandler<SkuPrice>
                 .attr("guid", price.getGuid())
                 .attr("sku", price.getSkuCode())
                 .attr("shop", price.getShop().getCode())
+                .attr("supplier", price.getSupplier())
                 .attr("currency", price.getCurrency())
                 .attr("quantity", price.getQuantity())
                 .attr("offer", price.isPriceOnOffer())

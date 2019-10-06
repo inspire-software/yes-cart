@@ -49,8 +49,6 @@ public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, S
     @Override
     protected void saveOrUpdate(final JobStatusListener statusListener, final SkuPrice domain, final PriceType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
 
-        domain.setSkuCode(xmlType.getSku());
-        domain.setCurrency(xmlType.getCurrency());
         domain.setQuantity(xmlType.getQuantity());
         domain.setPriceUponRequest(xmlType.isRequest());
         domain.setPriceOnOffer(xmlType.isOffer());
@@ -62,6 +60,7 @@ public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, S
             domain.setSaleto(processLDT(xmlType.getAvailability().getAvailableTo()));
         }
         domain.setTag(processTags(xmlType.getTags(), domain.getTag()));
+        domain.setSupplier(xmlType.getSupplier());
         if (xmlType.getPricingPolicy() != null) {
             domain.setPricingPolicy(xmlType.getPricingPolicy().getPolicy());
             domain.setRef(xmlType.getPricingPolicy().getRef());
@@ -85,6 +84,8 @@ public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, S
         price = this.priceService.getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
         price.setGuid(xmlType.getGuid());
         price.setShop(this.shopService.findSingleByCriteria(" where e.code = ?1", xmlType.getShop()));
+        price.setSkuCode(xmlType.getSku());
+        price.setCurrency(xmlType.getCurrency());
         return price;
     }
 

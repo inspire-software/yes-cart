@@ -1395,6 +1395,7 @@
             </column>
         </property>
         <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" index="SKUPRICE_PRICINGPOLICY" not-null="false"/>
+        <property name="supplier" length="255" type="java.lang.String" column="SUPPLIER" not-null="false"/>
         <property name="ref" length="255" type="java.lang.String" column="REF" index="SKUPRICE_REF" not-null="false"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
@@ -3896,7 +3897,6 @@
             select sp from SkuPriceEntity sp
             where sp.skuCode = ?1
               and sp.currency = ?2 and sp.shop.shopId = ?3
-              and (sp.pricingPolicy is null or sp.pricingPolicy = '')
         ]]>
     </query>
 
@@ -3905,25 +3905,6 @@
             select sp from SkuPriceEntity sp
             where sp.skuCode = ?1
               and sp.currency = ?2 and (sp.shop.shopId = ?3 or sp.shop.shopId = ?4)
-              and (sp.pricingPolicy is null or sp.pricingPolicy = '')
-        ]]>
-    </query>
-
-    <query name="SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP.AND.POLICY">
-        <![CDATA[
-            select sp from SkuPriceEntity sp
-            where sp.skuCode = ?1
-              and sp.currency = ?2 and sp.shop.shopId = ?3
-              and (sp.pricingPolicy is null or sp.pricingPolicy = '' or sp.pricingPolicy = ?4)
-        ]]>
-    </query>
-
-    <query name="SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOPS.AND.POLICY">
-        <![CDATA[
-            select sp from SkuPriceEntity sp
-            where sp.skuCode = ?1
-              and sp.currency = ?2 and (sp.shop.shopId = ?3 or sp.shop.shopId = ?4)
-              and (sp.pricingPolicy is null or sp.pricingPolicy = '' or sp.pricingPolicy = ?5)
         ]]>
     </query>
 
@@ -3939,7 +3920,6 @@
             select sp from SkuPriceEntity sp
             where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
                 and sp.currency = ?2 and sp.shop.shopId = ?3
-                and (sp.pricingPolicy is null or sp.pricingPolicy = '')
         ]]>
     </query>
 
@@ -3948,25 +3928,6 @@
             select sp from SkuPriceEntity sp
             where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
                 and sp.currency = ?2 and (sp.shop.shopId = ?3 or sp.shop.shopId = ?4)
-                and (sp.pricingPolicy is null or sp.pricingPolicy = '')
-        ]]>
-    </query>
-
-    <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP.AND.POLICY">
-        <![CDATA[
-            select sp from SkuPriceEntity sp
-            where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
-                and sp.currency = ?2 and sp.shop.shopId = ?3
-                and (sp.pricingPolicy is null or sp.pricingPolicy = '' or sp.pricingPolicy = ?4)
-        ]]>
-    </query>
-
-    <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOPS.AND.POLICY">
-        <![CDATA[
-            select sp from SkuPriceEntity sp
-            where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
-                and sp.currency = ?2 and (sp.shop.shopId = ?3 or sp.shop.shopId = ?4)
-                and (sp.pricingPolicy is null or sp.pricingPolicy = '' or sp.pricingPolicy = ?5)
         ]]>
     </query>
 

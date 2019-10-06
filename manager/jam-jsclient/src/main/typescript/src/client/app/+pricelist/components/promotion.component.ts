@@ -154,8 +154,8 @@ export class PromotionComponent implements OnInit, OnDestroy {
       'promoActionContext': ['', Validators.required],
       'couponTriggered': [''],
       'canBeCombined': [''],
-      'availablefrom': ['', YcValidators.validDate],
-      'availableto': ['', YcValidators.validDate],
+      'availablefrom': [''],
+      'availableto': [''],
       'tag': ['', YcValidators.nonBlankTrimmed],
       'name': [''],
       'description': [''],
@@ -211,21 +211,20 @@ export class PromotionComponent implements OnInit, OnDestroy {
   }
 
 
-  get availableto():string {
-    return UiUtil.dateInputGetterProxy(this._promotion, 'enabledTo');
+  onAvailableFrom(event:FormValidationEvent<any>) {
+    if (event.valid) {
+      this.promotion.enabledFrom = event.source;
+    }
+    UiUtil.formDataChange(this, 'promotionForm', 'availablefrom', event);
   }
 
-  set availableto(availableto:string) {
-    UiUtil.dateInputSetterProxy(this._promotion, 'enabledTo', availableto);
+  onAvailableTo(event:FormValidationEvent<any>) {
+    if (event.valid) {
+      this.promotion.enabledTo = event.source;
+    }
+    UiUtil.formDataChange(this, 'promotionForm', 'availableto', event);
   }
 
-  get availablefrom():string {
-    return UiUtil.dateInputGetterProxy(this._promotion, 'enabledFrom');
-  }
-
-  set availablefrom(availablefrom:string) {
-    UiUtil.dateInputSetterProxy(this._promotion, 'enabledFrom', availablefrom);
-  }
 
   onNameDataChange(event:FormValidationEvent<any>) {
     UiUtil.formI18nDataChange(this, 'promotionForm', 'name', event);

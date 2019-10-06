@@ -699,6 +699,7 @@
         <xsd:attribute type="xsd:string" name="guid"/>
         <xsd:attribute type="xsd:string" name="sku" use="required"/>
         <xsd:attribute type="xsd:string" name="shop" use="required"/>
+        <xsd:attribute type="xsd:string" name="supplier"/>
         <xsd:attribute type="xsd:string" name="currency" use="required"/>
         <xsd:attribute type="xsd:decimal" name="quantity" use="required"/>
         <xsd:attribute type="xsd:boolean" name="offer" use="required"/>

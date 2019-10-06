@@ -230,3 +230,9 @@ alter table TPROMOTIONCOUPONUSAGE drop column COUPON_ID;
 create index PROMOTIONCOUPONUSAGE_CODE on TPROMOTIONCOUPONUSAGE (COUPON_CODE);
 
 
+
+--
+-- YC-962 Allow fulfilment centre specific pricing
+--
+
+alter table TSKUPRICE add column SUPPLIER varchar(255);

@@ -109,8 +109,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
       'rank': ['', YcValidators.requiredRank],
       'uitemplate': ['', YcValidators.nonBlankTrimmed],
       'disabled': [''],
-      'availablefrom': ['', YcValidators.validDate],
-      'availableto': ['', YcValidators.validDate],
+      'availablefrom': [''],
+      'availableto': [''],
       'uri': ['', validUri],
       'navigationByAttributes': [''],
       'navigationByPrice': [''],
@@ -153,20 +153,18 @@ export class CategoryComponent implements OnInit, OnDestroy {
     return this._category;
   }
 
-  get availableto():string {
-    return UiUtil.dateInputGetterProxy(this._category, 'availableto');
+  onAvailableFrom(event:FormValidationEvent<any>) {
+    if (event.valid) {
+      this.category.availablefrom = event.source;
+    }
+    UiUtil.formDataChange(this, 'categoryForm', 'availablefrom', event);
   }
 
-  set availableto(availableto:string) {
-    UiUtil.dateInputSetterProxy(this._category, 'availableto', availableto);
-  }
-
-  get availablefrom():string {
-    return UiUtil.dateInputGetterProxy(this._category, 'availablefrom');
-  }
-
-  set availablefrom(availablefrom:string) {
-    UiUtil.dateInputSetterProxy(this._category, 'availablefrom', availablefrom);
+  onAvailableTo(event:FormValidationEvent<any>) {
+    if (event.valid) {
+      this.category.availableto = event.source;
+    }
+    UiUtil.formDataChange(this, 'categoryForm', 'availableto', event);
   }
 
   onNameDataChange(event:FormValidationEvent<any>) {

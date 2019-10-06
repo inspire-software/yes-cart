@@ -60,8 +60,8 @@ public class PriceResolverDefaultImpl implements PriceResolver, Configuration {
                 currencyCode,
                 quantity,
                 enforceTier,
-                pricingPolicy
-        );
+                pricingPolicy,
+                supplier);
     }
 
     /** {@inheritDoc} */
@@ -80,8 +80,8 @@ public class PriceResolverDefaultImpl implements PriceResolver, Configuration {
                 customerShopId,
                 masterShopId,
                 currencyCode,
-                pricingPolicy
-        );
+                pricingPolicy,
+                supplier);
     }
 
     /** {@inheritDoc} */

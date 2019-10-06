@@ -14,14 +14,10 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { YcValidators } from './../shared/validation/validators';
 import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/services/index';
 import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ProductSkuSelectComponent } from './../shared/catalog/index';
-import { CarrierSlaSelectComponent } from './../shared/shipping/index';
-import { PriceListVO, ShopVO, ProductSkuVO, CarrierSlaVO, PromotionTestVO, CartVO } from './../shared/model/index';
+import { PriceListVO, ShopVO, PromotionTestVO, CartVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -36,14 +32,15 @@ import { CookieUtil } from './../shared/cookies/index';
 
 export class ShopPriceListComponent implements OnInit, OnDestroy {
 
-  private static PRICELIST:string = 'pricelist';
-  private static PRICELIST_TEST:string = 'pricelisttest';
-
   private static COOKIE_SHOP:string = 'ADM_UI_PRICE_SHOP';
   private static COOKIE_CURRENCY:string = 'ADM_UI_PRICE_CURR';
 
   private static _selectedShop:ShopVO;
   private static _selectedCurrency:string;
+
+  private static PRICELIST:string = 'pricelist';
+  private static PRICE:string = 'price';
+  private static PRICELIST_TEST:string = 'pricelisttest';
 
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
@@ -62,16 +59,9 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   private selectedPricelist:PriceListVO;
 
   private pricelistEdit:PriceListVO;
-  private pricelistEditForm:any;
-  private pricelistEditFormSub:any; // tslint:disable-line:no-unused-variable
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
-  private validForSave:boolean = false;
 
   @ViewChild('deleteConfirmationModalDialog')
   private deleteConfirmationModalDialog:ModalComponent;
-
-  @ViewChild('editPricelistModalDialog')
-  private editPricelistModalDialog:ModalComponent;
 
   @ViewChild('selectShopModalDialog')
   private selectShopModalDialog:ModalComponent;
@@ -79,44 +69,24 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   @ViewChild('selectCurrencyModalDialog')
   private selectCurrencyModalDialog:ModalComponent;
 
-  @ViewChild('productSkuSelectDialog')
-  private productSkuSelectDialog:ProductSkuSelectComponent;
-
-  @ViewChild('carrierSlaSelectDialog')
-  private carrierSlaSelectDialog:CarrierSlaSelectComponent;
+  @ViewChild('runTestModalDialog')
+  private runTestModalDialog:PromotionTestConfigComponent;
 
   private deleteValue:String;
+
+  private selectedSkuCode:String;
 
   private loading:boolean = false;
 
   private testCart:CartVO;
 
-  @ViewChild('runTestModalDialog')
-  private runTestModalDialog:PromotionTestConfigComponent;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   private userSub:any;
 
-  constructor(private _priceService:PricingService,
-              fb: FormBuilder) {
+  constructor(private _priceService:PricingService) {
     LogUtil.debug('ShopPriceListComponent constructed');
-
-    this.pricelistEditForm = fb.group({
-      'skuCode': ['', YcValidators.requiredValidCode],
-      'skuName': [''],
-      'shopCode': ['', Validators.required],
-      'currency': ['', Validators.required],
-      'pricingPolicy': ['', YcValidators.validCode],
-      'priceUponRequest': [''],
-      'priceOnOffer': [''],
-      'quantity': ['', YcValidators.requiredPositiveNumber],
-      'regularPrice': ['', YcValidators.requiredPositiveNumber],
-      'salePrice': ['', YcValidators.positiveNumber],
-      'minimalPrice': ['', YcValidators.positiveNumber],
-      'salefrom': ['', YcValidators.validDate],
-      'saleto': ['', YcValidators.validDate],
-      'tag': ['', YcValidators.nonBlankTrimmed],
-      'ref': ['', YcValidators.nonBlankTrimmed],
-    });
   }
 
   get selectedShop():ShopVO {
@@ -135,25 +105,6 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     ShopPriceListComponent._selectedCurrency = selectedCurrency;
   }
 
-
-  get availableto():string {
-    return UiUtil.dateInputGetterProxy(this.pricelistEdit, 'saleto');
-  }
-
-  set availableto(availableto:string) {
-    UiUtil.dateInputSetterProxy(this.pricelistEdit, 'saleto', availableto);
-  }
-
-  get availablefrom():string {
-    return UiUtil.dateInputGetterProxy(this.pricelistEdit, 'salefrom');
-  }
-
-  set availablefrom(availablefrom:string) {
-    UiUtil.dateInputSetterProxy(this.pricelistEdit, 'salefrom', availablefrom);
-  }
-
-
-
   newPricelistInstance():PriceListVO {
     return {
       skuPriceId: 0,
@@ -165,7 +116,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       currency: this.selectedCurrency,
       skuCode: '', skuName: '',
       shopCode: this.selectedShop.code,
-      tag: null, pricingPolicy: null, ref: null,
+      tag: null, pricingPolicy: null, supplier: null, ref: null,
       autoGenerated: false
     };
   }
@@ -183,29 +134,14 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     this.delayedFiltering = Futures.perpetual(function() {
       that.getFilteredPricelist();
     }, this.delayedFilteringMs);
-    this.formBind();
 
   }
 
   ngOnDestroy() {
     LogUtil.debug('ShopPriceListComponent ngOnDestroy');
-    this.formUnbind();
     if (this.userSub) {
       this.userSub.unsubscribe();
     }
-  }
-
-  formBind():void {
-    UiUtil.formBind(this, 'pricelistEditForm', 'pricelistEditFormSub', 'formChange', 'initialising', false);
-  }
-
-  formUnbind():void {
-    UiUtil.formUnbind(this, 'pricelistEditFormSub');
-  }
-
-  formChange():void {
-    LogUtil.debug('ShopPriceListComponent formChange', this.pricelistEditForm.valid, this.pricelistEdit);
-    this.validForSave = !this.pricelistEdit.autoGenerated && this.pricelistEditForm.valid;
   }
 
   protected presetFromCookie() {
@@ -321,6 +257,14 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   protected onPricelistSelected(data:PriceListVO) {
     LogUtil.debug('ShopPriceListComponent onPricelistSelected', data);
     this.selectedPricelist = data;
+    this.selectedSkuCode = this.selectedPricelist ? this.selectedPricelist.skuCode : null;
+  }
+
+  protected onPriceChanged(event:FormValidationEvent<PriceListVO>) {
+    LogUtil.debug('ShopPriceListComponent onPriceChanged', event);
+    this.changed = true;
+    this.validForSave = event.valid;
+    this.pricelistEdit = event.source;
   }
 
   protected onSearchTag() {
@@ -355,17 +299,21 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   protected onBackToList() {
     LogUtil.debug('ShopPriceListComponent onBackToList handler');
-    if (this.viewMode === ShopPriceListComponent.PRICELIST_TEST) {
+    if (this.viewMode === ShopPriceListComponent.PRICELIST_TEST ||
+      this.viewMode === ShopPriceListComponent.PRICE) {
       this.viewMode = ShopPriceListComponent.PRICELIST;
     }
   }
 
   protected onRowNew() {
     LogUtil.debug('ShopPriceListComponent onRowNew handler');
+    this.changed = false;
     this.validForSave = false;
+    if (this.viewMode === ShopPriceListComponent.PRICELIST) {
+      this.pricelistEdit = this.newPricelistInstance();
+      this.viewMode = ShopPriceListComponent.PRICE;
+    }
     this.selectedPricelist = null;
-    UiUtil.formInitialise(this, 'initialising', 'pricelistEditForm', 'pricelistEdit', this.newPricelistInstance(), false, ['skuCode']);
-    this.editPricelistModalDialog.show();
   }
 
   protected onRowDelete(row:PriceListVO) {
@@ -383,9 +331,10 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   protected onRowEditPricelist(row:PriceListVO) {
     LogUtil.debug('ShopPriceListComponent onRowEditPricelist handler', row);
+    this.pricelistEdit = Util.clone(row);
+    this.changed = false;
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'pricelistEditForm', 'pricelistEdit', Util.clone(row), row.skuPriceId > 0, ['skuCode']);
-    this.editPricelistModalDialog.show();
+    this.viewMode = ShopPriceListComponent.PRICE;
   }
 
   protected onRowEditSelected() {
@@ -402,43 +351,9 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onSearchSKU() {
-    if (this.pricelistEdit != null && this.pricelistEdit.skuPriceId <= 0) {
-      this.productSkuSelectDialog.showDialog();
-    }
-  }
-
-
-  protected onProductSkuSelected(event:FormValidationEvent<ProductSkuVO>) {
-    LogUtil.debug('ShopPriceListComponent onProductSkuSelected');
-    if (event.valid && this.pricelistEdit != null && this.pricelistEdit.skuPriceId <= 0) {
-      this.pricelistEdit.skuCode = event.source.code;
-      this.pricelistEdit.skuName = event.source.name;
-    }
-  }
-
-  protected onSearchSLA() {
-    if (this.pricelistEdit != null && this.pricelistEdit.skuPriceId <= 0) {
-      this.carrierSlaSelectDialog.showDialog();
-    }
-  }
-
-
-  protected onCarrierSlaSelected(event:FormValidationEvent<CarrierSlaVO>) {
-    LogUtil.debug('ShopPriceListComponent onCarrierSlaSelected');
-    if (event.valid && this.pricelistEdit != null && this.pricelistEdit.skuPriceId <= 0) {
-      this.pricelistEdit.skuCode = event.source.code;
-      this.pricelistEdit.skuName = event.source.name;
-      if (this.pricelistEdit.tag == null || this.pricelistEdit.tag == '') {
-        this.pricelistEdit.tag = 'shipping'; // suggest shipping tag so that it is easier to find shipping prices
-      }
-    }
-  }
-
-
   protected onSaveHandler() {
 
-    if (this.validForSave && this.pricelistEditForm.dirty) {
+    if (this.validForSave && this.changed) {
 
       if (this.pricelistEdit != null) {
 
@@ -452,11 +367,13 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
               LogUtil.debug('ShopPriceListComponent pricelist changed', rez);
               this.selectedPricelist = rez;
               this.validForSave = false;
-              this.pricelistEdit = this.newPricelistInstance();
+              this.pricelistEdit = null;
+              this.loading = false;
+              this.viewMode = ShopPriceListComponent.PRICELIST;
+
               if (pk == 0) {
                 this.pricelistFilter = '!' + rez.skuCode;
               }
-              this.loading = false;
               this.getFilteredPricelist();
           }
         );
@@ -468,19 +385,12 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   protected onDiscardEventHandler() {
     LogUtil.debug('ShopPriceListComponent discard handler');
-    if (this.selectedPricelist != null) {
-      this.onRowEditSelected();
-    } else {
-      this.onRowNew();
-    }
-  }
-
-  protected onEditPricelistResult(modalresult: ModalResult) {
-    LogUtil.debug('ShopPriceListComponent onEditPricelistResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-
-      this.onSaveHandler();
-
+    if (this.viewMode == ShopPriceListComponent.PRICE) {
+      if (this.selectedPricelist != null) {
+        this.onRowEditSelected();
+      } else {
+        this.onRowNew();
+      }
     }
   }
 
@@ -523,6 +433,9 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopPriceListComponent getFilteredPricelist', allpricelist);
         this.pricelist = allpricelist;
         this.selectedPricelist = null;
+        this.pricelistEdit = null;
+        this.viewMode == ShopPriceListComponent.PRICELIST;
+        this.changed = false;
         this.validForSave = false;
         this.pricelistFilterCapped = this.pricelist.length >= max;
         this.loading = false;
@@ -531,6 +444,9 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     } else {
       this.pricelist = [];
       this.selectedPricelist = null;
+      this.pricelistEdit = null;
+      this.viewMode == ShopPriceListComponent.PRICELIST;
+      this.changed = false;
       this.validForSave = false;
       this.pricelistFilterCapped = false;
     }

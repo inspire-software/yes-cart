@@ -43,11 +43,11 @@
         <i class="fa fa-info"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" [disabled]="inventoryEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="selectedInventory == null || inventoryEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="inventoryEdit != null || selectedInventory == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedInventory == null || inventoryEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 

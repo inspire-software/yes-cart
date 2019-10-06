@@ -73,6 +73,9 @@ public class VoPriceList {
     @DtoField(value = "pricingPolicy")
     private String pricingPolicy;
 
+    @DtoField(value = "supplier")
+    private String supplier;
+
     @DtoField(value = "ref")
     private String ref;
 
@@ -198,6 +201,14 @@ public class VoPriceList {
 
     public void setPricingPolicy(final String pricingPolicy) {
         this.pricingPolicy = pricingPolicy;
+    }
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(final String supplier) {
+        this.supplier = supplier;
     }
 
     public String getRef() {

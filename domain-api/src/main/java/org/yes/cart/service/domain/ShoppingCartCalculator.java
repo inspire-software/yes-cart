@@ -49,7 +49,8 @@ public interface ShoppingCartCalculator {
     }
 
     /**
-     * Calculate price model for given SKU with minimal price ( {@link PriceService#getMinimalPrice(Long, String, long, Long, String, BigDecimal, boolean, String)}).
+     * Calculate price model for given SKU with minimal price. Creates a temporary basket and calculates the value
+     * according to amount calculation strategy.
      *
      * @param currentCart   current cart (to provide additional data such as location)
      * @param supplier      supplier

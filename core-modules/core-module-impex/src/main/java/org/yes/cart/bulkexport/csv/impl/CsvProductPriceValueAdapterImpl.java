@@ -65,10 +65,10 @@ public class CsvProductPriceValueAdapterImpl implements CsvValueAdapter {
             SkuPrice price = null;
             if (rawValue instanceof Long) {
                 // product ID
-                price = priceService.getMinimalPrice((Long) rawValue, null, shop.getShopId(), fallbackId, currency, BigDecimal.ONE, false, null);
+                price = priceService.getMinimalPrice((Long) rawValue, null, shop.getShopId(), fallbackId, currency, BigDecimal.ONE, false, null, null);
             } else if (rawValue instanceof String) {
                 // SKU
-                price = priceService.getMinimalPrice(null, (String) rawValue, shop.getShopId(), fallbackId, currency, BigDecimal.ONE, false, null);
+                price = priceService.getMinimalPrice(null, (String) rawValue, shop.getShopId(), fallbackId, currency, BigDecimal.ONE, false, null, null);
             }
             if (price != null && price.getSkuPriceId() > 0L) {
                 final BigDecimal lowest = MoneyUtils.secondOrFirst(price.getSalePriceForCalculation());

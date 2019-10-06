@@ -39,6 +39,7 @@ export interface PriceListVO {
   tag : string;
 
   pricingPolicy : string;
+  supplier : string;
 
   ref : string;
 

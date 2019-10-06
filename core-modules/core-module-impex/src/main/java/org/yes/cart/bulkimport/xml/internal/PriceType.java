@@ -58,6 +58,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *       &lt;attribute name="guid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sku" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="shop" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="supplier" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="currency" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="quantity" use="required" type="{http://www.w3.org/2001/XMLSchema}decimal" />
  *       &lt;attribute name="offer" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -117,6 +118,8 @@ public class PriceType {
     protected String sku;
     @XmlAttribute(name = "shop", required = true)
     protected String shop;
+    @XmlAttribute(name = "supplier")
+    protected String supplier;
     @XmlAttribute(name = "currency", required = true)
     protected String currency;
     @XmlAttribute(name = "quantity", required = true)
@@ -464,6 +467,30 @@ public class PriceType {
      */
     public void setShop(String value) {
         this.shop = value;
+    }
+
+    /**
+     * Gets the value of the supplier property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSupplier() {
+        return supplier;
+    }
+
+    /**
+     * Sets the value of the supplier property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSupplier(String value) {
+        this.supplier = value;
     }
 
     /**

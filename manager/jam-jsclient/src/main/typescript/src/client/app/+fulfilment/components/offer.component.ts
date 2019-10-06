@@ -58,14 +58,15 @@ export class OfferComponent implements OnInit, OnDestroy {
       'tag': ['', YcValidators.nonBlankTrimmed],
       'featured': [''],
       'disabled': [''],
-      'releaseDate': ['', YcValidators.validDate],
-      'availablefrom': ['', YcValidators.validDate],
-      'availableto': ['', YcValidators.validDate],
+      'releaseDate': [''],
+      'availablefrom': [''],
+      'availableto': [''],
       'availability': ['', YcValidators.requiredPositiveNumber],
       'minOrderQuantity': ['', YcValidators.positiveNumber],
       'maxOrderQuantity': ['', YcValidators.positiveNumber],
       'stepOrderQuantity': ['', YcValidators.positiveNumber],
-      'restockDate': ['', YcValidators.validDate],
+      'restockDate': [''],
+      'restockNotes': [''],
     });
 
     this.delayedChange = Futures.perpetual(function() {
@@ -89,7 +90,7 @@ export class OfferComponent implements OnInit, OnDestroy {
   }
 
   onRestockNotesDataChange(event:FormValidationEvent<any>) {
-    UiUtil.formI18nDataChange(this, 'inventoryForm', 'restockDate', event);
+    UiUtil.formI18nDataChange(this, 'inventoryForm', 'restockNotes', event);
   }
 
   formMarkDirty(field:string):void {
@@ -99,7 +100,8 @@ export class OfferComponent implements OnInit, OnDestroy {
   @Input()
   set inventory(inventory: InventoryVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'inventoryForm', '_inventory', inventory);
+    let lock = inventory == null || inventory.skuWarehouseId > 0;
+    UiUtil.formInitialise(this, 'initialising', 'inventoryForm', '_inventory', inventory, lock, ['skuCode']);
     if (inventory != null) {
       this._centreAndName = inventory.warehouseCode + ': ' + inventory.warehouseName;
     }
@@ -114,36 +116,33 @@ export class OfferComponent implements OnInit, OnDestroy {
     return this._centreAndName;
   }
 
-  get availableto():string {
-    return UiUtil.dateInputGetterProxy(this._inventory, 'availableto');
+
+  onAvailableFrom(event:FormValidationEvent<any>) {
+    if (event.valid) {
+      this.inventory.availablefrom = event.source;
+    }
+    UiUtil.formDataChange(this, 'inventoryForm', 'availablefrom', event);
   }
 
-  set availableto(availableto:string) {
-    UiUtil.dateInputSetterProxy(this._inventory, 'availableto', availableto);
+  onAvailableTo(event:FormValidationEvent<any>) {
+    if (event.valid) {
+      this.inventory.availableto = event.source;
+    }
+    UiUtil.formDataChange(this, 'inventoryForm', 'availableto', event);
   }
 
-  get availablefrom():string {
-    return UiUtil.dateInputGetterProxy(this._inventory, 'availablefrom');
+  onReleaseDate(event:FormValidationEvent<any>) {
+    if (event.valid) {
+      this.inventory.releaseDate = event.source;
+    }
+    UiUtil.formDataChange(this, 'inventoryForm', 'releaseDate', event);
   }
 
-  set availablefrom(availablefrom:string) {
-    UiUtil.dateInputSetterProxy(this._inventory, 'availablefrom', availablefrom);
-  }
-
-  get releaseDate():string {
-    return UiUtil.dateInputGetterProxy(this._inventory, 'releaseDate');
-  }
-
-  set releaseDate(releaseDate:string) {
-    UiUtil.dateInputSetterProxy(this._inventory, 'releaseDate', releaseDate);
-  }
-
-  get restockDate():string {
-    return UiUtil.dateInputGetterProxy(this._inventory, 'restockDate');
-  }
-
-  set restockDate(restockDate:string) {
-    UiUtil.dateInputSetterProxy(this._inventory, 'restockDate', restockDate);
+  onRestockDate(event:FormValidationEvent<any>) {
+    if (event.valid) {
+      this.inventory.restockDate = event.source;
+    }
+    UiUtil.formDataChange(this, 'inventoryForm', 'restockDate', event);
   }
 
 
@@ -169,7 +168,7 @@ export class OfferComponent implements OnInit, OnDestroy {
 
 
   protected onProductSkuSelected(event:FormValidationEvent<ProductSkuVO>) {
-    LogUtil.debug('CentreInventoryComponent onProductSkuSelected');
+    LogUtil.debug('OfferComponent onProductSkuSelected');
     if (event.valid && this._inventory != null && this._inventory.skuWarehouseId <= 0) {
       this._inventory.skuCode = event.source.code;
       this._inventory.skuName = event.source.name;

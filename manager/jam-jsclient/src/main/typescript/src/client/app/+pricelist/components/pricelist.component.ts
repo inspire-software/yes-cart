@@ -101,6 +101,23 @@ export class PriceListComponent implements OnInit, OnDestroy {
     return row.saleto === null || (row.saleto > new Date());
   }
 
+  protected getPolicyLabels(row:PriceListVO) {
+    let out = '';
+    if (row.ref) {
+      if (row.pricingPolicy) {
+        out += ' <span class="label label-primary">' + row.pricingPolicy + ':' + row.ref + '</span> ';
+      } else {
+        out += ' <span class="label label-primary">*:' + row.ref + '</span> ';
+      }
+    } else if (row.pricingPolicy) {
+      out += ' <span class="label label-primary">' + row.pricingPolicy + '</span> ';
+    }
+    if (row.supplier) {
+      out += ' <span class="label label-info">' + row.supplier + '</span> ';
+    }
+    return out;
+  }
+
   private filterPricelist() {
 
     this.filteredPricelist = this._pricelist;

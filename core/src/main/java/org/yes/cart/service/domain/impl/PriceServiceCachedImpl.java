@@ -51,8 +51,11 @@ public class PriceServiceCachedImpl implements PriceService {
                                     final String currencyCode,
                                     final BigDecimal quantity,
                                     final boolean enforceTier,
-                                    final String pricingPolicy) {
-        return priceService.getMinimalPrice(productId, selectedSku, customerShopId, masterShopId, currencyCode, quantity, enforceTier, pricingPolicy);
+                                    final String pricingPolicy,
+                                    final String supplier) {
+
+        return priceService.getMinimalPrice(productId, selectedSku, customerShopId, masterShopId, currencyCode, quantity, enforceTier, pricingPolicy, supplier);
+
     }
 
     /**
@@ -65,8 +68,11 @@ public class PriceServiceCachedImpl implements PriceService {
                                               final long customerShopId,
                                               final Long masterShopId,
                                               final String currencyCode,
-                                              final String pricingPolicy) {
-        return priceService.getAllCurrentPrices(productId, selectedSku, customerShopId, masterShopId, currencyCode, pricingPolicy);
+                                              final String pricingPolicy,
+                                              final String supplier) {
+
+        return priceService.getAllCurrentPrices(productId, selectedSku, customerShopId, masterShopId, currencyCode, pricingPolicy, supplier);
+
     }
 
 

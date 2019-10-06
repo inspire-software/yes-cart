@@ -411,6 +411,10 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                     continue; // This product is not in stock in this shop
                 }
 
+                if (StringUtils.isNotEmpty(skuPrice.getSupplier()) && !result.getFulfilmentCentreCode().equals(skuPrice.getSupplier())) {
+                    continue; // Skip supplier specific prices which are not for this supplier
+                }
+
                 final Map<String, SkuPrice> lowestQuantityPriceByShop = lowestQuantityPrice.get(skuPrice.getShop().getShopId());
                 if (lowestQuantityPriceByShop == null) {
                     // if we do not have a "byShop" this is the new lowest price

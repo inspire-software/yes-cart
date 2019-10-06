@@ -55,20 +55,11 @@
                   <input formControlName="disabled" name="disabled" type="checkbox" [(ngModel)]="category.disabled">
                   <label>{{ 'CATEGORY_DISABLED' | translate }}</label>
                 </div>
-                <div class="form-group">
-                  <label>{{ 'CATEGORY_FROM' | translate }}</label>
-                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom">
-                  <div [hidden]="categoryForm.controls['availablefrom'].valid || categoryForm.controls['availablefrom'].pristine" class="alert alert-danger">
-                    {{ 'DATE_REQUIRED' | translate }}
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>{{ 'CATEGORY_TO' | translate }}</label>
-                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto">
-                  <div [hidden]="categoryForm.controls['availableto'].valid || categoryForm.controls['availableto'].pristine" class="alert alert-danger">
-                    {{ 'DATE_REQUIRED' | translate }}
-                  </div>
-                </div>
+
+                <yc-datetime title="{{ 'CATEGORY_FROM' | translate }}" [value]="category.availablefrom" (dataChanged)="onAvailableFrom($event)"></yc-datetime>
+
+                <yc-datetime title="{{ 'CATEGORY_TO' | translate }}" [value]="category.availableto" (dataChanged)="onAvailableTo($event)"></yc-datetime>
+
               </fieldset>
             </div>
           </div>

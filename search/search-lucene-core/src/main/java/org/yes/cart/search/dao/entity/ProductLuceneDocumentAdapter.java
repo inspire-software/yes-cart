@@ -454,6 +454,10 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     continue; // This product is not in stock in this shop
                 }
 
+                if (StringUtils.isNotEmpty(skuPrice.getSupplier()) && !result.getFulfilmentCentreCode().equals(skuPrice.getSupplier())) {
+                    continue; // Skip supplier specific prices which are not for this supplier
+                }
+
                 final Map<String, BigDecimal> stock = result.getQtyOnWarehouse(skuPrice.getShop().getShopId());
                 if (stock == null || !stock.containsKey(skuPrice.getSkuCode())) {
                     continue; // This SKU is not available in this shop

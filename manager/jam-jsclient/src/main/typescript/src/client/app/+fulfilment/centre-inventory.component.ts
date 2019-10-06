@@ -74,6 +74,8 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   private changed:boolean = false;
   private validForSave:boolean = false;
 
+  private userSub:any;
+
   constructor(private _fulfilmentService:FulfilmentService) {
     LogUtil.debug('CentreInventoryComponent constructed');
   }
@@ -107,6 +109,29 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('CentreInventoryComponent ngOnInit');
+
+    this.onRefreshHandler();
+
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      this.presetFromCookie();
+    });
+
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.getFilteredInventory();
+    }, this.delayedFilteringMs);
+
+  }
+
+  ngOnDestroy() {
+    LogUtil.debug('CentreInventoryComponent ngOnDestroy');
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
+  }
+
+  protected presetFromCookie() {
+
     if (this.selectedCentre == null) {
       let ffCode = CookieUtil.readCookie(CentreInventoryComponent.COOKIE_CENTRE, null);
       if (ffCode != null) {
@@ -125,18 +150,8 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
       }
     }
-    this.onRefreshHandler();
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.getFilteredInventory();
-    }, this.delayedFilteringMs);
 
   }
-
-  ngOnDestroy() {
-    LogUtil.debug('CentreInventoryComponent ngOnDestroy');
-  }
-
 
   protected onFulfilmentCentreSelect() {
     LogUtil.debug('CentreInventoryComponent onFulfilmentCentreSelect');
@@ -161,6 +176,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   protected onRefreshHandler() {
     LogUtil.debug('CentreInventoryComponent refresh handler');
     if (UserEventBus.getUserEventBus().current() != null) {
+      this.presetFromCookie();
       this.getFilteredInventory();
     }
   }

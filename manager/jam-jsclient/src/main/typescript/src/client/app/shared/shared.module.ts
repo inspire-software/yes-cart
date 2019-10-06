@@ -2,6 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -9,11 +10,11 @@ import { YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe } from './pipes
 
 import { ServicesModule } from './services/services.module';
 
-import { PaginationModule, AccordionModule, TabsModule } from 'ngx-bootstrap';
+import { PaginationModule, AccordionModule, TabsModule, BsDatepickerModule } from 'ngx-bootstrap';
 
 import { ModalComponent } from './modal/index';
 
-import { I18nComponent } from './i18n/index';
+import { I18nComponent, DateTimeComponent } from './common/index';
 
 import { BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent } from './catalog/index';
 
@@ -48,12 +49,13 @@ import { CurrencySelectComponent } from './price/index';
     CommonModule, RouterModule,
     FormsModule, ReactiveFormsModule,
     TranslateModule, ServicesModule,
-    AccordionModule.forRoot(), PaginationModule.forRoot(), TabsModule.forRoot()
+    BrowserAnimationsModule,
+    AccordionModule.forRoot(), PaginationModule.forRoot(), TabsModule.forRoot(), BsDatepickerModule.forRoot()
   ],
   declarations: [
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,
     ModalComponent,
-    I18nComponent,
+    I18nComponent, DateTimeComponent,
     BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
     ContentSelectComponent, ContentMinSelectComponent, MailPreviewComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
@@ -71,7 +73,7 @@ import { CurrencySelectComponent } from './price/index';
   exports: [
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,
     ModalComponent,
-    I18nComponent,
+    I18nComponent, DateTimeComponent,
     BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
     ContentSelectComponent, ContentMinSelectComponent, MailPreviewComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
@@ -88,7 +90,7 @@ import { CurrencySelectComponent } from './price/index';
     FormsModule, ReactiveFormsModule,
     TranslateModule,
     LoginModalComponent,
-    AccordionModule, PaginationModule, TabsModule
+    AccordionModule, PaginationModule, TabsModule, BsDatepickerModule
   ]
 })
 export class SharedModule {
