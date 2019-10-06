@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { TabsetComponent } from 'ngx-bootstrap';
 import { DataGroupInfoVO, JobStatusVO, Pair } from './../shared/model/index';
 import { ImpexService } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
@@ -47,6 +48,9 @@ export class ExportManagerComponent implements OnInit {
 
   private delayedStatus:Future;
   private delayedStatusMs:number = Config.UI_BULKSERVICE_DELAY;
+
+  @ViewChild('exportTabs')
+  private exportTabs:TabsetComponent;
 
   /**
    * Construct export panel
@@ -112,9 +116,19 @@ export class ExportManagerComponent implements OnInit {
           status : { token: null, state: 'UNDEFINED', completion: null, report: null },
           running : false
         });
-        if (this.tabs.length == 1) {
-          this.selectedTab = 0;
-        }
+
+        let that = this;
+
+        Futures.once(function () {
+          if (that.exportTabs.tabs.length == that.tabs.length) {
+            that.selectedTab = that.tabs.length - 1;
+            if (!that.exportTabs.tabs[that.selectedTab].active) {
+              that.exportTabs.tabs[that.selectedTab].active = true;
+            }
+          } else if (that.tabs.length == 1) {
+            that.selectedTab = 0;
+          }
+        }, 50).delay();
       }
     }
   }
@@ -151,36 +165,20 @@ export class ExportManagerComponent implements OnInit {
     this.selectedFile = null;
   }
 
-
-  protected onTabDeleteSelected() {
-    if (this.selectedTab >= 0) {
-      let data = this.tabs[this.selectedTab];
-      if (!data.running) {
-        this.tabs.splice(this.selectedTab, 1);
-        this.tabs = this.tabs.slice(0, this.tabs.length);
-        if (this.tabs.length == 1) {
-          this.selectedTab = 0;
-        } else {
-          this.selectedTab = -1;
-        }
-      }
-    }
-  }
-
   protected onTabDeleteTab(tab:ExportTabData) {
     if (tab != null && !tab.running) {
       let idx = this.tabs.indexOf(tab);
       if (idx != -1) {
+        let wasActive = this.selectedTab == idx;
         this.tabs.splice(idx, 1);
         this.tabs = this.tabs.slice(0, this.tabs.length);
-        if (this.tabs.length == 1) {
-          this.selectedTab = 0;
-        } else {
+        if (wasActive) {
           this.selectedTab = -1;
         }
       }
     }
   }
+
 
   protected onRunHandler() {
     LogUtil.debug('ExportManagerComponent Run handler');
@@ -221,31 +219,32 @@ export class ExportManagerComponent implements OnInit {
 
     this.tabs.forEach((tab:ExportTabData, idx:number) => {
 
-      if (tab.status.completion == null) {
+      if (tab.status.token != null) {
+        if (tab.status.completion == null) {
 
-        let _sub:any = this._exportService.getExportStatus(tab.status.token).subscribe(update => {
+          let _sub: any = this._exportService.getExportStatus(tab.status.token).subscribe(update => {
 
-          LogUtil.debug('ExportManagerComponent getExportStatus', update);
-          tab.status = update;
-          tab.running = tab.status.completion == null;
-          _sub.unsubscribe();
+            LogUtil.debug('ExportManagerComponent getExportStatus', update);
+            tab.status = update;
+            tab.running = tab.status.completion == null;
+            _sub.unsubscribe();
 
-          if (tab.running) {
-            this.delayedStatus.delay();
-          }
+            if (tab.running) {
+              this.delayedStatus.delay();
+            }
 
-          if (this.selectedTab == idx) {
-            this.selectedTabRunning = tab.running;
-            this.selectedTabCompleted = !tab.running;
-          }
+            if (this.selectedTab == idx) {
+              this.selectedTabRunning = tab.running;
+              this.selectedTabCompleted = !tab.running;
+            }
 
-        });
+          });
 
-      } else if (this.selectedTab == idx) {
-        this.selectedTabRunning = tab.running;
-        this.selectedTabCompleted = !tab.running;
+        } else if (this.selectedTab == idx) {
+          this.selectedTabRunning = tab.running;
+          this.selectedTabCompleted = !tab.running;
+        }
       }
-
     });
 
   }

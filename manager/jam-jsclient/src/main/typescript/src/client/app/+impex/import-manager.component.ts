@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { TabsetComponent } from 'ngx-bootstrap';
 import { DataGroupInfoVO, JobStatusVO, Pair } from './../shared/model/index';
 import { ImpexService } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
@@ -46,6 +47,9 @@ export class ImportManagerComponent implements OnInit {
 
   private delayedStatus:Future;
   private delayedStatusMs:number = Config.UI_BULKSERVICE_DELAY;
+
+  @ViewChild('importTabs')
+  private importTabs:TabsetComponent;
 
   /**
    * Construct import panel
@@ -117,25 +121,20 @@ export class ImportManagerComponent implements OnInit {
           status : { token: null, state: 'UNDEFINED', completion: null, report: null },
           running : false
         });
-        if (this.tabs.length == 1) {
-          this.selectedTab = 0;
-        }
-      }
-    }
-  }
 
+        let that = this;
 
-  protected onTabDeleteSelected() {
-    if (this.selectedTab >= 0) {
-      let data = this.tabs[this.selectedTab];
-      if (!data.running) {
-        this.tabs.splice(this.selectedTab, 1);
-        this.tabs = this.tabs.slice(0, this.tabs.length);
-        if (this.tabs.length == 1) {
-          this.selectedTab = 0;
-        } else {
-          this.selectedTab = -1;
-        }
+        Futures.once(function () {
+          if (that.importTabs.tabs.length == that.tabs.length) {
+            that.selectedTab = that.tabs.length - 1;
+            if (!that.importTabs.tabs[that.selectedTab].active) {
+              that.importTabs.tabs[that.selectedTab].active = true;
+            }
+          } else if (that.tabs.length == 1) {
+            that.selectedTab = 0;
+          }
+        }, 50).delay();
+
       }
     }
   }
@@ -145,11 +144,10 @@ export class ImportManagerComponent implements OnInit {
     if (tab != null && !tab.running) {
       let idx = this.tabs.indexOf(tab);
       if (idx != -1) {
+        let wasActive = this.selectedTab == idx;
         this.tabs.splice(idx, 1);
         this.tabs = this.tabs.slice(0, this.tabs.length);
-        if (this.tabs.length == 1) {
-          this.selectedTab = 0;
-        } else {
+        if (wasActive) {
           this.selectedTab = -1;
         }
       }
