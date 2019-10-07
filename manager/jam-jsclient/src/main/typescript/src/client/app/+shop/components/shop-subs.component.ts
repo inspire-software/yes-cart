@@ -60,11 +60,9 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
 
   private selectedRow:ShopVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private subShopToEdit:SubShopVO;
 
   private shopSubForm:any;
-  private shopSubFormSub:any; // tslint:disable-line:no-unused-variable
 
   private loading:boolean = false;
 
@@ -113,11 +111,11 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'shopSubForm', 'shopSubFormSub', 'formChange', 'initialising', false);
+    UiUtil.formBind(this, 'shopSubForm', 'formChange', false);
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'shopSubFormSub');
+    UiUtil.formUnbind(this, 'shopSubForm');
   }
 
 
@@ -165,7 +163,7 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
   protected onRowNew() {
     LogUtil.debug('ShopSubsComponent onRowNew handler');
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'shopSubForm', 'subShopToEdit', this.newSubInstance());
+    UiUtil.formInitialise(this, 'shopSubForm', 'subShopToEdit', this.newSubInstance());
     this.editModalDialog.show();
   }
 
@@ -184,7 +182,7 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
           this.changed = false;
           this._reload = false;
           this.selectedRow = null;
-            this.loading = false;
+          this.loading = false;
           _sub.unsubscribe();
           this.getShopSubs();
         }

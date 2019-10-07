@@ -43,11 +43,9 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
   private attributeSelectedRow:ProductTypeAttrVO;
   private groupSelectedRow:ProductTypeViewGroupVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private productTypeForm:any;
-  private productTypeFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributesComponent')
   private attributesComponent:ProductTypeAttributeComponent;
@@ -97,12 +95,12 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'productTypeForm', 'productTypeFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'productTypeForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'productTypeFormSub');
+    UiUtil.formUnbind(this, 'productTypeForm');
   }
 
   formChange():void {
@@ -113,7 +111,7 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
   @Input()
   set productType(productType:ProductTypeVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'productTypeForm', '_productType', productType);
+    UiUtil.formInitialise(this, 'productTypeForm', '_productType', productType);
     this._changes = [];
 
   }

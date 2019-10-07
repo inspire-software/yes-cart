@@ -33,11 +33,9 @@ export class StateComponent implements OnInit, OnDestroy {
 
   private _state:StateVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private stateForm:any;
-  private stateFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('StateComponent constructed');
@@ -55,12 +53,12 @@ export class StateComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'stateForm', 'stateFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'stateForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'stateFormSub');
+    UiUtil.formUnbind(this, 'stateForm');
   }
 
   formChange():void {
@@ -75,7 +73,7 @@ export class StateComponent implements OnInit, OnDestroy {
   @Input()
   set state(state:StateVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'stateForm', '_state', state, true, ['countryCode']);
+    UiUtil.formInitialise(this, 'stateForm', '_state', state, true, ['countryCode']);
 
   }
 

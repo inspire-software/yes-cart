@@ -12,9 +12,9 @@
       <tbody>
       <tr *ngFor="let row of filteredTaxconfigs; let i = index" class="{{row == selectedTaxConfig ? 'active' : ''}}">
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'LOCATION_COUNTRY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.countryCode ? row.countryCode : '-'}}</a>&nbsp;</td>
-          <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.stateCode ? row.stateCode : '-' }}</a>&nbsp;</td>
-          <td title="{{ 'SKU' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productCode ? row.productCode : '-' }}</a>&nbsp;</td>
+          <td title="{{ 'LOCATION_COUNTRY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.countryCode ? row.countryCode : '***'}}</a>&nbsp;</td>
+          <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.stateCode ? row.stateCode : '***' }}</a>&nbsp;</td>
+          <td title="{{ 'SKU' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productCode ? row.productCode : '***' }}</a>&nbsp;</td>
         </ng-template>
       </tr>
       </tbody>

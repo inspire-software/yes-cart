@@ -79,17 +79,12 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
   private deleteValue:string = null;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
-  private initialising2:boolean = false; // tslint:disable-line:no-unused-variable
-
   private validForGenerate:boolean = true;
   private delayedChange:Future;
 
   private promotionForm:any;
-  private promotionFormSub:any; // tslint:disable-line:no-unused-variable
 
   private couponForm:any;
-  private couponFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('deleteConfirmationModalDialog')
   private deleteConfirmationModalDialog:ModalComponent;
@@ -178,14 +173,14 @@ export class PromotionComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'promotionForm', 'promotionFormSub', 'delayedChange', 'initialising');
-    UiUtil.formBind(this, 'couponForm', 'couponFormSub', 'formChangeCoupons', 'initialising2', false);
+    UiUtil.formBind(this, 'promotionForm', 'delayedChange');
+    UiUtil.formBind(this, 'couponForm', 'formChangeCoupons', false);
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'promotionFormSub');
-    UiUtil.formUnbind(this, 'couponFormSub');
+    UiUtil.formUnbind(this, 'promotionForm');
+    UiUtil.formUnbind(this, 'couponForm');
   }
 
   formChange():void {
@@ -201,7 +196,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
   @Input()
   set promotion(promotion:PromotionVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'promotionForm', '_promotion', promotion, promotion != null && promotion.promotionId > 0,
+    UiUtil.formInitialise(this, 'promotionForm', '_promotion', promotion, promotion != null && promotion.promotionId > 0,
       ['code', 'promoType', 'promoAction', ]);
 
   }
@@ -389,7 +384,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
         code: null, usageLimit: 1, usageLimitPerCustomer: 0, usageCount: 0
       };
 
-      UiUtil.formInitialise(this, 'initialising2', 'couponForm', 'generateCoupons', couponConfig);
+      UiUtil.formInitialise(this, 'couponForm', 'generateCoupons', couponConfig);
 
       this.generateCouponsModalDialog.show();
 

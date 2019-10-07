@@ -46,9 +46,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   @ViewChild('editNewCategoryName')
   private editNewCategoryName:ModalComponent;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private newCategoryForm:any;
-  private newCategoryFormSub:any; // tslint:disable-line:no-unused-variable
   private validForSave:boolean = false;
 
   private nodes:Array<ITreeNode>;
@@ -138,11 +136,11 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'newCategoryForm', 'newCategoryFormSub', 'formChange', 'initialising', false);
+    UiUtil.formBind(this, 'newCategoryForm', 'formChange', false);
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'newCategoryFormSub');
+    UiUtil.formUnbind(this, 'newCategoryForm');
   }
 
   formChange():void {
@@ -172,7 +170,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
                   this.categories = cats;
                   this.nodes = this.adaptToTree(cats, _assignedIds);
                   this.selectedNode = null;
-                  UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+                  UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
                   this.changed = false;
                   this._reload = false;
                   _subc.unsubscribe();
@@ -301,7 +299,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   createNew(parent:ITreeNode) {
     LogUtil.debug('ShopCatalogComponent createNew for parent', parent);
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+    UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
     this.editNewCategoryName.show();
   }
 

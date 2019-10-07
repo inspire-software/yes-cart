@@ -42,9 +42,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   private newCentre:FulfilmentCentreInfoVO;
   @ViewChild('editNewCentreName')
   private editNewCentreName:ModalComponent;
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private newCentreForm:any;
-  private newCentreFormSub:any; // tslint:disable-line:no-unused-variable
   private validForSave:boolean = false;
 
   private loading:boolean = false;
@@ -128,13 +126,11 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'newCentreForm', 'newCentreFormSub', 'formChange', 'initialising', false);
+    UiUtil.formBind(this, 'newCentreForm', 'formChange', false);
   }
 
   formUnbind():void {
-    if (this.newCentreFormSub) {
-      UiUtil.formUnbind(this, 'newCentreFormSub');
-    }
+    UiUtil.formUnbind(this, 'newCentreForm');
   }
 
   formChange():void {
@@ -153,7 +149,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   createNew() {
     LogUtil.debug('ShopFulfilmentCentreComponent createNew');
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'newCentreForm', 'newCentre', this.newCentreInstance());
+    UiUtil.formInitialise(this, 'newCentreForm', 'newCentre', this.newCentreInstance());
     this.editNewCentreName.show();
   }
 

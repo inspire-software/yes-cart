@@ -35,11 +35,9 @@ export class OfferComponent implements OnInit, OnDestroy {
   private _inventory:InventoryVO;
   private _centreAndName:string;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private inventoryForm:any;
-  private inventoryFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('productSkuSelectDialog')
   private productSkuSelectDialog:ProductSkuSelectComponent;
@@ -76,12 +74,12 @@ export class OfferComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'inventoryForm', 'inventoryFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'inventoryForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'inventoryFormSub');
+    UiUtil.formUnbind(this, 'inventoryForm');
   }
 
   formChange():void {
@@ -93,15 +91,11 @@ export class OfferComponent implements OnInit, OnDestroy {
     UiUtil.formI18nDataChange(this, 'inventoryForm', 'restockNotes', event);
   }
 
-  formMarkDirty(field:string):void {
-    UiUtil.formMarkFieldDirty(this, 'inventoryForm', field);
-  }
-
   @Input()
   set inventory(inventory: InventoryVO) {
 
     let lock = inventory == null || inventory.skuWarehouseId > 0;
-    UiUtil.formInitialise(this, 'initialising', 'inventoryForm', '_inventory', inventory, lock, ['skuCode']);
+    UiUtil.formInitialise(this, 'inventoryForm', '_inventory', inventory, lock, ['skuCode']);
     if (inventory != null) {
       this._centreAndName = inventory.warehouseCode + ': ' + inventory.warehouseName;
     }
@@ -172,7 +166,7 @@ export class OfferComponent implements OnInit, OnDestroy {
     if (event.valid && this._inventory != null && this._inventory.skuWarehouseId <= 0) {
       this._inventory.skuCode = event.source.code;
       this._inventory.skuName = event.source.name;
-      this.formMarkDirty('skuCode');
+      this.delayedChange.delay();
     }
   }
 

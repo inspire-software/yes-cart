@@ -35,11 +35,9 @@ export class AttributeComponent implements OnInit, OnDestroy {
 
   private _attribute:AttributeVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private attributeForm:any;
-  private attributeFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('AttributeComponent constructed');
@@ -95,12 +93,12 @@ export class AttributeComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'attributeForm', 'attributeFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'attributeForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'attributeFormSub');
+    UiUtil.formUnbind(this, 'attributeForm');
   }
 
   formChange():void {
@@ -111,7 +109,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
   @Input()
   set attribute(attribute:AttributeVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'attributeForm', '_attribute', attribute, attribute != null && attribute.attributeId > 0, ['code']);
+    UiUtil.formInitialise(this, 'attributeForm', '_attribute', attribute, attribute != null && attribute.attributeId > 0, ['code']);
 
   }
 

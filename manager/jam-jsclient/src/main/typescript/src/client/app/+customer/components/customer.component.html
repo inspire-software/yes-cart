@@ -5,7 +5,7 @@
 
       <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
 
-        <ng-template [ngIf]="customer != null && !(customer.customerId > 0) && (customer.customerShops == null || customer.customerShops.length == 0)">
+        <ng-template [ngIf]="mustSelectShop">
           <div class="row">
             <div class="col-xs-12 block-padding-spacer">
               <div class="bg-warning text-padding">

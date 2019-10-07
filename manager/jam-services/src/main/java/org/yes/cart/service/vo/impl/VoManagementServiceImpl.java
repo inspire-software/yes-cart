@@ -240,7 +240,9 @@ public class VoManagementServiceImpl implements VoManagementService {
     @Override
     public VoManager updateManager(VoManager voManager) throws Exception {
 
-        if (voManager != null && CollectionUtils.isNotEmpty(voManager.getManagerShops())) {
+        if (voManager != null &&
+                (CollectionUtils.isNotEmpty(voManager.getManagerShops()) ||
+                        federationFacade.isCurrentUserSystemAdmin())) {
 
             allowUpdateOnlyBySysAdmin(voManager.getEmail());
             checkShopsAndRoles(voManager);
@@ -260,11 +262,13 @@ public class VoManagementServiceImpl implements VoManagementService {
                 } // else skip updates for inaccessible shops
             }
 
-            for (final VoManagerShop link : voManager.getManagerShops()) {
-                if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
-                    final ShopDTO shop = shopService.getById(link.getShopId());
-                    managementService.grantShop(voManager.getEmail(), shop.getCode());
-                } // else skip updates for inaccessible shops
+            if (CollectionUtils.isNotEmpty(voManager.getManagerShops())) {
+                for (final VoManagerShop link : voManager.getManagerShops()) {
+                    if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
+                        final ShopDTO shop = shopService.getById(link.getShopId());
+                        managementService.grantShop(voManager.getEmail(), shop.getCode());
+                    } // else skip updates for inaccessible shops
+                }
             }
 
             for (final RoleDTO managerRole : managementService.getAssignedManagerRoles(voManager.getEmail())) {

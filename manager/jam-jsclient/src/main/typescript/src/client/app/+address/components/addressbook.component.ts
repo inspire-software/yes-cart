@@ -47,11 +47,9 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   private addresses:AddressVO[] = [];
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private addressForm:any;
-  private addressFormSub:any; // tslint:disable-line:no-unused-variable
 
   private addressFormConfig:any;
 
@@ -127,12 +125,12 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
 
   formBind():void {
-    UiUtil.formBind(this, 'addressForm', 'addressFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'addressForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'addressFormSub');
+    UiUtil.formUnbind(this, 'addressForm');
   }
 
   formChange():void {
@@ -323,7 +321,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
         copy.stateCode = this.states[0].code; // preselect first for new addresses
         LogUtil.debug('AddressBookComponent pre-selected state', copy.stateCode);
       }
-      UiUtil.formInitialise(this, 'initialising', 'addressForm', 'addressEdit', copy, address != null && address.addressId > 0, ['addressType']);
+      UiUtil.formInitialise(this, 'addressForm', 'addressEdit', copy, address != null && address.addressId > 0, ['addressType']);
       this.formConfigure(address.addressType);
       this.editModalDialog.show();
     }

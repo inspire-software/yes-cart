@@ -42,11 +42,11 @@ export class ManagerComponent implements OnInit, OnDestroy {
   private availableRoles:Array<Pair<RoleVO, ManagerRoleLinkVO>> = [];
   private supportedRoles:Array<Pair<RoleVO, ManagerRoleLinkVO>> = [];
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private managerForm:any;
-  private managerFormSub:any; // tslint:disable-line:no-unused-variable
+
+  private mustSelectShop:boolean = false;
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('ManagerComponent constructed');
@@ -86,16 +86,16 @@ export class ManagerComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'managerForm', 'managerFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'managerForm', 'delayedChange');
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'managerFormSub');
+    UiUtil.formUnbind(this, 'managerForm');
   }
 
   formChange():void {
     LogUtil.debug('ManagerComponent formChange', this.managerForm.valid, this._manager);
-    this.dataChanged.emit({ source: this._manager, valid: this.managerForm.valid });
+    this.dataChanged.emit({ source: this._manager, valid: this.managerForm.valid && !this.mustSelectShop });
   }
 
   formMarkDirty(field:string):void {
@@ -123,7 +123,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
   @Input()
   set manager(manager:ManagerVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'managerForm', '_manager', manager, manager != null && manager.managerId > 0, ['email']);
+    UiUtil.formInitialise(this, 'managerForm', '_manager', manager, manager != null && manager.managerId > 0, ['email']);
 
     this.recalculateShops();
     this.recalculateRoles();
@@ -198,6 +198,8 @@ export class ManagerComponent implements OnInit, OnDestroy {
       this.availableShops = this.getAvailableShopNames();
       this.supportedShops = [];
     }
+
+    this.mustSelectShop = this._manager != null && !(this._manager.managerId > 0) && (this._manager.managerShops == null || this._manager.managerShops.length == 0)
   }
 
   private recalculateRoles():void {

@@ -51,13 +51,9 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
   @ViewChild('editCategoryRank')
   private editCategoryRank:ModalComponent;
 
-  private initialisingAdd:boolean = false; // tslint:disable-line:no-unused-variable
   private newCategoryForm:any;
-  private newCategoryFormSub:any; // tslint:disable-line:no-unused-variable
   private validForSave:boolean = false;
-  private initialisingEdit:boolean = false; // tslint:disable-line:no-unused-variable
   private editCategoryForm:any;
-  private editCategoryFormSub:any; // tslint:disable-line:no-unused-variable
   private validForEdit:boolean = false;
 
   private nodes:Array<ITreeNode>;
@@ -148,11 +144,11 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
   }
 
   formBindAdd():void {
-    UiUtil.formBind(this, 'newCategoryForm', 'newCategoryFormSub', 'formChangeAdd', 'initialisingAdd', false);
+    UiUtil.formBind(this, 'newCategoryForm', 'formChangeAdd', false);
   }
 
   formUnbindAdd():void {
-    UiUtil.formUnbind(this, 'newCategoryFormSub');
+    UiUtil.formUnbind(this, 'newCategoryForm');
   }
 
   formChangeAdd():void {
@@ -162,12 +158,12 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
 
 
   formBindEdit():void {
-    UiUtil.formBind(this, 'editCategoryForm', 'editCategoryFormSub', 'formChangeEdit', 'initialisingEdit', false);
+    UiUtil.formBind(this, 'editCategoryForm', 'formChangeEdit', false);
   }
 
 
   formUnbindEdit():void {
-    UiUtil.formUnbind(this, 'editCategoryFormSub');
+    UiUtil.formUnbind(this, 'editCategoryForm');
   }
 
 
@@ -206,8 +202,8 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
               }
 
               // this.selectedNode = null;
-              // UiUtil.formInitialise(this, 'initialisingAdd', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
-              // UiUtil.formInitialise(this, 'initialisingEdit', 'editCategoryForm', 'editCategory', this.newProductCategoryInstance());
+              // UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+              // UiUtil.formInitialise(this, 'editCategoryForm', 'editCategory', this.newProductCategoryInstance());
               // this.changed = false;
               // this._reload = false;
               this.loading = false;
@@ -230,8 +226,8 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
                   LogUtil.debug('ProductCategoryMinComponent initial categories', cats, _assignedIds);
                   this.nodes = this.adaptToTree(cats, _assignedIds);
                   this.selectedNode = null;
-                  UiUtil.formInitialise(this, 'initialisingAdd', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
-                  UiUtil.formInitialise(this, 'initialisingEdit', 'editCategoryForm', 'editCategory', this.newProductCategoryInstance());
+                  UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+                  UiUtil.formInitialise(this, 'editCategoryForm', 'editCategory', this.newProductCategoryInstance());
                   this.changed = false;
                   this._reload = false;
                   this.loading = false;
@@ -399,7 +395,7 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
   createNew(parent:ITreeNode) {
     LogUtil.debug('ProductCategoryMinComponent createNew for parent', parent);
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialisingAdd', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+    UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
     this.editNewCategoryName.show();
   }
 
@@ -425,7 +421,7 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
     LogUtil.debug('ProductCategoryMinComponent onRank', cat);
 
     this.validForEdit = false;
-    UiUtil.formInitialise(this, 'initialisingEdit', 'editCategoryForm', 'editCategory', Util.clone(cat));
+    UiUtil.formInitialise(this, 'editCategoryForm', 'editCategory', Util.clone(cat));
     this.editCategoryRank.show();
 
   }

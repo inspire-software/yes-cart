@@ -93,6 +93,21 @@ export class CustomersComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(this.selectedCustomer);
   }
 
+
+  protected getPolicyLabels(row:CustomerInfoVO) {
+    let out = '';
+    if (row.customerType) {
+      if (row.pricingPolicy) {
+        out += ' <span class="label label-primary">' + row.customerType + ':' + row.pricingPolicy + '</span> ';
+      } else {
+        out += ' <span class="label label-primary">' + row.customerType + ':*</span> ';
+      }
+    } else if (row.pricingPolicy) {
+      out += ' <span class="label label-primary">B2C:' + row.pricingPolicy + '</span> ';
+    }
+    return out;
+  }
+
   private filterCustomers() {
 
     this.filteredCustomers = this._customers;

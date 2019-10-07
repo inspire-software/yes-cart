@@ -62,11 +62,9 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
 
   private selectedRow:UrlVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private urlToEdit:UrlVO;
 
   private shopUrlForm:any;
-  private shopUrlFormSub:any; // tslint:disable-line:no-unused-variable
 
   private loading:boolean = false;
 
@@ -94,11 +92,11 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'shopUrlForm', 'shopUrlFormSub', 'formChange', 'initialising', false);
+    UiUtil.formBind(this, 'shopUrlForm', 'formChange', false);
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'shopUrlFormSub');
+    UiUtil.formUnbind(this, 'shopUrlForm');
   }
 
 
@@ -162,7 +160,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   protected onRowEdit(row:UrlVO) {
     LogUtil.debug('ShopUrlComponent onRowEdit handler', row);
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'shopUrlForm', 'urlToEdit', Util.clone(row));
+    UiUtil.formInitialise(this, 'shopUrlForm', 'urlToEdit', Util.clone(row));
     this.editModalDialog.show();
   }
 
@@ -200,7 +198,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   protected onRowNew() {
     LogUtil.debug('ShopUrlComponent onRowNew handler');
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'shopUrlForm', 'urlToEdit', this.newUrlInstance());
+    UiUtil.formInitialise(this, 'shopUrlForm', 'urlToEdit', this.newUrlInstance());
     this.editModalDialog.show();
   }
 

@@ -33,11 +33,9 @@ export class CountryComponent implements OnInit, OnDestroy {
 
   private _country:CountryVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private countryForm:any;
-  private countryFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('CountryComponent constructed');
@@ -55,12 +53,12 @@ export class CountryComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'countryForm', 'countryFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'countryForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'countryFormSub');
+    UiUtil.formUnbind(this, 'countryForm');
   }
 
   formChange():void {
@@ -75,7 +73,7 @@ export class CountryComponent implements OnInit, OnDestroy {
   @Input()
   set country(country:CountryVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'countryForm', '_country', country);
+    UiUtil.formInitialise(this, 'countryForm', '_country', country);
 
   }
 

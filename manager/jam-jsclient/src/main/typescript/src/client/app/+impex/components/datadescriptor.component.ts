@@ -33,11 +33,9 @@ export class DataDescriptorComponent implements OnInit, OnDestroy {
 
   private _dataDescriptor:DataDescriptorVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private dataDescriptorForm:any;
-  private dataDescriptorFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('DataDescriptorComponent constructed');
@@ -57,12 +55,12 @@ export class DataDescriptorComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'dataDescriptorForm', 'dataDescriptorFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'dataDescriptorForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'dataDescriptorFormSub');
+    UiUtil.formUnbind(this, 'dataDescriptorForm');
   }
 
   formChange():void {
@@ -77,7 +75,7 @@ export class DataDescriptorComponent implements OnInit, OnDestroy {
   @Input()
   set dataDescriptor(dataDescriptor:DataDescriptorVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'dataDescriptorForm', '_dataDescriptor', dataDescriptor);
+    UiUtil.formInitialise(this, 'dataDescriptorForm', '_dataDescriptor', dataDescriptor);
 
   }
 

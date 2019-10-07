@@ -43,11 +43,9 @@ export class SlaComponent implements OnInit, OnDestroy {
   private availableFcs:Array<FulfilmentCentreInfoVO> = [];
   private supportedFcs:Array<FulfilmentCentreInfoVO> = [];
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private slaForm:any;
-  private slaFormSub:any; // tslint:disable-line:no-unused-variable
 
   private _excludeMonday:boolean = false;
   private _excludeTuesday:boolean = false;
@@ -122,12 +120,12 @@ export class SlaComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'slaForm', 'slaFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'slaForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'slaFormSub');
+    UiUtil.formUnbind(this, 'slaForm');
   }
 
   formChange():void {
@@ -158,7 +156,7 @@ export class SlaComponent implements OnInit, OnDestroy {
   @Input()
   set sla(sla:CarrierSlaVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'slaForm', '_sla', sla);
+    UiUtil.formInitialise(this, 'slaForm', '_sla', sla);
     this.recalculatePgs();
     this.recalculateFcs();
     this.recalculateWeekDayExclusions();

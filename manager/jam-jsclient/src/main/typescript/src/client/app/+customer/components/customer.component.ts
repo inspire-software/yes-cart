@@ -53,11 +53,9 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
   private selectedRow:AttrValueCustomerVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private customerForm:any;
-  private customerFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributeValuesComponent')
   private attributeValuesComponent:AttributeValuesComponent;
@@ -74,6 +72,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
   private searchHelpShow:boolean = false;
 
   private reloadAddressbook:boolean = false;
+
+  private mustSelectShop:boolean = false;
 
   constructor(private _customerService:CustomerService,
               fb: FormBuilder) {
@@ -103,23 +103,23 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
 
   formBind():void {
-    UiUtil.formBind(this, 'customerForm', 'customerFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'customerForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'customerFormSub');
+    UiUtil.formUnbind(this, 'customerForm');
   }
 
   formChange():void {
     LogUtil.debug('CustomerComponent formChange', this.customerForm.valid, this._customer);
-    this.dataChanged.emit({ source: new Pair(this._customer, this._changes), valid: this.customerForm.valid });
+    this.dataChanged.emit({ source: new Pair(this._customer, this._changes), valid: this.customerForm.valid && !this.mustSelectShop });
   }
 
   @Input()
   set customer(customer:CustomerVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'customerForm', '_customer', customer, customer != null && customer.customerId > 0, ['email']);
+    UiUtil.formInitialise(this, 'customerForm', '_customer', customer, customer != null && customer.customerId > 0, ['email']);
     this._changes = [];
     this.tabSelected('Main');
     this.recalculateShops();
@@ -310,6 +310,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
     });
     this.addressShops = addressShops;
 
+    this.mustSelectShop = this._customer != null && !(this._customer.customerId > 0) && (this._customer.customerShops == null || this._customer.customerShops.length == 0);
   }
 
   private getAvailableShopNames():Array<Pair<ShopVO, CustomerShopLinkVO>> {

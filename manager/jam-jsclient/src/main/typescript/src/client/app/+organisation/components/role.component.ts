@@ -34,11 +34,9 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   private _role:RoleVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private roleForm:any;
-  private roleFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('RoleComponent constructed');
@@ -55,11 +53,11 @@ export class RoleComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'roleForm', 'roleFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'roleForm', 'delayedChange');
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'roleFormSub');
+    UiUtil.formUnbind(this, 'roleForm');
   }
 
   formChange():void {
@@ -70,7 +68,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   @Input()
   set role(role:RoleVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'roleForm', '_role', role, role != null && role.roleId > 0, ['code']);
+    UiUtil.formInitialise(this, 'roleForm', '_role', role, role != null && role.roleId > 0, ['code']);
 
   }
 

@@ -37,11 +37,9 @@ export class ShopMainComponent implements OnInit, OnDestroy {
   private changed:boolean = false;
   private validForSave:boolean = false;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private shopMainForm:any;
-  private shopMainFormSub:any; // tslint:disable-line:no-unused-variable
 
   private shopSub:any;
 
@@ -85,7 +83,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
       this.validForSave = false;
       this.shopDisabled = shopevt.disabled;
-      UiUtil.formInitialise(this, 'initialising', 'shopMainForm', 'shop', Util.clone(shopevt), shopevt.shopId > 0, [ 'code' ]);
+      UiUtil.formInitialise(this, 'shopMainForm', 'shop', Util.clone(shopevt), shopevt.shopId > 0, [ 'code' ]);
     });
 
     this.delayedChange = Futures.perpetual(function() {
@@ -94,11 +92,11 @@ export class ShopMainComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'shopMainForm', 'shopMainFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'shopMainForm', 'delayedChange');
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'shopMainFormSub');
+    UiUtil.formUnbind(this, 'shopMainForm');
   }
 
   formChange():void {

@@ -37,11 +37,9 @@ export class CarrierComponent implements OnInit, OnDestroy {
   private availableShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
   private supportedShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private carrierForm:any;
-  private carrierFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('CarrierComponent constructed');
@@ -60,12 +58,12 @@ export class CarrierComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'carrierForm', 'carrierFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'carrierForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'carrierFormSub');
+    UiUtil.formUnbind(this, 'carrierForm');
   }
 
   formChange():void {
@@ -90,7 +88,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
   @Input()
   set carrier(carrier:CarrierVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'carrierForm', '_carrier', carrier);
+    UiUtil.formInitialise(this, 'carrierForm', '_carrier', carrier);
     this.recalculateShops();
 
   }

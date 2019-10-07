@@ -143,7 +143,7 @@ export class DataGroupsService {
    */
   removeDataDescriptor(descriptor:DataDescriptorVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/datadescriptor/' + descriptor.datadescriptorId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/impex/datadescriptor/' + descriptor.datadescriptorId, Util.requestOptions())
       .catch(this.handleError);
   }
 

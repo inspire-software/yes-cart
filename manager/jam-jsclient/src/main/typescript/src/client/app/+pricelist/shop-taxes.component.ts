@@ -69,14 +69,10 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
   private taxEdit:TaxVO;
   private taxEditForm:any;
-  private taxEditFormSub:any; // tslint:disable-line:no-unused-variable
-  private initialising:boolean = true; // tslint:disable-line:no-unused-variable
   private validForSaveTax:boolean = false;
 
   private taxconfigEdit:TaxConfigVO;
   private taxconfigEditForm:any;
-  private taxconfigEditFormSub:any; // tslint:disable-line:no-unused-variable
-  private initialising2:boolean = true; // tslint:disable-line:no-unused-variable
   private validForSaveTaxconfig:boolean = true;
 
   @ViewChild('deleteConfirmationModalDialog')
@@ -172,13 +168,13 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'taxEditForm', 'taxEditFormSub', 'formChangeTax', 'initialising', false);
-    UiUtil.formBind(this, 'taxconfigEditForm', 'taxconfigEditFormSub', 'formChangeTaxconfig', 'initialising2', false);
+    UiUtil.formBind(this, 'taxEditForm', 'formChangeTax', false);
+    UiUtil.formBind(this, 'taxconfigEditForm', 'formChangeTaxconfig', false);
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'taxEditFormSub');
-    UiUtil.formUnbind(this, 'taxconfigEditFormSub');
+    UiUtil.formUnbind(this, 'taxEditForm');
+    UiUtil.formUnbind(this, 'taxconfigEditForm');
   }
 
 
@@ -347,12 +343,12 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
     this.validForSaveTax = false;
     if (this.viewMode == ShopTaxesComponent.CONFIGS) {
 
-      UiUtil.formInitialise(this, 'initialising2', 'taxconfigEditForm', 'taxconfigEdit', this.newTaxConfigInstance());
+      UiUtil.formInitialise(this, 'taxconfigEditForm', 'taxconfigEdit', this.newTaxConfigInstance());
       this.editTaxconfigModalDialog.show();
 
     } else {
 
-      UiUtil.formInitialise(this, 'initialising', 'taxEditForm', 'taxEdit', this.newTaxInstance(), false, ['code']);
+      UiUtil.formInitialise(this, 'taxEditForm', 'taxEdit', this.newTaxInstance(), false, ['code']);
       this.editTaxModalDialog.show();
 
     }
@@ -385,14 +381,14 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   protected onRowEditTax(row:TaxVO) {
     LogUtil.debug('ShopTaxesComponent onRowEditTax handler', row);
     this.validForSaveTax = false;
-    UiUtil.formInitialise(this, 'initialising', 'taxEditForm', 'taxEdit', Util.clone(row), row.taxId > 0, ['code']);
+    UiUtil.formInitialise(this, 'taxEditForm', 'taxEdit', Util.clone(row), row.taxId > 0, ['code']);
     this.editTaxModalDialog.show();
   }
 
   protected onRowEditTaxconfig(row:TaxConfigVO) {
     LogUtil.debug('ShopTaxesComponent onRowEditTaxconfig handler', row);
     this.validForSaveTaxconfig = true;
-    UiUtil.formInitialise(this, 'initialising2', 'taxconfigEditForm', 'taxconfigEdit', Util.clone(row));
+    UiUtil.formInitialise(this, 'taxconfigEditForm', 'taxconfigEdit', Util.clone(row));
     this.editTaxconfigModalDialog.show();
   }
 

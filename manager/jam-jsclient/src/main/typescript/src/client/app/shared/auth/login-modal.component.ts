@@ -40,11 +40,9 @@ export class LoginModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private _login:LoginVO = { username: null, password: null, organisation: null };
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private loginForm:any;
-  private loginFormSub:any; // tslint:disable-line:no-unused-variable
 
   private userSub:any;
   private userTokenRefreshBufferMs:number = Config.AUTH_JWT_BUFFER;
@@ -156,11 +154,11 @@ export class LoginModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   formBind():void {
-    UiUtil.formBind(this, 'loginForm', 'loginFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'loginForm', 'delayedChange');
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'loginFormSub');
+    UiUtil.formUnbind(this, 'loginForm');
   }
 
   formChange():void {

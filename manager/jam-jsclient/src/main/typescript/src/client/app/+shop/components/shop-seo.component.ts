@@ -37,11 +37,9 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
   private changed:boolean = false;
   private validForSave:boolean = false;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private shopSEOForm:any;
-  private shopSEOFormSub:any; // tslint:disable-line:no-unused-variable
 
   private loading:boolean = false;
 
@@ -62,12 +60,12 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'shopSEOForm', 'shopSEOFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'shopSEOForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'shopSEOFormSub');
+    UiUtil.formUnbind(this, 'shopSEOForm');
   }
 
   formChange():void {
@@ -126,13 +124,11 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
       this.loading = true;
       let _sub:any = this._shopService.saveShopLocalization(this.shopLocalization).subscribe(shopLocalization => {
         LogUtil.debug('ShopSEOComponent Saved i18n', shopLocalization);
-        this.initialising = true;
-        this.shopLocalization = shopLocalization;
-        this.shopSEOForm.reset(this.shopLocalization);
+
+        UiUtil.formInitialise(this, 'shopSEOForm', 'shopLocalization', shopLocalization);
         this.changed = false;
         this._reload = false;
         this.validForSave = false;
-        this.initialising = false;
         this.loading = false;
         _sub.unsubscribe();
       });
@@ -145,13 +141,11 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
       this.loading = true;
       let _sub:any = this._shopService.getShopLocalization(this.shop.shopId).subscribe(shopLocalization => {
         LogUtil.debug('ShopSEOComponent Refreshed i18n', shopLocalization);
-        this.initialising = true;
-        this.shopLocalization = shopLocalization;
-        this.shopSEOForm.reset(this.shopLocalization);
+
+        UiUtil.formInitialise(this, 'shopSEOForm', 'shopLocalization', shopLocalization);
         this.changed = false;
         this._reload = false;
         this.validForSave = false;
-        this.initialising = false;
         _sub.unsubscribe();
         this.loading = false;
       });

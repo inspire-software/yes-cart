@@ -62,11 +62,9 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
 
   private selectedRow:AliasVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private aliasToEdit:AliasVO;
 
   private shopAliasForm:any;
-  private shopAliasFormSub:any; // tslint:disable-line:no-unused-variable
 
   private loading:boolean = false;
 
@@ -109,11 +107,11 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'shopAliasForm', 'shopAliasFormSub', 'formChange', 'initialising', false);
+    UiUtil.formBind(this, 'shopAliasForm', 'formChange', false);
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'shopAliasFormSub');
+    UiUtil.formUnbind(this, 'shopAliasForm');
   }
 
 
@@ -177,7 +175,7 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
   protected onRowEdit(row:AliasVO) {
     LogUtil.debug('ShopAliasComponent onRowEdit handler', row);
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'shopAliasForm', 'aliasToEdit', Util.clone(row));
+    UiUtil.formInitialise(this, 'shopAliasForm', 'aliasToEdit', Util.clone(row));
     this.editModalDialog.show();
   }
 
@@ -199,7 +197,7 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
   protected onRowNew() {
     LogUtil.debug('ShopAliasComponent onRowNew handler');
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'shopAliasForm', 'aliasToEdit', this.newAliasInstance());
+    UiUtil.formInitialise(this, 'shopAliasForm', 'aliasToEdit', this.newAliasInstance());
     this.editModalDialog.show();
   }
 

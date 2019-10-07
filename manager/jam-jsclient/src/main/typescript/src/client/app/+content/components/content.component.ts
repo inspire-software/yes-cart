@@ -56,11 +56,9 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   private selectedRow:AttrValueContentVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private contentForm:any;
-  private contentFormSub:any; // tslint:disable-line:no-unused-variable
 
   private winSub:any;
 
@@ -164,12 +162,12 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'contentForm', 'contentFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'contentForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'contentFormSub');
+    UiUtil.formUnbind(this, 'contentForm');
   }
 
   formChange():void {
@@ -190,7 +188,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   @Input()
   set content(content:ContentWithBodyVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'contentForm', '_content', content);
+    UiUtil.formInitialise(this, 'contentForm', '_content', content);
     this._changes = [];
     this.visibleContentBodies = this.content != null ? this.getVisibleContentBodies(this.content.contentBodies) : [];
 

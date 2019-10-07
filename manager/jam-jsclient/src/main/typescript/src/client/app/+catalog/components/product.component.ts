@@ -46,11 +46,9 @@ export class ProductComponent implements OnInit, OnDestroy {
   private selectedRowAttribute:AttrValueProductVO;
   private selectedRowAssociation:ProductAssociationVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private productForm:any;
-  private productFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributeValuesComponent')
   private attributeValuesComponent:AttributeValuesComponent;
@@ -152,12 +150,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'productForm', 'productFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'productForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'productFormSub');
+    UiUtil.formUnbind(this, 'productForm');
   }
 
   formChange():void {
@@ -168,7 +166,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   @Input()
   set product(product:ProductWithLinksVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'productForm', '_product', product);
+    UiUtil.formInitialise(this, 'productForm', '_product', product);
     this._changes = [];
     if (this._product != null) {
       this.avPrototype = {

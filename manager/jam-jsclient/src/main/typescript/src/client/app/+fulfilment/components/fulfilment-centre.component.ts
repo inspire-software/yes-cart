@@ -38,11 +38,9 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
   private availableShops:Array<Pair<ShopVO, FulfilmentCentreShopLinkVO>> = [];
   private supportedShops:Array<Pair<ShopVO, FulfilmentCentreShopLinkVO>> = [];
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private centreForm:any;
-  private centreFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('FulfilmentCentreComponent constructed');
@@ -94,12 +92,12 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'centreForm', 'centreFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'centreForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'centreFormSub');
+    UiUtil.formUnbind(this, 'centreForm');
   }
 
   formChange():void {
@@ -124,7 +122,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
   @Input()
   set centre(centre:FulfilmentCentreVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'centreForm', '_centre', centre);
+    UiUtil.formInitialise(this, 'centreForm', '_centre', centre);
     this.recalculateShops();
 
   }

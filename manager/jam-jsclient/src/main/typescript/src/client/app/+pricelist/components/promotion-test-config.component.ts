@@ -50,9 +50,7 @@ export class PromotionTestConfigComponent implements OnInit, OnDestroy {
   @ViewChild('carrierSlaSelectDialog')
   private carrierSlaSelectDialog:CarrierSlaSelectComponent;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private testRulesForm:any;
-  private testRulesFormSub:any; // tslint:disable-line:no-unused-variable
   private validForTest:boolean = false;
 
   constructor(fb: FormBuilder) {
@@ -71,7 +69,7 @@ export class PromotionTestConfigComponent implements OnInit, OnDestroy {
   ngOnInit() {
     LogUtil.debug('PromotionTestConfigComponent ngOnInit');
     this.formBind();
-    UiUtil.formInitialise(this, 'initialising', 'testRulesForm', 'testSku', '');
+    UiUtil.formInitialise(this, 'testRulesForm', 'testSku', '');
   }
 
   ngOnDestroy() {
@@ -84,11 +82,11 @@ export class PromotionTestConfigComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'testRulesForm', 'testRulesFormSub', 'formChange', 'initialising', false);
+    UiUtil.formBind(this, 'testRulesForm', 'formChange', false);
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'testRulesFormSub');
+    UiUtil.formUnbind(this, 'testRulesForm');
   }
 
   formChange():void {

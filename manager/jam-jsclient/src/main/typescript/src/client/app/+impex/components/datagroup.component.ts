@@ -33,11 +33,9 @@ export class DataGroupComponent implements OnInit, OnDestroy {
 
   private _dataGroup:DataGroupVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private dataGroupForm:any;
-  private dataGroupFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('DataGroupComponent constructed');
@@ -58,12 +56,12 @@ export class DataGroupComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'dataGroupForm', 'dataGroupFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'dataGroupForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'dataGroupFormSub');
+    UiUtil.formUnbind(this, 'dataGroupForm');
   }
 
   formChange():void {
@@ -78,7 +76,7 @@ export class DataGroupComponent implements OnInit, OnDestroy {
   @Input()
   set dataGroup(dataGroup:DataGroupVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'dataGroupForm', '_dataGroup', dataGroup);
+    UiUtil.formInitialise(this, 'dataGroupForm', '_dataGroup', dataGroup);
 
   }
 

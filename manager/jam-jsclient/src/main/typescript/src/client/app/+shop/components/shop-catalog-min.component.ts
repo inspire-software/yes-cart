@@ -44,9 +44,7 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
   @ViewChild('editNewCategoryName')
   private editNewCategoryName:ModalComponent;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private newCategoryForm:any;
-  private newCategoryFormSub:any; // tslint:disable-line:no-unused-variable
   private validForSave:boolean = false;
 
   private nodes:Array<ITreeNode>;
@@ -128,11 +126,11 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'newCategoryForm', 'newCategoryFormSub', 'formChange', 'initialising', false);
+    UiUtil.formBind(this, 'newCategoryForm', 'formChange', false);
   }
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'newCategoryFormSub');
+    UiUtil.formUnbind(this, 'newCategoryForm');
   }
 
   formChange():void {
@@ -169,7 +167,7 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
             }
 
             // this.selectedNode = null;
-            // UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+            // UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
             // this.changed = false;
             // this._reload = false;
             _subc.unsubscribe();
@@ -208,7 +206,7 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
                     }
 
                     this.selectedNode = null;
-                    UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+                    UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
                     this.changed = false;
                     this._reload = false;
                     this.loading = false;
@@ -372,7 +370,7 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
   createNew(parent:ITreeNode) {
     LogUtil.debug('ShopCatalogMinComponent createNew for parent', parent);
     this.validForSave = false;
-    UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+    UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
     this.editNewCategoryName.show();
   }
 

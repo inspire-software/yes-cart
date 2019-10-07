@@ -41,11 +41,9 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   private selectedRow:AttrValueBrandVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private brandForm:any;
-  private brandFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributeValuesComponent')
   private attributeValuesComponent:AttributeValuesComponent;
@@ -68,12 +66,12 @@ export class BrandComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'brandForm', 'brandFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'brandForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'brandFormSub');
+    UiUtil.formUnbind(this, 'brandForm');
   }
 
   formChange():void {
@@ -84,7 +82,7 @@ export class BrandComponent implements OnInit, OnDestroy {
   @Input()
   set brand(brand:BrandVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'brandForm', '_brand', brand);
+    UiUtil.formInitialise(this, 'brandForm', '_brand', brand);
     this._changes = [];
 
   }

@@ -138,14 +138,12 @@ export class UiUtil {
    *
    * @param component component object
    * @param form form property on component
-   * @param subscription property on component to hold subscription object Form.statusChanges.subscribe()
    * @param delayedChange property on component for Future object
-   * @param initialising property on component with initialisation flag
    * @param future is delayedChange a Future
    */
-  public static formBind(component:any, form:string, subscription:string, delayedChange:string, initialising:string, future:boolean = true):void {
+  public static formBind(component:any, form:string, delayedChange:string, future:boolean = true):void {
     let cacheKey = (form + Math.random()).replace('.', '');
-    LogUtil.debug('UiUtil.formBind', cacheKey);
+    LogUtil.debug('UiUtil.formBind', cacheKey, form);
     component[form + 'Init'] = false;
     component[form + 'Sub'] = component[form].statusChanges.subscribe((data:any) => {
       LogUtil.debug('UiUtil.formBind.statusChanges form/data/dirty/valid ', form, data, component[form].dirty, component[form].valid);
@@ -174,11 +172,12 @@ export class UiUtil {
    * Un-bind component with a form.
    *
    * @param component component object
-   * @param subscription property on component to hold subscription object Form.statusChanges.subscribe()
+   * @param form form property on component, for which to unbind the subscription
    */
-  public static formUnbind(component:any, subscription:string):void {
+  public static formUnbind(component:any, form:string):void {
+    let subscription = form + 'Sub';
     if (component[subscription]) {
-      LogUtil.debug('UiUtil.formUnbind', subscription);
+      LogUtil.debug('UiUtil.formUnbind', form, subscription);
       component[subscription].unsubscribe();
     }
   }
@@ -222,14 +221,13 @@ export class UiUtil {
    * Initialise form with new data object.
    *
    * @param component component
-   * @param initialising initialising flag
    * @param form form property
    * @param field component internal field name
    * @param value new value
    * @param lock boolean flag to lock fields
    * @param fieldsToLock field to lock if #lock is true and unlock if #lock is false
    */
-  public static formInitialise(component:any, initialising:string, form:string, field:string, value:any, lock:boolean = false, fieldsToLock:string[] = []):void {
+  public static formInitialise(component:any, form:string, field:string, value:any, lock:boolean = false, fieldsToLock:string[] = []):void {
 
     component[form + 'Init'] = true;
 

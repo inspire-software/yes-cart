@@ -46,11 +46,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   private selectedRow:AttrValueCategoryVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private categoryForm:any;
-  private categoryFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributeValuesComponent')
   private attributeValuesComponent:AttributeValuesComponent;
@@ -128,12 +126,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'categoryForm', 'categoryFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'categoryForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'categoryFormSub');
+    UiUtil.formUnbind(this, 'categoryForm');
   }
 
   formChange():void {
@@ -144,7 +142,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   @Input()
   set category(category:CategoryVO) {
 
-    UiUtil.formInitialise(this, 'initialising', 'categoryForm', '_category', category);
+    UiUtil.formInitialise(this, 'categoryForm', '_category', category);
     this._changes = [];
 
   }

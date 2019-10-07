@@ -36,11 +36,9 @@ export class PriceComponent implements OnInit, OnDestroy {
 
   private _pricelist:PriceListVO;
 
-  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
 
   private pricelistForm:any;
-  private pricelistFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('productSkuSelectDialog')
   private productSkuSelectDialog:ProductSkuSelectComponent;
@@ -82,12 +80,12 @@ export class PriceComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    UiUtil.formBind(this, 'pricelistForm', 'pricelistFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'pricelistForm', 'delayedChange');
   }
 
 
   formUnbind():void {
-    UiUtil.formUnbind(this, 'pricelistFormSub');
+    UiUtil.formUnbind(this, 'pricelistForm');
   }
 
   formChange():void {
@@ -95,15 +93,11 @@ export class PriceComponent implements OnInit, OnDestroy {
     this.dataChanged.emit({ source: this._pricelist, valid: this.pricelistForm.valid });
   }
 
-  formMarkDirty(field:string):void {
-    UiUtil.formMarkFieldDirty(this, 'pricelistForm', field);
-  }
-
   @Input()
   set pricelist(pricelist: PriceListVO) {
 
     let lock = pricelist == null || pricelist.skuPriceId > 0;
-    UiUtil.formInitialise(this, 'initialising', 'pricelistForm', '_pricelist', pricelist, lock, ['skuCode']);
+    UiUtil.formInitialise(this, 'pricelistForm', '_pricelist', pricelist, lock, ['skuCode']);
 
   }
 
@@ -153,7 +147,7 @@ export class PriceComponent implements OnInit, OnDestroy {
     if (event.valid && this._pricelist != null && this._pricelist.skuPriceId <= 0) {
       this._pricelist.skuCode = event.source.code;
       this._pricelist.skuName = event.source.name;
-      this.formMarkDirty('skuCode');
+      this.delayedChange.delay();
     }
   }
 
@@ -173,6 +167,7 @@ export class PriceComponent implements OnInit, OnDestroy {
       if (this.pricelist.tag == null || this.pricelist.tag == '') {
         this.pricelist.tag = 'shipping'; // suggest shipping tag so that it is easier to find shipping prices
       }
+      this.delayedChange.delay();
     }
   }
 
@@ -188,6 +183,7 @@ export class PriceComponent implements OnInit, OnDestroy {
     LogUtil.debug('PriceComponent onFulfilmentCentreSelected');
     if (event.valid) {
       this.pricelist.supplier = event.source.code;
+      this.delayedChange.delay();
     }
   }
 
