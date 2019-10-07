@@ -22,7 +22,7 @@
     <parent>
         <artifactId>payment-modules</artifactId>
         <groupId>org.yes</groupId>
-        <version>3.6.2</version>
+        <version>3.6.3</version>
     </parent>
     <artifactId>payment-module-paypal</artifactId>
     <name>Yes cart payment: PayPal</name>
