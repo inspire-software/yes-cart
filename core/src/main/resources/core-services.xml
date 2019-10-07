@@ -1336,8 +1336,9 @@
     <bean id="mailTemplateResourcesProviderShopContent"
           class="org.yes.cart.service.mail.impl.MailTemplateResourcesProviderShopContentImpl">
         <constructor-arg index="0" ref="contentService"/>
-        <constructor-arg index="1" ref="systemService"/>
-        <constructor-arg index="2" ref="imageService"/>
+        <constructor-arg index="1" ref="contentImageNameStrategy"/>
+        <constructor-arg index="2" ref="systemService"/>
+        <constructor-arg index="3" ref="imageService"/>
     </bean>
 
     <bean id="mailTemplateResourcesProviderTheme"
