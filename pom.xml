@@ -116,6 +116,12 @@
         <!-- Thymeleaf -->
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
 
+        <!-- FOP (PDF) -->
+        <apache-fop.version>2.3</apache-fop.version>
+
+        <!-- POI (XLS) -->
+        <apache-poi.version>4.1.0</apache-poi.version>
+
         <!-- Storefront global versions -->
         <wicket.version>8.5.0</wicket.version>
         <jetty.version>6.1.4</jetty.version>

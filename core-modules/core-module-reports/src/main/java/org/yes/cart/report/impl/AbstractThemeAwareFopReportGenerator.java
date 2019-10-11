@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.report.ReportDescriptor;
+import org.yes.cart.report.ReportDescriptorPDF;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ShopService;
@@ -99,8 +100,9 @@ public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopRe
         final Shop shop = resolveShop(descriptor, parameters, data, lang);
 
         try {
+            final String langXslfo = ((ReportDescriptorPDF) descriptor).getLangXslfo(lang);
             return new StreamSource(new FopThemeResourceResolver(
-                    shop, lang, descriptor.getReportId(), descriptor.getLangXslfo(lang),
+                    shop, lang, descriptor.getReportId(), langXslfo,
                     themeService, contentService, servletContext, systemService, imageService
             ).getResource((URI) null));
         } catch (Exception exp) {

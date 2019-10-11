@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
 import { I18nEventBus } from './../../shared/services/index';
-import {FormBuilder, Validators} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
 import { PromotionTestVO, ProductSkuVO, CarrierSlaVO, FulfilmentCentreInfoVO } from './../../shared/model/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';

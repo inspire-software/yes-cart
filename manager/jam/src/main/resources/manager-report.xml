@@ -27,8 +27,8 @@
 
     <import resource="classpath:core-reports.xml"/>
 
-    <bean id="reportDelivery" class="org.yes.cart.report.ReportDescriptor">
-        <property name="reportId" value="reportDelivery"/>
+    <bean id="reportDeliveryPDF" class="org.yes.cart.report.ReportDescriptorPDF">
+        <property name="reportId" value="reportDeliveryPDF"/>
         <property name="xslfoBase" value="client/order/delivery"/>
         <property name="parameters">
             <list>
@@ -42,8 +42,8 @@
     </bean>
 
 
-    <bean id="reportAvailableStock" class="org.yes.cart.report.ReportDescriptor">
-        <property name="reportId" value="reportAvailableStock"/>
+    <bean id="reportAvailableStockPDF" class="org.yes.cart.report.ReportDescriptorPDF">
+        <property name="reportId" value="reportAvailableStockPDF"/>
         <property name="xslfoBase" value="admin/inventory/available-stock"/>
         <property name="parameters">
             <list>
@@ -61,8 +61,8 @@
         </property>
     </bean>
 
-    <bean id="reportPayments" class="org.yes.cart.report.ReportDescriptor">
-        <property name="reportId" value="reportPayments"/>
+    <bean id="reportPaymentsPDF" class="org.yes.cart.report.ReportDescriptorPDF">
+        <property name="reportId" value="reportPaymentsPDF"/>
         <property name="xslfoBase" value="admin/payment/payments"/>
         <property name="parameters">
             <list>
@@ -85,37 +85,100 @@
         </property>
     </bean>
 
+    <bean id="reportAvailableStockXLSX" class="org.yes.cart.report.ReportDescriptorXLSX">
+        <property name="reportId" value="reportAvailableStockXLSX"/>
+        <property name="parameters">
+            <list>
+                <bean class="org.yes.cart.report.ReportParameter">
+                    <property name="parameterId" value="warehouse"/>
+                    <property name="businesstype" value="org.yes.cart.domain.dto.WarehouseDTO"/>
+                    <property name="mandatory" value="true"/>
+                </bean>
+                <bean class="org.yes.cart.report.ReportParameter">
+                    <property name="parameterId" value="skuCode"/>
+                    <property name="businesstype" value="String"/>
+                    <property name="mandatory" value="false"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="salesByCategoryXLSX" class="org.yes.cart.report.ReportDescriptorXLSX">
+        <property name="visible" value="false"/>
+        <property name="reportId" value="salesByCategoryXLSX"/>
+        <property name="parameters">
+            <list>
+                <bean class="org.yes.cart.report.ReportParameter">
+                    <property name="parameterId" value="shop"/>
+                    <property name="businesstype" value="org.yes.cart.domain.dto.ShopDTO"/>
+                    <property name="mandatory" value="true"/>
+                </bean>
+                <bean class="org.yes.cart.report.ReportParameter">
+                    <property name="parameterId" value="fromDate"/>
+                    <property name="businesstype" value="Date"/>
+                    <property name="mandatory" value="true"/>
+                </bean>
+                <bean class="org.yes.cart.report.ReportParameter">
+                    <property name="parameterId" value="tillDate"/>
+                    <property name="businesstype" value="Date"/>
+                    <property name="mandatory" value="true"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
     <util:list id="reportDescriptors">
-        <ref bean="reportAvailableStock"/>
-        <ref bean="reportPayments"/>
-        <ref bean="reportDelivery"/>
+        <ref bean="reportAvailableStockPDF"/>
+        <ref bean="reportPaymentsPDF"/>
+        <ref bean="reportDeliveryPDF"/>
+        <ref bean="reportAvailableStockXLSX"/>
+        <ref bean="salesByCategoryXLSX"/>
     </util:list>
 
     <util:map id="reportWorkers">
-        <entry key="reportPayments">
-            <bean class="org.yes.cart.report.impl.PaymentReportWorker">
+        <entry key="reportPaymentsPDF">
+            <bean class="org.yes.cart.report.impl.VoPaymentListReportWorker">
                 <constructor-arg index="0" ref="voPaymentService"/>
             </bean>
         </entry>
-        <entry key="reportDelivery">
-            <bean class="org.yes.cart.report.impl.DeliveryReportWorker">
+        <entry key="reportDeliveryPDF">
+            <bean class="org.yes.cart.report.impl.CustomerOrderReportWorker">
                 <constructor-arg index="0" ref="customerOrderService"/>
                 <constructor-arg index="1" ref="shopService"/>
                 <constructor-arg index="2" ref="shopFederationStrategy"/>
             </bean>
         </entry>
-        <entry key="reportAvailableStock">
-            <bean class="org.yes.cart.report.impl.InventoryReportWorker">
+        <entry key="reportAvailableStockPDF">
+            <bean class="org.yes.cart.report.impl.VoInventoryListReportWorker">
                 <constructor-arg index="0" ref="voFulfilmentService"/>
+            </bean>
+        </entry>
+        <entry key="reportAvailableStockXLSX">
+            <bean class="org.yes.cart.report.impl.InventoryArrayReportWorker">
+                <constructor-arg index="0" ref="voFulfilmentService"/>
+            </bean>
+        </entry>
+        <entry key="salesByCategoryXLSX">
+            <bean class="org.yes.cart.report.impl.SalesByCategoryArrayReportWorker">
+                <constructor-arg index="0" ref="customerOrderService"/>
+                <constructor-arg index="1" ref="shopService"/>
+                <constructor-arg index="2" ref="shopFederationStrategy"/>
+                <constructor-arg index="3" ref="productService"/>
+                <constructor-arg index="4" ref="productCategoryService"/>
+                <constructor-arg index="5" ref="categoryService"/>
             </bean>
         </entry>
     </util:map>
 
-    
+    <util:list id="reportGenerators">
+        <ref bean="reportGeneratorPDF"/>
+        <ref bean="reportGeneratorXLSX"/>
+    </util:list>
+
     <bean id="reportService" class="org.yes.cart.report.impl.ReportServiceImpl">
         <constructor-arg index="0" ref="reportDescriptors"/>
         <constructor-arg index="1" ref="reportWorkers"/>
-        <constructor-arg index="2" ref="reportGenerator"/>
+        <constructor-arg index="2" ref="reportGenerators"/>
         <constructor-arg index="3" ref="fsImpexFileManager"/>
     </bean>
 

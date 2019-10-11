@@ -30,6 +30,7 @@ public class VoReportRequestParameter {
     private String parameterId;
     private List<MutablePair<String, String>> options;
     private String value;
+    private String businesstype;
     private boolean mandatory;
 
     public String getParameterId() {
@@ -54,6 +55,14 @@ public class VoReportRequestParameter {
 
     public void setValue(final String value) {
         this.value = value;
+    }
+
+    public String getBusinesstype() {
+        return businesstype;
+    }
+
+    public void setBusinesstype(final String businesstype) {
+        this.businesstype = businesstype;
     }
 
     public boolean isMandatory() {

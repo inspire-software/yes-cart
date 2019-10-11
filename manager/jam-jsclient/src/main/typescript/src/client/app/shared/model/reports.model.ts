@@ -50,6 +50,7 @@ export interface ReportRequestParameterVO {
   parameterId : string;
   options : Pair<string, string>[];
   value : string;
+  businesstype : string;
   mandatory : boolean;
 
 }

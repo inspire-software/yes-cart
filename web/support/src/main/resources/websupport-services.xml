@@ -120,7 +120,7 @@
         <constructor-arg index="4" ref="carrierSlaService"/>
         <constructor-arg index="5" ref="paymentProcessorFactory"/>
         <constructor-arg index="6" ref="paymentModulesManager"/>
-        <constructor-arg index="7" ref="reportGenerator"/>
+        <constructor-arg index="7" ref="reportGeneratorPDF"/>
     </bean>
 
     <bean id="categoryServiceFacade"  class="org.yes.cart.web.support.service.impl.CategoryServiceFacadeImpl">

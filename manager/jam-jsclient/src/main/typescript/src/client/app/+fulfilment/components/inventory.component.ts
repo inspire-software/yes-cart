@@ -93,6 +93,18 @@ export class InventoryComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(this.selectedInventory);
   }
 
+  protected isAvailableFromNow(row:InventoryVO) {
+    return row.availablefrom === null || (row.availablefrom < new Date());
+  }
+
+  protected isAvailableToNow(row:InventoryVO) {
+    return row.availableto === null || (row.availableto > new Date());
+  }
+
+  protected isReleasedNow(row:InventoryVO) {
+    return row.releaseDate === null || (row.releaseDate < new Date());
+  }
+
   private filterInventory() {
 
     this.filteredInventory = this._inventory;
@@ -107,18 +119,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
     if (_total > 0) {
       this.resetLastPageEnd();
     }
-  }
-
-  protected isAvailableFromNow(row:InventoryVO) {
-    return row.availablefrom === null || (row.availablefrom < new Date());
-  }
-
-  protected isAvailableToNow(row:InventoryVO) {
-    return row.availableto === null || (row.availableto > new Date());
-  }
-
-  protected isReleasedNow(row:InventoryVO) {
-    return row.releaseDate === null || (row.releaseDate < new Date());
   }
 
 }

@@ -14,9 +14,11 @@
  *    limitations under the License.
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { TabsetComponent } from 'ngx-bootstrap';
 import { ReportDescriptorVO, ReportRequestVO, ReportRequestParameterVO, Pair } from './../shared/model/index';
 import { ReportsService, I18nEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { Futures } from './../shared/event/index';
 import { LogUtil } from './../shared/log/index';
 import { Config } from './../shared/config/env.config';
 
@@ -44,6 +46,9 @@ export class ReportsComponent implements OnInit {
   @ViewChild('selectFileModalDialog')
   private selectFileModalDialog:ModalComponent;
 
+  @ViewChild('reportTabs')
+  private reportTabs:TabsetComponent;
+
   /**
    * Construct reports panel
    *
@@ -62,7 +67,6 @@ export class ReportsComponent implements OnInit {
     ReportsComponent.tabs = tabs;
   }
 
-  /** {@inheritDoc} */
   public ngOnInit() {
     LogUtil.debug('ReportsComponent ngOnInit');
     this.onRefreshHandler();
@@ -87,7 +91,13 @@ export class ReportsComponent implements OnInit {
         let request:ReportRequestVO = { reportId: descriptor.reportId, lang: lang, parameters: [] };
 
         descriptor.parameters.forEach(param => {
-          let rp:ReportRequestParameterVO = { parameterId: param.parameterId, options: [], value: null, mandatory : param.mandatory };
+          let rp:ReportRequestParameterVO = {
+            parameterId: param.parameterId,
+            options: [],
+            value: null,
+            businesstype: param.businesstype,
+            mandatory : param.mandatory
+          };
           request.parameters.push(rp);
         });
 
@@ -99,12 +109,40 @@ export class ReportsComponent implements OnInit {
 
           this.tabs.push(_tab);
 
+          let that = this;
+
+          Futures.once(function () {
+            if (that.reportTabs.tabs.length == that.tabs.length) {
+              that.selectedTab = that.tabs.length - 1;
+              if (!that.reportTabs.tabs[that.selectedTab].active) {
+                that.reportTabs.tabs[that.selectedTab].active = true;
+              }
+            } else if (that.tabs.length == 1) {
+              that.selectedTab = 0;
+            }
+          }, 50).delay();
+
+
           _sub.unsubscribe();
 
         });
 
 
       }
+
+    }
+
+  }
+
+  protected onDateValueChange(event:any, requestParam:ReportRequestParameterVO) {
+
+    LogUtil.debug('ReportsComponent date change', event);
+
+    if (event.valid) {
+
+      requestParam.value = event.source;
+
+      this.validateCurrentTabForm();
 
     }
 
@@ -139,9 +177,18 @@ export class ReportsComponent implements OnInit {
 
   }
 
-  protected onTabDeleteSelected() {
-    this.tabs.splice(this.selectedTab, 1);
-    this.tabs = this.tabs.slice(0, this.tabs.length);
+  protected onTabDeleteTab(tab:QueryTabData) {
+    if (tab != null) {
+      let idx = this.tabs.indexOf(tab);
+      if (idx != -1) {
+        let wasActive = this.selectedTab == idx;
+        this.tabs.splice(idx, 1);
+        this.tabs = this.tabs.slice(0, this.tabs.length);
+        if (wasActive) {
+          this.selectedTab = -1;
+        }
+      }
+    }
   }
 
   protected onRunHandler() {
@@ -156,7 +203,7 @@ export class ReportsComponent implements OnInit {
 
       data.running = false;
       data.filename = res;
-      data.success = res != null && res != '' && /\S+.*\.pdf/.test(data.filename);
+      data.success = res != null && res != '';
       data.completed = data.success;
       if (data.success) {
         window.postMessage(res, '*');

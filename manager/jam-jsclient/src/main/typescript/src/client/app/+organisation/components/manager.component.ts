@@ -199,7 +199,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
       this.supportedShops = [];
     }
 
-    this.mustSelectShop = this._manager != null && !(this._manager.managerId > 0) && (this._manager.managerShops == null || this._manager.managerShops.length == 0)
+    this.mustSelectShop = this._manager != null && !(this._manager.managerId > 0) && (this._manager.managerShops == null || this._manager.managerShops.length == 0);
   }
 
   private recalculateRoles():void {

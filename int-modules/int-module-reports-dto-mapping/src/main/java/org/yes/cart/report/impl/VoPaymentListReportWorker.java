@@ -17,11 +17,13 @@
 package org.yes.cart.report.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
 import org.yes.cart.service.vo.VoPaymentService;
+import org.yes.cart.utils.DateUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,13 +35,13 @@ import java.util.Map;
  * Date: 12/11/2014
  * Time: 10:29
  */
-public class PaymentReportWorker implements ReportWorker {
+public class VoPaymentListReportWorker implements ReportWorker {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PaymentReportWorker.class);
+    private static final Logger LOG = LoggerFactory.getLogger(VoPaymentListReportWorker.class);
 
     private final VoPaymentService paymentService;
 
-    public PaymentReportWorker(final VoPaymentService paymentService) {
+    public VoPaymentListReportWorker(final VoPaymentService paymentService) {
         this.paymentService = paymentService;
     }
 
@@ -66,11 +68,19 @@ public class PaymentReportWorker implements ReportWorker {
             filter.append("#").append(orderNumber);
         } else if (fromDate != null || tillDate != null) {
             if (StringUtils.isNotBlank(fromDate)) {
-                filter.append(fromDate);
+                if (NumberUtils.toLong(fromDate) > 0L) {
+                    filter.append(DateUtils.formatSDT(DateUtils.ldtFrom(NumberUtils.toLong(fromDate))));
+                } else {
+                    filter.append(fromDate);
+                }
             }
             filter.append("<");
             if (StringUtils.isNotBlank(tillDate)) {
-                filter.append(tillDate);
+                if (NumberUtils.toLong(tillDate) > 0L) {
+                    filter.append(DateUtils.formatSDT(DateUtils.ldtFrom(NumberUtils.toLong(tillDate))));
+                } else {
+                    filter.append(tillDate);
+                }
             }
         }
 

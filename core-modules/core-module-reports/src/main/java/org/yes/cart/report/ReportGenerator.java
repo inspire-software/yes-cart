@@ -27,6 +27,15 @@ import java.util.Map;
 public interface ReportGenerator {
 
     /**
+     * Determine whether report generator supports given report descriptor.
+     *
+     * @param reportDescriptor descriptor to check
+     *
+     * @return true if supports
+     */
+    boolean supports(ReportDescriptor reportDescriptor);
+
+    /**
      * Generate report as bytes using given descriptor for data data object provided.
      *
      * @param descriptor report descriptor

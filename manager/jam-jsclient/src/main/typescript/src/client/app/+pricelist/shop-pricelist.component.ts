@@ -434,7 +434,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
         this.pricelist = allpricelist;
         this.selectedPricelist = null;
         this.pricelistEdit = null;
-        this.viewMode == ShopPriceListComponent.PRICELIST;
+        this.viewMode = ShopPriceListComponent.PRICELIST;
         this.changed = false;
         this.validForSave = false;
         this.pricelistFilterCapped = this.pricelist.length >= max;
@@ -445,7 +445,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       this.pricelist = [];
       this.selectedPricelist = null;
       this.pricelistEdit = null;
-      this.viewMode == ShopPriceListComponent.PRICELIST;
+      this.viewMode = ShopPriceListComponent.PRICELIST;
       this.changed = false;
       this.validForSave = false;
       this.pricelistFilterCapped = false;

@@ -17,8 +17,6 @@
 package org.yes.cart.report;
 
 
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +32,6 @@ public class ReportDescriptor {
 
     private String reportId;
     private boolean visible = true;
-    private String xslfoBase;
 
     private List<ReportParameter> parameters = new ArrayList<>();
 
@@ -86,40 +83,12 @@ public class ReportDescriptor {
         this.parameters = parameters;
     }
 
-    /**
-     * Get xsl fo file name for this reports.
-     * @return xsl fo file name for this reports.
-     */
-    public String getXslfoBase() {
-        return xslfoBase;
-    }
-
-    /**
-     * Get xsl fo file name for this reports.
-     * @param lang lang
-     * @return xsl fo file name for this reports.
-     */
-    public String getLangXslfo(final String lang) {
-        if (StringUtils.isNotBlank(lang)) {
-            return xslfoBase + "_" + lang + ".xslfo";
-        }
-        return xslfoBase + ".xslfo";
-    }
-
-    /**
-     * Set xsl fo file name for this reports.
-     * @param xslfoBase xsl fo file name for this reports.
-     */
-    public void setXslfoBase(String xslfoBase) {
-        this.xslfoBase = xslfoBase;
-    }
-
 
     @Override
     public String toString() {
         return "ReportDescriptor{" +
                 "reportId='" + reportId + '\'' +
-                ", xslfoBase='" + xslfoBase + '\'' +
+                ", visible=" + visible +
                 '}';
     }
 }

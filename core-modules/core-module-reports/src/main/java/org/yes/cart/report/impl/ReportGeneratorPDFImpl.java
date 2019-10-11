@@ -39,18 +39,18 @@ import java.util.Map;
  * Date: 26/10/2015
  * Time: 21:13
  */
-public class ReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator {
+public class ReportGeneratorPDFImpl extends AbstractThemeAwareFopReportGenerator {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReportGeneratorImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReportGeneratorPDFImpl.class);
 
     private final ReportObjectStreamFactory reportObjectStreamFactory;
 
-    public ReportGeneratorImpl(final ThemeService themeService,
-                               final ShopService shopService,
-                               final ContentService contentService,
-                               final SystemService systemService,
-                               final ImageService imageService,
-                               final ReportObjectStreamFactory reportObjectStreamFactory) {
+    public ReportGeneratorPDFImpl(final ThemeService themeService,
+                                  final ShopService shopService,
+                                  final ContentService contentService,
+                                  final SystemService systemService,
+                                  final ImageService imageService,
+                                  final ReportObjectStreamFactory reportObjectStreamFactory) {
         super(themeService, shopService, contentService, systemService, imageService);
         this.reportObjectStreamFactory = reportObjectStreamFactory;
     }

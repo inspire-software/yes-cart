@@ -195,26 +195,31 @@ export class UiUtil {
     component[form].controls[field].markAsDirty({ onlySelf: onlySelf });
   }
 
+  /**
+   * Mark field dirty and set error onto control if required.
+   *
+   * @param component component
+   * @param form form
+   * @param field filed to mark dirty
+   * @param {FormValidationEvent<any>} event update event
+   */
   public static formDataChange(component:any, form:string, field:string, event:FormValidationEvent<any>):void {
     LogUtil.debug('UiUtil.formDataChange', form, field, event);
     UiUtil._formDataChange(component, form, field, event);
   }
 
+
+  /**
+   * Mark field dirty and set error onto control if required.
+   *
+   * @param component component
+   * @param form form
+   * @param field filed to mark dirty
+   * @param {FormValidationEvent<any>} event update event
+   */
   public static formI18nDataChange(component:any, form:string, field:string, event:FormValidationEvent<any>):void {
     LogUtil.debug('UiUtil.formI18nDataChange', form, field, event);
     UiUtil._formDataChange(component, form, field, event);
-  }
-
-  private static _formDataChange(component:any, form:string, field:string, event:FormValidationEvent<any>):void {
-    let dirty = component[form].dirty;
-    if (!dirty) {
-      UiUtil.formMarkFieldDirty(component, form, field, false);
-    }
-    if (event.valid) {
-      component[form].controls[field].setErrors(null, {emitEvent: true});
-    } else {
-      component[form].controls[field].setErrors({'invalid': true}, {emitEvent: true});
-    }
   }
 
   /**
@@ -253,6 +258,17 @@ export class UiUtil {
 
   }
 
+  private static _formDataChange(component:any, form:string, field:string, event:FormValidationEvent<any>):void {
+    let dirty = component[form].dirty;
+    if (!dirty) {
+      UiUtil.formMarkFieldDirty(component, form, field, false);
+    }
+    if (event.valid) {
+      component[form].controls[field].setErrors(null, {emitEvent: true});
+    } else {
+      component[form].controls[field].setErrors({'invalid': true}, {emitEvent: true});
+    }
+  }
 
   private static toTwoChars(num:number):string {
     if (num > 9) {

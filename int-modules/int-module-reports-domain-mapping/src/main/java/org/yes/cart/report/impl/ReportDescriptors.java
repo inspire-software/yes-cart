@@ -17,6 +17,7 @@
 package org.yes.cart.report.impl;
 
 import org.yes.cart.report.ReportDescriptor;
+import org.yes.cart.report.ReportDescriptorPDF;
 import org.yes.cart.report.ReportParameter;
 
 import java.util.Collections;
@@ -29,8 +30,8 @@ import java.util.Collections;
 public class ReportDescriptors {
 
     public static ReportDescriptor reportDelivery() {
-        final ReportDescriptor receipt = new ReportDescriptor();
-        receipt.setReportId("reportDelivery");
+        final ReportDescriptorPDF receipt = new ReportDescriptorPDF();
+        receipt.setReportId("reportDeliveryPDF");
         receipt.setXslfoBase("client/order/delivery");
         final ReportParameter param1 = new ReportParameter();
         param1.setParameterId("orderNumber");

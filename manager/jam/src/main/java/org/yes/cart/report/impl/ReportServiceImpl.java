@@ -42,7 +42,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final List<ReportDescriptor> reportDescriptors;
     private final Map<String, ReportWorker> reportWorkers;
-    private final ReportGenerator reportGenerator;
+    private final List<ReportGenerator> reportGenerators;
     private final FileManager fileManager;
 
     /**
@@ -50,17 +50,17 @@ public class ReportServiceImpl implements ReportService {
      *
      * @param reportDescriptors list of configured reports.
      * @param reportWorkers     report workers
-     * @param reportGenerator   report generator
+     * @param reportGenerators   report generator
      * @param fileManager       file manager
      */
     public ReportServiceImpl(final List<ReportDescriptor> reportDescriptors,
                              final Map<String, ReportWorker> reportWorkers,
-                             final ReportGenerator reportGenerator,
+                             final List<ReportGenerator> reportGenerators,
                              final FileManager fileManager) {
 
         this.reportDescriptors = reportDescriptors;
         this.reportWorkers = reportWorkers;
-        this.reportGenerator = reportGenerator;
+        this.reportGenerators = reportGenerators;
 
         this.fileManager = fileManager;
     }
@@ -94,6 +94,8 @@ public class ReportServiceImpl implements ReportService {
             }
         }
 
+        reports.sort((a, b) -> a.getReportId().compareTo(b.getReportId()));
+
         return reports;
     }
 
@@ -118,9 +120,9 @@ public class ReportServiceImpl implements ReportService {
                 rp.setParameterId(parameter.getParameterId());
                 rp.setValue((String) values.get(parameter.getParameterId()));
                 rp.setMandatory(parameter.isMandatory());
+                rp.setBusinesstype(parameter.getBusinesstype());
 
                 if (parameter.getBusinesstype().startsWith("org.yes.cart")) {
-
 
                     final List<ReportPair> option = reportWorker.getParameterValues(
                             reportRequest.getLang(),
@@ -136,6 +138,7 @@ public class ReportServiceImpl implements ReportService {
                     rp.setOptions(selection);
 
                 }
+
                 requestParams.add(rp);
 
             }
@@ -158,7 +161,7 @@ public class ReportServiceImpl implements ReportService {
     public String generateReport(final VoReportRequest reportRequest) throws Exception {
 
         final String timestamp = DateUtils.impexFileTimestamp();
-        final File target = new File(this.fileManager.home() + File.separator + "reports" + File.separator + reportRequest.getReportId() + "_" + timestamp + ".pdf");
+        final File target = new File(this.fileManager.home() + File.separator + "reports" + File.separator + reportRequest.getReportId() + "_" + timestamp + determineExtension(reportRequest));
 
         if (!target.getParentFile().exists()) {
             target.getParentFile().mkdirs();
@@ -180,6 +183,15 @@ public class ReportServiceImpl implements ReportService {
             selection.put(value.getParameterId(), value.getValue());
         }
         return selection;
+    }
+
+    private String determineExtension(final VoReportRequest reportRequest) {
+        if (reportRequest.getReportId().contains("PDF")) {
+            return ".pdf";
+        } else if (reportRequest.getReportId().contains("XLSX")) {
+            return ".xlsx";
+        }
+        return ".out";
     }
 
 
@@ -204,8 +216,12 @@ public class ReportServiceImpl implements ReportService {
 
         if (CollectionUtils.isNotEmpty(rez)) {
 
-            this.reportGenerator.generateReport(descriptor, currentSelection, rez, lang, reportStream);
-            return true;
+            for (final ReportGenerator generator : this.reportGenerators) {
+                if (generator.supports(descriptor)) {
+                    generator.generateReport(descriptor, currentSelection, rez, lang, reportStream);
+                    return true;
+                }
+            }
 
         }
 

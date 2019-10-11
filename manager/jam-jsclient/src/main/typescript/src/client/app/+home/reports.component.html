@@ -24,11 +24,6 @@
         <i class="fa fa-refresh"></i>
       </button>
 
-      <button type="button" (click)="onTabDeleteSelected()" [disabled]="tabs.length == 0" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REPORTREMOVE' | translate }}">
-        <i class="fa fa-remove"></i>
-      </button>
-
-
     </div>
 
     <div>
@@ -37,23 +32,36 @@
         <p class="bg-info text-padding">{{ 'REPORT_SELECT_TIP' | translate }} <span><button type="button" (click)="onNewTabHandler()" class="btn btn-default btn-circle"><i class="fa fa-plus"></i></button></span></p>
       </div>
 
-      <tabset>
-        <tab *ngFor="let tab of tabs; let i = index" heading="{{ (i+1) }} {{ 'REPORT_' + tab.descriptor.reportId | translate }}" (select)="tabSelected(i)">
-
+      <tabset #reportTabs>
+        <tab *ngFor="let tab of tabs; let i = index" (select)="tabSelected(i)">
+          <ng-template tabHeading>
+            {{ (i+1) }} {{ 'REPORT_' + tab.descriptor.reportId | translate }}
+            <a (click)="onTabDeleteTab(tab)" [hidden]="tab.running" class="js-click" title="{{ 'MODAL_BUTTON_QUERYTABREMOVE' | translate }}">
+              <i class="fa fa-remove"></i>
+            </a>
+          </ng-template>
           <div class="row">
             <div class="col-md-9 col-lg-6">
               <div class="panel-body">
                 <form>
                   <fieldset>
-                    <div *ngFor="let requestParam of tab.request.parameters" class="form-group">
-                      <label>{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}</label>
+                    <div *ngFor="let requestParam of tab.request.parameters">
                       <ng-template [ngIf]="requestParam.options != null">
-                        <select class="form-control" name="{{ requestParam.parameterId + '_' + i }}"  [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
-                          <option *ngFor="let opt of requestParam.options" value="{{ opt.first}}">{{ opt.second }}</option>
-                        </select>
+                        <div class="form-group">
+                          <label>{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}</label>
+                          <select class="form-control" name="{{ requestParam.parameterId + '_' + i }}"  [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
+                            <option *ngFor="let opt of requestParam.options" value="{{ opt.first}}">{{ opt.second }}</option>
+                          </select>
+                        </div>
                       </ng-template>
-                      <ng-template [ngIf]="requestParam.options == null">
-                        <input class="form-control" name="{{ requestParam.parameterId + '_' + i }}" type="text" [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
+                      <ng-template [ngIf]="requestParam.options == null && requestParam.businesstype == 'Date'">
+                        <yc-datetime title="{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}" [value]="requestParam.value" (dataChanged)="onDateValueChange($event, requestParam)"></yc-datetime>
+                      </ng-template>
+                      <ng-template [ngIf]="requestParam.options == null && requestParam.businesstype != 'Date'">
+                        <div class="form-group">
+                          <label>{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}</label>
+                          <input class="form-control" name="{{ requestParam.parameterId + '_' + i }}" type="text" [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
+                        </div>
                       </ng-template>
                     </div>
                     <div class="form-group {{ tab.running && !tab.completed ? 'running-job-log' : '' }}" [hidden]="!tab.running && !tab.completed">

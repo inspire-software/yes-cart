@@ -40,17 +40,17 @@ import java.util.Map;
  * Date: 12/11/2014
  * Time: 13:52
  */
-public class DeliveryReportWorker implements ReportWorker {
+public class CustomerOrderReportWorker implements ReportWorker {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DeliveryReportWorker.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CustomerOrderReportWorker.class);
 
     private final CustomerOrderService customerOrderService;
     private final ShopService shopService;
     private final ShopFederationStrategy shopFederationStrategy;
 
-    public DeliveryReportWorker(final CustomerOrderService customerOrderService,
-                                final ShopService shopService,
-                                final ShopFederationStrategy shopFederationStrategy) {
+    public CustomerOrderReportWorker(final CustomerOrderService customerOrderService,
+                                     final ShopService shopService,
+                                     final ShopFederationStrategy shopFederationStrategy) {
         this.customerOrderService = customerOrderService;
         this.shopService = shopService;
         this.shopFederationStrategy = shopFederationStrategy;

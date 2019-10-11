@@ -30,11 +30,11 @@ import java.util.*;
  * Date: 12/11/2014
  * Time: 15:19
  */
-public class InventoryReportWorker implements ReportWorker {
+public class VoInventoryListReportWorker implements ReportWorker {
 
     private final VoFulfilmentService fulfilmentService;
 
-    public InventoryReportWorker(final VoFulfilmentService fulfilmentService) {
+    public VoInventoryListReportWorker(final VoFulfilmentService fulfilmentService) {
         this.fulfilmentService = fulfilmentService;
     }
 
@@ -48,8 +48,9 @@ public class InventoryReportWorker implements ReportWorker {
                 final List<VoFulfilmentCentre> warehouses = fulfilmentService.getAllFulfilmentCentres();
                 final List<ReportPair> select = new ArrayList<>();
                 for (final VoFulfilmentCentre warehouse : warehouses) {
-                    select.add(new ReportPair(warehouse.getName(), String.valueOf(warehouse.getWarehouseId())));
+                    select.add(new ReportPair(warehouse.getCode() + ": " + warehouse.getName(), String.valueOf(warehouse.getWarehouseId())));
                 }
+                select.sort((a, b) -> a.getLabel().compareToIgnoreCase(b.getLabel()));
                 return select;
             } catch (Exception e) {
                 return Collections.emptyList();

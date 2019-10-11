@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, Input } from '@angular/core';
-import { ShopVO, ShopLocationsVO, LocationVO, Pair } from './../../shared/model/index';
+import { ShopVO, ShopLocationsVO, LocationVO } from './../../shared/model/index';
 import { ShopService, Util } from './../../shared/services/index';
 import { LogUtil } from './../../shared/log/index';
 
