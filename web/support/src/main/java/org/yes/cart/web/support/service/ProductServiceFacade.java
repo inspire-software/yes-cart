@@ -365,6 +365,23 @@ public interface ProductServiceFacade {
                                      long customerShopId);
 
 
+
+    /**
+     * Quantity model.
+     *
+     * @param cartQty           quantity of given sku in cart
+     * @param sku               required product SKU
+     * @param supplier          supplier
+     * @param customerShopId    shop PK
+     *
+     * @return quantity model
+     */
+    QuantityModel getQuantityModel(BigDecimal cartQty,
+                                   String sku,
+                                   String supplier,
+                                   long customerShopId);
+
+
     /**
      * Quantity model.
      *
