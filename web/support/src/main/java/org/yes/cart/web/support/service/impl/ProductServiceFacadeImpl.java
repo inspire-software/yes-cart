@@ -470,11 +470,11 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     @Override
     public QuantityModel getProductQuantity(final BigDecimal cartQty,
                                             final String sku,
+                                            final String supplier,
                                             final BigDecimal min,
                                             final BigDecimal max,
                                             final BigDecimal step,
-                                            final long customerShopId,
-                                            final String supplier) {
+                                            final long customerShopId) {
 
         return productQuantityStrategy.getQuantityModel(customerShopId, cartQty, sku, min, max, step, supplier);
 

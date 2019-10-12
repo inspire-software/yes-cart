@@ -386,22 +386,22 @@ public interface ProductServiceFacade {
      * Quantity model.
      *
      * @param cartQty           quantity of given sku in cart
+     * @param supplier          supplier
      * @param skuCode           SKU code
      * @param min               min order quantity
      * @param max               max order quantity
      * @param step              step order quantity
      * @param customerShopId    current shop
-     * @param supplier          supplier
      *
      * @return quantity model
      */
     QuantityModel getProductQuantity(BigDecimal cartQty,
                                      String skuCode,
+                                     String supplier,
                                      BigDecimal min,
                                      BigDecimal max,
                                      BigDecimal step,
-                                     long customerShopId,
-                                     String supplier);
+                                     long customerShopId);
 
     /**
      * Get price model (or blank object) with respect to current shop tax display settings.
