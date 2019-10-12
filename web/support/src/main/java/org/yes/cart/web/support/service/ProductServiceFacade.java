@@ -376,10 +376,10 @@ public interface ProductServiceFacade {
      *
      * @return quantity model
      */
-    QuantityModel getQuantityModel(BigDecimal cartQty,
-                                   String sku,
-                                   String supplier,
-                                   long customerShopId);
+    QuantityModel getProductQuantity(BigDecimal cartQty,
+                                     String sku,
+                                     String supplier,
+                                     long customerShopId);
 
 
     /**
