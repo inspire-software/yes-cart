@@ -122,7 +122,7 @@ public class ReportServiceImpl implements ReportService {
                 rp.setMandatory(parameter.isMandatory());
                 rp.setBusinesstype(parameter.getBusinesstype());
 
-                if (parameter.getBusinesstype().startsWith("org.yes.cart")) {
+                if ("DomainObject".equals(parameter.getBusinesstype())) {
 
                     final List<ReportPair> option = reportWorker.getParameterValues(
                             reportRequest.getLang(),

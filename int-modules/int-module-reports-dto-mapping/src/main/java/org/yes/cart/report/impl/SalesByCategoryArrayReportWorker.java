@@ -21,10 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.CustomerOrderDet;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.report.ReportPair;
@@ -47,6 +44,13 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
     private static final Logger LOG = LoggerFactory.getLogger(SalesByCategoryArrayReportWorker.class);
 
     private static final String SEPARATOR = " -> ";
+
+    private final List<String> INCLUDE_ORDERS = new ArrayList<>(Arrays.asList(
+            CustomerOrder.ORDER_STATUS_IN_PROGRESS,
+            CustomerOrder.ORDER_STATUS_WAITING_PAYMENT,
+            CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED,
+            CustomerOrder.ORDER_STATUS_COMPLETED
+    ));
 
     private final CustomerOrderService customerOrderService;
     private final ShopService shopService;
@@ -128,8 +132,8 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
                 }
 
                 this.customerOrderService.findByCriteriaIterator(
-                        " where e.createdTimestamp >= ?1 and e.createdTimestamp < ?2 and e.shop.shopId in (?3)",
-                        new Object[]{ start, end, inShops },
+                        " where e.createdTimestamp >= ?1 and e.createdTimestamp < ?2 and e.shop.shopId in (?3) and e.orderStatus in (?4)",
+                        new Object[]{ start, end, inShops, INCLUDE_ORDERS },
                         (order) -> {
 
                             for (final CustomerOrderDet detail : order.getOrderDetail()) {
@@ -259,7 +263,7 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
 
         final Product product = productService.getProductBySkuCode(detail.getProductSkuCode());
 
-        if (product != null) {
+        if (product != null && StringUtils.isNotBlank(product.getManufacturerCode())) {
 
             return detail.getProductSkuCode() + SEPARATOR + detail.getProductName() + SEPARATOR + product.getManufacturerCode();
 
