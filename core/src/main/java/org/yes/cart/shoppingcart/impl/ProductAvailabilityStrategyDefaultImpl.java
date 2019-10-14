@@ -66,14 +66,16 @@ public class ProductAvailabilityStrategyDefaultImpl implements ProductAvailabili
             final Warehouse warehouse = StringUtils.isBlank(supplier) ? warehouses.values().iterator().next() : warehouses.get(supplier);
 
             final SortedMap<Integer, SkuWarehouse> rankedInventory = new TreeMap<>();
-            for (final ProductSku sku : product.getSku()) {
+            if (warehouse != null) {
+                for (final ProductSku sku : product.getSku()) {
 
-                final SkuWarehouse inventory = inventoryResolver.findByWarehouseSku(warehouse, sku.getCode());
-                if (inventory != null) {
-                    rankedInventory.put(sku.getRank(), inventory);
-                    qty.put(inventory.getSkuCode(), inventory.getAvailableToSell());
+                    final SkuWarehouse inventory = inventoryResolver.findByWarehouseSku(warehouse, sku.getCode());
+                    if (inventory != null) {
+                        rankedInventory.put(sku.getRank(), inventory);
+                        qty.put(inventory.getSkuCode(), inventory.getAvailableToSell());
+                    }
+
                 }
-
             }
 
             if (!rankedInventory.isEmpty()) {

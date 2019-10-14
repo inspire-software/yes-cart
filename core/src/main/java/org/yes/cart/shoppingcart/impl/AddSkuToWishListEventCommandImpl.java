@@ -200,7 +200,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
                 // duplicate item, so just update quantity
                 final QuantityModel pqm = productQuantityStrategy.getQuantityModel(customerShopId, item.getQuantity(), skuCode, supplier);
-                if (!pqm.canOrderMore()) {
+                if (!pqm.isCanOrderMore()) {
                     LOG.debug("[{}] Unable to add item of sku code {} to wishlist, cannot add more", shoppingCart.getGuid(), skuCode);
                     return; // cannot add more
                 }
@@ -236,7 +236,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         // not found so need to create one
 
         final QuantityModel pqm = productQuantityStrategy.getQuantityModel(customerShopId, BigDecimal.ZERO, skuCode, supplier);
-        if (!pqm.canOrderMore()) {
+        if (!pqm.isCanOrderMore()) {
             return; // cannot add more
         }
 

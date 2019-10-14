@@ -101,37 +101,37 @@ public class QuantityModelImpl implements QuantityModel {
 
     /** {@inheritDoc} */
     @Override
-    public boolean canOrderLess() {
+    public boolean isCanOrderLess() {
         return canOrderLess;
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean canOrderMore() {
+    public boolean isCanOrderMore() {
         return canOrderMore;
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean hasMin() {
+    public boolean isHasMin() {
         return hasMin;
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean hasMax() {
+    public boolean isHasMax() {
         return hasMax;
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean hasStep() {
+    public boolean isHasStep() {
         return hasStep;
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean hasMinMaxStep() {
+    public boolean isHasMinMaxStep() {
         return hasMin || hasStep || hasMax;
     }
 

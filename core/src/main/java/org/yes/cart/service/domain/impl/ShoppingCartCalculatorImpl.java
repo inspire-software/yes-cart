@@ -83,7 +83,9 @@ public class ShoppingCartCalculatorImpl implements ShoppingCartCalculator {
 
         PriceModel model = null;
         for (final CartItem item : cart.getCartItemList()) {
-            if (item.getProductSkuCode().equals(skuCode) && item.getSupplierCode().equals(supplier)) {
+            if (item.getProductSkuCode().equals(skuCode) &&
+                    (item.getSupplierCode() != null && item.getSupplierCode().equals(supplier))
+                        || item.getSupplierCode() == null && supplier == null) {
                 model = new DefaultPriceModel(
                         item.getGrossPrice(),
                         item.getNetPrice(),

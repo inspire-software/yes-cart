@@ -37,7 +37,7 @@ public interface QuantityModel extends Serializable {
      *
      * @return can order less flag
      */
-    boolean canOrderLess();
+    boolean isCanOrderLess();
 
     /**
      * Returns true if we can order more one step of this item
@@ -45,35 +45,35 @@ public interface QuantityModel extends Serializable {
      *
      * @return can order less flag
      */
-    boolean canOrderMore();
+    boolean isCanOrderMore();
 
     /**
      * Is min setting defined for this product.
      *
      * @return true if product min order quantity is not null or 0
      */
-    boolean hasMin();
+    boolean isHasMin();
 
     /**
      * Is max setting defined for this product.
      *
      * @return true if product max order quantity is not null or Integer.MAX
      */
-    boolean hasMax();
+    boolean isHasMax();
 
     /**
      * Is step setting defined for this product.
      *
      * @return true if product step order quantity is not null or 0
      */
-    boolean hasStep();
+    boolean isHasStep();
 
     /**
      * Does this product have any order quantity settings?
      *
      * @return true if any of the settings is provided
      */
-    boolean hasMinMaxStep();
+    boolean isHasMinMaxStep();
 
     /**
      * Valid min quantity, if none specified use 1.

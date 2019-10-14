@@ -37,12 +37,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC",null, null, null, null);
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertFalse(pqm.hasMin());
-        assertFalse(pqm.hasMax());
-        assertFalse(pqm.hasStep());
-        assertFalse(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertFalse(pqm.isHasMin());
+        assertFalse(pqm.isHasMax());
+        assertFalse(pqm.isHasStep());
+        assertFalse(pqm.isHasMinMaxStep());
         assertEquals("1", pqm.getMin().toPlainString());
         assertEquals("1", pqm.getMinOrder().toPlainString());
         assertEquals("2147483647", pqm.getMax().toPlainString());
@@ -81,12 +81,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("3"), null, null, null);
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertFalse(pqm.hasMax());
-        assertFalse(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertFalse(pqm.isHasMax());
+        assertFalse(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("3", pqm.getMin().toPlainString());
         assertEquals("3", pqm.getMinOrder().toPlainString());
         assertEquals("2147483647", pqm.getMax().toPlainString());
@@ -125,12 +125,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("3"), new BigDecimal("10"), null, null);
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertTrue(pqm.hasMax());
-        assertFalse(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertTrue(pqm.isHasMax());
+        assertFalse(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("3", pqm.getMin().toPlainString());
         assertEquals("3", pqm.getMinOrder().toPlainString());
         assertEquals("10", pqm.getMax().toPlainString());
@@ -169,12 +169,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("2"), null);
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertTrue(pqm.hasMax());
-        assertTrue(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertTrue(pqm.isHasMax());
+        assertTrue(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("3", pqm.getMin().toPlainString());
         assertEquals("3", pqm.getMinOrder().toPlainString());
         assertEquals("11", pqm.getMax().toPlainString());
@@ -213,12 +213,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("0.2"), null);
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertTrue(pqm.hasMax());
-        assertTrue(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertTrue(pqm.isHasMax());
+        assertTrue(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("3.0", pqm.getMin().toPlainString());
         assertEquals("3.0", pqm.getMinOrder().toPlainString());
         assertEquals("11.0", pqm.getMax().toPlainString());
@@ -258,12 +258,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", null, null, null, new BigDecimal("1.00"));
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertFalse(pqm.hasMin());
-        assertFalse(pqm.hasMax());
-        assertFalse(pqm.hasStep());
-        assertFalse(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertFalse(pqm.isHasMin());
+        assertFalse(pqm.isHasMax());
+        assertFalse(pqm.isHasStep());
+        assertFalse(pqm.isHasMinMaxStep());
         assertEquals("1", pqm.getMin().toPlainString());
         assertEquals("1", pqm.getMinOrder().toPlainString());
         assertEquals("2147483647", pqm.getMax().toPlainString());
@@ -302,12 +302,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("3"), null, null, new BigDecimal("1.00"));
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertFalse(pqm.hasMax());
-        assertFalse(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertFalse(pqm.isHasMax());
+        assertFalse(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("3", pqm.getMin().toPlainString());
         assertEquals("2", pqm.getMinOrder().toPlainString());
         assertEquals("2147483647", pqm.getMax().toPlainString());
@@ -346,12 +346,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("3"), new BigDecimal("10"), null, new BigDecimal("1.00"));
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertTrue(pqm.hasMax());
-        assertFalse(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertTrue(pqm.isHasMax());
+        assertFalse(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("3", pqm.getMin().toPlainString());
         assertEquals("2", pqm.getMinOrder().toPlainString());
         assertEquals("10", pqm.getMax().toPlainString());
@@ -390,12 +390,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("2"), new BigDecimal("1.00"));
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertTrue(pqm.hasMax());
-        assertTrue(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertTrue(pqm.isHasMax());
+        assertTrue(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("3", pqm.getMin().toPlainString());
         assertEquals("2", pqm.getMinOrder().toPlainString());
         assertEquals("11", pqm.getMax().toPlainString());
@@ -434,12 +434,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("3"), new BigDecimal("11"), new BigDecimal("0.2"), new BigDecimal("1.00"));
 
-        assertFalse(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertTrue(pqm.hasMax());
-        assertTrue(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertFalse(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertTrue(pqm.isHasMax());
+        assertTrue(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("3.0", pqm.getMin().toPlainString());
         assertEquals("2.0", pqm.getMinOrder().toPlainString());
         assertEquals("11.0", pqm.getMax().toPlainString());
@@ -478,12 +478,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", null, null, null, new BigDecimal("3.00"));
 
-        assertTrue(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertFalse(pqm.hasMin());
-        assertFalse(pqm.hasMax());
-        assertFalse(pqm.hasStep());
-        assertFalse(pqm.hasMinMaxStep());
+        assertTrue(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertFalse(pqm.isHasMin());
+        assertFalse(pqm.isHasMax());
+        assertFalse(pqm.isHasStep());
+        assertFalse(pqm.isHasMinMaxStep());
         assertEquals("1", pqm.getMin().toPlainString());
         assertEquals("1", pqm.getMinOrder().toPlainString());
         assertEquals("2147483647", pqm.getMax().toPlainString());
@@ -522,12 +522,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("2"), null, null, new BigDecimal("3.00"));
 
-        assertTrue(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertFalse(pqm.hasMax());
-        assertFalse(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertTrue(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertFalse(pqm.isHasMax());
+        assertFalse(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("2", pqm.getMin().toPlainString());
         assertEquals("1", pqm.getMinOrder().toPlainString());
         assertEquals("2147483647", pqm.getMax().toPlainString());
@@ -566,12 +566,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("2"), new BigDecimal("10"), null, new BigDecimal("3.00"));
 
-        assertTrue(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertTrue(pqm.hasMax());
-        assertFalse(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertTrue(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertTrue(pqm.isHasMax());
+        assertFalse(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("2", pqm.getMin().toPlainString());
         assertEquals("1", pqm.getMinOrder().toPlainString());
         assertEquals("10", pqm.getMax().toPlainString());
@@ -610,12 +610,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("2"), new BigDecimal("10"), new BigDecimal("2"), new BigDecimal("3.00"));
 
-        assertTrue(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertTrue(pqm.hasMax());
-        assertTrue(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertTrue(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertTrue(pqm.isHasMax());
+        assertTrue(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("2", pqm.getMin().toPlainString());
         assertEquals("2", pqm.getMinOrder().toPlainString());
         assertEquals("10", pqm.getMax().toPlainString());
@@ -654,12 +654,12 @@ public class QuantityModelImplTest {
 
         final QuantityModel pqm = new QuantityModelImpl("Main", "ABC", new BigDecimal("2"), new BigDecimal("10"), new BigDecimal("0.2"), new BigDecimal("3.00"));
 
-        assertTrue(pqm.canOrderLess());
-        assertTrue(pqm.canOrderMore());
-        assertTrue(pqm.hasMin());
-        assertTrue(pqm.hasMax());
-        assertTrue(pqm.hasStep());
-        assertTrue(pqm.hasMinMaxStep());
+        assertTrue(pqm.isCanOrderLess());
+        assertTrue(pqm.isCanOrderMore());
+        assertTrue(pqm.isHasMin());
+        assertTrue(pqm.isHasMax());
+        assertTrue(pqm.isHasStep());
+        assertTrue(pqm.isHasMinMaxStep());
         assertEquals("2.0", pqm.getMin().toPlainString());
         assertEquals("0.2", pqm.getMinOrder().toPlainString());
         assertEquals("10.0", pqm.getMax().toPlainString());

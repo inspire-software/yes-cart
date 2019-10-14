@@ -145,9 +145,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         final boolean notGift = !cartItem.isGift();
         final boolean available = skuPam.isAvailable();
 
-        cartItemListItem.add(createAddOneSkuLink(skuCode, supplier).setVisible(available && notGift && pqm.canOrderMore()));
+        cartItemListItem.add(createAddOneSkuLink(skuCode, supplier).setVisible(available && notGift && pqm.isCanOrderMore()));
         cartItemListItem.add(createRemoveAllSkuLink(skuCode, supplier).setVisible(notGift));
-        cartItemListItem.add(createRemoveOneSkuLink(skuCode, supplier).setVisible(available && notGift && pqm.canOrderLess()));
+        cartItemListItem.add(createRemoveOneSkuLink(skuCode, supplier).setVisible(available && notGift && pqm.isCanOrderLess()));
         cartItemListItem.add(new Label(SKU_NUM_LABEL, skuCode));
         cartItemListItem.add(getProductLink(productSkuDecorator, cartItem));
 
@@ -170,7 +170,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
 
         final String message;
-        if (!pqm.canOrderMore()) {
+        if (!pqm.isCanOrderMore()) {
 
             final Map<String, Object> mparams = new HashMap<>();
             mparams.put("cart", pqm.getCartQty().toPlainString());
@@ -178,7 +178,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
             message = getLocalizer().getString("quantityPickerFullTooltip", this,
                     new Model<Serializable>(new ValueMap(mparams)));
 
-        } else if (pqm.hasMax()) {
+        } else if (pqm.isHasMax()) {
 
             final Map<String, Object> mparams = new HashMap<>();
             mparams.put("min", pqm.getMin().toPlainString());

@@ -1076,7 +1076,7 @@
                 <constructor-arg index="1"  ref="customerDao"/>
                 <constructor-arg index="2"  ref="genericDao"/>
                 <constructor-arg index="3"  ref="customerOrderDeliveryDao"/>
-                <constructor-arg index="4" ref="orderNumberGenerator"/>
+                <constructor-arg index="4"  ref="orderNumberGenerator"/>
                 <constructor-arg index="5"  ref="orderAssembler"/>
                 <constructor-arg index="6"  ref="deliveryAssembler"/>
                 <constructor-arg index="7"  ref="orderSplittingStrategy"/>
@@ -1677,8 +1677,12 @@
         <constructor-arg index="0" ref="baseCartContentsValidator"/>
     </bean>
 
-    <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">
-        <constructor-arg index="0" ref="customerOrderDao"/>
+    <bean id="orderNumberGenerator"  parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">
+                <constructor-arg index="0" ref="customerOrderDao"/>
+            </bean>
+        </property>
     </bean>
 
     <bean id="orderAddressFormatter" class="org.yes.cart.service.order.impl.DefaultOrderAddressFormatterImpl">

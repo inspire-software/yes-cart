@@ -148,25 +148,28 @@ public class WishListView extends AbstractProductSearchResultList {
 
                     for (final ProductSearchResultDTO uniqueProduct : uniqueProducts) {
 
-                        ProductSearchResultDTO wlProductDto = null;
-                        ProductSkuSearchResultDTO wlProductSkuDto = null;
+                        if (uniqueProduct.getSearchSkus() != null) {
 
-                        for (final ProductSkuSearchResultDTO sku : uniqueProduct.getSearchSkus()) {
+                            ProductSearchResultDTO wlProductDto = null;
+                            ProductSkuSearchResultDTO wlProductSkuDto = null;
 
-                            if (sku.getCode().equals(item.getSkuCode())) {
-                                wlProductDto = uniqueProduct.copy();
-                                wlProductSkuDto = sku;
-                                wlProductDto.setSearchSkus(Collections.singletonList(sku));
+                            for (final ProductSkuSearchResultDTO sku : uniqueProduct.getSearchSkus()) {
+
+                                if (sku.getCode().equals(item.getSkuCode()) &&
+                                        sku.getFulfilmentCentreCode().equals(item.getSupplierCode())) {
+                                    wlProductDto = uniqueProduct.copy();
+                                    wlProductSkuDto = sku;
+                                    wlProductDto.setSearchSkus(Collections.singletonList(sku));
+                                }
+
                             }
 
+                            if (wlProductDto != null && wlProductSkuDto != null) {
+                                wishListProducts.add(wlProductDto);
+                                wishListDataByProduct.put(wlProductDto, item);
+
+                            }
                         }
-
-                        if (wlProductDto != null && wlProductSkuDto != null) {
-                            wishListProducts.add(wlProductDto);
-                            wishListDataByProduct.put(wlProductDto, item);
-
-                        }
-
                     }
 
                 }
