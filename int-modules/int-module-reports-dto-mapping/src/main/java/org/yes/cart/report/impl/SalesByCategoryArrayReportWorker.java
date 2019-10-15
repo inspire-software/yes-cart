@@ -52,6 +52,12 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
             CustomerOrder.ORDER_STATUS_COMPLETED
     ));
 
+    private static final int COUNT_QUANTITY = 0;
+    private static final int COUNT_COST = 1;
+    private static final int COUNT_AMOUNT = 2;
+    private static final int COUNT_PROFIT = 3;
+
+
     private final CustomerOrderService customerOrderService;
     private final ShopService shopService;
     private final ShopFederationStrategy shopFederationStrategy;
@@ -110,18 +116,13 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
         final Instant start = NumberUtils.toLong(fromDate) > 0L ? DateUtils.iFrom(NumberUtils.toLong(fromDate)) : DateUtils.iParseSDT(fromDate);
         final Instant end = NumberUtils.toLong(tillDate) > 0L ? DateUtils.iFrom(NumberUtils.toLong(tillDate)) : DateUtils.iParseSDT(tillDate);
 
-        final int count_quantity = 0;
-        final int count_cost = 1;
-        final int count_amount = 2;
-        final int count_profit = 3;
-
         if (shopId > 0L) {
             try {
 
+                final Map<String, Set<String>> catArt = new TreeMap<>();
+                final Map<String, BigDecimal[]> counters = new HashMap<>();
+
                 final Map<String, String> skuToCat = new HashMap<>();
-                final Map<String, List<String>> catToSku = new HashMap<>();
-                final Map<String, BigDecimal[]> catCounters = new TreeMap<>();
-                final Map<String, BigDecimal[]> skuCounters = new TreeMap<>();
 
                 final Map<Long, Set<Long>> shopsAndSubshops = shopService.getAllShopsAndSubs();
 
@@ -138,40 +139,28 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
 
                             for (final CustomerOrderDet detail : order.getOrderDetail()) {
 
+                                final BigDecimal[] update = calculateCounters(detail);
+
                                 final String productName = determineProductName(detail);
 
-                                final BigDecimal[] skuCounts = skuCounters.computeIfAbsent(
+                                final BigDecimal[] skuCounts = counters.computeIfAbsent(
                                         productName,
-                                        det -> createCounters()
+                                        prod -> createCounters()
                                 );
 
-                                final Pair<String, I18NModel> cost = detail.getValue("ItemCostPrice");
-                                BigDecimal lineCost = BigDecimal.ZERO;
-                                if (cost != null) {
-                                    lineCost = new BigDecimal(cost.getFirst()).multiply(detail.getQty());
-                                }
-                                final BigDecimal lineAmount = detail.getGrossPrice().multiply(detail.getQty());
-                                final BigDecimal lineProfit = lineAmount.subtract(lineCost);
+                                updateCounters(skuCounts, update);
 
-                                skuCounts[count_quantity] = skuCounts[count_quantity].add(detail.getQty());
-                                skuCounts[count_cost] = skuCounts[count_cost].add(lineCost);
-                                skuCounts[count_amount] = skuCounts[count_amount].add(lineAmount);
-                                skuCounts[count_profit] = skuCounts[count_profit].add(lineProfit);
+                                final String categoryName = determineCategoryName(skuToCat, detail, productName);
 
-                                final String categoryName = skuToCat.computeIfAbsent(
-                                        productName,
-                                        det -> determineCategoryName(catToSku, detail, productName)
-                                );
-
-                                final BigDecimal[] categoryCounts = catCounters.computeIfAbsent(
+                                final BigDecimal[] catCounts = counters.computeIfAbsent(
                                         categoryName,
-                                        det -> createCounters()
+                                        prod -> createCounters()
                                 );
 
-                                categoryCounts[count_quantity] = categoryCounts[count_quantity].add(detail.getQty());
-                                categoryCounts[count_cost] = categoryCounts[count_cost].add(lineCost);
-                                categoryCounts[count_amount] = categoryCounts[count_amount].add(lineAmount);
-                                categoryCounts[count_profit] = categoryCounts[count_profit].add(lineProfit);
+                                updateCounters(catCounts, update);
+
+                                final Set<String> skus = catArt.computeIfAbsent(categoryName, cat -> new TreeSet<>());
+                                skus.add(productName);
 
                             }
 
@@ -185,7 +174,7 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
                         "Category 1",
                         "Category 2",
                         "Category 3",
-                        "TechData Article",
+                        "SKU",
                         "Product Name",
                         "Model",
                         "Quantity",
@@ -194,7 +183,7 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
                         "Profit"
                 });
 
-                for (final Map.Entry<String, BigDecimal[]> catCounter : catCounters.entrySet()) {
+                for (final Map.Entry<String, Set<String>> catCounter : catArt.entrySet()) {
 
                     final String[] cats = StringUtils.splitByWholeSeparator(catCounter.getKey(), SEPARATOR);
 
@@ -205,49 +194,26 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
                     final String category2 = has3Cats || has2Cats ? cats[cats.length - (has2Cats ? 1 : 2)] : "";
                     final String category3 = has3Cats ? cats[cats.length - 1] : "";
 
-                    out.add(new Object[]{
-                            category1,
-                            category2,
-                            category3,
-                            "",
-                            "",
-                            "",
-                            catCounter.getValue()[count_quantity],
-                            catCounter.getValue()[count_cost],
-                            catCounter.getValue()[count_amount],
-                            catCounter.getValue()[count_profit]
-                    });
+                    final BigDecimal[] catCount = counters.get(catCounter.getKey());
 
-                    for (final String productName : catToSku.get(catCounter.getKey())) {
+                    appendLine(out, category1, category2, category3, "", "", "", catCount);
 
-                        final String[] prods = StringUtils.splitByWholeSeparator(productName, SEPARATOR);
+                    for (final String prod : catCounter.getValue()) {
+
+                        final String[] prods = StringUtils.splitByWholeSeparator(prod, SEPARATOR);
 
                         final boolean hasModel = prods.length == 3;
-                        final String td = prods[0];
+                        final String sku = prods[0];
                         final String name = prods[1];
-                        final String sku = hasModel ? prods[2] : "";
+                        final String model = hasModel ? prods[2] : "";
 
+                        final BigDecimal[] skuCounter = counters.get(prod);
 
-                        final BigDecimal[] skuCounter = skuCounters.get(productName);
-
-                        out.add(new Object[]{
-                                category1,
-                                category2,
-                                category3,
-                                td,
-                                name,
-                                sku,
-                                skuCounter[count_quantity],
-                                skuCounter[count_cost],
-                                skuCounter[count_amount],
-                                skuCounter[count_profit]
-                        });
-
+                        appendLine(out, category1, category2, category3, sku, name, model, skuCounter);
 
                     }
 
                 }
-
 
                 return (List) out;
 
@@ -257,6 +223,30 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
             }
         }
         return Collections.emptyList();
+    }
+
+    private void appendLine(final List<Object[]> toAppendTo,
+                            final String category1,
+                            final String category2,
+                            final String category3,
+                            final String sku,
+                            final String name,
+                            final String model,
+                            final BigDecimal[] counts) {
+
+        toAppendTo.add(new Object[]{
+                category1,
+                category2,
+                category3,
+                sku,
+                name,
+                model,
+                counts[COUNT_QUANTITY],
+                counts[COUNT_COST],
+                counts[COUNT_AMOUNT],
+                counts[COUNT_PROFIT]
+        });
+
     }
 
     private String determineProductName(final CustomerOrderDet detail) {
@@ -273,7 +263,13 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
 
     }
 
-    private String determineCategoryName(final Map<String, List<String>> catToSku, final CustomerOrderDet detail, final String productName) {
+    private String determineCategoryName(final Map<String, String> skuToCat, final CustomerOrderDet detail, final String productName) {
+
+        final String mapped = skuToCat.get(productName);
+
+        if (mapped != null) {
+            return mapped;
+        }
 
         String categoryName = "????";
 
@@ -295,7 +291,7 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
 
         }
 
-        catToSku.computeIfAbsent(categoryName, cat -> new ArrayList<>()).add(productName);
+        skuToCat.put(productName, categoryName);
 
         return categoryName;
 
@@ -319,12 +315,42 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
     }
 
     private BigDecimal[] createCounters() {
+
         return new BigDecimal[] {
                 BigDecimal.ZERO,
                 BigDecimal.ZERO,
                 BigDecimal.ZERO,
                 BigDecimal.ZERO
         };
+
+    }
+
+    private BigDecimal[] calculateCounters(final CustomerOrderDet detail) {
+
+        final Pair<String, I18NModel> cost = detail.getValue("ItemCostPrice");
+        BigDecimal lineCost = BigDecimal.ZERO;
+        if (cost != null) {
+            lineCost = new BigDecimal(cost.getFirst()).multiply(detail.getQty());
+        }
+        final BigDecimal lineAmount = detail.getGrossPrice().multiply(detail.getQty());
+        final BigDecimal lineProfit = lineAmount.subtract(lineCost);
+
+        return new BigDecimal[] {
+                detail.getQty(),
+                lineCost,
+                lineAmount,
+                lineProfit
+        };
+
+    }
+
+    private void updateCounters(final BigDecimal[] counts, final BigDecimal[] update) {
+
+        counts[COUNT_QUANTITY] = counts[COUNT_QUANTITY].add(update[COUNT_QUANTITY]);
+        counts[COUNT_COST] = counts[COUNT_COST].add(update[COUNT_COST]);
+        counts[COUNT_AMOUNT] = counts[COUNT_AMOUNT].add(update[COUNT_AMOUNT]);
+        counts[COUNT_PROFIT] = counts[COUNT_PROFIT].add(update[COUNT_PROFIT]);
+
     }
 
     /**
