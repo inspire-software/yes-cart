@@ -208,7 +208,7 @@
         </property>
         <property name="transactionAttributes">
             <props>
-                <prop key="removeProduct">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="removeProductSkuIfInventoryDisabledSince">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>
