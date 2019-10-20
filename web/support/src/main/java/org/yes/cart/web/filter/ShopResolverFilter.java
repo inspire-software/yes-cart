@@ -56,6 +56,8 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
     private ServletContext servletContext;
 
+    private boolean skipRequestWrapper = false;
+
 
     public ShopResolverFilter(final ShopService shopService,
                               final SystemService systemService,
@@ -121,6 +123,10 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
      */
     private ServletRequest getModifiedRequest(final ServletRequest servletRequest, final List<String> themes) {
 
+        if (skipRequestWrapper) {
+            return servletRequest;
+        }
+
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final String servletPath = httpServletRequest.getServletPath();
 
@@ -153,6 +159,15 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     @Override
     public void setServletContext(final ServletContext servletContext) {
         this.servletContext = servletContext;
+    }
+
+    @Override
+    public void init(final FilterConfig filterConfig) throws ServletException {
+        super.init(filterConfig);
+
+        final String skip = filterConfig.getInitParameter("skipRequestWrapper");
+        this.skipRequestWrapper = skip != null && Boolean.valueOf(skip);
+
     }
 
     @Override

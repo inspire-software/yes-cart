@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
+import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ import java.util.regex.Pattern;
  * Time: 14:46
  */
 @Controller
+@Api(value = "Authentication", tags = "auth")
 @RequestMapping("/auth")
 public class AuthenticationController {
 
@@ -149,7 +151,8 @@ public class AuthenticationController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO check(final HttpServletRequest request,
+    public @ResponseBody AuthenticationResultRO check(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
@@ -269,7 +272,8 @@ public class AuthenticationController {
             method = RequestMethod.PUT,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO login(final @RequestBody LoginRO loginRO,
+    public @ResponseBody AuthenticationResultRO login(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @RequestBody LoginRO loginRO,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -359,7 +363,8 @@ public class AuthenticationController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO logout(final HttpServletRequest request,
+    public @ResponseBody AuthenticationResultRO logout(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                       final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
@@ -482,9 +487,10 @@ public class AuthenticationController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody RegisterFormRO register(final HttpServletRequest request,
-                                                 final HttpServletResponse response,
-                                                 final @RequestParam(value = "customerType", required = false) String customerType) {
+    public @ResponseBody RegisterFormRO register(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                 final @RequestParam(value = "customerType", required = false) String customerType,
+                                                 final HttpServletRequest request,
+                                                 final HttpServletResponse response) {
 
         cartMixin.persistShoppingCart(request, response);
         final Shop shop = cartMixin.getCurrentShop();
@@ -683,7 +689,8 @@ public class AuthenticationController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO register(final @RequestBody RegisterRO registerRO,
+    public @ResponseBody AuthenticationResultRO register(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                         final @RequestBody RegisterRO registerRO,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
@@ -760,7 +767,7 @@ public class AuthenticationController {
         loginRO.setUsername(registerRO.getEmail());
         loginRO.setPassword(password);
 
-        return login(loginRO, request, response);
+        return login(requestToken, loginRO, request, response);
 
     }
 
@@ -880,7 +887,8 @@ public class AuthenticationController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO guest(final @RequestBody RegisterRO registerRO,
+    public @ResponseBody AuthenticationResultRO guest(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @RequestBody RegisterRO registerRO,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -1034,9 +1042,10 @@ public class AuthenticationController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO resetPassword(@RequestParam(value = "email", required = false) final String email,
-                                                              @RequestParam(value = "authToken", required = false) final String authToken,
-                                                              @RequestParam(value = "newPassword", required = false) final String newPassword,
+    public @ResponseBody AuthenticationResultRO resetPassword(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                              final @RequestParam(value = "email", required = false) String email,
+                                                              final @RequestParam(value = "authToken", required = false) String authToken,
+                                                              final @RequestParam(value = "newPassword", required = false) String newPassword,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 
@@ -1138,8 +1147,9 @@ public class AuthenticationController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO deleteAccount(@RequestParam(value = "authToken", required = false) final String authToken,
-                                                              @RequestParam(value = "password", required = false) final String password,
+    public @ResponseBody AuthenticationResultRO deleteAccount(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                              final @RequestParam(value = "authToken", required = false) String authToken,
+                                                              final @RequestParam(value = "password", required = false) String password,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 
@@ -1152,7 +1162,7 @@ public class AuthenticationController {
             }
             return new AuthenticationResultRO("INVALID_TOKEN");
 
-        } else if (check(request, response).isAuthenticated()) {
+        } else if (check(requestToken, request, response).isAuthenticated()) {
 
             final Shop shop = cartMixin.getCurrentShop();
             final ShoppingCart cart = cartMixin.getCurrentCart();
@@ -1235,7 +1245,8 @@ public class AuthenticationController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO signUpNewsletter(@RequestParam(value = "email", required = false) final String email,
+    public @ResponseBody AuthenticationResultRO signUpNewsletter(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                 final @RequestParam(value = "email", required = false) String email,
                                                                  final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
 
@@ -1253,7 +1264,7 @@ public class AuthenticationController {
 
     }
 
-    private AuthenticationResultRO checkValidEmail(final @RequestParam(value = "email", required = false) String email, final Shop shop) {
+    private AuthenticationResultRO checkValidEmail(final String email, final Shop shop) {
 
         final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(shop);
         if (emailConfig != null) {
@@ -1342,11 +1353,12 @@ public class AuthenticationController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO contactUs(@RequestParam(value = "email", required = false) final String email,
-                                                          @RequestParam(value = "name", required = false) final String name,
-                                                          @RequestParam(value = "phone", required = false) final String phone,
-                                                          @RequestParam(value = "subject", required = false) final String subject,
-                                                          @RequestParam(value = "message", required = false) final String message,
+    public @ResponseBody AuthenticationResultRO contactUs(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                          final @RequestParam(value = "email", required = false) String email,
+                                                          final @RequestParam(value = "name", required = false) String name,
+                                                          final @RequestParam(value = "phone", required = false) String phone,
+                                                          final @RequestParam(value = "subject", required = false) String subject,
+                                                          final @RequestParam(value = "message", required = false) String message,
                                                           final HttpServletRequest request,
                                                           final HttpServletResponse response) {
 

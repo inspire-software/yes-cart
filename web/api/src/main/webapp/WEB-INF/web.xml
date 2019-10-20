@@ -97,6 +97,10 @@
             <param-name>excludePattern</param-name>
             <param-value>services/connector</param-value>
         </init-param>
+        <init-param>
+            <param-name>skipRequestWrapper</param-name>
+            <param-value>true</param-value>
+        </init-param>
     </filter>
 
     <filter>

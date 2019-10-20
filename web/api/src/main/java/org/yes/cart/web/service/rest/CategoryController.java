@@ -16,14 +16,12 @@
 
 package org.yes.cart.web.service.rest;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.BreadcrumbRO;
@@ -47,7 +45,8 @@ import java.util.*;
  * Time: 23:42
  */
 @Controller
-@RequestMapping("/category")
+@Api(value = "Category", tags = "category")
+@RequestMapping("/categories")
 public class CategoryController {
 
     @Autowired
@@ -161,7 +160,8 @@ public class CategoryController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody List<CategoryRO> listRoot(final HttpServletRequest request,
+    public @ResponseBody List<CategoryRO> listRoot(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                   final HttpServletRequest request,
                                                    final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -257,7 +257,8 @@ public class CategoryController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
-    public @ResponseBody CategoryListRO listRootXML(final HttpServletRequest request,
+    public @ResponseBody CategoryListRO listRootXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                    final HttpServletRequest request,
                                                     final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -396,7 +397,8 @@ public class CategoryController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CategoryRO viewCategory(@PathVariable(value = "id") final String category,
+    public @ResponseBody CategoryRO viewCategory(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                 final @PathVariable(value = "id") String category,
                                                  final HttpServletRequest request,
                                                  final HttpServletResponse response) {
 
@@ -539,7 +541,8 @@ public class CategoryController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody List<CategoryRO> listCategory(@PathVariable(value = "id") final String category,
+    public @ResponseBody List<CategoryRO> listCategory(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                       final @PathVariable(value = "id") String category,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -636,7 +639,8 @@ public class CategoryController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
-    public @ResponseBody CategoryListRO listCategoryXML(@PathVariable(value = "id") final String category,
+    public @ResponseBody CategoryListRO listCategoryXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                        final @PathVariable(value = "id") String category,
                                                         final HttpServletRequest request,
                                                         final HttpServletResponse response) {
 

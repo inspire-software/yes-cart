@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
+import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,7 @@ import java.io.IOException;
  * Time: 19:28
  */
 @Controller
+@Api(value = "Error", tags = "error")
 @RequestMapping("/error")
 public class ErrorController {
 

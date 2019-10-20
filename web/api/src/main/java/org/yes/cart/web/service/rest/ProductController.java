@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
+import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,7 @@ import java.util.Map;
  * Time: 10:43
  */
 @Controller
+@Api(value = "Product", tags = "product")
 public class ProductController {
 
     @Autowired
@@ -157,7 +159,7 @@ public class ProductController {
 
 
     /**
-     * Interface: GET /product/{id}/supplier/{supplier}
+     * Interface: GET /products/{id}/supplier/{supplier}
      * <p>
      * <p>
      * Display full product details.
@@ -473,12 +475,13 @@ public class ProductController {
      * @return product
      */
     @RequestMapping(
-            value = "/product/{id}/supplier/{supplier}",
+            value = "/products/{id}/supplier/{supplier}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductRO viewProduct(@PathVariable(value = "id") final String product,
-                                               @PathVariable(value = "supplier") final String supplier,
+    public @ResponseBody ProductRO viewProduct(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                               final @PathVariable(value = "id") String product,
+                                               final @PathVariable(value = "supplier") String supplier,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
@@ -721,7 +724,8 @@ public class ProductController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductRO> viewProducts(@RequestBody final ProductReferenceListRO products,
+    public @ResponseBody List<ProductRO> viewProducts(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @RequestBody ProductReferenceListRO products,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -913,7 +917,8 @@ public class ProductController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductListRO viewProductsXML(@RequestBody final ProductReferenceListRO products,
+    public @ResponseBody ProductListRO viewProductsXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                       final @RequestBody ProductReferenceListRO products,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -939,7 +944,7 @@ public class ProductController {
 
 
     /**
-     * Interface: GET /product/{id}/associations/{type}
+     * Interface: GET /products/{id}/associations/{type}
      * <p>
      * <p>
      * Display list of associated products.
@@ -1028,12 +1033,13 @@ public class ProductController {
      * @return list of products
      */
     @RequestMapping(
-            value = "/product/{id}/associations/{type}",
+            value = "/products/{id}/associations/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductSearchResultRO> viewProductAssociations(@PathVariable(value = "id") final String product,
-                                                                             @PathVariable(value = "type") final String type,
+    public @ResponseBody List<ProductSearchResultRO> viewProductAssociations(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                             final @PathVariable(value = "id") String product,
+                                                                             final @PathVariable(value = "type") String type,
                                                                              final HttpServletRequest request,
                                                                              final HttpServletResponse response) {
 
@@ -1045,7 +1051,7 @@ public class ProductController {
     }
 
     /**
-     * Interface: GET /product/{id}/associations/{type}
+     * Interface: GET /products/{id}/associations/{type}
      * <p>
      * <p>
      * Display list of associated products.
@@ -1123,12 +1129,13 @@ public class ProductController {
      * @return list of products
      */
     @RequestMapping(
-            value = "/product/{id}/associations/{type}",
+            value = "/products/{id}/associations/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductSearchResultListRO viewProductAssociationsXML(@PathVariable(value = "id") final String product,
-                                                                              @PathVariable(value = "type") final String type,
+    public @ResponseBody ProductSearchResultListRO viewProductAssociationsXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                              final @PathVariable(value = "id") String product,
+                                                                              final @PathVariable(value = "type") String type,
                                                                               final HttpServletRequest request,
                                                                               final HttpServletResponse response) {
 
@@ -1216,7 +1223,7 @@ public class ProductController {
 
 
     /**
-     * Interface: GET /sku/{id}/supplier/{supplier}
+     * Interface: GET /skus/{id}/supplier/{supplier}
      * <p>
      * <p>
      * Display full product details.
@@ -1367,12 +1374,13 @@ public class ProductController {
      * @return product sku
      */
     @RequestMapping(
-            value = "/sku/{id}/supplier/{supplier}",
+            value = "/skus/{id}/supplier/{supplier}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductSkuRO viewSku(@PathVariable(value = "id") final String sku,
-                                              @PathVariable(value = "supplier") final String supplier,
+    public @ResponseBody ProductSkuRO viewSku(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                              final @PathVariable(value = "id") String sku,
+                                              final @PathVariable(value = "supplier") String supplier,
                                               final HttpServletRequest request,
                                               final HttpServletResponse response) {
 
@@ -1525,7 +1533,8 @@ public class ProductController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductSkuRO> viewSkus(@RequestBody final ProductReferenceListRO skus,
+    public @ResponseBody List<ProductSkuRO> viewSkus(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                     final @RequestBody ProductReferenceListRO skus,
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
@@ -1643,7 +1652,8 @@ public class ProductController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductSkuListRO viewSkusXML(@RequestBody final ProductReferenceListRO skus,
+    public @ResponseBody ProductSkuListRO viewSkusXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @RequestBody ProductReferenceListRO skus,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 

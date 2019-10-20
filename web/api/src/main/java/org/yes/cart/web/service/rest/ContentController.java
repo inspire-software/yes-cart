@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -49,6 +50,7 @@ import java.util.*;
  * Time: 23:42
  */
 @Controller
+@Api(value = "Content", tags = "content")
 @RequestMapping("/content")
 public class ContentController {
 
@@ -202,7 +204,8 @@ public class ContentController {
             method = RequestMethod.GET,
             produces =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ContentRO viewContent(@PathVariable(value = "id") final String content,
+    public @ResponseBody ContentRO viewContent(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                               final @PathVariable(value = "id")String content,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
@@ -290,8 +293,9 @@ public class ContentController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody ContentRO viewContent(@PathVariable(value = "id") final String content,
-                                               @RequestBody final Map<String, Object> params,
+    public @ResponseBody ContentRO viewContent(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                               final @PathVariable(value = "id") String content,
+                                               final @RequestBody Map<String, Object> params,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
@@ -382,8 +386,9 @@ public class ContentController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = MediaType.APPLICATION_XML_VALUE
     )
-    public @ResponseBody ContentRO viewContentXML(@PathVariable(value = "id") final String content,
-                                                  @RequestBody final XMLParamsRO params,
+    public @ResponseBody ContentRO viewContentXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                  final @PathVariable(value = "id") String content,
+                                                  final @RequestBody XMLParamsRO params,
                                                   final HttpServletRequest request,
                                                   final HttpServletResponse response) {
 
@@ -491,7 +496,8 @@ public class ContentController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody List<ContentRO> listContent(@PathVariable(value = "id") final String content,
+    public @ResponseBody List<ContentRO> listContent(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                     final @PathVariable(value = "id") String content,
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
@@ -577,7 +583,8 @@ public class ContentController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
-    public @ResponseBody ContentListRO listContentXML(@PathVariable(value = "id") final String content,
+    public @ResponseBody ContentListRO listContentXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @PathVariable(value = "id") String content,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 

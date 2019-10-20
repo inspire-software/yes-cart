@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
+import io.swagger.annotations.Api;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -23,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductTypeAttr;
@@ -65,6 +63,7 @@ import java.util.Map;
  * Time: 15:17
  */
 @Controller
+@Api(value = "Search", tags = "search")
 @RequestMapping("/search")
 public class SearchController {
 
@@ -476,7 +475,8 @@ public class SearchController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody SearchResultRO search(final @RequestBody SearchRO search,
+    public @ResponseBody SearchResultRO search(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                               final @RequestBody SearchRO search,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 

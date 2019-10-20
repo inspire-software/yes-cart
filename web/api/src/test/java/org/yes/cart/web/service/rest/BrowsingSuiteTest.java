@@ -66,7 +66,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
     @Test
     public void testCategoryJson() throws Exception {
 
-        mockMvc.perform(get("/category/menu")
+        mockMvc.perform(get("/categories/menu")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale))
@@ -76,7 +76,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
 
-        mockMvc.perform(get("/category/menu/106")
+        mockMvc.perform(get("/categories/menu/106")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale))
@@ -85,7 +85,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Retro Gadgets")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/category/view/106")
+        mockMvc.perform(get("/categories/view/106")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale))
@@ -99,7 +99,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
     @Test
     public void testCategoryXML() throws Exception {
 
-        mockMvc.perform(get("/category/menu")
+        mockMvc.perform(get("/categories/menu")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale))
@@ -108,7 +108,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/category/menu/106")
+        mockMvc.perform(get("/categories/menu/106")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale))
@@ -117,7 +117,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Retro Gadgets")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/category/view/106")
+        mockMvc.perform(get("/categories/view/106")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale))
@@ -204,7 +204,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
         assertNull(cart.getCustomerEmail());
 
 
-        mockMvc.perform(get("/product/9998/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/products/9998/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -254,7 +254,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/sku/9998/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/skus/9998/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -269,7 +269,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/sku/BENDER-ua/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/skus/BENDER-ua/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -316,7 +316,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/product/9999/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/products/9999/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -326,7 +326,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/sku/9999/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/skus/9999/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -336,7 +336,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/product/9998/associations/accessories")
+        mockMvc.perform(get("/products/9998/associations/accessories")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -397,7 +397,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
         assertNull(cart.getCustomerEmail());
 
 
-        mockMvc.perform(get("/product/9998/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/products/9998/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -449,7 +449,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/sku/9998/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/skus/9998/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -464,7 +464,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/sku/BENDER-ua/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/skus/BENDER-ua/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -512,7 +512,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Available in 2010 Q2")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/product/9999/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/products/9999/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -522,7 +522,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/sku/9999/supplier/WAREHOUSE_2")
+        mockMvc.perform(get("/skus/9999/supplier/WAREHOUSE_2")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -532,7 +532,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/product/9998/associations/accessories")
+        mockMvc.perform(get("/products/9998/associations/accessories")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
