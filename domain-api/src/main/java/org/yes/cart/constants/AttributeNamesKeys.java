@@ -157,6 +157,11 @@ public interface AttributeNamesKeys {
         String SYSTEM_EXTENSION_CFG_PROPERTIES = "SYSTEM_EXTENSION_CFG_PROPERTIES";
 
         /**
+         * System extension for security configurations
+         */
+        String SYSTEM_EXTENSION_CFG_SECURITY = "SYSTEM_EXTENSION_CFG_SECURITY";
+
+        /**
          * Batch size for expired accounts removal
          */
         String JOB_EXPIRE_GUESTS_BATCH_SIZE = "JOB_EXPIRE_GUESTS_BATCH_SIZE";

@@ -29,6 +29,7 @@
   <aop:aspectj-autoproxy/>
 
   <import resource="classpath:manager-aspects.xml"/>
+  <import resource="classpath:manager-sac.xml"/>
 
   <bean id="multipartResolver"
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
@@ -78,6 +79,10 @@
 
   <bean id="restAwareExceptionTranslationFilter" class="org.yes.cart.security.impl.RestAwareExceptionTranslationFilter">
       <constructor-arg value="/client/index.html"/>
+  </bean>
+
+  <bean id="sacFilter" class="org.yes.cart.web.filter.SecurityAccessControlFilter">
+    <property name="allowKey" value="httpSecurityAccessControlService"/>
   </bean>
 
   <security:http auto-config="true" use-expressions="true" create-session="stateless">

@@ -366,6 +366,15 @@ SHOP10.cartContentsValidator=[bean name]
 Main.inventoryResolver=[bean name]',  1012, 1000, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8026,  'SYSTEM_EXTENSION_CFG_SECURITY', 'SYSTEM_EXTENSION_CFG_SECURITY',  0,  NULL,  'System\\Customisations\\Security Control',
+    'Property mapping for system security control service. E.g.
+[NodeType].HTTP.maxRequestsPerMinute=1000
+[NodeType].HTTP.maxRequestsPerMinutePerIP=60
+[NodeType].HTTP.blockIPCSV=192.0.0.18,192.10
+[NodeType].HTTP.allowIPCSV=192.0.0.18,192.10
+After changing these settings configurations need to be reloaded (use cluster panel)',  1012, 1000, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11000,  'SYSTEM_DEFAULT_SHOP', 'SYSTEM_DEFAULT_SHOP',  1,  NULL,  'SF\\Behaviour Default shop URL',
   'This value will be used for redirects when shop can not be resolved by http request', 1002,  1000, 0, 0, 0, 0);
 

@@ -236,3 +236,17 @@ create index PROMOTIONCOUPONUSAGE_CODE on TPROMOTIONCOUPONUSAGE (COUPON_CODE);
 --
 
 alter table TSKUPRICE add column SUPPLIER varchar(255);
+
+--
+--  YC-1004 Security Control
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8026,  'SYSTEM_EXTENSION_CFG_SECURITY', 'SYSTEM_EXTENSION_CFG_SECURITY',  0,  NULL,  'System\\Customisations\\Security Control',
+    'Property mapping for system security control service. E.g.
+[NodeType].HTTP.maxRequestsPerMinute=1000
+[NodeType].HTTP.maxRequestsPerMinutePerIP=60
+[NodeType].HTTP.blockIPCSV=192.0.0.18,192.10
+[NodeType].HTTP.allowIPCSV=192.0.0.18,192.10
+After changing these settings configurations need to be reloaded (use cluster panel)',  1012, 1000, 0, 0, 0, 0);
+

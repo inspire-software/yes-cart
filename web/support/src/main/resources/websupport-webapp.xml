@@ -26,6 +26,7 @@
     <import resource="websupport-tools.xml"/>
     <import resource="websupport-cronjob.xml"/>
     <import resource="websupport-storefront.xml"/>
+    <import resource="websupport-sac.xml"/>
     <import resource="classpath*:websupport-ext.xml"/>
 
     <!-- ################################ Register module  ####################################################### -->

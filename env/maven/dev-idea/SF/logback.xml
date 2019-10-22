@@ -190,7 +190,23 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-ws.config.%i.zip</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/yc-config.%i.zip</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <appender name="SAC" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${catalina.base}/logs/yc-${shopCode}-sac.log</File>
+        <Append>true</Append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>10</maxIndex>
+            <FileNamePattern>${catalina.base}/logs/yc-${shopCode}-sac.%i.zip</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -279,6 +295,12 @@
         <appender-ref ref="AUDIT"/>
     </logger>
     -->
+
+    <logger name="org.yes.cart.web.support.request.impl.ServletRequestSecurityAccessControlServiceImpl" level="DEBUG">
+        <!-- DETAILED logs at DEBUG level -->
+        <!--<appender-ref ref="SAC"/>-->
+        <appender-ref ref="CONSOLE"/>
+    </logger>
 
     <logger name="FTQ" level="DEBUG">
         <!-- FTQ logs at DEBUG level, TRACE logs FTQ explanations -->

@@ -96,6 +96,7 @@
                 <ref bean="shopCartConfiguration"/>
                 <ref bean="warehouseInventoryConfiguration"/>
                 <ref bean="cmsConfiguration"/>
+                <ref bean="systemConfiguration"/>
             </list>
         </property>
     </bean>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ################################### security control ######################### -->
+
+    <bean id="servletRequestSecurityAccessControlService" class="org.yes.cart.web.support.request.impl.ServletRequestSecurityAccessControlServiceImpl">
+        <property name="systemService" ref="systemService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="ipResolver">
+            <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
+        </property>
+        <property name="executorService">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
+                <description>
+                    Executor to track re-issue of semaphore permits to facilitate throttling thresholds
+                </description>
+                <property name="poolSize" value="1"/>
+            </bean>
+        </property>
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="SYS"/>
+                <property name="name" value="servletRequestSecurityAccessControlService"/>
+                <property name="cfgInterface" value="SecurityAccessControlService"/>
+                <property name="cfgDefault" value="false"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="description">Security control service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SYS.httpSecurityAccessControlService=servletRequestSecurityAccessControlService</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_SECURITY]">Additional configuration for this service (blacklisting, whitelisting, throttling)</prop>
+                    </props>
+                </property>
+            </bean>
+
+        </property>
+    </bean>
+
+    <!-- ################################### security control end ##################### -->
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="jam"/>
+        <property name="subName" value="manager-sac"/>
+    </bean>
+
+</beans>

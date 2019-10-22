@@ -52,6 +52,10 @@
 
     <bean id="shopRequireLoginFilter" class="org.yes.cart.web.filter.ShopRequireLoginFilter"/>
 
+    <bean id="sacFilter" class="org.yes.cart.web.filter.SecurityAccessControlFilter">
+        <property name="allowKey" value="httpSecurityAccessControlService"/>
+    </bean>
+
     <!-- ################################### filter delegates end ################################### -->
 
     <!-- ################################### cart persistence start ################################# -->
@@ -456,7 +460,7 @@
     </bean>
 
     <!-- ################################### presentation layer support end ######################### -->
-
+    
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">

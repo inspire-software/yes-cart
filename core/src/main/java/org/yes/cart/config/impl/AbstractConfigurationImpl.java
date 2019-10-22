@@ -137,6 +137,9 @@ public abstract class AbstractConfigurationImpl
                     final ConfigurationContext ctx = ((Configuration) configuration).getCfgContext();
                     this.active.add(new ActiveConfigurationImpl(ctx.getName(), ctx.getCfgInterface(), ref));
                 }
+                if (configuration instanceof RegistrationAware) {
+                    ((RegistrationAware) configuration).onRegisterEvent();
+                }
                 LOG.debug("Custom configurations for {}/{}/{} ... registering {}", ref, key, configurationType, configuration);
             }
         }
