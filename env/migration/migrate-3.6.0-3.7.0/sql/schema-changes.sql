@@ -170,7 +170,7 @@ alter table TCUSTOMERWISHLIST add column SUPPLIER_CODE varchar(255);
 
 update TCUSTOMERWISHLIST l, TSKU s set
   l.SKU_CODE = s.CODE,
-  l.SUPPLIER_CODE = 'Main',
+  l.SUPPLIER_CODE = 'Main'
   where l.SKU_ID = s.SKU_ID;
 
 -- Derby

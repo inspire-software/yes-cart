@@ -236,6 +236,7 @@ build_demo() {
 
     cp $YC_HOME/manager/jam/target/cp.war $YC_HOME/
     cp $YC_HOME/web/store-wicket/target/ROOT.war $YC_HOME/
+    cp $YC_HOME/web/api/target/api.war $YC_HOME/
 
 }
 
