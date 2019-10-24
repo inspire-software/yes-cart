@@ -40,7 +40,7 @@ import java.util.*;
  */
 public class ReportServiceImpl implements ReportService {
 
-    private final List<ReportDescriptor> reportDescriptors;
+    private final Map<String, ReportDescriptor> reportDescriptors;
     private final Map<String, ReportWorker> reportWorkers;
     private final List<ReportGenerator> reportGenerators;
     private final FileManager fileManager;
@@ -53,7 +53,7 @@ public class ReportServiceImpl implements ReportService {
      * @param reportGenerators   report generator
      * @param fileManager       file manager
      */
-    public ReportServiceImpl(final List<ReportDescriptor> reportDescriptors,
+    public ReportServiceImpl(final Map<String, ReportDescriptor> reportDescriptors,
                              final Map<String, ReportWorker> reportWorkers,
                              final List<ReportGenerator> reportGenerators,
                              final FileManager fileManager) {
@@ -74,7 +74,7 @@ public class ReportServiceImpl implements ReportService {
 
         final List<VoReportDescriptor> reports = new ArrayList<>();
 
-        for (final ReportDescriptor descriptor : reportDescriptors) {
+        for (final ReportDescriptor descriptor : reportDescriptors.values()) {
 
             if (descriptor.isVisible()) {
                 final VoReportDescriptor report = new VoReportDescriptor();
@@ -152,7 +152,7 @@ public class ReportServiceImpl implements ReportService {
 
     ReportDescriptor getReportDescriptorById(final String reportId) {
 
-        return (ReportDescriptor) CollectionUtils.find(reportDescriptors, o -> reportId.equalsIgnoreCase(((ReportDescriptor) o).getReportId()));
+        return reportDescriptors.get(reportId);
 
     }
 

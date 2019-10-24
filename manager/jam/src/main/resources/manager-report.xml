@@ -127,13 +127,16 @@
         </property>
     </bean>
 
-    <util:list id="reportDescriptors">
-        <ref bean="reportAvailableStockPDF"/>
-        <ref bean="reportPaymentsPDF"/>
-        <ref bean="reportDeliveryPDF"/>
-        <ref bean="reportAvailableStockXLSX"/>
-        <ref bean="salesByCategoryXLSX"/>
-    </util:list>
+    <util:map id="reportDescriptors">
+        <!-- PDF examples -->
+        <entry key="reportAvailableStockPDF"    value-ref="reportAvailableStockPDF"/>
+        <entry key="reportAvailableStockPDF"    value-ref="reportAvailableStockPDF"/>
+        <entry key="reportPaymentsPDF"          value-ref="reportPaymentsPDF"/>
+        <entry key="reportDeliveryPDF"          value-ref="reportDeliveryPDF"/>
+        <!-- Excel examples -->
+        <entry key="reportAvailableStockXLSX"   value-ref="reportAvailableStockXLSX"/>
+        <entry key="salesByCategoryXLSX"        value-ref="salesByCategoryXLSX"/>
+    </util:map>
 
     <util:map id="reportWorkers">
         <entry key="reportPaymentsPDF">
@@ -174,6 +177,8 @@
         <ref bean="reportGeneratorPDF"/>
         <ref bean="reportGeneratorXLSX"/>
     </util:list>
+
+    <import resource="classpath*:manager-report-ext.xml"/>
 
     <bean id="reportService" class="org.yes.cart.report.impl.ReportServiceImpl">
         <constructor-arg index="0" ref="reportDescriptors"/>
