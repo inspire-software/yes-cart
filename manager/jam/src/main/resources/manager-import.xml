@@ -82,11 +82,7 @@
         <constructor-arg index="4" ref="nodeService"/>
         <constructor-arg index="5" ref="webAppManagerAsyncContextFactory"/>
         <constructor-arg index="6" ref="systemService"/>
-        <constructor-arg index="7">
-            <bean class="org.yes.cart.utils.impl.ZipUtils">
-                <constructor-arg index="0" value="${fs.config.bulkimport.ziputils.filename.encoding}"/>
-            </bean>
-        </constructor-arg>
+        <constructor-arg index="7" ref="zipUtils"/>
         <constructor-arg index="8" ref="uiFederationFacade"/>
         <constructor-arg index="9" ref="bulkImportServiceBeanMap"/>
     </bean>

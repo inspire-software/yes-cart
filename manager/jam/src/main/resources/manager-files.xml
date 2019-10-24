@@ -23,6 +23,10 @@
 
     <!-- ########################################## file management ########################## -->
 
+    <bean id="zipUtils" class="org.yes.cart.utils.impl.ZipUtils">
+        <constructor-arg index="0" value="${fs.config.bulkimport.ziputils.filename.encoding}"/>
+    </bean>
+
     <bean id="fsImpexFileManager" class="org.yes.cart.remote.service.impl.FSFileManagerImpl">
         <constructor-arg index="0" ref="bulkImportService"/>
         <constructor-arg index="1" ref="bulkExportService"/>
