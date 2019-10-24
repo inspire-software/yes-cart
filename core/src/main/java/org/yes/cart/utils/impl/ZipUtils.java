@@ -24,16 +24,15 @@ import java.io.*;
 import java.util.Enumeration;
 
 
+
 /**
- *
- * Modified by I.Azarny to support different entry encoding via apache commons.
- *
- * by Piotr Gabryanczyk on May 7, 2008
- * http://piotrga.wordpress.com/
+ * User: denispavlov
+ * Date: 24/10/2019
+ * Time: 09:38
  */
 public class ZipUtils {
-    
-    
+
+
     private final String encoding;
 
     /**
@@ -88,19 +87,14 @@ public class ZipUtils {
             createDir(outputFile.getParentFile());
         }
 
-        BufferedInputStream inputStream = new BufferedInputStream(zipfile.getInputStream(entry));
-        BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
-
-        try {
+        try (BufferedInputStream inputStream = new BufferedInputStream(zipfile.getInputStream(entry));
+             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile))) {
             IOUtils.copy(inputStream, outputStream);
-        } finally {
-            outputStream.close();
-            inputStream.close();
         }
     }
 
-    private void createDir(final File dir) {
-        if (!dir.mkdirs()) throw new RuntimeException("Can not create dir " + dir);
+    private void createDir(final File dir) throws IOException {
+        if (!dir.mkdirs()) throw new IOException("Unable to create dir:" + dir);
     }
 
 
