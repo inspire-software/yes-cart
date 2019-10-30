@@ -81,6 +81,10 @@ public interface GenericDAO<T, PK extends Serializable> {
 
     /**
      * Find by hsql query.
+     * E.g. "select x from XEntity x where x.foo = ?1 and x.bar = ?2"
+     *
+     * Sorting should be defined in HSQL query.
+     * E.g. "select x from XEntity x where x.foo = ?1 and x.bar = ?2 order by x.foo asc"
      *
      * @param hsqlQuery  query
      * @param parameters parameters
