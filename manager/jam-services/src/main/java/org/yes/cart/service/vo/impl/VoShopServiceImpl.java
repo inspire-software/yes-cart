@@ -382,6 +382,8 @@ public class VoShopServiceImpl implements VoShopService {
                 masterAttrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
         summary.setAnonymousBrowsing(getBooleanShopAttributeConfig(
                 masterAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN, lang, true));
+        summary.setManagerLogin(getBooleanShopAttributeConfig(
+                masterAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_LOGIN_MANAGER, lang, false));
 
         final MutablePair<String, String> sessionExpiry = getShopAttributeConfig(
                 masterAttrsMap, AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS, lang, "21600");
@@ -464,6 +466,8 @@ public class VoShopServiceImpl implements VoShopService {
                 getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_B2B_ORDER_FORM_TYPES, lang);
         final MutablePair<String, List<String>> shoppingLists =
                 getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_SHOPPING_LIST_TYPES, lang);
+        final MutablePair<String, List<String>> managedLists =
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_MANAGED_LIST_TYPES, lang);
         final MutablePair<String, List<String>> addressBookDisabled =
                 getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES, lang);
         final MutablePair<String, List<String>> addressBookBillingDisabled =
@@ -487,6 +491,7 @@ public class VoShopServiceImpl implements VoShopService {
         additionalTypes.addAll(orderLineRemarks.getSecond());
         additionalTypes.addAll(orderForm.getSecond());
         additionalTypes.addAll(shoppingLists.getSecond());
+        additionalTypes.addAll(managedLists.getSecond());
         additionalTypes.addAll(addressBookDisabled.getSecond());
         additionalTypes.addAll(addressBookBillingDisabled.getSecond());
         if (CollectionUtils.isNotEmpty(additionalTypes)) {
@@ -516,6 +521,7 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerTypesB2BOrderLineRemarks(orderLineRemarks);
         summary.setCustomerTypesB2BOrderForm(orderForm);
         summary.setCustomerTypesShoppingLists(shoppingLists);
+        summary.setCustomerTypesManagedLists(managedLists);
         summary.setCustomerTypesAddressBookDisabled(addressBookDisabled);
         summary.setCustomerTypesAddressBookBillingDisabled(addressBookBillingDisabled);
     }
@@ -660,6 +666,7 @@ public class VoShopServiceImpl implements VoShopService {
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund-failed", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-rfq-new", true);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-managedlist-rejected", true);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-activation", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-change-password", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-deactivation", false);
@@ -676,6 +683,7 @@ public class VoShopServiceImpl implements VoShopService {
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "rfq-new", true);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "shipment-complete", false);
         addEmailTemplateBasicSettings(summary, lang, attrsMap, "sup-order-new", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "managedlist-created", true);
 
     }
 
@@ -704,7 +712,7 @@ public class VoShopServiceImpl implements VoShopService {
     private MutablePair<String, Boolean> getBooleanShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang,  final boolean inverse) {
         final VoAttrValueShop attr = attrsMap.get(key);
         if (attr == null) {
-            return MutablePair.of(attr, !inverse);
+            return MutablePair.of(key, !inverse);
         }
         final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
         return MutablePair.of(name, Boolean.valueOf(attr.getVal()) ? !inverse : inverse);
@@ -713,7 +721,7 @@ public class VoShopServiceImpl implements VoShopService {
     private MutablePair<String, Integer> getIntegerShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang,  final int def) {
         final VoAttrValueShop attr = attrsMap.get(key);
         if (attr == null) {
-            return MutablePair.of(attr, def);
+            return MutablePair.of(key, def);
         }
         final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
         return MutablePair.of(name, NumberUtils.toInt(attr.getVal(), def));
@@ -722,7 +730,7 @@ public class VoShopServiceImpl implements VoShopService {
     private MutablePair<String, String> getShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang, final String def) {
         final VoAttrValueShop attr = attrsMap.get(key);
         if (attr == null) {
-            return MutablePair.of(attr, def);
+            return MutablePair.of(key, def);
         }
         final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
         return MutablePair.of(name, StringUtils.isNotBlank(attr.getVal()) ? attr.getVal() : def);
@@ -731,7 +739,7 @@ public class VoShopServiceImpl implements VoShopService {
     private MutablePair<String, List<String>> getCsvShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang) {
         final VoAttrValueShop attr = attrsMap.get(key);
         if (attr == null) {
-            return MutablePair.of(attr, Collections.emptyList());
+            return MutablePair.of(key, Collections.emptyList());
         }
         final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
         final List<String> vals = new ArrayList<>();

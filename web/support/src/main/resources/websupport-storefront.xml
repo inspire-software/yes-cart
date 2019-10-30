@@ -183,6 +183,8 @@
                 <value>expireCartCmd</value>
                 <value>loginCmd</value>
                 <value>logoutCmd</value>
+                <value>loginOnBehalfCmd</value>
+                <value>logoutOnBehalfCmd</value>
                 <value>removeCouponCmd</value>
                 <value>removeFromWishListCmd</value>
                 <value>removeAllSkuCmd</value>
@@ -202,6 +204,7 @@
                 <value>supplier</value>
                 <value>type</value>
                 <value>wlv</value>
+                <value>wln</value>
                 <value>sku</value>
                 <value>wla</value>
                 <value>cip</value>
@@ -222,6 +225,7 @@
                 <value>cleanCartCmd</value>
                 <value>expireCartCmd</value>
                 <value>loginCmd</value>
+                <value>loginOnBehalfCmd</value>
                 <value>setBillingAddressSeparateCmd</value>
                 <value>splitCartItemsCmd</value>
                 <value>setCarrierSlaCmd</value>

@@ -32,7 +32,7 @@ import java.util.Map;
  * Time: 15:29
  */
 @XmlRootElement(name = "search-result")
-public class SearchResultRO implements Serializable {
+public abstract class AbstractSearchResultRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
@@ -40,13 +40,11 @@ public class SearchResultRO implements Serializable {
 
     private int totalResults;
 
-    private String productImageWidth;
-    private String productImageHeight;
+    private String itemImageWidth;
+    private String itemImageHeight;
 
     private List<String> pageAvailableSize;
     private Map<String, String> pageAvailableSort;
-
-    private List<ProductSearchResultRO> products;
 
     private FilteredNavigationRO filteredNavigation;
 
@@ -70,22 +68,22 @@ public class SearchResultRO implements Serializable {
         this.totalResults = totalResults;
     }
 
-    @XmlElement(name = "product-image-width")
-    public String getProductImageWidth() {
-        return productImageWidth;
+    @XmlElement(name = "image-width")
+    public String getItemImageWidth() {
+        return itemImageWidth;
     }
 
-    public void setProductImageWidth(final String productImageWidth) {
-        this.productImageWidth = productImageWidth;
+    public void setItemImageWidth(final String itemImageWidth) {
+        this.itemImageWidth = itemImageWidth;
     }
 
-    @XmlElement(name = "product-image-height")
-    public String getProductImageHeight() {
-        return productImageHeight;
+    @XmlElement(name = "image-height")
+    public String getItemImageHeight() {
+        return itemImageHeight;
     }
 
-    public void setProductImageHeight(final String productImageHeight) {
-        this.productImageHeight = productImageHeight;
+    public void setItemImageHeight(final String itemImageHeight) {
+        this.itemImageHeight = itemImageHeight;
     }
 
     @XmlElementWrapper(name = "page-available-sizes")
@@ -106,16 +104,6 @@ public class SearchResultRO implements Serializable {
 
     public void setPageAvailableSort(final Map<String, String> pageAvailableSort) {
         this.pageAvailableSort = pageAvailableSort;
-    }
-
-    @XmlElementWrapper(name = "products")
-    @XmlElement(name = "product")
-    public List<ProductSearchResultRO> getProducts() {
-        return products;
-    }
-
-    public void setProducts(final List<ProductSearchResultRO> products) {
-        this.products = products;
     }
 
     @XmlElement(name = "filtered-navigation")

@@ -17,8 +17,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.CustomerResolver;
 import org.yes.cart.shoppingcart.MutableOrderInfo;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 
@@ -29,9 +29,9 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
  */
 public class ShoppingCartCommandConfigurationCheckoutVisitorImpl extends ShoppingCartCommandConfigurationCustomerTypeVisitorImpl {
 
-    public ShoppingCartCommandConfigurationCheckoutVisitorImpl(final CustomerService customerService,
+    public ShoppingCartCommandConfigurationCheckoutVisitorImpl(final CustomerResolver customerResolver,
                                                                final ShopService shopService) {
-        super(customerService, shopService);
+        super(customerResolver, shopService);
     }
 
 

@@ -32,6 +32,8 @@ public interface CustomerWishList extends Auditable {
 
     String SHOPPING_LIST_ITEM = "S";
 
+    String MANAGED_LIST_ITEM = "M";
+
     String CART_SAVE_FOR_LATER = "C";
 
     String REMIND_WHEN_WILL_BE_AVAILABLE = "A";
@@ -147,6 +149,21 @@ public interface CustomerWishList extends Auditable {
      * @param tag space separated product tags.
      */
     void setTag(String tag);
+
+    /**
+     * Get notification email of the creator of this wishlist.
+     *
+     * @return notification email
+     */
+    String getNotificationEmail();
+
+    /**
+     * Set notification email of the creator of this wishlist.
+     *
+     * @param notificationEmail notification email
+     */
+    void setNotificationEmail(String notificationEmail);
+
 
     /**
      * Quantity in wish list.

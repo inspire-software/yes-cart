@@ -149,6 +149,9 @@
           <div class="clearfix"></div>
           <div class="col-xs-5 col-md-4"><strong>{{ shopSummary.anonymousBrowsing.first }}</strong></div>
           <div class="col-xs-7 col-md-8"><i class="fa {{ shopSummary.anonymousBrowsing.second ? 'fa-remove text-success' : 'fa-check text-danger' }}" title="{{ shopSummary.anonymousBrowsing.first }}"></i></div>
+          <div class="clearfix"></div>
+          <div class="col-xs-5 col-md-4"><strong class="text-muted">{{ shopSummary.managerLogin.first }}</strong> <span class="label label-info">YCE</span></div>
+          <div class="col-xs-7 col-md-8"><i class="fa {{ shopSummary.managerLogin.second ? 'fa-check text-danger' : 'fa-remove text-success' }}" title="{{ shopSummary.managerLogin.first }}"></i></div>
         </div>
         <div class="row block-margin-spacer">
           <div class="col-xs-5 col-md-4"><strong class="text-muted">{{ shopSummary.b2bProfileActive.first }}</strong> <span class="label label-info">YCE</span></div>
@@ -267,6 +270,10 @@
                 <tr>
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted"><i class="fa fa-list"></i> {{ shopSummary.customerTypesShoppingLists.first }} <span class="label label-info">YCE</span></td>
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesShoppingLists.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
+                </tr>
+                <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted"><i class="fa fa-list"></i> {{ shopSummary.customerTypesManagedLists.first }} <span class="label label-info">YCE</span></td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesManagedLists.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
                 </tr>
                 <tr>
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted"><i class="fa fa-drivers-license-o"></i> {{ shopSummary.customerTypesB2BOrderForm.first }} <span class="label label-info">YCE</span></td>

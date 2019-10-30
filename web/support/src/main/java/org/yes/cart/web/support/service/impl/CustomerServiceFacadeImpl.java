@@ -123,6 +123,9 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                                 break;
                             }
                         }
+                        if (tags.length == 1 && tags[0].equals(itemTagStr)) {
+                            noTag = false; // managed lists and shopping lists tags
+                        }
                         if (noTag) {
                             continue;
                         }
@@ -403,6 +406,20 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                                      final String email,
                                      final Map<String, Object> registrationData) {
         return email; // do nothing, email is sent via NewsletterAspect
+    }
+
+    @Override
+    public String notifyManagedListCreated(final Shop customerShop,
+                                           final String email,
+                                           final Map<String, Object> listData) {
+        return email; // do nothing, email is sent via ManagedListAspect
+    }
+
+    @Override
+    public String notifyManagedListRejected(final Shop customerShop,
+                                            final String email,
+                                            final Map<String, Object> listData) {
+        return email; // do nothing, email is sent via ManagedListAspect
     }
 
     /** {@inheritDoc} */

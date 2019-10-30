@@ -94,6 +94,11 @@ public interface StorefrontServiceSpringKeys {
      String CUSTOMER_SERVICE_FACADE = "customerServiceFacade";
 
      /**
+      * Manager service facade
+      */
+     String MANAGER_SERVICE_FACADE = "managerServiceFacade";
+
+     /**
       * Shipping service facade
       */
      String SHIPPING_SERVICE_FACADE = "shippingServiceFacade";

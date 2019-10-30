@@ -359,7 +359,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
                 customerShopId,
                 AttributeNamesKeys.Category.CATEGORY_SORT_OPTIONS,
                 AttributeNamesKeys.Shop.SHOP_CATEGORY_SORT_OPTIONS,
-                Constants.DEFAULT_PAGE_SORT);
+                Constants.DEFAULT_PAGE_SORT_PRODUCT);
 
     }
 

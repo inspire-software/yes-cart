@@ -39,6 +39,7 @@ import org.yes.cart.utils.TimeContext;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -374,6 +375,17 @@ public class OrderAssemblerImpl implements OrderAssembler {
                     );
                 }
             }
+
+            if (shoppingCart.getShoppingContext().isManagedCart()) {
+
+                final String timestamp = DateUtils.formatSDT();
+                final String auditKey = "MGR/ORD: " + timestamp;
+
+                customerOrder.putValue(auditKey,
+                        shoppingCart.getShoppingContext().getManagerName() + " / " + shoppingCart.getShoppingContext().getManagerEmail(),
+                        newDefaultModel("AUDITEXPORT")
+                );
+            }
         }
 
 
@@ -516,6 +528,10 @@ public class OrderAssemblerImpl implements OrderAssembler {
             // Copy line remark which will be stored in "b2bRemarksLine" + FF + SKU detail, e.g. b2bRemarksLineMAIN_ABC0001
             customerOrderDet.setB2bRemarks(shoppingCart.getOrderInfo().getDetailByKey(
                     AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + item.getSupplierCode() + "_" + item.getProductSkuCode()));
+
+            final String managed = shoppingCart.getOrderInfo().getDetailByKey(
+                    AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_MANAGED_LIST + item.getSupplierCode() + "_" + item.getProductSkuCode());
+            customerOrderDet.putValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_MANAGED_LIST, managed, null);
         }
 
         /*
@@ -714,6 +730,10 @@ public class OrderAssemblerImpl implements OrderAssembler {
             }
         }
         return display;
+    }
+
+    private I18NModel newDefaultModel(final String value) {
+        return new StringI18NModel(Collections.singletonMap(I18NModel.DEFAULT, value));
     }
 
 }

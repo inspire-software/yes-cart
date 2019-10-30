@@ -108,8 +108,9 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testAddRole() throws Exception {
+        final int init = managementService.getRolesList().size();
         managementService.addRole("ROLE_ZZZ", null);
-        assertEquals(3, managementService.getRolesList().size());
+        assertEquals(init + 1, managementService.getRolesList().size());
         managementService.deleteRole("ROLE_ZZZ");
     }
 
@@ -119,8 +120,9 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
+                    final int init = managementService.getRolesList().size();
                     managementService.addRole("ROLE_XXX", null);
-                    assertEquals(3, managementService.getRolesList().size());
+                    assertEquals(init + 1, managementService.getRolesList().size());
                     managementService.updateRole("ROLE_XXX", "xxx");
                     assertEquals("xxx", managementService.getRolesList().stream().filter(role -> "ROLE_XXX".equals(role.getCode())).findFirst().get().getDescription());
                 }   catch (Exception e) {

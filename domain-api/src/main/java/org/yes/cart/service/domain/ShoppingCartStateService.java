@@ -42,10 +42,11 @@ public interface ShoppingCartStateService extends GenericService<ShoppingCartSta
      * Get state by guid.
      *
      * @param email customer email
+     * @param shopId shop PK
      *
-     * @return get by customer email
+     * @return get by customer email and shop
      */
-    List<ShoppingCartState> findByCustomerEmail(String email);
+    List<ShoppingCartState> findByCustomerEmail(String email, long shopId);
 
     /**
      * Get state by order number.

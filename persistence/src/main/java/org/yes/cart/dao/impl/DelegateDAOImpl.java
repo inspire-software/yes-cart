@@ -115,6 +115,22 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
      * {@inheritDoc}
      */
     @Override
+    public List<T> findRangeByQuery(final String hsqlQuery, final int firstResult, final int maxResults, final Object... parameters) {
+        return delegate.findRangeByQuery(hsqlQuery, firstResult, maxResults, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCountByQuery(final String hsqlQuery, final Object... parameters) {
+        return delegate.findCountByQuery(hsqlQuery, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ResultsIterator<Object> findByQueryIterator(final String hsqlQuery, final Object... parameters) {
         return delegate.findByQueryIterator(hsqlQuery, parameters);
     }
@@ -205,6 +221,14 @@ public class DelegateDAOImpl<T, PK extends Serializable> implements GenericDAO<T
     @Override
     public List<T> findRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         return delegate.findRangeByNamedQuery(namedQueryName, firstResult, maxResults, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCountByNamedQuery(final String namedQueryName, final Object... parameters) {
+        return delegate.findCountByNamedQuery(namedQueryName, parameters);
     }
 
     /**

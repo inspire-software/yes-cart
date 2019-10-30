@@ -65,6 +65,14 @@ public class CartShoppingContextRO implements Serializable {
     private boolean hidePrices;
 
     @DtoField(readOnly = true)
+    private boolean managedCart;
+    @DtoField(readOnly = true)
+    private String managerEmail;
+    @DtoField(readOnly = true)
+    private String managerName;
+
+
+    @DtoField(readOnly = true)
     private List<String> latestViewedSkus;
     @DtoField(readOnly = true)
     private List<String> latestViewedCategories;
@@ -226,5 +234,32 @@ public class CartShoppingContextRO implements Serializable {
 
     public void setHidePrices(final boolean hidePrices) {
         this.hidePrices = hidePrices;
+    }
+
+    @XmlElement(name = "managed-cart")
+    public boolean isManagedCart() {
+        return managedCart;
+    }
+
+    public void setManagedCart(final boolean managedCart) {
+        this.managedCart = managedCart;
+    }
+
+    @XmlElement(name = "manager-email")
+    public String getManagerEmail() {
+        return managerEmail;
+    }
+
+    public void setManagerEmail(final String managerEmail) {
+        this.managerEmail = managerEmail;
+    }
+
+    @XmlElement(name = "manager-name")
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManagerName(final String managerName) {
+        this.managerName = managerName;
     }
 }

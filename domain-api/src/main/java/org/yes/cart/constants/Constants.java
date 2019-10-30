@@ -86,6 +86,11 @@ public interface Constants {
     String[] DEFAULT_CATEGORYLIST_IMAGE_SIZE = new String[] { "280", "280" };
 
     /**
+     * Default customer image size
+     */
+    String[] DEFAULT_CUSTOMERLIST_IMAGE_SIZE = new String[] { "280", "280" };
+
+    /**
      * Default limit of featured panel
      */
     int FEATURED_LIST_SIZE = 15;
@@ -99,6 +104,11 @@ public interface Constants {
      * Default product count in one row on category and search pages
      */
     int PRODUCT_COLUMNS_SIZE = 2;
+
+    /**
+     * Default customer count in one row in list
+     */
+    int CUSTOMER_COLUMNS_SIZE = 2;
 
     /**
      * Default sub categories count in one row on category and search pages
@@ -139,7 +149,13 @@ public interface Constants {
      * Sort options on page. In case if default value in root category not set
      * the default values will be used.
      */
-    List<String> DEFAULT_PAGE_SORT = Arrays.asList("displayName", "sku", "basePrice");
+    List<String> DEFAULT_PAGE_SORT_PRODUCT = Arrays.asList("displayName", "sku", "basePrice");
+
+    /**
+     * Sort options on page. In case if default value in root category not set
+     * the default values will be used.
+     */
+    List<String> DEFAULT_PAGE_SORT_CUSTOMER = Arrays.asList("lastname", "companyName1", "createdTimestamp");
 
     /**
      * Default customer password reset token expiry.

@@ -88,6 +88,7 @@ public class VoShopSummary {
     private MutablePair<String, Boolean> b2bStrictPromotionsActive;
     private MutablePair<String, Boolean> cookiePolicy;
     private MutablePair<String, Boolean> anonymousBrowsing;
+    private MutablePair<String, Boolean> managerLogin;
     private MutablePair<String, String> customerSession;
     private List<MutablePair<String, String>> customerTypes = new ArrayList<>();
     private MutablePair<String, List<String>> customerTypesAbleToRegister;
@@ -104,6 +105,7 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesBlockCheckout;
     private MutablePair<String, List<String>> customerTypesRepeatOrders;
     private MutablePair<String, List<String>> customerTypesShoppingLists;
+    private MutablePair<String, List<String>> customerTypesManagedLists;
     private MutablePair<String, List<String>> customerTypesB2BOrderLineRemarks;
     private MutablePair<String, List<String>> customerTypesB2BOrderForm;
     private MutablePair<String, List<String>> customerTypesAddressBookDisabled;
@@ -462,6 +464,14 @@ public class VoShopSummary {
         this.anonymousBrowsing = anonymousBrowsing;
     }
 
+    public MutablePair<String, Boolean> getManagerLogin() {
+        return managerLogin;
+    }
+
+    public void setManagerLogin(final MutablePair<String, Boolean> managerLogin) {
+        this.managerLogin = managerLogin;
+    }
+
     public MutablePair<String, String> getCustomerSession() {
         return customerSession;
     }
@@ -588,6 +598,14 @@ public class VoShopSummary {
 
     public void setCustomerTypesShoppingLists(final MutablePair<String, List<String>> customerTypesShoppingLists) {
         this.customerTypesShoppingLists = customerTypesShoppingLists;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesManagedLists() {
+        return customerTypesManagedLists;
+    }
+
+    public void setCustomerTypesManagedLists(final MutablePair<String, List<String>> customerTypesManagedLists) {
+        this.customerTypesManagedLists = customerTypesManagedLists;
     }
 
     public MutablePair<String, List<String>> getCustomerTypesB2BOrderLineRemarks() {

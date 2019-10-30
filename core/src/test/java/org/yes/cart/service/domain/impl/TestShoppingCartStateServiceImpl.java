@@ -54,7 +54,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
 
         List<ShoppingCartState> carts;
         assertNull(shoppingCartStateService.findByGuid(uuid));
-        carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com");
+        carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com", 10L);
         assertNotNull(carts);
         assertTrue(carts.isEmpty());
 
@@ -62,17 +62,18 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         scs.setGuid(uuid);
         scs.setCustomerEmail("bob@doe.com");
         scs.setState("State".getBytes());
+        scs.setShopId(10L);
         shoppingCartStateService.create(scs);
 
         assertNotNull(shoppingCartStateService.findByGuid(uuid));
-        carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com");
+        carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com", 10L);
         assertNotNull(carts);
         assertEquals(carts.size(), 1);
 
         shoppingCartStateService.delete(scs);
 
         assertNull(shoppingCartStateService.findByGuid(uuid));
-        carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com");
+        carts = shoppingCartStateService.findByCustomerEmail("bob@doe.com", 10L);
         assertNotNull(carts);
         assertTrue(carts.isEmpty());
     }
@@ -87,6 +88,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         scs.setCustomerEmail("bob@doe.com");
         scs.setEmpty(false);
         scs.setState("State".getBytes());
+        scs.setShopId(10L);
         shoppingCartStateService.create(scs);
 
         final Instant tenSecondsAfterCreation = Instant.now().plusSeconds(10L);
@@ -126,6 +128,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         scs.setCustomerEmail("bob@doe.com");
         scs.setEmpty(true);
         scs.setState("State".getBytes());
+        scs.setShopId(10L);
         shoppingCartStateService.create(scs);
 
         final Instant tenSecondsAfterCreation = Instant.now().plusSeconds(10L);
@@ -163,6 +166,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
         scs.setGuid(uuid);
         scs.setState("State".getBytes());
+        scs.setShopId(10L);
         shoppingCartStateService.create(scs);
 
         final Instant tenSecondsAfterCreation = Instant.now().plusSeconds(10L);

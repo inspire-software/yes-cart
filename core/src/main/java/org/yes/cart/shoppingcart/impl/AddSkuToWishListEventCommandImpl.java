@@ -119,6 +119,15 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         return CustomerWishList.PRIVATE;
     }
 
+    private String getNotificationValue(final Map parameters) {
+        final Object strNotification = parameters.get(CMD_ADDTOWISHLIST_P_NOTIFICATION);
+
+        if (strNotification instanceof String) {
+            return (String) strNotification;
+        }
+        return null;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -136,8 +145,9 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
             final String tags = getTagsValue(parameters);
             final boolean tagsr = isTagsValueReplace(parameters);
             final String visibility = getVisibilityValue(parameters);
+            final String notification = getNotificationValue(parameters);
 
-            createWishListItem(shoppingCart, skuCode, supplier, qty, type, tags, tagsr, visibility, parameters);
+            createWishListItem(shoppingCart, skuCode, supplier, qty, type, tags, tagsr, visibility, notification, parameters);
 
             if (CustomerWishList.CART_SAVE_FOR_LATER.equals(type)) {
 
@@ -167,6 +177,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                                     final String tags,
                                     final boolean tagsr,
                                     final String visibility,
+                                    final String notification,
                                     final Map<String, Object> parameters) {
 
         final Shop shop = getShopService().getById(shoppingCart.getShoppingContext().getShopId());
@@ -186,6 +197,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
         final long customerShopId = shoppingCart.getShoppingContext().getCustomerShopId();
         final long masterShopId = shoppingCart.getShoppingContext().getShopId();
+        final boolean isNamedList = isNamedListType(type);
 
         final List<CustomerWishList> wishList = customerWishListService.findWishListByCustomerId(customer.getCustomerId());
 
@@ -194,8 +206,8 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
             if (item.getSkuCode().equals(skuCode) && item.getSupplierCode().equals(supplier)
                     && item.getWlType().equals(type)) {
 
-                if (CustomerWishList.SHOPPING_LIST_ITEM.equals(type) && !tags.equals(item.getTag())) {
-                    continue; // This is not the same shopping list
+                if (isNamedList && !tags.equals(item.getTag())) {
+                    continue; // This is not the same named list
                 }
 
                 // duplicate item, so just update quantity
@@ -209,7 +221,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                 final BigDecimal quantity = pqm.getValidSetQty(item.getQuantity().add(qtyAdd));
                 item.setQuantity(quantity);
 
-                if (!CustomerWishList.SHOPPING_LIST_ITEM.equals(type)) {
+                if (!isNamedList) {
                     final Set<String> tag = new TreeSet<>();
                     if (!tagsr && StringUtils.isNotBlank(item.getTag())) {
                         tag.addAll(Arrays.asList(StringUtils.split(item.getTag(), ' ')));
@@ -276,12 +288,17 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         customerWishList.setWlType(type);
         customerWishList.setTag(tags);
         customerWishList.setVisibility(visibility);
+        customerWishList.setNotificationEmail(notification);
         customerWishList.setQuantity(quantity);
         customerWishList.setRegularPriceWhenAdded(price);
         customerWishList.setRegularPriceCurrencyWhenAdded(shoppingCart.getCurrencyCode());
 
         customerWishListService.create(customerWishList);
 
+    }
+
+    protected boolean isNamedListType(final String type) {
+        return CustomerWishList.SHOPPING_LIST_ITEM.equals(type) || CustomerWishList.MANAGED_LIST_ITEM.equals(type);
     }
 
     /**

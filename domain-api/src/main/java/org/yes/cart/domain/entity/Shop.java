@@ -278,6 +278,15 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     boolean isSfShoppingListsEnabled(String customerType);
 
     /**
+     * Flag to indicate that this shop allows managed lists feature.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer can use managed lists
+     */
+    boolean isSfManagedListsEnabled(String customerType);
+
+    /**
      * Flag to indicate that this shop allows per line remarks.
      *
      * @param customerType type of customer
@@ -405,6 +414,12 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     boolean isSfHidePricesTypes(String customerType);
 
+    /**
+     * Enable login for managers with ROLE_SMCALLCENTERLOGINSF role.
+     *
+     * @return set of roles
+     */
+    Boolean isSfManagersLoginEnabled();
 
     /**
      * Flag to denote if shop is disabled on not.

@@ -284,7 +284,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/auth/logout").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put("/auth/logout").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .header("yc", uuid))
@@ -586,7 +586,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/auth/logout").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put("/auth/logout").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .header("yc", uuid))

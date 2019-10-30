@@ -127,6 +127,28 @@ public interface ShoppingContext extends Serializable {
     boolean isHidePrices();
 
     /**
+     * Flag to determine if given cart is managed by sales operative on behalf of the
+     * customer.
+     *
+     * @return true if this is managed cart
+     */
+    boolean isManagedCart();
+
+    /**
+     * Email of the manager that manages this cart.
+     *
+     * @return email if cart is managed
+     */
+    String getManagerEmail();
+
+    /**
+     * Name of the manager that manages this cart.
+     *
+     * @return name if cart is managed
+     */
+    String getManagerName();
+
+    /**
      * Get shopper ip address
      *
      * @return customer's IP

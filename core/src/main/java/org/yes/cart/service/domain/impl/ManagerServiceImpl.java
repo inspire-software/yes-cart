@@ -18,9 +18,7 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Manager;
-import org.yes.cart.domain.entity.ManagerShop;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.ManagerService;
 
 import java.util.Collections;
@@ -33,12 +31,20 @@ import java.util.List;
  */
 public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implements ManagerService {
 
+
+    private final GenericDAO<Role, Long> roleDao;
+    private final GenericDAO<ManagerRole, Long> managerRoleDao;
+
     /**
      * Create service to manage the administrative of web shop
      * @param genericDao dao to use
      */
-    public ManagerServiceImpl(final GenericDAO<Manager, Long> genericDao) {
+    public ManagerServiceImpl(final GenericDAO<Manager, Long> genericDao,
+                              final GenericDAO<Role, Long> roleDao,
+                              final GenericDAO<ManagerRole, Long> managerRoleDao) {
         super(genericDao);
+        this.roleDao = roleDao;
+        this.managerRoleDao = managerRoleDao;
     }
 
     /** {@inheritDoc } */
@@ -49,14 +55,26 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
 
     /** {@inheritDoc } */
     @Override
-    public Manager create(final Manager manager, final Shop shop) {
+    public Manager create(final Manager manager, final Shop shop, final String ... roles) {
         if (shop != null) {
             final ManagerShop managerShop = getGenericDao().getEntityFactory().getByIface(ManagerShop.class);
             managerShop.setManager(manager);
             managerShop.setShop(shop);
             manager.getShops().add(managerShop);
         }
-        return super.create(manager);
+        final Manager created = super.create(manager);
+        if (roles != null) {
+            for (final String role : roles) {
+                final Role roleEntity = roleDao.findSingleByCriteria(" where e.code = ?1 ", role);
+                if (roleEntity != null) {
+                    final ManagerRole managerRole = managerRoleDao.getEntityFactory().getByIface(ManagerRole.class);
+                    managerRole.setCode(role);
+                    managerRole.setEmail(created.getEmail());
+                    managerRoleDao.create(managerRole);
+                }
+            }
+        }
+        return created;
     }
 
     /** {@inheritDoc } */

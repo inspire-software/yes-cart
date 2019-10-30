@@ -2028,6 +2028,8 @@
             </column>
         </property>
 
+        <property name="notificationEmail" column="NOTIFICATION_EMAIL" type="string" length="255"/>
+
         <property name="quantity" type="java.math.BigDecimal" not-null="true">
             <column name="QTY" not-null="true">
                 <comment>Quantity of SKU.</comment>
@@ -2630,7 +2632,9 @@
 
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPPINGCARTSTATE_GUID" not-null="true"/>
         <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" index="SHOPPINGCARTSTATE_EMAIL"/>
+        <property name="shopId" column="SHOP_ID" type="long" index="SHOPPINGCARTSTATE_SHOP"/>
         <property name="empty" column="EMPTY" type="boolean" />
+        <property name="managed" column="MANAGED" type="boolean" />
         <property name="state" column="CART_STATE" type="byte[]" length="65536" not-null="true"/>
         <property name="ordernum" column="ORDERNUM" type="string" length="16" not-null="false"/>
 
@@ -2784,9 +2788,9 @@
        ]]>
     </query>
 
-    <query name="SHOPPINGCARTSTATE.BY.EMAIL">
+    <query name="SHOPPINGCARTSTATE.BY.EMAIL.AND.SHOP">
         <![CDATA[
-       select scs from ShoppingCartStateEntity scs where scs.customerEmail  = ?1 and scs.ordernum IS NULL
+       select scs from ShoppingCartStateEntity scs where scs.customerEmail  = ?1 and scs.shopId = ?2 and scs.ordernum IS NULL
        ]]>
     </query>
 
@@ -3854,6 +3858,30 @@
     <query name="PASS.CHECK">
         <![CDATA[
             select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.customer.password = ?3 and cse.disabled = ?4
+        ]]>
+    </query>
+
+    <query name="MANAGER.EMAIL.CHECK">
+        <![CDATA[
+            select count(managerShopId) from ManagerShopEntity mse where lower(mse.manager.email) = ?1 and (mse.shop.shopId = ?2 or mse.shop.master.shopId = ?2) and mse.manager.enabled = ?3
+        ]]>
+    </query>
+
+    <query name="MANAGER.ROLE.CHECK">
+        <![CDATA[
+            select count(managerRoleId) from ManagerRoleEntity mre where lower(mre.email) = ?1 and mre.code in (?2)
+        ]]>
+    </query>
+
+    <query name="MANAGER.ROLE.CODES">
+        <![CDATA[
+            select mre.code from ManagerRoleEntity mre where lower(mre.email) = ?1
+        ]]>
+    </query>
+
+    <query name="MANAGER.PASS.CHECK">
+        <![CDATA[
+            select count(managerShopId) from ManagerShopEntity mse where lower(mse.manager.email) = ?1 and (mse.shop.shopId = ?2 or mse.shop.master.shopId = ?2) and mse.manager.password = ?3
         ]]>
     </query>
 

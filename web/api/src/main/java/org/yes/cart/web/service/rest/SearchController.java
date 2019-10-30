@@ -372,6 +372,7 @@ public class SearchController {
      *     &lt;product-image-height&gt;280&lt;/product-image-height&gt;
      *     &lt;product-image-width&gt;280&lt;/product-image-width&gt;
      *     &lt;products&gt;
+     *     &lt;product&gt;
      *         &lt;availability&gt;1&lt;/availability&gt;
      *         &lt;code&gt;910-002&lt;/code&gt;
      *         &lt;default-image&gt;Logitech-M187_910-002-742_a.png&lt;/default-image&gt;
@@ -444,6 +445,7 @@ public class SearchController {
      *             &lt;/sku&gt;
      *             ...
      *         &lt;/skus&gt;
+     *     &lt;/product&gt;
      *     &lt;/products&gt;
      *     ...
      *     &lt;search&gt;
@@ -475,10 +477,11 @@ public class SearchController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody SearchResultRO search(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                               final @RequestBody SearchRO search,
-                                               final HttpServletRequest request,
-                                               final HttpServletResponse response) {
+    public @ResponseBody
+    SearchResultProductRO search(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                 final @RequestBody SearchRO search,
+                                 final HttpServletRequest request,
+                                 final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
@@ -489,7 +492,7 @@ public class SearchController {
         final long browsingShopId = cart.getShoppingContext().getCustomerShopId();
         final String locale = cart.getCurrentLocale();
 
-        final SearchResultRO result = new SearchResultRO();
+        final SearchResultProductRO result = new SearchResultProductRO();
         result.setSearch(search);
 
         final Pair<String, String> templates = resolveTemplate(categoryId);
@@ -538,7 +541,7 @@ public class SearchController {
                                             final String locale,
                                             final String currencyCode,
                                             final NavigationContext context,
-                                            final SearchResultRO result) {
+                                            final SearchResultProductRO result) {
 
         final Category category = categoryServiceFacade.getCategory(categoryId, browsingShopId);
 
@@ -701,7 +704,7 @@ public class SearchController {
     }
 
     private void populateSearchResults(final NavigationContext context,
-                                       final SearchResultRO result,
+                                       final SearchResultProductRO result,
                                        final ShoppingCart cart) {
 
         ProductSearchResultPageDTO products = productServiceFacade.getListProducts(
@@ -710,7 +713,7 @@ public class SearchController {
 
         result.setTotalResults(products.getTotalHits());
 
-        result.setProducts(searchSupportMixin.map(products.getResults(), cart));
+        result.setItems(searchSupportMixin.map(products.getResults(), cart));
 
     }
 
@@ -718,7 +721,7 @@ public class SearchController {
                                             final long browsingShopId,
                                             final String locale,
                                             final String currency,
-                                            final SearchResultRO result) {
+                                            final SearchResultProductRO result) {
 
         final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, browsingShopId);
         final int selectedItemPerPage;
@@ -739,6 +742,9 @@ public class SearchController {
                 );
             }
         }
+        if (result.getSearch().getSortField() != null && !pageSortingValues.contains(result.getSearch().getSortField())) {
+            result.getSearch().setSortField(null);
+        }
 
         final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, browsingShopId);
 
@@ -748,8 +754,8 @@ public class SearchController {
             result.getSearch().setPageNumber(0); // do not allow negative start page
         }
         result.getSearch().setPageSize(selectedItemPerPage);
-        result.setProductImageWidth(widthHeight.getFirst());
-        result.setProductImageHeight(widthHeight.getSecond());
+        result.setItemImageWidth(widthHeight.getFirst());
+        result.setItemImageHeight(widthHeight.getSecond());
 
     }
 
@@ -757,7 +763,7 @@ public class SearchController {
                                                       final long browsingShopId,
                                                       final String locale,
                                                       final long categoryId,
-                                                      final SearchResultRO result) {
+                                                      final SearchResultProductRO result) {
 
         final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, browsingShopId);
 

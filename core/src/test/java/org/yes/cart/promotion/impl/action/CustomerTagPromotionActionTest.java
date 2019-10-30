@@ -27,8 +27,6 @@ import org.yes.cart.promotion.PromotionContextFactory;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.PromotionService;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 /**
@@ -73,10 +71,10 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
                 @Override
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
-                    assertFalse(fromDb.isEmpty());
-                    promotionContext.applyCustomerPromo(fromDb.get(0), null);
-                    assertEquals("first", fromDb.get(0).getTag());
+                    final Customer fromDb = customerService.findById(newCustomer.getCustomerId());
+                    assertNotNull(fromDb);
+                    promotionContext.applyCustomerPromo(fromDb, null);
+                    assertEquals("first", fromDb.getTag());
                     status.setRollbackOnly();
 
                 }
@@ -122,10 +120,10 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
                 @Override
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
-                    assertFalse(fromDb.isEmpty());
-                    promotionContext.applyCustomerPromo(fromDb.get(0), null);
-                    assertNull(fromDb.get(0).getTag());
+                    final Customer fromDb = customerService.findById(newCustomer.getCustomerId());
+                    assertNotNull(fromDb);
+                    promotionContext.applyCustomerPromo(fromDb, null);
+                    assertNull(fromDb.getTag());
                     status.setRollbackOnly();
 
                 }
@@ -186,10 +184,10 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
                 @Override
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
-                    assertFalse(fromDb.isEmpty());
-                    promotionContext.applyCustomerPromo(fromDb.get(0), null);
-                    assertEquals("first john", fromDb.get(0).getTag());
+                    final Customer fromDb = customerService.findById(newCustomer.getCustomerId());
+                    assertNotNull(fromDb);
+                    promotionContext.applyCustomerPromo(fromDb, null);
+                    assertEquals("first john", fromDb.getTag());
                     status.setRollbackOnly();
 
                 }
@@ -254,10 +252,10 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
                 @Override
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
-                    assertFalse(fromDb.isEmpty());
-                    promotionContext.applyCustomerPromo(fromDb.get(0), null);
-                    assertEquals("first", fromDb.get(0).getTag());
+                    final Customer fromDb = customerService.findById(newCustomer.getCustomerId());
+                    assertNotNull(fromDb);
+                    promotionContext.applyCustomerPromo(fromDb, null);
+                    assertEquals("first", fromDb.getTag());
                     status.setRollbackOnly();
 
                 }

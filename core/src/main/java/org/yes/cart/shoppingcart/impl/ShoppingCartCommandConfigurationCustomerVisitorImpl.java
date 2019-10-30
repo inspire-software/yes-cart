@@ -21,8 +21,8 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.CustomerResolver;
 import org.yes.cart.shoppingcart.MutableOrderInfo;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 
@@ -33,9 +33,9 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
  */
 public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends ShoppingCartCommandConfigurationCustomerTypeVisitorImpl {
 
-    public ShoppingCartCommandConfigurationCustomerVisitorImpl(final CustomerService customerService,
+    public ShoppingCartCommandConfigurationCustomerVisitorImpl(final CustomerResolver customerResolver,
                                                                final ShopService shopService) {
-        super(customerService, shopService);
+        super(customerResolver, shopService);
     }
 
 
@@ -54,6 +54,7 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
         boolean blockCheckout = shop.isSfBlockCustomerCheckout(customerType);
         boolean orderRequiresApproval = shop.isSfRequireCustomerOrderApproval(customerType);
         boolean shoppingListsEnabled = shop.isSfShoppingListsEnabled(customerType);
+        boolean managedListsEnabled = shop.isSfManagedListsEnabled(customerType);
         boolean repeatOrderEnabled = shop.isSfRepeatOrdersEnabled(customerType);
         boolean rfqEnabled = shop.isSfRFQEnabled(customerType);
         boolean orderB2BFormEnabled = shop.isSfB2BOrderFormEnabled(customerType);
@@ -66,6 +67,7 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_TYPE, String.valueOf(orderRequiresApproval));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_TYPE, String.valueOf(blockCheckout));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_LIST_ON, String.valueOf(shoppingListsEnabled));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_MANAGED_LIST_ON, String.valueOf(managedListsEnabled));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_REPEAT_ORDER_ON, String.valueOf(repeatOrderEnabled));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_RFQ_ON, String.valueOf(rfqEnabled));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_B2B_FORM_ON, String.valueOf(orderB2BFormEnabled));
@@ -115,6 +117,13 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY, null);
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE, null);
 
+        // Manager info
+        final Customer manager = determineManager(cart);
+
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_MANAGER_LOGIN_ON,
+                String.valueOf(manager != null && manager.isAttributeValueByCodeTrue("ROLE_SMCALLCENTERLOGINONBEHALF")));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_MANAGER_CREATE_MANAGED_LISTS_ON,
+                String.valueOf(manager != null && manager.isAttributeValueByCodeTrue("ROLE_SMCALLCENTERCREATEMANAGEDLISTS")));
 
     }
 

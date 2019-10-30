@@ -46,8 +46,8 @@ public class ManagerServiceCachedImpl implements ManagerService {
     }
 
     @Override
-    public Manager create(final Manager manager, final Shop shop) {
-        return managerService.create(manager, shop);
+    public Manager create(final Manager manager, final Shop shop, final String ... roles) {
+        return managerService.create(manager, shop, roles);
     }
 
     @Override

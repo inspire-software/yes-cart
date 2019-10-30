@@ -18,7 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
@@ -36,26 +35,27 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
 
     private static final long serialVersionUID = 20101026L;
 
-    private final CustomerService customerService;
+    private final CustomerResolver customerResolver;
     private final ShopService shopService;
 
     /**
      * Construct command.
-     * @param registry shopping cart command registry
-     * @param customerService customer service
-     * @param shopService shop service
-     * @param priceResolver price service
-     * @param pricingPolicyProvider pricing policy provider
-     * @param productService product service
+     *
+     * @param registry                  shopping cart command registry
+     * @param customerResolver          customer service
+     * @param shopService               shop service
+     * @param priceResolver             price service
+     * @param pricingPolicyProvider     pricing policy provider
+     * @param productService            product service
      */
     public LoginCommandImpl(final ShoppingCartCommandRegistry registry,
-                            final CustomerService customerService,
+                            final CustomerResolver customerResolver,
                             final ShopService shopService,
                             final PriceResolver priceResolver,
                             final PricingPolicyProvider pricingPolicyProvider,
                             final ProductService productService) {
         super(registry, priceResolver, pricingPolicyProvider, productService, shopService);
-        this.customerService = customerService;
+        this.customerResolver = customerResolver;
         this.shopService = shopService;
     }
 
@@ -83,13 +83,13 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
             final MutableOrderInfo info = shoppingCart.getOrderInfo();
             if (current != null && authenticate(email, current, passw)) {
 
-                final Customer customer = customerService.getCustomerByEmail(email, current);
+                final Customer customer = customerResolver.getCustomerByEmail(email, current);
                 final List<String> customerShops = new ArrayList<>();
                 // set default shop
                 shoppingCart.getShoppingContext().setCustomerShopId(shoppingCart.getShoppingContext().getShopId());
                 shoppingCart.getShoppingContext().setCustomerShopCode(shoppingCart.getShoppingContext().getShopCode());
                 // set accessible shops
-                for (final Shop shop : customerService.getCustomerShops(customer)) {
+                for (final Shop shop : customerResolver.getCustomerShops(customer)) {
                     customerShops.add(shop.getCode());
                     if (shop.getMaster() != null && shop.getMaster().getShopId() == shopId) {
                         // set customer shop is registered in a sub of a master
@@ -99,7 +99,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
                 }
 
                 ctx.setCustomerEmail(customer.getEmail());
-                ctx.setCustomerName(customerService.formatNameFor(customer, current));
+                ctx.setCustomerName(customerResolver.formatNameFor(customer, current));
                 ctx.setCustomerShops(customerShops);
                 setDefaultCustomerOptions(shoppingCart);
                 setDefaultAddressesIfNecessary(current, customer, shoppingCart);
@@ -150,8 +150,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
      * @return true if credentials are correct for given shop
      */
     protected boolean authenticate(final String username, final Shop shop, final String password) {
-        return customerService.isCustomerExists(username, shop) &&
-                customerService.isPasswordValid(username, shop, password);
+        return customerResolver.authenticate(username, shop, password);
     }
 
 }

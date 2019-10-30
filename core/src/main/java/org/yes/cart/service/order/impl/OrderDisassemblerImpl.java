@@ -82,6 +82,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                 }
 
                 copyLineRemarks(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getB2bRemarks());
+                copyManagedList(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_MANAGED_LIST));
                 copyLineCustomAttributes(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getAllValues());
             }
         } else {
@@ -103,6 +104,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                     }
 
                     copyLineRemarks(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getB2bRemarks());
+                    copyManagedList(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getValue(AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_MANAGED_LIST));
                     copyLineCustomAttributes(shoppingCart, orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getAllValues());
                 }
             }
@@ -223,6 +225,19 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
             shoppingCart.getOrderInfo().putDetail(
                     AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + supplier + "_" + skuCode,
                     remarks
+            );
+        }
+    }
+
+    private void copyManagedList(final ShoppingCartImpl shoppingCart,
+                                 final String supplier,
+                                 final String skuCode,
+                                 final Pair<String, I18NModel> listInfo) {
+
+        if (listInfo != null && StringUtils.isNotBlank(listInfo.getFirst())) {
+            shoppingCart.getOrderInfo().putDetail(
+                    AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_MANAGED_LIST + supplier + "_" + skuCode,
+                    listInfo.getFirst()
             );
         }
     }

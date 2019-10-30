@@ -160,6 +160,27 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
         return query.list();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<T> findRangeByQuery(final String hsqlQuery, final int firstResult, final int maxResults, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        setQueryParameters(query, parameters);
+        return query.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCountByQuery(final String hsqlQuery, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
+        setQueryParameters(query, parameters);
+        return ((Number) query.uniqueResult()).intValue();
+    }
 
     /**
      * {@inheritDoc}
@@ -323,6 +344,15 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
         return query.list();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCountByNamedQuery(final String namedQueryName, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        setQueryParameters(query, parameters);
+        return ((Number) query.uniqueResult()).intValue();
+    }
 
     /**
      * {@inheritDoc}

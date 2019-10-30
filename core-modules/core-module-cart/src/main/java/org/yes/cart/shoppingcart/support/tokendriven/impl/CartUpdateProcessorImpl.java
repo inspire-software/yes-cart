@@ -62,33 +62,38 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
             dbState.setOrdernum(shoppingCart.getOrdernum());
         }
 
+        final long shopId = shoppingCart.getShoppingContext().getShopId();
+        final boolean managed = shoppingCart.getShoppingContext().isManagedCart();
+
         // 2. If this is for logged in cart now but was anonymous we have just logged in
         if (shoppingCart.getLogonState() == ShoppingCart.LOGGED_IN && StringUtils.isBlank(dbState.getCustomerEmail())) {
 
             // 3. Make sure we save the customer email
             dbState.setCustomerEmail(shoppingCart.getCustomerEmail());
 
-            // 4. Copy all items from old carts to current and delete them
-            final List<ShoppingCartState> oldCartStates = shoppingCartStateService.findByCustomerEmail(shoppingCart.getCustomerEmail());
-            final Map<String, Object> cmdParams = new HashMap<>();
-            for (final ShoppingCartState oldCartState : oldCartStates) {
-                // 4.1. Skip same cart
-                if (dbState.getGuid().equals(oldCartState.getGuid())) {
-                    continue;
-                }
-                final ShoppingCart oldCart = restoreStateInternal(oldCartState.getState());
-                // 4.2. Merge only valid restored carts that are not
-                if (oldCart != null) {
-                    // 4.3. Only merge carts from the same shop as we may have mismatch on SKU's
-                    if (shoppingCart.getShoppingContext().getShopCode().equals(oldCart.getShoppingContext().getShopCode())) {
+            if (!managed) {
+                // 4. Copy all items from old carts to current and delete them
+                final List<ShoppingCartState> oldCartStates = shoppingCartStateService.findByCustomerEmail(shoppingCart.getCustomerEmail(), shopId);
+                final Map<String, Object> cmdParams = new HashMap<>();
+                for (final ShoppingCartState oldCartState : oldCartStates) {
+                    // 4.1. Skip same cart OR managed carts
+                    if (dbState.getGuid().equals(oldCartState.getGuid()) || (oldCartState.getManaged() != null && oldCartState.getManaged())) {
+                        continue;
+                    }
+                    final ShoppingCart oldCart = restoreStateInternal(oldCartState.getState());
+                    // 4.2. Merge only valid restored carts that are not
+                    if (oldCart != null) {
+                        // 4.3. Only merge carts from the same shop as we may have mismatch on SKU's
+                        if (shoppingCart.getShoppingContext().getShopCode().equals(oldCart.getShoppingContext().getShopCode())) {
 
-                        mergeNonGiftSKU(shoppingCart, oldCart, cmdParams);
-                        mergeCouponCodes(shoppingCart, oldCart, cmdParams);
-                        mergeShoppingContext(shoppingCart, oldCart, cmdParams);
-                        mergeOrderInfo(shoppingCart, oldCart, cmdParams);
+                            mergeNonGiftSKU(shoppingCart, oldCart, cmdParams);
+                            mergeCouponCodes(shoppingCart, oldCart, cmdParams);
+                            mergeShoppingContext(shoppingCart, oldCart, cmdParams);
+                            mergeOrderInfo(shoppingCart, oldCart, cmdParams);
 
-                        // 4.4. Remove merged cart state
-                        shoppingCartStateService.delete(oldCartState);
+                            // 4.4. Remove merged cart state
+                            shoppingCartStateService.delete(oldCartState);
+                        }
                     }
                 }
             }
@@ -96,6 +101,8 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
         // 5. Store new state
         dbState.setEmpty(shoppingCart.getCartItemsCount() == 0);
+        dbState.setShopId(shopId);
+        dbState.setManaged(managed);
         dbState.setState(saveState(shoppingCart));
 
         // 6. Persist

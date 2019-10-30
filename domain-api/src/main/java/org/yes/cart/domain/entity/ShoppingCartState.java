@@ -51,6 +51,20 @@ public interface ShoppingCartState extends Auditable {
      */
     void setCustomerEmail(String customerEmail);
 
+    /**
+     * Shop id for given cart state.
+     *
+     * @return shop PK
+     */
+    long getShopId();
+
+    /**
+     * Shop id for given cart state.
+     *
+     * @param shopId shop PK
+     */
+    void setShopId(long shopId);
+
 
     /**
      * Order number for order amendment cart.
@@ -80,6 +94,20 @@ public interface ShoppingCartState extends Auditable {
      * @param empty flag indicating empty
      */
     void setEmpty(Boolean empty);
+
+    /**
+     * Get managed cart flag. Indicates if cart is not created by customer.
+     *
+     * @return flag indicating managed
+     */
+    Boolean getManaged();
+
+    /**
+     * Set managed cart flag. Indicates if cart is not created by customer.
+     *
+     * @param managed flag indicating managed
+     */
+    void setManaged(Boolean managed);
 
     /**
      * Get pk value.

@@ -100,6 +100,11 @@
         <constructor-arg index="6" ref="shopAddressCustomisationSupport"/>
     </bean>
 
+    <bean id="managerServiceFacade" class="org.yes.cart.web.support.service.impl.ManagerServiceFacadeImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
     <bean id="promotionFacade" class="org.yes.cart.web.support.service.impl.PromotionFacadeImpl">
         <constructor-arg index="0" ref="promotionService"/>
     </bean>
@@ -174,6 +179,13 @@
     </bean>
 
     <bean id="customerContactFormAspect" class="org.yes.cart.web.aspect.ContactFormAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="mailService"/>
+        <constructor-arg index="2" ref="mailComposer"/>
+        <constructor-arg index="3" ref="themeService"/>
+    </bean>
+
+    <bean id="managedListAspect" class="org.yes.cart.web.aspect.ManagedListAspect">
         <constructor-arg index="0" ref="aspectExecutor"/>
         <constructor-arg index="1" ref="mailService"/>
         <constructor-arg index="2" ref="mailComposer"/>

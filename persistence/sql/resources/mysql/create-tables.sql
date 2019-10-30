@@ -530,6 +530,7 @@
         WL_TYPE varchar(1) default 'W',
         VISIBILITY varchar(1) default 'P',
         TAG varchar(255),
+        NOTIFICATION_EMAIL varchar(255),
         QTY decimal(19,2) not null default 1,
         REGULAR_PRICE_WHEN_ADDED decimal(19,2) not null default 0,
         REGULAR_PRICE_CURRENCY_WHEN_ADDED varchar(5) not null,
@@ -1259,7 +1260,9 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         CART_STATE varbinary(55536),
+        MANAGED bit not null default 0,
         EMPTY bit not null,
+        SHOP_ID bigint not null default 0,
         CUSTOMER_EMAIL varchar(255),
         ORDERNUM varchar(255),
         primary key (TSHOPPINGCARTSTATE_ID)
@@ -1762,6 +1765,7 @@
     create index PROMOTIONCOUPONUSAGE_EMAIL on TPROMOTIONCOUPONUSAGE (CUSTOMER_EMAIL);
 
     create index SHOPPINGCARTSTATE_EMAIL on TSHOPPINGCARTSTATE (CUSTOMER_EMAIL);
+    create index SHOPPINGCARTSTATE_SHOP on TSHOPPINGCARTSTATE (SHOP_ID);
 
 
     alter table TMAILPART

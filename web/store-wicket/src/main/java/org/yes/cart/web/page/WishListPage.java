@@ -89,7 +89,7 @@ public class WishListPage extends AbstractWebPage {
             if (cart.getLogonState() == ShoppingCart.LOGGED_IN && ((AuthenticatedWebSession) getSession()).isSignedIn()) {
                 email = cart.getCustomerEmail();
                 customer = customerServiceFacade.getCustomerByEmail(getCurrentShop(), email);
-                publicKey = customerServiceFacade.getCustomerPublicKey(customer);
+                publicKey = customer != null ? customerServiceFacade.getCustomerPublicKey(customer) : null;
             } else {
                 email = "";
                 customer = null;

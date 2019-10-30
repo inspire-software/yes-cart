@@ -125,13 +125,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     public boolean isCategoryHasChildren(final long categoryId) {
         final List<Long> id = getCategoryIdAndLinkId(categoryId);
         if (id != null) {
-            List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.SUBCATEGORY.COUNT", id);
-            if (count != null && count.size() == 1) {
-                int qty = ((Number) count.get(0)).intValue();
-                if (qty > 0) {
-                    return true;
-                }
-            }
+            final int qty = categoryDao.findCountByNamedQuery("CATEGORY.SUBCATEGORY.COUNT", id);
+            return qty > 0;
         }
         return false;
     }

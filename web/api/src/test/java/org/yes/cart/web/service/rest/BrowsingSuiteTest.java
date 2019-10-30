@@ -35,6 +35,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 
 import static org.junit.Assert.assertNotNull;
@@ -571,6 +572,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
         reindex();
 
         final SearchRO search = new SearchRO();
+        search.setParameters(Collections.singletonMap("query", Collections.singletonList("BENDER")));
         search.setSortField("sku.code_sort");
 
         final byte[] body = toJsonBytes(search);
@@ -597,6 +599,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
         reindex();
 
         final SearchRO search = new SearchRO();
+        search.setParameters(Collections.singletonMap("query", Collections.singletonList("BENDER")));
         search.setSortField("sku.code_sort");
 
         final byte[] body = toJsonBytes(search);

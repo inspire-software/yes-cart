@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.shoppingcart.MutableShoppingContext;
 
 import java.util.ArrayList;
@@ -50,6 +52,9 @@ public class ShoppingContextImpl implements MutableShoppingContext {
 
     private boolean hidePrices;
 
+    private String managerEmail;
+    private String managerName;
+
     private List<String> latestViewedSkus;
     private List<String> latestViewedCategories;
     private String resolvedIp;
@@ -80,6 +85,8 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         customerShops = new ArrayList<>(0);
         customerShopId = shopId;
         customerShopCode = shopCode;
+        managerEmail = null;
+        managerName = null;
     }
 
     private void clearShopRelatedParameters() {
@@ -359,4 +366,36 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     public void setHidePrices(final boolean hidePrices) {
         this.hidePrices = hidePrices;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    @JsonIgnore
+    public boolean isManagedCart() {
+        return StringUtils.isNotBlank(managerEmail);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getManagerEmail() {
+        return managerEmail;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setManagerEmail(final String managerEmail) {
+        this.managerEmail = managerEmail;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getManagerName() {
+        return managerName;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setManagerName(final String managerName) {
+        this.managerName = managerName;
+    }
+    
 }

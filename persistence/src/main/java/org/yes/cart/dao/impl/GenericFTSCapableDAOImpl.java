@@ -138,6 +138,22 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @Override
+    public List<T> findRangeByQuery(final String hsqlQuery, final int firstResult, final int maxResults, final Object... parameters) {
+        return genericDAO.findRangeByQuery(hsqlQuery, firstResult, maxResults, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCountByQuery(final String hsqlQuery, final Object... parameters) {
+        return genericDAO.findCountByQuery(hsqlQuery, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ResultsIterator<Object> findByQueryIterator(final String hsqlQuery, final Object... parameters) {
         return genericDAO.findByQueryIterator(hsqlQuery, parameters);
     }
@@ -228,6 +244,14 @@ public class GenericFTSCapableDAOImpl<T, PK extends Serializable>
     @Override
     public List<T> findRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         return genericDAO.findRangeByNamedQuery(namedQueryName, firstResult, maxResults, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCountByNamedQuery(final String namedQueryName, final Object... parameters) {
+        return genericDAO.findCountByNamedQuery(namedQueryName, parameters);
     }
 
     /**

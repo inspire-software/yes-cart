@@ -17,6 +17,8 @@
 package org.yes.cart.service.order.impl.listener;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.PromotionCouponUsage;
 import org.yes.cart.service.domain.PromotionCouponService;
@@ -29,6 +31,8 @@ import org.yes.cart.service.order.OrderStateTransitionListener;
  * Time: 18:29
  */
 public class CouponUsageTrackingListenerImpl implements OrderStateTransitionListener {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CouponUsageTrackingListenerImpl.class);
 
     private final PromotionCouponService promotionCouponService;
     private int usageOffset = 1;
@@ -50,6 +54,8 @@ public class CouponUsageTrackingListenerImpl implements OrderStateTransitionList
                 promotionCouponService.updateUsage(
                         promotionCouponService.findByCode(usage.getCouponCode()),
                         usageOffset);
+
+                LOG.info("Recorded coupon code usage {} with order {}", usage.getCouponCode(), customerOrder.getOrdernum());
 
             }
 

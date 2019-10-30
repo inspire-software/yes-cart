@@ -61,6 +61,13 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     private boolean hidePrices;
 
     @DtoField(readOnly = true)
+    private boolean managedCart;
+    @DtoField(readOnly = true)
+    private String managerEmail;
+    @DtoField(readOnly = true)
+    private String managerName;
+
+    @DtoField(readOnly = true)
     private List<String> latestViewedSkus;
     @DtoField(readOnly = true)
     private List<String> latestViewedCategories;
@@ -219,5 +226,32 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
 
     public void setHidePrices(final boolean hidePrices) {
         this.hidePrices = hidePrices;
+    }
+
+    @Override
+    public boolean isManagedCart() {
+        return managedCart;
+    }
+
+    public void setManagedCart(final boolean managedCart) {
+        this.managedCart = managedCart;
+    }
+
+    @Override
+    public String getManagerEmail() {
+        return managerEmail;
+    }
+
+    public void setManagerEmail(final String managerEmail) {
+        this.managerEmail = managerEmail;
+    }
+
+    @Override
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManagerName(final String managerName) {
+        this.managerName = managerName;
     }
 }

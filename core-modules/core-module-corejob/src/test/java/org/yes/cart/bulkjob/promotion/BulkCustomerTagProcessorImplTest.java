@@ -24,8 +24,6 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.domain.SystemService;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -114,17 +112,17 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
         bulkCustomerTagProcessor.run();
         systemService.updateAttributeValue("JOB_CUSTOMER_TAG_PAUSE", Boolean.TRUE.toString());
 
-        final List<Customer> customer1tagged = customerService.findCustomer(customer1.getEmail(), null, null, null, null, null, null);
+        final Customer customer1tagged = customerService.findById(customer1.getCustomerId());
 
-        assertEquals("tag1 tag1or3", customer1tagged.get(0).getTag());
+        assertEquals("tag1 tag1or3", customer1tagged.getTag());
 
-        final List<Customer> customer2tagged = customerService.findCustomer(customer2.getEmail(), null, null, null, null, null, null);
+        final Customer customer2tagged = customerService.findById(customer2.getCustomerId());
 
-        assertNull(customer2tagged.get(0).getTag());
+        assertNull(customer2tagged.getTag());
 
-        final List<Customer> customer3tagged = customerService.findCustomer(customer3.getEmail(), null, null, null, null, null, null);
+        final Customer customer3tagged = customerService.findById(customer3.getCustomerId());
 
-        assertEquals("first3 tag1or3 tag3", customer3tagged.get(0).getTag());
+        assertEquals("first3 tag1or3 tag3", customer3tagged.getTag());
 
 
     }

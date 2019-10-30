@@ -1124,12 +1124,30 @@
         </property>
     </bean>
 
+    <bean id="customerManagerService" class="org.yes.cart.service.domain.impl.CustomerManagerServiceCachedImpl">
+        <constructor-arg>
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.service.domain.impl.CustomerManagerServiceImpl">
+                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="managerDao"/>
+                        <constructor-arg index="1" type="org.yes.cart.service.domain.HashHelper" ref="passwordHashHelper"/>
+                        <constructor-arg index="2" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+                        <constructor-arg index="3" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+                        <constructor-arg index="4" type="org.yes.cart.service.customer.CustomerNameFormatter" ref="customerNameFormatter"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+    </bean>
+
     <bean id="managerService" class="org.yes.cart.service.domain.impl.ManagerServiceCachedImpl">
        <constructor-arg>
            <bean parent="txProxyTemplate">
                <property name="target">
                    <bean class="org.yes.cart.service.domain.impl.ManagerServiceImpl">
                        <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="managerDao"/>
+                       <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="roleDao"/>
+                       <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="managerRoleDao"/>
                    </bean>
                </property>
            </bean>
@@ -1435,32 +1453,37 @@
 
     <!-- ############################# Shopping Cart Commands and Events ######################### -->
 
-    <bean id="shoppingCartCommandConfigurationCheckoutVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationCheckoutVisitorImpl">
+    <bean id="customerResolver" class="org.yes.cart.shoppingcart.impl.CustomerResolverDefaultImpl">
         <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="customerManagerService"/>
+    </bean>
+
+    <bean id="shoppingCartCommandConfigurationCheckoutVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationCheckoutVisitorImpl">
+        <constructor-arg index="0" ref="customerResolver"/>
         <constructor-arg index="1" ref="shopService"/>
         <property name="visitorId" value="CHECKOUT"/>
     </bean>
 
     <bean id="shoppingCartCommandConfigurationCustomerTypeVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationCustomerTypeVisitorImpl">
-        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="0" ref="customerResolver"/>
         <constructor-arg index="1" ref="shopService"/>
         <property name="visitorId" value="CUSTOMERTYPE"/>
     </bean>
 
     <bean id="shoppingCartCommandConfigurationCustomerVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationCustomerVisitorImpl">
-        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="0" ref="customerResolver"/>
         <constructor-arg index="1" ref="shopService"/>
         <property name="visitorId" value="CUSTOMER"/>
     </bean>
 
     <bean id="shoppingCartCommandConfigurationDefaultAddressVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationDefaultAddressVisitorImpl">
-        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="0" ref="customerResolver"/>
         <constructor-arg index="1" ref="shopService"/>
         <property name="visitorId" value="DEFAULTADDRESS"/>
     </bean>
 
     <bean id="shoppingCartCommandConfigurationTaxOptionsVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationTaxOptionsVisitorImpl">
-        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="0" ref="customerResolver"/>
         <constructor-arg index="1" ref="shopService"/>
         <property name="visitorId" value="TAX"/>
     </bean>

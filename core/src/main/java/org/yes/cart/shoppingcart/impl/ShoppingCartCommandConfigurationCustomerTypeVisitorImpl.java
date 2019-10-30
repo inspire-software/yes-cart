@@ -19,13 +19,9 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.CustomerResolver;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * User: denispavlov
@@ -34,9 +30,9 @@ import java.util.List;
  */
 public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends AbstractShoppingCartCommandConfigurationVisitorImpl {
 
-    public ShoppingCartCommandConfigurationCustomerTypeVisitorImpl(final CustomerService customerService,
+    public ShoppingCartCommandConfigurationCustomerTypeVisitorImpl(final CustomerResolver customerResolver,
                                                                    final ShopService shopService) {
-        super(customerService, shopService);
+        super(customerResolver, shopService);
     }
 
 

@@ -16,29 +16,15 @@
 
 package org.yes.cart.web.aspect;
 
-import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.message.RegistrationMessage;
-import org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener;
-import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.MailService;
-import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.web.application.ApplicationDirector;
-
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * User: denispavlov
@@ -46,15 +32,9 @@ import java.util.Set;
  * Time: 09:09
  */
 @Aspect
-public class NewsletterAspect extends BaseNotificationAspect {
+public class NewsletterAspect extends AbstractSimpleNotificationAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewsletterAspect.class);
-
-    private final MailService mailService;
-
-    private final MailComposer mailComposer;
-
-    private final ThemeService themeService;
 
     /**
      * Construct customer aspect.
@@ -68,91 +48,7 @@ public class NewsletterAspect extends BaseNotificationAspect {
                             final MailService mailService,
                             final MailComposer mailComposer,
                             final ThemeService themeService) {
-        super(taskExecutor);
-        this.mailService = mailService;
-        this.mailComposer = mailComposer;
-        this.themeService = themeService;
-    }
-
-
-    /**
-     * Perform notification about newsletter registration.
-     *
-     * @param pjp join point
-     *
-     * @return inherited return
-     *
-     * @throws Throwable in case it was in underlying method
-     */
-    protected Object notifyInternal(final ProceedingJoinPoint pjp) throws Throwable {
-        final Object[] args = pjp.getArgs();
-
-        final Shop shop = (Shop) args[0];
-        final String email = (String) args[1];
-        final Map<String, Object> registrationData = (Map<String, Object>) args[2];
-        registrationData.put("email", email);
-
-
-        final RegistrationMessage registrationMessage = new RegistrationMessageImpl();
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        if (cart != null) {
-            registrationMessage.setLocale(cart.getCurrentLocale());
-        }
-
-        registrationMessage.setMailTemplatePathChain(themeService.getMailTemplateChainByShopId(shop.getShopId()));
-
-        registrationMessage.setTemplateName("adm-newsletter-request");
-
-        final String emailTo = determineFromEmail(shop); // newsletter request to admin
-        registrationMessage.setEmail(emailTo);
-        registrationMessage.setShopMailFrom(emailTo);
-
-        registrationMessage.setShopId(shop.getShopId());
-        registrationMessage.setShopCode(shop.getCode());
-        registrationMessage.setShopName(shop.getName());
-        registrationMessage.setShopUrl(transformShopUrls(shop));
-        registrationMessage.setShopSecureUrl(transformShopSecureUrls(shop));
-
-        registrationMessage.setAdditionalData(registrationData);
-
-        sendNotification(registrationMessage);
-
-        LOG.info("Newsletter message was send to queue {}", registrationMessage);
-
-        return pjp.proceed();
-    }
-
-    private String determineFromEmail(final Shop shop) {
-        final String attrVal = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
-        if (StringUtils.isNotBlank(attrVal)) {
-            return attrVal;
-        }
-        return null;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Runnable getTask(Serializable serializableMessage) {
-        return new CustomerRegistrationMessageListener(
-                mailService,
-                mailComposer,
-                (RegistrationMessage) serializableMessage
-        );
-    }
-
-    private Set<String> transformShopUrls(final Shop shop) {
-        final Set<String> rez = new HashSet<>();
-        rez.add(shop.getDefaultShopUrl());
-        return rez;
-    }
-
-    private Set<String> transformShopSecureUrls(final Shop shop) {
-        final Set<String> rez = new HashSet<>();
-        rez.add(shop.getDefaultShopSecureUrl());
-        return rez;
+        super(taskExecutor, mailService, mailComposer, themeService);
     }
 
 
@@ -165,7 +61,7 @@ public class NewsletterAspect extends BaseNotificationAspect {
      */
     @Around("execution(* org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl.registerNewsletter(..))")
     public Object doSignupNewsletter(final ProceedingJoinPoint pjp) throws Throwable {
-        return notifyInternal(pjp);
+        return notifyInternal(pjp, "adm-newsletter-request");
     }
 
 }

@@ -16,10 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.CustomerResolver;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandConfigurationVisitor;
@@ -31,14 +32,14 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandConfigurationVisitor;
  */
 public abstract class AbstractShoppingCartCommandConfigurationVisitorImpl implements ShoppingCartCommandConfigurationVisitor<MutableShoppingCart> {
 
-    private final CustomerService customerService;
+    private final CustomerResolver customerResolver;
     private final ShopService shopService;
 
     private String visitorId;
 
-    protected AbstractShoppingCartCommandConfigurationVisitorImpl(final CustomerService customerService,
+    protected AbstractShoppingCartCommandConfigurationVisitorImpl(final CustomerResolver customerResolver,
                                                                   final ShopService shopService) {
-        this.customerService = customerService;
+        this.customerResolver = customerResolver;
         this.shopService = shopService;
     }
 
@@ -61,7 +62,29 @@ public abstract class AbstractShoppingCartCommandConfigurationVisitorImpl implem
      */
     protected Customer determineCustomer(final MutableShoppingCart cart) {
         if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
-            return customerService.getCustomerByEmail(cart.getCustomerEmail(), determineCustomerShop(cart));
+            return customerResolver.getCustomerByEmail(cart.getCustomerEmail(), determineCustomerShop(cart));
+        }
+        return null;
+    }
+
+    /**
+     * Determine manager for current cart.
+     *
+     * @param cart cart
+     *
+     * @return customer object or null for anonymous
+     */
+    protected Customer determineManager(final MutableShoppingCart cart) {
+        if (customerResolver.isManagerLoginEnabled(determineCustomerShop(cart))) {
+            if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
+                if (cart.getShoppingContext().isManagedCart()) {
+                    return customerResolver.getCustomerByEmail(cart.getShoppingContext().getManagerEmail(), determineCustomerShop(cart));
+                }
+                final Customer customer = customerResolver.getCustomerByEmail(cart.getCustomerEmail(), determineCustomerShop(cart));
+                if (customer != null && AttributeNamesKeys.Cart.CUSTOMER_TYPE_MANAGER.equals(customer.getCustomerType())) {
+                    return customer;
+                }
+            }
         }
         return null;
     }

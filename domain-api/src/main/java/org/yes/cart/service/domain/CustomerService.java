@@ -21,6 +21,8 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -28,6 +30,38 @@ import java.util.List;
  * Time: 11:13:01
  */
 public interface CustomerService extends GenericService<Customer> {
+
+
+    /**
+     * Find customer by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param shops             optional shops to search in
+     * @param filter            optional filters (e.g. any, firstname, lastname)
+     *
+     * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
+     */
+    List<Customer> findCustomer(int start,
+                                int offset,
+                                String sort,
+                                boolean sortDescending,
+                                Set<Long> shops,
+                                Map<String, Object> filter);
+
+    /**
+     * Find customer by given search criteria. Search will be performed using like operation.
+     *
+     * @param shops             optional shops to search in
+     * @param filter            optional filters (e.g. any, firstname, lastname)
+     *
+     * @return count
+     */
+    int findCustomerCount(Set<Long> shops,
+                          Map<String, Object> filter);
+
 
     /**
      * Find customer by given search criteria. Search will be performed using like operation.
@@ -40,6 +74,7 @@ public interface CustomerService extends GenericService<Customer> {
      * @param tag           optional tag
      * @param customerType  optional customer type
      * @param pricingPolicy optional customer pricing policy
+     *                      
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      */
     List<Customer> findCustomer(String email, String firstname, String lastname, String middlename, String tag, String customerType, String pricingPolicy);

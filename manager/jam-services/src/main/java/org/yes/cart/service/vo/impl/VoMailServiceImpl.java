@@ -182,7 +182,7 @@ public class VoMailServiceImpl implements VoMailService {
 
             return mailComposer.convertMessageToHTML(mail);
 
-        } else if (template.contains("customer") || template.contains("contactform") || template.contains("newsletter")) {
+        } else if (template.contains("customer") || template.contains("contactform") || template.contains("newsletter") || template.contains("managedlist")) {
 
             final Shop shop = shopService.findById(shopId);
 
@@ -218,6 +218,15 @@ public class VoMailServiceImpl implements VoMailService {
             additionalData.put("requireNotification", Boolean.TRUE);
             additionalData.put("requireNotificationEmails", "test@example.com");
             additionalData.put("callCentrePasswordReset", Boolean.TRUE);
+
+            if (template.contains("managedlist")) {
+                additionalData.put("managedListName", "Managed List 001");
+                additionalData.put("managedListManagerEmail", "manager@example.com");
+                additionalData.put("managedListCustomerEmail", "test@example.com");
+                additionalData.put("managedListCustomerName", "Bob J. Doe");
+                additionalData.put("rejectReason", "Rejected due to reason X");
+                additionalData.put("managedListUri", "managedlist?list=Managed%20List%20001");
+            }
 
             emailModel.put("additionalData", additionalData);
 

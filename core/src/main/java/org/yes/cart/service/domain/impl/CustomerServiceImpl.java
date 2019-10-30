@@ -27,14 +27,11 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.customer.CustomerNameFormatter;
-import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.HashHelper;
-import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.utils.log.Markers;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.utils.HQLUtils;
-import org.yes.cart.service.domain.AttributeRankComparator;
+import org.yes.cart.utils.log.Markers;
 
 import java.util.*;
 
@@ -158,6 +155,153 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
     }
 
+    private Pair<String, Object[]> findCustomerQuery(final boolean count,
+                                                     final String sort,
+                                                     final boolean sortDescending,
+                                                     final Set<Long> shops,
+                                                     final Map<String, Object> filter) {
+
+        final Map<String, Object> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(cse.customer) from CustomerShopEntity cse ");
+        } else {
+            hqlCriteria.append("select cse.customer from CustomerShopEntity cse ");
+        }
+
+        Boolean disabled = Boolean.FALSE;
+        if (currentFilter != null) {
+            final Object disabledFilter = currentFilter.get("disabled");
+            if (disabledFilter instanceof String) {
+                if ("*".equalsIgnoreCase((String) disabledFilter)) {
+                    disabled = null;
+                } else {
+                    disabled = Boolean.valueOf((String) disabledFilter);
+                }
+            } else if (disabledFilter instanceof Boolean) {
+                disabled = (Boolean) disabledFilter;
+            }
+            currentFilter.remove("disabled");
+        }
+
+        if (CollectionUtils.isNotEmpty(shops)) {
+
+            if (disabled != null) {
+                hqlCriteria.append(" where (cse.shop.shopId in (?1) or cse.shop.master.shopId in (?1)) and cse.disabled = ?2 ");
+                params.add(shops);
+                params.add(disabled);
+            } else {
+                hqlCriteria.append(" where (cse.shop.shopId in (?1) or cse.shop.master.shopId in (?1)) ");
+                params.add(shops);
+            }
+
+        } else {
+
+            if (disabled != null) {
+                hqlCriteria.append(" where cse.disabled = ?1 ");
+                params.add(disabled);
+            }
+
+        }
+
+        if (currentFilter != null) {
+            final Object any = currentFilter.get("any");
+            if (any instanceof String && StringUtils.isNotBlank((String) any)) {
+
+                final int pIdx = params.size() + 1;
+
+                if (pIdx == 1) {
+                    hqlCriteria.append(" where ");
+                } else {
+                    hqlCriteria.append(" and ");
+                }
+
+                hqlCriteria.append(
+                        "  (\n" +
+                                " (lower(cse.customer.email) like ?" + pIdx + ") or\n" +
+                                " (lower(cse.customer.firstname) like ?" + pIdx + ") or\n" +
+                                " (lower(cse.customer.lastname) like ?" + pIdx + ") or\n" +
+                                " (lower(cse.customer.companyName1) like ?" + pIdx + ") or\n" +
+                                " (lower(cse.customer.companyName2) like ?" + pIdx + ") or\n" +
+                                " (lower(cse.customer.tag) like ?" + pIdx + ")\n" +
+                                " ) ");
+                params.add(HQLUtils.criteriaIlikeAnywhere((String) any));
+
+            } else {
+
+                for (final Map.Entry<String, Object> props : currentFilter.entrySet()) {
+
+                    final Object val = props.getValue();
+                    if (val instanceof String && StringUtils.isNotBlank((String) val)) {
+
+                        final int pIdx = params.size() + 1;
+
+                        if (pIdx == 1) {
+                            hqlCriteria.append(" where ");
+                        } else {
+                            hqlCriteria.append(" and ");
+                        }
+
+                        hqlCriteria.append(" (lower(cse.customer." + props.getKey() + ") like ?" + pIdx + ") \n");
+                        params.add(HQLUtils.criteriaIlikeAnywhere((String) val));
+
+                    }
+                }
+
+            }
+        }
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by cse.customer." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Customer> findCustomer(final int start,
+                                       final int offset,
+                                       final String sort,
+                                       final boolean sortDescending,
+                                       final Set<Long> shops,
+                                       final Map<String, Object> filter) {
+
+        final Pair<String, Object[]> query = findCustomerQuery(false, sort, sortDescending, shops, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCustomerCount(final Set<Long> shops,
+                                 final Map<String, Object> filter) {
+
+        final Pair<String, Object[]> query = findCustomerQuery(true, null, false, shops, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -189,10 +333,8 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     @Override
     public boolean isCustomerExists(final String email, final Shop shop) {
         if (StringUtils.isNotBlank(email)) {
-            final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("EMAIL.CHECK", email.toLowerCase(), shop.getShopId());
-            if (CollectionUtils.isNotEmpty(counts)) {
-                return ((Number) counts.get(0)).intValue() > 0;
-            }
+            final int counts = getGenericDao().findCountByNamedQuery("EMAIL.CHECK", email.toLowerCase(), shop.getShopId());
+            return counts > 0;
         }
         return false;
     }
@@ -204,17 +346,18 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     public boolean isPasswordValid(final String email, final Shop shop, final String password) {
         try {
 
+            if (StringUtils.isBlank(password)) {
+                return false;
+            }
+
             final String hash = passwordHashHelper.getHash(password);
 
-            final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("PASS.CHECK", email.toLowerCase(), shop.getShopId(), hash, Boolean.FALSE);
+            final int validLoginsFound = getGenericDao().findCountByNamedQuery("PASS.CHECK", email.toLowerCase(), shop.getShopId(), hash, Boolean.FALSE);
 
-            if (CollectionUtils.isNotEmpty(counts)) {
-                final int validLoginsFound = ((Number) counts.get(0)).intValue();
-                if (validLoginsFound == 1) {
-                    return true;
-                } else if (validLoginsFound > 1) {
-                    LOG.warn(Markers.alert(), "Customer {} assigned to multiple shops when checking {} ... password will be marked as invalid", email, shop.getCode());
-                }
+            if (validLoginsFound == 1) {
+                return true;
+            } else if (validLoginsFound > 1) {
+                LOG.warn(Markers.alert(), "Customer {} assigned to multiple shops when checking {} ... password will be marked as invalid", email, shop.getCode());
             }
             return false;
 

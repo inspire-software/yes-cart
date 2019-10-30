@@ -201,6 +201,7 @@ export interface ShopSummaryVO {
   customerTypesBlockCheckout: Pair<string, string[]>;
   customerTypesRepeatOrders: Pair<string, string[]>;
   customerTypesShoppingLists: Pair<string, string[]>;
+  customerTypesManagedLists: Pair<string, string[]>;
   customerTypesB2BOrderLineRemarks: Pair<string, string[]>;
   customerTypesB2BOrderForm: Pair<string, string[]>;
   customerTypesAddressBookDisabled: Pair<string, string[]>;

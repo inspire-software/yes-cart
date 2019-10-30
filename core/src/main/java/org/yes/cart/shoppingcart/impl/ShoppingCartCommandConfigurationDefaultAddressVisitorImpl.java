@@ -19,8 +19,8 @@ package org.yes.cart.shoppingcart.impl;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.CustomerResolver;
 import org.yes.cart.shoppingcart.MutableOrderInfo;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.MutableShoppingContext;
@@ -32,9 +32,9 @@ import org.yes.cart.shoppingcart.MutableShoppingContext;
  */
 public class ShoppingCartCommandConfigurationDefaultAddressVisitorImpl extends ShoppingCartCommandConfigurationCustomerTypeVisitorImpl {
 
-    public ShoppingCartCommandConfigurationDefaultAddressVisitorImpl(final CustomerService customerService,
+    public ShoppingCartCommandConfigurationDefaultAddressVisitorImpl(final CustomerResolver customerResolver,
                                                                      final ShopService shopService) {
-        super(customerService, shopService);
+        super(customerResolver, shopService);
     }
 
     @Override

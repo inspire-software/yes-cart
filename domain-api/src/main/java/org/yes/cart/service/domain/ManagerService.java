@@ -41,9 +41,11 @@ public interface ManagerService extends GenericService<Manager> {
      *
      * @param manager to reset password
      * @param shop    shop to assign
+     * @param roles   roles to assign
+     *
      * @return customer instance
      */
-    Manager create(final Manager manager, final Shop shop);
+    Manager create(Manager manager, Shop shop, String ... roles);
 
     /**
      * Find manager by email exact

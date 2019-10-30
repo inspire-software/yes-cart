@@ -273,31 +273,29 @@ public class AuthenticationController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody AuthenticationResultRO login(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @RequestParam(value = "customer", required = false)  Boolean customer,
                                                       final @RequestBody LoginRO loginRO,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), loginRO.getUsername());
-
-        if (customer != null) {
-
+        if (customer != null && customer) {
+            executeLoginOnBehalf(loginRO.getUsername());
+        } else {
             executeLoginCommand(loginRO.getUsername(), loginRO.getPassword());
+        }
 
-            final TokenRO token = cartMixin.persistShoppingCart(request, response);
+        final TokenRO token = cartMixin.persistShoppingCart(request, response);
 
-            ShoppingCart cart = cartMixin.getCurrentCart();
-            final int logOnState = cart.getLogonState();
-            if (logOnState == ShoppingCart.LOGGED_IN) {
+        ShoppingCart cart = cartMixin.getCurrentCart();
+        final int logOnState = cart.getLogonState();
+        if (logOnState == ShoppingCart.LOGGED_IN) {
 
-                return new AuthenticationResultRO(cart.getCustomerName(), token);
-
-            }
-
-            return new AuthenticationResultRO("AUTH_FAILED");
+            return new AuthenticationResultRO(cart.getCustomerName(), token);
 
         }
 
-        return new AuthenticationResultRO("USER_FAILED");
+        return new AuthenticationResultRO("AUTH_FAILED");
+        
     }
 
 
@@ -360,10 +358,11 @@ public class AuthenticationController {
      */
     @RequestMapping(
             value = "/logout",
-            method = RequestMethod.GET,
+            method = RequestMethod.PUT,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody AuthenticationResultRO logout(final @RequestHeader(value = "yc", required = false) String requestToken,
+                                                       final @RequestParam(value = "customer", required = false)  Boolean customer,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -371,8 +370,27 @@ public class AuthenticationController {
 
         if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
-            executeLogoutCommand();
-            cartMixin.persistShoppingCart(request, response);
+            if (customer != null && customer) {
+
+                executeLogoutCustomerCommand();
+
+                final TokenRO token = cartMixin.persistShoppingCart(request, response);
+
+                ShoppingCart freshCart = cartMixin.getCurrentCart();
+                final int logOnState = freshCart.getLogonState();
+                if (logOnState == ShoppingCart.LOGGED_IN) {
+
+                    return new AuthenticationResultRO(freshCart.getCustomerName(), token);
+
+                }
+
+            } else {
+                
+                executeLogoutCommand();
+                cartMixin.persistShoppingCart(request, response);
+
+            }
+
 
         }
 
@@ -767,7 +785,7 @@ public class AuthenticationController {
         loginRO.setUsername(registerRO.getEmail());
         loginRO.setPassword(password);
 
-        return login(requestToken, loginRO, request, response);
+        return login(requestToken, null, loginRO, request, response);
 
     }
 
@@ -1413,12 +1431,37 @@ public class AuthenticationController {
     }
 
     /**
+     * Execute login command.
+     *
+     * @param email     customer.
+     */
+    protected void executeLoginOnBehalf(final String email) {
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN_ON_BEHALF, cartMixin.getCurrentCart(),
+                new HashMap<String, Object>() {{
+                    put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, email);
+                    put(ShoppingCartCommand.CMD_LOGIN_ON_BEHALF, ShoppingCartCommand.CMD_LOGIN_ON_BEHALF);
+                }}
+        );
+    }
+
+    /**
      * Execute logout command.
      */
     protected void executeLogoutCommand() {
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT, cartMixin.getCurrentCart(),
                 new HashMap<String, Object>() {{
                     put(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+                }}
+        );
+    }
+
+    /**
+     * Execute logout command.
+     */
+    protected void executeLogoutCustomerCommand() {
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT_ON_BEHALF, cartMixin.getCurrentCart(),
+                new HashMap<String, Object>() {{
+                    put(ShoppingCartCommand.CMD_LOGOUT_ON_BEHALF, ShoppingCartCommand.CMD_LOGOUT_ON_BEHALF);
                 }}
         );
     }

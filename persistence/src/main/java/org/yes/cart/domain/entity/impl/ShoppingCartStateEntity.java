@@ -28,8 +28,11 @@ public class ShoppingCartStateEntity implements ShoppingCartState, java.io.Seria
 
     private Boolean empty = Boolean.TRUE;
     private String customerEmail;
+    private long shopId;
     private String ordernum;
     private byte[] state;
+
+    private Boolean managed = Boolean.TRUE;
 
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
@@ -51,6 +54,16 @@ public class ShoppingCartStateEntity implements ShoppingCartState, java.io.Seria
     }
 
     @Override
+    public long getShopId() {
+        return shopId;
+    }
+
+    @Override
+    public void setShopId(final long shopId) {
+        this.shopId = shopId;
+    }
+
+    @Override
     public String getOrdernum() {
         return ordernum;
     }
@@ -68,6 +81,16 @@ public class ShoppingCartStateEntity implements ShoppingCartState, java.io.Seria
     @Override
     public void setEmpty(final Boolean empty) {
         this.empty = empty;
+    }
+
+    @Override
+    public Boolean getManaged() {
+        return managed;
+    }
+
+    @Override
+    public void setManaged(final Boolean managed) {
+        this.managed = managed;
     }
 
     @Override

@@ -221,6 +221,13 @@
         </property>
     </bean>
 
+    <bean id="managedListsRemovalListener" parent="txProxyOrderStateTransitionListenerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.listener.ManagedListsRemovalListenerImpl">
+                <constructor-arg index="0" ref="customerWishListService"/>
+            </bean>
+        </property>
+    </bean>
 
     <bean id="couponUsageTrackingListener" parent="txProxyOrderStateTransitionListenerTemplate">
         <property name="target">
@@ -336,7 +343,12 @@
     <bean id="orderStateManagerBeforeListenersMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
-                <entry key="evt.pending"                   value-ref="couponUsageTrackingListener"/>
+                <entry key="evt.pending">
+                    <list>
+                        <ref bean="couponUsageTrackingListener"/>
+                        <ref bean="managedListsRemovalListener"/>
+                    </list>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

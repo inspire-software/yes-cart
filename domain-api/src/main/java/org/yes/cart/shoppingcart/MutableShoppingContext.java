@@ -125,6 +125,20 @@ public interface MutableShoppingContext extends ShoppingContext, Serializable {
     void setHidePrices(final boolean hidePrices);
 
     /**
+     * Email of the manager that manages this cart.
+     *
+     * @param managerEmail email if cart is managed
+     */
+    void setManagerEmail(String managerEmail);
+
+    /**
+     * Name of the manager that manages this cart.
+     *
+     * @param managerName name if cart is managed
+     */
+    void setManagerName(String managerName);
+
+    /**
      * Set shopper ip address.
      *
      * @param resolvedIp resolved ip address.

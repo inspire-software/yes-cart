@@ -79,6 +79,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfB2BOrderLineRemarksEnabledTypes;
     private Set<String> sfB2BOrderFormEnabledTypes;
     private Set<String> sfShoppingListsEnabledTypes;
+    private Set<String> sfManagedListsEnabledTypes;
     private Set<String> sfRFQEnabledTypes;
     private Set<String> sfAddressBookDisabledTypes;
     private Set<String> sfAddressBookBillingDisabledTypes;
@@ -95,6 +96,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Boolean B2BStrictPriceActive = null;
     private Boolean sfPageTraceOn = null;
     private Boolean sfRequireCustomerLogin = null;
+
+    private Boolean sfManagersLoginEnable = null;
 
     private List<String> productStoredAttributesAsList;
 
@@ -678,7 +681,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     @Override
     public boolean isSfBlockCustomerCheckout(final String customerType) {
-        return getSfBlockCustomerCheckoutTypes().contains(customerType);
+        return AttributeNamesKeys.Cart.CUSTOMER_TYPE_MANAGER.equals(customerType) ||
+                getSfBlockCustomerCheckoutTypes().contains(customerType);
     }
 
     private Set<String> getSfRepeatOrdersEnabledTypes() {
@@ -703,6 +707,19 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     @Override
     public boolean isSfShoppingListsEnabled(final String customerType) {
         return getSfShoppingListsEnabledTypes().contains(customerType);
+    }
+
+
+    private Set<String> getSfManagedListsEnabledTypes() {
+        if (this.sfManagedListsEnabledTypes == null) {
+            this.sfManagedListsEnabledTypes = getCsvValuesTrimmedAsSet(AttributeNamesKeys.Shop.SHOP_SF_MANAGED_LIST_TYPES);
+        }
+        return this.sfManagedListsEnabledTypes;
+    }
+
+    @Override
+    public boolean isSfManagedListsEnabled(final String customerType) {
+        return getSfManagedListsEnabledTypes().contains(customerType);
     }
 
     private Set<String> getSfB2BOrderLineRemarksEnabledTypes() {
@@ -865,6 +882,16 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     @Override
     public boolean isSfHidePricesTypes(final String customerType) {
         return getSfHidePricesTypes().contains(customerType);
+    }
+
+    @Override
+    public Boolean isSfManagersLoginEnabled() {
+
+        final String val = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_LOGIN_MANAGER);
+        if (StringUtils.isNotBlank(val)) {
+            return Boolean.valueOf(val);
+        }
+        return null;
     }
 
     @Override

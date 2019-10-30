@@ -39,6 +39,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     private String wlType;
     private String visibility;
     private String tag;
+    private String notificationEmail;
     private BigDecimal quantity;
     private BigDecimal regularPriceWhenAdded;
     private String regularPriceCurrencyWhenAdded;
@@ -111,6 +112,14 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     @Override
     public void setTag(final String tag) {
         this.tag = tag;
+    }
+
+    public String getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(final String notificationEmail) {
+        this.notificationEmail = notificationEmail;
     }
 
     @Override

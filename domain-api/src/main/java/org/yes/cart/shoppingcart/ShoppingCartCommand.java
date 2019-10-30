@@ -37,6 +37,7 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_ADDTOWISHLIST_P_TAGS = "tags";
     String CMD_ADDTOWISHLIST_P_TAGS_REPLACE = "tagsr";
     String CMD_ADDTOWISHLIST_P_VISIBILITY = "wlv";
+    String CMD_ADDTOWISHLIST_P_NOTIFICATION = "wln";
     String CMD_REMOVEFROMWISHLIST = "removeFromWishListCmd";
     String CMD_REMOVEFROMWISHLIST_P_ID = "i";
 
@@ -92,9 +93,11 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_CLEAN = "cleanCartCmd";
     String CMD_EXPIRE = "expireCartCmd";
     String CMD_LOGIN = "loginCmd";
+    String CMD_LOGIN_ON_BEHALF = "loginOnBehalfCmd";
     String CMD_LOGIN_P_EMAIL = "email";
     String CMD_LOGIN_P_PASS = "password";
     String CMD_LOGOUT = "logoutCmd";
+    String CMD_LOGOUT_ON_BEHALF = "logoutOnBehalfCmd";
 
     String CMD_RESET_PASSWORD = "resetPasswordCmd";
     String CMD_RESET_PASSWORD_PW = "resetPasswordCmd_pw";

@@ -50,8 +50,8 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
      * {@inheritDoc}
      */
     @Override
-    public List<ShoppingCartState> findByCustomerEmail(final String email) {
-        return shoppingCartStateDao.findByNamedQuery("SHOPPINGCARTSTATE.BY.EMAIL", email);
+    public List<ShoppingCartState> findByCustomerEmail(final String email, final long shopId) {
+        return shoppingCartStateDao.findByNamedQuery("SHOPPINGCARTSTATE.BY.EMAIL.AND.SHOP", email, shopId);
     }
 
     /**

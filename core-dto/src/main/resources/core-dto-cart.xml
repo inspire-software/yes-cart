@@ -100,6 +100,8 @@
                 <value>expireCartCmd</value>
                 <value>loginCmd</value>
                 <value>logoutCmd</value>
+                <value>loginOnBehalfCmd</value>
+                <value>logoutOnBehalfCmd</value>
                 <value>removeCouponCmd</value>
                 <value>removeFromWishListCmd</value>
                 <value>removeAllSkuCmd</value>
@@ -139,6 +141,7 @@
                 <value>cleanCartCmd</value>
                 <value>expireCartCmd</value>
                 <value>loginCmd</value>
+                <value>loginOnBehalfCmd</value>
                 <value>setBillingAddressSeparateCmd</value>
                 <value>splitCartItemsCmd</value>
                 <value>setCarrierSlaCmd</value>
