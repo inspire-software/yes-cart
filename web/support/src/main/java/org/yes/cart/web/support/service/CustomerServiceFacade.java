@@ -87,26 +87,26 @@ public interface CustomerServiceFacade {
     /**
      * Register given email in given shop for newsletter list.
      *
-     * @param customerShop     shop where managed list was created
+     * @param shop             shop where managed list was created
      * @param email            customer email
      * @param listData         list data
      *
      * @return email
      */
-    String notifyManagedListCreated(Shop customerShop,
+    String notifyManagedListCreated(Shop shop,
                                     String email,
                                     Map<String, Object> listData);
 
     /**
      * Register given email in given shop for newsletter list.
      *
-     * @param customerShop     shop where managed list was created
+     * @param shop             shop where managed list was created
      * @param email            customer email
      * @param listData         list data
      *
      * @return email
      */
-    String notifyManagedListRejected(Shop customerShop,
+    String notifyManagedListRejected(Shop shop,
                                      String email,
                                      Map<String, Object> listData);
 

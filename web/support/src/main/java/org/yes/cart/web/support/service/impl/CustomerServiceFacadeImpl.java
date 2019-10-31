@@ -408,15 +408,17 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         return email; // do nothing, email is sent via NewsletterAspect
     }
 
+    /** {@inheritDoc} */
     @Override
-    public String notifyManagedListCreated(final Shop customerShop,
+    public String notifyManagedListCreated(final Shop shop,
                                            final String email,
                                            final Map<String, Object> listData) {
         return email; // do nothing, email is sent via ManagedListAspect
     }
 
+    /** {@inheritDoc} */
     @Override
-    public String notifyManagedListRejected(final Shop customerShop,
+    public String notifyManagedListRejected(final Shop shop,
                                             final String email,
                                             final Map<String, Object> listData) {
         return email; // do nothing, email is sent via ManagedListAspect
