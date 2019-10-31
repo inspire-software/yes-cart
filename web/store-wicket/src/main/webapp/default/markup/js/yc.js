@@ -519,7 +519,7 @@ $(document).ready(function() {
                 }
 
                 var _ajaxWLA = ctx.root + '/ajaxwl/addToWishListCmd/'
-                    + _wla.data('sku') + '/type/' + _wla.data('type') + '/tags/'
+                    + _wla.data('sku') + '/supplier/' + _wla.data('fc') + '/type/' + _wla.data('type') + '/tags/'
                     + _tiaall + '/tagsr/tagsr/qty/0';
 
                 console.log('Sending add to ' + _ajaxWLA);
@@ -561,7 +561,7 @@ $(document).ready(function() {
                 var _tirall = _wlr.data('tag').replace(_tir, '').replace(/\s{2,}/g, ' ').replace(/^\s+|\s+$/g, '');
 
                 var _ajaxWL = ctx.root + '/ajaxwl/addToWishListCmd/'
-                    + _wlr.data('sku') + '/type/' + _wlr.data('type') + '/tags/'
+                    + _wlr.data('sku') + '/supplier/' + _wlr.data('fc') + '/type/' + _wlr.data('type') + '/tags/'
                     + _tirall + '/tagsr/tagsr/qty/0';
 
                 console.log('Sending remove to ' + _ajaxWL);

@@ -244,6 +244,7 @@ public class WishListView extends AbstractProductSearchResultList {
         listItem.add(new AttributeModifier("data-visibility", itemData.getVisibility()));
         listItem.add(new AttributeModifier("data-type", itemData.getWlType()));
         listItem.add(new AttributeModifier("data-sku", product.getDefaultSkuCode()));
+        listItem.add(new AttributeModifier("data-fc", itemData.getSupplierCode()));
         listItem.add(new AttributeModifier("data-qty", itemData.getQuantity().toPlainString()));
 
     }
