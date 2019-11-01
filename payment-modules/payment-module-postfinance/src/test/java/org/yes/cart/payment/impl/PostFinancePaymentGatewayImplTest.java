@@ -871,7 +871,7 @@ public class PostFinancePaymentGatewayImplTest {
     private Payment createTestPayment(boolean withAddress, boolean addr2IsNumber) {
 
         final List<PaymentLine> orderItems = new ArrayList<PaymentLine>() {{
-            add(new PaymentLineImpl("code2", "name2", new BigDecimal(2), new BigDecimal(5), new BigDecimal(2), false));
+            add(new PaymentLineImpl("code2", "name'2", new BigDecimal(2), new BigDecimal(5), new BigDecimal(2), false));
             add(new PaymentLineImpl("ship2", "ship2", BigDecimal.ONE, BigDecimal.ZERO, BigDecimal.ZERO, true));
         }};
 
@@ -888,12 +888,12 @@ public class PostFinancePaymentGatewayImplTest {
         if (withAddress) {
             final PaymentAddress address = new PaymentAddressImpl();
             if (addr2IsNumber) {
-                address.setAddrline1("In the middle of");
+                address.setAddrline1("In the middle of'");
                 address.setAddrline2("123");
             } else {
-                address.setAddrline1("In the middle of 123b");
+                address.setAddrline1("In the middle of' 123b");
             }
-            address.setCity("Nowhere");
+            address.setCity("No'where");
             address.setStateCode("NA");
             address.setCountryCode("NA");
             address.setPostcode("NA1 NA1");
@@ -990,5 +990,24 @@ public class PostFinancePaymentGatewayImplTest {
         assertTrue(goodCallback.isValidated());
     }
 
+    @Test
+    public void testSetValueIfNotNull() throws Exception {
 
+        final PostFinancePaymentGatewayImpl pg = new PostFinancePaymentGatewayImpl();
+
+        final Map<String, String> params = new HashMap<>();
+
+        pg.setValueIfNotNull(params, "key", null);
+
+        assertFalse(params.containsKey("key"));
+
+        pg.setValueIfNotNull(params, "key", "value");
+
+        assertEquals("value", params.get("key"));
+
+        pg.setValueIfNotNull(params, "key2", "value's");
+
+        assertEquals("values", params.get("key2"));
+
+    }
 }

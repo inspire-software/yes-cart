@@ -440,8 +440,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(getHiddenField("x_login", apiLoginId));
-        stringBuilder.append(getHiddenField("x_fp_sequence", x_fp_sequence));
-        stringBuilder.append(getHiddenField("x_fp_timestamp", x_fp_timestamp));
+        stringBuilder.append(getHiddenField("x_fp_sequence", String.valueOf(x_fp_sequence)));
+        stringBuilder.append(getHiddenField("x_fp_timestamp", String.valueOf(x_fp_timestamp)));
         stringBuilder.append(getHiddenField("x_fp_hash", x_fp_hash));
         stringBuilder.append(getHiddenField("x_version", "3.1"));
         stringBuilder.append(getHiddenField("x_method", "CC"));
@@ -596,9 +596,13 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         final StringBuilder stringBuilder = new StringBuilder();
         for (PaymentLine line : payment.getOrderItems()) {
             if (line.isShipment()) {
-                stringBuilder.append(line.getSkuName().replace("\"","")).append(", ");
+                stringBuilder.append(line.getSkuName()
+                        .replace("\"","")
+                ).append(", ");
             } else {
-                stringBuilder.append(line.getSkuCode().replace("\"",""));
+                stringBuilder.append(line.getSkuCode()
+                        .replace("\"","")
+                );
                 stringBuilder.append(" x ");
                 stringBuilder.append(line.getQuantity());
                 stringBuilder.append(", ");

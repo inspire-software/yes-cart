@@ -224,28 +224,6 @@ public abstract class AbstractCyberSourcePaymentGatewayImpl implements Configura
     }
 
     /**
-     * Get street address.
-     *
-     * @param addreLine1 line 1
-     * @param addreLine2 line 2
-     * @return street address
-     */
-    protected String getStreetAddress(final String addreLine1, final String addreLine2) {
-        return addreLine1
-                + (
-                StringUtils.isNotBlank(addreLine2) ?
-                        " " + addreLine2 :
-                        StringUtils.EMPTY)
-                ;
-
-    }
-
-
-    protected String getHiddenField(final String fieldName, final Object value) {
-        return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override

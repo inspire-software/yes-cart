@@ -23,7 +23,6 @@ import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -155,29 +154,6 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
         return null;
     }
 
-
-
-    protected String getHiddenField(final String fieldName, final Object value) {
-        return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
-    }
-
-    /**
-     * Dump map value into String.
-     *
-     * @param map given map
-     * @return dump map as string
-     */
-    public static String dump(Map<?, ?> map) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (Map.Entry<?, ?> entry : map.entrySet()) {
-            stringBuilder.append(entry.getKey());
-            stringBuilder.append(" : ");
-            stringBuilder.append(entry.getValue());
-        }
-
-        return stringBuilder.toString();
-    }
 
 
     /**

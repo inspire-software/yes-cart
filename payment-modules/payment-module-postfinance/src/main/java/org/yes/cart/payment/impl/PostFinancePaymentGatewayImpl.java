@@ -516,9 +516,9 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             final BigDecimal unitTax = item.getTaxAmount().divide(item.getQuantity(), Total.ZERO.scale(), RoundingMode.CEILING);
             final BigDecimal taxRate = MoneyUtils.isPositive(item.getTaxAmount()) && MoneyUtils.isPositive(itemGrossAmount) ?
                     item.getTaxAmount().divide(itemGrossAmount.subtract(item.getTaxAmount()),3, BigDecimal.ROUND_HALF_EVEN).movePointRight(2) : BigDecimal.ZERO.setScale(1);
-            params.put("ITEMID" + i, item.getSkuCode().length() > ITEMID ? item.getSkuCode().substring(0, ITEMID - 1) + "~" : item.getSkuCode());
-            params.put("ITEMNAME" + i, item.getSkuName().length() > ITEMNAME ? item.getSkuName().substring(0, ITEMNAME - 1) + "~" : item.getSkuName());
-            params.put("ITEMQUANT" + i, item.getQuantity().toPlainString());
+            setValueIfNotNull(params, "ITEMID" + i, item.getSkuCode().length() > ITEMID ? item.getSkuCode().substring(0, ITEMID - 1) + "~" : item.getSkuCode());
+            setValueIfNotNull(params, "ITEMNAME" + i, item.getSkuName().length() > ITEMNAME ? item.getSkuName().substring(0, ITEMNAME - 1) + "~" : item.getSkuName());
+            setValueIfNotNull(params, "ITEMQUANT" + i, item.getQuantity().toPlainString());
             if (hasOrderDiscount
                     && MoneyUtils.isPositive(orderDiscountRemainder)
                     && MoneyUtils.isPositive(itemGrossAmount)) {
@@ -539,29 +539,29 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
                 }
                 final BigDecimal scaleRate = discount.divide(item.getUnitPrice().subtract(discount), 10, RoundingMode.CEILING);
                 final BigDecimal scaledTax = unitTax.multiply(scaleRate).setScale(Total.ZERO.scale(), RoundingMode.FLOOR);
-                //params.put("ITEMDISCOUNT" + i, discount.setScale(4, RoundingMode.FLOOR).toPlainString());
-                params.put("ITEMPRICE" + i, item.getUnitPrice().subtract(discount).setScale(4, RoundingMode.FLOOR).toPlainString());
+                //setValueIfNotNull(params, "ITEMDISCOUNT" + i, discount.setScale(4, RoundingMode.FLOOR).toPlainString());
+                setValueIfNotNull(params, "ITEMPRICE" + i, item.getUnitPrice().subtract(discount).setScale(4, RoundingMode.FLOOR).toPlainString());
                 if (useTaxAmount) {
-                    params.put("ITEMVAT" + i, unitTax.subtract(scaledTax).setScale(4, RoundingMode.FLOOR).toPlainString());
+                    setValueIfNotNull(params, "ITEMVAT" + i, unitTax.subtract(scaledTax).setScale(4, RoundingMode.FLOOR).toPlainString());
                 } else {
-                    params.put("ITEMVATCODE" + i, taxRate.toPlainString());
+                    setValueIfNotNull(params, "ITEMVATCODE" + i, taxRate.toPlainString());
                 }
-                params.put("TAXINCLUDED" + i, "1");
+                setValueIfNotNull(params, "TAXINCLUDED" + i, "1");
             } else {
-                params.put("ITEMPRICE" + i, item.getUnitPrice().setScale(4, RoundingMode.FLOOR).toPlainString());
+                setValueIfNotNull(params, "ITEMPRICE" + i, item.getUnitPrice().setScale(4, RoundingMode.FLOOR).toPlainString());
                 if (useTaxAmount) {
-                    params.put("ITEMVAT" + i, unitTax.toPlainString());
+                    setValueIfNotNull(params, "ITEMVAT" + i, unitTax.toPlainString());
                 } else {
-                    params.put("ITEMVATCODE" + i, taxRate.toPlainString());
+                    setValueIfNotNull(params, "ITEMVATCODE" + i, taxRate.toPlainString());
                 }
-                params.put("TAXINCLUDED" + i, "1");
+                setValueIfNotNull(params, "TAXINCLUDED" + i, "1");
             }
 
             if (item.isShipment() && StringUtils.isNotBlank(shippingCategory)) {
-                params.put("ITEMCATEGORY" + i, shippingCategory);
+                setValueIfNotNull(params, "ITEMCATEGORY" + i, shippingCategory);
             }
             if (!item.isShipment() && StringUtils.isNotBlank(itemCategory)) {
-                params.put("ITEMCATEGORY" + i, itemCategory);
+                setValueIfNotNull(params, "ITEMCATEGORY" + i, itemCategory);
             }
 
             i++;
@@ -579,17 +579,14 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         return "SAL";
     }
 
-    private void setValueIfNotNull(final Map<String, String> params, final String key, final String value) {
+    void setValueIfNotNull(final Map<String, String> params, final String key, final String value) {
         if (StringUtils.isNotBlank(value)) {
-            params.put(key, value);
+            params.put(key, StringUtils.remove(value, '\''));
         }
     }
 
-    private void setParameterIfNotNull(final Map<String, String> params, final String key, final String valueKey) {
-        final String value = getParameterValue(valueKey);
-        if (StringUtils.isNotBlank(value)) {
-            params.put(key, value);
-        }
+    void setParameterIfNotNull(final Map<String, String> params, final String key, final String valueKey) {
+        setValueIfNotNull(params, key, getParameterValue(valueKey));
     }
 
     private String getAddressLines(final PaymentAddress address) {

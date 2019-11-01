@@ -46,10 +46,8 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
         AuthorizeNetSimPaymentGatewayImpl gateway = new AuthorizeNetSimPaymentGatewayImpl();
         assertEquals("<input type='hidden' name='qwerty' value='1234567890'>\n",
                 gateway.getHiddenField("qwerty", "1234567890"));
-        assertEquals("<input type='hidden' name='qwerty' value='9223372036854775807'>\n",
-                gateway.getHiddenField("qwerty", Long.MAX_VALUE));
-        assertEquals("<input type='hidden' name='qwerty' value='922337203685477.58'>\n",
-                gateway.getHiddenField("qwerty", new BigDecimal("922337203685477.58")));
+        assertEquals("<input type='hidden' name='qwerty' value='1234567890'>\n",
+                gateway.getHiddenField("qwerty", "1'234'567'890"));
     }
 
 
@@ -172,7 +170,7 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
     private Payment createTestPayment(boolean withAddress) {
 
         final List<PaymentLine> orderItems = new ArrayList<PaymentLine>() {{
-            add(new PaymentLineImpl("code2", "name2", BigDecimal.ONE, BigDecimal.TEN, BigDecimal.ZERO, false));
+            add(new PaymentLineImpl("code2", "name'2", BigDecimal.ONE, BigDecimal.TEN, BigDecimal.ZERO, false));
         }};
 
 
@@ -187,8 +185,8 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
         if (withAddress) {
             final PaymentAddress address = new PaymentAddressImpl();
             address.setAddrline1("123");
-            address.setAddrline2("In the middle of");
-            address.setCity("Nowhere");
+            address.setAddrline2("In the middle of'");
+            address.setCity("No'where");
             address.setStateCode("NA");
             address.setCountryCode("NA");
             address.setPostcode("NA1 NA1");

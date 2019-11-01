@@ -241,8 +241,8 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
     }
 
 
-    protected String getHiddenField(final String fieldName, final Object value) {
-        return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
+    protected String getHiddenField(final String fieldName, final String value) {
+        return "<input type='hidden' name='" + fieldName + "' value='" + StringUtils.remove(value, '\'') + "'>\n";
     }
 
     /**

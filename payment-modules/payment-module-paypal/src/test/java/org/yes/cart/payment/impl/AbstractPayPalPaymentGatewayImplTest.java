@@ -28,6 +28,7 @@ import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -119,4 +120,67 @@ public class AbstractPayPalPaymentGatewayImplTest {
         assertNull(pg.getParameterValue("#SHOP10_param")); // Do not allow explicit access
 
     }
+
+
+    @Test
+    public void testGetHiddenFiled() {
+
+        final AbstractPayPalPaymentGatewayImpl pg = new AbstractPayPalPaymentGatewayImpl() {
+            @Override
+            public Payment authorizeCapture(final Payment payment, final boolean forceProcessing) {
+                return null;
+            }
+
+            @Override
+            public Payment authorize(final Payment payment, final boolean forceProcessing) {
+                return null;
+            }
+
+            @Override
+            public Payment reverseAuthorization(final Payment payment, final boolean forceProcessing) {
+                return null;
+            }
+
+            @Override
+            public Payment capture(final Payment payment, final boolean forceProcessing) {
+                return null;
+            }
+
+            @Override
+            public Payment voidCapture(final Payment payment, final boolean forceProcessing) {
+                return null;
+            }
+
+            @Override
+            public Payment refund(final Payment payment, final boolean forceProcessing) {
+                return null;
+            }
+
+            @Override
+            public PaymentGatewayFeature getPaymentGatewayFeatures() {
+                return null;
+            }
+
+            @Override
+            public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderReference, final Payment payment) {
+                return null;
+            }
+
+            @Override
+            public Payment createPaymentPrototype(final String operation, final Map map, final boolean forceProcessing) {
+                return null;
+            }
+
+            @Override
+            public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
+                return Collections.emptyList();
+            }
+        };
+
+        assertEquals("<input type='hidden' name='qwerty' value='1234567890'>\n",
+                pg.getHiddenFieldValue("qwerty", "1234567890"));
+        assertEquals("<input type='hidden' name='qwerty' value='1234567890'>\n",
+                pg.getHiddenFieldValue("qwerty", "1'234'567'890"));
+    }
+
 }
