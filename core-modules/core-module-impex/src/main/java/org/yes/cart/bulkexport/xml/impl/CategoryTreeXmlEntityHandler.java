@@ -100,10 +100,13 @@ public class CategoryTreeXmlEntityHandler extends AbstractXmlEntityHandler<Categ
             final Category link =
                     this.categoryService.findById(category.getLinkToId());
 
-            final XmlExportTuple tupleLink = new XmlExportTupleImpl(link);
+            if (link != null) {
 
-            handleCategory(statusListener, xmlExportDescriptor, (ImpExTuple) tupleLink, xmlValueAdapter, fileToExport, writer, entityCount);
+                final XmlExportTuple tupleLink = new XmlExportTupleImpl(link);
 
+                handleCategory(statusListener, xmlExportDescriptor, (ImpExTuple) tupleLink, xmlValueAdapter, fileToExport, writer, entityCount);
+
+            }
         }
 
     }
