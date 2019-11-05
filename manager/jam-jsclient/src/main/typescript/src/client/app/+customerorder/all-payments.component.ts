@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CustomerOrderService, UserEventBus } from './../shared/services/index';
 import { ModalComponent } from './../shared/modal/index';
-import { PaymentVO, Pair } from './../shared/model/index';
+import { PaymentVO, Pair, SearchContextVO, SearchResultVO } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -66,19 +66,15 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
     'Ok'
   ];
 
-
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
 
-  private payments:Array<PaymentVO> = [];
+  private payments:SearchResultVO<PaymentVO>;
   private paymentFilter:string;
   private paymentFilterRequired:boolean = true;
-  private paymentFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedPayment:PaymentVO;
 
@@ -92,6 +88,25 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
 
   constructor(private _paymentService:CustomerOrderService) {
     LogUtil.debug('AllPaymentsComponent constructed');
+    this.payments = this.newSearchResultInstance();
+  }
+
+  newSearchResultInstance():SearchResultVO<PaymentVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: [],
+          statuses: [],
+          operations: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    }
   }
 
   ngOnInit() {
@@ -126,9 +141,8 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
 
 
   protected onFilterChange(event:any) {
-
+    this.payments.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
@@ -136,6 +150,24 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
     if (UserEventBus.getUserEventBus().current() != null) {
       this.getFilteredPayments();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('AllPaymentsComponent onPageSelected', page);
+    this.payments.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('AllPaymentsComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.payments.searchContext.sortBy = null;
+      this.payments.searchContext.sortDesc = false;
+    } else {
+      this.payments.searchContext.sortBy = sort.first;
+      this.payments.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onPaymentSelected(data:PaymentVO) {
@@ -156,6 +188,11 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
   protected onSearchDetails() {
     this.searchHelpShow = false;
     this.paymentFilter = '@';
+  }
+
+  protected onSearchInshop() {
+    this.searchHelpShow = false;
+    this.paymentFilter = '^';
   }
 
   protected onSearchDate() {
@@ -255,7 +292,6 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
 
     if (!this.paymentFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
 
       let ops:string[] = [];
       AllPaymentsComponent._operations.forEach((_op:Pair<string, boolean>) => {
@@ -271,22 +307,25 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
         }
       });
 
-      let _sub:any = this._paymentService.getFilteredPayments(this.paymentFilter, ops, sts, max).subscribe( allpayments => {
+      this.payments.searchContext.parameters.filter = [ this.paymentFilter ];
+      this.payments.searchContext.parameters.statuses = sts;
+      this.payments.searchContext.parameters.operations = ops;
+      this.payments.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._paymentService.getFilteredPayments(this.payments.searchContext).subscribe( allpayments => {
         LogUtil.debug('AllPaymentsComponent getFilteredPayments', allpayments);
         this.payments = allpayments;
         this.selectedPayment = null;
         this.changed = false;
         this.validForSave = false;
-        this.paymentFilterCapped = this.payments.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.payments = [];
+      this.payments = this.newSearchResultInstance();
       this.selectedPayment = null;
       this.changed = false;
       this.validForSave = false;
-      this.paymentFilterCapped = false;
     }
   }
 

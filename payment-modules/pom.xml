@@ -25,7 +25,7 @@
     </parent>
     <artifactId>payment-modules</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart payment modules</name>
+    <name>Payment modules</name>
     <modules>
         <module>payment-module-base</module>
         <module>payment-module-authorizenet</module>

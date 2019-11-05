@@ -24,7 +24,7 @@
         <version>3.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>search-lucene-core</artifactId>
-    <name>Yes cart search: Lucene core</name>
+    <name>Search: core Lucene</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
@@ -70,7 +70,7 @@
 
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>persistence-core-hibernate</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

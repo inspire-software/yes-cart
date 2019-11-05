@@ -1,50 +1,78 @@
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.service.dto.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
-import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.payment.service.DtoCustomerOrderPaymentService;
-import org.yes.cart.payment.service.impl.PaymentModuleGenericServiceImpl;
 import org.yes.cart.utils.DateUtils;
-import org.yes.cart.utils.HQLUtils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
  * Date: 05/09/2016
  * Time: 18:33
  */
-public class DtoCustomerOrderPaymentServiceImpl extends PaymentModuleGenericServiceImpl<CustomerOrderPayment> implements DtoCustomerOrderPaymentService {
+public class DtoCustomerOrderPaymentServiceImpl implements DtoCustomerOrderPaymentService {
 
+    private final CustomerOrderPaymentService customerOrderPaymentService;
 
-    public DtoCustomerOrderPaymentServiceImpl(final PaymentModuleGenericDAO<CustomerOrderPayment, Long> genericDao) {
-        super(genericDao);
+    public DtoCustomerOrderPaymentServiceImpl(final CustomerOrderPaymentService customerOrderPaymentService) {
+        this.customerOrderPaymentService = customerOrderPaymentService;
     }
 
 
-    private final static char[] ORDER_OR_CUSTOMER_OR_DETAILS = new char[] { '#', '?', '@' };
+    private final static char[] ORDER_OR_CUSTOMER_OR_DETAILS = new char[] { '#', '?', '@', '^' };
     private final static char[] PAYMENT_STATUS = new char[] { '~', '-', '+', '*' };
     static {
         Arrays.sort(ORDER_OR_CUSTOMER_OR_DETAILS);
         Arrays.sort(PAYMENT_STATUS);
     }
 
+
     @Override
-    public List<CustomerOrderPayment> findBy(final String filter, final List<String> operations, final List<String> statuses, final int page, final int pageSize) {
+    public SearchResult<CustomerOrderPayment> findPayments(final Set<String> shopCodes, final SearchContext filter) {
 
-        final String orderBy = " order by e.createdTimestamp desc, e.orderNumber";
+        final Map<String, List> params = filter.reduceParameters("filter", "statuses", "operations");
+        final List filterParam = params.get("filter");
+        final List statusesParam = params.get("statuses");
+        final List opsParam = params.get("operations");
 
-        if (StringUtils.isNotBlank(filter)) {
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
 
+        final Map<String, List> currentFilter = new HashMap<>();
+
+
+        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+            final String textFilter = (String) filterParam.get(0);
             final Pair<String, String> orderNumberOrCustomerOrDetails =
-                    ComplexSearchUtils.checkSpecialSearch(filter, ORDER_OR_CUSTOMER_OR_DETAILS);
+                    ComplexSearchUtils.checkSpecialSearch(textFilter, ORDER_OR_CUSTOMER_OR_DETAILS);
             final Pair<LocalDateTime, LocalDateTime> dateSearch = orderNumberOrCustomerOrDetails == null ?
-                    ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+                    ComplexSearchUtils.checkDateRangeSearch(textFilter) : null;
 
             if (orderNumberOrCustomerOrDetails != null) {
 
@@ -52,41 +80,36 @@ public class DtoCustomerOrderPaymentServiceImpl extends PaymentModuleGenericServ
                     // order/transaction number search
                     final String orderNumber = orderNumberOrCustomerOrDetails.getSecond();
 
-                    return getGenericDao().findRangeByCriteria(
-                            " where (e.orderNumber like ?1 or e.orderShipment like ?1 or lower(e.transactionReferenceId) like ?1 or lower(e.transactionRequestToken) like ?1 or lower(e.transactionAuthorizationCode) like ?1) and (?2 = 0 or e.paymentProcessorResult in (?3))  and (?4 = 0 or e.transactionOperation in (?5)) " + orderBy,
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIlikeAnywhere(orderNumber),
-                            HQLUtils.criteriaInTest(statuses),
-                            HQLUtils.criteriaIn(statuses),
-                            HQLUtils.criteriaInTest(operations),
-                            HQLUtils.criteriaIn(operations)
-                    );
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("orderNumber", Collections.singletonList(orderNumber));
+                    currentFilter.put("orderShipment", Collections.singletonList(orderNumber));
+                    currentFilter.put("transactionReferenceId", Collections.singletonList(orderNumber));
+                    currentFilter.put("transactionRequestToken", Collections.singletonList(orderNumber));
+                    currentFilter.put("transactionAuthorizationCode", Collections.singletonList(orderNumber));
+
                 } else if ("?".equals(orderNumberOrCustomerOrDetails.getFirst())) {
                     // customer search
                     final String customer = orderNumberOrCustomerOrDetails.getSecond();
 
-                    return getGenericDao().findRangeByCriteria(
-                            " where (lower(e.cardNumber) like ?1 or lower(e.cardHolderName) like ?1 or lower(e.shopperIpAddress) like ?1) and (?2 = 0 or e.paymentProcessorResult in (?3))  and (?4 = 0 or e.transactionOperation in (?5)) " + orderBy,
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIlikeAnywhere(customer),
-                            HQLUtils.criteriaInTest(statuses),
-                            HQLUtils.criteriaIn(statuses),
-                            HQLUtils.criteriaInTest(operations),
-                            HQLUtils.criteriaIn(operations)
-                    );
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("cardNumber", Collections.singletonList(customer));
+                    currentFilter.put("cardHolderName", Collections.singletonList(customer));
+                    currentFilter.put("shopperIpAddress", Collections.singletonList(customer));
+
                 } else if ("@".equals(orderNumberOrCustomerOrDetails.getFirst())) {
                     // details search
                     final String details = orderNumberOrCustomerOrDetails.getSecond();
 
-                    return getGenericDao().findRangeByCriteria(
-                            " where (lower(e.transactionOperation) like ?1 or lower(e.transactionOperationResultCode) like ?1 or lower(e.transactionOperation) like ?1) and (?2 = 0 or e.paymentProcessorResult in (?3))  and (?4 = 0 or e.transactionOperation in (?5)) " + orderBy,
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIlikeAnywhere(details),
-                            HQLUtils.criteriaInTest(statuses),
-                            HQLUtils.criteriaIn(statuses),
-                            HQLUtils.criteriaInTest(operations),
-                            HQLUtils.criteriaIn(operations)
-                    );
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("transactionGatewayLabel", Collections.singletonList(details));
+                    currentFilter.put("transactionOperationResultCode", Collections.singletonList(details));
+
+                } else if ("^".equals(orderNumberOrCustomerOrDetails.getFirst())) {
+                    // shop code search
+                    final String shopCode = orderNumberOrCustomerOrDetails.getSecond();
+
+                    currentFilter.put("shopCode", Collections.singletonList(shopCode));
+
                 }
 
             } else if (dateSearch != null) {
@@ -94,42 +117,52 @@ public class DtoCustomerOrderPaymentServiceImpl extends PaymentModuleGenericServ
                 final Instant from = DateUtils.iFrom(dateSearch.getFirst());
                 final Instant to = DateUtils.iFrom(dateSearch.getSecond());
 
-                // time search
-                return getGenericDao().findRangeByCriteria(
-                        " where (?1 is null or e.createdTimestamp >= ?1) and (?2 is null or e.createdTimestamp <= ?2) and (?3 = 0 or e.paymentProcessorResult in (?4))  and (?5 = 0 or e.transactionOperation in (?6)) " + orderBy,
-                        page * pageSize, pageSize,
-                        from, to,
-                        HQLUtils.criteriaInTest(statuses),
-                        HQLUtils.criteriaIn(statuses),
-                        HQLUtils.criteriaInTest(operations),
-                        HQLUtils.criteriaIn(operations)
-                );
+                final List range = new ArrayList(2);
+                if (from != null) {
+                    range.add(SearchContext.MatchMode.GT.toParam(from));
+                }
+                if (to != null) {
+                    range.add(SearchContext.MatchMode.LE.toParam(to));
+                }
+
+                currentFilter.put("createdTimestamp", range);
 
             } else {
 
-                final String search = filter;
+                final String basic = textFilter;
 
-                return getGenericDao().findRangeByCriteria(
-                        " where (e.orderNumber like ?1 or e.orderShipment like ?1 or lower(e.cardHolderName) like ?1 or lower(e.transactionGatewayLabel) like ?1 or lower(e.transactionOperation) like ?1) and (?2 = 0 or e.paymentProcessorResult in (?3))  and (?4 = 0 or e.transactionOperation in (?5)) " + orderBy,
-                        page * pageSize, pageSize,
-                        HQLUtils.criteriaIlikeAnywhere(search),
-                        HQLUtils.criteriaInTest(statuses),
-                        HQLUtils.criteriaIn(statuses),
-                        HQLUtils.criteriaInTest(operations),
-                        HQLUtils.criteriaIn(operations)
-                );
+                SearchContext.JoinMode.OR.setMode(currentFilter);
+                currentFilter.put("orderNumber", Collections.singletonList(basic));
+                currentFilter.put("orderShipment", Collections.singletonList(basic));
+                currentFilter.put("cardHolderName", Collections.singletonList(basic));
+                currentFilter.put("transactionGatewayLabel", Collections.singletonList(basic));
 
             }
 
         }
 
-        return getGenericDao().findRangeByCriteria(
-                " where (?1 = 0 or e.paymentProcessorResult in (?2))  and (?3 = 0 or e.transactionOperation in (?4)) " + orderBy,
-                page * pageSize, pageSize,
-                HQLUtils.criteriaInTest(statuses),
-                HQLUtils.criteriaIn(statuses),
-                HQLUtils.criteriaInTest(operations),
-                HQLUtils.criteriaIn(operations)
-        );
+        // Filter by payment status
+        if (CollectionUtils.isNotEmpty(statusesParam)) {
+            currentFilter.put("paymentProcessorResult", statusesParam);
+        }
+
+        // Filter by payment status
+        if (CollectionUtils.isNotEmpty(opsParam)) {
+            currentFilter.put("transactionOperation", opsParam);
+        }
+
+        final int count = customerOrderPaymentService.findCustomerOrderPaymentCount(shopCodes, currentFilter);
+        if (count > startIndex) {
+
+            final List<CustomerOrderPayment> orders = customerOrderPaymentService.findCustomerOrderPayment(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopCodes, currentFilter);
+
+            return new SearchResult<>(filter, orders, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
+
     }
+
+
+
 }

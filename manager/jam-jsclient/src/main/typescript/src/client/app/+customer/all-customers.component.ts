@@ -17,7 +17,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CustomerService, ShopEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ShopVO, CustomerInfoVO, CustomerVO, AttrValueCustomerVO, Pair } from './../shared/model/index';
+import { ShopVO, CustomerInfoVO, CustomerVO, AttrValueCustomerVO, Pair, SearchContextVO, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -38,15 +38,12 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
   private forceShowAll:boolean = false;
   private viewMode:string = AllCustomersComponent.CUSTOMERS;
 
-  private customers:Array<CustomerInfoVO> = [];
+  private customers:SearchResultVO<CustomerInfoVO>;
   private customerFilter:string;
   private customerFilterRequired:boolean = true;
-  private customerFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedCustomer:CustomerInfoVO;
 
@@ -73,9 +70,26 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
   constructor(private _customerService:CustomerService,
               private _route: ActivatedRoute) {
     LogUtil.debug('AllCustomersComponent constructed');
+    this.customers = this.newSearchResultInstance();
     this.shopAllSub = ShopEventBus.getShopEventBus().shopsUpdated$.subscribe(shopsevt => {
       this.shops = shopsevt;
     });
+  }
+
+  newSearchResultInstance():SearchResultVO<CustomerInfoVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    }
   }
 
   newCustomerInstance():CustomerVO {
@@ -121,9 +135,8 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
 
   protected onFilterChange(event:any) {
-
+    this.customers.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
@@ -131,6 +144,24 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
     if (UserEventBus.getUserEventBus().current() != null) {
       this.getFilteredCustomers();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('AllCustomersComponent onPageSelected', page);
+    this.customers.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('AllCustomersComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.customers.searchContext.sortBy = null;
+      this.customers.searchContext.sortDesc = false;
+    } else {
+      this.customers.searchContext.sortBy = sort.first;
+      this.customers.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onCustomerSelected(data:CustomerInfoVO) {
@@ -326,8 +357,10 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
 
     if (!this.customerFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      let _sub:any = this._customerService.getFilteredCustomer(this.customerFilter, max).subscribe( allcustomers => {
+      this.customers.searchContext.parameters.filter = [ this.customerFilter ];
+      this.customers.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+      // let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      let _sub:any = this._customerService.getFilteredCustomer(this.customers.searchContext).subscribe( allcustomers => {
         LogUtil.debug('AllCustomersComponent getFilteredCustomers', allcustomers);
         this.customers = allcustomers;
         this.selectedCustomer = null;
@@ -335,24 +368,23 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
         this.viewMode = AllCustomersComponent.CUSTOMERS;
         this.changed = false;
         this.validForSave = false;
-        this.customerFilterCapped = this.customers.length >= max;
         this.loading = false;
         _sub.unsubscribe();
-        if (this.openFirstResultOnSearch && this.customers.length > 0) {
-          this.onCustomerSelected(this.customers[0]);
+        if (this.openFirstResultOnSearch && this.customers.items.length > 0) {
+          this.onCustomerSelected(this.customers.items[0]);
           this.onRowEditSelected();
         }
         this.openFirstResultOnSearch = false;
       });
     } else {
-      this.customers = [];
+      this.customers = this.newSearchResultInstance();
+      this.customers.total = 0;
       this.selectedCustomer = null;
       this.customerEdit = null;
       this.customerEditAttributes = null;
       this.viewMode = AllCustomersComponent.CUSTOMERS;
       this.changed = false;
       this.validForSave = false;
-      this.customerFilterCapped = false;
     }
   }
 

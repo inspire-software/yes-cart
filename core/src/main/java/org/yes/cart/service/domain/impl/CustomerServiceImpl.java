@@ -28,6 +28,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.customer.CustomerNameFormatter;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.utils.HQLUtils;
@@ -159,9 +160,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
                                                      final String sort,
                                                      final boolean sortDescending,
                                                      final Set<Long> shops,
-                                                     final Map<String, Object> filter) {
+                                                     final Map<String, List> filter) {
 
-        final Map<String, Object> currentFilter = filter != null ? new HashMap<>(filter) : null;
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
 
         final StringBuilder hqlCriteria = new StringBuilder();
         final List<Object> params = new ArrayList<>();
@@ -174,85 +175,35 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
         Boolean disabled = Boolean.FALSE;
         if (currentFilter != null) {
-            final Object disabledFilter = currentFilter.get("disabled");
-            if (disabledFilter instanceof String) {
-                if ("*".equalsIgnoreCase((String) disabledFilter)) {
-                    disabled = null;
-                } else {
+            final List disabledParam = currentFilter.remove("disabled");
+            if (CollectionUtils.isNotEmpty(disabledParam)) {
+                final Object disabledFilter = disabledParam.get(0);
+                if (disabledFilter instanceof String) {
                     disabled = Boolean.valueOf((String) disabledFilter);
+                } else if (disabledFilter instanceof Boolean) {
+                    disabled = (Boolean) disabledFilter;
+                } else if (disabledFilter == SearchContext.MatchMode.ANY) {
+                    disabled = null;
                 }
-            } else if (disabledFilter instanceof Boolean) {
-                disabled = (Boolean) disabledFilter;
             }
-            currentFilter.remove("disabled");
         }
 
         if (CollectionUtils.isNotEmpty(shops)) {
+            hqlCriteria.append(" where (cse.shop.shopId in (?1) or cse.shop.master.shopId in (?1)) ");
+            params.add(shops);
+        }
 
-            if (disabled != null) {
-                hqlCriteria.append(" where (cse.shop.shopId in (?1) or cse.shop.master.shopId in (?1)) and cse.disabled = ?2 ");
-                params.add(shops);
-                params.add(disabled);
-            } else {
-                hqlCriteria.append(" where (cse.shop.shopId in (?1) or cse.shop.master.shopId in (?1)) ");
-                params.add(shops);
-            }
-
-        } else {
-
-            if (disabled != null) {
+        if (disabled != null) {
+            if (params.isEmpty()) {
                 hqlCriteria.append(" where cse.disabled = ?1 ");
-                params.add(disabled);
-            }
-
-        }
-
-        if (currentFilter != null) {
-            final Object any = currentFilter.get("any");
-            if (any instanceof String && StringUtils.isNotBlank((String) any)) {
-
-                final int pIdx = params.size() + 1;
-
-                if (pIdx == 1) {
-                    hqlCriteria.append(" where ");
-                } else {
-                    hqlCriteria.append(" and ");
-                }
-
-                hqlCriteria.append(
-                        "  (\n" +
-                                " (lower(cse.customer.email) like ?" + pIdx + ") or\n" +
-                                " (lower(cse.customer.firstname) like ?" + pIdx + ") or\n" +
-                                " (lower(cse.customer.lastname) like ?" + pIdx + ") or\n" +
-                                " (lower(cse.customer.companyName1) like ?" + pIdx + ") or\n" +
-                                " (lower(cse.customer.companyName2) like ?" + pIdx + ") or\n" +
-                                " (lower(cse.customer.tag) like ?" + pIdx + ")\n" +
-                                " ) ");
-                params.add(HQLUtils.criteriaIlikeAnywhere((String) any));
-
             } else {
-
-                for (final Map.Entry<String, Object> props : currentFilter.entrySet()) {
-
-                    final Object val = props.getValue();
-                    if (val instanceof String && StringUtils.isNotBlank((String) val)) {
-
-                        final int pIdx = params.size() + 1;
-
-                        if (pIdx == 1) {
-                            hqlCriteria.append(" where ");
-                        } else {
-                            hqlCriteria.append(" and ");
-                        }
-
-                        hqlCriteria.append(" (lower(cse.customer." + props.getKey() + ") like ?" + pIdx + ") \n");
-                        params.add(HQLUtils.criteriaIlikeAnywhere((String) val));
-
-                    }
-                }
-
+                hqlCriteria.append(" and cse.disabled = ?2 ");
             }
+            params.add(disabled);
         }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "cse.customer", currentFilter);
+
 
         if (StringUtils.isNotBlank(sort)) {
 
@@ -276,7 +227,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
                                        final String sort,
                                        final boolean sortDescending,
                                        final Set<Long> shops,
-                                       final Map<String, Object> filter) {
+                                       final Map<String, List> filter) {
 
         final Pair<String, Object[]> query = findCustomerQuery(false, sort, sortDescending, shops, filter);
 
@@ -292,7 +243,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @Override
     public int findCustomerCount(final Set<Long> shops,
-                                 final Map<String, Object> filter) {
+                                 final Map<String, List> filter) {
 
         final Pair<String, Object[]> query = findCustomerQuery(true, null, false, shops, filter);
 
@@ -300,31 +251,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
                 query.getFirst(),
                 query.getSecond()
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Customer> findCustomer(final String email,
-                                       final String firstname,
-                                       final String lastname,
-                                       final String middlename,
-                                       final String tag,
-                                       final String customerType,
-                                       final String pricingPolicy) {
-
-        return getGenericDao().findByNamedQuery(
-                "CUSTOMER.BY.EMAIL.NAME.TAG.TYPE",
-                HQLUtils.criteriaIlikeAnywhere(email),
-                HQLUtils.criteriaIlikeAnywhere(firstname),
-                HQLUtils.criteriaIlikeAnywhere(lastname),
-                HQLUtils.criteriaIlikeAnywhere(middlename),
-                HQLUtils.criteriaIlikeAnywhere(tag),
-                HQLUtils.criteriaIlikeAnywhere(customerType),
-                HQLUtils.criteriaIlikeAnywhere(pricingPolicy)
-        );
-
     }
 
     /**

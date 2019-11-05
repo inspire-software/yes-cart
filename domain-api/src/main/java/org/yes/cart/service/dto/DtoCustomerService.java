@@ -18,11 +18,14 @@ package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -47,41 +50,15 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
     List<CustomerDTO> findCustomer(String email) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Find customer by given search criteria. Search will be performed using like operation.
-     *
-     *
-     * @param email         optional email
-     * @param firstname     optional first name
-     * @param lastname      optional last name
-     * @param middlename    optional middle name
-     * @param tag           optional tag
-     * @param customerType  optional customer type
-     * @param pricingPolicy optional pricing policy
-     *
-     * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException
-     *          in case of dto mapping errors
-     * @throws org.yes.cart.exception.UnmappedInterfaceException
-     *          in case of config errors
-     */
-    List<CustomerDTO> findCustomer(String email,
-                                   String firstname,
-                                   String lastname,
-                                   String middlename,
-                                   String tag,
-                                   String customerType,
-                                   String pricingPolicy) throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-    /**
      * Find customers by filter.
      *
-     * @param filter filter for partial match.
-     * @param page page number starting from 0
-     * @param pageSize size of page
+     * @param shopIds   enforce access.
+     * @param filter    filter for partial match.
      *
      * @return list of customers
      */
-    List<CustomerDTO> findBy(String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<CustomerDTO> findCustomer(Set<Long> shopIds,
+                                           SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Reset password to given user and send generated password via email.

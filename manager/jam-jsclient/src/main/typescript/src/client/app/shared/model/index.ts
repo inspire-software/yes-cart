@@ -2,6 +2,7 @@
  * This barrel file provides the export for the shared NameListService.
  */
 export * from './common.model';
+export * from './search.model';
 export * from './attribute.model';
 export * from './cart.model';
 export * from './system.model';

@@ -25,7 +25,7 @@
         <version>3.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>core-module-cluster-jgroups</artifactId>
-    <name>Yes cart core: JGroups cluster support</name>
+    <name>Cluster: JGroups connector</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

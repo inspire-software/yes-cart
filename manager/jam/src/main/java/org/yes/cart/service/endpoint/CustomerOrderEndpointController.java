@@ -19,13 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.yes.cart.domain.vo.VoCustomerOrder;
-import org.yes.cart.domain.vo.VoCustomerOrderInfo;
-import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
-import org.yes.cart.domain.vo.VoPayment;
-
-import java.util.List;
-import java.util.Map;
+import org.yes.cart.domain.vo.*;
 
 /**
  * User: denispavlov
@@ -38,9 +32,9 @@ public interface CustomerOrderEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSUBSHOPUSER","ROLE_SMCALLCENTER"})
-    @RequestMapping(value = "/filtered/{max}/{lang}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/filtered/{lang}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") String lang, @RequestBody(required = false) Map<String, Object> filter, @PathVariable("max") int max) throws Exception;
+    VoSearchResult<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") String lang, @RequestBody VoSearchContext filter) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSUBSHOPUSER","ROLE_SMCALLCENTER"})
     @RequestMapping(value = "/order/{id}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -65,9 +59,9 @@ public interface CustomerOrderEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSUBSHOPUSER","ROLE_SMCALLCENTER"})
-    @RequestMapping(value = "/payments/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/payments/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPayment> getFilteredPayments(@RequestBody(required = false) Map<String, Object> filter, @PathVariable("max") int max) throws Exception;
+    VoSearchResult<VoPayment> getFilteredPayments(@RequestBody VoSearchContext filter) throws Exception;
 
 
 }

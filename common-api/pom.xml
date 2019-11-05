@@ -25,5 +25,5 @@
         <version>3.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>common-api</artifactId>
-    <name>Yes cart common API</name>
+    <name>Common API</name>
 </project>

@@ -22,6 +22,8 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -29,6 +31,37 @@ import java.util.List;
  * Time: 10:22:53
  */
 public interface CustomerOrderPaymentService extends PaymentModuleGenericService<CustomerOrderPayment> {
+
+
+    /**
+     * Find payments by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param shops             optional shops to search in
+     * @param filter            optional filters (e.g. firstname, lastname)
+     *
+     * @return list of payments, that match search criteria or empty list if nobody found or null if no search criteria provided.
+     */
+    List<CustomerOrderPayment> findCustomerOrderPayment(int start,
+                                                        int offset,
+                                                        String sort,
+                                                        boolean sortDescending,
+                                                        Set<String> shops,
+                                                        Map<String, List> filter);
+
+    /**
+     * Find payments by given search criteria. Search will be performed using like operation.
+     *
+     * @param shops             optional shops to search in
+     * @param filter            optional filters (e.g. orderNumber, lastname)
+     *
+     * @return count
+     */
+    int findCustomerOrderPaymentCount(Set<String> shops,
+                                      Map<String, List> filter);
 
 
     /**
@@ -41,10 +74,10 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
      * @param transactionOperation   operation name at payment gateway. optional
      * @return list of payments
      */
-    List<CustomerOrderPayment> findBy(String orderNumber,
-                                      String shipmentNumber,
-                                      String paymentProcessorResult,
-                                      String transactionOperation);
+    List<CustomerOrderPayment> findCustomerOrderPayment(String orderNumber,
+                                                        String shipmentNumber,
+                                                        String paymentProcessorResult,
+                                                        String transactionOperation);
 
     /**
      * Find all payments by given parameters.
@@ -56,31 +89,10 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
      * @param transactionOperation   operation names at payment gateway. optional
      * @return list of payments
      */
-    List<CustomerOrderPayment> findBy(String orderNumber,
-                                      String shipmentNumber,
-                                      String[] paymentProcessorResult,
-                                      String[] transactionOperation);
-
-    /**
-     * Find all payments by given parameters.
-     * All parameters are optional, but at least one must be present. Please verify this fact on UI.
-     *
-     * @param orderNumber            given order number. optional
-     * @param fromDate from date
-     * @param tillDate till date
-     * @param lastCardDigits last 4 digits of plastic card
-     * @param cardHolderName card holder name
-     * @param paymentGateway payment gateway
-     * @return list of payments which satisfy search criteria
-     */
-    List<CustomerOrderPayment> findBy(
-            String orderNumber,
-            LocalDateTime fromDate,
-            LocalDateTime tillDate,
-            String lastCardDigits,
-            String cardHolderName,
-            String paymentGateway
-            );
+    List<CustomerOrderPayment> findCustomerOrderPayment(String orderNumber,
+                                                        String shipmentNumber,
+                                                        String[] paymentProcessorResult,
+                                                        String[] transactionOperation);
 
 
     /**

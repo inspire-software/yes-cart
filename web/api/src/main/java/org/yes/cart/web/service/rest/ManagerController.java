@@ -102,7 +102,14 @@ public class ManagerController {
         final Map<String, List> all = new HashMap<>(search.getParameters());
         all.put("shopId", Collections.singletonList(String.valueOf(cart.getShoppingContext().getCustomerShopId())));
 
-        final SearchContext searchContext = new SearchContext(all, search.getPageNumber(), search.getPageSize(), search.getSortField(), search.getSortDescending());
+        final SearchContext searchContext = new SearchContext(
+                all,
+                search.getPageNumber(),
+                search.getPageSize(),
+                search.getSortField(),
+                search.getSortDescending(),
+                "any", "shopId", "email", "firstname", "lastname", "companyName1", "companyName2", "tag"
+        );
 
         final SearchResult<Customer> results = managerServiceFacade.getCustomers(searchContext);
 

@@ -26,8 +26,7 @@
     </parent>
     <artifactId>jam</artifactId>
     <packaging>war</packaging>
-    <name>Yes cart JAM: server</name>
-    <description>Yes cart manager server</description>
+    <name>Admin: server</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -81,6 +80,11 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
+            <artifactId>int-module-reports-hibernate</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
             <artifactId>core-module-impex</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -108,7 +112,7 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>persistence-core-hibernate</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>

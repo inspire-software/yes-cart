@@ -29,7 +29,7 @@
     <groupId>org.yes</groupId>
     <artifactId>imagevault</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart themes: imagevault structure</name>
+    <name>Themes: imagevault structure</name>
 
     <build>
         <plugins>

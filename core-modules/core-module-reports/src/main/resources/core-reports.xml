@@ -34,11 +34,22 @@
         </constructor-arg>
     </bean>
 
+    <bean id="reportObjectStreamFactoryConverterMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map key-type="java.lang.String" value-type="java.lang.Object">
+                <entry key="dateTime">
+                    <bean class="org.yes.cart.report.impl.DateTimeConverterImpl"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
     <import resource="classpath*:core-reports-ext.xml"/>
 
     <bean id="reportObjectStreamFactory" class="org.yes.cart.report.impl.ReportObjectStreamFactoryImpl">
         <property name="aliasesMap" ref="reportObjectStreamFactoryAliasesMapping"/>
         <property name="omitFieldsMap" ref="reportObjectStreamFactoryOmitFieldMapping"/>
+        <property name="converterMap" ref="reportObjectStreamFactoryConverterMapping"/>
     </bean>
 
 

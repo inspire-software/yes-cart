@@ -102,6 +102,7 @@
                        (saveEvent)="onSaveHandler()"
                        (discardEvent)="onDiscardEventHandler()"
                        (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
     </div>
 
   </div>
@@ -131,11 +132,7 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <div *ngIf="customerorderFilterCapped">
-      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-    </div>
-
-    <yc-customerorders [customerorders]="customerorders" (dataSelected)="onCustomerorderSelected($event)"></yc-customerorders>
+    <yc-customerorders [customerorders]="customerorders" (dataSelected)="onCustomerorderSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-customerorders>
   </div>
 
   <div [hidden]="viewMode !== 'customerorder'" class="{{ loading ? 'loading-data' : '' }}">

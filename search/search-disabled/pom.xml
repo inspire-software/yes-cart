@@ -24,7 +24,7 @@
         <version>3.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>search-disabled</artifactId>
-    <name>Yes cart search: disabled provider</name>
+    <name>Search: disabled provider</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

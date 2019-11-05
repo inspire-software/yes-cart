@@ -663,7 +663,7 @@
             <bean parent="txPayProxyTemplate">
                 <property name="target">
                     <bean class="org.yes.cart.service.dto.impl.DtoCustomerOrderPaymentServiceImpl">
-                        <constructor-arg index="0" type="org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO"  ref="customerOrderPaymentDao"/>
+                        <constructor-arg index="0" ref="customerOrderPaymentService"/>
                     </bean>
                 </property>
             </bean>

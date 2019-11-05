@@ -28,7 +28,7 @@
     <groupId>org.yes</groupId>
     <artifactId>web</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart web modules</name>
+    <name>WebApps</name>
 
     <modules>
         <module>support</module>

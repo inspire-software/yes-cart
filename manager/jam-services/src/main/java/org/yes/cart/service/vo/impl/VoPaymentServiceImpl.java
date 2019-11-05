@@ -16,7 +16,12 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.VoPayment;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.DtoCustomerOrderPaymentService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -25,6 +30,7 @@ import org.yes.cart.service.vo.VoPaymentService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -48,21 +54,42 @@ public class VoPaymentServiceImpl implements VoPaymentService {
     }
 
     @Override
-    public List<VoPayment> getFilteredPayments(final String filter, final List<String> operations, final List<String> statuses, final int max) throws Exception {
+    public VoSearchResult<VoPayment> getFilteredPayments(final VoSearchContext filter) throws Exception {
 
+
+        final VoSearchResult<VoPayment> result = new VoSearchResult<>();
         final List<VoPayment> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        int start = 0;
-        do {
-            final List<CustomerOrderPayment> batch = dtoCustomerOrderPaymentService.findBy(filter, operations, statuses, start, max);
-            if (batch.isEmpty()) {
-                break;
+        Set<String> shopCodes = null;
+        if (!federationFacade.isCurrentUserSystemAdmin()) {
+            shopCodes = federationFacade.getAccessibleShopCodesByCurrentManager();
+            if (CollectionUtils.isEmpty(shopCodes)) {
+                return result;
             }
-            federationFacade.applyFederationFilter(batch, CustomerOrderPayment.class);
+        }
 
-            results.addAll(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, batch));
-            start++;
-        } while (results.size() < max && max != Integer.MAX_VALUE);
-        return results.size() > max ? results.subList(0, max) : results;
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                Math.min(filter.getSize(), 100),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "statuses", "operations"
+        );
+
+        final SearchResult<CustomerOrderPayment> batch = dtoCustomerOrderPaymentService.findPayments(shopCodes, searchContext);
+
+        if (!batch.getItems().isEmpty()) {
+
+            results.addAll(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, batch.getItems()));
+
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
+
     }
 }

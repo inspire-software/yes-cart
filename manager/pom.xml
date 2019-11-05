@@ -27,7 +27,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>manager</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart Admin modules</name>
+    <name>Admin modules</name>
 
   <modules>
     <module>jam-vo</module>

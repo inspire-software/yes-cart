@@ -26,10 +26,14 @@ import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -54,15 +58,15 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testFindBy() throws Exception {
-        CustomerDTO jane = getCustomerDto(getTestName() + "_a");
+    public void testFindCustomer() throws Exception {
+        CustomerDTO jane = getCustomerDto(getTestName() + "_c");
         jane = dtoService.createForShop(jane, 10L);
         assertTrue(jane.getCustomerId() > 0);
         jane.setFirstname("Jane");
         jane.setLastname("Gav");
         jane.setCustomerType("B2C");
         jane = dtoService.update(jane);
-        CustomerDTO bob = getCustomerDto(getTestName() + "_b");
+        CustomerDTO bob = getCustomerDto(getTestName() + "_d");
         bob = dtoService.createForShop(bob, 10L);
         assertTrue(bob.getCustomerId() > 0);
         bob.setFirstname("Bob");
@@ -70,20 +74,29 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         bob.setCustomerType("B2B");
         bob = dtoService.update(bob);
 
+        final Set<Long> shopIds = Collections.singleton(10L);
+        SearchContext ctx;
+        SearchResult<CustomerDTO> rez;
+
         // check by id
-        List<CustomerDTO> rez = dtoService.findBy("#" + jane.getCustomerId(), 0, 10);
-        assertEquals(1, rez.size());
-        assertEquals("Jane", rez.get(0).getFirstname());
+        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("#" + jane.getCustomerId())), 0, 10, null, false, "filter");
+        rez = dtoService.findCustomer(shopIds, ctx);
+        assertEquals(1, rez.getTotal());
+        assertEquals(1, rez.getItems().size());
+        assertEquals("Jane", rez.getItems().get(0).getFirstname());
 
         // check by name
-        rez = dtoService.findBy("?bob", 0, 10);
-        assertEquals(1, rez.size());
-        assertEquals("Bob", rez.get(0).getFirstname());
+        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("?bob")), 0, 10, null, false, "filter");
+        rez = dtoService.findCustomer(shopIds, ctx);
+        assertEquals(1, rez.getTotal());
+        assertEquals(1, rez.getItems().size());
+        assertEquals("Bob", rez.getItems().get(0).getFirstname());
 
         // check by type
-        rez = dtoService.findBy("$b2c", 0, 10);
-        assertFalse(rez.isEmpty());
-        assertEquals("B2C", rez.get(0).getCustomerType());
+        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("$b2c")), 0, 10, null, false, "filter");
+        rez = dtoService.findCustomer(shopIds, ctx);
+        assertTrue(rez.getTotal() > 0);
+        assertEquals("B2C", rez.getItems().get(0).getCustomerType());
 
         dtoService.remove(bob.getCustomerId());
         dtoService.remove(jane.getCustomerId());

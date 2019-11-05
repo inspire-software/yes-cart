@@ -5,10 +5,10 @@
       <thead class="cf">
       <tr>
         <th>{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}</th>
-        <th>{{ 'CUSTOMERORDER_NUM' | translate }}</th>
-        <th>{{ 'CUSTOMERORDER_DATE' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('ordernum')">{{ 'CUSTOMERORDER_NUM' | translate }} <span [hidden]="sortColumn != 'ordernum'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('orderTimestamp')">{{ 'CUSTOMERORDER_DATE' | translate }} <span [hidden]="sortColumn != 'orderTimestamp'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'CUSTOMERORDER_STATUS' | translate }}</th>
-        <th>{{ 'CUSTOMERORDER_CUSTOMER' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('email')">{{ 'CUSTOMERORDER_CUSTOMER' | translate }} <span [hidden]="sortColumn != 'email'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'CURRENCY' | translate }}</th>
         <th><a (click)="onShowGrossTotalClick()" class="js-click"  title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_NO_TAX' : 'CUSTOMERORDER_TOTAL_WITH_TAX') | translate }}">
           {{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }}
@@ -18,18 +18,16 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let row of filteredCustomerorders; let i = index" class="{{row == selectedCustomerorder ? 'active' : ''}}">
-        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
-          <td title="{{ 'CUSTOMERORDER_NUM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.ordernum}}</a></td>
-          <td title="{{ 'CUSTOMERORDER_DATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.orderTimestamp | ycdatetime}}</a></td>
-          <td title="{{ 'CUSTOMERORDER_STATUS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.orderStatus | translate}}</a></td>
-          <td title="{{ 'CUSTOMERORDER_CUSTOMER' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getUserIcon(row)"></span> {{row.salutation}} {{row.firstname}} {{row.middlename}} {{row.lastname}} ({{row.email}})</a></td>
-          <td title="{{ 'CURRENCY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.currency}}</a></td>
-          <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{ (showGrossTotal ? row.orderGrossTotal : row.orderNetTotal) | ycprice}}</a></td>
-          <td title="{{ 'CUSTOMERORDER_PG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.pgName}}</a></td>
-          <td title="{{ 'CUSTOMERORDER_BALANCE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.orderPaymentBalance | ycprice}}</a></td>
-        </ng-template>
+      <tr *ngFor="let row of filteredCustomerorders; let i = index" class="{{selectedCustomerorder != null && row.customerorderId == selectedCustomerorder.customerorderId ? 'active' : ''}}">
+        <td title="{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+        <td title="{{ 'CUSTOMERORDER_NUM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.ordernum}}</a></td>
+        <td title="{{ 'CUSTOMERORDER_DATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.orderTimestamp | ycdatetime}}</a></td>
+        <td title="{{ 'CUSTOMERORDER_STATUS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.orderStatus | translate}}</a></td>
+        <td title="{{ 'CUSTOMERORDER_CUSTOMER' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getUserIcon(row)"></span> {{row.salutation}} {{row.firstname}} {{row.middlename}} {{row.lastname}} ({{row.email}})</a></td>
+        <td title="{{ 'CURRENCY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.currency}}</a></td>
+        <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{ (showGrossTotal ? row.orderGrossTotal : row.orderNetTotal) | ycprice}}</a></td>
+        <td title="{{ 'CUSTOMERORDER_PG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.pgName}}</a></td>
+        <td title="{{ 'CUSTOMERORDER_BALANCE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.orderPaymentBalance | ycprice}}</a></td>
       </tr>
       </tbody>
     </table>

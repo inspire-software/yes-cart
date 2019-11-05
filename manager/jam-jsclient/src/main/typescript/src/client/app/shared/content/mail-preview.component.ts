@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
-import { CustomerOrderInfoVO } from './../model/index';
+import { CustomerOrderInfoVO, SearchContextVO } from './../model/index';
 import { CustomerOrderService, I18nEventBus } from './../services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { Futures, Future, FormValidationEvent } from './../event/index';
@@ -109,12 +109,13 @@ export class MailPreviewComponent implements OnInit, OnDestroy {
     if (!this.customerorderFilterRequired) {
       this.loading = true;
       let lang = I18nEventBus.getI18nEventBus().current();
-      let _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, [],this.filterCap).subscribe(allcustomerorders => {
+      let ctx:SearchContextVO = { parameters: { filter: [ this.customerorderFilter ] }, start: 0, size: this.filterCap, sortBy: null, sortDesc: false };
+      let _sub:any = this._customerorderService.getFilteredOrders(lang, ctx).subscribe(allcustomerorders => {
         LogUtil.debug('MailPreviewComponent getAllCustomerOrders', allcustomerorders);
         this.selectedCustomerOrder = null;
         this.changed = false;
-        this.filteredCustomerOrders = allcustomerorders;
-        this.customerorderFilterCapped = this.filteredCustomerOrders.length >= this.filterCap;
+        this.filteredCustomerOrders = allcustomerorders.items;
+        this.customerorderFilterCapped = allcustomerorders.total > this.filterCap;
         this.loading = false;
         _sub.unsubscribe();
       });

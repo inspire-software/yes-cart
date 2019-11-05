@@ -23,7 +23,6 @@ import org.yes.cart.service.federation.ShopFederationStrategy;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -65,8 +64,8 @@ public class CustomerOrderUiFederationFilterImpl implements FederationFilter {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
         if (object instanceof String) {
             try {
-                final List<CustomerOrderDTO> orders = customerOrderService.findCustomerOrdersByCriteria(0L, null, null, null, null, null, null, (String) object);
-                return orders != null && orders.size() == 1 && manageableShopIds.contains(orders.get(0).getShopId());
+                final CustomerOrderDTO order = customerOrderService.findByOrderNumber((String) object);
+                return order != null && manageableShopIds.contains(order.getShopId());
             } catch (Exception exp) {
                 return false;
             }

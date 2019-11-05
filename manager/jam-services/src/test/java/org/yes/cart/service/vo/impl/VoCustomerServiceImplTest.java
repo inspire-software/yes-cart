@@ -19,10 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttrValueCustomer;
-import org.yes.cart.domain.vo.VoCustomer;
-import org.yes.cart.domain.vo.VoCustomerInfo;
-import org.yes.cart.domain.vo.VoCustomerShopLink;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.vo.VoCustomerService;
 
 import java.util.Collections;
@@ -49,39 +46,59 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetCustomers() throws Exception {
 
-        List<VoCustomerInfo> customerNoFilter = voCustomerService.getFilteredCustomers(null, 10);
+        VoSearchContext ctxNoFilter = new VoSearchContext();
+        ctxNoFilter.setSize(10);
+        VoSearchResult<VoCustomerInfo> customerNoFilter = voCustomerService.getFilteredCustomers(ctxNoFilter);
         assertNotNull(customerNoFilter);
-        assertFalse(customerNoFilter.isEmpty());
+        assertTrue(customerNoFilter.getTotal() > 0);
 
-        List<VoCustomerInfo> customerFind = voCustomerService.getFilteredCustomers("reg@test.com", 10);
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("reg@test.com")));
+        ctxFind.setSize(10);
+        VoSearchResult<VoCustomerInfo> customerFind = voCustomerService.getFilteredCustomers(ctxFind);
         assertNotNull(customerFind);
-        assertFalse(customerFind.isEmpty());
-        assertEquals("reg@test.com", customerFind.get(0).getEmail());
+        assertTrue(customerFind.getTotal() > 0);
+        assertEquals("reg@test.com", customerFind.getItems().get(0).getEmail());
 
-        List<VoCustomerInfo> customerByEmailTagOrCompany = voCustomerService.getFilteredCustomers("#JJ", 10);
+        VoSearchContext ctxByEmailTagOrCompany = new VoSearchContext();
+        ctxByEmailTagOrCompany.setParameters(Collections.singletonMap("filter", Collections.singletonList("#JJ")));
+        ctxByEmailTagOrCompany.setSize(10);
+        VoSearchResult<VoCustomerInfo> customerByEmailTagOrCompany = voCustomerService.getFilteredCustomers(ctxByEmailTagOrCompany);
         assertNotNull(customerByEmailTagOrCompany);
-        assertFalse(customerByEmailTagOrCompany.isEmpty());
-        assertEquals("reg@test.com", customerByEmailTagOrCompany.get(0).getEmail());
+        assertTrue(customerByEmailTagOrCompany.getTotal() > 0);
+        assertEquals("reg@test.com", customerByEmailTagOrCompany.getItems().get(0).getEmail());
 
-        List<VoCustomerInfo> customerByName = voCustomerService.getFilteredCustomers("?John", 10);
+        VoSearchContext ctxByName = new VoSearchContext();
+        ctxByName.setParameters(Collections.singletonMap("filter", Collections.singletonList("?John")));
+        ctxByName.setSize(10);
+        VoSearchResult<VoCustomerInfo> customerByName = voCustomerService.getFilteredCustomers(ctxByName);
         assertNotNull(customerByName);
-        assertFalse(customerByName.isEmpty());
-        assertEquals("reg@test.com", customerByName.get(0).getEmail());
+        assertTrue(customerByName.getTotal() > 0);
+        assertEquals("reg@test.com", customerByName.getItems().get(0).getEmail());
 
-        List<VoCustomerInfo> customerByAddress = voCustomerService.getFilteredCustomers("@NW1 6XE", 10);
+        VoSearchContext ctxByAddress = new VoSearchContext();
+        ctxByAddress.setParameters(Collections.singletonMap("filter", Collections.singletonList("@NW1 6XE")));
+        ctxByAddress.setSize(10);
+        VoSearchResult<VoCustomerInfo> customerByAddress = voCustomerService.getFilteredCustomers(ctxByAddress);
         assertNotNull(customerByAddress);
-        assertFalse(customerByAddress.isEmpty());
-        assertEquals("reg@test.com", customerByAddress.get(0).getEmail());
+        assertTrue(customerByAddress.getTotal() > 0);
+        assertEquals("reg@test.com", customerByAddress.getItems().get(0).getEmail());
 
-        List<VoCustomerInfo> customerByTypeOrPolicy = voCustomerService.getFilteredCustomers("$TEST", 10);
+        VoSearchContext ctxByTypeOrPolicy = new VoSearchContext();
+        ctxByTypeOrPolicy.setParameters(Collections.singletonMap("filter", Collections.singletonList("$TEST")));
+        ctxByTypeOrPolicy.setSize(10);
+        VoSearchResult<VoCustomerInfo> customerByTypeOrPolicy = voCustomerService.getFilteredCustomers(ctxByTypeOrPolicy);
         assertNotNull(customerByTypeOrPolicy);
-        assertFalse(customerByTypeOrPolicy.isEmpty());
-        assertEquals("reg@test.com", customerByTypeOrPolicy.get(0).getEmail());
+        assertTrue(customerByTypeOrPolicy.getTotal() > 0);
+        assertEquals("reg@test.com", customerByTypeOrPolicy.getItems().get(0).getEmail());
 
-        List<VoCustomerInfo> customerByDate = voCustomerService.getFilteredCustomers("2008-12<2009-01", 10);
+        VoSearchContext ctxByByDate = new VoSearchContext();
+        ctxByByDate.setParameters(Collections.singletonMap("filter", Collections.singletonList("2008-12<2009-01")));
+        ctxByByDate.setSize(10);
+        VoSearchResult<VoCustomerInfo> customerByDate = voCustomerService.getFilteredCustomers(ctxByByDate);
         assertNotNull(customerByDate);
-        assertFalse(customerByDate.isEmpty());
-        assertEquals("reg@test.com", customerByDate.get(0).getEmail());
+        assertTrue(customerByDate.getTotal() > 0);
+        assertEquals("reg@test.com", customerByDate.getItems().get(0).getEmail());
 
     }
 
@@ -109,7 +126,10 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         final VoCustomer updated = voCustomerService.updateCustomer(created);
         assertEquals("TEST CRUD UPDATE", updated.getFirstname());
 
-        assertFalse(voCustomerService.getFilteredCustomers("TEST CRUD UPDATE", 10).isEmpty());
+        VoSearchContext ctx = new VoSearchContext();
+        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setSize(10);
+        assertTrue(voCustomerService.getFilteredCustomers(ctx).getTotal() > 0);
 
         final List<VoAttrValueCustomer> attributes = voCustomerService.getCustomerAttributes(updated.getCustomerId());
         assertNotNull(attributes);
@@ -132,7 +152,7 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
 
         voCustomerService.removeCustomer(updated.getCustomerId());
 
-        assertTrue(voCustomerService.getFilteredCustomers("TEST CRUD UPDATE", 10).isEmpty());
+        assertEquals(0, voCustomerService.getFilteredCustomers(ctx).getTotal());
 
     }
 }

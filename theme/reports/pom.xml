@@ -29,7 +29,7 @@
     <groupId>org.yes</groupId>
     <artifactId>reports</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart themes: reports templates</name>
+    <name>Themes: reports templates</name>
 
     <build>
         <plugins>

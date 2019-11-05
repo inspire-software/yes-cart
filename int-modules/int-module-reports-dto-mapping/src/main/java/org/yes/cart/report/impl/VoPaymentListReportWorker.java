@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.domain.vo.VoSearchContext;
 import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
 import org.yes.cart.service.vo.VoPaymentService;
@@ -85,7 +86,10 @@ public class VoPaymentListReportWorker implements ReportWorker {
         }
 
         try {
-            return (List) paymentService.getFilteredPayments(filter.length() > 0 ? filter.toString() : null, null, null, Integer.MAX_VALUE);
+            final VoSearchContext ctx = new VoSearchContext();
+            ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList(filter.length() > 0 ? filter.toString() : null)));
+            ctx.setSize(1000);
+            return (List) paymentService.getFilteredPayments(ctx).getItems();
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             return Collections.emptyList();

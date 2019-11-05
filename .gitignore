@@ -140,6 +140,34 @@ persistence/logs/net.authorize.aim.log
 
 persistence/target/**
 
+persistence/persistence-api/persistence-api.iml
+
+persistence/persistence-api/target/**
+
+persistence/persistence-common/persistence-common.iml
+
+persistence/persistence-common/target/**
+
+persistence/persistence-common-hibernate/persistence-common-hibernate.iml
+
+persistence/persistence-common-hibernate/target/**
+
+persistence/persistence-domain-core/persistence-domain-core.iml
+
+persistence/persistence-domain-core/target/**
+
+persistence/persistence-core-hibernate/persistence-core-hibernate.iml
+
+persistence/persistence-core-hibernate/target/**
+
+persistence/persistence-domain-payment/persistence-domain-payment.iml
+
+persistence/persistence-domain-payment/target/**
+
+persistence/persistence-payment-hibernate/persistence-payment-hibernate.iml
+
+persistence/persistence-payment-hibernate/target/**
+
 theme/imagevault/imagevault.iml
 
 theme/imagevault/target/**

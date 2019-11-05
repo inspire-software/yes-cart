@@ -60,6 +60,39 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
      */
     List<Object> findByQuery(String hsqlQuery, Object... parameters);
 
+
+    /**
+     * Find entities within HSQL query.
+     * E.g. "select x from XEntity x where x.foo = ?1 and x.bar = ?2"
+     *
+     * Sorting should be defined in HSQL query.
+     * E.g. "select x from XEntity x where x.foo = ?1 and x.bar = ?2 order by x.foo asc"
+     *
+     * @param hsqlQuery      query
+     * @param firstResult    first row of result
+     * @param maxResults     size of result set
+     * @param parameters     optional parameters for named query
+     *
+     * @return list of found entities
+     */
+    List<T> findRangeByQuery(String hsqlQuery,
+                             int firstResult,
+                             int maxResults,
+                             Object... parameters);
+
+
+    /**
+     * Find count by criteria.
+     * E.g. "select count(x) from XEntity x where x.foo = ?1 and x.bar = ?2"
+     *
+     * @param hsqlQuery HQL criteria, to reference entity use "e", e.g. " where e.attr1 = ? and e.attr2 = ?"
+     * @param parameters parameters to fill in for question marks
+     *
+     * @return list of found entities.
+     */
+    int findCountByQuery(String hsqlQuery, Object... parameters);
+
+
     /**
      * Find entities within named query .
      *

@@ -40,7 +40,7 @@ public interface CustomerService extends GenericService<Customer> {
      * @param sort              optional sort property
      * @param sortDescending    optional sort property direction
      * @param shops             optional shops to search in
-     * @param filter            optional filters (e.g. any, firstname, lastname)
+     * @param filter            optional filters (e.g. firstname, lastname)
      *
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      */
@@ -49,35 +49,19 @@ public interface CustomerService extends GenericService<Customer> {
                                 String sort,
                                 boolean sortDescending,
                                 Set<Long> shops,
-                                Map<String, Object> filter);
+                                Map<String, List> filter);
 
     /**
      * Find customer by given search criteria. Search will be performed using like operation.
      *
      * @param shops             optional shops to search in
-     * @param filter            optional filters (e.g. any, firstname, lastname)
+     * @param filter            optional filters (e.g. firstname, lastname)
      *
      * @return count
      */
     int findCustomerCount(Set<Long> shops,
-                          Map<String, Object> filter);
+                          Map<String, List> filter);
 
-
-    /**
-     * Find customer by given search criteria. Search will be performed using like operation.
-     *
-     *
-     * @param email         optional email
-     * @param firstname     optional first name
-     * @param lastname      optional last name
-     * @param middlename    optional middle name
-     * @param tag           optional tag
-     * @param customerType  optional customer type
-     * @param pricingPolicy optional customer pricing policy
-     *                      
-     * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
-     */
-    List<Customer> findCustomer(String email, String firstname, String lastname, String middlename, String tag, String customerType, String pricingPolicy);
 
     /**
      * Get customer by email.

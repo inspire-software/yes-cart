@@ -26,8 +26,7 @@
     </parent>
     <artifactId>jam-jsclient</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart JAM: JS client</name>
-    <description>Yes cart manager server JS client</description>
+    <name>Admin: JS client</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <npm.executable>npm</npm.executable>

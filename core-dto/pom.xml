@@ -24,7 +24,7 @@
         <version>3.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>core-dto</artifactId>
-    <name>Yes cart core DTO service</name>
+    <name>Core: DTO service</name>
     <dependencies>
 
         <dependency>
@@ -61,7 +61,15 @@
 
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>persistence-core-hibernate</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>persistence-payment-hibernate</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>

@@ -17,9 +17,7 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttrValueCustomer;
-import org.yes.cart.domain.vo.VoCustomer;
-import org.yes.cart.domain.vo.VoCustomerInfo;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -35,7 +33,7 @@ public interface VoCustomerService {
      *
      * @throws Exception errors
      */
-    List<VoCustomerInfo> getFilteredCustomers(String filter, int max) throws Exception;
+    VoSearchResult<VoCustomerInfo> getFilteredCustomers(VoSearchContext filter) throws Exception;
 
     /**
      * Get customer by id.

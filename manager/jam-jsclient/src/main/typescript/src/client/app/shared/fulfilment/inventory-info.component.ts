@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CustomerOrderService, I18nEventBus } from './../services/index';
-import { CustomerOrderInfoVO } from './../model/index';
+import { CustomerOrderInfoVO, SearchContextVO } from './../model/index';
 import { ModalComponent, ModalResult } from './../modal/index';
 import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
@@ -83,11 +83,12 @@ export class InventoryInfoComponent implements OnInit {
     LogUtil.debug('InventoryInfoComponent loading orders', this._skuCode);
     let lang = I18nEventBus.getI18nEventBus().current();
     this.loading = true;
-    let _subc:any = this._customerOrderService.getFilteredOrders(lang, '!' + this._skuCode, [], this.filterCap).subscribe(
+    let ctx:SearchContextVO = { parameters: { filter: [ '!' + this._skuCode ] }, start: 0, size: this.filterCap, sortBy: null, sortDesc: false };
+    let _subc:any = this._customerOrderService.getFilteredOrders(lang, ctx).subscribe(
         info => {
           LogUtil.debug('InventoryInfoComponent all orders', info);
-          this.orders = info;
-          this.customerorderFilterCapped = this.orders.length >= this.filterCap;
+          this.orders = info.items;
+          this.customerorderFilterCapped = info.total > this.filterCap;
           this.loading = false;
           _subc.unsubscribe();
       }

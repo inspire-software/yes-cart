@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { CustomerOrderVO, CustomerOrderInfoVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, PaymentVO } from '../model/index';
+import { CustomerOrderVO, CustomerOrderInfoVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, PaymentVO, SearchContextVO, SearchResultVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -45,12 +45,12 @@ export class CustomerOrderService {
    * Get list of all orders, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredOrders(lang:string, filter:string, statuses:string[], max:number) {
+  getFilteredOrders(lang:string, filter:SearchContextVO) {
 
-    let body = JSON.stringify({ filter: filter, statuses: statuses });
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/filtered/' + max + '/' + lang, body, Util.requestOptions())
-        .map(res => <CustomerOrderInfoVO[]> this.json(res))
+    return this.http.post(this._serviceBaseUrl + '/filtered/' + lang, body, Util.requestOptions())
+        .map(res => <SearchResultVO<CustomerOrderInfoVO>> this.json(res))
         .catch(this.handleError);
   }
 
@@ -120,12 +120,12 @@ export class CustomerOrderService {
    * Get list of all payments, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredPayments(filter:string, operations:string[], statuses:string[], max:number) {
+  getFilteredPayments(filter:SearchContextVO) {
 
-    let body = JSON.stringify({ filter: filter, operations: operations, statuses: statuses });
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/payments/filtered/' + max + '/', body, Util.requestOptions())
-      .map(res => <PaymentVO[]> this.json(res))
+    return this.http.post(this._serviceBaseUrl + '/payments/filtered', body, Util.requestOptions())
+      .map(res => <SearchResultVO<PaymentVO>> this.json(res))
       .catch(this.handleError);
   }
 

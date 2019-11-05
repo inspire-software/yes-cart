@@ -55,8 +55,8 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
 
     @Override
     public @ResponseBody
-    List<VoCustomerInfo> getFilteredCustomer(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voCustomerService.getFilteredCustomers(filter, max);
+    VoSearchResult<VoCustomerInfo> getFilteredCustomer(@RequestBody(required = false) final VoSearchContext filter) throws Exception {
+        return voCustomerService.getFilteredCustomers(filter);
     }
 
     @Override

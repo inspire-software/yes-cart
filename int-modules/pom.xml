@@ -25,9 +25,10 @@
     </parent>
     <artifactId>int-modules</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart integrations</name>
+    <name>Integrations</name>
     <modules>
         <module>int-module-marketing-pricerules</module>
+        <module>int-module-reports-hibernate</module>
         <module>int-module-reports-domain-mapping</module>
         <module>int-module-reports-dto-mapping</module>
     </modules>

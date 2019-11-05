@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CustomerOrderService, I18nEventBus, ErrorEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, Pair } from './../shared/model/index';
+import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, Pair, SearchContextVO, SearchResultVO } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { CookieUtil } from './../shared/cookies/index';
 import { Config } from './../shared/config/env.config';
@@ -76,15 +76,12 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   private forceShowAll:boolean = false;
   private viewMode:string = AllCustomerOrdersComponent.CUSTOMERORDERS;
 
-  private customerorders:Array<CustomerOrderInfoVO> = [];
+  private customerorders:SearchResultVO<CustomerOrderInfoVO>;
   private customerorderFilter:string;
   private customerorderFilterRequired:boolean = true;
-  private customerorderFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedCustomerorder:CustomerOrderInfoVO;
 
@@ -127,6 +124,24 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   constructor(private _customerorderService:CustomerOrderService) {
     LogUtil.debug('AllCustomerOrdersComponent constructed');
+    this.customerorders = this.newSearchResultInstance();
+  }
+
+  newSearchResultInstance():SearchResultVO<CustomerOrderInfoVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: [],
+          statuses: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    }
   }
 
   ngOnInit() {
@@ -168,9 +183,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
 
   protected onFilterChange(event:any) {
-
+    this.customerorders.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
@@ -182,6 +196,24 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         this.getFilteredCustomerorders();
       }
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('AllCustomerOrdersComponent onPageSelected', page);
+    this.customerorders.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('AllCustomersComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.customerorders.searchContext.sortBy = null;
+      this.customerorders.searchContext.sortDesc = false;
+    } else {
+      this.customerorders.searchContext.sortBy = sort.first;
+      this.customerorders.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onCustomerorderSelected(data:CustomerOrderInfoVO) {
@@ -413,16 +445,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.customerorderEdit = customerorder;
       this.selectedCustomerorder = customerorder;
 
-      let idx = this.customerorders.findIndex(order => {
+      let idx = this.customerorders.items.findIndex(order => {
         return order.customerorderId === customerorder.customerorderId;
       });
 
-      if (idx != -1) {
-        this.customerorders[idx] = customerorder;
-      } else {
-        this.customerorders.splice(0, 0, customerorder);
-        idx = 0;
-      }
+      this.customerorders = this.customerorders;
 
       this.changed = false;
       this.validForSave = false;
@@ -538,18 +565,12 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
                   this.customerorderEdit = customerorder;
                 }
 
-                let idx = this.customerorders.findIndex(order => {
+                let idx = this.customerorders.items.findIndex(order => {
                   return order.customerorderId === customerorder.customerorderId;
                 });
 
-                if (idx != -1) {
-                  this.customerorders[idx] = customerorder;
-                } else {
-                  this.customerorders.splice(0, 0, customerorder);
-                  idx = 0;
-                }
-                this.selectedCustomerorder = this.customerorders[idx];
-                this.customerorders = this.customerorders.slice(0, this.customerorders.length); // hack to retrigger change
+                this.selectedCustomerorder = this.customerorders.items[idx != -1 ? idx : 0];
+                this.customerorders = this.customerorders; // hack to retrigger change
                 this.onCustomerorderSelected(this.selectedCustomerorder);
 
                 this.changed = false;
@@ -582,18 +603,12 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
                   this.customerorderEdit = customerorder;
                 }
 
-                let idx = this.customerorders.findIndex(order => {
+                let idx = this.customerorders.items.findIndex(order => {
                   return order.customerorderId === customerorder.customerorderId;
                 });
 
-                if (idx != -1) {
-                  this.customerorders[idx] = customerorder;
-                } else {
-                  this.customerorders.splice(0, 0, customerorder);
-                  idx = 0;
-                }
-                this.selectedCustomerorder = this.customerorders[idx];
-                this.customerorders = this.customerorders.slice(0, this.customerorders.length); // hack to retrigger change
+                this.selectedCustomerorder = this.customerorders.items[idx != -1 ? idx : 0];
+                this.customerorders = this.customerorders; // hack to retrigger change
                 this.onCustomerorderSelected(this.selectedCustomerorder);
 
                 let delivery:CustomerOrderDeliveryInfoVO = null;
@@ -745,18 +760,18 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
           this.customerorderEdit = exportedOrder;
         }
 
-        let idx = this.customerorders.findIndex(order => {
+        let idx = this.customerorders.items.findIndex(order => {
           return order.customerorderId === exportedOrder.customerorderId;
         });
 
         if (idx != -1) {
-          this.customerorders[idx] = exportedOrder;
+          this.customerorders.items[idx] = exportedOrder;
         } else {
-          this.customerorders.splice(0, 0, exportedOrder);
+          this.customerorders.items.splice(0, 0, exportedOrder);
           idx = 0;
         }
-        this.selectedCustomerorder = this.customerorders[idx];
-        this.customerorders = this.customerorders.slice(0, this.customerorders.length); // hack to retrigger change
+        this.selectedCustomerorder = this.customerorders.items[idx];
+        this.customerorders = this.customerorders; // hack to retrigger change
         this.onCustomerorderSelected(this.selectedCustomerorder);
 
         _sub.unsubscribe();
@@ -807,7 +822,6 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     if (!this.customerorderFilterRequired) {
       this.loading = true;
       let lang = I18nEventBus.getI18nEventBus().current();
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
 
       let sts:string[] = [];
       AllCustomerOrdersComponent._statuses.forEach((_st:Pair<string, boolean>) => {
@@ -816,7 +830,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         }
       });
 
-      let _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, sts, max).subscribe( allcustomerorders => {
+      this.customerorders.searchContext.parameters.filter = [ this.customerorderFilter ];
+      this.customerorders.searchContext.parameters.statuses = sts;
+      this.customerorders.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorders.searchContext).subscribe( allcustomerorders => {
         LogUtil.debug('AllCustomerOrdersComponent getFilteredCustomerorders', allcustomerorders);
         this.customerorders = allcustomerorders;
         this.selectedCustomerorder = null;
@@ -824,18 +842,16 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDERS;
         this.changed = false;
         this.validForSave = false;
-        this.customerorderFilterCapped = this.customerorders.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.customerorders = [];
+      this.customerorders = this.newSearchResultInstance();
       this.selectedCustomerorder = null;
       this.customerorderEdit = null;
       this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDERS;
       this.changed = false;
       this.validForSave = false;
-      this.customerorderFilterCapped = false;
     }
   }
 

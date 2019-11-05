@@ -22,13 +22,14 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.utils.DateUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -147,5 +148,98 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
         return shoppingCart;
     }
+
+
+    @Test
+    public void testFindCustomerOrder() {
+
+        final Set<Long> shopAll = null;
+        final Set<Long> shop10 = Collections.singleton(10L);
+
+        List<CustomerOrder> list;
+        int count;
+
+        final Map<String, List> filterNone = null;
+
+        count = customerOrderService.findCustomerOrderCount(shopAll, filterNone);
+        assertTrue(count > 0);
+        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shopAll, filterNone);
+        assertFalse(list.isEmpty());
+
+        count = customerOrderService.findCustomerOrderCount(shop10, filterNone);
+        assertTrue(count > 0);
+        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shop10, filterNone);
+        assertFalse(list.isEmpty());
+
+
+        final Map<String, List> filterAny = new HashMap<>();
+        SearchContext.JoinMode.OR.setMode(filterAny);
+        filterAny.put("email", Collections.singletonList("190323"));
+        filterAny.put("ordernum", Collections.singletonList("190323"));
+        filterAny.put("lastname", Collections.singletonList("190323"));
+
+        count = customerOrderService.findCustomerOrderCount(shopAll, filterAny);
+        assertEquals(2, count);
+        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shopAll, filterAny);
+        assertEquals(1, list.size());
+        list = customerOrderService.findCustomerOrder(1, 1, "ordernum", false, shopAll, filterAny);
+        assertEquals(1, list.size());
+
+
+        final Map<String, List> filterSpecific = new HashMap<>();
+        filterSpecific.put("email", Collections.singletonList("reg@test.com"));
+        filterSpecific.put("ordernum", Collections.singletonList("190323063753-2"));
+
+        count = customerOrderService.findCustomerOrderCount(shopAll, filterSpecific);
+        assertEquals(1, count);
+        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shopAll, filterSpecific);
+        assertEquals(1, list.size());
+
+        final Map<String, List> filterNoMatch = Collections.singletonMap("ordernum", Collections.singletonList("ZZZZZZZ"));
+
+        count = customerOrderService.findCustomerOrderCount(shopAll, filterNoMatch);
+        assertEquals(0, count);
+        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shopAll, filterNoMatch);
+        assertEquals(0, list.size());
+
+        final Map<String, List> filterStatusSpecific = Collections.singletonMap("orderStatus", Collections.singletonList("os.in.progress"));
+
+        count = customerOrderService.findCustomerOrderCount(shop10, filterStatusSpecific);
+        assertTrue(count > 0);
+        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shop10, filterStatusSpecific);
+        assertFalse(list.isEmpty());
+
+        final Map<String, List> filterStatusSpecificNoMatch = Collections.singletonMap("orderStatus", Collections.singletonList("zzzzzz"));
+
+        count = customerOrderService.findCustomerOrderCount(shop10, filterStatusSpecificNoMatch);
+        assertEquals(0, count);
+        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shop10, filterStatusSpecificNoMatch);
+        assertTrue(list.isEmpty());
+
+        final Map<String, List> filterOr = new HashMap<>();
+        SearchContext.JoinMode.OR.setMode(filterOr);
+        filterOr.put("email", Collections.singletonList("reg@test.com"));
+        filterOr.put("ordernum", Collections.singletonList("190323063746-1"));
+
+        count = customerOrderService.findCustomerOrderCount(shop10, filterOr);
+        assertEquals(2, count);
+        list = customerOrderService.findCustomerOrder(0, 2, "ordernum", false, shop10, filterOr);
+        assertEquals(2, list.size());
+
+        final Map<String, List> filterCreated = new HashMap<>();
+        filterCreated.put("email", Collections.singletonList("reg@test.com"));
+        filterCreated.put("orderTimestamp", Arrays.asList(
+                SearchContext.MatchMode.GE.toParam(DateUtils.ldtParseSDT("2019-03-01")),
+                SearchContext.MatchMode.LT.toParam(DateUtils.ldtParseSDT("2019-04-01"))
+                )
+        );
+
+        count = customerOrderService.findCustomerOrderCount(shop10, filterCreated);
+        assertEquals(2, count);
+        list = customerOrderService.findCustomerOrder(0, 2, "ordernum", false, shop10, filterCreated);
+        assertEquals(2, list.size());
+
+    }
+
 
 }

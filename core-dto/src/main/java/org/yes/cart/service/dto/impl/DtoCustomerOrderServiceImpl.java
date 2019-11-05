@@ -36,6 +36,8 @@ import org.yes.cart.domain.dto.impl.CustomerOrderDetailDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.Result;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.payment.PaymentGateway;
@@ -537,11 +539,9 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     @Override
     public List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(final String orderNum) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<CustomerOrder> orderList = ((CustomerOrderService) service).findCustomerOrdersByCriteria(
-                0, null, null, null, null, null, null, orderNum);
+        final CustomerOrder customerOrder = ((CustomerOrderService) service).findByReference(orderNum);
 
-        if (CollectionUtils.isNotEmpty(orderList)) {
-            final CustomerOrder customerOrder = orderList.get(0);
+        if (customerOrder != null) {
             final List<CustomerOrderDeliveryDet> allDeliveryDet = new ArrayList<>();
             for (CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
                 allDeliveryDet.addAll(orderDelivery.getDetail());
@@ -571,113 +571,77 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
     }
 
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<CustomerOrderDTO> findCustomerOrdersByCriteria(
-            final long customerId,
-            final String firstName,
-            final String lastName,
-            final String email,
-            final String orderStatus,
-            final LocalDateTime fromDate,
-            final LocalDateTime toDate,
-            final String orderNum
-    ) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerOrder> orders = ((CustomerOrderService) service).findCustomerOrdersByCriteria(
-                customerId,
-                firstName,
-                lastName,
-                email,
-                orderStatus,
-                fromDate,
-                toDate,
-                orderNum
-        );
-        final List<CustomerOrderDTO> ordersDtos = new ArrayList<>(orders.size());
-        fillDTOs(orders, ordersDtos);
-        ordersDtos.sort(ORDERS_REV_CHRONOLOGICAL);
-        return ordersDtos;
+    public CustomerOrderDTO findByOrderNumber(final String orderNum) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
+        if (order != null) {
+            return fillDTO(order);
+        }
+        return null;
+        
     }
-
-    private static final Comparator<CustomerOrderDTO> ORDERS_REV_CHRONOLOGICAL = (o1, o2) -> -o1.getOrderTimestamp().compareTo(o2.getOrderTimestamp());
-
 
     private final static char[] ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU = new char[] { '#', '?', '@', '!', '*', '^' };
     static {
         Arrays.sort(ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
     }
 
-    @Override
-    public List<CustomerOrderDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        return findBy(filter, null, page, pageSize);
-
-    }
-
 
     @Override
-    public List<CustomerOrderDTO> findBy(final String filter, final List<String> statuses, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<CustomerOrderDTO> findOrders(final Set<Long> shopIds, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<CustomerOrderDTO> orders = new ArrayList<>();
+        final Map<String, List> params = filter.reduceParameters("filter", "statuses");
+        final List filterParam = params.get("filter");
+        final List statusesParam = params.get("statuses");
 
-        List<CustomerOrder> entities = Collections.emptyList();
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
 
-        if (StringUtils.isNotBlank(filter)) {
+        final Map<String, List> currentFilter = new HashMap<>();
 
-            final Pair<String, String> orderNumberOrCustomerOrAddressOrSku = ComplexSearchUtils.checkSpecialSearch(filter, ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
-            final Pair<LocalDateTime, LocalDateTime> dateSearch = orderNumberOrCustomerOrAddressOrSku == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+
+        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+            final String textFilter = (String) filterParam.get(0);
+            final Pair<String, String> orderNumberOrCustomerOrAddressOrSku = ComplexSearchUtils.checkSpecialSearch(textFilter, ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
+            final Pair<LocalDateTime, LocalDateTime> dateSearch = orderNumberOrCustomerOrAddressOrSku == null ? ComplexSearchUtils.checkDateRangeSearch(textFilter) : null;
 
             if (orderNumberOrCustomerOrAddressOrSku != null) {
 
                 if ("*".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // If this by PK then to by PK
-                    final long byPk = NumberUtils.toLong(orderNumberOrCustomerOrAddressOrSku.getSecond());
-                    if (page == 0 && byPk > 0) {
-                        final CustomerOrderDTO order = getById(byPk);
-                        if (order != null) {
-                            orders.add(order);
-                        }
-                    }
-                    return orders;
+                    final String refNumber = orderNumberOrCustomerOrAddressOrSku.getSecond();
+
+                    currentFilter.put("customerorderId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(NumberUtils.toLong(refNumber.trim()))));
+
                 } else if ("#".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // order number search
                     final String orderNumber = orderNumberOrCustomerOrAddressOrSku.getSecond();
 
-                    entities = service.getGenericDao().findRangeByCriteria(
-                            " where (e.ordernum like ?1 or lower(e.cartGuid) like ?2)  and (?3 = 0 or e.orderStatus in (?4)) order by e.orderTimestamp desc, e.ordernum desc",
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaLikeAnywhere(orderNumber),
-                            HQLUtils.criteriaIlikeAnywhere(orderNumber),
-                            HQLUtils.criteriaInTest(statuses),
-                            HQLUtils.criteriaIn(statuses)
-                    );
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("ordernum", Collections.singletonList(orderNumber));
+                    currentFilter.put("cartGuid", Collections.singletonList(orderNumber));
 
                 } else if ("?".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // customer search
                     final String customer = orderNumberOrCustomerOrAddressOrSku.getSecond();
 
-                    entities = service.getGenericDao().findRangeByCriteria(
-                            " where (lower(e.email) like ?1 or lower(e.firstname) like ?1 or lower(e.lastname) like ?1)  and (?2 = 0 or e.orderStatus in (?3))order by e.orderTimestamp desc, e.ordernum desc",
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIlikeAnywhere(customer),
-                            HQLUtils.criteriaInTest(statuses),
-                            HQLUtils.criteriaIn(statuses)
-                    );
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("email", Collections.singletonList(customer));
+                    currentFilter.put("firstname", Collections.singletonList(customer));
+                    currentFilter.put("lastname", Collections.singletonList(customer));
 
                 } else if ("@".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // address search
                     final String address = orderNumberOrCustomerOrAddressOrSku.getSecond();
 
-                    entities = service.getGenericDao().findRangeByCriteria(
-                            " where (lower(e.billingAddress) like ?1 or lower(e.shippingAddress) like ?1) and (?2 = 0 or e.orderStatus in (?3)) order by e.orderTimestamp desc, e.ordernum desc",
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIlikeAnywhere(address),
-                            HQLUtils.criteriaInTest(statuses),
-                            HQLUtils.criteriaIn(statuses)
-                    );
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("billingAddress", Collections.singletonList(address));
+                    currentFilter.put("shippingAddress", Collections.singletonList(address));
 
                 } else if ("^".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // shop search
@@ -695,32 +659,25 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
                     if (customerIds.isEmpty()) {
 
-                        entities = service.getGenericDao().findRangeByCriteria(
-                                " where lower(e.shop.code) = ?1 and (?2 = 0 or e.orderStatus in (?3)) order by e.orderTimestamp desc, e.ordernum desc",
-                                page * pageSize, pageSize,
-                                HQLUtils.criteriaIeq(shopCode),
-                                HQLUtils.criteriaInTest(statuses),
-                                HQLUtils.criteriaIn(statuses)
-                        );
+                        currentFilter.put("shop.code", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(shopCode)));
 
                     } else {
 
-                        entities = service.getGenericDao().findRangeByCriteria(
-                                " left join e.customer as cust where (lower(e.shop.code) = ?1 or cust.customerId in ?4) and (?2 = 0 or e.orderStatus in (?3)) order by e.orderTimestamp desc, e.ordernum desc",
-                                page * pageSize, pageSize,
-                                HQLUtils.criteriaIeq(shopCode),
-                                HQLUtils.criteriaInTest(statuses),
-                                HQLUtils.criteriaIn(statuses),
-                                customerIds
-                        );
+                        SearchContext.JoinMode.OR.setMode(currentFilter);
+                        currentFilter.put("shop.code", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(shopCode)));
+                        currentFilter.put("customer.customerId", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(customerIds)));
 
                     }
 
                 } else if ("!".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
-                    if (page > 0) {
-                        return Collections.emptyList();
+
+                    final List<Long> ids = findIdsByReservation(orderNumberOrCustomerOrAddressOrSku.getSecond());
+
+                    if (ids.isEmpty()) {
+                        return new SearchResult<>(filter, Collections.emptyList(), 0);
                     }
-                    return findByReservation(orderNumberOrCustomerOrAddressOrSku.getSecond());
+                    currentFilter.put("customerorderId", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(ids)));
+
                 }
 
             } else if (dateSearch != null) {
@@ -728,54 +685,70 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 final LocalDateTime from = dateSearch.getFirst();
                 final LocalDateTime to = dateSearch.getSecond();
 
-                // time search
-                entities = service.getGenericDao().findRangeByCriteria(
-                        " where ((?1 is null or e.orderTimestamp >= ?1) and (?2 is null or e.orderTimestamp <= ?2)) and (?3 = 0 or e.orderStatus in (?4)) order by e.orderTimestamp desc, e.ordernum desc",
-                        page * pageSize, pageSize,
-                        from, to,
-                        HQLUtils.criteriaInTest(statuses),
-                        HQLUtils.criteriaIn(statuses)
-                );
+                final List range = new ArrayList(2);
+                if (from != null) {
+                    range.add(SearchContext.MatchMode.GT.toParam(from));
+                }
+                if (to != null) {
+                    range.add(SearchContext.MatchMode.LE.toParam(to));
+                }
+
+                currentFilter.put("orderTimestamp", range);
 
             } else {
 
                 // basic search
-                final String search = filter;
+                final String basic = textFilter;
 
-                entities = service.getGenericDao().findRangeByCriteria(
-                        " where (e.ordernum like ?1 or lower(e.email) like ?1 or lower(e.firstname) like ?1 or lower(e.lastname) like ?1) and (?2 = 0 or e.orderStatus in (?3)) order by e.orderTimestamp desc, e.ordernum desc",
-                        page * pageSize, pageSize,
-                        HQLUtils.criteriaIlikeAnywhere(search),
-                        HQLUtils.criteriaInTest(statuses),
-                        HQLUtils.criteriaIn(statuses)
-                );
+                SearchContext.JoinMode.OR.setMode(currentFilter);
+                currentFilter.put("ordernum", Collections.singletonList(basic));
+                currentFilter.put("email", Collections.singletonList(basic));
+                currentFilter.put("firstname", Collections.singletonList(basic));
+                currentFilter.put("lastname", Collections.singletonList(basic));
 
             }
 
-        } else {
-
-            entities = service.getGenericDao().findRangeByCriteria(
-                    " where ?1 = 0 or e.orderStatus in (?2) order by e.orderTimestamp desc, e.ordernum desc",
-                    page * pageSize, pageSize,
-                    HQLUtils.criteriaInTest(statuses),
-                    HQLUtils.criteriaIn(statuses)
-            );
-
         }
 
-        fillDTOs(entities, orders);
+        final CustomerOrderService customerOrderService = (CustomerOrderService) service;
 
-        return orders;
+        // Filter by order status only if it is not search by PK
+        if (CollectionUtils.isNotEmpty(statusesParam) && !currentFilter.containsKey("customerorderId")) {
+            currentFilter.put("orderStatus", statusesParam);
+        }
+
+        final int count = customerOrderService.findCustomerOrderCount(shopIds, currentFilter);
+        if (count > startIndex) {
+
+            final List<CustomerOrderDTO> entities = new ArrayList<>();
+            final List<CustomerOrder> orders = customerOrderService.findCustomerOrder(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopIds, currentFilter);
+
+            fillDTOs(orders, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
     }
 
+    private List<Long> findIdsByReservation(final String sku) {
 
-    private List<CustomerOrderDTO> findByReservation(final String sku) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        final List<String> orderStatusThatCouldHaveReservations = Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED);
+        final List<String> orderStatusThatCouldHaveReservations = Arrays.asList(
+                CustomerOrder.ORDER_STATUS_WAITING,
+                CustomerOrder.ORDER_STATUS_APPROVE,
+                CustomerOrder.ORDER_STATUS_WAITING_PAYMENT,
+                CustomerOrder.ORDER_STATUS_IN_PROGRESS,
+                CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED
+        );
         final List<String> skus = Collections.singletonList(sku);
         final CustomerOrderService cos = (CustomerOrderService) service;
         final Set<Long> deliveryIds = new HashSet<>();
 
+        deliveryIds.addAll(cos.findAwaitingDeliveriesIds(
+                skus,
+                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED,
+                orderStatusThatCouldHaveReservations
+        ));
         deliveryIds.addAll(cos.findAwaitingDeliveriesIds(
                 skus,
                 CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT,
@@ -793,16 +766,13 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         ));
 
 
-        final List<CustomerOrderDTO> orders = new ArrayList<>();
-
         if (!deliveryIds.isEmpty()) {
 
-            final List<CustomerOrder> entities = cos.findCustomerOrdersByDeliveryIds(deliveryIds);
-            fillDTOs(entities, orders);
+            return cos.findCustomerOrderIdsByDeliveryIds(deliveryIds);
 
         }
 
-        return orders;
+        return Collections.emptyList();
 
     }
 

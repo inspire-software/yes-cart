@@ -19,14 +19,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.domain.vo.VoAttrValue;
-import org.yes.cart.domain.vo.VoCustomerOrder;
-import org.yes.cart.domain.vo.VoCustomerOrderInfo;
-import org.yes.cart.domain.vo.VoCustomerOrderLine;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.vo.VoCustomerOrderService;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 
@@ -48,11 +45,15 @@ public class VoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetOrders() throws Exception {
 
-        List<VoCustomerOrderInfo> ordersAll = voCustomerOrderService.getFilteredOrders("en", "#190323063746-1", null, 10);
+        final VoSearchContext ctx = new VoSearchContext();
+        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("#190323063746-1")));
+        ctx.setSize(10);
+        VoSearchResult<VoCustomerOrderInfo> ordersAll = voCustomerOrderService.getFilteredOrders("en", ctx);
         assertNotNull(ordersAll);
-        assertFalse(ordersAll.isEmpty());
+        assertTrue(ordersAll.getTotal() > 0);
+        assertFalse(ordersAll.getItems().isEmpty());
 
-        VoCustomerOrder order = voCustomerOrderService.getOrderById("en", ordersAll.get(0).getCustomerorderId());
+        VoCustomerOrder order = voCustomerOrderService.getOrderById("en", ordersAll.getItems().get(0).getCustomerorderId());
         assertNotNull(order);
         assertEquals("190323063746-1", order.getOrdernum());
         assertNotNull(order.getLines());

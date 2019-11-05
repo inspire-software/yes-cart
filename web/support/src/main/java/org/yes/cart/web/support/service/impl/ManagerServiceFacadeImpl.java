@@ -110,9 +110,10 @@ public class ManagerServiceFacadeImpl implements ManagerServiceFacade {
 
         final long shopId = NumberUtils.toLong(HttpUtil.getSingleValue(searchContext.getParameters().get("shopId")));
 
-        final Map<String, Object> filter = searchContext.collectSingleValueParameters(
-                "any", "email", "firstname", "lastname", "companyName1", "companyName2", "tag"
-        );
+        Map<String, List> filter = searchContext.expandParameter("any", "email", "firstname", "lastname", "companyName1", "companyName2", "tag");
+        if (filter.isEmpty()) {
+            filter = searchContext.reduceParameters("email", "firstname", "lastname", "companyName1", "companyName2", "tag");
+        }
 
         final int pageSize = Math.min(searchContext.getSize(), 50);
         final int startIndex = searchContext.getStart() * pageSize;

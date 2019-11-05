@@ -1,8 +1,27 @@
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.payment.service;
 
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -11,17 +30,17 @@ import java.util.List;
  */
 public interface DtoCustomerOrderPaymentService {
 
+
     /**
-     * Find payments.
+     * Get payments by filter.
      *
-     * @param filter filter
-     * @param operations operations
-     * @param statuses statuses
-     * @param page page start
-     * @param pageSize max results
+     * @param shopCodes enforce access.
+     * @param filter    filter
      *
-     * @return payments
+     * @return list of orders
      */
-    List<CustomerOrderPayment> findBy(String filter, List<String> operations, List<String> statuses, int page, int pageSize);
+    SearchResult<CustomerOrderPayment> findPayments(Set<String> shopCodes,
+                                                    SearchContext filter);
+
 
 }

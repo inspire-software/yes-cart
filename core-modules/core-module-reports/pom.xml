@@ -25,7 +25,7 @@
         <version>3.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>core-module-reports</artifactId>
-    <name>Yes cart core: reports support</name>
+    <name>Reports</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

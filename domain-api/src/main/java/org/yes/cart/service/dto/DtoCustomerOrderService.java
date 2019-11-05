@@ -20,12 +20,14 @@ import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.domain.misc.Result;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -151,47 +153,23 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
     /**
      * Find customer's order by given criteria.
      *
-     * @param customerId  customer id. Rest of parameters will be ignored, if customerId more that 0.
-     * @param firstName   optional to perform search using like by first name
-     * @param lastName    optional to perform search using like by last name
-     * @param email       optional to perform search using like by email
-     * @param orderStatus optional order status
-     * @param fromDate    optional order created from
-     * @param toDate      optional order created to
-     * @param orderNum    optional to perform search using like by order number
-     * @return list of customer's order dtos
+     * @param orderNum    to perform search using like by order number
+     *
+     * @return customer order
      */
-    List<CustomerOrderDTO> findCustomerOrdersByCriteria(
-            long customerId,
-            String firstName,
-            String lastName,
-            String email,
-            String orderStatus,
-            LocalDateTime fromDate,
-            LocalDateTime toDate,
-            String orderNum
-    ) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    CustomerOrderDTO findByOrderNumber(String orderNum)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get orders by filter.
      *
-     * @param filter filter
-     * @param page start page
-     * @param pageSize page size
-     * @return list of orders
-     */
-    List<CustomerOrderDTO> findBy(String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-    /**
-     * Get orders by filter.
+     * @param shopIds   enforce access.
+     * @param filter    filter
      *
-     * @param filter filter
-     * @param statuses statuses
-     * @param page start page
-     * @param pageSize page size
      * @return list of orders
      */
-    List<CustomerOrderDTO> findBy(String filter, List<String> statuses, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<CustomerOrderDTO> findOrders(Set<Long> shopIds,
+                                              SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get localized name for all payment gateways on this server.

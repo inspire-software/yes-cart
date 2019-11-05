@@ -18,29 +18,13 @@ package org.yes.cart.report.impl;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
-import org.hibernate.collection.internal.AbstractPersistentCollection;
-import org.hibernate.collection.internal.PersistentBag;
-import org.hibernate.collection.internal.PersistentList;
-import org.hibernate.collection.internal.PersistentSet;
 import org.yes.cart.report.ReportObjectStreamFactory;
-import org.yes.cart.utils.DateUtils;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Writer;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -74,57 +58,6 @@ public class ReportObjectStreamFactoryImpl implements ReportObjectStreamFactory 
 
         final XStream xStream = new XStream(new DomDriver());
         xStream.addPermission(AnyTypePermission.ANY);
-
-        xStream.registerConverter(new Converter() {
-
-
-            @Override
-            public void marshal(final Object source, final HierarchicalStreamWriter writer, final MarshallingContext context) {
-                if (source == null) {
-                    writer.setValue("");
-                } else if (source instanceof LocalDate) {
-                    writer.setValue(((LocalDate) source).atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME));
-                } else if (source instanceof LocalDateTime) {
-                    writer.setValue(((LocalDateTime) source).format(DateTimeFormatter.ISO_DATE_TIME));
-                } else if (source instanceof ZonedDateTime) {
-                    writer.setValue(((ZonedDateTime) source).format(DateTimeFormatter.ISO_DATE_TIME));
-                } else if (source instanceof Instant) {
-                    writer.setValue(ZonedDateTime.ofInstant((Instant) source, DateUtils.zone()).format(DateTimeFormatter.ISO_DATE_TIME));
-                } else {
-                    writer.setValue(source.toString());
-                }
-            }
-
-            @Override
-            public Object unmarshal(final HierarchicalStreamReader reader, final UnmarshallingContext context) {
-                return null; // not needed
-            }
-
-            @Override
-            public boolean canConvert(final Class type) {
-                return LocalDate.class == type || LocalDateTime.class == type || ZonedDateTime.class == type || Instant.class == type;
-            }
-        });
-
-        xStream.registerConverter(new Converter() {
-            @Override
-            public void marshal(final Object source, final HierarchicalStreamWriter writer, final MarshallingContext context) {
-                if (((AbstractPersistentCollection) source).wasInitialized()) {
-                    context.convertAnother(new ArrayList((Collection) source));
-                }
-            }
-
-            @Override
-            public Object unmarshal(final HierarchicalStreamReader reader, final UnmarshallingContext context) {
-                return null; // not needed
-            }
-
-            @Override
-            public boolean canConvert(final Class type) {
-                return PersistentBag.class == type || PersistentList.class == type || PersistentSet.class == type;
-            }
-        });
-
         xStream.setMode(XStream.NO_REFERENCES);
 
         return xStream;
@@ -155,6 +88,19 @@ public class ReportObjectStreamFactoryImpl implements ReportObjectStreamFactory 
             for (final String field : entry.getValue()) {
                 this.xStream.omitField(entry.getKey(), field);
             }
+        }
+
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param converters converter
+     */
+    public void setConverterMap(final Map<String, Converter> converters) {
+
+        for (final Map.Entry<String, Converter> entry : converters.entrySet()) {
+            this.xStream.registerConverter(entry.getValue());
         }
 
     }

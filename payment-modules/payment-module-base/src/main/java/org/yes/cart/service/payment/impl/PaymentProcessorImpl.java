@@ -647,7 +647,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         final List<Payment> rez = new ArrayList<>();
         if (forceSinglePayment || !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment()) {
 
-            final List<CustomerOrderPayment> existing = customerOrderPaymentService.findBy(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, transactionOperation);
+            final List<CustomerOrderPayment> existing = customerOrderPaymentService.findCustomerOrderPayment(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, transactionOperation);
             if (existing.isEmpty()) {
 
                 Payment payment = (Payment) SerializationUtils.clone(templatePayment);
@@ -671,7 +671,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             final Iterator<CustomerOrderDelivery> deliveryIt = order.getDelivery().iterator();
             while (deliveryIt.hasNext()) {
                 final CustomerOrderDelivery delivery = deliveryIt.next();
-                final List<CustomerOrderPayment> existing = customerOrderPaymentService.findBy(order.getOrdernum(), delivery.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, transactionOperation);
+                final List<CustomerOrderPayment> existing = customerOrderPaymentService.findCustomerOrderPayment(order.getOrdernum(), delivery.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, transactionOperation);
                 if (existing.isEmpty()) {
                     Payment payment = (Payment) SerializationUtils.clone(templatePayment);
                     final Pair<BigDecimal, BigDecimal> amountAndTax = fillPayment(order, delivery, payment, false, runningTotal, runningTotalTax, !deliveryIt.hasNext());
@@ -899,7 +899,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
     protected List<CustomerOrderPayment> determineOpenAuthorisations(final String orderNumber, final String orderShipmentNumber) {
 
-        final List<CustomerOrderPayment> paymentsToCapture = new ArrayList<>(customerOrderPaymentService.findBy(
+        final List<CustomerOrderPayment> paymentsToCapture = new ArrayList<>(customerOrderPaymentService.findCustomerOrderPayment(
                 orderNumber,
                 orderShipmentNumber,
                 Payment.PAYMENT_STATUS_OK,
@@ -908,7 +908,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         if (!paymentsToCapture.isEmpty()) {
 
-            final List<CustomerOrderPayment> paymentsCapturedOrReversedAuth = new ArrayList<>(customerOrderPaymentService.findBy(
+            final List<CustomerOrderPayment> paymentsCapturedOrReversedAuth = new ArrayList<>(customerOrderPaymentService.findCustomerOrderPayment(
                     orderNumber,
                     orderShipmentNumber,
                     new String[]{Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_PROCESSING},
@@ -925,14 +925,14 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
     protected List<CustomerOrderPayment> determineOpenCaptures(final String orderNumber, final String orderShipmentNumber) {
 
-        final List<CustomerOrderPayment> paymentsCaptured = new ArrayList<>(customerOrderPaymentService.findBy(
+        final List<CustomerOrderPayment> paymentsCaptured = new ArrayList<>(customerOrderPaymentService.findCustomerOrderPayment(
                 orderNumber,
                 orderShipmentNumber,
                 new String[]{Payment.PAYMENT_STATUS_OK},
                 new String[]{PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE}
         ));
 
-        final List<CustomerOrderPayment> paymentsProcessing = new ArrayList<>(customerOrderPaymentService.findBy(
+        final List<CustomerOrderPayment> paymentsProcessing = new ArrayList<>(customerOrderPaymentService.findCustomerOrderPayment(
                 orderNumber,
                 orderShipmentNumber,
                 new String[]{Payment.PAYMENT_STATUS_PROCESSING},
@@ -941,7 +941,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         if (!paymentsProcessing.isEmpty()) {
 
-            final List<CustomerOrderPayment> paymentsFailed = new ArrayList<>(customerOrderPaymentService.findBy(
+            final List<CustomerOrderPayment> paymentsFailed = new ArrayList<>(customerOrderPaymentService.findCustomerOrderPayment(
                     orderNumber,
                     orderShipmentNumber,
                     new String[]{Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED},
@@ -959,7 +959,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         if (!paymentsCaptured.isEmpty()) {
 
-            final List<CustomerOrderPayment> paymentsRefunded = new ArrayList<>(customerOrderPaymentService.findBy(
+            final List<CustomerOrderPayment> paymentsRefunded = new ArrayList<>(customerOrderPaymentService.findCustomerOrderPayment(
                     orderNumber,
                     orderShipmentNumber,
                     new String[]{Payment.PAYMENT_STATUS_OK},

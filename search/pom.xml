@@ -25,7 +25,7 @@
     </parent>
     <artifactId>search</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart search</name>
+    <name>Search</name>
     <modules>
         <module>search-api</module>
         <module>search-lucene-core</module>

@@ -60,6 +60,7 @@
         <p>{{ 'SEARCH_HELP_PAYMENT_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-default btn-circle"><i class="fa fa-user"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_PAYMENT_DETAILS' | translate }} <span><button type="button" (click)="onSearchDetails()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-default btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_SHOP' | translate }} <span><button type="button" (click)="onSearchInshop()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
       </div>
     </div>
 
@@ -67,12 +68,7 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <div *ngIf="paymentFilterCapped">
-      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-    </div>
-
-    <yc-payments [payments]="payments" (dataSelected)="onPaymentSelected($event)"></yc-payments>
-
+    <yc-payments [payments]="payments" (dataSelected)="onPaymentSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-payments>
   </div>
 
   <yc-modal #transactionDetailsModalDialog

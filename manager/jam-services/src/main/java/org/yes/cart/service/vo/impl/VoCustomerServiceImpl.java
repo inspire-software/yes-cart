@@ -27,10 +27,9 @@ import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.vo.VoAttrValueCustomer;
-import org.yes.cart.domain.vo.VoCustomer;
-import org.yes.cart.domain.vo.VoCustomerInfo;
-import org.yes.cart.domain.vo.VoCustomerShopLink;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -107,22 +106,35 @@ public class VoCustomerServiceImpl implements VoCustomerService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoCustomerInfo> getFilteredCustomers(final String filter, final int max) throws Exception {
+    public VoSearchResult<VoCustomerInfo> getFilteredCustomers(final VoSearchContext filter) throws Exception {
 
+        final VoSearchResult<VoCustomerInfo> result = new VoSearchResult<>();
         final List<VoCustomerInfo> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        int start = 0;
-        do {
-            final List<CustomerDTO> batch = dtoCustomerService.findBy(filter, start, max);
-            if (batch.isEmpty()) {
-                break;
+        Set<Long> shopIds = null;
+        if (!federationFacade.isCurrentUserSystemAdmin()) {
+            shopIds = federationFacade.getAccessibleShopIdsByCurrentManager();
+            if (CollectionUtils.isEmpty(shopIds)) {
+                return result;
             }
-            federationFacade.applyFederationFilter(batch, CustomerDTO.class);
-            results.addAll(voAssemblySupport.assembleVos(VoCustomerInfo.class, CustomerDTO.class, batch));
+        }
 
-            start++;
-        } while (results.size() < max && max != Integer.MAX_VALUE);
-        return results.size() > max ? results.subList(0, max) : results;
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                Math.min(filter.getSize(), 100),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter"
+        );
+
+        final SearchResult<CustomerDTO> batch = dtoCustomerService.findCustomer(shopIds, searchContext);
+        results.addAll(voAssemblySupport.assembleVos(VoCustomerInfo.class, CustomerDTO.class, batch.getItems()));
+        result.setTotal(batch.getTotal());
+
+        return result;
 
     }
 

@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
@@ -26,11 +27,13 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartContentsValidator;
 import org.yes.cart.shoppingcart.CartValidityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.utils.HQLUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -163,31 +166,51 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     }
 
+    private Pair<String, Object[]> findCustomerOrderQuery(final boolean count,
+                                                          final String sort,
+                                                          final boolean sortDescending,
+                                                          final Set<Long> shops,
+                                                          final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(o) from CustomerOrderEntity o ");
+        } else {
+            hqlCriteria.append("select o from CustomerOrderEntity o ");
+        }
+
+        final List statuses  = currentFilter != null ? currentFilter.remove("orderStatus") : null;
+
+        if (CollectionUtils.isNotEmpty(shops)) {
+            hqlCriteria.append(" where (o.shop.shopId in (?1) or o.shop.master.shopId in (?1)) ");
+            params.add(shops);
+        }
+
+        if (CollectionUtils.isNotEmpty(statuses)) {
+            if (params.isEmpty()) {
+                hqlCriteria.append(" where o.orderStatus in ?1 ");
+            } else {
+                hqlCriteria.append(" and o.orderStatus in ?2 ");
+            }
+            params.add(statuses);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "o", currentFilter);
 
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<CustomerOrder> findCustomerOrdersByCriteria(
-            final long customerId,
-            final String firstName,
-            final String lastName,
-            final String email,
-            final String orderStatus,
-            final LocalDateTime fromDate,
-            final LocalDateTime toDate,
-            final String orderNum
-            ) {
-        return getGenericDao().findByNamedQuery("ORDERS.BY.CRITERIA",
-                likeValue(firstName),
-                likeValue(lastName),
-                likeValue(email),
-                orderStatus,
-                fromDate,
-                toDate,
-                likeValue(orderNum),
-                customerId
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by o." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
         );
 
     }
@@ -197,8 +220,43 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * {@inheritDoc}
      */
     @Override
-    public List<CustomerOrder> findCustomerOrdersByDeliveryIds(final Collection<Long> deliveryIds) {
-        return getGenericDao().findByNamedQuery("ORDERS.BY.DELIVERY.IDS", deliveryIds);
+    public List<CustomerOrder> findCustomerOrder(final int start,
+                                                 final int offset,
+                                                 final String sort,
+                                                 final boolean sortDescending,
+                                                 final Set<Long> shops,
+                                                 final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findCustomerOrderQuery(false, sort, sortDescending, shops, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCustomerOrderCount(final Set<Long> shops,
+                                      final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findCustomerOrderQuery(true, null, false, shops, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Long> findCustomerOrderIdsByDeliveryIds(final Collection<Long> deliveryIds) {
+        return (List) getGenericDao().findQueryObjectByNamedQuery("ORDER.IDS.BY.DELIVERY.IDS", deliveryIds);
     }
 
     /**

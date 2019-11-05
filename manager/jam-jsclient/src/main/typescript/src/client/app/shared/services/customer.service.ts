@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { CustomerVO, CustomerInfoVO, AttrValueCustomerVO, AddressBookVO, AddressVO, Pair } from '../model/index';
+import { CustomerVO, CustomerInfoVO, AttrValueCustomerVO, AddressBookVO, AddressVO, Pair, SearchContextVO, SearchResultVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -45,13 +45,13 @@ export class CustomerService {
    * Get list of all customers, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredCustomer(filter:string, max:number) {
+  getFilteredCustomer(filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/filtered/' + max, body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
-        .map(res => <CustomerInfoVO[]> this.json(res))
+    return this.http.post(this._serviceBaseUrl + '/filtered', body,
+          Util.requestOptions())
+        .map(res => <SearchResultVO<CustomerInfoVO>> this.json(res))
         .catch(this.handleError);
   }
 

@@ -24,7 +24,7 @@
         <version>3.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>search-api</artifactId>
-    <name>Yes cart search API</name>
+    <name>Search: API</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

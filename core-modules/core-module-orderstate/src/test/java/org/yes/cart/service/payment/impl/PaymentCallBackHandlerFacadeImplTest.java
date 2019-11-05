@@ -102,7 +102,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
                 CustomerOrder.ORDER_STATUS_IN_PROGRESS,
                 customerOrder.getOrderStatus());
 
-        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, (String) null, (String) null);
+        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findCustomerOrderPayment(customerOrder.getOrdernum(), null, (String) null, (String) null);
         assertNotNull(payments);
         assertEquals(payments.size(), 1);
         assertEquals(PaymentGateway.AUTH_CAPTURE, payments.get(0).getTransactionOperation());
@@ -147,7 +147,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
                 CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT,
                 customerOrder.getOrderStatus());
 
-        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, (String) null, (String) null);
+        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findCustomerOrderPayment(customerOrder.getOrdernum(), null, (String) null, (String) null);
         assertNotNull(payments);
         assertEquals(payments.size(), 2);
         assertEquals(PaymentGateway.AUTH_CAPTURE, payments.get(0).getTransactionOperation());

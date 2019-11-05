@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { CustomerOrderInfoVO } from './../../shared/model/index';
+import { CustomerOrderInfoVO, Pair, SearchResultVO } from './../../shared/model/index';
 import { CookieUtil } from './../../shared/cookies/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -31,19 +31,23 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
 
   @Output() dataSelected: EventEmitter<CustomerOrderInfoVO> = new EventEmitter<CustomerOrderInfoVO>();
 
-  private _customerorders:Array<CustomerOrderInfoVO> = [];
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
+
+  private _customerorders:SearchResultVO<CustomerOrderInfoVO> = null;
 
   private filteredCustomerorders:Array<CustomerOrderInfoVO>;
 
+  //sorting
+  private sortColumn:string = null;
+  private sortDesc:boolean = false;
+
   //paging
-  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS;
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
   private totalItems:number = 0;
-  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
-  // Must use separate variables (not currentPage) for table since that causes
-  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  private pageStart:number = 0;
-  private pageEnd:number = this.itemsPerPage;
+  private currentPage:number = 1;
 
   constructor() {
     LogUtil.debug('CustomerOrdersComponent constructed');
@@ -54,7 +58,7 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set customerorders(customerorders:Array<CustomerOrderInfoVO>) {
+  set customerorders(customerorders:SearchResultVO<CustomerOrderInfoVO>) {
     this._customerorders = customerorders;
     this.filterCustomerorders();
   }
@@ -80,22 +84,21 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(null);
   }
 
-  resetLastPageEnd() {
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
+  onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
     }
   }
 
-  onPageChanged(event:any) {
-    this.pageStart = (event.page - 1) * this.itemsPerPage;
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortSelected.emit(null);
+      } else {  // same column asc, change to desc
+        this.sortSelected.emit({ first: event, second: true });
+      }
+    } else { // different column, start asc sort
+      this.sortSelected.emit({ first: event, second: false });
     }
   }
 
@@ -119,19 +122,28 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
 
   private filterCustomerorders() {
 
-    this.filteredCustomerorders = this._customerorders;
-    LogUtil.debug('CustomerOrdersComponent filterCustomerorders', this.filteredCustomerorders);
+    LogUtil.debug('CustomerOrdersComponent filterCustomerorders', this._customerorders, this.filteredCustomerorders);
 
-    if (this.filteredCustomerorders === null) {
+    if (this._customerorders != null) {
+      this.filteredCustomerorders = this._customerorders.items != null ? this._customerorders.items : [];
+      this.totalItems = 0;
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = this._customerorders.searchContext.size;
+      this.totalItems = this._customerorders.total;
+      this.currentPage = this._customerorders.searchContext.start + 1;
+      this.sortColumn = this._customerorders.searchContext.sortBy;
+      this.sortDesc = this._customerorders.searchContext.sortDesc;
+    } else {
       this.filteredCustomerorders = [];
+      this.totalItems = 0;
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = Config.UI_TABLE_PAGE_SIZE;
+      this.totalItems = 0;
+      this.currentPage = 1;
+      this.sortColumn = null;
+      this.sortDesc = false;
     }
 
-    let _total = this.filteredCustomerorders.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
   }
-
 
 }

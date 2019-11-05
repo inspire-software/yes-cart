@@ -25,7 +25,7 @@
     </parent>
     <artifactId>rest-api</artifactId>
     <packaging>war</packaging>
-    <name>Yes cart web: REST API</name>
+    <name>WebApps: REST API</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
@@ -132,7 +132,7 @@
 
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>persistence-core-hibernate</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>

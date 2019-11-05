@@ -29,7 +29,7 @@
     <groupId>org.yes</groupId>
     <artifactId>mail</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart themes: mail templates</name>
+    <name>Themes: mail templates</name>
 
     <build>
         <plugins>

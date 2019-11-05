@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -35,6 +36,38 @@ import java.util.Map;
  * Time: 11:13:01
  */
 public interface CustomerOrderService extends GenericService<CustomerOrder> {
+
+
+
+    /**
+     * Find orders by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param shops             optional shops to search in
+     * @param filter            optional filters (e.g. firstname, lastname)
+     *
+     * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
+     */
+    List<CustomerOrder> findCustomerOrder(int start,
+                                          int offset,
+                                          String sort,
+                                          boolean sortDescending,
+                                          Set<Long> shops,
+                                          Map<String, List> filter);
+
+    /**
+     * Find orders by given search criteria. Search will be performed using like operation.
+     *
+     * @param shops             optional shops to search in
+     * @param filter            optional filters (e.g. firstname, lastname)
+     *
+     * @return count
+     */
+    int findCustomerOrderCount(Set<Long> shops,
+                               Map<String, List> filter);
 
 
     /**
@@ -56,38 +89,13 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     List<CustomerOrder> findCustomerOrders(long customerId, LocalDateTime since);
 
     /**
-     * Find customer's order by given criteria.
-     *
-     * @param customerId  customer id. Rest of parameters will be ignored, if customerId more that 0.
-     * @param firstName   optional to perform search using like by first name
-     * @param lastName    optional to perform search using like by last name
-     * @param email       optional to perform search using like by email
-     * @param orderStatus optional order status
-     * @param fromDate    optional order created from
-     * @param toDate    optional order created to
-     * @param orderNum    optional to perform search using like by order number
-     *
-     * @return list of orders
-     */
-    List<CustomerOrder> findCustomerOrdersByCriteria(
-            long customerId,
-            String firstName,
-            String lastName,
-            String email,
-            String orderStatus,
-            LocalDateTime fromDate,
-            LocalDateTime toDate,
-            String orderNum
-    );
-
-    /**
      * Find customer orders by delivery ids.
      *
      * @param deliveryIds delivery ids
      *
      * @return list of orders
      */
-    List<CustomerOrder> findCustomerOrdersByDeliveryIds(Collection<Long> deliveryIds);
+    List<Long> findCustomerOrderIdsByDeliveryIds(Collection<Long> deliveryIds);
 
     /**
      * Find specific delivery.

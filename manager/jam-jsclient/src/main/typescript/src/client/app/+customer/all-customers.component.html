@@ -74,11 +74,7 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <div *ngIf="customerFilterCapped">
-      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-    </div>
-
-    <yc-customers [customers]="customers" (dataSelected)="onCustomerSelected($event)"></yc-customers>
+    <yc-customers [customers]="customers" (dataSelected)="onCustomerSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-customers>
   </div>
 
   <div [hidden]="viewMode !== 'customer'" class="{{ loading ? 'loading-data' : '' }}">

@@ -25,7 +25,7 @@
         <version>3.7.0-SNAPSHOT</version>
     </parent>
     <artifactId>websupport</artifactId>
-    <name>Yes cart web: web support</name>
+    <name>WebApps: web support</name>
     <dependencies>
 
         <dependency>
@@ -36,7 +36,7 @@
 
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>persistence-core-hibernate</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
@@ -68,6 +68,11 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>int-module-reports-domain-mapping</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>int-module-reports-hibernate</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -116,7 +121,7 @@
 
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>persistence</artifactId>
+            <artifactId>persistence-core-hibernate</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>

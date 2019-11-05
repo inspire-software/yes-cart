@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { PaymentVO } from './../../shared/model/index';
+import { PaymentVO, Pair, SearchResultVO } from './../../shared/model/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
@@ -30,19 +30,23 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   @Output() dataSelected: EventEmitter<PaymentVO> = new EventEmitter<PaymentVO>();
 
-  private _payments:Array<PaymentVO> = [];
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
+
+  private _payments:SearchResultVO<PaymentVO> = null;
 
   private filteredPayments:Array<PaymentVO>;
 
+  //sorting
+  private sortColumn:string = null;
+  private sortDesc:boolean = false;
+
   //paging
-  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS;
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
   private totalItems:number = 0;
-  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
-  // Must use separate variables (not currentPage) for table since that causes
-  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  private pageStart:number = 0;
-  private pageEnd:number = this.itemsPerPage;
+  private currentPage:number = 1;
 
   constructor() {
     LogUtil.debug('PaymentsComponent constructed');
@@ -53,7 +57,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set payments(payments:Array<PaymentVO>) {
+  set payments(payments:SearchResultVO<PaymentVO>) {
     this._payments = payments;
     this.filterPayments();
   }
@@ -64,22 +68,21 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(null);
   }
 
-  resetLastPageEnd() {
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
+  onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
     }
   }
 
-  onPageChanged(event:any) {
-    this.pageStart = (event.page - 1) * this.itemsPerPage;
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortSelected.emit(null);
+      } else {  // same column asc, change to desc
+        this.sortSelected.emit({ first: event, second: true });
+      }
+    } else { // different column, start asc sort
+      this.sortSelected.emit({ first: event, second: false });
     }
   }
 
@@ -95,19 +98,28 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   private filterPayments() {
 
-    this.filteredPayments = this._payments;
-    LogUtil.debug('PaymentsComponent filterPayments', this.filteredPayments);
+    LogUtil.debug('PaymentsComponent filterPayments', this._payments, this.filteredPayments);
 
-    if (this.filteredPayments === null) {
+    if (this._payments) {
+      this.filteredPayments = this._payments != null ? this._payments.items : [];
+      this.totalItems = 0;
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = this._payments.searchContext.size;
+      this.totalItems = this._payments.total;
+      this.currentPage = this._payments.searchContext.start + 1;
+      this.sortColumn = this._payments.searchContext.sortBy;
+      this.sortDesc = this._payments.searchContext.sortDesc;
+    } else {
       this.filteredPayments = [];
+      this.totalItems = 0;
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = Config.UI_TABLE_PAGE_SIZE;
+      this.totalItems = 0;
+      this.currentPage = 1;
+      this.sortColumn = null;
+      this.sortDesc = false;
     }
 
-    let _total = this.filteredPayments.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
   }
-
 
 }

@@ -383,7 +383,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     /** {@inheritDoc} */
     @Override
     public List<CustomerOrderPayment> findPaymentRecordsByOrderNumber(final String orderNumber) {
-        return customerOrderPaymentService.findBy(orderNumber, null, (String) null, (String) null);
+        return customerOrderPaymentService.findCustomerOrderPayment(orderNumber, null, (String) null, (String) null);
     }
 
     /** {@inheritDoc} */
@@ -515,7 +515,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         // AUTH or AUTH_CAPTURE for full order amount with successful result
         final List<CustomerOrderPayment> payments =
-                customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null,
+                customerOrderPaymentService.findCustomerOrderPayment(customerOrder.getOrdernum(), null,
                         new String[]{Payment.PAYMENT_STATUS_OK},
                         new String[]{PaymentGateway.AUTH, PaymentGateway.AUTH_CAPTURE});
 
