@@ -173,7 +173,7 @@ export class PriceComponent implements OnInit, OnDestroy {
 
 
   protected onSearchFC() {
-    if (this.pricelist != null && this.pricelist.skuPriceId <= 0) {
+    if (this.pricelist != null) {
       this.selectCentreModalDialog.showDialog();
     }
   }
