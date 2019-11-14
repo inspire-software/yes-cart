@@ -169,6 +169,7 @@
         </description>
         <property name="corePoolSize" value="1"/>
         <property name="maxPoolSize" value="10"/>
+        <property name="threadNamePrefix" value="[websupport-email]-"/>
     </bean>
 
     <bean id="customerNewsletterAspect" class="org.yes.cart.web.aspect.NewsletterAspect">

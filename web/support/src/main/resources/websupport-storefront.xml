@@ -139,7 +139,8 @@
                 <!--</description>-->
                 <!--<property name="corePoolSize" value="1"/>-->
                 <!--<property name="maxPoolSize" value="1"/>-->
-            <!--</bean>-->
+                <!--<property name="threadNamePrefix" value="[websupport-cartupdate]-"/>-->
+        <!--</bean>-->
         <!--</constructor-arg>-->
     </bean>
 

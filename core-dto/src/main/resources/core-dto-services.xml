@@ -668,6 +668,8 @@
         <constructor-arg index="0" ref="genericDao"/>
     </bean>
 
+    <bean id="customerShopToMap" class="org.yes.cart.domain.dto.adapter.impl.CustomerShopToMapConverter"/>
+
     <bean id="warehouseSkuCodeToName" class="org.yes.cart.domain.dto.adapter.impl.SkuWarehouseSkuCodeToNameConverter">
         <constructor-arg index="0" ref="genericDao"/>
     </bean>
@@ -723,6 +725,7 @@
                 <entry key="productId2Product"                  value-ref="productId2Product"/>
                 <entry key="skuId2Sku"                          value-ref="skuId2Sku"/>
                 <entry key="customerWishListSkuCodeToName"      value-ref="customerWishListSkuCodeToName"/>
+                <entry key="customerShopToMap"                  value-ref="customerShopToMap"/>
                 <entry key="warehouseSkuCodeToName"             value-ref="warehouseSkuCodeToName"/>
                 <entry key="priceSkuCodeToName"                 value-ref="priceSkuCodeToName"/>
                 <entry key="productAssociationSkuCodeToName"    value-ref="productAssociationSkuCodeToName"/>

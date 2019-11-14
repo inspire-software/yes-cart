@@ -34,6 +34,7 @@
         </description>
         <property name="corePoolSize" value="1"/>
         <property name="maxPoolSize" value="1"/>
+        <property name="threadNamePrefix" value="[admin-export]-"/>
     </bean>
 
     <bean id="exportDataDescriptorResolverDataDescriptorReaders" class="org.yes.cart.utils.spring.ArrayListBean">

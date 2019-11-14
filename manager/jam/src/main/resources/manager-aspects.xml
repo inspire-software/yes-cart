@@ -29,6 +29,7 @@
         </description>
         <property name="corePoolSize" value="1"/>
         <property name="maxPoolSize" value="10"/>
+        <property name="threadNamePrefix" value="[admin-email]-"/>
     </bean>
 
     <bean id="managerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.ManagerRegistrationAspect">

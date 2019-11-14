@@ -28,6 +28,7 @@
         </description>
         <property name="corePoolSize" value="1"/>
         <property name="maxPoolSize" value="1"/>
+        <property name="threadNamePrefix" value="[dao-product-index]-"/>
     </bean>
 
     <bean id="productIndexProvider" class="org.yes.cart.search.dao.impl.LuceneIndexProviderImpl">

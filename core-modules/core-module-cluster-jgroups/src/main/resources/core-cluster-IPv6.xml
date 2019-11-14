@@ -29,6 +29,7 @@
         </description>
         <property name="corePoolSize" value="1"/>
         <property name="maxPoolSize" value="1"/>
+        <property name="threadNamePrefix" value="[cluster-jgroups-ip6]-"/>
     </bean>
 
     <bean id="nodeService" class="org.yes.cart.cluster.node.impl.JGroupsNodeServiceImpl">
