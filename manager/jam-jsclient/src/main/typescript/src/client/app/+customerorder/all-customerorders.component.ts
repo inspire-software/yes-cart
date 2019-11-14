@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CustomerOrderService, I18nEventBus, ErrorEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, Pair, SearchContextVO, SearchResultVO } from './../shared/model/index';
+import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, Pair, SearchResultVO } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { CookieUtil } from './../shared/cookies/index';
 import { Config } from './../shared/config/env.config';
@@ -141,7 +141,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       },
       items: [],
       total: 0
-    }
+    };
   }
 
   ngOnInit() {
@@ -444,12 +444,6 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.customerorderEdit = customerorder;
       this.selectedCustomerorder = customerorder;
-
-      let idx = this.customerorders.items.findIndex(order => {
-        return order.customerorderId === customerorder.customerorderId;
-      });
-
-      this.customerorders = this.customerorders;
 
       this.changed = false;
       this.validForSave = false;

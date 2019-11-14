@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CustomerOrderService, UserEventBus } from './../shared/services/index';
 import { ModalComponent } from './../shared/modal/index';
-import { PaymentVO, Pair, SearchContextVO, SearchResultVO } from './../shared/model/index';
+import { PaymentVO, Pair, SearchResultVO } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -106,7 +106,7 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
       },
       items: [],
       total: 0
-    }
+    };
   }
 
   ngOnInit() {

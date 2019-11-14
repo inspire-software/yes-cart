@@ -17,7 +17,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CustomerService, ShopEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ShopVO, CustomerInfoVO, CustomerVO, AttrValueCustomerVO, Pair, SearchContextVO, SearchResultVO } from './../shared/model/index';
+import { ShopVO, CustomerInfoVO, CustomerVO, AttrValueCustomerVO, Pair, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -89,7 +89,7 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
       },
       items: [],
       total: 0
-    }
+    };
   }
 
   newCustomerInstance():CustomerVO {
