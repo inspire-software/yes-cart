@@ -20,6 +20,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="asyncExecutor" class="org.yes.cart.service.cluster.impl.AsyncExecutorImpl">
+        <constructor-arg>
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                <property name="corePoolSize" value="1"/>
+                <property name="maxPoolSize" value="10"/>
+                <property name="threadNamePrefix" value="[admin-sync]-"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
     <bean id="localModuleDirector" class="org.yes.cart.cluster.service.impl.LocalModuleDirectorImpl">
         <property name="config" value="classpath:yc-config.properties"/>
     </bean>
@@ -42,12 +52,20 @@
         </description>
         <property name="corePoolSize" value="1"/>
         <property name="maxPoolSize" value="1"/>
+        <property name="threadNamePrefix" value="[admin-product-index]-"/>
     </bean>
 
     <bean id="reindexService" class="org.yes.cart.service.cluster.impl.ReindexServiceImpl">
         <constructor-arg index="0" ref="productIndexExecutor"/>
         <constructor-arg index="1" ref="clusterService"/>
         <constructor-arg index="2" ref="nodeService"/>
+    </bean>
+
+    <bean id="productAsyncSupport" class="org.yes.cart.service.cluster.impl.ProductAsyncSupportImpl">
+        <constructor-arg index="0" ref="clusterService"/>
+        <constructor-arg index="1" ref="webAppManagerAsyncContextFactory"/>
+        <constructor-arg index="2" ref="nodeService"/>
+        <constructor-arg index="3" ref="asyncExecutor"/>
     </bean>
 
     <!-- ############################# Cluster specific widgets ######################### -->

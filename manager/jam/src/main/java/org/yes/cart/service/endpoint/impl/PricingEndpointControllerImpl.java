@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.*;
+import org.yes.cart.service.cluster.ProductAsyncSupport;
 import org.yes.cart.service.endpoint.PricingEndpointController;
 import org.yes.cart.service.vo.VoPriceService;
 import org.yes.cart.service.vo.VoPromotionService;
@@ -40,14 +41,18 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     private final VoPriceService voPriceService;
     private final VoTaxService voTaxService;
     private final VoPromotionService voPromotionService;
+    private final ProductAsyncSupport productAsyncSupport;
+
 
     @Autowired
     public PricingEndpointControllerImpl(final VoPriceService voPriceService,
                                          final VoTaxService voTaxService,
-                                         final VoPromotionService voPromotionService) {
+                                         final VoPromotionService voPromotionService,
+                                         final ProductAsyncSupport productAsyncSupport) {
         this.voPriceService = voPriceService;
         this.voTaxService = voTaxService;
         this.voPromotionService = voPromotionService;
+        this.productAsyncSupport = productAsyncSupport;
     }
 
     @Override
@@ -62,17 +67,25 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     @Override
     public @ResponseBody VoPriceList createPriceList(@RequestBody final VoPriceList vo) throws Exception {
-        return voPriceService.createPrice(vo);
+        final VoPriceList price = voPriceService.createPrice(vo);
+        productAsyncSupport.asyncIndexSku(vo.getSkuCode());
+        return price;
     }
 
     @Override
     public @ResponseBody VoPriceList updatePriceList(@RequestBody final VoPriceList vo) throws Exception {
-        return voPriceService.updatePrice(vo);
+        final VoPriceList price = voPriceService.updatePrice(vo);
+        productAsyncSupport.asyncIndexSku(vo.getSkuCode());
+        return price;
     }
 
     @Override
     public @ResponseBody void removePriceList(@PathVariable("id") final long id) throws Exception {
-        voPriceService.removePrice(id);
+        final VoPriceList price = voPriceService.getPriceById(id);
+        if (price != null) {
+            voPriceService.removePrice(id);
+            productAsyncSupport.asyncIndexSku(price.getSkuCode());
+        }
     }
 
 

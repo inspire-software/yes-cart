@@ -24,6 +24,7 @@ import org.yes.cart.domain.vo.VoFulfilmentCentre;
 import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
 import org.yes.cart.domain.vo.VoInventory;
 import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
+import org.yes.cart.service.cluster.ProductAsyncSupport;
 import org.yes.cart.service.endpoint.FulfilmentEndpointController;
 import org.yes.cart.service.vo.VoFulfilmentService;
 
@@ -38,10 +39,13 @@ import java.util.List;
 public class FulfilmentEndpointControllerImpl implements FulfilmentEndpointController {
 
     private final VoFulfilmentService voFulfilmentService;
+    private final ProductAsyncSupport productAsyncSupport;
 
     @Autowired
-    public FulfilmentEndpointControllerImpl(final VoFulfilmentService voFulfilmentService) {
+    public FulfilmentEndpointControllerImpl(final VoFulfilmentService voFulfilmentService,
+                                            final ProductAsyncSupport productAsyncSupport) {
         this.voFulfilmentService = voFulfilmentService;
+        this.productAsyncSupport = productAsyncSupport;
     }
 
     @Override
@@ -97,16 +101,24 @@ public class FulfilmentEndpointControllerImpl implements FulfilmentEndpointContr
 
     @Override
     public @ResponseBody VoInventory createInventory(@RequestBody final VoInventory vo) throws Exception {
-        return voFulfilmentService.createInventory(vo);
+        final VoInventory inventory = voFulfilmentService.createInventory(vo);
+        productAsyncSupport.asyncIndexSku(inventory.getSkuCode());
+        return inventory;
     }
 
     @Override
     public @ResponseBody VoInventory updateInventory(@RequestBody final VoInventory vo) throws Exception {
-        return voFulfilmentService.updateInventory(vo);
+        final VoInventory inventory = voFulfilmentService.updateInventory(vo);
+        productAsyncSupport.asyncIndexSku(inventory.getSkuCode());
+        return inventory;
     }
 
     @Override
     public @ResponseBody void removeInventory(@PathVariable("id") final long id) throws Exception {
-        voFulfilmentService.removeInventory(id);
+        final VoInventory inventory = voFulfilmentService.getInventoryById(id);
+        if (inventory != null) {
+            voFulfilmentService.removeInventory(id);
+            productAsyncSupport.asyncIndexSku(inventory.getSkuCode());
+        }
     }
 }
