@@ -34,6 +34,7 @@
                     Executor to track re-issue of semaphore permits to facilitate throttling thresholds
                 </description>
                 <property name="poolSize" value="1"/>
+                <property name="threadNamePrefix" value="[websupport-sac]-"/>
             </bean>
         </property>
         <property name="cfgContext">
