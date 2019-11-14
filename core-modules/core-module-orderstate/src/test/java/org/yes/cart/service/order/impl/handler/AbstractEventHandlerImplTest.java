@@ -569,7 +569,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      * @param orderNum order number
      */
     protected void assertNoPaymentEntries(final String orderNum) {
-        List<CustomerOrderPayment> rezList = customerOrderPaymentService.findCustomerOrderPayment(orderNum, null, (String) null, (String) null);
+        List<CustomerOrderPayment> rezList = customerOrderPaymentService.findPayments(orderNum, null, (String) null, (String) null);
         assertEquals(0, rezList.size());
     }
 
@@ -632,7 +632,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
                                            final List<String> expectedResult,
                                            final List<Boolean> expectedSettled) {
 
-        List<CustomerOrderPayment> rezList = new ArrayList<>(customerOrderPaymentService.findCustomerOrderPayment(orderNum, null, (String) null, (String) null));
+        List<CustomerOrderPayment> rezList = new ArrayList<>(customerOrderPaymentService.findPayments(orderNum, null, (String) null, (String) null));
 
         List<String> expected = new ArrayList<>();
         for (int i = 0; i < expectedAmount.size(); i++) {

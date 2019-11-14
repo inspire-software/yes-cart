@@ -165,7 +165,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         false,
                         createCardParameters()));
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -174,14 +174,14 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         paymentProcessor.reverseAuthorizations(orderNum, false);
         //two records for reverse
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
                         PaymentGateway.REVERSE_AUTH).size());
         //total 54 records
         assertEquals(4,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -202,7 +202,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         false,
                         createCardParameters()));
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -212,7 +212,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false));
         assertEquals(1,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -221,7 +221,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false));
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -241,7 +241,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         false,
                         createCardParameters()));
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -251,7 +251,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false));
         assertEquals(1,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -260,7 +260,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false, new BigDecimal("-23.23")));
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -293,7 +293,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         false,
                         createCardParameters()));
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -302,7 +302,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false);
         assertEquals(1,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -310,7 +310,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         //capture on second completed shipment
         paymentProcessor.shipmentComplete(customerOrder, iter.next().getDeliveryNum(), false);
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -319,13 +319,13 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assertEquals(Payment.PAYMENT_STATUS_OK,
                 paymentProcessor.cancelOrder(customerOrder, false, useRefund));
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
                         useRefund ? PaymentGateway.REFUND : PaymentGateway.VOID_CAPTURE).size());
         assertEquals(6,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_OK,
@@ -345,7 +345,7 @@ public class PayPalProPaymentGatewayImplTest extends PaymentModuleDBTestCase {
                         false,
                         createCardParameters()));
         assertEquals(2,
-                customerOrderPaymentService.findCustomerOrderPayment(
+                customerOrderPaymentService.findPayments(
                         orderNum,
                         null,
                         Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED,

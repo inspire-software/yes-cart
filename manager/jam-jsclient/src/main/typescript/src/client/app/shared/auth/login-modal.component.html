@@ -9,7 +9,7 @@
     <div class="panel-body {{ loading ? 'loading-data' : '' }}">
 
       <div [hidden]="changePasswordSuccess == false" class="alert alert-success">{{ 'AUTH_CHANGEPWD_SUCCESS' | translate }}</div>
-      <div [hidden]="authError == null" class="alert alert-danger">{{ authError | translate }}</div>
+      <div [hidden]="authError == null" class="alert alert-danger max-height-100">{{ authError | translate }}</div>
 
       <form role="form" [formGroup]="loginForm">
         <fieldset>

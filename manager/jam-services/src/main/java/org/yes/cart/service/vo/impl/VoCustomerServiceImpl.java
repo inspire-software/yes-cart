@@ -130,7 +130,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
                 "filter"
         );
 
-        final SearchResult<CustomerDTO> batch = dtoCustomerService.findCustomer(shopIds, searchContext);
+        final SearchResult<CustomerDTO> batch = dtoCustomerService.findCustomers(shopIds, searchContext);
         results.addAll(voAssemblySupport.assembleVos(VoCustomerInfo.class, CustomerDTO.class, batch.getItems()));
         result.setTotal(batch.getTotal());
 
@@ -159,15 +159,6 @@ public class VoCustomerServiceImpl implements VoCustomerService {
             vo.setOrdersRequireApproval(Boolean.valueOf(getStringVoAttrValueCustomer(attrsMap, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE)));
             final String approveLimit = vo.isOrdersRequireApproval() ? "0" : getStringVoAttrValueCustomer(attrsMap, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE_X);
             vo.setOrdersRequireApprovalForOrdersOver(StringUtils.isNotBlank(approveLimit) ? new BigDecimal(NumberUtils.toInt(approveLimit)) : null);
-
-            final Map<ShopDTO, Boolean> links = dtoCustomerService.getAssignedShop(id);
-            for (final Map.Entry<ShopDTO, Boolean> assign : links.entrySet()) {
-                final VoCustomerShopLink link = new VoCustomerShopLink();
-                link.setCustomerId(vo.getCustomerId());
-                link.setShopId(assign.getKey().getShopId());
-                link.setDisabled(assign.getValue());
-                vo.getCustomerShops().add(link);
-            }
 
             return vo;
         } else {
@@ -247,7 +238,7 @@ public class VoCustomerServiceImpl implements VoCustomerService {
     @Override
     public VoCustomer createCustomer(final VoCustomer vo) throws Exception {
 
-        final List<CustomerDTO> existing = dtoCustomerService.findCustomer(vo.getEmail());
+        final List<CustomerDTO> existing = dtoCustomerService.findCustomers(vo.getEmail());
         final Map<String, Set<Long>> registered = new HashMap<>();
         if (!existing.isEmpty()) {
             for (final CustomerDTO existingDto : existing) {

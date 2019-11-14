@@ -16,7 +16,7 @@
           <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
           <td title="{{ 'TAB_SHOPS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
             <span *ngFor="let carrierShop of getShopNames(row)">
-              <span class="label {{ carrierShop.active ? 'label-info' : 'label-default'}}">{{carrierShop.name}}</span>&nbsp;
+              <span class="label {{ carrierShop.active ? 'label-info' : 'label-default'}}" title="{{carrierShop.name}}">{{carrierShop.code}}</span>&nbsp;
             </span>
             &nbsp;
           </a></td>

@@ -8,6 +8,7 @@
         <th><a class="js-click" (click)="onSortClick('email')">{{ 'CUSTOMER_EMAIL' | translate }} <span [hidden]="sortColumn != 'email'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th><a class="js-click" (click)="onSortClick('lastname')">{{ 'CUSTOMER_FULLNAME' | translate }} <span [hidden]="sortColumn != 'lastname'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th><a class="js-click" (click)="onSortClick('companyName1')">{{ 'CUSTOMER_FULLCOMPANY' | translate }} <span [hidden]="sortColumn != 'companyName1'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th>{{ 'TAB_SHOPS' | translate }}</th>
         <th>{{ 'CUSTOMER_POLICY' | translate }}</th>
         <th>{{ 'CUSTOMER_TAG' | translate }}</th>
       </tr>
@@ -18,6 +19,12 @@
         <td title="{{ 'CUSTOMER_EMAIL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.email}}</a></td>
         <td title="{{ 'CUSTOMER_FULLNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.salutation}} {{row.firstname}}  {{row.middlename}}  {{row.lastname}}</a></td>
         <td title="{{ 'CUSTOMER_FULLCOMPANY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.companyName1}} {{row.companyName2}}  {{row.companyDepartment}}</a></td>
+        <td title="{{ 'TAB_SHOPS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
+            <span *ngFor="let customerShop of getShopNames(row)">
+              <span class="label {{ customerShop.active ? 'label-info' : 'label-default'}}" title="{{customerShop.name}}">{{customerShop.code}}</span>&nbsp;
+            </span>
+          &nbsp;
+        </a></td>
         <td title="{{ 'CUSTOMER_POLICY' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getPolicyLabels(row)"></span></a></td>
         <td title="{{ 'CUSTOMER_TAG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}}</a>&nbsp;</td>
       </tr>

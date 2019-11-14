@@ -37,7 +37,6 @@ public class VoCustomer extends VoCustomerInfo {
     private BigDecimal ordersRequireApprovalForOrdersOver;
 
     private List<VoAttrValueCustomer> attributes;
-    private List<VoCustomerShopLink> customerShops = new ArrayList<>();
 
     public boolean isCheckoutBocked() {
         return checkoutBocked;
@@ -79,11 +78,4 @@ public class VoCustomer extends VoCustomerInfo {
         this.attributes = attributes;
     }
 
-    public List<VoCustomerShopLink> getCustomerShops() {
-        return customerShops;
-    }
-
-    public void setCustomerShops(final List<VoCustomerShopLink> customerShops) {
-        this.customerShops = customerShops;
-    }
 }

@@ -40,6 +40,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * Confirm customer will to pay via carrie or confirm status of bank payment.
      *
      * @param orderNum             unique order number. not pk value.
+     *
      * @return result object
      */
     Result updateOrderSetConfirmed(String orderNum);
@@ -58,6 +59,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * For more details see org.yes.cart.payment.PaymentGateway interface and his implementations.
      *
      * @param orderNum             unique order number. not pk value.
+     *
      * @return result object
      */
     Result updateOrderSetCancelled(String orderNum);
@@ -68,6 +70,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      *
      * @param orderNum             unique order number. not pk value.
      * @param message              manual operation message
+     *
      * @return result object
      */
     Result updateOrderSetCancelledManual(String orderNum, String message);
@@ -79,6 +82,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @param orderNum    unique order number. not pk value.
      * @param deliveryNum unique delivery number in order scope. not pk value.
      * @param newRefNo    new reference number
+     *
      * @return result object
      */
     Result updateExternalDeliveryRefNo(String orderNum, String deliveryNum, String newRefNo);
@@ -92,6 +96,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @param deliveryNum       unique delivery number in order scope. not pk value.
      * @param currentStatus     from status
      * @param destinationStatus to status
+     *
      * @return result object
      */
     Result updateDeliveryStatus(String orderNum, String deliveryNum, String currentStatus, String destinationStatus);
@@ -105,6 +110,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @param currentStatus     from status
      * @param destinationStatus to status
      * @param message           manual operation message
+     *
      * @return result object
      */
     Result updateDeliveryStatusManual(String orderNum, String deliveryNum, String currentStatus, String destinationStatus, String message);
@@ -113,7 +119,9 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * Get list of delivery details for given order number.
      *
      * @param orderNum order number
+     *
      * @return list of delivery details.
+     *
      * @throws UnmappedInterfaceException in case of dto mapping error
      * @throws UnableToCreateInstanceException
      *                                    in case of dto mapping error
@@ -126,7 +134,9 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * slave details objects.
      *
      * @param orderNum order number
+     *
      * @return list of deliveries.
+     *
      * @throws UnmappedInterfaceException in case of dto mapping error
      * @throws UnableToCreateInstanceException
      *                                    in case of dto mapping error
@@ -140,7 +150,9 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      *
      * @param orderNum order number
      * @param deliveryNum optional delivery number filter
+     *
      * @return list of deliveries.
+     *
      * @throws UnmappedInterfaceException in case of dto mapping error
      * @throws UnableToCreateInstanceException
      *                                    in case of dto mapping error

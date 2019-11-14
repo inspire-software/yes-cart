@@ -34,6 +34,8 @@ export interface CustomerInfoVO {
   companyName2  : string;
   companyDepartment  : string;
 
+  customerShops: CustomerShopLinkVO[];
+
 }
 
 
@@ -60,7 +62,6 @@ export interface CustomerVO extends CustomerInfoVO {
   ordersRequireApprovalForOrdersOver: number;
 
   attributes: AttrValueCustomerVO[];
-  customerShops: CustomerShopLinkVO[];
 
 }
 

@@ -47,7 +47,7 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of config errors
      */
-    List<CustomerDTO> findCustomer(String email) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    List<CustomerDTO> findCustomers(String email) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Find customers by filter.
@@ -57,8 +57,8 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      *
      * @return list of customers
      */
-    SearchResult<CustomerDTO> findCustomer(Set<Long> shopIds,
-                                           SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<CustomerDTO> findCustomers(Set<Long> shopIds,
+                                            SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Reset password to given user and send generated password via email.

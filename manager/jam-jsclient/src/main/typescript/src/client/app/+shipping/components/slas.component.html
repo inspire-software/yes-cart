@@ -29,7 +29,7 @@
           </a></td>
           <td title="{{ 'CARRIERSLA_FC' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
             <span *ngFor="let fc of getFCNames(row)">
-              <span class="label label-info">{{fc.name}}</span>&nbsp;
+              <span class="label label-info" title="{{fc.name}}">{{fc.code}}</span>&nbsp;
             </span>
             &nbsp;
           </a></td>

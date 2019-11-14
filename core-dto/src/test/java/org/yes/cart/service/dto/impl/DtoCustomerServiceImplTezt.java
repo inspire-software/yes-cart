@@ -80,21 +80,21 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
 
         // check by id
         ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("#" + jane.getCustomerId())), 0, 10, null, false, "filter");
-        rez = dtoService.findCustomer(shopIds, ctx);
+        rez = dtoService.findCustomers(shopIds, ctx);
         assertEquals(1, rez.getTotal());
         assertEquals(1, rez.getItems().size());
         assertEquals("Jane", rez.getItems().get(0).getFirstname());
 
         // check by name
         ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("?bob")), 0, 10, null, false, "filter");
-        rez = dtoService.findCustomer(shopIds, ctx);
+        rez = dtoService.findCustomers(shopIds, ctx);
         assertEquals(1, rez.getTotal());
         assertEquals(1, rez.getItems().size());
         assertEquals("Bob", rez.getItems().get(0).getFirstname());
 
         // check by type
         ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("$b2c")), 0, 10, null, false, "filter");
-        rez = dtoService.findCustomer(shopIds, ctx);
+        rez = dtoService.findCustomers(shopIds, ctx);
         assertTrue(rez.getTotal() > 0);
         assertEquals("B2C", rez.getItems().get(0).getCustomerType());
 

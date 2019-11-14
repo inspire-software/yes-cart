@@ -53,6 +53,7 @@
                 <entry key="ProductTypeAttrNavigationRanges"    value-ref="voProductTypeAttrNavigationRanges"/>
                 <entry key="CategoryNavigationPriceTiers"       value-ref="voCategoryNavigationPriceTiers"/>
                 <entry key="StringToMappingConverter"           value-ref="voStringToMappingConverter"/>
+                <entry key="MapToCustomerShopLink"              value-ref="voMapToCustomerShopLink"/>
             </map>
         </constructor-arg>
     </bean>
@@ -78,6 +79,7 @@
     <bean id="voProductTypeAttrNavigationRanges"    class="org.yes.cart.domain.vo.converter.StringToProductTypeAttrNavigationRangesConverter"/>
     <bean id="voCategoryNavigationPriceTiers"       class="org.yes.cart.domain.vo.converter.StringToCategoryNavigationPriceTiersConverter"/>
     <bean id="voStringToMappingConverter"           class="org.yes.cart.domain.vo.converter.StringToMappingConverter"/>
+    <bean id="voMapToCustomerShopLink"              class="org.yes.cart.domain.vo.converter.MapToCustomerShopLinkConverter"/>
 
     <bean id="voAssemblySupport" class="org.yes.cart.service.vo.impl.VoAssemblySupportImpl">
         <constructor-arg index="0" ref="voKeyToClassFactory"/>

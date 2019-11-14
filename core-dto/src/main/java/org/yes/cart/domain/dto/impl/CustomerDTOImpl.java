@@ -25,6 +25,7 @@ import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -71,6 +72,9 @@ public class CustomerDTOImpl implements CustomerDTO {
 
     @DtoField(value = "companyDepartment")
     private String companyDepartment;
+
+    @DtoField(value = "shops", converter = "customerShopToMap", readOnly = true)
+    private Map<Long, Boolean> assignedShops;
 
     @DtoCollection(
             value="attributes",
@@ -245,6 +249,18 @@ public class CustomerDTOImpl implements CustomerDTO {
     @Override
     public void setCompanyDepartment(final String companyDepartment) {
         this.companyDepartment = companyDepartment;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Map<Long, Boolean> getAssignedShops() {
+        return assignedShops;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setAssignedShops(final Map<Long, Boolean> assignedShops) {
+        this.assignedShops = assignedShops;
     }
 
     @Override

@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -217,5 +218,18 @@ public interface CustomerDTO extends Identifiable {
      */
     void setCompanyDepartment(String companyDepartment);
 
+    /**
+     * Shop Assignments.
+     *
+     * @return shop map
+     */
+    Map<Long, Boolean> getAssignedShops();
+
+    /**
+     * Shop assignments.
+     *
+     * @param assignedShops assignments
+     */
+    void setAssignedShops(Map<Long, Boolean> assignedShops);
 
 }

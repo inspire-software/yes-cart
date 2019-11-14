@@ -154,7 +154,7 @@ public class DtoCustomerOrderPaymentServiceImpl implements DtoCustomerOrderPayme
         final int count = customerOrderPaymentService.findCustomerOrderPaymentCount(shopCodes, currentFilter);
         if (count > startIndex) {
 
-            final List<CustomerOrderPayment> orders = customerOrderPaymentService.findCustomerOrderPayment(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopCodes, currentFilter);
+            final List<CustomerOrderPayment> orders = customerOrderPaymentService.findPayments(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopCodes, currentFilter);
 
             return new SearchResult<>(filter, orders, count);
 

@@ -45,12 +45,12 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
      *
      * @return list of payments, that match search criteria or empty list if nobody found or null if no search criteria provided.
      */
-    List<CustomerOrderPayment> findCustomerOrderPayment(int start,
-                                                        int offset,
-                                                        String sort,
-                                                        boolean sortDescending,
-                                                        Set<String> shops,
-                                                        Map<String, List> filter);
+    List<CustomerOrderPayment> findPayments(int start,
+                                            int offset,
+                                            String sort,
+                                            boolean sortDescending,
+                                            Set<String> shops,
+                                            Map<String, List> filter);
 
     /**
      * Find payments by given search criteria. Search will be performed using like operation.
@@ -74,10 +74,10 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
      * @param transactionOperation   operation name at payment gateway. optional
      * @return list of payments
      */
-    List<CustomerOrderPayment> findCustomerOrderPayment(String orderNumber,
-                                                        String shipmentNumber,
-                                                        String paymentProcessorResult,
-                                                        String transactionOperation);
+    List<CustomerOrderPayment> findPayments(String orderNumber,
+                                            String shipmentNumber,
+                                            String paymentProcessorResult,
+                                            String transactionOperation);
 
     /**
      * Find all payments by given parameters.
@@ -89,10 +89,10 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
      * @param transactionOperation   operation names at payment gateway. optional
      * @return list of payments
      */
-    List<CustomerOrderPayment> findCustomerOrderPayment(String orderNumber,
-                                                        String shipmentNumber,
-                                                        String[] paymentProcessorResult,
-                                                        String[] transactionOperation);
+    List<CustomerOrderPayment> findPayments(String orderNumber,
+                                            String shipmentNumber,
+                                            String[] paymentProcessorResult,
+                                            String[] transactionOperation);
 
 
     /**

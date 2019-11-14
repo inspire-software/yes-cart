@@ -243,7 +243,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
                 vo.setPromotions(Collections.EMPTY_LIST);
             }
 
-            vo.setPayments(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, customerOrderPaymentService.findCustomerOrderPayment(vo.getOrdernum(), null, (String) null, (String) null)));
+            vo.setPayments(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, customerOrderPaymentService.findPayments(vo.getOrdernum(), null, (String) null, (String) null)));
 
             final boolean removeSecureDetails = !isSecureDetailsViewable();
             if (removeSecureDetails) {

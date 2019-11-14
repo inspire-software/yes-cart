@@ -220,12 +220,12 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * {@inheritDoc}
      */
     @Override
-    public List<CustomerOrder> findCustomerOrder(final int start,
-                                                 final int offset,
-                                                 final String sort,
-                                                 final boolean sortDescending,
-                                                 final Set<Long> shops,
-                                                 final Map<String, List> filter) {
+    public List<CustomerOrder> findOrders(final int start,
+                                          final int offset,
+                                          final String sort,
+                                          final boolean sortDescending,
+                                          final Set<Long> shops,
+                                          final Map<String, List> filter) {
 
         final Pair<String, Object[]> query = findCustomerOrderQuery(false, sort, sortDescending, shops, filter);
 
@@ -240,8 +240,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * {@inheritDoc}
      */
     @Override
-    public int findCustomerOrderCount(final Set<Long> shops,
-                                      final Map<String, List> filter) {
+    public int findOrderCount(final Set<Long> shops,
+                              final Map<String, List> filter) {
 
         final Pair<String, Object[]> query = findCustomerOrderQuery(true, null, false, shops, filter);
 

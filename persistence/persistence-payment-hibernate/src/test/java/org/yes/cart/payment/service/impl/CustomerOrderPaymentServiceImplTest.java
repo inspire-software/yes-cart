@@ -74,7 +74,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
 
         count = service.findCustomerOrderPaymentCount(shopAll, filterNone);
         assertTrue(count > 0);
-        list = service.findCustomerOrderPayment(0, 1, "createdTimestamp", false, shopAll, filterNone);
+        list = service.findPayments(0, 1, "createdTimestamp", false, shopAll, filterNone);
         assertFalse(list.isEmpty());
 
 
@@ -85,9 +85,9 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
 
         count = service.findCustomerOrderPaymentCount(shopAll, filterAny);
         assertEquals(5, count);
-        list = service.findCustomerOrderPayment(0, 3, "createdTimestamp", false, shopAll, filterAny);
+        list = service.findPayments(0, 3, "createdTimestamp", false, shopAll, filterAny);
         assertEquals(3, list.size());
-        list = service.findCustomerOrderPayment(3, 3, "createdTimestamp", false, shopAll, filterAny);
+        list = service.findPayments(3, 3, "createdTimestamp", false, shopAll, filterAny);
         assertEquals(2, list.size());
 
 
@@ -97,14 +97,14 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
 
         count = service.findCustomerOrderPaymentCount(shopAll, filterSpecific);
         assertEquals(5, count);
-        list = service.findCustomerOrderPayment(0, 1, "createdTimestamp", false, shopAll, filterSpecific);
+        list = service.findPayments(0, 1, "createdTimestamp", false, shopAll, filterSpecific);
         assertEquals(1, list.size());
 
         final Map<String, List> filterNoMatch = Collections.singletonMap("orderNumber", Collections.singletonList("ZZZZZZZ"));
 
         count = service.findCustomerOrderPaymentCount(shopAll, filterNoMatch);
         assertEquals(0, count);
-        list = service.findCustomerOrderPayment(0, 1, "createdTimestamp", false, shopAll, filterNoMatch);
+        list = service.findPayments(0, 1, "createdTimestamp", false, shopAll, filterNoMatch);
         assertEquals(0, list.size());
 
         final Map<String, List> filterIncludeProcessing = new HashMap<>();
@@ -113,7 +113,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
 
         count = service.findCustomerOrderPaymentCount(shop10, filterIncludeProcessing);
         assertEquals(2, count);
-        list = service.findCustomerOrderPayment(0, 1, "createdTimestamp", false, shop10, filterIncludeProcessing);
+        list = service.findPayments(0, 1, "createdTimestamp", false, shop10, filterIncludeProcessing);
         assertFalse(list.isEmpty());
 
         final Map<String, List> filterIncludeProcessingVoidCapture = new HashMap<>();
@@ -123,7 +123,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
 
         count = service.findCustomerOrderPaymentCount(shop10, filterIncludeProcessingVoidCapture);
         assertEquals(1, count);
-        list = service.findCustomerOrderPayment(0, 1, "createdTimestamp", false, shop10, filterIncludeProcessingVoidCapture);
+        list = service.findPayments(0, 1, "createdTimestamp", false, shop10, filterIncludeProcessingVoidCapture);
         assertFalse(list.isEmpty());
 
 
@@ -137,7 +137,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
 
         count = service.findCustomerOrderPaymentCount(shop10, filterCreated);
         assertEquals(5, count);
-        list = service.findCustomerOrderPayment(0, 2, "createdTimestamp", false, shop10, filterCreated);
+        list = service.findPayments(0, 2, "createdTimestamp", false, shop10, filterCreated);
         assertEquals(2, list.size());
 
 
@@ -153,12 +153,12 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         fb2 = service.create(fb2);
         assertTrue(fb2.getCustomerOrderPaymentId() > 0);
 
-        assertTrue(service.findCustomerOrderPayment(null, null, (String) null, (String) null).size() >= 2);
-        assertEquals(Payment.PAYMENT_STATUS_OK, service.findCustomerOrderPayment(null, null, Payment.PAYMENT_STATUS_OK, null).get(0).getPaymentProcessorResult());
-        assertEquals(PaymentGateway.AUTH, service.findCustomerOrderPayment(null, null, null, PaymentGateway.AUTH).get(0).getTransactionOperation());
-        assertEquals(fb1.getOrderNumber(), service.findCustomerOrderPayment(fb1.getOrderNumber(), null, (String) null, (String) null).get(0).getOrderNumber());
-        assertEquals(fb1.getOrderShipment(), service.findCustomerOrderPayment(null, fb1.getOrderShipment(), (String) null, (String) null).get(0).getOrderShipment());
-        assertEquals(fb1.getCustomerOrderPaymentId(), service.findCustomerOrderPayment(fb1.getOrderNumber(), fb1.getOrderShipment(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).get(0).getCustomerOrderPaymentId());
+        assertTrue(service.findPayments(null, null, (String) null, (String) null).size() >= 2);
+        assertEquals(Payment.PAYMENT_STATUS_OK, service.findPayments(null, null, Payment.PAYMENT_STATUS_OK, null).get(0).getPaymentProcessorResult());
+        assertEquals(PaymentGateway.AUTH, service.findPayments(null, null, null, PaymentGateway.AUTH).get(0).getTransactionOperation());
+        assertEquals(fb1.getOrderNumber(), service.findPayments(fb1.getOrderNumber(), null, (String) null, (String) null).get(0).getOrderNumber());
+        assertEquals(fb1.getOrderShipment(), service.findPayments(null, fb1.getOrderShipment(), (String) null, (String) null).get(0).getOrderShipment());
+        assertEquals(fb1.getCustomerOrderPaymentId(), service.findPayments(fb1.getOrderNumber(), fb1.getOrderShipment(), Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).get(0).getCustomerOrderPaymentId());
     }
 
     @Test
@@ -170,12 +170,12 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         fba2 = service.create(fba2);
         assertTrue(fba2.getCustomerOrderPaymentId() > 0);
 
-        assertTrue(service.findCustomerOrderPayment(null, null, (String[]) null, (String[]) null).size() >= 2);
-        assertEquals(Payment.PAYMENT_STATUS_OK, service.findCustomerOrderPayment(null, null, new String[] { Payment.PAYMENT_STATUS_OK }, (String[]) null).get(0).getPaymentProcessorResult());
-        assertEquals(PaymentGateway.AUTH, service.findCustomerOrderPayment(null, null, null, new String[] { PaymentGateway.AUTH }).get(0).getTransactionOperation());
-        assertEquals(fba1.getOrderNumber(), service.findCustomerOrderPayment(fba1.getOrderNumber(), null, (String[]) null, (String[]) null).get(0).getOrderNumber());
-        assertEquals(fba1.getOrderShipment(), service.findCustomerOrderPayment(null, fba1.getOrderShipment(), (String[]) null, (String[]) null).get(0).getOrderShipment());
-        assertEquals(fba1.getCustomerOrderPaymentId(), service.findCustomerOrderPayment(fba1.getOrderNumber(), fba1.getOrderShipment(), new String[] { Payment.PAYMENT_STATUS_OK }, new String[] { PaymentGateway.AUTH }).get(0).getCustomerOrderPaymentId());
+        assertTrue(service.findPayments(null, null, (String[]) null, (String[]) null).size() >= 2);
+        assertEquals(Payment.PAYMENT_STATUS_OK, service.findPayments(null, null, new String[] { Payment.PAYMENT_STATUS_OK }, (String[]) null).get(0).getPaymentProcessorResult());
+        assertEquals(PaymentGateway.AUTH, service.findPayments(null, null, null, new String[] { PaymentGateway.AUTH }).get(0).getTransactionOperation());
+        assertEquals(fba1.getOrderNumber(), service.findPayments(fba1.getOrderNumber(), null, (String[]) null, (String[]) null).get(0).getOrderNumber());
+        assertEquals(fba1.getOrderShipment(), service.findPayments(null, fba1.getOrderShipment(), (String[]) null, (String[]) null).get(0).getOrderShipment());
+        assertEquals(fba1.getCustomerOrderPaymentId(), service.findPayments(fba1.getOrderNumber(), fba1.getOrderShipment(), new String[] { Payment.PAYMENT_STATUS_OK }, new String[] { PaymentGateway.AUTH }).get(0).getCustomerOrderPaymentId());
     }
 
     @Test

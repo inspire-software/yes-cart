@@ -51,12 +51,12 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      *
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      */
-    List<CustomerOrder> findCustomerOrder(int start,
-                                          int offset,
-                                          String sort,
-                                          boolean sortDescending,
-                                          Set<Long> shops,
-                                          Map<String, List> filter);
+    List<CustomerOrder> findOrders(int start,
+                                   int offset,
+                                   String sort,
+                                   boolean sortDescending,
+                                   Set<Long> shops,
+                                   Map<String, List> filter);
 
     /**
      * Find orders by given search criteria. Search will be performed using like operation.
@@ -66,8 +66,8 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      *
      * @return count
      */
-    int findCustomerOrderCount(Set<Long> shops,
-                               Map<String, List> filter);
+    int findOrderCount(Set<Long> shops,
+                       Map<String, List> filter);
 
 
     /**

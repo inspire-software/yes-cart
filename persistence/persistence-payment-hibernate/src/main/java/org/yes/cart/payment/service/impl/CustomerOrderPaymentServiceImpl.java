@@ -63,7 +63,7 @@ public class CustomerOrderPaymentServiceImpl extends PaymentModuleGenericService
     @Override
     public BigDecimal getOrderAmount(final String orderNumber) {
 
-        final List<CustomerOrderPayment> payments = findCustomerOrderPayment(orderNumber, null,
+        final List<CustomerOrderPayment> payments = findPayments(orderNumber, null,
                 new String[] { Payment.PAYMENT_STATUS_OK },
                 new String[] { PaymentGateway.AUTH_CAPTURE, PaymentGateway.CAPTURE, PaymentGateway.VOID_CAPTURE, PaymentGateway.REFUND });
 
@@ -169,7 +169,7 @@ public class CustomerOrderPaymentServiceImpl extends PaymentModuleGenericService
      * {@inheritDoc}
      */
     @Override
-    public List<CustomerOrderPayment> findCustomerOrderPayment(final int start, final int offset, final String sort, final boolean sortDescending, final Set<String> shops, final Map<String, List> filter) {
+    public List<CustomerOrderPayment> findPayments(final int start, final int offset, final String sort, final boolean sortDescending, final Set<String> shops, final Map<String, List> filter) {
 
         final Pair<String, Object[]> query = findCustomerOrderPaymentQuery(false, sort, sortDescending, shops, filter);
 
@@ -201,10 +201,10 @@ public class CustomerOrderPaymentServiceImpl extends PaymentModuleGenericService
      * {@inheritDoc}
      */
     @Override
-    public List<CustomerOrderPayment> findCustomerOrderPayment(final String orderNumber,
-                                                               final String shipmentNumber,
-                                                               final String paymentProcessorResult,
-                                                               final String transactionOperation) {
+    public List<CustomerOrderPayment> findPayments(final String orderNumber,
+                                                   final String shipmentNumber,
+                                                   final String paymentProcessorResult,
+                                                   final String transactionOperation) {
 
         return getGenericDao().findByCriteria(
                 " where (?1 is null or e.orderNumber = ?1) and (?2 is null or e.orderShipment = ?2) and (?3 is null or e.paymentProcessorResult = (?3)) and (?4 is null or e.transactionOperation = (?4))",
@@ -220,10 +220,10 @@ public class CustomerOrderPaymentServiceImpl extends PaymentModuleGenericService
      * {@inheritDoc}
      */
     @Override
-    public List<CustomerOrderPayment> findCustomerOrderPayment(final String orderNumber,
-                                                               final String shipmentNumber,
-                                                               final String[] paymentProcessorResult,
-                                                               final String[] transactionOperation) {
+    public List<CustomerOrderPayment> findPayments(final String orderNumber,
+                                                   final String shipmentNumber,
+                                                   final String[] paymentProcessorResult,
+                                                   final String[] transactionOperation) {
 
         return getGenericDao().findByCriteria(
                 " where (?1 is null or e.orderNumber = ?1) and (?2 is null or e.orderShipment = ?2) and (?3 is null or e.paymentProcessorResult in (?4)) and (?5 is null or e.transactionOperation in (?6))",

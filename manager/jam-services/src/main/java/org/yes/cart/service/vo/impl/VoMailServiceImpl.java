@@ -138,7 +138,7 @@ public class VoMailServiceImpl implements VoMailService {
             List<CustomerOrderPayment> payments = null;
 
             if (template.contains("adm-")) {
-                payments = customerOrderPaymentService.findCustomerOrderPayment(customerOrder.getOrdernum(), null, (String) null, (String) null);
+                payments = customerOrderPaymentService.findPayments(customerOrder.getOrdernum(), null, (String) null, (String) null);
             }
 
             if (template.contains("shipment-complete")) {

@@ -161,14 +161,14 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
         final Map<String, List> filterNone = null;
 
-        count = customerOrderService.findCustomerOrderCount(shopAll, filterNone);
+        count = customerOrderService.findOrderCount(shopAll, filterNone);
         assertTrue(count > 0);
-        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shopAll, filterNone);
+        list = customerOrderService.findOrders(0, 1, "ordernum", false, shopAll, filterNone);
         assertFalse(list.isEmpty());
 
-        count = customerOrderService.findCustomerOrderCount(shop10, filterNone);
+        count = customerOrderService.findOrderCount(shop10, filterNone);
         assertTrue(count > 0);
-        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shop10, filterNone);
+        list = customerOrderService.findOrders(0, 1, "ordernum", false, shop10, filterNone);
         assertFalse(list.isEmpty());
 
 
@@ -178,11 +178,11 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         filterAny.put("ordernum", Collections.singletonList("190323"));
         filterAny.put("lastname", Collections.singletonList("190323"));
 
-        count = customerOrderService.findCustomerOrderCount(shopAll, filterAny);
+        count = customerOrderService.findOrderCount(shopAll, filterAny);
         assertEquals(2, count);
-        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shopAll, filterAny);
+        list = customerOrderService.findOrders(0, 1, "ordernum", false, shopAll, filterAny);
         assertEquals(1, list.size());
-        list = customerOrderService.findCustomerOrder(1, 1, "ordernum", false, shopAll, filterAny);
+        list = customerOrderService.findOrders(1, 1, "ordernum", false, shopAll, filterAny);
         assertEquals(1, list.size());
 
 
@@ -190,30 +190,30 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         filterSpecific.put("email", Collections.singletonList("reg@test.com"));
         filterSpecific.put("ordernum", Collections.singletonList("190323063753-2"));
 
-        count = customerOrderService.findCustomerOrderCount(shopAll, filterSpecific);
+        count = customerOrderService.findOrderCount(shopAll, filterSpecific);
         assertEquals(1, count);
-        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shopAll, filterSpecific);
+        list = customerOrderService.findOrders(0, 1, "ordernum", false, shopAll, filterSpecific);
         assertEquals(1, list.size());
 
         final Map<String, List> filterNoMatch = Collections.singletonMap("ordernum", Collections.singletonList("ZZZZZZZ"));
 
-        count = customerOrderService.findCustomerOrderCount(shopAll, filterNoMatch);
+        count = customerOrderService.findOrderCount(shopAll, filterNoMatch);
         assertEquals(0, count);
-        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shopAll, filterNoMatch);
+        list = customerOrderService.findOrders(0, 1, "ordernum", false, shopAll, filterNoMatch);
         assertEquals(0, list.size());
 
         final Map<String, List> filterStatusSpecific = Collections.singletonMap("orderStatus", Collections.singletonList("os.in.progress"));
 
-        count = customerOrderService.findCustomerOrderCount(shop10, filterStatusSpecific);
+        count = customerOrderService.findOrderCount(shop10, filterStatusSpecific);
         assertTrue(count > 0);
-        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shop10, filterStatusSpecific);
+        list = customerOrderService.findOrders(0, 1, "ordernum", false, shop10, filterStatusSpecific);
         assertFalse(list.isEmpty());
 
         final Map<String, List> filterStatusSpecificNoMatch = Collections.singletonMap("orderStatus", Collections.singletonList("zzzzzz"));
 
-        count = customerOrderService.findCustomerOrderCount(shop10, filterStatusSpecificNoMatch);
+        count = customerOrderService.findOrderCount(shop10, filterStatusSpecificNoMatch);
         assertEquals(0, count);
-        list = customerOrderService.findCustomerOrder(0, 1, "ordernum", false, shop10, filterStatusSpecificNoMatch);
+        list = customerOrderService.findOrders(0, 1, "ordernum", false, shop10, filterStatusSpecificNoMatch);
         assertTrue(list.isEmpty());
 
         final Map<String, List> filterOr = new HashMap<>();
@@ -221,9 +221,9 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         filterOr.put("email", Collections.singletonList("reg@test.com"));
         filterOr.put("ordernum", Collections.singletonList("190323063746-1"));
 
-        count = customerOrderService.findCustomerOrderCount(shop10, filterOr);
+        count = customerOrderService.findOrderCount(shop10, filterOr);
         assertEquals(2, count);
-        list = customerOrderService.findCustomerOrder(0, 2, "ordernum", false, shop10, filterOr);
+        list = customerOrderService.findOrders(0, 2, "ordernum", false, shop10, filterOr);
         assertEquals(2, list.size());
 
         final Map<String, List> filterCreated = new HashMap<>();
@@ -234,9 +234,9 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
                 )
         );
 
-        count = customerOrderService.findCustomerOrderCount(shop10, filterCreated);
+        count = customerOrderService.findOrderCount(shop10, filterCreated);
         assertEquals(2, count);
-        list = customerOrderService.findCustomerOrder(0, 2, "ordernum", false, shop10, filterCreated);
+        list = customerOrderService.findOrders(0, 2, "ordernum", false, shop10, filterCreated);
         assertEquals(2, list.size());
 
     }

@@ -44,12 +44,12 @@ public interface CustomerService extends GenericService<Customer> {
      *
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      */
-    List<Customer> findCustomer(int start,
-                                int offset,
-                                String sort,
-                                boolean sortDescending,
-                                Set<Long> shops,
-                                Map<String, List> filter);
+    List<Customer> findCustomers(int start,
+                                 int offset,
+                                 String sort,
+                                 boolean sortDescending,
+                                 Set<Long> shops,
+                                 Map<String, List> filter);
 
     /**
      * Find customer by given search criteria. Search will be performed using like operation.

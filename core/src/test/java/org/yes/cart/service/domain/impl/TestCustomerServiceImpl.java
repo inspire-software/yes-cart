@@ -125,7 +125,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
 
         count = customerService.findCustomerCount(shopAll, filterNone);
         assertTrue(count > 0);
-        list = customerService.findCustomer(0, 1, "firstname", false, shopAll, filterNone);
+        list = customerService.findCustomers(0, 1, "firstname", false, shopAll, filterNone);
         assertFalse(list.isEmpty());
 
 
@@ -140,9 +140,9 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
 
         count = customerService.findCustomerCount(shopAll, filterAny);
         assertEquals(2, count);
-        list = customerService.findCustomer(0, 1, "firstname", false, shopAll, filterAny);
+        list = customerService.findCustomers(0, 1, "firstname", false, shopAll, filterAny);
         assertEquals(1, list.size());
-        list = customerService.findCustomer(1, 1, "firstname", false, shopAll, filterAny);
+        list = customerService.findCustomers(1, 1, "firstname", false, shopAll, filterAny);
         assertEquals(1, list.size());
 
 
@@ -152,21 +152,21 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
 
         count = customerService.findCustomerCount(shopAll, filterSpecific);
         assertEquals(1, count);
-        list = customerService.findCustomer(0, 1, "firstname", false, shopAll, filterSpecific);
+        list = customerService.findCustomers(0, 1, "firstname", false, shopAll, filterSpecific);
         assertEquals(1, list.size());
 
         final Map<String, List> filterNoMatch = Collections.singletonMap("firstname", Collections.singletonList("ZZZZZZZ"));
 
         count = customerService.findCustomerCount(shopAll, filterNoMatch);
         assertEquals(0, count);
-        list = customerService.findCustomer(0, 1, "firstname", false, shopAll, filterNoMatch);
+        list = customerService.findCustomers(0, 1, "firstname", false, shopAll, filterNoMatch);
         assertEquals(0, list.size());
 
         final Map<String, List> filterIncludeDisabled = Collections.singletonMap("disabled", Collections.singletonList(SearchContext.MatchMode.ANY));
 
         count = customerService.findCustomerCount(shop10, filterIncludeDisabled);
         assertTrue(count > 0);
-        list = customerService.findCustomer(0, 1, "firstname", false, shop10, filterIncludeDisabled);
+        list = customerService.findCustomers(0, 1, "firstname", false, shop10, filterIncludeDisabled);
         assertFalse(list.isEmpty());
 
         final Map<String, List> filterOr = new HashMap<>();
@@ -176,7 +176,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
 
         count = customerService.findCustomerCount(shop10, filterOr);
         assertEquals(2, count);
-        list = customerService.findCustomer(0, 2, "firstname", false, shop10, filterOr);
+        list = customerService.findCustomers(0, 2, "firstname", false, shop10, filterOr);
         assertEquals(2, list.size());
 
         final Map<String, List> filterCreated = new HashMap<>();
@@ -189,7 +189,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
 
         count = customerService.findCustomerCount(shop10, filterCreated);
         assertEquals(1, count);
-        list = customerService.findCustomer(0, 2, "firstname", false, shop10, filterCreated);
+        list = customerService.findCustomers(0, 2, "firstname", false, shop10, filterCreated);
         assertEquals(1, list.size());
 
     }

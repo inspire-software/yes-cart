@@ -503,6 +503,11 @@ table.dataTable thead .sorting:after {
   padding: 15px;
 }
 
+.max-height-100 {
+  max-height: 100px;
+  overflow: auto;
+}
+
 .block-margin-spacer {
   margin-top: 5px;
   margin-bottom: 5px;

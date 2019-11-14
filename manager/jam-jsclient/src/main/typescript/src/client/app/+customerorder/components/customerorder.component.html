@@ -13,13 +13,16 @@
               </div>
               <div class="row">
                 <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMERORDER_STATUS' | translate }}</strong></div>
-                <div class="col-xs-9 col-md-6">{{ customerorder.orderStatus | translate }}</div>
+                <div class="col-xs-9 col-md-6">
+                  <span class="label label-info">{{ customerorder.code }}</span>
+                  {{ customerorder.orderStatus | translate }}
+                </div>
               </div>
               <div class="row" *ngIf="isOrderType()">
                 <div class="col-xs-3 col-md-2"><strong>{{ 'CUSTOMERORDER_PAYMENT_STATUS' | translate }}</strong></div>
                 <div class="col-xs-9 col-md-6">
-                  {{ customerorder.pgName ? customerorder.pgName : customerorder.pgLabel }}
                   <span class="label {{ customerorder.orderPaymentStatus == 'pt.pending' ? 'label-danger' : (customerorder.orderPaymentStatus == 'pt.full' ? 'label-success' : (customerorder.orderPaymentStatus != 'pt.none' ? 'label-warning' : '')) }}">{{ customerorder.orderPaymentStatus | translate }}</span>
+                  {{ customerorder.pgName ? customerorder.pgName : customerorder.pgLabel }}
                 </div>
               </div>
               <div class="row">
@@ -169,7 +172,7 @@
               </div>
               <div class="row">
                 <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_PG_LABEL' | translate }}</strong></div>
-                <div class="col-xs-9">{{ customerorder.pgLabel }}&nbsp;</div>
+                <div class="col-xs-9">{{ customerorder.pgName ? customerorder.pgName : customerorder.pgLabel }}&nbsp;</div>
               </div>
               <div class="row">
                 <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_PROMOTIONS' | translate }}</strong></div>
@@ -195,10 +198,6 @@
         <div class="row">
           <div class="col-xs-12">
             <div class="panel-body text-muted">
-              <div class="row">
-                <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_PG_LABEL' | translate }}</strong></div>
-                <div class="col-xs-9">{{ customerorder.pgName ? customerorder.pgName : customerorder.pgLabel }}&nbsp;</div>
-              </div>
               <div class="row">
                 <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_B2B_REF' | translate }}</strong></div>
                 <div class="col-xs-9">{{ customerorder.b2bRef }}&nbsp;</div>

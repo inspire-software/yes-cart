@@ -168,9 +168,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         final List<Object> params = new ArrayList<>();
 
         if (count) {
-            hqlCriteria.append("select count(cse.customer) from CustomerShopEntity cse ");
+            hqlCriteria.append("select count(distinct c.customerId) from CustomerEntity c left join c.shops cse ");
         } else {
-            hqlCriteria.append("select cse.customer from CustomerShopEntity cse ");
+            hqlCriteria.append("select distinct c from CustomerEntity c left join fetch c.shops cse ");
         }
 
         Boolean disabled = Boolean.FALSE;
@@ -202,12 +202,13 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             params.add(disabled);
         }
 
-        HQLUtils.appendFilterCriteria(hqlCriteria, params, "cse.customer", currentFilter);
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
 
+        // hqlCriteria.append(" group by cse.customer ");
 
         if (StringUtils.isNotBlank(sort)) {
 
-            hqlCriteria.append(" order by cse.customer." + sort + " " + (sortDescending ? "desc" : "asc"));
+            hqlCriteria.append(" order by c." + sort + " " + (sortDescending ? "desc" : "asc"));
 
         }
 
@@ -222,12 +223,12 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     @Override
-    public List<Customer> findCustomer(final int start,
-                                       final int offset,
-                                       final String sort,
-                                       final boolean sortDescending,
-                                       final Set<Long> shops,
-                                       final Map<String, List> filter) {
+    public List<Customer> findCustomers(final int start,
+                                        final int offset,
+                                        final String sort,
+                                        final boolean sortDescending,
+                                        final Set<Long> shops,
+                                        final Map<String, List> filter) {
 
         final Pair<String, Object[]> query = findCustomerQuery(false, sort, sortDescending, shops, filter);
 

@@ -18,6 +18,10 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -61,6 +65,9 @@ public class VoCustomerInfo {
 
     @DtoField(value = "companyDepartment")
     private String companyDepartment;
+
+    @DtoVirtualField(converter = "MapToCustomerShopLink", readOnly = true)
+    private List<VoCustomerShopLink> customerShops = new ArrayList<>();
 
     public long getCustomerId() {
         return customerId;
@@ -157,4 +164,13 @@ public class VoCustomerInfo {
     public void setCompanyDepartment(final String companyDepartment) {
         this.companyDepartment = companyDepartment;
     }
+
+    public List<VoCustomerShopLink> getCustomerShops() {
+        return customerShops;
+    }
+
+    public void setCustomerShops(final List<VoCustomerShopLink> customerShops) {
+        this.customerShops = customerShops;
+    }
+
 }

@@ -59,6 +59,8 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(customerFind);
         assertTrue(customerFind.getTotal() > 0);
         assertEquals("reg@test.com", customerFind.getItems().get(0).getEmail());
+        assertNotNull(customerFind.getItems().get(0).getCustomerShops());
+        assertFalse(customerFind.getItems().get(0).getCustomerShops().isEmpty());
 
         VoSearchContext ctxByEmailTagOrCompany = new VoSearchContext();
         ctxByEmailTagOrCompany.setParameters(Collections.singletonMap("filter", Collections.singletonList("#JJ")));
@@ -120,6 +122,10 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         final VoCustomer afterCreated = voCustomerService.getCustomerById(created.getCustomerId());
         assertNotNull(afterCreated);
         assertEquals(email, afterCreated.getEmail());
+        assertNotNull(afterCreated.getCustomerShops());
+        assertFalse(afterCreated.getCustomerShops().isEmpty());
+        assertEquals(10L, afterCreated.getCustomerShops().get(0).getShopId());
+        assertEquals(afterCreated.getCustomerId(), afterCreated.getCustomerShops().get(0).getCustomerId());
 
         created.setFirstname("TEST CRUD UPDATE");
 

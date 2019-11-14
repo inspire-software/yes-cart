@@ -717,11 +717,11 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
             currentFilter.put("orderStatus", statusesParam);
         }
 
-        final int count = customerOrderService.findCustomerOrderCount(shopIds, currentFilter);
+        final int count = customerOrderService.findOrderCount(shopIds, currentFilter);
         if (count > startIndex) {
 
             final List<CustomerOrderDTO> entities = new ArrayList<>();
-            final List<CustomerOrder> orders = customerOrderService.findCustomerOrder(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopIds, currentFilter);
+            final List<CustomerOrder> orders = customerOrderService.findOrders(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopIds, currentFilter);
 
             fillDTOs(orders, entities);
 

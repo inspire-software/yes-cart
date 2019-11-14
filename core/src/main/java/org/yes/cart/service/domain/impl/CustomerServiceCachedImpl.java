@@ -88,13 +88,13 @@ public class CustomerServiceCachedImpl implements CustomerService {
      * {@inheritDoc}
      */
     @Override
-    public List<Customer> findCustomer(final int start,
-                                       final int offset,
-                                       final String sort,
-                                       final boolean sortDescending,
-                                       final Set<Long> shops,
-                                       final Map<String, List> filter) {
-        return customerService.findCustomer(start, offset, sort, sortDescending, shops, filter);
+    public List<Customer> findCustomers(final int start,
+                                        final int offset,
+                                        final String sort,
+                                        final boolean sortDescending,
+                                        final Set<Long> shops,
+                                        final Map<String, List> filter) {
+        return customerService.findCustomers(start, offset, sort, sortDescending, shops, filter);
     }
 
     /**

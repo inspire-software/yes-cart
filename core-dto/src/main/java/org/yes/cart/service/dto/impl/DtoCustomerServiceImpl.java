@@ -304,7 +304,7 @@ public class DtoCustomerServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<CustomerDTO> findCustomer(final String email) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<CustomerDTO> findCustomers(final String email) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Customer> entities = service.findByCriteria(
                 " where lower(e.email) = ?1",
                 email.toLowerCase()
@@ -324,8 +324,8 @@ public class DtoCustomerServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public SearchResult<CustomerDTO> findCustomer(final Set<Long> shopIds,
-                                                  final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<CustomerDTO> findCustomers(final Set<Long> shopIds,
+                                                   final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final Map<String, List> params = filter.reduceParameters("filter");
         final List filterParam = params.get("filter");
@@ -348,7 +348,7 @@ public class DtoCustomerServiceImpl
                     final String refNumber = refOrCustomerOrAddressOrPolicy.getSecond();
 
                     SearchContext.JoinMode.OR.setMode(currentFilter);
-                    currentFilter.put("customerId", Collections.singletonList(NumberUtils.toLong(refNumber)));
+                    currentFilter.put("customerId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(NumberUtils.toLong(refNumber))));
                     currentFilter.put("email", Collections.singletonList(refNumber));
                     currentFilter.put("tag", Collections.singletonList(refNumber));
                     currentFilter.put("companyName1", Collections.singletonList(refNumber));
@@ -428,7 +428,7 @@ public class DtoCustomerServiceImpl
         if (count > startIndex) {
 
             final List<CustomerDTO> entities = new ArrayList<>();
-            final List<Customer> customers = customerService.findCustomer(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopIds, currentFilter);
+            final List<Customer> customers = customerService.findCustomers(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopIds, currentFilter);
 
             fillDTOs(customers, entities);
 

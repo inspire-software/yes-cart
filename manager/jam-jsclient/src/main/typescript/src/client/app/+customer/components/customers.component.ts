@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { CustomerInfoVO, Pair, SearchResultVO } from './../../shared/model/index';
+import { CustomerInfoVO, Pair, SearchResultVO, ShopVO } from './../../shared/model/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
@@ -35,6 +35,8 @@ export class CustomersComponent implements OnInit, OnDestroy {
   @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
 
   private _customers:SearchResultVO<CustomerInfoVO> = null;
+
+  private _shops:any = {};
 
   private filteredCustomers:Array<CustomerInfoVO>;
 
@@ -60,6 +62,16 @@ export class CustomersComponent implements OnInit, OnDestroy {
   set customers(customers:SearchResultVO<CustomerInfoVO>) {
     this._customers = customers;
     this.filterCustomers();
+  }
+
+  @Input()
+  set shops(shops:Array<ShopVO>) {
+    if (shops != null) {
+      shops.forEach(shop => {
+        this._shops['S' + shop.shopId] = shop;
+      });
+    }
+    LogUtil.debug('CustomersComponent mapped shops', this._shops);
   }
 
   ngOnDestroy() {
@@ -111,6 +123,25 @@ export class CustomersComponent implements OnInit, OnDestroy {
     return out;
   }
 
+  protected getShopNames(row:CustomerInfoVO):CustomerShop[] {
+    let shops:CustomerShop[] = [];
+    if (row.customerShops != null && row.customerShops.length > 0) {
+      row.customerShops.forEach( customerShop => {
+        let key = 'S' + customerShop.shopId;
+        if (this._shops.hasOwnProperty(key)) {
+          let shop:ShopVO = this._shops[key];
+          shops.push({ code: shop.code, name: shop.name, active: !shop.disabled && !customerShop.disabled });
+        }
+      });
+    }
+
+    shops.sort((a, b) => {
+      return (a.name.toLowerCase() < b.name.toLowerCase()) ? -1 : 1;
+    });
+
+    return shops;
+  }
+
   private filterCustomers() {
 
     LogUtil.debug('CustomersComponent filterCustomers', this._customers, this.filteredCustomers);
@@ -139,3 +170,13 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
 }
+
+
+interface CustomerShop {
+
+  code: string;
+  name: string;
+  active: boolean;
+
+}
+

@@ -254,7 +254,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         List<CustomerOrderPayment> payments = null;
 
         if (listPayments) {
-            payments = customerOrderPaymentService.findCustomerOrderPayment(customerOrder.getOrdernum(), null, (String) null, (String) null);
+            payments = customerOrderPaymentService.findPayments(customerOrder.getOrdernum(), null, (String) null, (String) null);
         }
 
         for (final String recipient : mailTo) {

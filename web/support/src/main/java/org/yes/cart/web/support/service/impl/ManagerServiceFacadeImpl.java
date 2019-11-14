@@ -121,7 +121,7 @@ public class ManagerServiceFacadeImpl implements ManagerServiceFacade {
         final int count = customerService.findCustomerCount(Collections.singleton(shopId), filter);
         if (count > startIndex) {
 
-            final List<Customer> customer = customerService.findCustomer(startIndex, pageSize, searchContext.getSortBy(), searchContext.isSortDesc(), Collections.singleton(shopId), filter);
+            final List<Customer> customer = customerService.findCustomers(startIndex, pageSize, searchContext.getSortBy(), searchContext.isSortDesc(), Collections.singleton(shopId), filter);
             return new SearchResult<>(searchContext, customer, count);
 
         }
