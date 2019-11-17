@@ -300,6 +300,9 @@
         <appender-ref ref="SAC"/>
     </logger>
 
+    <!-- Suppress ehcache size warnings -->
+    <logger name="net.sf.ehcache.pool.impl.DefaultSizeOfEngine" level="ERROR"/>
+
     <logger name="FTQ" level="INFO">
         <!-- FTQ logs at DEBUG level, TRACE logs FTQ explanations -->
         <appender-ref ref="FTQ"/>
