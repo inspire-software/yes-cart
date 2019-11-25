@@ -149,7 +149,7 @@ public class ManagerController {
                 );
             }
         }
-        if (result.getSearch().getSortField() != null && !pageSortingValues.contains(result.getSearch().getSortField())) {
+        if (result.getSearch().getSortField() != null && !sortPageValues.values().contains(result.getSearch().getSortField())) {
             result.getSearch().setSortField(null);
         }
 
