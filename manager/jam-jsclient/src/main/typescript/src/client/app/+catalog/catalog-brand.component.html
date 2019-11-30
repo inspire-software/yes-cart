@@ -58,11 +58,7 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <div *ngIf="brandFilterCapped">
-      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-    </div>
-
-    <yc-brands [brands]="brands" (dataSelected)="onBrandSelected($event)"></yc-brands>
+    <yc-brands [brands]="brands" (dataSelected)="onBrandSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-brands>
   </div>
 
   <div [hidden]="viewMode !== 'brand'" class="{{ loading ? 'loading-data' : '' }}">

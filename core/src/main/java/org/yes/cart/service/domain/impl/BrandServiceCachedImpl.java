@@ -24,6 +24,7 @@ import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.service.domain.BrandService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -53,6 +54,22 @@ public class BrandServiceCachedImpl implements BrandService {
     @Override
     public Brand findByNameOrGuid(final String nameOrGuid) {
         return brandService.findByNameOrGuid(nameOrGuid);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Brand> findBrands(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return brandService.findBrands(start, offset, sort, sortDescending, filter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findBrandCount(final Map<String, List> filter) {
+        return brandService.findBrandCount(filter);
     }
 
     /**

@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.Constants;
@@ -35,19 +36,16 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.domain.entity.impl.AttrValueEntityBrand;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.FileService;
-import org.yes.cart.service.domain.GenericService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.domain.*;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoBrandService;
-import org.yes.cart.utils.HQLUtils;
-import org.yes.cart.service.dto.AttrValueDTOComparator;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  ** User: Igor Azarny iazarny@yahoo.com
@@ -217,41 +215,41 @@ public class DtoBrandServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<BrandDTO> findBrands(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<BrandDTO> findBrands(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Brand> entities;
-        if (StringUtils.isNotBlank(name)) {
-            final String iName = HQLUtils.criteriaIlikeAnywhere(name);
-            entities = service.getGenericDao().findByNamedQuery(
-                    "BRAND.BY.GUID.NAME.DESCRIPTION.ORDBY.NAME",
-                    iName, iName, iName
-                    );
-        } else {
-            entities = service.findAll();
+        final Map<String, List> params = filter.reduceParameters("filter");
+        final List filterParam = params.get("filter");
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+            final String textFilter = (String) filterParam.get(0);
+
+            SearchContext.JoinMode.OR.setMode(currentFilter);
+            currentFilter.put("guid", Collections.singletonList(textFilter));
+            currentFilter.put("name", Collections.singletonList(textFilter));
+            currentFilter.put("description", Collections.singletonList(textFilter));
+
         }
-        final List<BrandDTO> dtos = new ArrayList<>(entities.size());
-        fillDTOs(entities, dtos);
-        return dtos;
 
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<BrandDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final BrandService brandService = (BrandService) service;
 
-        final String iFilter = HQLUtils.criteriaIlikeAnywhere(filter);
+        final int count = brandService.findBrandCount(currentFilter);
+        if (count > startIndex) {
 
-        final List<Brand> entities = service.getGenericDao().findRangeByNamedQuery(
-                "BRAND.BY.GUID.NAME.DESCRIPTION.ORDBY.NAME",
-                page * pageSize, pageSize,
-                iFilter, iFilter, iFilter);
+            final List<BrandDTO> entities = new ArrayList<>();
+            final List<Brand> brands = brandService.findBrands(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
 
-        final List<BrandDTO> dtos = new ArrayList<>(entities.size());
-        fillDTOs(entities, dtos);
-        return dtos;
+            fillDTOs(brands, entities);
 
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
     }
 
     /**

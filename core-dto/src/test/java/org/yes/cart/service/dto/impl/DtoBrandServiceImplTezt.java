@@ -22,8 +22,11 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.DtoServiceSpringKeys;
 import org.yes.cart.domain.dto.BrandDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.service.dto.DtoBrandService;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -47,15 +50,19 @@ public class DtoBrandServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testFindBy() throws Exception {
+    public void testFindBrand() throws Exception {
+
         // full name
-        List<BrandDTO> dto = dtoService.findBy("sony", 0, 10);
-        assertFalse(dto.isEmpty());
-        assertEquals("Sony", dto.get(0).getName());
+        final SearchContext filterSony = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("Sony")), 0, 10, "name", false, "filter");
+        SearchResult<BrandDTO> dto = dtoService.findBrands(filterSony);
+        assertFalse(dto.getItems().isEmpty());
+        assertEquals("Sony", dto.getItems().get(0).getName());
+
         // partial
-        dto = dtoService.findBy("future", 0, 10);
-        assertFalse(dto.isEmpty());
-        assertEquals("FutureRobots", dto.get(0).getName());
+        final SearchContext filterFuture = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("future")), 0, 10, "name", false, "filter");
+        dto = dtoService.findBrands(filterFuture);
+        assertFalse(dto.getItems().isEmpty());
+        assertEquals("FutureRobots", dto.getItems().get(0).getName());
     }
 
     @Test
@@ -82,14 +89,6 @@ public class DtoBrandServiceImplTezt extends BaseCoreDBTestCase {
     public void testGetAll() throws Exception {
         List<BrandDTO> list = dtoService.getAll();
         assertFalse(list.isEmpty());
-    }
-
-    @Test
-    public void testFindBrands() throws Exception {
-
-        List<BrandDTO> list = dtoService.findBrands("Robo");
-        assertFalse(list.isEmpty());
-
     }
 
     @Test

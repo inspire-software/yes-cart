@@ -18,6 +18,10 @@ package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.Brand;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -42,5 +46,34 @@ public interface BrandService extends GenericService<Brand> {
      * @return brand with attributes (or null if not found)
      */
     Brand findByNameOrGuid(String nameOrGuid);
+
+
+    /**
+     * Find brands by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of brands.
+     */
+    List<Brand> findBrands(int start,
+                           int offset,
+                           String sort,
+                           boolean sortDescending,
+                           Map<String, List> filter);
+
+    /**
+     * Find brands by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findBrandCount(Map<String, List> filter);
+
+
 
 }

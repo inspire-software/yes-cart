@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { BrandVO, AttrValueBrandVO, ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, BasicCategoryVO, CategoryVO, AttrValueCategoryVO, Pair } from '../model/index';
+import { BrandVO, AttrValueBrandVO, ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, BasicCategoryVO, CategoryVO, AttrValueCategoryVO, Pair, SearchContextVO, SearchResultVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -45,13 +45,13 @@ export class CatalogService {
    * Get list of all brands, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredBrands(filter:string, max:number) {
+  getFilteredBrands(filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/brand/filtered/' + max, body,
-            Util.requestOptions({ type:'text/plain; charset=utf-8' }))
-        .map(res => <BrandVO[]> this.json(res))
+    return this.http.post(this._serviceBaseUrl + '/brand/filtered', body,
+            Util.requestOptions())
+        .map(res => <SearchResultVO<BrandVO>> this.json(res))
         .catch(this.handleError);
   }
 

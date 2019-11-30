@@ -21,8 +21,12 @@ import org.yes.cart.domain.dto.AttrValueBrandDTO;
 import org.yes.cart.domain.dto.BrandDTO;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.VoAttrValueBrand;
 import org.yes.cart.domain.vo.VoBrand;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoBrandService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -97,16 +101,31 @@ public class VoBrandServiceImpl implements VoBrandService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoBrand> getFilteredBrands(final String filter, final int max) throws Exception {
+    public VoSearchResult<VoBrand> getFilteredBrands(final VoSearchContext filter) throws Exception {
 
+        final VoSearchResult<VoBrand> result = new VoSearchResult<>();
         final List<VoBrand> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        final List<BrandDTO> batch = dtoBrandService.findBy(filter, 0, max);
-        if (!batch.isEmpty()) {
-            results.addAll(voAssemblySupport.assembleVos(VoBrand.class, BrandDTO.class, batch));
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                Math.min(filter.getSize(), 100),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter"
+        );
+
+
+        final SearchResult<BrandDTO> batch = dtoBrandService.findBrands(searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoBrand.class, BrandDTO.class, batch.getItems()));
         }
 
-        return results;
+        result.setTotal(batch.getTotal());
+
+        return result;
 
     }
 

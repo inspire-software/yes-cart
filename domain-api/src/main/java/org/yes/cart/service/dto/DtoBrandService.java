@@ -17,10 +17,10 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.BrandDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-
-import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -30,25 +30,13 @@ import java.util.List;
 public interface DtoBrandService extends GenericDTOService<BrandDTO>, GenericAttrValueService {
 
     /**
-     * Find brands by name.
-     *
-     * @param name brand name for partial match.
-     *
-     * @return list of brands
-     */
-    List<BrandDTO> findBrands(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-
-    /**
      * Find brands by filter.
      *
-     * @param filter filter for partial match.
-     * @param page page number starting from 0
-     * @param pageSize size of page
+     * @param filter filter
      *
      * @return list of brands
      */
-    List<BrandDTO> findBy(String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<BrandDTO> findBrands(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
 }

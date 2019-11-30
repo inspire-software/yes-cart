@@ -49,7 +49,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param shops             optional shops to search in
      * @param filter            optional filters (e.g. firstname, lastname)
      *
-     * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
+     * @return list of orders, that match search criteria or empty list if nobody found or null if no search criteria provided.
      */
     List<CustomerOrder> findOrders(int start,
                                    int offset,

@@ -56,8 +56,8 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoBrand> getFilteredBrands(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voBrandService.getFilteredBrands(filter, max);
+    VoSearchResult<VoBrand> getFilteredBrands(@RequestBody final VoSearchContext filter) throws Exception {
+        return voBrandService.getFilteredBrands(filter);
     }
 
     @Override

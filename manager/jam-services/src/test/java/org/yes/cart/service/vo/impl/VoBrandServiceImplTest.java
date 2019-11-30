@@ -21,6 +21,8 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttrValueBrand;
 import org.yes.cart.domain.vo.VoBrand;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.service.vo.VoBrandService;
 
 import java.util.Collections;
@@ -46,15 +48,20 @@ public class VoBrandServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetBrands() throws Exception {
 
-        List<VoBrand> brandNoFilter = voBrandService.getFilteredBrands(null, 10);
+        VoSearchContext ctxNoFilter = new VoSearchContext();
+        ctxNoFilter.setSize(10);
+        VoSearchResult<VoBrand> brandNoFilter = voBrandService.getFilteredBrands(ctxNoFilter);
         assertNotNull(brandNoFilter);
-        assertFalse(brandNoFilter.isEmpty());
+        assertFalse(brandNoFilter.getItems().isEmpty());
 
-        List<VoBrand> brandFind = voBrandService.getFilteredBrands("FutureRobots", 10);
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("FutureRobots")));
+        ctxFind.setSize(10);
+        VoSearchResult<VoBrand> brandFind = voBrandService.getFilteredBrands(ctxFind);
         assertNotNull(brandFind);
-        assertFalse(brandFind.isEmpty());
+        assertFalse(brandFind.getItems().isEmpty());
 
-        final VoBrand c101 = brandFind.get(0);
+        final VoBrand c101 = brandFind.getItems().get(0);
         assertEquals(101L, c101.getBrandId());
         assertEquals("FutureRobots", c101.getName());
 
@@ -78,7 +85,11 @@ public class VoBrandServiceImplTest extends BaseCoreDBTestCase {
         final VoBrand updated = voBrandService.updateBrand(created);
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
-        assertFalse(voBrandService.getFilteredBrands("TEST CRUD UPDATE", 10).isEmpty());
+        VoSearchContext ctx = new VoSearchContext();
+        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setSize(10);
+
+        assertTrue(voBrandService.getFilteredBrands(ctx).getTotal() > 0);
 
         final List<VoAttrValueBrand> attributes = voBrandService.getBrandAttributes(updated.getBrandId());
         assertNotNull(attributes);
@@ -106,7 +117,7 @@ public class VoBrandServiceImplTest extends BaseCoreDBTestCase {
 
         voBrandService.removeBrand(updated.getBrandId());
 
-        assertTrue(voBrandService.getFilteredBrands("TEST CRUD UPDATE", 10).isEmpty());
+        assertTrue(voBrandService.getFilteredBrands(ctx).getTotal() == 0);
 
     }
 }

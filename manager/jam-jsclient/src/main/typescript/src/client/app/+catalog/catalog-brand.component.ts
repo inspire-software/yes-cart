@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CatalogService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { BrandVO, AttrValueBrandVO, Pair } from './../shared/model/index';
+import { BrandVO, AttrValueBrandVO, Pair, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -35,15 +35,12 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
   private forceShowAll:boolean = false;
   private viewMode:string = CatalogBrandComponent.BRANDS;
 
-  private brands:Array<BrandVO> = [];
+  private brands:SearchResultVO<BrandVO>;
   private brandFilter:string;
   private brandFilterRequired:boolean = true;
-  private brandFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedBrand:BrandVO;
 
@@ -63,10 +60,28 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
 
   constructor(private _brandService:CatalogService) {
     LogUtil.debug('CatalogBrandComponent constructed');
+    this.brands = this.newSearchResultInstance();
   }
 
   newBrandInstance():BrandVO {
     return { brandId: 0, name: '', description: null};
+  }
+
+  newSearchResultInstance():SearchResultVO<BrandVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: [],
+          statuses: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    };
   }
 
   ngOnInit() {
@@ -85,9 +100,8 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
 
 
   protected onFilterChange(event:any) {
-
+    this.brands.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
@@ -95,6 +109,24 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
     if (UserEventBus.getUserEventBus().current() != null) {
       this.getFilteredBrands();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('CatalogBrandComponent onPageSelected', page);
+    this.brands.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('CatalogBrandComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.brands.searchContext.sortBy = null;
+      this.brands.searchContext.sortDesc = false;
+    } else {
+      this.brands.searchContext.sortBy = sort.first;
+      this.brands.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onBrandSelected(data:BrandVO) {
@@ -257,8 +289,11 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
 
     if (!this.brandFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      let _sub:any = this._brandService.getFilteredBrands(this.brandFilter, max).subscribe( allbrands => {
+
+      this.brands.searchContext.parameters.filter = [ this.brandFilter ];
+      this.brands.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._brandService.getFilteredBrands(this.brands.searchContext).subscribe( allbrands => {
         LogUtil.debug('CatalogBrandComponent getFilteredBrands', allbrands);
         this.brands = allbrands;
         this.selectedBrand = null;
@@ -266,19 +301,17 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
         this.viewMode = CatalogBrandComponent.BRANDS;
         this.changed = false;
         this.validForSave = false;
-        this.brandFilterCapped = this.brands.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.brands = [];
+      this.brands = this.newSearchResultInstance();
       this.selectedBrand = null;
       this.brandEdit = null;
       this.brandEditAttributes = null;
       this.viewMode = CatalogBrandComponent.BRANDS;
       this.changed = false;
       this.validForSave = false;
-      this.brandFilterCapped = false;
     }
   }
 

@@ -17,7 +17,10 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.*;
+import org.yes.cart.domain.vo.VoAttrValueBrand;
+import org.yes.cart.domain.vo.VoBrand;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 
 import java.util.List;
 
@@ -33,7 +36,7 @@ public interface VoBrandService {
      *
      * @throws Exception errors
      */
-    List<VoBrand> getFilteredBrands(String filter, int max) throws Exception;
+    VoSearchResult<VoBrand> getFilteredBrands(VoSearchContext filter) throws Exception;
 
     /**
      * Get brand by id.
