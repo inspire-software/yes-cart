@@ -59,6 +59,7 @@ import org.yes.cart.utils.impl.ZipUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -325,7 +326,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     protected void moveImportFilesToArchive(final Set<String> importedFiles) {
         if (!importedFiles.isEmpty()) {
             final String fullPathToArchiveFolder = pathToArchiveDirectory;
-            File dir = new File(fullPathToArchiveFolder + File.separator + DateUtils.impexFileTimestamp() + File.separator);
+            final LocalDateTime now = LocalDateTime.now();
+            File dir = new File(fullPathToArchiveFolder + File.separator + DateUtils.format(now, "yyyy-MM-dd") + File.separator + DateUtils.impexFileTimestamp() + File.separator);
             dir.mkdirs();
 
             String tempRoot = null;
