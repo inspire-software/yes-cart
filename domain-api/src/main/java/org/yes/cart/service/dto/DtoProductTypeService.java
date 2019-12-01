@@ -18,6 +18,8 @@ package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -40,15 +42,13 @@ public interface DtoProductTypeService extends GenericDTOService<ProductTypeDTO>
     List<ProductTypeDTO> findProductTypes(String name)  throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Find product types by name.
+     * Find product types by filter.
      *
-     * @param name product type name for partial match.
-     * @param page page number starting from 0
-     * @param pageSize size of page
+     * @param filter filter
      *
      * @return list of types
      */
-    List<ProductTypeDTO> findBy(String name, int page, int pageSize)  throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<ProductTypeDTO> findProductTypes(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**

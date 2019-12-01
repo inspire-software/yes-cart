@@ -75,9 +75,9 @@ public interface CatalogEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCATALOGADMIN","ROLE_SMCATALOGUSER","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
-    @RequestMapping(value = "/producttypes/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/producttypes/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoProductTypeInfo> getFilteredProductTypes(@RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
+    VoSearchResult<VoProductTypeInfo> getFilteredProductTypes(@RequestBody VoSearchContext filter) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCATALOGADMIN","ROLE_SMCATALOGUSER","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
     @RequestMapping(value = "/producttype/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

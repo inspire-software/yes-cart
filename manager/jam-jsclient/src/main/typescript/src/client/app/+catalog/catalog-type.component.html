@@ -71,11 +71,7 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <div *ngIf="typeFilterCapped">
-      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-    </div>
-
-    <yc-product-types [productTypes]="types" (dataSelected)="onTypeSelected($event)"></yc-product-types>
+    <yc-product-types [productTypes]="types" (dataSelected)="onTypeSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-product-types>
   </div>
 
   <div [hidden]="viewMode !== 'type'" class="{{ loading ? 'loading-data' : '' }}">

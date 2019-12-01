@@ -129,13 +129,13 @@ export class CatalogService {
    * Get list of all product types, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredProductTypes(filter:string, max:number) {
+  getFilteredProductTypes(filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/producttypes/filtered/' + max, body,
-        Util.requestOptions({ type:'text/plain; charset=utf-8' }))
-      .map(res => <ProductTypeInfoVO[]> this.json(res))
+    return this.http.post(this._serviceBaseUrl + '/producttypes/filtered', body,
+        Util.requestOptions())
+      .map(res => <SearchResultVO<ProductTypeInfoVO>> this.json(res))
       .catch(this.handleError);
   }
 

@@ -17,9 +17,7 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoProductType;
-import org.yes.cart.domain.vo.VoProductTypeAttr;
-import org.yes.cart.domain.vo.VoProductTypeInfo;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -33,11 +31,11 @@ public interface VoProductTypeService {
     /**
      * Get all types in the system, filtered by criteria and according to rights, up to max
      *
-     * @return list of categories
+     * @return list of types
      *
      * @throws Exception errors
      */
-    List<VoProductTypeInfo> getFilteredTypes(String filter, int max) throws Exception;
+    VoSearchResult<VoProductTypeInfo> getFilteredTypes(VoSearchContext filter) throws Exception;
 
     /**
      * Get type by id.

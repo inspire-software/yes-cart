@@ -17,12 +17,15 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductTypeDTOImpl;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
@@ -30,9 +33,7 @@ import org.yes.cart.service.domain.ProductTypeService;
 import org.yes.cart.service.dto.DtoProductTypeService;
 import org.yes.cart.utils.HQLUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -118,45 +119,73 @@ public class DtoProductTypeServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<ProductTypeDTO> findBy(final String name, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<ProductTypeDTO> findProductTypes(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<ProductType> entities;
+        final Map<String, List> params = filter.reduceParameters("filter");
+        final List filterParam = params.get("filter");
 
-        if (StringUtils.isNotBlank(name)) {
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
 
-            final Pair<String, String> exactOrCode = ComplexSearchUtils.checkSpecialSearch(name, EXACT_OR_CODE);
+        final Map<String, List> currentFilter = new HashMap<>();
+
+        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+            final String textFilter = (String) filterParam.get(0);
+
+            final Pair<String, String> exactOrCode = ComplexSearchUtils.checkSpecialSearch(textFilter, EXACT_OR_CODE);
 
             if (exactOrCode != null) {
 
                 if ("!".equals(exactOrCode.getFirst())) {
 
-                    entities = service.getGenericDao().findRangeByCriteria(
-                            " where lower(e.guid) like ?1 or lower(e.name) like ?1 order by e.name",
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIeq(exactOrCode.getSecond())
-                    );
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("guid", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(exactOrCode.getSecond())));
+                    currentFilter.put("name", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(exactOrCode.getSecond())));
 
                 } else {
 
-                    return findByAttributeCode(exactOrCode.getSecond());
+                    final List<ProductTypeDTO> typesByCode = findByAttributeCode(exactOrCode.getSecond());
+                    final List<ProductTypeDTO> typesByCodePage;
+                    if (startIndex > typesByCode.size()) {
+                        typesByCodePage = Collections.emptyList();
+                    } else if (startIndex + pageSize < typesByCode.size()) {
+                        typesByCodePage = typesByCode.subList(startIndex, startIndex + pageSize);
+                    } else {
+                        typesByCodePage = typesByCode.subList(startIndex, typesByCode.size());
+                    }
+
+                    return new SearchResult<>(filter, typesByCodePage, typesByCode.size());
 
                 }
 
             } else {
 
-                entities = service.getGenericDao().findRangeByCriteria(
-                        " where lower(e.guid) like ?1 or lower(e.name) like ?1 or lower(e.description) like ?1 order by e.name",
-                        page * pageSize, pageSize,
-                        HQLUtils.criteriaIlikeAnywhere(name)
-                );
+                final String basic = textFilter;
+
+                SearchContext.JoinMode.OR.setMode(currentFilter);
+                currentFilter.put("guid", Collections.singletonList(basic));
+                currentFilter.put("name", Collections.singletonList(basic));
+                currentFilter.put("description", Collections.singletonList(basic));
 
             }
-        } else {
-            entities = service.getGenericDao().findRangeByCriteria(" order by e.name", page * pageSize, pageSize);
+
         }
-        final List<ProductTypeDTO> dtos = new ArrayList<>(entities.size());
-        fillDTOs(entities, dtos);
-        return dtos;
+
+        final ProductTypeService productTypeService = (ProductTypeService) service;
+
+        final int count = productTypeService.findProductTypeCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<ProductTypeDTO> entities = new ArrayList<>();
+            final List<ProductType> productTypes = productTypeService.findProductTypes(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(productTypes, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
 
     }
 

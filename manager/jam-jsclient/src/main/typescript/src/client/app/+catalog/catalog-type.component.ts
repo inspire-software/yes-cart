@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CatalogService, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, Pair } from './../shared/model/index';
+import { ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, Pair, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -36,15 +36,12 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   private forceShowAll:boolean = false;
   private viewMode:string = CatalogTypeComponent.TYPES;
 
-  private types:Array<ProductTypeInfoVO> = [];
+  private types:SearchResultVO<ProductTypeInfoVO>;
   private typeFilter:string;
   private typeFilterRequired:boolean = true;
-  private typeFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedType:ProductTypeInfoVO;
 
@@ -64,10 +61,28 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
   constructor(private _typeService:CatalogService) {
     LogUtil.debug('CatalogTypeComponent constructed');
+    this.types = this.newSearchResultInstance();
   }
 
   newTypeInstance():ProductTypeVO {
     return { producttypeId: 0, guid: null, name: '', displayNames: [], description: null, uitemplate: null, uisearchtemplate: null, service: false, ensemble: false, shippable: true, downloadable: false, digital:false, viewGroups: [] };
+  }
+
+  newSearchResultInstance():SearchResultVO<ProductTypeInfoVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: [],
+          statuses: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    };
   }
 
   ngOnInit() {
@@ -86,9 +101,8 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
 
   protected onFilterChange(event:any) {
-
+    this.types.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
@@ -96,6 +110,24 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
     if (UserEventBus.getUserEventBus().current() != null) {
       this.getFilteredTypes();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('CatalogTypeComponent onPageSelected', page);
+    this.types.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('CatalogTypeComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.types.searchContext.sortBy = null;
+      this.types.searchContext.sortDesc = false;
+    } else {
+      this.types.searchContext.sortBy = sort.first;
+      this.types.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onTypeSelected(data:ProductTypeInfoVO) {
@@ -280,8 +312,11 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
     if (!this.typeFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      let _sub:any = this._typeService.getFilteredProductTypes(this.typeFilter, max).subscribe( alltypes => {
+
+      this.types.searchContext.parameters.filter = [ this.typeFilter ];
+      this.types.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._typeService.getFilteredProductTypes(this.types.searchContext).subscribe( alltypes => {
         LogUtil.debug('CatalogTypeComponent getFilteredTypes', alltypes);
         this.types = alltypes;
         this.selectedType = null;
@@ -289,21 +324,18 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
         this.viewMode = CatalogTypeComponent.TYPES;
         this.changed = false;
         this.validForSave = false;
-        this.typeFilterCapped = this.types.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.types = [];
+      this.types = this.newSearchResultInstance();
       this.selectedType = null;
       this.typeEdit = null;
       this.typeEditAttributes = null;
       this.viewMode = CatalogTypeComponent.TYPES;
       this.changed = false;
       this.validForSave = false;
-      this.typeFilterCapped = false;
     }
   }
-
 
 }

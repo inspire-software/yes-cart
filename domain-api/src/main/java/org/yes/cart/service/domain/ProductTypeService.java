@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProductType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -43,5 +44,34 @@ public interface ProductTypeService extends GenericService<ProductType> {
      * @return list of product types
      */
     List<ProductType> findAllAssignedToCategories();
+
+
+    /**
+     * Find product type by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of brands.
+     */
+    List<ProductType> findProductTypes(int start,
+                                       int offset,
+                                       String sort,
+                                       boolean sortDescending,
+                                       Map<String, List> filter);
+
+    /**
+     * Find product type by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findProductTypeCount(Map<String, List> filter);
+
+
 
 }

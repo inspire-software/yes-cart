@@ -47,27 +47,44 @@ public class VoProductTypeServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetProductTypes() throws Exception {
 
-        List<VoProductTypeInfo> ptNoFilter = voProductTypeService.getFilteredTypes(null, 10);
+        VoSearchContext ctx;
+
+        ctx = new VoSearchContext();
+        ctx.setStart(0);
+        ctx.setSize(10);
+        VoSearchResult<VoProductTypeInfo> ptNoFilter = voProductTypeService.getFilteredTypes(ctx);
         assertNotNull(ptNoFilter);
-        assertFalse(ptNoFilter.isEmpty());
+        assertFalse(ptNoFilter.getItems().isEmpty());
 
-        List<VoProductTypeInfo> ptFind = voProductTypeService.getFilteredTypes("Laser", 10);
+        ctx = new VoSearchContext();
+        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("Laser")));
+        ctx.setStart(0);
+        ctx.setSize(10);
+        VoSearchResult<VoProductTypeInfo> ptFind = voProductTypeService.getFilteredTypes(ctx);
         assertNotNull(ptFind);
-        assertFalse(ptFind.isEmpty());
+        assertFalse(ptFind.getItems().isEmpty());
 
-        final VoProductTypeInfo pt6 = ptFind.get(0);
+        final VoProductTypeInfo pt6 = ptFind.getItems().get(0);
         assertEquals("6", pt6.getGuid());
         assertEquals("Blaster", pt6.getName());
 
-        List<VoProductTypeInfo> ptExact = voProductTypeService.getFilteredTypes("!MP3 Player", 10);
+        ctx = new VoSearchContext();
+        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("!MP3 Player")));
+        ctx.setStart(0);
+        ctx.setSize(10);
+        VoSearchResult<VoProductTypeInfo> ptExact = voProductTypeService.getFilteredTypes(ctx);
         assertNotNull(ptExact);
-        assertEquals(1, ptExact.size());
-        assertEquals("2", ptExact.get(0).getGuid());
+        assertEquals(1, ptExact.getTotal());
+        assertEquals("2", ptExact.getItems().get(0).getGuid());
 
-        List<VoProductTypeInfo> ptByAttrCode = voProductTypeService.getFilteredTypes("#POWERSUPPLY", 10);
+        ctx = new VoSearchContext();
+        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("#POWERSUPPLY")));
+        ctx.setStart(0);
+        ctx.setSize(10);
+        VoSearchResult<VoProductTypeInfo> ptByAttrCode = voProductTypeService.getFilteredTypes(ctx);
         assertNotNull(ptByAttrCode);
-        assertFalse(ptByAttrCode.isEmpty());
-        assertTrue(ptByAttrCode.stream().allMatch(pt -> Arrays.asList("6").contains(pt.getGuid())));
+        assertFalse(ptByAttrCode.getItems().isEmpty());
+        assertTrue(ptByAttrCode.getItems().stream().allMatch(pt -> "6".equals(pt.getGuid())));
 
     }
 
@@ -99,7 +116,11 @@ public class VoProductTypeServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(afterCreated.getViewGroups());
         assertEquals(1, afterCreated.getViewGroups().size());
 
-        assertFalse(voProductTypeService.getFilteredTypes("!TEST CRUD UPDATE", 10).isEmpty());
+        VoSearchContext ctx = new VoSearchContext();
+        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("!TEST CRUD UPDATE")));
+        ctx.setSize(10);
+
+        assertTrue(voProductTypeService.getFilteredTypes(ctx).getTotal() > 0);
 
         final List<VoProductTypeAttr> attributesEmpty = voProductTypeService.getTypeAttributes(updated.getProducttypeId());
         assertNotNull(attributesEmpty);
@@ -138,7 +159,7 @@ public class VoProductTypeServiceImplTest extends BaseCoreDBTestCase {
 
         voProductTypeService.removeType(updated.getProducttypeId());
 
-        assertTrue(voProductTypeService.getFilteredTypes("!TEST CRUD UPDATE", 10).isEmpty());
+        assertFalse(voProductTypeService.getFilteredTypes(ctx).getTotal() > 0);
 
     }
 }
