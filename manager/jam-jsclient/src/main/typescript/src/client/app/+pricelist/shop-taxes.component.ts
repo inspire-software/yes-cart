@@ -17,8 +17,9 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../shared/validation/validators';
 import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/services/index';
+import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { TaxVO, ShopVO, TaxConfigVO } from './../shared/model/index';
+import { TaxVO, ShopVO, TaxConfigVO, PromotionTestVO, CartVO } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -33,20 +34,20 @@ import { CookieUtil } from './../shared/cookies/index';
 
 export class ShopTaxesComponent implements OnInit, OnDestroy {
 
-  private static TAXES:string = 'taxes';
-  private static CONFIGS:string = 'taxconfigs';
-
   private static COOKIE_SHOP:string = 'ADM_UI_TAX_SHOP';
   private static COOKIE_CURRENCY:string = 'ADM_UI_TAX_CURR';
 
   private static _selectedShop:ShopVO;
   private static _selectedCurrency:string;
 
-  private viewMode:string = ShopTaxesComponent.TAXES;
+  private static TAXES:string = 'taxes';
+  private static CONFIGS:string = 'taxconfigs';
+  private static PRICELIST_TEST:string = 'pricelisttest';
 
   private searchHelpTaxShow:boolean = false;
   private searchHelpTaxConfigShow:boolean = false;
   private forceShowAll:boolean = false;
+  private viewMode:string = ShopTaxesComponent.TAXES;
 
   private taxes:Array<TaxVO> = [];
   private taxesFilter:string;
@@ -90,9 +91,14 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   @ViewChild('selectCurrencyModalDialog')
   private selectCurrencyModalDialog:ModalComponent;
 
-  private loading:boolean = false;
+  @ViewChild('runTestModalDialog')
+  private runTestModalDialog:PromotionTestConfigComponent;
 
   private deleteValue:String;
+
+  private loading:boolean = false;
+
+  private testCart:CartVO;
 
   private userSub:any;
 
@@ -263,6 +269,28 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onTestRules() {
+    LogUtil.debug('ShopTaxesComponent onTestRules');
+    this.runTestModalDialog.showDialog();
+  }
+
+  onRunTestResult(event:PromotionTestVO) {
+    LogUtil.debug('ShopTaxesComponent onRunTestResult', event);
+    if (event != null) {
+      this.loading = true;
+      let _sub:any = this._taxService.testPromotions(this.selectedShop, this.selectedCurrency, event).subscribe(
+        cart => {
+          _sub.unsubscribe();
+          this.loading = false;
+          LogUtil.debug('ShopTaxesComponent onTestRules', cart);
+          this.viewMode = ShopTaxesComponent.PRICELIST_TEST;
+          this.testCart = cart;
+        }
+      );
+
+    }
+  }
+
   protected onTaxFilterChange(event:any) {
 
     this.delayedFilteringTax.delay();
@@ -427,7 +455,13 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
   protected onBackToList() {
     LogUtil.debug('ShopTaxesComponent onBackToList handler');
-    if (this.viewMode === ShopTaxesComponent.CONFIGS) {
+    if (this.viewMode === ShopTaxesComponent.PRICELIST_TEST) {
+      if (this.selectedTax != null) {
+        this.viewMode = ShopTaxesComponent.CONFIGS;
+      } else {
+        this.viewMode = ShopTaxesComponent.TAXES;
+      }
+    } else if (this.viewMode === ShopTaxesComponent.CONFIGS) {
       this.taxEdit = null;
       this.viewMode = ShopTaxesComponent.TAXES;
     }
