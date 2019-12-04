@@ -201,8 +201,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     }
                     addBoostField(document, "featured_boost", atLeastOneFeatured != null && atLeastOneFeatured ? 1.25d : 1.0d);
                     // Created timestamp is used to determine ranges
-                    addInstantField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
-                    addSortField(document, PRODUCT_CREATED_SORT_FIELD, entity.getCreatedTimestamp(), false);
+                    addInstantField(document, PRODUCT_CREATED_FIELD, result.getCreatedTimestamp(), false);
+                    addSortField(document, PRODUCT_CREATED_SORT_FIELD, result.getCreatedTimestamp(), false);
 
                     // Inventory flag
                     addInventoryFields(document, result, available, now);
@@ -848,6 +848,8 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                                         withFc = base.copy();
                                         withFc.setFulfilmentCentreCode(code);
+                                        withFc.setCreatedTimestamp(stock.getCreatedTimestamp());
+                                        withFc.setUpdatedTimestamp(stock.getUpdatedTimestamp());
                                         withFc.setBaseSkus(new HashMap<>());
                                         withFc.setSearchSkus(new ArrayList<>());
                                         if (sku.getTag() != null || stock.getTag() != null) {

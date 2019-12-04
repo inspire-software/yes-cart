@@ -147,8 +147,8 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                     addBoostField(document, "rank_boost", boost);
 
                     // Created timestamp is used to determine ranges
-                    addInstantField(document, PRODUCT_CREATED_FIELD, entity.getCreatedTimestamp(), false);
-                    addSortField(document, PRODUCT_CREATED_SORT_FIELD, entity.getCreatedTimestamp(), false);
+                    addInstantField(document, PRODUCT_CREATED_FIELD, result.getCreatedTimestamp(), false);
+                    addSortField(document, PRODUCT_CREATED_SORT_FIELD, result.getCreatedTimestamp(), false);
 
                     // Inventory flag
                     addInventoryFields(document, result, available, now);
@@ -622,6 +622,8 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
 
                                     withFc = base.copy();
                                     withFc.setFulfilmentCentreCode(code);
+                                    withFc.setCreatedTimestamp(stock.getCreatedTimestamp());
+                                    withFc.setUpdatedTimestamp(stock.getUpdatedTimestamp());
                                     if (stock.getTag() != null) {
                                         final Set<String> uniqueTags = new TreeSet<>();
                                         if (entity.getTag() != null) {
