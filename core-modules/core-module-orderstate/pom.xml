@@ -49,13 +49,6 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>payment-api</artifactId>
-            <version>${project.parent.version}</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
@@ -65,6 +58,14 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>persistence-core-hibernate</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>persistence-payment-hibernate</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
