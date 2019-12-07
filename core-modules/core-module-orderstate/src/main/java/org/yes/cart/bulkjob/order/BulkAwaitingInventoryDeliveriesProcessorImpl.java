@@ -43,7 +43,7 @@ import java.util.List;
  * pre oder and back order items and updates those deliveries if the inventory
  * is not available.
  *
- * Last time this job runs is stored in system preferences: JOB_DEL_WAITING_INV_LAST_RUN
+ * Last time this job runs is stored in system preferences: JOB_DELWAITINV_LR
  * So that next run we only scan inventory that has changed since last job run.
  *
  * User: denispavlov
