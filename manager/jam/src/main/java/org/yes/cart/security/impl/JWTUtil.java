@@ -56,6 +56,7 @@ final class JWTUtil {
     static final String TOKEN_HEADER = "Authorization";
     static final String COOKIE_HEADER = "X-Auth";
     static final String TOKEN_PREFIX = "Bearer ";
+    static final String TOKEN_PREFIX_ENCODED = "Bearer%20";
     static final String TOKEN_PREFIX_LOWER = TOKEN_PREFIX.toLowerCase();
     static final String TOKEN_TYPE = "JWT";
 
@@ -150,9 +151,10 @@ final class JWTUtil {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        final Cookie xAuth = new Cookie(JWTUtil.COOKIE_HEADER, JWTUtil.TOKEN_PREFIX + token);
+        final Cookie xAuth = new Cookie(JWTUtil.COOKIE_HEADER, JWTUtil.TOKEN_PREFIX_ENCODED + token);
         xAuth.setHttpOnly(true);
         xAuth.setMaxAge(-1);
+        xAuth.setVersion(1);
         response.addCookie(xAuth);
 
         final StringBuilder jsonRsp = new StringBuilder();
@@ -179,6 +181,7 @@ final class JWTUtil {
 
         final Cookie xAuth = new Cookie(JWTUtil.COOKIE_HEADER, "");
         xAuth.setMaxAge(0);
+        xAuth.setVersion(1);
         response.addCookie(xAuth);
 
         final StringBuilder error = new StringBuilder();
@@ -202,6 +205,7 @@ final class JWTUtil {
 
         final Cookie xAuth = new Cookie(JWTUtil.COOKIE_HEADER, "");
         xAuth.setMaxAge(0);
+        xAuth.setVersion(1);
         response.addCookie(xAuth);
 
         response.getWriter().write("{\"token\": null }");
@@ -223,7 +227,7 @@ final class JWTUtil {
                                         final String secret,
                                         final HttpServletRequest request) {
 
-        final String token = value.substring(JWTUtil.TOKEN_PREFIX.length());
+        final String token = value.startsWith(JWTUtil.TOKEN_PREFIX) ? value.substring(JWTUtil.TOKEN_PREFIX.length()) :  value.substring(JWTUtil.TOKEN_PREFIX_ENCODED.length());
 
         try {
             return Jwts.parser().setSigningKey(secret.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token);

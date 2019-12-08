@@ -29,6 +29,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -195,11 +197,15 @@ public class CookieTuplizerImpl extends AbstractCryptedTuplizerImpl implements C
     }
 
     private Cookie createNewCookie(final String name, final String value, final int maxAgeInSeconds, final String path) {
-        final Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(maxAgeInSeconds);
-        cookie.setPath(path);
-        cookie.setVersion(1); // allow to have base64 encoded value in cookie
-        return cookie;
+        try {
+            final Cookie cookie = new Cookie(name, URLEncoder.encode(value, "UTF-8"));
+            cookie.setMaxAge(maxAgeInSeconds);
+            cookie.setPath(path);
+            cookie.setVersion(1); // allow to have base64 encoded value in cookie
+            return cookie;
+        } catch (UnsupportedEncodingException uee) {
+            throw new IllegalArgumentException(uee);
+        }
     }
 
     /**

@@ -869,6 +869,14 @@ public class HttpUtilTest {
 
     }
 
+    @Test
+    public void testEncodeUtf8_RFC6265() throws Exception {
+
+        assertEquals("Bearer%20XYZ", HttpUtil.encodeUtf8UriParam("Bearer XYZ"));
+        assertEquals("Bearer%20XYZ%3A%22%2C%3B%5C", HttpUtil.encodeUtf8UriParam("Bearer XYZ:\",;\\"));
+        assertEquals("Bearer%20WFla", HttpUtil.encodeUtf8UriParam("Bearer " + Base64.getEncoder().encodeToString("XYZ".getBytes())));
+
+    }
 
     @Test
     public void testEscapeForHTML() throws Exception {
