@@ -53,7 +53,7 @@
             </props>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor">
+            <bean class="org.yes.cart.payment.interceptor.AuditInterceptor">
                 <property name="prohibitedFields" ref="ycpProhibitedFields"/>
             </bean>
         </property>

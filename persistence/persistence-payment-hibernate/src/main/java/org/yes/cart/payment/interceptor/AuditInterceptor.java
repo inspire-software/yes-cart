@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.payment.persistence.service.impl;
+package org.yes.cart.payment.interceptor;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EmptyInterceptor;
