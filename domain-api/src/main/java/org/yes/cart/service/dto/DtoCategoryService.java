@@ -18,6 +18,8 @@ package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.ShopCategoryDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -34,16 +36,13 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
      * Get categories by criteria.
      *
      * @param filter filter
-     * @param page page number starting from 0
-     * @param pageSize size of page
      *
      * @return list of matching categories
      *
      * @throws UnmappedInterfaceException error
      * @throws UnableToCreateInstanceException error
      */
-    List<CategoryDTO> findBy(String filter, int page, int pageSize)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<CategoryDTO> findCategories(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get all assigned to shop categories.

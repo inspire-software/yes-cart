@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.TimeContext;
@@ -224,53 +225,80 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }
 
 
+    private Pair<String, Object[]> findCategoryQuery(final boolean count,
+                                                     final String sort,
+                                                     final boolean sortDescending,
+                                                     final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(c) from CategoryEntity c ");
+        } else {
+            hqlCriteria.append("select c from CategoryEntity c ");
+        }
+
+        final List categoryIds = currentFilter != null ? currentFilter.remove("categoryIds") : null;
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
+
+        if (categoryIds != null) {
+            if (params.size() > 0) {
+                hqlCriteria.append(" and (c.categoryId in (?").append(params.size() + 1).append(")) ");
+            } else {
+                hqlCriteria.append(" where (c.categoryId in (?1)) ");
+            }
+            params.add(categoryIds);
+        }
+
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by c." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Category> findBy(final String code, final String name, final String uri, final int page, final int pageSize) {
+    public List<Category> findCategories(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
 
-        final String codeP = HQLUtils.criteriaIlikeAnywhere(code);
-        final String nameP = HQLUtils.criteriaIlikeAnywhere(name);
-        final String uriP = HQLUtils.criteriaIlikeAnywhere(uri);
+        final Pair<String, Object[]> query = findCategoryQuery(false, sort, sortDescending, filter);
 
-        final Category root = proxy().getRootCategory();
-        List<Category> cats;
-        if ((codeP != null || nameP != null) && uriP != null) {
-            cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
-        } else if (codeP == null && nameP == null && uriP != null) {
-            cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.URI", page * pageSize, pageSize, uriP);
-        } else {
-            cats = getGenericDao().findRangeByCriteria(null, page * pageSize, pageSize);
-        }
-
-        final Iterator<Category> catsIt = cats.iterator();
-        while (catsIt.hasNext()) {
-            Category category = catsIt.next();
-            if (category.isRoot()) {
-                catsIt.remove();
-            } else {
-                final long currentCatId = category.getCategoryId();
-                while (category.getParentId() != root.getCategoryId()) {
-                    if (category.isRoot()) {
-                        // if this is root and not category root matches then this is content
-                        catsIt.remove();
-                        break;
-                    }
-                    category = proxy().findById(category.getParentId());
-                    if (category == null) {
-                        // could have happened if import created some reassignments and we loose path to root
-                        catsIt.remove();
-                        LOG.warn("Found orphan category {}", currentCatId);
-                        break;
-                    }
-                }
-            }
-        }
-        return cats;
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCategoryCount(final Map<String, List> filter) {
 
+        final Pair<String, Object[]> query = findCategoryQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
+    }
 
     /**
      * {@inheritDoc}

@@ -19,6 +19,8 @@ package org.yes.cart.service.vo;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttrValueCategory;
 import org.yes.cart.domain.vo.VoCategory;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 
 import java.util.List;
 
@@ -75,7 +77,7 @@ public interface VoCategoryService {
      *
      * @throws Exception errors
      */
-    List<VoCategory> getFilteredCategories(String filter, int max) throws Exception;
+    VoSearchResult<VoCategory> getFilteredCategories(VoSearchContext filter) throws Exception;
 
     /**
      * Get category by id.

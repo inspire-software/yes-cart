@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.Constants;
@@ -30,12 +31,14 @@ import org.yes.cart.domain.dto.impl.CategoryDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCategoryService;
-import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.util.*;
 
@@ -314,49 +317,45 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<CategoryDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<CategoryDTO> findCategories(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        CategoryService categoryService = (CategoryService) service;
+        final Map<String, List> params = filter.reduceParameters("filter", "categoryIds");
+        final List filterParam = params.get("filter");
+        final List categoriesParam = params.get("categoryIds");
 
-        final List<CategoryDTO> categoriesDTO = new ArrayList<>(pageSize);
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
 
-        if (StringUtils.isNotBlank(filter)) {
-            final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
+        final CategoryService categoryService = (CategoryService) service;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+            final String textFilter = (String) filterParam.get(0);
+
+            final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(textFilter, PARENT_OR_URI);
 
             if (parentOrUri == null) {
 
-                fillDTOs(categoryService.findBy(filter, filter, filter, page, pageSize), categoriesDTO);
+                SearchContext.JoinMode.OR.setMode(currentFilter);
+                currentFilter.put("guid", Collections.singletonList(textFilter));
+                currentFilter.put("name", Collections.singletonList(textFilter));
+                currentFilter.put("seoInternal.uri", Collections.singletonList(textFilter));
 
             } else {
 
                 if ("@".equals(parentOrUri.getFirst())) {
 
-                    fillDTOs(categoryService.findBy(null, null, parentOrUri.getSecond(), page, pageSize), categoriesDTO);
+                    currentFilter.put("seoInternal.uri", Collections.singletonList(parentOrUri.getSecond()));
 
                 } else if ("^".equals(parentOrUri.getFirst())) {
 
-                    final List<Category> parents = categoryService.findBy(parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
+                    final Long parentCatId = categoryService.findCategoryIdByGUID(parentOrUri.getSecond());
+                    if (parentCatId != null) {
 
-                    if (!parents.isEmpty()) {
-
-                        final Set<Long> dedup = new HashSet<>();
-                        final List<Category> parentsWithChildren = new ArrayList<>();
-                        for (final Category parent : parents) {
-
-                            if (!dedup.contains(parent.getCategoryId())) {
-                                parentsWithChildren.add(parent);
-                                dedup.add(parent.getCategoryId());
-                            }
-                            for (final Category child : categoryService.findChildCategoriesWithAvailability(parent.getCategoryId(), false)) {
-                                if (!dedup.contains(child.getCategoryId())) {
-                                    parentsWithChildren.add(child);
-                                    dedup.add(child.getCategoryId());
-                                }
-                            }
-
-                        }
-
-                        fillDTOs(parentsWithChildren, categoriesDTO);
+                        SearchContext.JoinMode.OR.setMode(currentFilter);
+                        currentFilter.put("categoryId", Collections.singletonList(parentCatId));
+                        currentFilter.put("parentId", Collections.singletonList(parentCatId));
 
                     }
 
@@ -364,15 +363,26 @@ public class DtoCategoryServiceImpl
 
             }
 
-        } else {
-
-            fillDTOs(categoryService.findBy( null, null, null, page, pageSize), categoriesDTO);
-
         }
 
-        return categoriesDTO;
-    }
+        // Filter by accessible categoryId
+        if (CollectionUtils.isNotEmpty(categoriesParam)) {
+            currentFilter.put("categoryIds", categoriesParam);
+        }
 
+        final int count = categoryService.findCategoryCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<CategoryDTO> entities = new ArrayList<>();
+            final List<Category> categories = categoryService.findCategories(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(categories, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
+    }
 
     /**
      * {@inheritDoc}

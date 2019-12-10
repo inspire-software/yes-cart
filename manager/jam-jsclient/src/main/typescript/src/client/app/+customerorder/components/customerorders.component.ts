@@ -126,7 +126,6 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
 
     if (this._customerorders != null) {
       this.filteredCustomerorders = this._customerorders.items != null ? this._customerorders.items : [];
-      this.totalItems = 0;
       this.maxSize = Config.UI_TABLE_PAGE_NUMS;
       this.itemsPerPage = this._customerorders.searchContext.size;
       this.totalItems = this._customerorders.total;
@@ -135,7 +134,6 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
       this.sortDesc = this._customerorders.searchContext.sortDesc;
     } else {
       this.filteredCustomerorders = [];
-      this.totalItems = 0;
       this.maxSize = Config.UI_TABLE_PAGE_NUMS;
       this.itemsPerPage = Config.UI_TABLE_PAGE_SIZE;
       this.totalItems = 0;

@@ -26,7 +26,7 @@
 
     <aop:aspectj-autoproxy/>
 
-    <bean name="uiFederationFacade" class="org.yes.cart.service.vo.impl.TestJamFederationFacadeImpl"/>
+    <bean name="uiFederationFacade" class="org.yes.cart.service.vo.impl.TestAdminFederationFacadeImpl"/>
     <bean name="shopFederationStrategy" class="org.yes.cart.service.vo.impl.TestShopFederationStrategyImpl"/>
 
     <import resource="persistence.xml"/>

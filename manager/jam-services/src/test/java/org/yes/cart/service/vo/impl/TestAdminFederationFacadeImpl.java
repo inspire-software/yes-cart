@@ -23,13 +23,15 @@ import java.util.*;
 /**
  * Created by iazarnyi on 1/20/16.
  */
-public class TestJamFederationFacadeImpl implements FederationFacade {
+public class TestAdminFederationFacadeImpl implements FederationFacade {
+
+  public static boolean IS_SYSADMIN = true;
 
   /**
    * {@inheritDoc}
    */
   public boolean isCurrentUserSystemAdmin() {
-    return true;
+    return IS_SYSADMIN;
   }
 
   /**

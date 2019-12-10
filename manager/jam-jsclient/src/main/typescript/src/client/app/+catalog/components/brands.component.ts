@@ -103,7 +103,6 @@ export class BrandsComponent implements OnInit, OnDestroy {
     if (this._brands != null) {
 
       this.filteredBrands = this._brands.items != null ? this._brands.items : [];
-      this.totalItems = 0;
       this.maxSize = Config.UI_TABLE_PAGE_NUMS;
       this.itemsPerPage = this._brands.searchContext.size;
       this.totalItems = this._brands.total;
@@ -112,7 +111,6 @@ export class BrandsComponent implements OnInit, OnDestroy {
       this.sortDesc = this._brands.searchContext.sortDesc;
     } else {
       this.filteredBrands = [];
-      this.totalItems = 0;
       this.maxSize = Config.UI_TABLE_PAGE_NUMS;
       this.itemsPerPage = Config.UI_TABLE_PAGE_SIZE;
       this.totalItems = 0;

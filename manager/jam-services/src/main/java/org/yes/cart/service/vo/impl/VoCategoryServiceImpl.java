@@ -23,9 +23,14 @@ import org.yes.cart.domain.dto.AttrValueCategoryDTO;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.VoAttrValueCategory;
 import org.yes.cart.domain.vo.VoCategory;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -43,6 +48,8 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     private final DtoCategoryService dtoCategoryService;
     private final DtoAttributeService dtoAttributeService;
 
+    private final ShopService shopService;
+
     private final FederationFacade federationFacade;
     private final VoAssemblySupport voAssemblySupport;
     private final VoIOSupport voIOSupport;
@@ -54,11 +61,13 @@ public class VoCategoryServiceImpl implements VoCategoryService {
 
     public VoCategoryServiceImpl(final DtoCategoryService dtoCategoryService,
                                  final DtoAttributeService dtoAttributeService,
+                                 final ShopService shopService,
                                  final FederationFacade federationFacade,
                                  final VoAssemblySupport voAssemblySupport,
                                  final VoIOSupport voIOSupport) {
         this.dtoCategoryService = dtoCategoryService;
         this.dtoAttributeService = dtoAttributeService;
+        this.shopService = shopService;
         this.federationFacade = federationFacade;
         this.voAssemblySupport = voAssemblySupport;
         this.voIOSupport = voIOSupport;
@@ -198,22 +207,43 @@ public class VoCategoryServiceImpl implements VoCategoryService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoCategory> getFilteredCategories(final String filter, final int max) throws Exception {
+    public VoSearchResult<VoCategory> getFilteredCategories(final VoSearchContext filter) throws Exception {
 
+        final VoSearchResult<VoCategory> result = new VoSearchResult<>();
         final List<VoCategory> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        int start = 0;
-        do {
-            final List<CategoryDTO> batch = dtoCategoryService.findBy(filter, start, max);
-            if (batch.isEmpty()) {
-                break;
+        final Map<String, List> params = new HashMap<>();
+        if (filter.getParameters() != null) {
+            params.putAll(filter.getParameters());
+        }
+        if (!federationFacade.isCurrentUserSystemAdmin()) {
+            final Set<Long> manageableShopIds = federationFacade.getAccessibleShopIdsByCurrentManager();
+            final Set<Long> manageableCategoryIds = new HashSet<>();
+            for (final Long shopId : manageableShopIds) {
+                manageableCategoryIds.addAll(shopService.getShopCategoriesIds(shopId));
             }
-            federationFacade.applyFederationFilter(batch, CategoryDTO.class);
-            results.addAll(voAssemblySupport.assembleVos(VoCategory.class, CategoryDTO.class, batch));
-            start++;
-        } while (results.size() < max && max != Integer.MAX_VALUE);
-        return results.size() > max ? results.subList(0, max) : results;
+            params.put("categoryIds", new ArrayList(manageableCategoryIds));
+        }
 
+        final SearchContext searchContext = new SearchContext(
+                params,
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "categoryIds"
+        );
+
+        final SearchResult<CategoryDTO> batch = dtoCategoryService.findCategories(searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoCategory.class, CategoryDTO.class, batch.getItems()));
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
     }
 
     /** {@inheritDoc} */

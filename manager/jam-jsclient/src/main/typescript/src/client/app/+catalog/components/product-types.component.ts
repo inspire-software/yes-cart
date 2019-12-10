@@ -124,7 +124,6 @@ export class ProductTypesComponent implements OnInit, OnDestroy {
     if (this._productTypes != null) {
 
       this.filteredProductTypes = this._productTypes.items != null ? this._productTypes.items : [];
-      this.totalItems = 0;
       this.maxSize = Config.UI_TABLE_PAGE_NUMS;
       this.itemsPerPage = this._productTypes.searchContext.size;
       this.totalItems = this._productTypes.total;
@@ -133,7 +132,6 @@ export class ProductTypesComponent implements OnInit, OnDestroy {
       this.sortDesc = this._productTypes.searchContext.sortDesc;
     } else {
       this.filteredProductTypes = [];
-      this.totalItems = 0;
       this.maxSize = Config.UI_TABLE_PAGE_NUMS;
       this.itemsPerPage = Config.UI_TABLE_PAGE_SIZE;
       this.totalItems = 0;

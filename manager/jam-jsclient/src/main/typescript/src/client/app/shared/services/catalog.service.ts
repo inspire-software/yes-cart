@@ -256,13 +256,13 @@ export class CatalogService {
    * Get list of all filtered categories, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredCategories(filter:string, max:number) {
+  getFilteredCategories(filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/category/filtered/' + max, body,
-        Util.requestOptions({ type:'text/plain; charset=utf-8' }))
-      .map(res => <CategoryVO[]> this.json(res))
+    return this.http.post(this._serviceBaseUrl + '/category/filtered', body,
+        Util.requestOptions())
+      .map(res => <SearchResultVO<CategoryVO>> this.json(res))
       .catch(this.handleError);
   }
 

@@ -17,7 +17,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CatalogService, UserEventBus, Util } from './../shared/services/index';
 import { CategoryMinSelectComponent } from './../shared/catalog/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { CategoryVO, AttrValueCategoryVO, Pair } from './../shared/model/index';
+import { CategoryVO, AttrValueCategoryVO, Pair, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -37,15 +37,12 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
   private forceShowAll:boolean = false;
   private viewMode:string = CatalogCategoryComponent.CATEGORIES;
 
-  private categories:Array<CategoryVO> = [];
+  private categories:SearchResultVO<CategoryVO>;
   private categoryFilter:string;
   private categoryFilterRequired:boolean = true;
-  private categoryFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedCategory:CategoryVO;
 
@@ -68,6 +65,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
 
   constructor(private _categoryService:CatalogService) {
     LogUtil.debug('CatalogCategoryComponent constructed');
+    this.categories = this.newSearchResultInstance();
   }
 
   newCategoryInstance():CategoryVO {
@@ -85,6 +83,23 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
     };
   }
 
+  newSearchResultInstance():SearchResultVO<CategoryVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: [],
+          statuses: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    };
+  }
+
   ngOnInit() {
     LogUtil.debug('CatalogCategoryComponent ngOnInit');
     this.onRefreshHandler();
@@ -92,6 +107,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
     this.delayedFiltering = Futures.perpetual(function() {
       that.getFilteredCategories();
     }, this.delayedFilteringMs);
+
   }
 
   ngOnDestroy() {
@@ -100,9 +116,8 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
 
 
   protected onFilterChange(event:any) {
-
+    this.categories.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
@@ -110,6 +125,24 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
     if (UserEventBus.getUserEventBus().current() != null) {
       this.getFilteredCategories();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('CatalogCategoryComponent onPageSelected', page);
+    this.categories.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('CatalogCategoryComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.categories.searchContext.sortBy = null;
+      this.categories.searchContext.sortDesc = false;
+    } else {
+      this.categories.searchContext.sortBy = sort.first;
+      this.categories.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onCategorySelected(data:CategoryVO) {
@@ -249,10 +282,12 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
 
               if (pk > 0 && this.categoryAttributesUpdate != null && this.categoryAttributesUpdate.length > 0) {
 
+                this.loading = true;
                 let _sub2:any = this._categoryService.saveCategoryAttributes(this.categoryAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogCategoryComponent category attributes updated', rez);
                   this.categoryAttributesUpdate = null;
+                  this.loading = false;
                   this.getFilteredCategories();
                 });
               } else {
@@ -314,8 +349,11 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
 
     if (!this.categoryFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      let _sub:any = this._categoryService.getFilteredCategories(this.categoryFilter, max).subscribe( allcategories => {
+
+      this.categories.searchContext.parameters.filter = [ this.categoryFilter ];
+      this.categories.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._categoryService.getFilteredCategories(this.categories.searchContext).subscribe( allcategories => {
         LogUtil.debug('CatalogCategoryComponent getFilteredCategories', allcategories);
         this.categories = allcategories;
         this.selectedCategory = null;
@@ -323,19 +361,17 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
         this.viewMode = CatalogCategoryComponent.CATEGORIES;
         this.changed = false;
         this.validForSave = false;
-        this.categoryFilterCapped = this.categories.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.categories = [];
+      this.categories = this.newSearchResultInstance();
       this.selectedCategory = null;
       this.categoryEdit = null;
       this.categoryEditAttributes = null;
       this.viewMode = CatalogCategoryComponent.CATEGORIES;
       this.changed = false;
       this.validForSave = false;
-      this.categoryFilterCapped = false;
     }
   }
 

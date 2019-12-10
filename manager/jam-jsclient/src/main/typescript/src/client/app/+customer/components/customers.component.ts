@@ -149,7 +149,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
     if (this._customers != null) {
 
       this.filteredCustomers = this._customers.items != null ? this._customers.items : [];
-      this.totalItems = 0;
       this.maxSize = Config.UI_TABLE_PAGE_NUMS;
       this.itemsPerPage = this._customers.searchContext.size;
       this.totalItems = this._customers.total;
@@ -158,7 +157,6 @@ export class CustomersComponent implements OnInit, OnDestroy {
       this.sortDesc = this._customers.searchContext.sortDesc;
     } else {
       this.filteredCustomers = [];
-      this.totalItems = 0;
       this.maxSize = Config.UI_TABLE_PAGE_NUMS;
       this.itemsPerPage = Config.UI_TABLE_PAGE_SIZE;
       this.totalItems = 0;

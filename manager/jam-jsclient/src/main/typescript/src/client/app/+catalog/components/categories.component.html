@@ -4,26 +4,24 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CODE' | translate }}</th>
-        <th>{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('guid')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'guid'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'CATEGORY_TEMPLATE' | translate }}</th>
         <th>{{ 'CATEGORY_NAV' | translate }}</th>
-        <th>{{ 'CATEGORY_FROM' | translate }}</th>
-        <th>{{ 'CATEGORY_TO' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('availablefrom')">{{ 'CATEGORY_FROM' | translate }} <span [hidden]="sortColumn != 'availablefrom'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('availableto')">{{ 'CATEGORY_TO' | translate }} <span [hidden]="sortColumn != 'availableto'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'CATEGORY_ENABLED' | translate }}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredCategories; let i = index" class="{{row == selectedCategory ? 'active' : ''}}">
-        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.guid}}</a></td>
-          <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><i class="fa fa-sitemap" title="{{row.parentName}}"></i> <a class="js-click" (click)="onSelectRow(row)">{{row.name}} ({{row.rank}})</a> <span [innerHTML]="getUri(row)"></span> <span [innerHTML]="getLink(row)"></span></td>
-          <td title="{{ 'CATEGORY_TEMPLATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.uitemplate}}</a>&nbsp;</td>
-          <td title="{{ 'CATEGORY_NAV' | translate }}"><a class="js-click" (click)="onSelectRow(row)"> <span [innerHTML]="getNavFlags(row)"></span></a>&nbsp;</td>
-          <td title="{{ 'CATEGORY_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'CATEGORY_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'CATEGORY_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{!row.disabled && isAvailableFromNow(row) && isAvailableToNow(row) ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
-        </ng-template>
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.guid}}</a></td>
+        <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><i class="fa fa-sitemap" title="{{row.parentName}}"></i> <a class="js-click" (click)="onSelectRow(row)">{{row.name}} ({{row.rank}})</a> <span [innerHTML]="getUri(row)"></span> <span [innerHTML]="getLink(row)"></span></td>
+        <td title="{{ 'CATEGORY_TEMPLATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.uitemplate}}</a>&nbsp;</td>
+        <td title="{{ 'CATEGORY_NAV' | translate }}"><a class="js-click" (click)="onSelectRow(row)"> <span [innerHTML]="getNavFlags(row)"></span></a>&nbsp;</td>
+        <td title="{{ 'CATEGORY_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
+        <td title="{{ 'CATEGORY_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
+        <td title="{{ 'CATEGORY_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{!row.disabled && isAvailableFromNow(row) && isAvailableToNow(row) ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
       </tr>
       </tbody>
     </table>

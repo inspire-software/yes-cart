@@ -21,6 +21,8 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttrValueCategory;
 import org.yes.cart.domain.vo.VoCategory;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.service.vo.VoCategoryService;
 
 import java.util.Arrays;
@@ -45,49 +47,74 @@ public class VoCategoryServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetCategories() throws Exception {
 
-        List<VoCategory> categoryAll = voCategoryService.getAll();
-        assertNotNull(categoryAll);
+        TestAdminFederationFacadeImpl.IS_SYSADMIN = false;
 
-        List<VoCategory> categoryNoFilter = voCategoryService.getFilteredCategories(null, 10);
-        assertNotNull(categoryNoFilter);
-        assertFalse(categoryNoFilter.isEmpty());
+        try {
+            List<VoCategory> categoryAll = voCategoryService.getAll();
+            assertNotNull(categoryAll);
 
-        List<VoCategory> categoryFind = voCategoryService.getFilteredCategories("Flying Machines", 10);
-        assertNotNull(categoryFind);
-        assertFalse(categoryFind.isEmpty());
-
-        final VoCategory c102 = categoryFind.get(0);
-        assertEquals("102", c102.getGuid());
-        assertEquals("Flying Machines", c102.getName());
-
-        final List<Long> path = voCategoryService.getBranchesPaths(Collections.singletonList(c102.getCategoryId()));
-        assertTrue("Paths: " + path, Arrays.asList(100L, 101L, 102L).containsAll(path));
-
-        final List<VoCategory> branch101L = voCategoryService.getBranch(101L, path);
-        assertEquals(1, branch101L.size());
-        assertEquals(4, branch101L.get(0).getChildren().size());
-        for (final VoCategory leaf : branch101L.get(0).getChildren()) {
-            assertTrue("Category: " + leaf.getCategoryId(), Arrays.asList("102", "103", "104", "105").contains(leaf.getGuid()));
-            if ("102".equals(leaf.getGuid())) {
-                assertNotNull(leaf.getChildren());
-                for (final VoCategory subLeaf : leaf.getChildren()) {
-                    assertTrue("Category: " + leaf.getCategoryId(), Arrays.asList("143", "144").contains(subLeaf.getGuid()));
+            for (int start = 0; start < 20; start++) { // Test paging till the end
+                VoSearchContext ctxNoFilter = new VoSearchContext();
+                ctxNoFilter.setStart(start);
+                ctxNoFilter.setSize(10);
+                VoSearchResult<VoCategory> categoryNoFilter = voCategoryService.getFilteredCategories(ctxNoFilter);
+                assertNotNull(categoryNoFilter);
+                if (start * 10 < categoryNoFilter.getTotal()) {
+                    assertEquals(10, categoryNoFilter.getItems().size());
+                } else {
+                    break;
                 }
-            } else {
-                assertNull(leaf.getChildren());
+                start++;
             }
+
+            VoSearchContext ctxFind = new VoSearchContext();
+            ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("Flying Machines")));
+            ctxFind.setSize(10);
+            VoSearchResult<VoCategory> categoryFind = voCategoryService.getFilteredCategories(ctxFind);
+            assertNotNull(categoryFind);
+            assertFalse(categoryFind.getItems().isEmpty());
+
+            final VoCategory c102 = categoryFind.getItems().get(0);
+            assertEquals("102", c102.getGuid());
+            assertEquals("Flying Machines", c102.getName());
+
+            final List<Long> path = voCategoryService.getBranchesPaths(Collections.singletonList(c102.getCategoryId()));
+            assertTrue("Paths: " + path, Arrays.asList(100L, 101L, 102L).containsAll(path));
+
+            final List<VoCategory> branch101L = voCategoryService.getBranch(101L, path);
+            assertEquals(1, branch101L.size());
+            assertEquals(4, branch101L.get(0).getChildren().size());
+            for (final VoCategory leaf : branch101L.get(0).getChildren()) {
+                assertTrue("Category: " + leaf.getCategoryId(), Arrays.asList("102", "103", "104", "105").contains(leaf.getGuid()));
+                if ("102".equals(leaf.getGuid())) {
+                    assertNotNull(leaf.getChildren());
+                    for (final VoCategory subLeaf : leaf.getChildren()) {
+                        assertTrue("Category: " + leaf.getCategoryId(), Arrays.asList("143", "144").contains(subLeaf.getGuid()));
+                    }
+                } else {
+                    assertNull(leaf.getChildren());
+                }
+            }
+
+            VoSearchContext ctxFindUri = new VoSearchContext();
+            ctxFindUri.setParameters(Collections.singletonMap("filter", Collections.singletonList("@big-boys-Gadgets")));
+            ctxFindUri.setSize(10);
+            VoSearchResult<VoCategory> categoryByURI = voCategoryService.getFilteredCategories(ctxFindUri);
+            assertNotNull(categoryByURI);
+            assertEquals(1, categoryByURI.getTotal());
+            assertEquals("101", categoryByURI.getItems().get(0).getGuid());
+
+            VoSearchContext ctxFindByParent = new VoSearchContext();
+            ctxFindByParent.setParameters(Collections.singletonMap("filter", Collections.singletonList("^101")));
+            ctxFindByParent.setSize(10);
+            VoSearchResult<VoCategory> categorySubTree = voCategoryService.getFilteredCategories(ctxFindByParent);
+            assertNotNull(categorySubTree);
+            assertFalse(categorySubTree.getItems().isEmpty());
+            assertTrue(categorySubTree.getItems().stream().allMatch(cat -> Arrays.asList("101", "102", "103", "104", "105").contains(cat.getGuid())));
+
+        } finally {
+            TestAdminFederationFacadeImpl.IS_SYSADMIN = true;
         }
-
-        List<VoCategory> categoryByURI = voCategoryService.getFilteredCategories("@big-boys-Gadgets", 10);
-        assertNotNull(categoryByURI);
-        assertEquals(1, categoryByURI.size());
-        assertEquals("101", categoryByURI.get(0).getGuid());
-
-        List<VoCategory> categorySubTree = voCategoryService.getFilteredCategories("^Big Boys Gadgets", 10);
-        assertNotNull(categorySubTree);
-        assertFalse(categorySubTree.isEmpty());
-        assertTrue(categorySubTree.stream().allMatch(cat -> Arrays.asList("101", "102", "103", "104", "105").contains(cat.getGuid())));
-
     }
 
     @Test
@@ -110,7 +137,11 @@ public class VoCategoryServiceImplTest extends BaseCoreDBTestCase {
         final VoCategory updated = voCategoryService.updateCategory(created);
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
-        assertFalse(voCategoryService.getFilteredCategories("TEST CRUD UPDATE", 10).isEmpty());
+        VoSearchContext ctx = new VoSearchContext();
+        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setSize(10);
+
+        assertTrue(voCategoryService.getFilteredCategories(ctx).getTotal() > 0);
 
         final List<VoAttrValueCategory> attributes = voCategoryService.getCategoryAttributes(updated.getCategoryId());
         assertNotNull(attributes);
@@ -136,7 +167,7 @@ public class VoCategoryServiceImplTest extends BaseCoreDBTestCase {
 
         voCategoryService.removeCategory(updated.getCategoryId());
 
-        assertTrue(voCategoryService.getFilteredCategories("TEST CRUD UPDATE", 10).isEmpty());
+        assertFalse(voCategoryService.getFilteredCategories(ctx).getTotal() > 0);
 
     }
 }

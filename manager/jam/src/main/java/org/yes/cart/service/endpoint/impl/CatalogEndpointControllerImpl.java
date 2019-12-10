@@ -173,9 +173,8 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoCategory> getFilteredCategories(@RequestBody(required = false) final String filter,
-                                           @PathVariable("max") final int max) throws Exception {
-        return voCategoryService.getFilteredCategories(filter, max);
+    VoSearchResult<VoCategory> getFilteredCategories(@RequestBody final VoSearchContext filter) throws Exception {
+        return voCategoryService.getFilteredCategories(filter);
     }
 
     @Override

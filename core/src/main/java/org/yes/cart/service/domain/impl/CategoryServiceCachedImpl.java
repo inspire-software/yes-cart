@@ -24,6 +24,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -142,8 +143,16 @@ public class CategoryServiceCachedImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Override
-    public List<Category> findBy(final String code, final String name, final String uri, final int page, final int pageSize) {
-        return categoryService.findBy(code, name, uri, page, pageSize);
+    public List<Category> findCategories(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return categoryService.findCategories(start, offset, sort, sortDescending, filter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCategoryCount(final Map<String, List> filter) {
+        return categoryService.findCategoryCount(filter);
     }
 
     /**
