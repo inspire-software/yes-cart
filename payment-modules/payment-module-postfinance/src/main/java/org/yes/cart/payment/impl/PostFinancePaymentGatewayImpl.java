@@ -298,20 +298,6 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         // Customer’s e-mail address
         setValueIfNotNull(params, "EMAIL", payment.getBillingEmail());
 
-        final PaymentAddress address = payment.getBillingAddress();
-        if (address != null) {
-            // Customer’s street name and number
-            setValueIfNotNull(params, "OWNERADDRESS", getAddressLines(address));
-            // Customer’s postcode
-            setValueIfNotNull(params, "OWNERZIP", address.getPostcode());
-            // Customer’s town/city name
-            setValueIfNotNull(params, "OWNERTOWN", address.getCity());
-            // Customer’s country
-            setValueIfNotNull(params, "OWNERCTY", address.getCountryCode());
-            // Customer’s telephone number
-            setValueIfNotNull(params, "OWNERTELNO", address.getPhone1());
-        }
-
         // Delivery & Invoice info enabled
         final boolean invoiceDetailsEnabled = Boolean.valueOf(getParameterValue(PF_DELIVERY_AND_INVOICE_ON));
         if (invoiceDetailsEnabled) {
@@ -353,6 +339,20 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
                 setValueIfNotNull(params, "ECOM_SHIPTO_POSTAL_COUNTRYCODE", shipping.getCountryCode());
                 setValueIfNotNull(params, "ECOM_SHIPTO_TELECOM_MOBILE_NUMBER", shipping.getMobile1());
                 setValueIfNotNull(params, "ECOM_SHIPTO_TELECOM_PHONE_NUMBER", shipping.getPhone1());
+            }
+        } else {
+            final PaymentAddress address = payment.getBillingAddress();
+            if (address != null) {
+                // Customer’s street name and number
+                setValueIfNotNull(params, "OWNERADDRESS", getAddressLines(address));
+                // Customer’s postcode
+                setValueIfNotNull(params, "OWNERZIP", address.getPostcode());
+                // Customer’s town/city name
+                setValueIfNotNull(params, "OWNERTOWN", address.getCity());
+                // Customer’s country
+                setValueIfNotNull(params, "OWNERCTY", address.getCountryCode());
+                // Customer’s telephone number
+                setValueIfNotNull(params, "OWNERTELNO", address.getPhone1());
             }
         }
 
@@ -518,7 +518,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
                     item.getTaxAmount().divide(itemGrossAmount.subtract(item.getTaxAmount()),3, BigDecimal.ROUND_HALF_EVEN).movePointRight(2) : BigDecimal.ZERO.setScale(1);
             setValueIfNotNull(params, "ITEMID" + i, item.getSkuCode().length() > ITEMID ? item.getSkuCode().substring(0, ITEMID - 1) + "~" : item.getSkuCode());
             setValueIfNotNull(params, "ITEMNAME" + i, item.getSkuName().length() > ITEMNAME ? item.getSkuName().substring(0, ITEMNAME - 1) + "~" : item.getSkuName());
-            setValueIfNotNull(params, "ITEMQUANT" + i, item.getQuantity().toPlainString());
+            setValueIfNotNull(params, "ITEMQUANT" + i, item.getQuantity().stripTrailingZeros().toPlainString());
             if (hasOrderDiscount
                     && MoneyUtils.isPositive(orderDiscountRemainder)
                     && MoneyUtils.isPositive(itemGrossAmount)) {

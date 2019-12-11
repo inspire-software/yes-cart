@@ -715,13 +715,8 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='LANGUAGE' value='en'>\n" +
                         "<input type='hidden' name='OPERATION' value='SAL'>\n" +
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
-                        "<input type='hidden' name='OWNERADDRESS' value='In the middle of 123b'>\n" +
-                        "<input type='hidden' name='OWNERCTY' value='NA'>\n" +
-                        "<input type='hidden' name='OWNERTELNO' value='123412341234'>\n" +
-                        "<input type='hidden' name='OWNERTOWN' value='Nowhere'>\n" +
-                        "<input type='hidden' name='OWNERZIP' value='NA1 NA1'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='A85B7608A717D533D1E2A9541EA88126878673FA'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='7B1878859E8DBA1F128A39B0A1675CFA7218292E'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
                 htmlFormPart);
 
@@ -785,13 +780,8 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='LANGUAGE' value='en'>\n" +
                         "<input type='hidden' name='OPERATION' value='SAL'>\n" +
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
-                        "<input type='hidden' name='OWNERADDRESS' value='Street Number'>\n" +
-                        "<input type='hidden' name='OWNERCTY' value='NA'>\n" +
-                        "<input type='hidden' name='OWNERTELNO' value='123412341234'>\n" +
-                        "<input type='hidden' name='OWNERTOWN' value='Nowhere'>\n" +
-                        "<input type='hidden' name='OWNERZIP' value='NA1 NA1'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='806A08C422655931E13D177F5B71DB207379ABD3'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='3E688E8E165ED192DF37564C098C85CE108A5048'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
                 htmlFormPart);
 
@@ -853,13 +843,8 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='LANGUAGE' value='en'>\n" +
                         "<input type='hidden' name='OPERATION' value='SAL'>\n" +
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
-                        "<input type='hidden' name='OWNERADDRESS' value='In the middle of 123'>\n" +
-                        "<input type='hidden' name='OWNERCTY' value='NA'>\n" +
-                        "<input type='hidden' name='OWNERTELNO' value='123412341234'>\n" +
-                        "<input type='hidden' name='OWNERTOWN' value='Nowhere'>\n" +
-                        "<input type='hidden' name='OWNERZIP' value='NA1 NA1'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='2EEAD9A99A95806835B24CDF436EF581B9DE747E'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='1EEAB82350F77B5AB9C15527702569E9E6A2E4B0'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n",
                 htmlFormPart);
 
