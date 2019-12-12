@@ -354,8 +354,8 @@ public class DtoCategoryServiceImpl
                     if (parentCatId != null) {
 
                         SearchContext.JoinMode.OR.setMode(currentFilter);
-                        currentFilter.put("categoryId", Collections.singletonList(parentCatId));
-                        currentFilter.put("parentId", Collections.singletonList(parentCatId));
+                        currentFilter.put("categoryId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(parentCatId)));
+                        currentFilter.put("parentId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(parentCatId)));
 
                     }
 

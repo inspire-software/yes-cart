@@ -15,9 +15,10 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { PIMService, UserEventBus, Util } from './../shared/services/index';
+import { CategoryMinSelectComponent, BrandSelectComponent, ProductTypeSelectComponent } from './../shared/catalog/index';
 import { UiUtil } from './../shared/ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ProductVO, ProductWithLinksVO, ProductSkuVO, AttrValueProductVO, AttrValueProductSkuVO, Pair } from './../shared/model/index';
+import { CategoryVO, ProductTypeInfoVO, BrandVO, ProductVO, ProductWithLinksVO, ProductSkuVO, AttrValueProductVO, AttrValueProductSkuVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -68,6 +69,15 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
   private skuAttributesUpdate:Array<Pair<AttrValueProductSkuVO, boolean>>;
 
   private deleteValue:String;
+
+  @ViewChild('categorySelectComponent')
+  private categorySelectComponent:CategoryMinSelectComponent;
+
+  @ViewChild('brandSelectComponent')
+  private brandSelectComponent:BrandSelectComponent;
+
+  @ViewChild('productTypeSelectComponent')
+  private productTypeSelectComponent:ProductTypeSelectComponent;
 
   private loading:boolean = false;
 
@@ -199,13 +209,47 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchType() {
-    this.searchHelpShow = false;
-    this.productFilter = '?';
+    LogUtil.debug('CatalogProductsComponent onSearchType handler');
+    this.productTypeSelectComponent.showDialog();
+  }
+
+  protected onProductTypeSelected(event:FormValidationEvent<ProductTypeInfoVO>) {
+    LogUtil.debug('CatalogProductsComponent onProductTypeSelected', event);
+    if (event.valid) {
+      this.productFilter = '?' + event.source.guid;
+      this.getFilteredProducts();
+    }
+  }
+
+  protected onSearchBrand() {
+    LogUtil.debug('CatalogProductsComponent onSearchBrand handler');
+    this.brandSelectComponent.showDialog();
+  }
+
+  protected onBrandSelected(event:FormValidationEvent<BrandVO>) {
+    LogUtil.debug('CatalogProductsComponent onBrandSelected', event);
+    if (event.valid) {
+      this.productFilter = '?' + event.source.name;
+      this.getFilteredProducts();
+    }
   }
 
   protected onSearchCategories() {
     this.searchHelpShow = false;
     this.productFilter = '^';
+  }
+
+  protected onViewTree() {
+    LogUtil.debug('CatalogProductsComponent onViewTree handler');
+    this.categorySelectComponent.showDialog();
+  }
+
+  protected onCatalogTreeDataSelected(event:FormValidationEvent<CategoryVO>) {
+    LogUtil.debug('CatalogProductsComponent onCatalogTreeDataSelected handler', event);
+    if (event.valid) {
+      this.productFilter = '^' + event.source.guid;
+      this.getFilteredProducts();
+    }
   }
 
   protected onSearchDate() {

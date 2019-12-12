@@ -47,7 +47,6 @@
       </form>
     </div>
 
-
     <div class="col-xs-12 {{ viewMode === 'products' || viewMode === 'skus' ? 'col-md-7' : '' }} padding-lr-0 button-panel">
 
       <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'products'" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_BACK' | translate }}">
@@ -80,7 +79,6 @@
 
   </div>
 
-
   <div [hidden]="viewMode !== 'products'" class="{{ loading ? 'loading-data' : '' }}">
 
     <div *ngIf="searchHelpShow">
@@ -88,8 +86,8 @@
         <p>{{ 'SEARCH_HELP_PRODUCT_DEFAULT' | translate }}</p>
         <p>{{ 'SEARCH_HELP_PRODUCT_EXACT' | translate }} <span><button type="button" (click)="onSearchCodeExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_PRODUCT_CODE' | translate }} <span><button type="button" (click)="onSearchCode()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PRODUCT_TYPE' | translate }} <span><button type="button" (click)="onSearchType()" class="btn btn-default btn-circle"><i class="fa fa-cogs"></i></button></span></p>
-        <p>{{ 'SEARCH_HELP_PRODUCT_CATEGORY' | translate }} <span><button type="button" (click)="onSearchCategories()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PRODUCT_TYPE' | translate }} <span><button type="button" (click)="onSearchType()" class="btn btn-default btn-circle"><i class="fa fa-cogs"></i></button></span> &nbsp; <span><button type="button" (click)="onSearchBrand()" class="btn btn-default btn-circle"><i class="fa fa-trademark"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PRODUCT_CATEGORY' | translate }} <span><button type="button" (click)="onViewTree()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-default btn-circle"><i class="fa fa-calendar"></i></button></span></p>
       </div>
     </div>
@@ -119,7 +117,6 @@
     <yc-sku [sku]="skuEdit" [attributes]="skuEditAttributes" (dataChanged)="onSkuChanged($event)"></yc-sku>
   </div>
 
-
   <yc-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
@@ -129,5 +126,13 @@
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
   </yc-modal>
 
+  <yc-category-min-select #categorySelectComponent
+                          (dataSelected)="onCatalogTreeDataSelected($event)"></yc-category-min-select>
+
+  <yc-brand-select #brandSelectComponent
+                   (dataSelected)="onBrandSelected($event)"></yc-brand-select>
+
+  <yc-product-type-select #productTypeSelectComponent
+                          (dataSelected)="onProductTypeSelected($event)"></yc-product-type-select>
 
 </div>
