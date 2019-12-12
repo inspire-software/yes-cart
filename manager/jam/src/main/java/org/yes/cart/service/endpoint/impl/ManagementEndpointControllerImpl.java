@@ -89,7 +89,7 @@ public class ManagementEndpointControllerImpl implements ManagementEndpointContr
         out = out.replace("{{cluster}}", currentNode.getClusterId());
         out = out.replace("{{buildNo}}", currentNode.getBuildNo());
         out = out.replace("{{version}}", currentNode.getVersion());
-        out = out.replace("{{fullVersion}}", currentNode.getVersion());
+        out = out.replace("{{fullVersion}}", currentNode.getFullVersion());
         return out;
     }
 }
