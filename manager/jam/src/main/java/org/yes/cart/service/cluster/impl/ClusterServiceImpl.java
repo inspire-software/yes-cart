@@ -71,6 +71,14 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
+    public Node getCurrentNode() {
+        return nodeService.getCurrentNode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Node> getClusterInfo(final AsyncContext context) {
 
         final Message message = new ContextRspMessageImpl(

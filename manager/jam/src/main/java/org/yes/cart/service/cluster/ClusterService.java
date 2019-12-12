@@ -32,6 +32,13 @@ import java.util.Map;
 public interface ClusterService {
 
     /**
+     * Get current Node.
+     *
+     * @return current node
+     */
+    Node getCurrentNode();
+
+    /**
      * All registered nodes in this cluster.
      *
      * E.g. if we have JAM, SF0, SF1 and SF2 nodes

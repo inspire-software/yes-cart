@@ -18,8 +18,10 @@ package org.yes.cart.service.endpoint.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.cluster.node.Node;
 import org.yes.cart.domain.vo.VoLicenseAgreement;
 import org.yes.cart.domain.vo.VoManager;
+import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.endpoint.ManagementEndpointController;
 import org.yes.cart.service.vo.VoManagementService;
@@ -36,14 +38,17 @@ import java.util.Map;
 @Component
 public class ManagementEndpointControllerImpl implements ManagementEndpointController {
 
+    private final ClusterService clusterService;
     private final VoManagementService voManagementService;
     private final SystemService systemPreferencesService;
     private final ServletContext servletContext;
 
     @Autowired
-    public ManagementEndpointControllerImpl(final VoManagementService voManagementService,
+    public ManagementEndpointControllerImpl(final ClusterService clusterService,
+                                            final VoManagementService voManagementService,
                                             final SystemService systemPreferencesService,
                                             final ServletContext servletContext) {
+        this.clusterService = clusterService;
         this.voManagementService = voManagementService;
         this.systemPreferencesService = systemPreferencesService;
         this.servletContext = servletContext;
@@ -73,9 +78,18 @@ public class ManagementEndpointControllerImpl implements ManagementEndpointContr
         final Map<String, String> vals = new HashMap<>();
         vals.put("SYSTEM_PANEL_HELP_DOCS", systemPreferencesService.getAttributeValue("SYSTEM_PANEL_HELP_DOCS"));
         vals.put("SYSTEM_PANEL_HELP_COPYRIGHT", systemPreferencesService.getAttributeValue("SYSTEM_PANEL_HELP_COPYRIGHT"));
-        vals.put("SYSTEM_PANEL_LABEL", systemPreferencesService.getSystemEnvironmentLabel());
+        vals.put("SYSTEM_PANEL_LABEL", insertLabelPlaceholders(systemPreferencesService.getSystemEnvironmentLabel(), clusterService.getCurrentNode()));
         vals.put("CONTEXT_PATH", servletContext.getContextPath());
 
         return vals;
+    }
+
+    private String insertLabelPlaceholders(final String systemEnvironmentLabel, final Node currentNode) {
+        String out = systemEnvironmentLabel;
+        out = out.replace("{{cluster}}", currentNode.getClusterId());
+        out = out.replace("{{buildNo}}", currentNode.getBuildNo());
+        out = out.replace("{{version}}", currentNode.getVersion());
+        out = out.replace("{{fullVersion}}", currentNode.getVersion());
+        return out;
     }
 }
