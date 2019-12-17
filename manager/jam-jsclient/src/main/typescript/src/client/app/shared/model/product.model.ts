@@ -151,3 +151,10 @@ export interface ProductWithLinksVO extends ProductVO {
   associations : ProductAssociationVO[];
 
 }
+
+export interface ProductSupplierCatalogVO {
+
+  code : string;
+
+}
+

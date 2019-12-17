@@ -5,5 +5,6 @@
 export * from './roles.component';
 export * from './role.component';
 export * from './manager.component';
+export * from './manager-categories-min.component';
 export * from './managers.component';
 

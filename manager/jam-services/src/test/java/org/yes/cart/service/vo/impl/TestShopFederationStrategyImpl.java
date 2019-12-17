@@ -1,9 +1,7 @@
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -34,6 +32,16 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
     }
 
     @Override
+    public boolean isSupplierCatalogAccessibleByCurrentManager(final String catalogCode) {
+        return true;
+    }
+
+    @Override
+    public boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode) {
+        return true;
+    }
+
+    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return null;
     }
@@ -44,7 +52,17 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
     }
 
     @Override
-    public List<ShopDTO> getAccessibleShopsByCurrentManager() {
+    public Set<String> getAccessibleSupplierCatalogCodesByCurrentManager() {
+        return null;
+    }
+
+    @Override
+    public Set<String> getAccessibleCategoryCatalogCodesByCurrentManager() {
+        return null;
+    }
+
+    @Override
+    public Set<Long> getAccessibleCatalogIdsByCurrentManager() {
         return null;
     }
 

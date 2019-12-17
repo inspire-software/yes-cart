@@ -319,9 +319,10 @@ public class DtoCategoryServiceImpl
     @Override
     public SearchResult<CategoryDTO> findCategories(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, List> params = filter.reduceParameters("filter", "categoryIds");
+        final Map<String, List> params = filter.reduceParameters("filter", "categoryIds", "GUIDs");
         final List filterParam = params.get("filter");
         final List categoriesParam = params.get("categoryIds");
+        final List guidsParam = params.get("GUIDs");
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
@@ -363,6 +364,11 @@ public class DtoCategoryServiceImpl
 
             }
 
+        }
+
+        // Filter by GUID
+        if (CollectionUtils.isNotEmpty(guidsParam)) {
+            currentFilter.put("guid", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(guidsParam)));
         }
 
         // Filter by accessible categoryId

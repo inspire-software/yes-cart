@@ -29,9 +29,7 @@ import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.DateUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -88,6 +86,8 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
             domain.setLastname(xmlType.getContactDetails().getLastname());
         }
 
+        processSupplierCatalogs(domain, xmlType);
+
         if (domain.getManagerId() == 0L) {
             this.managerService.create(domain);
         } else {
@@ -100,6 +100,7 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
         processRoles(domain, xmlType);
 
     }
+
 
     private void processRoles(final Manager domain, final OrganisationUserType xmlType) {
 
@@ -134,6 +135,30 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
 
         }
 
+
+    }
+
+
+    private void processSupplierCatalogs(final Manager domain, final OrganisationUserType xmlType) {
+
+        if (xmlType.getOrganisation() == null || xmlType.getOrganisation().getSupplierCatalogs() == null) {
+            return;
+        }
+
+        final CollectionImportModeType collectionMode = xmlType.getOrganisation().getSupplierCatalogs().getImportMode() != null ? xmlType.getOrganisation().getSupplierCatalogs().getImportMode() : CollectionImportModeType.MERGE;
+
+        final Set<String> codes;
+        if (collectionMode == CollectionImportModeType.REPLACE) {
+            codes = new TreeSet<>();
+        } else {
+            codes = new TreeSet<>(domain.getProductSupplierCatalogs());
+        }
+
+        for (final OrganisationUserSupplierCatalogType supCat : xmlType.getOrganisation().getSupplierCatalogs().getSupplierCatalog()) {
+            codes.add(supCat.getCode());
+        }
+
+        domain.setProductSupplierCatalogs(codes);
 
     }
 

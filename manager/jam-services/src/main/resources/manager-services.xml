@@ -131,11 +131,17 @@
         <constructor-arg index="10" ref="voIOSupport"/>
     </bean>
 
+    <bean id="voProductSupplierService" class="org.yes.cart.service.vo.impl.VoProductSupplierServiceImpl">
+        <constructor-arg index="0" ref="dtoProductService"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
+    </bean>
+
     <bean id="voManagementService" class="org.yes.cart.service.vo.impl.VoManagementServiceImpl">
         <constructor-arg index="0" ref="userManagementService"/>
         <constructor-arg index="1" ref="dtoShopService"/>
-        <constructor-arg index="2" ref="uiFederationFacade"/>
-        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="2" ref="dtoCategoryService"/>
+        <constructor-arg index="3" ref="uiFederationFacade"/>
+        <constructor-arg index="4" ref="voAssemblySupport"/>
         <property name="licenseTextResource" value="classpath:yc-license.txt"/>
     </bean>
 

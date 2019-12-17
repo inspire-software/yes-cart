@@ -43,6 +43,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product sku by his id
      *
      * @param skuId given sku id
+     *
      * @return product sku
      */
     ProductSku getSkuById(Long skuId);
@@ -52,6 +53,7 @@ public interface ProductService extends GenericService<Product> {
      *
      * @param skuId given sku id
      * @param withAttributes with attributes
+     *
      * @return product sku
      */
     ProductSku getSkuById(Long skuId, boolean withAttributes);
@@ -86,6 +88,7 @@ public interface ProductService extends GenericService<Product> {
      * @param productId  product ID
      * @param skuId sku ID
      * @param productTypeId product type id
+     *
      * @return hierarchy of attributes for this product or sku.
      */
     Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(String locale,
@@ -133,6 +136,7 @@ public interface ProductService extends GenericService<Product> {
      * @param locale locale
      * @param productId  product ID
      * @param skuId sku ID
+     *
      * @return hierarchy of attributes for this product or sku.
      */
     Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(String locale,
@@ -142,6 +146,7 @@ public interface ProductService extends GenericService<Product> {
 
     /**
      * @param attributeCode code
+     *
      * @return raw and display value pair
      */
     Map<Long, String> getAllProductsAttributeValues(String attributeCode);
@@ -150,6 +155,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product by his primary key value
      *
      * @param productId product id
+     *
      * @return product if found, otherwise null
      */
     Product getProductById(Long productId);
@@ -159,6 +165,7 @@ public interface ProductService extends GenericService<Product> {
      *
      * @param productId product id
      * @param withAttribute flag if need to load product with attributes
+     *
      * @return product if found, otherwise null
      */
     Product getProductById(Long productId, boolean withAttribute);
@@ -169,6 +176,7 @@ public interface ProductService extends GenericService<Product> {
      * @param categoryId  category id
      * @param firstResult index of first result
      * @param maxResults  quantity results to return
+     *
      * @return list of products
      */
     List<Product> findProductByCategory(long categoryId,
@@ -177,7 +185,9 @@ public interface ProductService extends GenericService<Product> {
 
     /**
      * Get list of products by id list.
+     *
      * @param idList given list of id.
+     *
      * @return list of product, that satisfy given list of ids.
      */
     List<Product> getProductByIdList(List idList);
@@ -190,6 +200,7 @@ public interface ProductService extends GenericService<Product> {
      * @param maxResults        quantity results to return
      * @param sortFieldName     sort field name
      * @param reverse           reverse the search result if true
+     *
      * @return list of products
      */
     ProductSearchResultPageDTO getProductSearchResultDTOByQuery(NavigationContext navigationContext,
@@ -213,6 +224,7 @@ public interface ProductService extends GenericService<Product> {
      * Get the quantity of products in particular category.
      *
      * @param navigationContext navigation context
+     *
      * @return quantity of products
      */
     int getProductQty(NavigationContext navigationContext);
@@ -307,6 +319,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product sku by code.
      *
      * @param skuCode sku code
+     *
      * @return product sku for this sku code
      */
     ProductSku getProductSkuByCode(String skuCode);
@@ -315,6 +328,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product by sku code.
      *
      * @param skuCode sku code
+     *
      * @return product sku for this sku code
      */
     Product getProductBySkuCode(String skuCode);
@@ -324,6 +338,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product id by given seo uri
      *
      * @param seoUri given seo uri
+     *
      * @return product id if found otherwise null
      */
     Long findProductIdBySeoUri(String seoUri);
@@ -332,6 +347,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product id by given GUID
      *
      * @param guid given GUID
+     *
      * @return product id if found otherwise null
      */
     Long findProductIdByGUID(String guid);
@@ -340,6 +356,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product id by given code
      *
      * @param code given code
+     *
      * @return product id if found otherwise null
      */
     Long findProductIdByCode(String code);
@@ -348,6 +365,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product id by given code
      *
      * @param code given manufacturer code
+     *
      * @return product id if found otherwise null
      */
     List<Long> findProductIdsByManufacturerCode(String code);
@@ -356,6 +374,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product id by given code
      *
      * @param code given barcode (EAN/UPC)
+     *
      * @return product id if found otherwise null
      */
     List<Long> findProductIdsByBarCode(String code);
@@ -364,6 +383,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product id by given code
      *
      * @param codes given barcode (EAN/UPC)
+     *
      * @return product id if found otherwise null
      */
     List<Long> findProductIdsByBarCodes(Collection<String> codes);
@@ -372,6 +392,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product id by given code
      *
      * @param code given code in PIM
+     *
      * @return product id if found otherwise null
      */
     List<Long> findProductIdsByPimCode(String code);
@@ -382,6 +403,7 @@ public interface ProductService extends GenericService<Product> {
      *
      * @param attrCode attribute code
      * @param attrValue attribute value
+     *
      * @return product id if found otherwise null
      */
     List<Long> findProductIdsByAttributeValue(String attrCode, String attrValue);
@@ -390,6 +412,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product SEO uri id by given id
      *
      * @param productId given product id
+     *
      * @return product seo uri if found otherwise null
      */
     String findSeoUriByProductId(Long productId);
@@ -398,6 +421,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product sku id by given seo uri
      *
      * @param seoUri given seo uri
+     *
      * @return product sku id if found otherwise null
      */
     Long findProductSkuIdBySeoUri(String seoUri);
@@ -406,6 +430,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product sku id by given GUID
      *
      * @param guid given GUID
+     *
      * @return product sku id if found otherwise null
      */
     Long findProductSkuIdByGUID(String guid);
@@ -414,6 +439,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product sku id by given code
      *
      * @param code given code
+     *
      * @return product sku id if found otherwise null
      */
     Long findProductSkuIdByCode(String code);
@@ -422,6 +448,7 @@ public interface ProductService extends GenericService<Product> {
      * Get product sku SEO uri by given id
      *
      * @param skuId given sku id
+     *
      * @return product sku uri if found otherwise null
      */
     String findSeoUriByProductSkuId(Long skuId);
@@ -435,6 +462,7 @@ public interface ProductService extends GenericService<Product> {
      * @param name          product name.  use like %%
      * @param brandId       brand id. use exact match
      * @param productTypeId product type id. use exact match
+     *
      * @return list of founded products
      */
      List<Product> findProductByCodeNameBrandType(String code,
@@ -442,12 +470,20 @@ public interface ProductService extends GenericService<Product> {
                                                   Long brandId,
                                                   Long productTypeId);
 
+    /**
+     * Get list of unique supplier catalog codes that exist.
+     *
+     * @return list of unique codes
+     */
+     List<String> findProductSupplierCatalogCodes();
 
     /**
      * Get default image file name by given product.
+     *
      * @param productId   given id, which identify product
+     *
      * @return image file name if found.
      */
-     String getDefaultImage( Long productId);
+     String getDefaultImage(Long productId);
 
 }

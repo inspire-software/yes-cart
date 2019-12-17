@@ -51,14 +51,25 @@ public interface ShopCategoryRelationshipSupport {
      * Get all categories including child categories, that belong to given shop.
      *
      * @param shopId given shop PK
+     *
      * @return linear representation of category tree
      */
     Set<Long> getShopCategoriesIds(long shopId);
 
     /**
+     * Get all categories including child categories, that belong to given category branch.
+     *
+     * @param branchId branch of master catalog to scan
+     *
+     * @return linear representation of category tree
+     */
+    Set<Long> getCatalogCategoriesIds(long branchId);
+
+    /**
      * Get category by id.
      *
      * @param categoryId given category id
+     *
      * @return category
      */
     Category getCategoryById(long categoryId);
@@ -67,6 +78,7 @@ public interface ShopCategoryRelationshipSupport {
      * Get category by id.
      *
      * @param categoryId given category id
+     * 
      * @return category
      */
     CategoryRelationDTO getCategoryRelationById(long categoryId);

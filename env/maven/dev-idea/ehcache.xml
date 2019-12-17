@@ -351,6 +351,9 @@
     <cache name="shopService-shopCategoriesIds" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="shopService-catalogCategoriesIds" maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="shopService-shopContentIds" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
@@ -614,21 +617,6 @@
     <!-- ############################################# Federation cache #######################################-->
 
     <cache name="shopFederationStrategy-admin"
-           maxElementsInMemory="1000"
-           overflowToDisk="false"
-           eternal="true"/>
-
-    <cache name="shopFederationStrategy-shop"
-           maxElementsInMemory="1000"
-           overflowToDisk="false"
-           eternal="true"/>
-
-    <cache name="shopFederationStrategy-shopId"
-           maxElementsInMemory="1000"
-           overflowToDisk="false"
-           eternal="true"/>
-
-    <cache name="shopFederationStrategy-shopCode"
            maxElementsInMemory="1000"
            overflowToDisk="false"
            eternal="true"/>

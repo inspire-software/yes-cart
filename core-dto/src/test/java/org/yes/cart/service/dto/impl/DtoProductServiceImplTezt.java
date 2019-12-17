@@ -113,12 +113,16 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         assertEquals(2L, dto.getProductTypeDTO().getProducttypeId());
     }
 
-
     @Test
-    public void testGetProductByCodeNameBrandType() throws Exception {
-        List<ProductDTO> list = dtoService.getProductByCodeNameBrandType(null, null, 104L, 0);
-        assertFalse(list.isEmpty());
-        assertTrue(26 == list.size() || 28 == list.size());             //26 products with brand samsung
+    public void findProductSupplierCatalogCodes() throws Exception {
+
+        final List<String> codes = dtoService.findProductSupplierCatalogCodes();
+        assertNotNull(codes);
+        assertEquals(3, codes.size());
+        assertTrue(codes.contains("CAT001"));
+        assertTrue(codes.contains("CAT002"));
+        assertTrue(codes.contains("CAT003"));
+
     }
 
     @Test

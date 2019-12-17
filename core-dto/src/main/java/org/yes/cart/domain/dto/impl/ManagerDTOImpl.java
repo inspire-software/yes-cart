@@ -20,6 +20,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.ManagerDTO;
 
+import java.util.Collection;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -56,6 +58,12 @@ public class ManagerDTOImpl implements ManagerDTO {
 
     @DtoField(value = "companyDepartment")
     private String companyDepartment;
+
+    @DtoField(value = "productSupplierCatalogs")
+    private Collection<String> productSupplierCatalogs;
+
+    @DtoField(value = "categoryCatalogs")
+    private Collection<String> categoryCatalogs;
 
     /**
      * {@inheritDoc}
@@ -213,6 +221,38 @@ public class ManagerDTOImpl implements ManagerDTO {
      * {@inheritDoc}
      */
     @Override
+    public Collection<String> getProductSupplierCatalogs() {
+        return productSupplierCatalogs;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setProductSupplierCatalogs(final Collection<String> productSupplierCatalogs) {
+        this.productSupplierCatalogs = productSupplierCatalogs;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<String> getCategoryCatalogs() {
+        return categoryCatalogs;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setCategoryCatalogs(final Collection<String> categoryCatalogs) {
+        this.categoryCatalogs = categoryCatalogs;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean equals(Object otherObj) {
         if (this == otherObj) {
             return true;
@@ -226,13 +266,6 @@ public class ManagerDTOImpl implements ManagerDTO {
         if (!email.equals(that.email)) {
             return false;
         }
-        if (!firstName.equals(that.firstName)) {
-            return false;
-        }
-        if (!lastName.equals(that.lastName)) {
-            return false;
-        }
-
         return true;
     }
 
@@ -241,10 +274,7 @@ public class ManagerDTOImpl implements ManagerDTO {
      */
     @Override
     public int hashCode() {
-        int result = email.hashCode();
-        result = 31 * result + firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
-        return result;
+        return email.hashCode();
     }
 
     /**

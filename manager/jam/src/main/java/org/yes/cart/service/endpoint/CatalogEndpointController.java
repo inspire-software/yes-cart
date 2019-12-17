@@ -64,7 +64,6 @@ public interface CatalogEndpointController {
     @ResponseBody
     List<VoAttrValueBrand> getBrandAttributes(@PathVariable("brandId") long brandId) throws Exception;
 
-
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/brand/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
@@ -104,11 +103,17 @@ public interface CatalogEndpointController {
     @ResponseBody
     List<VoProductTypeAttr> getProductTypeAttributes(@PathVariable("typeId") long typeId) throws Exception;
 
-
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/producttype/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoProductTypeAttr> updateProductType(@RequestBody List<MutablePair<VoProductTypeAttr, Boolean>> vo) throws Exception;
+
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCATALOGADMIN","ROLE_SMCATALOGUSER","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
+    @RequestMapping(value = "/productsuppliercatalogs/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoProductSupplierCatalog> getAllProductSuppliersCatalogs() throws Exception;
 
 
 
@@ -157,7 +162,6 @@ public interface CatalogEndpointController {
     @RequestMapping(value = "/category/attributes/{categoryId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttrValueCategory> getCategoryAttributes(@PathVariable("categoryId") long categoryId) throws Exception;
-
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCATALOGADMIN"})
     @RequestMapping(value = "/category/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })

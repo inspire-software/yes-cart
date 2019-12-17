@@ -122,7 +122,7 @@ export class ShopCatalogMinComponent implements OnInit, OnDestroy {
   }
 
   newCategoryInstance():BasicCategoryVO {
-    return { 'name': '', 'guid': '' };
+    return { name: '', guid: '' };
   }
 
   formBind():void {

@@ -30,7 +30,7 @@ import java.util.List;
  */
 public abstract class AbstractImpexFederationFilterImpl implements FederationFilter {
 
-    private final ShopFederationStrategy shopFederationStrategy;
+    protected final ShopFederationStrategy shopFederationStrategy;
     private final List<String> roles;
 
     protected AbstractImpexFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy,

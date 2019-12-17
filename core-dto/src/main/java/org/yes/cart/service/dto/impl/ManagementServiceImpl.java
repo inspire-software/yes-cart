@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,8 +38,8 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.ManagementService;
-import org.yes.cart.utils.RegExUtils;
 import org.yes.cart.utils.HQLUtils;
+import org.yes.cart.utils.RegExUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -60,6 +61,8 @@ public class ManagementServiceImpl implements ManagementService {
     private final AttributeService attributeService;
 
     private final ShopService shopService;
+
+    private final CategoryService categoryService;
 
     private final GenericDAO<ManagerRole, Long> managerRoleDao;
 
@@ -86,6 +89,7 @@ public class ManagementServiceImpl implements ManagementService {
      * @param systemService       system service
      * @param attributeService    attribute service
      * @param shopService         shop service
+     * @param categoryService     category service
      * @param managerRoleDao      manager roles dao
      * @param roleDao             role dao
      * @param dtoFactory          {@link DtoFactory}
@@ -95,6 +99,7 @@ public class ManagementServiceImpl implements ManagementService {
                                  final SystemService systemService,
                                  final AttributeService attributeService,
                                  final ShopService shopService,
+                                 final CategoryService categoryService,
                                  final GenericDAO<ManagerRole, Long> managerRoleDao,
                                  final GenericDAO<Role, Long> roleDao,
                                  final GenericDAO<Shop, Long> shopDao,
@@ -105,6 +110,7 @@ public class ManagementServiceImpl implements ManagementService {
         this.systemService = systemService;
         this.attributeService = attributeService;
         this.shopService = shopService;
+        this.categoryService = categoryService;
         this.managerRoleDao = managerRoleDao;
         this.roleDao = roleDao;
         this.shopDao = shopDao;
@@ -377,12 +383,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @Override
-    @CacheEvict(value = {
-            "shopFederationStrategy-admin",
-            "shopFederationStrategy-shop",
-            "shopFederationStrategy-shopId",
-            "shopFederationStrategy-shopCode",
-    }, allEntries = true)
+    @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void grantRole(final String userId, final String role) {
         final Role roleEntity = roleDao.findSingleByCriteria(" where e.code = ?1 ", role);
         final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
@@ -398,12 +399,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @Override
-    @CacheEvict(value = {
-            "shopFederationStrategy-admin",
-            "shopFederationStrategy-shop",
-            "shopFederationStrategy-shopId",
-            "shopFederationStrategy-shopCode",
-    }, allEntries = true)
+    @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void revokeRole(final String userId, final String role) {
         final List<ManagerRole> managerRole = managerRoleDao.findByCriteria(
                 " where e.code = ?1 and e.email = ?2",
@@ -457,7 +453,6 @@ public class ManagementServiceImpl implements ManagementService {
         return shopDTOs;
     }
 
-
     private void fillManagerShopsDTOs(final List<ShopDTO> result, final Collection<ManagerShop> shops, final boolean includeSubs)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         for (ManagerShop managerShop : shops) {
@@ -492,12 +487,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @Override
-    @CacheEvict(value = {
-            "shopFederationStrategy-admin",
-            "shopFederationStrategy-shop",
-            "shopFederationStrategy-shopId",
-            "shopFederationStrategy-shopCode",
-    }, allEntries = true)
+    @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void grantShop(final String userId, final String shopCode) {
         final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         final Collection<ManagerShop> assigned = manager.getShops();
@@ -520,12 +510,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @Override
-    @CacheEvict(value = {
-            "shopFederationStrategy-admin",
-            "shopFederationStrategy-shop",
-            "shopFederationStrategy-shopId",
-            "shopFederationStrategy-shopCode",
-    }, allEntries = true)
+    @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
     public void revokeShop(final String userId, final String shopCode) {
         final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         final Iterator<ManagerShop> assigned = manager.getShops().iterator();
@@ -536,6 +521,118 @@ public class ManagementServiceImpl implements ManagementService {
                 managerService.update(manager);
             }
         }
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getAssignedManagerSupplierCatalogs(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        if (manager == null || manager.getProductSupplierCatalogs() == null) {
+            return Collections.emptyList();
+        }
+        return new ArrayList<>(manager.getProductSupplierCatalogs());
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> getAssignedManagerCategoryCatalogs(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        if (manager == null || manager.getCategoryCatalogs() == null) {
+            return Collections.emptyList();
+        }
+        return new ArrayList<>(manager.getCategoryCatalogs());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Long> getAssignedManagerCatalogHierarchy(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        if (manager == null) {
+            return new ArrayList<>();
+        }
+        if (CollectionUtils.isEmpty(manager.getCategoryCatalogs())) {
+
+            final Set<Long> allFromShops = new TreeSet<>();
+            if (CollectionUtils.isNotEmpty(manager.getShops())) {
+                for (final ManagerShop ms : manager.getShops()) {
+                    final Shop shop = shopService.getById(ms.getShop().getShopId());
+                    if (CollectionUtils.isNotEmpty(shop.getShopCategory())) {
+                        for (final ShopCategory sc : shop.getShopCategory()) {
+                            allFromShops.add(sc.getCategory().getCategoryId());
+                        }
+                    }
+                }
+            }
+
+            return new ArrayList<>(allFromShops);
+        }
+
+        final Set<Long> allFromCatalog = new TreeSet<>();
+        for (final String catGuid : manager.getCategoryCatalogs()) {
+            allFromCatalog.add(categoryService.findCategoryIdByGUID(catGuid));
+        }
+
+        return new ArrayList<>(allFromCatalog);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
+    public void grantSupplierCatalog(final String userId, final String catalogCode) {
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Set<String> assigned = new HashSet<>(manager.getProductSupplierCatalogs());
+        assigned.add(catalogCode);
+        manager.setProductSupplierCatalogs(assigned);
+        managerService.update(manager);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
+    public void revokeSupplierCatalog(final String userId, final String catalogCode) {
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Set<String> assigned = new HashSet<>(manager.getProductSupplierCatalogs());
+        assigned.remove(catalogCode);
+        manager.setProductSupplierCatalogs(assigned);
+        managerService.update(manager);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
+    public void grantCategoryCatalog(final String userId, final String catalogCode) {
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Set<String> assigned = new HashSet<>(manager.getCategoryCatalogs());
+        assigned.add(catalogCode);
+        manager.setCategoryCatalogs(assigned);
+        managerService.update(manager);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @CacheEvict(value = "shopFederationStrategy-admin", key = "#userId")
+    public void revokeCategoryCatalog(final String userId, final String catalogCode) {
+        final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
+        final Set<String> assigned = new HashSet<>(manager.getCategoryCatalogs());
+        assigned.remove(catalogCode);
+        manager.setCategoryCatalogs(assigned);
+        managerService.update(manager);
     }
 
     /**

@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="company-department" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="shops" type="{}organisation-userShopsType" minOccurs="0"/>
  *         &lt;element name="roles" type="{}organisation-userRolesType" minOccurs="0"/>
+ *         &lt;element name="supplier-catalogs" type="{}organisation-userSupplierCatalogsType" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,7 +37,8 @@ import javax.xml.bind.annotation.XmlType;
     "companyName2",
     "companyDepartment",
     "shops",
-    "roles"
+    "roles",
+    "supplierCatalogs"
 })
 public class OrganisationUserOrganisationType {
 
@@ -48,6 +50,8 @@ public class OrganisationUserOrganisationType {
     protected String companyDepartment;
     protected OrganisationUserShopsType shops;
     protected OrganisationUserRolesType roles;
+    @XmlElement(name = "supplier-catalogs")
+    protected OrganisationUserSupplierCatalogsType supplierCatalogs;
 
     /**
      * Gets the value of the companyName1 property.
@@ -167,6 +171,30 @@ public class OrganisationUserOrganisationType {
      */
     public void setRoles(OrganisationUserRolesType value) {
         this.roles = value;
+    }
+
+    /**
+     * Gets the value of the supplierCatalogs property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link OrganisationUserSupplierCatalogsType }
+     *     
+     */
+    public OrganisationUserSupplierCatalogsType getSupplierCatalogs() {
+        return supplierCatalogs;
+    }
+
+    /**
+     * Sets the value of the supplierCatalogs property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link OrganisationUserSupplierCatalogsType }
+     *     
+     */
+    public void setSupplierCatalogs(OrganisationUserSupplierCatalogsType value) {
+        this.supplierCatalogs = value;
     }
 
 }

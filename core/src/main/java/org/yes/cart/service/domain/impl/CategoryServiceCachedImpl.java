@@ -23,6 +23,7 @@ import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -119,6 +120,15 @@ public class CategoryServiceCachedImpl implements CategoryService {
     @Cacheable(value = "categoryService-childCategoriesRecursive")
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
         return categoryService.getChildCategoriesRecursive(categoryId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Cacheable(value = "shopService-catalogCategoriesIds", keyGenerator = "cacheKeyGeneratorCollectionToString")
+    public Set<Long> getAllCategoryIds(final Collection<String> guids) {
+        return categoryService.getAllCategoryIds(guids);
     }
 
     /**
@@ -276,7 +286,9 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-categoryParentsIds",
             "categoryService-categoryLinkedIds",
             "shopService-allCategoriesIdsMap",
+            "shopService-catalogCategoriesIds",
             "shopService-shopCategoriesIds",
+            "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds"
     }, allEntries = true)
     public Category create(final Category instance) {
@@ -314,7 +326,9 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-categoryParentsIds",
             "categoryService-categoryLinkedIds",
             "shopService-allCategoriesIdsMap",
+            "shopService-catalogCategoriesIds",
             "shopService-shopCategoriesIds",
+            "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds"
     }, allEntries = true)
     public Category update(final Category instance) {

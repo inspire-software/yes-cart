@@ -1,11 +1,9 @@
 package org.yes.cart.bulkcommon.service.support.auth.impl;
 
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.service.federation.FederationFacade;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,6 +34,16 @@ public class SystemAdminFederationFacade implements FederationFacade {
     }
 
     @Override
+    public boolean isSupplierCatalogAccessibleByCurrentManager(final String catalogCode) {
+        return true;
+    }
+
+    @Override
+    public boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode) {
+        return true;
+    }
+
+    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return null;
     }
@@ -46,8 +54,18 @@ public class SystemAdminFederationFacade implements FederationFacade {
     }
 
     @Override
-    public List<ShopDTO> getAccessibleShopsByCurrentManager() {
-        return Collections.emptyList();
+    public Set<String> getAccessibleSupplierCatalogCodesByCurrentManager() {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Set<String> getAccessibleCategoryCatalogCodesByCurrentManager() {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Set<Long> getAccessibleCatalogIdsByCurrentManager() {
+        return Collections.emptySet();
     }
 
     @Override

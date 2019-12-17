@@ -1,10 +1,10 @@
-<ng-template [ngIf]="existingProduct">
+<ng-template [ngIf]="existingManager">
 
   <div class="row data-control">
 
     <div class="col-xs-12 padding-lr-0 button-panel">
 
-      <button type="button" (click)="assignToProductClick(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null || selectedNode.id == '100'">
+      <button type="button" (click)="assignToManagerClick(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null || selectedNode.id == '100'">
         <i class="fa fa-link"></i>
       </button>
 
@@ -51,29 +51,6 @@
     </form>
   </yc-modal>
 
-
-  <yc-modal #editCategoryRank
-            title="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
-            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-            positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
-            [valid]="validForEdit"
-            (closed)="editCategoryRankModalResult($event)">
-    <form role="form" [formGroup]="editCategoryForm">
-      <fieldset>
-        <div class="row">
-          <div class="col-xs-3">{{ 'AV_RANK' | translate }}</div>
-          <div class="col-xs-9">
-            <input class="form-control" formControlName="rank" name="rank" type="text" [(ngModel)]="editCategory.rank">
-            <div [hidden]="editCategoryForm.controls['rank'].valid || editCategoryForm.controls['rank'].pristine" class="alert alert-danger">
-              {{ 'POS_INT_REQUIRED' | translate }}
-            </div>
-          </div>
-        </div>
-      </fieldset>
-    </form>
-  </yc-modal>
-
-
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-md-6">
       <div class="panel panel-default">
@@ -81,12 +58,11 @@
         <ul class="list-group">
           <li *ngFor="let cat of assigned" class="list-group-item">
             <h5>
-              <span>{{cat.categoryName}}</span>
+              <span>{{cat.name}}</span>
               <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onAssignedClick(cat)><i class="fa fa-unlink"></i></button>
-              <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}" (click)=onRankClick(cat)>{{cat.rank}}</button>
             </h5>
             <p>
-              <small>{{cat.categoryCode}}</small>
+              <small>{{cat.code}}</small>
             </p>
           </li>
         </ul>

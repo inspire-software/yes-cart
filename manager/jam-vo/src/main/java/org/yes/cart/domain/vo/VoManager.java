@@ -29,6 +29,8 @@ public class VoManager extends VoManagerInfo {
 
     private List<VoManagerShop> managerShops;
     private List<VoManagerRole> managerRoles;
+    private List<VoManagerSupplierCatalog> managerSupplierCatalogs;
+    private List<VoManagerCategoryCatalog> managerCategoryCatalogs;
 
     public List<VoManagerShop> getManagerShops() {
         return managerShops;
@@ -44,5 +46,21 @@ public class VoManager extends VoManagerInfo {
 
     public void setManagerRoles(List<VoManagerRole> managerRoles) {
         this.managerRoles = managerRoles;
+    }
+
+    public List<VoManagerSupplierCatalog> getManagerSupplierCatalogs() {
+        return managerSupplierCatalogs;
+    }
+
+    public void setManagerSupplierCatalogs(final List<VoManagerSupplierCatalog> managerSupplierCatalogs) {
+        this.managerSupplierCatalogs = managerSupplierCatalogs;
+    }
+
+    public List<VoManagerCategoryCatalog> getManagerCategoryCatalogs() {
+        return managerCategoryCatalogs;
+    }
+
+    public void setManagerCategoryCatalogs(final List<VoManagerCategoryCatalog> managerCategoryCatalogs) {
+        this.managerCategoryCatalogs = managerCategoryCatalogs;
     }
 }

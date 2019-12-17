@@ -16,13 +16,11 @@
 
 package org.yes.cart.service.federation.impl;
 
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,6 +73,21 @@ public class UiFederationFacadeImpl implements FederationFacade {
         return shopFederationStrategy.isShopAccessibleByCurrentManager(shopId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isSupplierCatalogAccessibleByCurrentManager(final String catalogCode) {
+        return shopFederationStrategy.isSupplierCatalogAccessibleByCurrentManager(catalogCode);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode) {
+        return shopFederationStrategy.isCategoryCatalogAccessibleByCurrentManager(catalogCode);
+    }
 
     /**
      * {@inheritDoc}
@@ -96,8 +109,24 @@ public class UiFederationFacadeImpl implements FederationFacade {
      * {@inheritDoc}
      */
     @Override
-    public List<ShopDTO> getAccessibleShopsByCurrentManager() {
-        return shopFederationStrategy.getAccessibleShopsByCurrentManager();
+    public Set<String> getAccessibleSupplierCatalogCodesByCurrentManager() {
+        return shopFederationStrategy.getAccessibleSupplierCatalogCodesByCurrentManager();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<String> getAccessibleCategoryCatalogCodesByCurrentManager() {
+        return shopFederationStrategy.getAccessibleCategoryCatalogCodesByCurrentManager();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Long> getAccessibleCatalogIdsByCurrentManager() {
+        return shopFederationStrategy.getAccessibleCatalogIdsByCurrentManager();
     }
 
     /**

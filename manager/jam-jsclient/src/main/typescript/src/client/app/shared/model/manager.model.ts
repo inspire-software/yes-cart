@@ -45,11 +45,29 @@ export interface ManagerRoleLinkVO {
 
 }
 
+export interface ManagerSupplierCatalogVO {
+
+  managerId : number;
+  code : string;
+
+}
+
+export interface ManagerCategoryCatalogVO {
+
+  managerId : number;
+  categoryId : number;
+
+  code : string;
+  name : string;
+
+}
+
 export interface ManagerVO extends ManagerInfoVO {
 
   managerShops : Array<ManagerShopLinkVO>;
-
   managerRoles : Array<ManagerRoleLinkVO>;
+  managerSupplierCatalogs : Array<ManagerSupplierCatalogVO>;
+  managerCategoryCatalogs : Array<ManagerCategoryCatalogVO>;
 
 }
 

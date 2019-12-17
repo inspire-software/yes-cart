@@ -165,6 +165,19 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         return shopDao.findSingleByNamedQuery("SHOP.BY.URL", serverName);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Long> getShopsCategoriesIds(final Collection<Long> shopId) {
+        final Set<Long> all = new HashSet<>();
+        for (final Long id : shopId) {
+            all.addAll(shopCategoryRelationshipSupport.getShopCategoriesIds(id));
+        }
+        return all;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -177,8 +190,32 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * {@inheritDoc}
      */
     @Override
+    public Set<Long> getShopsContentIds(final Collection<Long> shopId) {
+        final Set<Long> all = new HashSet<>();
+        for (final Long id : shopId) {
+            all.addAll(contentService.getShopContentIds(id));
+        }
+        return all;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Set<Long> getShopContentIds(final long shopId) {
         return contentService.getShopContentIds(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Long> getShopsAllCategoriesIds(final Collection<Long> shopId) {
+        final Set<Long> all = new HashSet<>();
+        for (final Long id : shopId) {
+            all.addAll(getShopAllCategoriesIds(id));
+        }
+        return all;
     }
 
     /**

@@ -41,7 +41,6 @@ import org.yes.cart.service.dto.*;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.utils.HQLUtils;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -286,6 +285,14 @@ public class DtoProductServiceImpl
      * {@inheritDoc}
      */
     @Override
+    public List<String> findProductSupplierCatalogCodes() {
+        return productService.findProductSupplierCatalogCodes();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected void createPostProcess(final ProductDTO dto, final Product entity) {
         ensureBlankUriIsNull(entity);
         ensureTagsAreLowercase(entity);
@@ -345,55 +352,6 @@ public class DtoProductServiceImpl
     }
 
 
-
-    /**
-     * Get the all products in category without product availability dependancy
-     *
-     * @param categoryId  category id
-     * @param firstResult index of first result
-     * @param maxResults  quantity results to return
-     * @return list of products
-     * @throws UnableToCreateInstanceException
-     *                                    in case of reflection problem
-     * @throws UnmappedInterfaceException in case of configuration problem
-     */
-    @Override
-    public List<ProductDTO> getProductByCategoryWithPaging(
-            final long categoryId,
-            final int firstResult,
-            final int maxResults) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Product> products = ((ProductService) service).findProductByCategory(categoryId, firstResult, maxResults);
-        final List<ProductDTO> dtos = new ArrayList<>(products.size());
-        fillDTOs(products, dtos);
-        return dtos;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<ProductDTO> getProductByCodeNameBrandType(
-            final String code,
-            final String name,
-            final long brandId,
-            final long productTypeId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        Long brand = null;
-        Long productType = null;
-        if (brandId > 0) {
-            brand = brandId;
-        }
-        if (productTypeId > 0) {
-            productType = productTypeId;
-        }
-        final List<Product> products = ((ProductService) service).findProductByCodeNameBrandType(
-                code, name, brand, productType);
-
-        final List<ProductDTO> dtos = new ArrayList<>(products.size());
-        fillDTOs(products, dtos);
-        return dtos;
-
-    }
 
 
     /**

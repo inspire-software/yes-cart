@@ -18,6 +18,7 @@ package org.yes.cart.service.endpoint.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +27,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.CatalogEndpointController;
-import org.yes.cart.service.vo.VoBrandService;
-import org.yes.cart.service.vo.VoCategoryService;
-import org.yes.cart.service.vo.VoProductTypeService;
+import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.service.vo.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -44,14 +45,20 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     private final VoBrandService voBrandService;
     private final VoProductTypeService voProductTypeService;
     private final VoCategoryService voCategoryService;
+    private final VoProductSupplierService voProductSupplierService;
+    private final FederationFacade federationFacade;
 
     @Autowired
     public CatalogEndpointControllerImpl(final VoBrandService voBrandService,
                                          final VoProductTypeService voProductTypeService,
-                                         final VoCategoryService voCategoryService) {
+                                         final VoCategoryService voCategoryService,
+                                         final VoProductSupplierService voProductSupplierService,
+                                         @Qualifier("uiFederationFacade") final FederationFacade federationFacade) {
         this.voBrandService = voBrandService;
         this.voProductTypeService = voProductTypeService;
         this.voCategoryService = voCategoryService;
+        this.voProductSupplierService = voProductSupplierService;
+        this.federationFacade = federationFacade;
     }
 
     @Override
@@ -138,6 +145,11 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
         return voProductTypeService.updateTypeAttributes(vo);
     }
 
+    @Override
+    public @ResponseBody
+    List<VoProductSupplierCatalog> getAllProductSuppliersCatalogs() throws Exception {
+        return voProductSupplierService.getAllProductSuppliersCatalogs();
+    }
 
     @Override
     public @ResponseBody
@@ -149,7 +161,13 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     public @ResponseBody
     List<VoCategory> getBranchCategories(@PathVariable("branch") final long branch,
                                          @RequestParam(value = "expand", required = false) final String expand) throws Exception {
-        return voCategoryService.getBranch(branch, determineBranchIds(expand));
+
+        final List<Long> expandIds = determineBranchIds(expand);
+        if (branch == 0L) { // for root need to proactively expand top level assignments
+            final Set<Long> userTopLevel = federationFacade.getAccessibleCatalogIdsByCurrentManager();
+            expandIds.addAll(voCategoryService.getBranchesPaths(new ArrayList<>(userTopLevel)));
+        }
+        return voCategoryService.getBranch(branch, expandIds);
     }
 
     @Override

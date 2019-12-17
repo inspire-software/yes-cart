@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.TimeContext;
@@ -41,14 +42,19 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
 
     private final GenericDAO<Category, Long> categoryDao;
 
+    private final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport;
+
     /**
      * Construct service to manage categories
      *
      * @param categoryDao     category dao to use
+     * @param shopCategoryRelationshipSupport support
      */
-    public CategoryServiceImpl(final GenericDAO<Category, Long> categoryDao) {
+    public CategoryServiceImpl(final GenericDAO<Category, Long> categoryDao,
+                               final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport) {
         super(categoryDao);
         this.categoryDao = categoryDao;
+        this.shopCategoryRelationshipSupport = shopCategoryRelationshipSupport;
     }
 
 
@@ -190,6 +196,21 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             return all;
         }
         return Collections.emptySet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Long> getAllCategoryIds(final Collection<String> guids) {
+        List<Long> list = (List) categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.GUIDs", guids);
+        final Set<Long> all = new HashSet<>();
+
+        list.forEach(branchId -> {
+            all.addAll(shopCategoryRelationshipSupport.getCatalogCategoriesIds(branchId));
+        });
+
+        return all;
     }
 
     /**

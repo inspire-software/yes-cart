@@ -22,7 +22,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +32,6 @@ import java.util.Set;
  */
 public class ContentImpexFederationFilterImpl extends CacheableImpexFederationFacadeImpl implements FederationFilter {
 
-    private final ShopFederationStrategy shopFederationStrategy;
     private final ShopService shopService;
 
     public ContentImpexFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy,
@@ -42,7 +40,6 @@ public class ContentImpexFederationFilterImpl extends CacheableImpexFederationFa
                                             final CacheManager cacheManager,
                                             final List<String> cachesToFlushForTransientEntities) {
         super(shopFederationStrategy, roles, cacheManager, cachesToFlushForTransientEntities);
-        this.shopFederationStrategy = shopFederationStrategy;
         this.shopService = shopService;
     }
 
@@ -57,10 +54,7 @@ public class ContentImpexFederationFilterImpl extends CacheableImpexFederationFa
         }
 
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
-        final Set<Long> manageableContentIds = new HashSet<>();
-        for (final Long shopId : manageableShopIds) {
-            manageableContentIds.addAll(shopService.getShopContentIds(shopId));
-        }
+        final Set<Long> manageableContentIds = shopService.getShopsContentIds(manageableShopIds);
 
         final Content cn = (Content) object;
         final Long cnId = cn.getContentId();

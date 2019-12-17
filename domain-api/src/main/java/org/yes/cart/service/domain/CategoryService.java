@@ -18,9 +18,7 @@ package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.Category;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -105,6 +103,15 @@ public interface CategoryService extends GenericService<Category> {
      * @return list of child categories
      */
     Set<Category> getChildCategoriesRecursive(long categoryId);
+
+    /**
+     * Get all ids for all categories represented by given GUIDs.
+     *
+     * @param guids GUIDs of category branches
+     *
+     * @return set of ids
+     */
+    Set<Long> getAllCategoryIds(Collection<String> guids);
 
     /**
      * Get the child categories with recursion.

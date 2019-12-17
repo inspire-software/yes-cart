@@ -59,7 +59,7 @@
   </div>
 
   <div [hidden]="viewMode !== 'manager'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-manager [manager]="managerEdit" [shops]="shops" [roles]="roles" (dataChanged)="onManagerChanged($event)"></yc-manager>
+    <yc-manager [manager]="managerEdit" [shops]="shops" [roles]="roles" [suppliers]="suppliers" (dataChanged)="onManagerChanged($event)"></yc-manager>
   </div>
 
   <yc-modal #deleteConfirmationModalDialog

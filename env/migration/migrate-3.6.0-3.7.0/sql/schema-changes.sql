@@ -292,6 +292,12 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11325,  'SHOP_CUSTOMER_RECORDS_COLUMNS', 'SHOP_CUSTOMER_RECORDS_COLUMNS',  0,  NULL,  'Manager: Quantity of customer pods in one row in list',
    'Quantity of product pods in one row to show on category page',  1006, 1001, 0, 0, 0, 0);
 
+--
+-- YC-802 Improved data federation
+--
 
+alter table TMANAGER add column PRODUCT_SUPPLIER_CATALOGS varchar(255);
+alter table TMANAGER add column CATEGORY_CATALOGS varchar(1024);
 
-
+-- example update all manager if Product.supplierCatalogCode had been used
+-- update TMANAGER set PRODUCT_SUPPLIER_CATALOGS = 'ABC,DEF,XYZ';

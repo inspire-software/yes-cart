@@ -615,6 +615,8 @@
         COMPANYNAME1 varchar(255),
         COMPANYNAME2 varchar(255),
         COMPANYDEPARTMENT varchar(255),
+        PRODUCT_SUPPLIER_CATALOGS varchar(255),
+        CATEGORY_CATALOGS varchar(1024),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

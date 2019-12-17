@@ -413,6 +413,14 @@ public class ProductServiceCachedImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+    public List<String> findProductSupplierCatalogCodes() {
+        return productService.findProductSupplierCatalogCodes();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Product> findAll() {
         return productService.findAll();
     }

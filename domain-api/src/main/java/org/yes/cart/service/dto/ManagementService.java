@@ -77,12 +77,12 @@ public interface ManagementService {
      *          in case if some problems with reflection
      */
     List<ManagerDTO> getManagers(final String emailFilter,
-                                        final String firstNameFilter,
-                                        final String lastNameFilter)
+                                 final String firstNameFilter,
+                                 final String lastNameFilter)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Get the assigned to manager roles
+     * Get the roles assigned to manager.
      *
      * @param userId user email
      * @return list of assigned roles
@@ -95,7 +95,7 @@ public interface ManagementService {
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Get the available to manager roles. Mean all roles minus assigned.
+     * Get the roles available to manager.
      *
      * @param userId user email
      * @return list of available roles
@@ -108,7 +108,7 @@ public interface ManagementService {
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Get the assigned to manager shops
+     * Get the shops assigned to manager
      *
      * @param userId user email
      * @param includeSubs include sub shops
@@ -122,7 +122,7 @@ public interface ManagementService {
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Get the available to manager shops.
+     * Get the shops available to manager.
      *
      * @param userId user email
      * @return list of available shops
@@ -134,6 +134,46 @@ public interface ManagementService {
     List<ShopDTO> getAvailableManagerShops(String userId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+
+    /**
+     * Get the suppliers assigned to manager
+     *
+     * @param userId user email
+     * @return list of supplier codes
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration error
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case if some problems with reflection
+     */
+    List<String> getAssignedManagerSupplierCatalogs(String userId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
+     * Get the categories assigned to manager
+     *
+     * @param userId user email
+     * @return list of GUIDs
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration error
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case if some problems with reflection
+     */
+    List<String> getAssignedManagerCategoryCatalogs(String userId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get full hierarchy of categories
+     *
+     * @param userId user email
+     * @return list of IDs
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration error
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case if some problems with reflection
+     */
+    List<Long> getAssignedManagerCatalogHierarchy(String userId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Update user names by given user id.
@@ -249,6 +289,38 @@ public interface ManagementService {
      * @param shopCode  shop
      */
     void revokeShop(String userId, String shopCode);
+
+    /**
+     * Grant given supplier code to user
+     *
+     * @param userId user id
+     * @param catalogCode  catalog
+     */
+    void grantSupplierCatalog(String userId, String catalogCode);
+
+    /**
+     * Revoke supplier code from user.
+     *
+     * @param userId user id
+     * @param catalogCode  catalog
+     */
+    void revokeSupplierCatalog(String userId, String catalogCode);
+
+    /**
+     * Grant given catalog to user
+     *
+     * @param userId user id
+     * @param catalogCode  catalog
+     */
+    void grantCategoryCatalog(String userId, String catalogCode);
+
+    /**
+     * Revoke catalog from user.
+     *
+     * @param userId user id
+     * @param catalogCode  catalog
+     */
+    void revokeCategoryCatalog(String userId, String catalogCode);
 
     /**
      * Enable user account.

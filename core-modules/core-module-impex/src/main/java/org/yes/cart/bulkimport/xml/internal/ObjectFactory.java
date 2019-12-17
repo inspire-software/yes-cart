@@ -975,6 +975,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrganisationUserSupplierCatalogType }
+     * 
+     */
+    public OrganisationUserSupplierCatalogType createOrganisationUserSupplierCatalogType() {
+        return new OrganisationUserSupplierCatalogType();
+    }
+
+    /**
      * Create an instance of {@link OrderItemB2BType }
      * 
      */
@@ -1484,6 +1492,14 @@ public class ObjectFactory {
      */
     public ContentTemplatesType createContentTemplatesType() {
         return new ContentTemplatesType();
+    }
+
+    /**
+     * Create an instance of {@link OrganisationUserSupplierCatalogsType }
+     * 
+     */
+    public OrganisationUserSupplierCatalogsType createOrganisationUserSupplierCatalogsType() {
+        return new OrganisationUserSupplierCatalogsType();
     }
 
     /**

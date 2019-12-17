@@ -49,6 +49,7 @@
     <bean id="categoryFederationFilter" class="org.yes.cart.service.federation.impl.CategoryUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2" ref="categoryService"/>
     </bean>
 
     <bean id="contentFederationFilter" class="org.yes.cart.service.federation.impl.ContentUiFederationFilterImpl">
@@ -71,8 +72,7 @@
 
     <bean id="productFederationFilter" class="org.yes.cart.service.federation.impl.ProductUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <constructor-arg index="2" ref="dtoProductService"/>
+        <constructor-arg index="1" ref="dtoProductService"/>
     </bean>
 
     <bean id="carrierFederationFilter" class="org.yes.cart.service.federation.impl.CarrierUiFederationFilterImpl">

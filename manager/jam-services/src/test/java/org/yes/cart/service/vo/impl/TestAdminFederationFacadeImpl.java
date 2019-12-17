@@ -15,7 +15,6 @@
  */
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.service.federation.FederationFacade;
 
 import java.util.*;
@@ -25,69 +24,111 @@ import java.util.*;
  */
 public class TestAdminFederationFacadeImpl implements FederationFacade {
 
-  public static boolean IS_SYSADMIN = true;
+    static boolean IS_SYSADMIN = true;
 
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isCurrentUserSystemAdmin() {
-    return IS_SYSADMIN;
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCurrentUserSystemAdmin() {
+        return IS_SYSADMIN;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isCurrentUser(final String role) {
-    return false;
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCurrentUser(final String role) {
+        return false;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isShopAccessibleByCurrentManager(final String shopCode) {
-    return true;
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isShopAccessibleByCurrentManager(final String shopCode) {
+        return true;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isShopAccessibleByCurrentManager(final Long shopId) {
-    return true;
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isShopAccessibleByCurrentManager(final Long shopId) {
+        return true;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public Set<Long> getAccessibleShopIdsByCurrentManager() {
-    return new HashSet<Long>(Arrays.asList(10L, 20L, 30L, 40L, 50L, 60L));
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isSupplierCatalogAccessibleByCurrentManager(final String catalogCode) {
+        return true;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public Set<String> getAccessibleShopCodesByCurrentManager() {
-    return new HashSet<String>(Arrays.asList("SHOIP1", "SHOIP2", "SHOIP3", "SHOIP4", "SHOIP5", "JEWEL_SHOP"));
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode) {
+        return true;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public List<ShopDTO> getAccessibleShopsByCurrentManager() {
-    return Collections.emptyList();
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Long> getAccessibleShopIdsByCurrentManager() {
+        return new HashSet<Long>(Arrays.asList(10L, 20L, 30L, 40L, 50L, 60L));
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void applyFederationFilter(final Collection list, final Class objectType) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<String> getAccessibleShopCodesByCurrentManager() {
+        return new HashSet<String>(Arrays.asList("SHOIP1", "SHOIP2", "SHOIP3", "SHOIP4", "SHOIP5", "JEWEL_SHOP"));
+    }
 
-  }
 
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isManageable(final Object object, final Class objectType) {
-    return true;
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<String> getAccessibleSupplierCatalogCodesByCurrentManager() {
+        return new HashSet<String>(Arrays.asList("CAT001", "CAT002", "CAT003"));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<String> getAccessibleCategoryCatalogCodesByCurrentManager() {
+        return Collections.emptySet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Long> getAccessibleCatalogIdsByCurrentManager() {
+        return Collections.emptySet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void applyFederationFilter(final Collection list, final Class objectType) {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isManageable(final Object object, final Class objectType) {
+        return true;
+    }
 
 }

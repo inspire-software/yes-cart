@@ -1457,6 +1457,13 @@
         <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
     </xsd:complexType>
 
+    <xsd:complexType name="organisation-userSupplierCatalogsType">
+        <xsd:sequence>
+            <xsd:element type="organisation-userSupplierCatalogType" name="supplier-catalog" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType"  name="import-mode"/>
+    </xsd:complexType>
+
     <xsd:complexType name="organisation-userPreferencesType">
         <xsd:sequence>
             <xsd:element type="xsd:string" name="dashboard-widgets"/>
@@ -1491,6 +1498,10 @@
         <xsd:attribute type="xsd:string" name="code" use="required"/>
     </xsd:complexType>
 
+    <xsd:complexType name="organisation-userSupplierCatalogType">
+        <xsd:attribute type="xsd:string" name="code" use="required"/>
+    </xsd:complexType>
+
     <xsd:complexType name="organisation-userOrganisationType">
         <xsd:sequence>
             <xsd:element type="xsd:string" name="company-name-1" minOccurs="0"/>
@@ -1498,6 +1509,7 @@
             <xsd:element type="xsd:string" name="company-department" minOccurs="0"/>
             <xsd:element type="organisation-userShopsType" name="shops" minOccurs="0"/>
             <xsd:element type="organisation-userRolesType" name="roles" minOccurs="0"/>
+            <xsd:element type="organisation-userSupplierCatalogsType" name="supplier-catalogs" minOccurs="0"/>
         </xsd:sequence>
     </xsd:complexType>
 

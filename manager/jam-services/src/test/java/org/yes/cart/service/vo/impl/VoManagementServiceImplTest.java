@@ -82,12 +82,26 @@ public class VoManagementServiceImplTest extends BaseCoreDBTestCase {
         role.setManagerId(created.getManagerId());
         role.setCode("ROLE_OTHER");
         afterCreated.setManagerRoles(Collections.singletonList(role));
+        final VoManagerSupplierCatalog cat = new VoManagerSupplierCatalog();
+        cat.setManagerId(created.getManagerId());
+        cat.setCode("CAT0004");
+        afterCreated.setManagerSupplierCatalogs(Collections.singletonList(cat));
+        final VoManagerCategoryCatalog mst = new VoManagerCategoryCatalog();
+        mst.setManagerId(created.getManagerId());
+        mst.setCategoryId(102L);
+        mst.setCode("102");
+        mst.setName("Flying Machines");
+        afterCreated.setManagerCategoryCatalogs(Collections.singletonList(mst));
 
         final VoManager updated = voManagementService.updateManager(afterCreated);
         assertNotNull(updated.getManagerShops());
         assertEquals(10L, updated.getManagerShops().get(0).getShopId());
         assertNotNull(updated.getManagerRoles());
         assertEquals("ROLE_OTHER", updated.getManagerRoles().get(0).getCode());
+        assertNotNull(updated.getManagerSupplierCatalogs());
+        assertEquals("CAT0004", updated.getManagerSupplierCatalogs().get(0).getCode());
+        assertNotNull(updated.getManagerCategoryCatalogs());
+        assertEquals("102", updated.getManagerCategoryCatalogs().get(0).getCode());
 
         assertTrue(voManagementService.getManagers().stream().anyMatch(mng -> mng.getManagerId() == updated.getManagerId()));
 
@@ -95,6 +109,14 @@ public class VoManagementServiceImplTest extends BaseCoreDBTestCase {
 
         final VoManager disabled = voManagementService.updateManager(created);
         assertFalse(disabled.getEnabled());
+        assertNotNull(disabled.getManagerShops());
+        assertFalse(disabled.getManagerShops().isEmpty());
+        assertNotNull(disabled.getManagerRoles());
+        assertTrue(disabled.getManagerRoles().isEmpty());
+        assertNotNull(disabled.getManagerSupplierCatalogs());
+        assertTrue(disabled.getManagerSupplierCatalogs().isEmpty());
+        assertNotNull(disabled.getManagerCategoryCatalogs());
+        assertTrue(disabled.getManagerCategoryCatalogs().isEmpty());
 
 
     }

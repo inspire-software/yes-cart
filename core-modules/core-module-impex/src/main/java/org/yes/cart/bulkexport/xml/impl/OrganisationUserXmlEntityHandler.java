@@ -94,6 +94,14 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<M
                 rolesTag.end();
             }
 
+            if (CollectionUtils.isNotEmpty(manager.getProductSupplierCatalogs())) {
+                final Tag supplierCatalogsTag = orgTag.tag("supplier-catalogs");
+                for (final String code : manager.getProductSupplierCatalogs()) {
+                    supplierCatalogsTag.tag("supplier-catalog").attr("code", code).end();
+                }
+                supplierCatalogsTag.end();
+            }
+
             orgTag.end();
 
             mTag.tag("contact-details")

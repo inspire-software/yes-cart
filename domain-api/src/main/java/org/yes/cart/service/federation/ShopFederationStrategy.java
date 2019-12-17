@@ -53,6 +53,20 @@ public interface ShopFederationStrategy {
     boolean isShopAccessibleByCurrentManager(final Long shopId);
 
     /**
+     * @param catalogCode supplier catalog code
+     *
+     * @return true if current manager has access to this catalog
+     */
+    boolean isSupplierCatalogAccessibleByCurrentManager(final String catalogCode);
+
+    /**
+     * @param catalogCode category catalog code
+     *
+     * @return true if current manager has access to this catalog
+     */
+    boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode);
+
+    /**
      * @return set of PK's of shops to which current manager has access
      */
     Set<Long> getAccessibleShopIdsByCurrentManager();
@@ -63,9 +77,19 @@ public interface ShopFederationStrategy {
     Set<String> getAccessibleShopCodesByCurrentManager();
 
     /**
-     * @return set of shops to which current manager has access
+     * @return set fo supplier catalog codes that are accessible
      */
-    List<ShopDTO> getAccessibleShopsByCurrentManager();
+    Set<String> getAccessibleSupplierCatalogCodesByCurrentManager();
+
+    /**
+     * @return set of category catalog codes that are accessible
+     */
+    Set<String> getAccessibleCategoryCatalogCodesByCurrentManager();
+
+    /**
+     * @return set of immediate category catalog codes that are accessible
+     */
+    Set<Long> getAccessibleCatalogIdsByCurrentManager();
 
     /**
      * @param employeeId employee ID (email)

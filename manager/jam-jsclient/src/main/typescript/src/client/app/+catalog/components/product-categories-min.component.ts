@@ -59,9 +59,9 @@ export class ProductCategoryMinComponent implements OnInit, OnDestroy {
   private nodes:Array<ITreeNode>;
   private selectedNode:ITreeNode;
 
-  private loading:boolean = false;
-
   private assigned:Array<ProductCategoryVO> = null;
+
+  private loading:boolean = false;
 
   /**
    * Construct product catalogues panel.

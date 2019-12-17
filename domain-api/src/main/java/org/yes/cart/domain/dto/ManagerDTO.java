@@ -18,6 +18,8 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Collection;
+
 /**
  * Shop manager DTO.
  * <p/>
@@ -158,6 +160,34 @@ public interface ManagerDTO extends Identifiable {
      */
     void setCompanyDepartment(String companyDepartment);
 
+
+    /**
+     * Get assigned product suppliers
+     *
+     * @return product supplier codes
+     */
+    Collection<String> getProductSupplierCatalogs();
+
+    /**
+     * Set  assigned product suppliers
+     *
+     * @param productSupplierCatalogs  product supplier codes
+     */
+    void setProductSupplierCatalogs(Collection<String> productSupplierCatalogs);
+
+    /**
+     * Get assigned category catalogs
+     *
+     * @return category codes
+     */
+    Collection<String> getCategoryCatalogs();
+
+    /**
+     * Set assigned category catalogs
+     *
+     * @param categoryCatalogs category codes
+     */
+    void setCategoryCatalogs(Collection<String> categoryCatalogs);
 
 
 }

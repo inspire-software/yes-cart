@@ -60,41 +60,13 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
     ProductSkuDTO getProductSkuByCode(String skuCode) throws
             ObjectNotFoundException, UnableToWrapObjectException;
 
-    /**
-     * Get the all products in category.
-     *
-     * @param categoryId  category id
-     * @param firstResult index of first result
-     * @param maxResults  quantity results to return
-     * @return list of products
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException
-     *          in case of reflection problem
-     * @throws org.yes.cart.exception.UnmappedInterfaceException
-     *          in case of configuration problem
-     */
-    List<ProductDTO> getProductByCategoryWithPaging(
-            long categoryId,
-            int firstResult,
-            int maxResults) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Find product by given optional filtering criteria.
+     * Get list of unique supplier catalog codes that exist.
      *
-     * @param code          product code.  use like %%
-     * @param name          product name.  use like %%
-     * @param brandId       brand id. use exact match
-     * @param productTypeId product type id. use exact match
-     * @return list of founded products
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException
-     *          in case of reflection problem
-     * @throws org.yes.cart.exception.UnmappedInterfaceException
-     *          in case of configuration problem
+     * @return list of unique codes
      */
-    List<ProductDTO> getProductByCodeNameBrandType(
-            final String code,
-            final String name,
-            final long brandId,
-            final long productTypeId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    List<String> findProductSupplierCatalogCodes();
 
 
     /**

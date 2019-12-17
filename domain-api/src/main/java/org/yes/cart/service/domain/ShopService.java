@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,7 @@ public interface ShopService extends GenericService<Shop> {
      * Get the {@link Shop} by given server name.
      *
      * @param serverName the server name
+     *
      * @return instance of Shop if it has given server name, otherwise null
      */
     Shop getShopByDomainName(String serverName);
@@ -63,7 +65,9 @@ public interface ShopService extends GenericService<Shop> {
 
     /**
      * Find shop by id
+     *
      * @param shopId  given id
+     *
      * @return     shop if found, otherwise null
      */
     Shop getById(long shopId);
@@ -72,6 +76,7 @@ public interface ShopService extends GenericService<Shop> {
      * Get the {@link Shop} by given order guid.
      *
      * @param orderGuid the guid of order
+     *
      * @return instance of Shop if it has given server name, otherwise null
      */
     Shop getShopByOrderGuid(String orderGuid);
@@ -79,22 +84,28 @@ public interface ShopService extends GenericService<Shop> {
 
     /**
      * Get shop by given shop code.
+     *
      * @param shopCode  given shop code.
+     *
      * @return instance of Shop if it has given server name, otherwise null
      */
     Shop getShopByCode(String shopCode);
 
     /**
      * Get shops by given shop master.
+     *
      * @param masterId master shop
+     *
      * @return instance of Shop if it has given server name, otherwise null
      */
     List<Shop> getSubShopsByMaster(long masterId);
 
     /**
      * Get shop by given shop code.
+     *
      * @param shopName  given shop code.
      * @param masterId master shop
+     *
      * @return instance of Shop if it has given server name, otherwise null
      */
     Shop getSubShopByNameAndMaster(String shopName, long masterId);
@@ -111,6 +122,16 @@ public interface ShopService extends GenericService<Shop> {
      * Get all categories and content including child categories, that belong to given shop.
      *
      * @param shopId given shop
+     *
+     * @return linear representation of category tree
+     */
+    Set<Long> getShopsAllCategoriesIds(Collection<Long> shopId);
+
+    /**
+     * Get all categories and content including child categories, that belong to given shop.
+     *
+     * @param shopId given shop
+     *
      * @return linear representation of category tree
      */
     Set<Long> getShopAllCategoriesIds(long shopId);
@@ -119,6 +140,16 @@ public interface ShopService extends GenericService<Shop> {
      * Get all categories including child categories, that belong to given shop.
      *
      * @param shopId given shop
+     *
+     * @return linear representation of category tree
+     */
+    Set<Long> getShopsCategoriesIds(Collection<Long> shopId);
+
+    /**
+     * Get all categories including child categories, that belong to given shop.
+     *
+     * @param shopId given shop
+     *
      * @return linear representation of category tree
      */
     Set<Long> getShopCategoriesIds(long shopId);
@@ -127,6 +158,16 @@ public interface ShopService extends GenericService<Shop> {
      * Get all content including child content, that belong to given shop.
      *
      * @param shopId given shop
+     *
+     * @return linear representation of category tree
+     */
+    Set<Long> getShopsContentIds(Collection<Long> shopId);
+
+    /**
+     * Get all content including child content, that belong to given shop.
+     *
+     * @param shopId given shop
+     *
      * @return linear representation of category tree
      */
     Set<Long> getShopContentIds(long shopId);
@@ -135,6 +176,7 @@ public interface ShopService extends GenericService<Shop> {
      * Get the top level categories assigned to shop.
      *
      * @param shopId given shop
+     *
      * @return ordered by rank list of assigned top level categories
      */
     Set<Category> getTopLevelCategories(Long shopId);
@@ -143,6 +185,7 @@ public interface ShopService extends GenericService<Shop> {
      * Get all assigned to shop categories.
      *
      * @param shopId shop id
+     *
      * @return list of assigned categories
      */
     Set<Category> findAllByShopId(long shopId);
@@ -168,6 +211,7 @@ public interface ShopService extends GenericService<Shop> {
      *
      * @param shopId shop id
      * @param categoryId given category PK
+     *
      * @return parent ID (or symlink parent)
      */
     Long getShopCategoryParentId(long shopId, long categoryId);
@@ -178,6 +222,7 @@ public interface ShopService extends GenericService<Shop> {
      *
      * @param shopId shop id
      * @param categoryId given category PK
+     *
      * @return Template variation
      */
     String getShopCategoryTemplate(long shopId, long categoryId);
@@ -188,6 +233,7 @@ public interface ShopService extends GenericService<Shop> {
      *
      * @param shopId shop id
      * @param categoryId given category PK
+     *
      * @return Template variation
      */
     String getShopCategorySearchTemplate(long shopId, long categoryId);
@@ -208,6 +254,7 @@ public interface ShopService extends GenericService<Shop> {
      * Get shop id by given code
      *
      * @param code given code
+     *
      * @return shop id if found otherwise null
      */
     Long findShopIdByCode(String code);

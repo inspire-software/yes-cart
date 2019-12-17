@@ -783,6 +783,17 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> findProductSupplierCatalogCodes() {
+
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.SUPPLIER.CATALOG.CODES");
+
+    }
+
     /**
      * Persist product. Default sku will be created.
      *

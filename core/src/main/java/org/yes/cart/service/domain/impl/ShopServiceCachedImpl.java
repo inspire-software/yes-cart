@@ -24,9 +24,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -132,6 +130,15 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "shopService-shopCategoriesIds", keyGenerator = "cacheKeyGeneratorCollectionToString")
+    @Override
+    public Set<Long> getShopsCategoriesIds(final Collection<Long> shopId) {
+        return shopService.getShopsCategoriesIds(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     // @Cacheable(value = "shopService-shopCategoriesIds") already cached at shopCategorySupport
     @Override
     public Set<Long> getShopCategoriesIds(final long shopId) {
@@ -141,10 +148,28 @@ public class ShopServiceCachedImpl implements ShopService {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "shopService-shopContentIds", keyGenerator = "cacheKeyGeneratorCollectionToString")
+    @Override
+    public Set<Long> getShopsContentIds(final Collection<Long> shopId) {
+        return shopService.getShopsContentIds(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     // @Cacheable(value = "shopService-shopContentIds")  already cached at shopCategorySupport
     @Override
     public Set<Long> getShopContentIds(final long shopId) {
         return shopService.getShopContentIds(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Cacheable(value = "shopService-shopAllCategoriesIds", keyGenerator = "cacheKeyGeneratorCollectionToString")
+    public Set<Long> getShopsAllCategoriesIds(final Collection<Long> shopId) {
+        return shopService.getShopsAllCategoriesIds(shopId);
     }
 
     /**
@@ -297,7 +322,6 @@ public class ShopServiceCachedImpl implements ShopService {
     /** {@inheritDoc} */
     @Override
     @CacheEvict(value ={
-            "shopService-allCategoriesIdsMap",
             "shopService-shopCategoriesIds",
             "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds",
@@ -306,10 +330,7 @@ public class ShopServiceCachedImpl implements ShopService {
             "shopService-allShopsFulfilmentMap",
             "shopService-allNonSubShops",
             "shopService-subShopsByMaster",
-            "shopFederationStrategy-admin",
-            "shopFederationStrategy-shop",
-            "shopFederationStrategy-shopId",
-            "shopFederationStrategy-shopCode"
+            "shopFederationStrategy-admin"
     }, allEntries = true)
     public Shop create(final Shop instance) {
         return shopService.create(instance);
@@ -350,7 +371,6 @@ public class ShopServiceCachedImpl implements ShopService {
             "shopService-allShopsFulfilmentMap",
             "shopService-allNonSubShops",
             "shopService-subShopsByMaster",
-            "shopService-allCategoriesIdsMap",
             "shopService-shopCategoriesIds",
             "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds",

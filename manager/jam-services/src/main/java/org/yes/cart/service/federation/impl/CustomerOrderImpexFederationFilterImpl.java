@@ -30,12 +30,9 @@ import java.util.Set;
  */
 public class CustomerOrderImpexFederationFilterImpl extends AbstractImpexFederationFilterImpl implements FederationFilter {
 
-    private final ShopFederationStrategy shopFederationStrategy;
-
     public CustomerOrderImpexFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy,
                                                   final List<String> roles) {
         super(shopFederationStrategy, roles);
-        this.shopFederationStrategy = shopFederationStrategy;
     }
 
     /**

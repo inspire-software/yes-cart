@@ -36,8 +36,9 @@
             </list>
         </constructor-arg>
         <constructor-arg index="2" ref="shopService"/>
-        <constructor-arg index="3" ref="cacheManager"/>
-        <constructor-arg index="4">
+        <constructor-arg index="3" ref="categoryService"/>
+        <constructor-arg index="4" ref="cacheManager"/>
+        <constructor-arg index="5">
             <list>
                 <value>shopService-allCategoriesIdsMap</value>
                 <value>shopService-shopCategoriesIds</value>
@@ -64,6 +65,7 @@
                 <value>shopService-allCategoriesIdsMap</value>
                 <value>shopService-shopCategoriesIds</value>
                 <value>shopService-shopContentIds</value>
+                <value>shopService-shopAllCategoriesIds</value>
             </list>
         </constructor-arg>
     </bean>
@@ -77,7 +79,6 @@
                 <value>ROLE_SMMARKETINGADMIN</value>
             </list>
         </constructor-arg>
-        <constructor-arg index="2" ref="categoryImpexFederationFilter"/>
     </bean>
 
     <bean id="productSkuImpexFederationFilter" class="org.yes.cart.service.federation.impl.ProductSkuImpexFederationFilterImpl">

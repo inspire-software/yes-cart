@@ -56,6 +56,9 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ManagerShopEntity"/>
         </bag>
 
+        <property name="productSupplierCatalogsInternal" length="255" type="java.lang.String" column="PRODUCT_SUPPLIER_CATALOGS" not-null="false"/>
+        <property name="categoryCatalogsInternal" length="1024" type="java.lang.String" column="CATEGORY_CATALOGS" not-null="false"/>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -3451,6 +3454,12 @@
        ]]>
     </query>
 
+    <query name="PRODUCT.SUPPLIER.CATALOG.CODES">
+        <![CDATA[
+       select distinct a.supplierCatalogCode from ProductEntity a where a.supplierCatalogCode is not null
+       ]]>
+    </query>
+
     <query name="PRODUCT.SKU.BY.CODE">
         <![CDATA[
        select a
@@ -3476,6 +3485,12 @@
     <query name="CATEGORY.ID.BY.GUID">
         <![CDATA[
                   select c.categoryId from CategoryEntity c  where c.guid = ?1
+       ]]>
+    </query>
+
+    <query name="CATEGORY.ID.BY.GUIDs">
+        <![CDATA[
+                  select c.categoryId from CategoryEntity c  where c.guid in ?1
        ]]>
     </query>
 

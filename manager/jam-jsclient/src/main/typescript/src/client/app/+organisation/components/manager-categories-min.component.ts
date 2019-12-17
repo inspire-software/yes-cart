@@ -13,34 +13,35 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { ShopService, CatalogService } from './../../shared/services/index';
-import { ShopVO, CategoryVO, BasicCategoryVO, ValidationRequestVO } from './../../shared/model/index';
+import { CatalogService } from './../../shared/services/index';
+import { ManagerVO, ManagerCategoryCatalogVO, CategoryVO, BasicCategoryVO, ValidationRequestVO } from './../../shared/model/index';
 import { ITreeNode } from './../../shared/tree-view/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
+import { Util } from './../../shared/services/util';
 
 @Component({
-  selector: 'yc-shop-catalog',
+  selector: 'yc-manager-categories-min',
   moduleId: module.id,
-  templateUrl: 'shop-catalog.component.html',
+  templateUrl: 'manager-categories-min.component.html',
 })
 
 /**
- * Manage categories assigned to shop.
+ * Manage categories assigned to manager.
  */
-export class ShopCatalogComponent implements OnInit, OnDestroy {
+export class ManagerCategoryMinComponent implements OnInit, OnDestroy {
 
-  private static _categories:Array<CategoryVO> = null;
+  @Output() dataChanged: EventEmitter<Array<ManagerCategoryCatalogVO>> = new EventEmitter<Array<ManagerCategoryCatalogVO>>();
 
-  private _shop:ShopVO;
+  private _manager:ManagerVO;
   private _reload:boolean = false;
 
   private changed:boolean = false;
-  private existingShop:boolean = false;
+  private existingManager:boolean = false;
 
   private newCategory:BasicCategoryVO;
   @ViewChild('editNewCategoryName')
@@ -52,20 +53,18 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   private nodes:Array<ITreeNode>;
   private selectedNode:ITreeNode;
 
-  private assigned:Array<CategoryVO> = null;
+  private assigned:Array<ManagerCategoryCatalogVO> = null;
 
   private loading:boolean = false;
 
   /**
-   * Construct shop catalogues panel.
+   * Construct manager catalogues panel.
    * @param _categoryService category service
-   * @param _shopService shop service
    * @param fb form builder
    */
   constructor(private _categoryService:CatalogService,
-              private _shopService:ShopService,
               fb: FormBuilder) {
-    LogUtil.debug('ShopCatalogComponent constructed');
+    LogUtil.debug('ManagerCategoryMinComponent constructed');
 
     this.newCategory = this.newCategoryInstance();
 
@@ -91,101 +90,134 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
       'guid': ['', validCode],
       'name': ['', YcValidators.requiredNonBlankTrimmed],
     });
+
   }
 
   @Input()
   set reload(reload:boolean) {
     if (reload && !this._reload) {
       this._reload = true;
-      this.reloadData();
+      this.loadData();
     }
   }
 
   @Input()
-  set shop(shop:ShopVO) {
-    this._shop = shop;
+  set manager(manager:ManagerVO) {
+    this._manager = manager;
     if (this._reload || this.assigned != null) {
-      this.reloadData();
+      this.loadData();
     }
   }
 
-  get shop():ShopVO  {
-    return this._shop;
-  }
-
-  get categories():Array<CategoryVO> {
-    return ShopCatalogComponent._categories;
-  }
-
-  set categories(categories:Array<CategoryVO>) {
-    ShopCatalogComponent._categories = categories;
+  get manager():ManagerVO  {
+    return this._manager;
   }
 
   ngOnInit() {
-    LogUtil.debug('ShopCatalogComponent ngOnInit shop', this.shop);
-    this.formBind();
+    LogUtil.debug('ManagerCategoryMinComponent ngOnInit manager', this.manager);
+    this.formBindAdd();
   }
 
   ngOnDestroy() {
-    LogUtil.debug('ShopCatalogComponent ngOnDestroy');
-    this.formUnbind();
+    LogUtil.debug('ManagerCategoryMinComponent ngOnDestroy');
+    this.formUnbindAdd();
   }
 
   newCategoryInstance():BasicCategoryVO {
-    return { 'name': '', 'guid': '' };
+    return { name: '', guid: '' };
   }
 
-  formBind():void {
-    UiUtil.formBind(this, 'newCategoryForm', 'formChange', false);
+  newManagerCategoryInstance():ManagerCategoryCatalogVO {
+    return { managerId : 0, categoryId : 0, code : '', name : '' };
   }
 
-  formUnbind():void {
+  formBindAdd():void {
+    UiUtil.formBind(this, 'newCategoryForm', 'formChangeAdd', false);
+  }
+
+  formUnbindAdd():void {
     UiUtil.formUnbind(this, 'newCategoryForm');
   }
 
-  formChange():void {
-    LogUtil.debug('ShopCatalogComponent formChange', this.newCategoryForm.valid, this.newCategory);
+  formChangeAdd():void {
+    LogUtil.debug('ManagerCategoryMinComponent formChangeAdd', this.newCategoryForm.valid, this.newCategory);
     this.validForSave = this.newCategoryForm.valid;
   }
-
 
   /**
    * Load data and adapt time.
    */
-  loadData() {
-    LogUtil.debug('ShopCatalogComponent loading categories', this.shop);
-    this.existingShop = this.shop.shopId > 0;
-    if (this.existingShop) {
-      this.loading = true;
-      let _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
-          cats => {
-            LogUtil.debug('ShopCatalogComponent assigned categories', cats);
-            this.assigned = cats;
-            _subs.unsubscribe();
-            let _assignedIds:Array<number> = this.adaptToIds(cats);
+  loadData(current:number = 0) {
+    LogUtil.debug('ManagerCategoryMinComponent loading categories', this.manager);
+    this.existingManager = this.manager != null;
+    if (this.existingManager) {
 
-            let _subc:any = this._categoryService.getAllCategories().subscribe(
+      this.assigned = this._manager.managerCategoryCatalogs;
+      let _assignedIds:Array<number> = this.adaptToIds(this.assigned);
+
+        if (current > 0) {
+          // expanding single node
+          this.loading = true;
+          let _subc:any = this._categoryService.getBranchCategories(current, []).subscribe(
+            cats => {
+              LogUtil.debug('ManagerCategoryMinComponent branch categories', cats, _assignedIds);
+              let branchNodes = this.adaptToTree(cats, _assignedIds);
+
+              LogUtil.debug('ManagerCategoryMinComponent adaptToTree', branchNodes);
+
+              let branch = this.resetCurrent(this.nodes, branchNodes[0]);
+              if (branch == null) {
+                this.nodes = branchNodes;
+                LogUtil.debug('ManagerCategoryMinComponent root categories', this.nodes);
+              } else {
+                LogUtil.debug('ManagerCategoryMinComponent branch categories', this.nodes, branch);
+              }
+
+              // this.selectedNode = null;
+              // UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
+              // this.changed = false;
+              // this._reload = false;
+              this.loading = false;
+              _subc.unsubscribe();
+            }
+          );
+
+        } else {
+          // expanding initial
+          this.loading = true;
+          let _subc:any = this._categoryService.getBranchesCategoriesPaths(_assignedIds).subscribe(
+            cats => {
+              LogUtil.debug('ManagerCategoryMinComponent loading branch path', cats);
+              _subc.unsubscribe();
+
+              this.loading = true;
+
+              let _subc2:any = this._categoryService.getBranchCategories(0, cats).subscribe(
                 cats => {
-                  LogUtil.debug('ShopCatalogComponent all categories', cats, _assignedIds);
-                  this.categories = cats;
+                  LogUtil.debug('ManagerCategoryMinComponent initial categories', cats, _assignedIds);
                   this.nodes = this.adaptToTree(cats, _assignedIds);
                   this.selectedNode = null;
                   UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
                   this.changed = false;
                   this._reload = false;
-                  _subc.unsubscribe();
                   this.loading = false;
-              }
-            );
+                  _subc2.unsubscribe();
+                }
+              );
+
+            }
+          );
+
+
         }
-      );
+
     }
   }
 
-  adaptToIds(vo:Array<CategoryVO>):Array<number> {
+  adaptToIds(vo:Array<ManagerCategoryCatalogVO>):Array<number> {
     let rez:Array<number> = [];
     for (let idx = 0; idx < vo.length; idx++) {
-      let catVo:CategoryVO = vo[idx];
+      let catVo:ManagerCategoryCatalogVO = vo[idx];
       rez.push(catVo.categoryId);
     }
     return rez;
@@ -205,7 +237,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
         'id': catVo.categoryId.toString(),
         'name': catVo.name,
         'children': [],
-        'childrenLoaded': true,
+        'childrenLoaded': catVo.children != null,
         'expanded': catVo.categoryId === 100, //the root is expanded by default
         'selected': catVo.categoryId === 100, //treat root as already selected
         'disabled': disabled.indexOf(catVo.categoryId) !== -1,
@@ -224,39 +256,69 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
     return rez;
   }
 
+
+  resetCurrent(nodes:Array<ITreeNode>, current:ITreeNode):ITreeNode {
+    if (nodes != null) {
+
+      LogUtil.debug('ManagerCategoryMinComponent resetCurrent', nodes, current);
+
+      for (let idx = 0; idx < nodes.length; idx++) {
+        let node:ITreeNode = nodes[idx];
+        LogUtil.debug('ManagerCategoryMinComponent resetCurrent matching', node, current);
+        if (node.id == current.id) {
+          LogUtil.debug('ManagerCategoryMinComponent resetCurrent matched', node, current);
+          current.expanded = true;
+          nodes[idx] = current;
+          return current;
+        }
+        if (node.children != null && node.children.length > 0) {
+          let child = this.resetCurrent(node.children, current);
+          if (child != null) {
+            return child;
+          }
+        }
+      }
+    }
+    LogUtil.debug('ManagerCategoryMinComponent resetCurrent no match');
+    return null;
+  }
+
+
   /**
-   * Assign selected category to shop.
+   * Assign selected category to manager.
    * @param node
    */
-  assignToShopClick(node:ITreeNode) {
-    LogUtil.debug('ShopCatalogComponent assignToShop ', node);
+  assignToManagerClick(node:ITreeNode) {
+    LogUtil.debug('ManagerCategoryMinComponent assignToManager ', node);
     let catVo = node.source;
-    this.assigned.push(catVo);
-    LogUtil.debug('ShopCatalogComponent disabled node', node);
+    this.assigned.push({ managerId: this._manager.managerId, categoryId: catVo.categoryId, code: catVo.guid, name: catVo.name });
+    LogUtil.debug('ManagerCategoryMinComponent disabled node', node);
     this.changeDisabledState(catVo, this.nodes, true);
     this.selectedNode = null;
     this.changed = true;
+    this.dataChanged.emit(this.assigned);
   }
 
   /**
-   * Un-assign from shop.
+   * Un-assign from manager.
    * @param cat category
      */
   onAssignedClick(cat:CategoryVO) {
-    LogUtil.debug('ShopCatalogComponent onAssigned', cat);
+    LogUtil.debug('ManagerCategoryMinComponent onAssigned', cat);
     for (let idx = 0; idx < this.assigned.length; idx++) {
-      let catVo : CategoryVO = this.assigned[idx];
+      let catVo : ManagerCategoryCatalogVO = this.assigned[idx];
       if (catVo.categoryId === cat.categoryId) {
-        LogUtil.debug('ShopCatalogComponent remove from assigned', catVo);
+        LogUtil.debug('ManagerCategoryMinComponent remove from assigned', catVo);
         this.assigned.splice(idx, 1);
         this.changeDisabledState(catVo, this.nodes, false);
         this.changed = true;
+        this.dataChanged.emit(this.assigned);
         break;
       }
     }
   }
 
-  changeDisabledState(cat:CategoryVO, nodes:Array<ITreeNode>, disabled:boolean):boolean {
+  changeDisabledState(cat:ManagerCategoryCatalogVO, nodes:Array<ITreeNode>, disabled:boolean):boolean {
     let changed = false;
     for (let idx = 0; idx < nodes.length; idx++) {
       let node:ITreeNode = nodes[idx];
@@ -265,7 +327,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
         if (disabled) {
           node.expanded = false;
         }
-        LogUtil.debug('ShopCatalogComponent enabled node', node);
+        LogUtil.debug('ManagerCategoryMinComponent enabled node', node);
         changed = true;
       } else if (node.children && this.changeDisabledState(cat, node.children, disabled)) {
         changed = true;
@@ -279,7 +341,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * @param node
    */
   onSelectNode(node:ITreeNode) {
-    LogUtil.debug('ShopCatalogComponent selected node', node);
+    LogUtil.debug('ManagerCategoryMinComponent selected node', node);
     if (node.disabled === false) {
       node.expanded = false; // collapse on selection, to prevent recursive selection (i.e. sub categories from same branch)
       this.selectedNode = node;
@@ -287,8 +349,12 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   }
 
   onRequest(parent:ITreeNode) {
-    LogUtil.debug('ShopCatalogComponent onRequest node', parent);
+    LogUtil.debug('ManagerCategoryMinComponent onRequest node', parent);
     parent.expanded = !parent.expanded;
+    if (!parent.childrenLoaded) {
+      this.loadData(parent.source.categoryId);
+    }
+
   }
 
 
@@ -297,7 +363,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * @param parent parent of new catecory
    */
   createNew(parent:ITreeNode) {
-    LogUtil.debug('ShopCatalogComponent createNew for parent', parent);
+    LogUtil.debug('ManagerCategoryMinComponent createNew for parent', parent);
     this.validForSave = false;
     UiUtil.formInitialise(this, 'newCategoryForm', 'newCategory', this.newCategoryInstance());
     this.editNewCategoryName.show();
@@ -308,104 +374,15 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * @param modalresult
      */
   editNewCategoryNameModalResult(modalresult:ModalResult) {
-    LogUtil.debug('ShopCatalogComponent editNewCategoryNameModalResult modal result', modalresult);
+    LogUtil.debug('ManagerCategoryMinComponent editNewCategoryNameModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       this._categoryService.createCategory(this.newCategory, +this.selectedNode.id).subscribe(
         catVo => {
           this.validForSave = false;
-          this.onRefreshHandler();
+          this.loadData();
         }
       );
 
-    }
-  }
-
-  /**
-   * Save assigned categories.
-   */
-  onSaveHandler() {
-    LogUtil.debug('ShopCatalogComponent Save handler for shop', this.shop);
-    if (this.shop.shopId > 0) {
-      this.loading = true;
-      let _sub:any = this._shopService.saveShopCategories(this.shop.shopId, this.assigned).subscribe(
-          cats => {
-            this.assigned = cats;
-            this.changed = false;
-            this.loading = false;
-            _sub.unsubscribe();
-        }
-      );
-    }
-  }
-
-  /**
-   * Discard changes.
-   */
-  onDiscardEventHandler() {
-    LogUtil.debug('ShopCatalogComponent Discard handler for shop', this.shop);
-    this.existingShop = this.shop.shopId > 0;
-    if (this.existingShop) {
-      this.loading = true;
-      let _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
-          cats => {
-            LogUtil.debug('ShopCatalogComponent assigned categories', cats);
-            this.assigned = cats;
-            _subs.unsubscribe();
-            let _assignedIds:Array<number> = this.adaptToIds(cats);
-
-            this.nodes = this.adaptToTree(this.categories, _assignedIds);
-            this.selectedNode = null;
-            this.newCategory = this.newCategoryInstance();
-            this.changed = false;
-            this._reload = false;
-            this.loading = false;
-        }
-      );
-    }
-
-  }
-
-  /**
-   * Load fresh data.
-   */
-  onRefreshHandler() {
-    LogUtil.debug('ShopCatalogComponent Refresh handler ', this.shop);
-    this.loadData();
-  }
-
-
-  protected isAvailable(row:CategoryVO) {
-    let now = new Date();
-    return (row.availablefrom === null || (row.availablefrom < now)) &&
-      (row.availableto === null || (row.availableto > now));
-  }
-
-
-  protected getUri(row:CategoryVO) {
-    if (row.uri) {
-      return '<i  title="' + row.uri + '" class="fa fa-globe"></i>';
-    }
-    return '';
-  }
-
-  protected getNavFlags(row:CategoryVO) {
-
-    let flags = '';
-    if (row.navigationByPrice) {
-      flags += '<i class="fa fa-dollar"></i>&nbsp;';
-    }
-    if (row.navigationByAttributes) {
-      flags += '<i class="fa fa-list-alt"></i>&nbsp;' + (row.productTypeName ? row.productTypeName : '');
-    }
-    return flags;
-  }
-
-
-  private reloadData() {
-    if (this.categories == null) {
-      this.onRefreshHandler();
-    } else {
-      this.onDiscardEventHandler();
     }
   }
 

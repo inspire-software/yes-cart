@@ -16,10 +16,8 @@
 
 package org.yes.cart.service.federation.impl;
 
-import org.springframework.util.CollectionUtils;
-import org.yes.cart.domain.entity.Category;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
@@ -32,13 +30,9 @@ import java.util.List;
  */
 public class ProductImpexFederationFilterImpl extends AbstractImpexFederationFilterImpl implements FederationFilter {
 
-    private final FederationFilter categoryFederationFilter;
-
     public ProductImpexFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy,
-                                            final List<String> roles,
-                                            final FederationFilter categoryFederationFilter) {
+                                            final List<String> roles) {
         super(shopFederationStrategy, roles);
-        this.categoryFederationFilter = categoryFederationFilter;
     }
 
     /**
@@ -52,16 +46,9 @@ public class ProductImpexFederationFilterImpl extends AbstractImpexFederationFil
         }
 
         final Product product = (Product) object;
-        if (isTransientEntity(product) && CollectionUtils.isEmpty(product.getProductCategory())) {
-            return true; // skip this until sub import has finished
-        }
 
-        for (final ProductCategory category : product.getProductCategory()) {
-            if (categoryFederationFilter.isManageable(category.getCategory(), Category.class)) {
-                return true;
-            }
-        }
-        return false;
+        return StringUtils.isBlank(product.getSupplierCatalogCode()) ||
+                shopFederationStrategy.getAccessibleSupplierCatalogCodesByCurrentManager().contains(product.getSupplierCatalogCode());
     }
 
 }

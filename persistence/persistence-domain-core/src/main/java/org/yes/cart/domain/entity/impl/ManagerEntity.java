@@ -17,11 +17,14 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.ManagerShop;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,6 +37,12 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     private long version;
 
     private Collection<ManagerShop> shops = new ArrayList<>(0);
+
+    private Collection<String> productSupplierCatalogs = Collections.emptyList();
+    private String productSupplierCatalogsInternal;
+
+    private Collection<String> categoryCatalogs = Collections.emptyList();
+    private String categoryCatalogsInternal;
 
     private String email;
     private String salutation;
@@ -282,6 +291,62 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     @Override
     public void setShops(final Collection<ManagerShop> shops) {
         this.shops = shops;
+    }
+
+    @Override
+    public Collection<String> getProductSupplierCatalogs() {
+        return productSupplierCatalogs;
+    }
+
+    @Override
+    public void setProductSupplierCatalogs(final Collection<String> productSupplierCatalogs) {
+        this.productSupplierCatalogs = productSupplierCatalogs;
+        if (productSupplierCatalogs != null) {
+            this.productSupplierCatalogsInternal = StringUtils.join(productSupplierCatalogs, ",");
+        } else {
+            this.productSupplierCatalogsInternal = null;
+        }
+    }
+
+    public String getProductSupplierCatalogsInternal() {
+        return productSupplierCatalogsInternal;
+    }
+
+    public void setProductSupplierCatalogsInternal(final String productSupplierCatalogsInternal) {
+        this.productSupplierCatalogsInternal = productSupplierCatalogsInternal;
+        if (StringUtils.isNotBlank(productSupplierCatalogsInternal)) {
+            this.productSupplierCatalogs = Arrays.asList(StringUtils.split(productSupplierCatalogsInternal, ','));
+        } else {
+            this.productSupplierCatalogs = Collections.emptyList();
+        }
+    }
+
+    @Override
+    public Collection<String> getCategoryCatalogs() {
+        return categoryCatalogs;
+    }
+
+    @Override
+    public void setCategoryCatalogs(final Collection<String> categoryCatalogs) {
+        this.categoryCatalogs = categoryCatalogs;
+        if (categoryCatalogs != null) {
+            this.categoryCatalogsInternal = StringUtils.join(categoryCatalogs, ",");
+        } else {
+            this.categoryCatalogsInternal = null;
+        }
+    }
+
+    public String getCategoryCatalogsInternal() {
+        return categoryCatalogsInternal;
+    }
+
+    public void setCategoryCatalogsInternal(final String categoryCatalogsInternal) {
+        this.categoryCatalogsInternal = categoryCatalogsInternal;
+        if (StringUtils.isNotBlank(categoryCatalogsInternal)) {
+            this.categoryCatalogs = Arrays.asList(StringUtils.split(categoryCatalogsInternal, ','));
+        } else {
+            this.categoryCatalogs = Collections.emptyList();
+        }
     }
 }
 

@@ -50,6 +50,9 @@
         <!--<property name="cacheManager" ref="cacheManager"/>-->
     <!--</bean>-->
 
+
+    <bean id="cacheKeyGeneratorCollectionToString" class="org.yes.cart.service.domain.cache.impl.CollectionToStringKeyGenerator"/>
+
     <!-- ###################### Attributes  ################################################################################################################## -->
 
     <util:set id="AttributeAll">
@@ -272,6 +275,18 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="contentService-contentHasSubcontent"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-allCategoriesIdsMap"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-catalogCategoriesIds"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopCategoriesIds"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -817,10 +832,6 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopService-allCategoriesIdsMap"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="shopService-shopCategoriesIds"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -989,18 +1000,6 @@
     <util:set id="ManagerAll">
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="shopFederationStrategy-admin"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopFederationStrategy-shop"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopFederationStrategy-shopId"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopFederationStrategy-shopCode"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

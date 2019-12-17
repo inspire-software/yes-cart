@@ -18,7 +18,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { BrandVO, AttrValueBrandVO, ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, BasicCategoryVO, CategoryVO, AttrValueCategoryVO, Pair, SearchContextVO, SearchResultVO } from '../model/index';
+import {
+  BrandVO, AttrValueBrandVO,
+  ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO,
+  BasicCategoryVO, CategoryVO, AttrValueCategoryVO,
+  Pair, SearchContextVO, SearchResultVO,
+  ProductSupplierCatalogVO
+} from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -205,6 +211,18 @@ export class CatalogService {
       .map(res => <ProductTypeAttrVO[]> this.json(res))
       .catch(this.handleError);
   }
+
+
+  /**
+   * Get list of all product supplier catalogs, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getAllProductSuppliersCatalogs() {
+    return this.http.get(this._serviceBaseUrl + '/productsuppliercatalogs/all', Util.requestOptions())
+      .map(res => <ProductSupplierCatalogVO[]> this.json(res))
+      .catch(this.handleError);
+  }
+
 
 
   /**

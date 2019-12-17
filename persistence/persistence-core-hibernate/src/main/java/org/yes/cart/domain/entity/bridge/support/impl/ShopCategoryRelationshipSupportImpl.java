@@ -143,6 +143,28 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Long> getCatalogCategoriesIds(final long branchId) {
+
+        final Set<Long> result = new HashSet<>();
+
+        final Map<Long, Set<Long>> map = proxy().getAllCategoriesIdsMap();
+
+        if (map.containsKey(branchId)) {
+
+            appendChildren(result, branchId, map);
+
+        } else {
+            LOG.warn(Markers.alert(), "Attempted to get catalog categories for branch {} but it either does not exist or has null categories", branchId);
+        }
+
+        return Collections.unmodifiableSet(result);
+
+    }
+
     private void appendChildren(final Set<Long> result, final long currentId, final Map<Long, Set<Long>> map) {
 
         result.add(currentId);

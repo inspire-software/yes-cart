@@ -98,6 +98,7 @@
                 <property name="target">
                     <bean class="org.yes.cart.service.domain.impl.CategoryServiceImpl">
                         <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
+                        <constructor-arg type="org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport" ref="shopCategoryRelationshipSupport"/>
                         <lookup-method name="getSelf" bean="categoryService"/>
                     </bean>
                 </property>

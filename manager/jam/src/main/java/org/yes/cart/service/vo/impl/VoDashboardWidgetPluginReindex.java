@@ -114,7 +114,7 @@ public class VoDashboardWidgetPluginReindex extends AbstractVoDashboardWidgetPlu
         );
 
         data.put("productCountTotal", total);
-        data.put("offerCountTotal", offersActive);
+        data.put("offerCountTotal", offersTotal);
         data.put("offerCountActive", offersActive);
 
         widget.setData(data);

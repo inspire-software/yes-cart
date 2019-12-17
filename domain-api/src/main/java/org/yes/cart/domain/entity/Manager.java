@@ -43,6 +43,33 @@ public interface Manager extends RegisteredPerson, Auditable {
      */
     void setShops(Collection<ManagerShop> shops);
 
+    /**
+     * Get assigned product suppliers
+     *
+     * @return product supplier codes {@link Product#getSupplierCatalogCode()}
+     */
+    Collection<String> getProductSupplierCatalogs();
+
+    /**
+     * Set  assigned product suppliers
+     *
+     * @param productSupplierCatalogs  product supplier codes {@link Product#getSupplierCatalogCode()}
+     */
+    void setProductSupplierCatalogs(Collection<String> productSupplierCatalogs);
+
+    /**
+     * Get assigned category catalogs
+     *
+     * @return category codes {@link Category#getGuid()}
+     */
+    Collection<String> getCategoryCatalogs();
+
+    /**
+     * Set assigned category catalogs
+     *
+     * @param categoryCatalogs category codes {@link Category#getGuid()}
+     */
+    void setCategoryCatalogs(Collection<String> categoryCatalogs);
 
     /**
      * Primary key.
