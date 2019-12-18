@@ -606,7 +606,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
         if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
 
-            final String textFilter = (String) filterParam.get(0);
+            final String textFilter = ((String) filterParam.get(0)).trim();
             final Pair<String, String> orderNumberOrCustomerOrAddressOrSku = ComplexSearchUtils.checkSpecialSearch(textFilter, ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
             final Pair<LocalDateTime, LocalDateTime> dateSearch = orderNumberOrCustomerOrAddressOrSku == null ? ComplexSearchUtils.checkDateRangeSearch(textFilter) : null;
 
@@ -616,7 +616,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                     // If this by PK then to by PK
                     final String refNumber = orderNumberOrCustomerOrAddressOrSku.getSecond();
 
-                    currentFilter.put("customerorderId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(NumberUtils.toLong(refNumber.trim()))));
+                    currentFilter.put("customerorderId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(NumberUtils.toLong(refNumber))));
 
                 } else if ("#".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // order number search

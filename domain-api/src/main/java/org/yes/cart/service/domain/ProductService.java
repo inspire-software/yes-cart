@@ -486,4 +486,32 @@ public interface ProductService extends GenericService<Product> {
      */
      String getDefaultImage(Long productId);
 
+
+    /**
+     * Find products by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of products.
+     */
+    List<Product> findProducts(int start,
+                               int offset,
+                               String sort,
+                               boolean sortDescending,
+                               Map<String, List> filter);
+
+    /**
+     * Find products by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findProductCount(Map<String, List> filter);
+
+
 }

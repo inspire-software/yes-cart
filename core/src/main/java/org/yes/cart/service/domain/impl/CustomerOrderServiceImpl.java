@@ -178,7 +178,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         final List<Object> params = new ArrayList<>();
 
         if (count) {
-            hqlCriteria.append("select count(o) from CustomerOrderEntity o ");
+            hqlCriteria.append("select count(o.customerorderId) from CustomerOrderEntity o ");
         } else {
             hqlCriteria.append("select o from CustomerOrderEntity o ");
         }

@@ -18,7 +18,7 @@ import { PIMService, UserEventBus, Util } from './../shared/services/index';
 import { CategoryMinSelectComponent, BrandSelectComponent, ProductTypeSelectComponent } from './../shared/catalog/index';
 import { UiUtil } from './../shared/ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { CategoryVO, ProductTypeInfoVO, BrandVO, ProductVO, ProductWithLinksVO, ProductSkuVO, AttrValueProductVO, AttrValueProductSkuVO, Pair } from './../shared/model/index';
+import { CategoryVO, ProductTypeInfoVO, BrandVO, ProductVO, ProductWithLinksVO, ProductSkuVO, AttrValueProductVO, AttrValueProductSkuVO, Pair, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -33,22 +33,18 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   private static PRODUCTS:string = 'products';
   private static PRODUCT:string = 'product';
-  private static SKUS:string = 'skus';
   private static SKU:string = 'sku';
 
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
   private viewMode:string = CatalogProductsComponent.PRODUCTS;
 
-  private products:Array<ProductVO> = [];
+  private products:SearchResultVO<ProductVO>;
   private productFilter:string;
   private productFilterRequired:boolean = true;
-  private productFilterCapped:boolean = false;
 
-  private delayedFiltering:Future;
-  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFilteringProduct:Future;
+  private delayedFilteringProductMs:number = Config.UI_INPUT_DELAY;
 
   private selectedProduct:ProductVO;
 
@@ -58,9 +54,6 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   @ViewChild('deleteConfirmationModalDialog')
   private deleteConfirmationModalDialog:ModalComponent;
-
-  private skus:Array<ProductSkuVO> = [];
-  private skuFilter:string;
 
   private selectedSku:ProductSkuVO;
 
@@ -86,6 +79,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   constructor(private _pimService:PIMService) {
     LogUtil.debug('CatalogProductsComponent constructed');
+    this.products = this.newSearchResultProductInstance();
   }
 
   newProductInstance():ProductWithLinksVO {
@@ -110,6 +104,23 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     };
   }
 
+  newSearchResultProductInstance():SearchResultVO<ProductVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    };
+  }
+
+
   newSkuInstance():ProductSkuVO {
     let product = this.selectedProduct != null ? this.selectedProduct.productId : 0;
     return {
@@ -132,10 +143,9 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     LogUtil.debug('CatalogProductsComponent ngOnInit');
     this.onRefreshHandler();
     let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
+    this.delayedFilteringProduct = Futures.perpetual(function() {
       that.getFilteredProducts();
-    }, this.delayedFilteringMs);
-
+    }, this.delayedFilteringProductMs);
   }
 
   ngOnDestroy() {
@@ -144,28 +154,38 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
 
   protected onProductFilterChange(event:any) {
-
-    this.delayedFiltering.delay();
-
+    this.products.searchContext.start = 0; // changing filter means we need to start from first page
+    this.delayedFilteringProduct.delay();
   }
 
   protected onRefreshHandler() {
     LogUtil.debug('CatalogProductsComponent refresh handler');
     if (UserEventBus.getUserEventBus().current() != null) {
-      if (this.viewMode === CatalogProductsComponent.PRODUCTS ||
-          this.viewMode === CatalogProductsComponent.PRODUCT ||
-          this.selectedProduct == null) {
-        this.getFilteredProducts();
-      } else {
-        this.getProductSkus();
-      }
+      this.getFilteredProducts();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('CatalogProductsComponent onPageSelected', page);
+    this.products.searchContext.start = page;
+    this.delayedFilteringProduct.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('CatalogBrandComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.products.searchContext.sortBy = null;
+      this.products.searchContext.sortDesc = false;
+    } else {
+      this.products.searchContext.sortBy = sort.first;
+      this.products.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFilteringProduct.delay();
   }
 
   protected onProductSelected(data:ProductVO) {
     LogUtil.debug('CatalogProductsComponent onProductSelected', data);
     this.selectedProduct = data;
-    this.skuFilter = '';
   }
 
   protected onProductChanged(event:FormValidationEvent<Pair<ProductWithLinksVO, Array<Pair<AttrValueProductVO, boolean>>>>) {
@@ -234,11 +254,6 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onSearchCategories() {
-    this.searchHelpShow = false;
-    this.productFilter = '^';
-  }
-
   protected onViewTree() {
     LogUtil.debug('CatalogProductsComponent onViewTree handler');
     this.categorySelectComponent.showDialog();
@@ -264,13 +279,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
       this.skuEdit = null;
       if (this.productEdit != null) {
         this.viewMode = CatalogProductsComponent.PRODUCT;
-      } else {
-        this.viewMode = CatalogProductsComponent.SKUS;
       }
-    } else if (this.viewMode === CatalogProductsComponent.SKUS) {
-      this.skuEdit = null;
-      this.selectedSku = null;
-      this.viewMode = CatalogProductsComponent.PRODUCTS;
     } else if (this.viewMode === CatalogProductsComponent.PRODUCT) {
       this.productEdit = null;
       this.skuEdit = null;
@@ -286,7 +295,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     if (this.viewMode === CatalogProductsComponent.PRODUCTS) {
       this.productEdit = this.newProductInstance();
       this.viewMode = CatalogProductsComponent.PRODUCT;
-    } else if (this.viewMode === CatalogProductsComponent.SKUS || this.viewMode == CatalogProductsComponent.PRODUCT) {
+    } else if (this.viewMode == CatalogProductsComponent.PRODUCT) {
       this.skuEdit = this.newSkuInstance();
       this.viewMode = CatalogProductsComponent.SKU;
     }
@@ -354,18 +363,6 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onRowList(row:ProductVO) {
-    LogUtil.debug('CatalogProductsComponent onRowList handler', row);
-    this.getProductSkus();
-  }
-
-
-  protected onRowListSelected() {
-    if (this.selectedProduct != null) {
-      this.onRowList(this.selectedProduct);
-    }
-  }
-
   protected onSaveHandler() {
 
     if (this.validForSave && this.changed) {
@@ -378,13 +375,8 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         let _sub:any = this._pimService.saveSKU(this.skuEdit).subscribe(
             rez => {
               let pk = this.skuEdit.skuId;
-              if (this.skuEdit.skuId > 0) {
-                let idx = this.skus.findIndex(rez => rez.skuId == this.skuEdit.skuId);
-                if (idx !== -1) {
-                  this.skus[idx] = rez;
-                  this.skus = this.skus.slice(0, this.skus.length); // reset to propagate changes
-                  LogUtil.debug('CatalogProductsComponent sku changed', rez);
-                }
+              if (pk > 0) {
+                LogUtil.debug('CatalogProductsComponent sku edit', rez);
                 if (this.productEdit != null) {
                   let idx = this.productEdit.sku.findIndex(rez => rez.skuId == this.skuEdit.skuId);
                   if (idx !== -1) {
@@ -393,8 +385,6 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
                   }
                 }
               } else {
-                this.skus.push(rez);
-                this.skuFilter = rez.name;
                 if (this.productEdit != null) {
                   this.productEdit.sku.push(rez);
                   this.productEdit.sku = this.productEdit.sku.slice(0, this.productEdit.sku.length); // reset to propagate changes
@@ -415,10 +405,10 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
                   LogUtil.debug('CatalogProductsComponent SKU attributes updated', rez);
                   this.skuAttributesUpdate = null;
                   this.loading = false;
-                  this.onBackToList();
+                  this.viewMode = CatalogProductsComponent.PRODUCT;
                 });
               } else {
-                this.onBackToList();
+                this.viewMode = CatalogProductsComponent.PRODUCT;
               }
 
             }
@@ -431,16 +421,10 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         let _sub:any = this._pimService.saveProduct(this.productEdit).subscribe(
             rez => {
               let pk = this.productEdit.productId;
-              if (this.productEdit.productId > 0) {
-                let idx = this.products.findIndex(rez => rez.productId == this.productEdit.productId);
-                if (idx !== -1) {
-                  this.products[idx] = rez;
-                  this.products = this.products.slice(0, this.products.length); // reset to propagate changes
-                  LogUtil.debug('CatalogProductsComponent product changed', rez);
-                }
+              if (pk > 0) {
+                LogUtil.debug('CatalogProductsComponent product changed', rez);
               } else {
-                this.products.push(rez);
-                this.productFilter = rez.productCode;
+                this.productFilter = '!' + rez.code;
                 LogUtil.debug('CatalogProductsComponent product added', rez);
               }
               this.changed = false;
@@ -457,10 +441,10 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
                   LogUtil.debug('CatalogProductsComponent product attributes updated', rez);
                   this.productAttributesUpdate = null;
                   this.loading = false;
-                  this.viewMode = CatalogProductsComponent.PRODUCTS;
+                  this.getFilteredProducts();
                 });
               } else {
-                this.viewMode = CatalogProductsComponent.PRODUCTS;
+                this.getFilteredProducts();
               }
           }
         );
@@ -499,9 +483,6 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         let _sub:any = this._pimService.removeSKU(this.selectedSku).subscribe(res => {
           LogUtil.debug('CatalogProductsComponent removeSku', this.selectedSku);
           let pk = this.selectedSku.skuId;
-          let idx = this.skus.indexOf(this.selectedSku);
-          this.skus.splice(idx, 1);
-          this.skus = this.skus.slice(0, this.skus.length); // reset to propagate changes
           this.skuEdit = null;
           if (this.productEdit != null) {
             let idx2 = this.productEdit.sku.findIndex(rez => rez.skuId == pk);
@@ -513,6 +494,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
           this.selectedSku = null;
           this.loading = false;
           _sub.unsubscribe();
+          this.viewMode = CatalogProductsComponent.PRODUCT;
         });
 
       } else if (this.selectedProduct != null) {
@@ -521,13 +503,11 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._pimService.removeProduct(this.selectedProduct).subscribe(res => {
           LogUtil.debug('CatalogProductsComponent removeProduct', this.selectedProduct);
-          let idx = this.products.indexOf(this.selectedProduct);
-          this.products.splice(idx, 1);
-          this.products = this.products.slice(0, this.products.length); // reset to propagate changes
           this.selectedProduct = null;
           this.productEdit = null;
           this.loading = false;
           _sub.unsubscribe();
+          this.getFilteredProducts();
         });
       }
     }
@@ -540,12 +520,6 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   }
 
-  protected onClearFilterSKU() {
-
-    this.skuFilter = '';
-
-  }
-
   private getFilteredProducts() {
 
     this.productFilterRequired = !this.forceShowAll && (this.productFilter == null || this.productFilter.length < 2);
@@ -554,8 +528,11 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
     if (!this.productFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      let _sub:any = this._pimService.getFilteredProducts(this.productFilter, max).subscribe(allproducts => {
+
+      this.products.searchContext.parameters.filter = [ this.productFilter ];
+      this.products.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._pimService.getFilteredProducts(this.products.searchContext).subscribe(allproducts => {
         LogUtil.debug('CatalogProductsComponent getAllCountries', allproducts);
         this.products = allproducts;
         this.selectedProduct = null;
@@ -563,42 +540,14 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         this.viewMode = CatalogProductsComponent.PRODUCTS;
         this.changed = false;
         this.validForSave = false;
-        this.productFilterCapped = this.products.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.products = [];
+      this.products = this.newSearchResultProductInstance();
       this.selectedProduct = null;
       this.productEdit = null;
       this.viewMode = CatalogProductsComponent.PRODUCTS;
-      this.changed = false;
-      this.validForSave = false;
-      this.productFilterCapped = false;
-    }
-  }
-
-  private getProductSkus() {
-    if (this.selectedProduct != null) {
-      this.loading = true;
-      let _sub:any = this._pimService.getProductSkuAll(this.selectedProduct).subscribe(allskus => {
-        LogUtil.debug('CatalogProductsComponent getProductSkus', allskus);
-        this.skus = allskus;
-        this.selectedSku = null;
-        this.skuEdit = null;
-        this.productEdit = null;
-        this.viewMode = CatalogProductsComponent.SKUS;
-        this.changed = false;
-        this.validForSave = false;
-        this.loading = false;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.skus = [];
-      this.selectedSku = null;
-      this.skuEdit = null;
-      this.productEdit = null;
-      this.viewMode = CatalogProductsComponent.SKUS;
       this.changed = false;
       this.validForSave = false;
     }

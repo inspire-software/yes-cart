@@ -32,15 +32,16 @@ import org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.utils.MoneyUtils;
-import org.yes.cart.utils.HQLUtils;
-import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.util.*;
 
@@ -147,15 +148,23 @@ public class DtoProductSkuServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<ProductSkuDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<ProductSkuDTO> findProductSkus(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<ProductSkuDTO> dtos = new ArrayList<>();
+        final Map<String, List> params = filter.reduceParameters("filter", "supplierCatalogCodes");
+        final List filterParam = params.get("filter");
+        final List supplierCatalogCodesParam = params.get("supplierCatalogCodes");
 
-        List<ProductSku> entities = Collections.emptyList();
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
 
-        if (StringUtils.isNotBlank(filter)) {
+        final ProductSkuService productSkuService = (ProductSkuService) service;
 
-            final Pair<String, String> code = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
+        final Map<String, List> currentFilter = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+            final String textFilter = ((String) filterParam.get(0)).trim();
+
+            final Pair<String, String> code = ComplexSearchUtils.checkSpecialSearch(textFilter, CODE);
 
             if (code != null) {
 
@@ -163,39 +172,50 @@ public class DtoProductSkuServiceImpl
 
                     // If this by PK then to by PK
                     final long byPk = NumberUtils.toLong(code.getSecond());
-                    if (page == 0 && byPk > 0) {
-                        final ProductSkuDTO product = getById(byPk);
-                        if (product != null) {
-                            dtos.add(product);
-                        }
-                    }
-                    return dtos;
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("skuId", Collections.singletonList(byPk));
+                    currentFilter.put("product.productId", Collections.singletonList(byPk));
 
                 } else if ("!".equals(code.getFirst())) {
 
-                    entities = getService().getGenericDao().findRangeByCriteria(
-                            " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.barCode) like ?1 order by e.code",
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIeq(code.getSecond())
-                    );
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("guid", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(code.getSecond())));
+                    currentFilter.put("code", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(code.getSecond())));
+                    currentFilter.put("manufacturerCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(code.getSecond())));
+                    currentFilter.put("barCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(code.getSecond())));
+                    currentFilter.put("supplierCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(code.getSecond())));
+                    currentFilter.put("tag", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(code.getSecond())));
 
                 }
 
             } else {
 
-                entities = getService().getGenericDao().findRangeByCriteria(
-                        " where lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.name) like ?1 order by e.code",
-                        page * pageSize, pageSize,
-                        HQLUtils.criteriaIlikeAnywhere(filter)
-                );
+                SearchContext.JoinMode.OR.setMode(currentFilter);
+                currentFilter.put("code", Collections.singletonList(textFilter));
+                currentFilter.put("manufacturerCode", Collections.singletonList(textFilter));
+                currentFilter.put("name", Collections.singletonList(textFilter));
 
             }
 
         }
 
-        fillDTOs(entities, dtos);
+        // Filter by accessible categoryId
+        if (CollectionUtils.isNotEmpty(supplierCatalogCodesParam)) {
+            currentFilter.put("supplierCatalogCodes", supplierCatalogCodesParam);
+        }
 
-        return dtos;
+        final int count = productSkuService.findProductSkuCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<ProductSkuDTO> entities = new ArrayList<>();
+            final List<ProductSku> skus = productSkuService.findProductSkus(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(skus, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
     }
 
     /**

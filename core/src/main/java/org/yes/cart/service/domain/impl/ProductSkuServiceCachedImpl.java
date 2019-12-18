@@ -30,6 +30,7 @@ import org.yes.cart.service.domain.ProductSkuService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -154,6 +155,22 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
     @Override
     public void removeAllEnsembleOptions(final ProductSku sku) {
         productSkuService.removeAllEnsembleOptions(sku);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ProductSku> findProductSkus(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return productSkuService.findProductSkus(start, offset, sort, sortDescending, filter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findProductSkuCount(final Map<String, List> filter) {
+        return productSkuService.findProductSkuCount(filter);
     }
 
     /**

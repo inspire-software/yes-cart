@@ -21,6 +21,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.dto.*;
@@ -154,21 +156,35 @@ public class VoProductServiceImpl implements VoProductService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoProduct> getFilteredProducts(final String filter, final int max) throws Exception {
+    public VoSearchResult<VoProduct> getFilteredProducts(final VoSearchContext filter) throws Exception {
 
+        final VoSearchResult<VoProduct> result = new VoSearchResult<>();
         final List<VoProduct> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        int start = 0;
-        do {
-            final List<ProductDTO> batch = dtoProductService.findBy(filter, start, max);
-            if (batch.isEmpty()) {
-                break;
-            }
-            federationFacade.applyFederationFilter(batch, ProductDTO.class);
-            results.addAll(voAssemblySupport.assembleVos(VoProduct.class, ProductDTO.class, batch));
-            start++;
-        } while (results.size() < max && max != Integer.MAX_VALUE);
-        return results.size() > max ? results.subList(0, max) : results;
+        final Map<String, List> params = new HashMap<>();
+        if (filter.getParameters() != null) {
+            params.putAll(filter.getParameters());
+        }
+        if (!federationFacade.isCurrentUserSystemAdmin()) {
+            params.put("supplierCatalogCodes", new ArrayList(federationFacade.getAccessibleSupplierCatalogCodesByCurrentManager()));
+        }
+
+        final SearchContext searchContext = new SearchContext(
+                params,
+                filter.getStart(),
+                Math.min(filter.getSize(), 100),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "supplierCatalogCodes"
+        );
+
+        final SearchResult<ProductDTO> batch = dtoProductService.findProducts(searchContext);
+        results.addAll(voAssemblySupport.assembleVos(VoProduct.class, ProductDTO.class, batch.getItems()));
+        result.setTotal(batch.getTotal());
+
+        return result;
 
     }
 
@@ -395,21 +411,37 @@ public class VoProductServiceImpl implements VoProductService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoProductSku> getFilteredProductSkus(final String filter, final int max) throws Exception {
+    public VoSearchResult<VoProductSku> getFilteredProductSkus(final VoSearchContext filter) throws Exception {
 
+
+        final VoSearchResult<VoProductSku> result = new VoSearchResult<>();
         final List<VoProductSku> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        int start = 0;
-        do {
-            final List<ProductSkuDTO> batch = dtoProductSkuService.findBy(filter, start, max);
-            if (batch.isEmpty()) {
-                break;
-            }
-            batch.removeIf(productSkuDTO -> !federationFacade.isManageable(productSkuDTO.getProductId(), ProductDTO.class));
-            results.addAll(voAssemblySupport.assembleVos(VoProductSku.class, ProductSkuDTO.class, batch));
-            start++;
-        } while (results.size() < max && max != Integer.MAX_VALUE);
-        return results.size() > max ? results.subList(0, max) : results;
+        final Map<String, List> params = new HashMap<>();
+        if (filter.getParameters() != null) {
+            params.putAll(filter.getParameters());
+        }
+        if (!federationFacade.isCurrentUserSystemAdmin()) {
+            params.put("supplierCatalogCodes", new ArrayList(federationFacade.getAccessibleSupplierCatalogCodesByCurrentManager()));
+        }
+
+        final SearchContext searchContext = new SearchContext(
+                params,
+                filter.getStart(),
+                Math.min(filter.getSize(), 100),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "supplierCatalogCodes"
+        );
+
+        final SearchResult<ProductSkuDTO> batch = dtoProductSkuService.findProductSkus(searchContext);
+        results.addAll(voAssemblySupport.assembleVos(VoProductSku.class, ProductSkuDTO.class, batch.getItems()));
+        result.setTotal(batch.getTotal());
+
+        return result;
+
     }
 
     /** {@inheritDoc} */

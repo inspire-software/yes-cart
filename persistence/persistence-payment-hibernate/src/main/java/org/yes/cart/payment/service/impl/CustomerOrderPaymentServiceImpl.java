@@ -117,7 +117,7 @@ public class CustomerOrderPaymentServiceImpl extends PaymentModuleGenericService
         final List<Object> params = new ArrayList<>();
 
         if (count) {
-            hqlCriteria.append("select count(p) from CustomerOrderPaymentEntity p ");
+            hqlCriteria.append("select count(p.customerOrderPaymentId) from CustomerOrderPaymentEntity p ");
         } else {
             hqlCriteria.append("select p from CustomerOrderPaymentEntity p ");
         }

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
-import { ProductVO } from './../model/index';
+import { ProductVO, SearchContextVO } from './../model/index';
 import { PIMService } from './../services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { Futures, Future, FormValidationEvent } from './../event/index';
@@ -105,13 +105,22 @@ export class ProductSelectComponent implements OnInit, OnDestroy {
 
     if (!this.productFilterRequired) {
       this.loading = true;
-      let _sub:any = this._productService.getFilteredProducts(this.productFilter, this.filterCap).subscribe(allproducts => {
+      let _ctx:SearchContextVO = {
+        parameters : {
+          filter: [ this.productFilter ]
+        },
+        start : 0,
+        size : this.filterCap,
+        sortBy : null,
+        sortDesc : false
+      };
+      let _sub:any = this._productService.getFilteredProducts(_ctx).subscribe(allproducts => {
         LogUtil.debug('ProductSelectComponent getAllProducts', allproducts);
         this.selectedProduct = null;
         this.changed = false;
         this.validForSelect = false;
-        this.filteredProducts = allproducts;
-        this.productFilterCapped = this.filteredProducts.length >= this.filterCap;
+        this.filteredProducts = allproducts != null ? allproducts.items : [];
+        this.productFilterCapped = allproducts != null && allproducts.total > this.filterCap;
         this.loading = false;
         _sub.unsubscribe();
       });

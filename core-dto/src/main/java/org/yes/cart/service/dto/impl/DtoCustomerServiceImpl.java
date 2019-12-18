@@ -337,7 +337,7 @@ public class DtoCustomerServiceImpl
 
         if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
 
-            final String textFilter = (String) filterParam.get(0);
+            final String textFilter = ((String) filterParam.get(0)).trim();
             final Pair<String, String> refOrCustomerOrAddressOrPolicy = ComplexSearchUtils.checkSpecialSearch(textFilter, REF_OR_CUSTOMER_OR_ADDRESS);
             final Pair<LocalDateTime, LocalDateTime> dateSearch = refOrCustomerOrAddressOrPolicy == null ? ComplexSearchUtils.checkDateRangeSearch(textFilter) : null;
 

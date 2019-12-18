@@ -332,7 +332,7 @@ public class DtoCategoryServiceImpl
         final Map<String, List> currentFilter = new HashMap<>();
         if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
 
-            final String textFilter = (String) filterParam.get(0);
+            final String textFilter = ((String) filterParam.get(0)).trim();
 
             final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(textFilter, PARENT_OR_URI);
 

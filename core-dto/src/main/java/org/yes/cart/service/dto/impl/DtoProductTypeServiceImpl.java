@@ -131,7 +131,7 @@ public class DtoProductTypeServiceImpl
 
         if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
 
-            final String textFilter = (String) filterParam.get(0);
+            final String textFilter = ((String) filterParam.get(0)).trim();
 
             final Pair<String, String> exactOrCode = ComplexSearchUtils.checkSpecialSearch(textFilter, EXACT_OR_CODE);
 

@@ -68,7 +68,7 @@ public class DtoCustomerOrderPaymentServiceImpl implements DtoCustomerOrderPayme
 
         if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
 
-            final String textFilter = (String) filterParam.get(0);
+            final String textFilter = ((String) filterParam.get(0)).trim();
             final Pair<String, String> orderNumberOrCustomerOrDetails =
                     ComplexSearchUtils.checkSpecialSearch(textFilter, ORDER_OR_CUSTOMER_OR_DETAILS);
             final Pair<LocalDateTime, LocalDateTime> dateSearch = orderNumberOrCustomerOrDetails == null ?

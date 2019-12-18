@@ -18,6 +18,8 @@ package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.SkuPriceDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -34,6 +36,7 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
      * Get all product SKUs.
      *
      * @param productId product id
+     *
      * @return list of product skus.
      */
     List<ProductSkuDTO> getAllProductSkus(long productId)
@@ -41,21 +44,20 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
 
 
     /**
-     * Find products by filter.
+     * Find SKU by filter.
      *
-     * @param filter filter for partial match.
-     * @param page page number starting from 0
-     * @param pageSize size of page
+     * @param filter               filter for partial match.
      *
-     * @return list of products
+     * @return list of SKU
      */
-    List<ProductSkuDTO> findBy(String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<ProductSkuDTO> findProductSkus(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**
      * Create sku price.
      *
      * @param skuPriceDTO to create in database
+     *
      * @return created price sku pk value
      */
     long createSkuPrice(SkuPriceDTO skuPriceDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
@@ -80,7 +82,7 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
 
 
     /**
-     * Delete sku price by given pk
+     * Get sku price by given pk
      *
      * @param skuPriceId pk value.
      */
@@ -95,12 +97,14 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
 
      /**
      * Remove all sku prices from all shops.
+     *
      * @param productId product pk value
      */
     void removeAllPrices(long productId);
 
     /**
      * Remove from all warehouses.
+     *
      * @param productId product pk value
      */
     void removeAllInventory(long productId);

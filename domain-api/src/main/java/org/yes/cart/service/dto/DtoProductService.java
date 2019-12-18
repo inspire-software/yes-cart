@@ -18,6 +18,8 @@ package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ProductDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.ObjectNotFoundException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnableToWrapObjectException;
@@ -35,6 +37,15 @@ import java.util.List;
 public interface DtoProductService extends GenericDTOService<ProductDTO>, GenericAttrValueService {
 
 
+
+    /**
+     * Find products by filter.
+     *
+     * @param filter                 filter for partial match.
+     *
+     * @return list of products
+     */
+    SearchResult<ProductDTO> findProducts(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Find products by filter.

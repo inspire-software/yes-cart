@@ -4,9 +4,9 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CODE' | translate }}</th>
-        <th>{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}</th>
-        <th>{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('code')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'code'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('manufacturerCode')">{{ 'PRODUCT_MANUFACTURER_CODE' | translate }} <span [hidden]="sortColumn != 'manufacturerCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'PRODUCT_BRAND' | translate }}</th>
         <th>{{ 'PRODUCT_TYPE' | translate }}</th>
         <th>{{ 'PRODUCT_CATEGORIES' | translate }}</th>
@@ -14,21 +14,19 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredProducts; let i = index" class="{{row == selectedProduct ? 'active' : ''}}">
-        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
-          <td title="{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.manufacturerCode}}</a>&nbsp;</td>
-          <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a> <span [innerHTML]="getUri(row)"></span></td>
-          <td title="{{ 'PRODUCT_BRAND' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.brand.name}}</a></td>
-          <td title="{{ 'PRODUCT_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productType.name}}</a></td>
-          <td title="{{ 'PRODUCT_CATEGORIES' | translate }}">
-            <a class="js-click" (click)="onSelectRow(row)">
-              <span *ngFor="let category of row.productCategories">
-                <span class="label label-info" title="{{category.categoryCode}}">{{category.categoryName}} ({{category.rank}})</span>
-              </span>
-              &nbsp;
-            </a>
-          </td>
-        </ng-template>
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+        <td title="{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.manufacturerCode}}</a>&nbsp;</td>
+        <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a> <span [innerHTML]="getUri(row)"></span></td>
+        <td title="{{ 'PRODUCT_BRAND' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.brand.name}}</a></td>
+        <td title="{{ 'PRODUCT_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productType.name}}</a></td>
+        <td title="{{ 'PRODUCT_CATEGORIES' | translate }}">
+          <a class="js-click" (click)="onSelectRow(row)">
+            <span *ngFor="let category of row.productCategories">
+              <span class="label label-info" title="{{category.categoryCode}}">{{category.categoryName}} ({{category.rank}})</span>
+            </span>
+            &nbsp;
+          </a>
+        </td>
       </tr>
       </tbody>
     </table>

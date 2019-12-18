@@ -18,7 +18,11 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { AssociationVO, AttrValueProductVO, AttrValueProductSkuVO, ProductSkuVO, ProductVO, ProductWithLinksVO, Pair } from '../model/index';
+import {
+  AssociationVO,
+  AttrValueProductVO, AttrValueProductSkuVO, ProductSkuVO, ProductVO, ProductWithLinksVO,
+  Pair, SearchContextVO, SearchResultVO,
+} from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -59,12 +63,12 @@ export class PIMService {
    * Get list of all products, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredProducts(filter:string, max:number) {
+  getFilteredProducts(filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/product/filtered/' + max, body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
+    return this.http.post(this._serviceBaseUrl + '/product/filtered', body,
+          Util.requestOptions())
       .map(res => <ProductVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -156,12 +160,12 @@ export class PIMService {
    * Get list of all products SKU, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredProductSkus(filter:string, max:number) {
+  getFilteredProductSkus(filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/product/sku/filtered/' + max, body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
+    return this.http.post(this._serviceBaseUrl + '/product/sku/filtered', body,
+          Util.requestOptions())
       .map(res => <ProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }

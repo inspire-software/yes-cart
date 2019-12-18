@@ -39,9 +39,9 @@ public interface PIMEndpointController {
     List<VoAssociation> getAllAssociations() throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
-    @RequestMapping(value = "/product/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/product/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoProduct> getFilteredProducts(@RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
+    VoSearchResult<VoProduct> getFilteredProducts(@RequestBody VoSearchContext filter) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER"})
     @RequestMapping(value = "/product/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -83,9 +83,9 @@ public interface PIMEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(value = "/product/sku/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/product/sku/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoProductSku> getFilteredProductSkus(@RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
+    VoSearchResult<VoProductSku> getFilteredProductSkus(@RequestBody VoSearchContext filter) throws Exception;
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN","ROLE_SMPIMUSER","ROLE_SMWAREHOUSEADMIN","ROLE_SMMARKETINGADMIN"})

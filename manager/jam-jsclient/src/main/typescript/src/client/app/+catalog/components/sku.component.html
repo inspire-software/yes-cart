@@ -94,7 +94,7 @@
 
                 <div class="form-group">
                   <label>{{ 'DESCRIPTION' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="sku.description">
+                  <textarea class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" rows="4" [(ngModel)]="sku.description"></textarea>
                 </div>
               </fieldset>
             </div>

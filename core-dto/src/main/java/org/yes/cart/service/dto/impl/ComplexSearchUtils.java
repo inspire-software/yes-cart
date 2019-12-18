@@ -49,7 +49,7 @@ class ComplexSearchUtils {
      */
     public static Pair<String, String> checkSpecialSearch(String filter, char[] binarySortedPrefixes) {
         if (filter.length() > 1 && Arrays.binarySearch(binarySortedPrefixes, filter.charAt(0)) >= 0) {
-            return new Pair<>(filter.substring(0, 1), filter.substring(1));
+            return new Pair<>(filter.substring(0, 1), filter.substring(1).trim());
         }
         return null;
     }
@@ -70,7 +70,7 @@ class ComplexSearchUtils {
     public static Pair<String, BigDecimal> checkNumericSearch(String filter, char[] binarySortedPrefixes, int precision) {
         if (filter.length() > 1 && Arrays.binarySearch(binarySortedPrefixes, filter.charAt(0)) >= 0) {
             try {
-                final BigDecimal qty = new BigDecimal(filter.substring(1)).setScale(precision, BigDecimal.ROUND_CEILING);
+                final BigDecimal qty = new BigDecimal(filter.substring(1).trim()).setScale(precision, BigDecimal.ROUND_CEILING);
                 if (qty.signum() == -1) {
                     return null;
                 }
@@ -100,8 +100,8 @@ class ComplexSearchUtils {
         if (filter.length() > 4 && filter.contains("<")) {
 
             final String[] fromAndTo = org.apache.commons.lang.StringUtils.splitPreserveAllTokens(filter, '<');
-            final LocalDateTime from = fromAndTo.length > 0 ? stringToDate(fromAndTo[0]) : null;
-            final LocalDateTime to = fromAndTo.length > 1 ? stringToDate(fromAndTo[1]) : null;
+            final LocalDateTime from = fromAndTo.length > 0 ? stringToDate(fromAndTo[0].trim()) : null;
+            final LocalDateTime to = fromAndTo.length > 1 ? stringToDate(fromAndTo[1].trim()) : null;
 
             if (from != null || to != null) {
                 return new Pair<>(from, to);

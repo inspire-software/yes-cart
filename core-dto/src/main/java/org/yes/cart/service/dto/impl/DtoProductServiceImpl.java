@@ -32,6 +32,8 @@ import org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.ObjectNotFoundException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnableToWrapObjectException;
@@ -60,6 +62,7 @@ public class DtoProductServiceImpl
     private static final AttrValueDTOComparator ATTR_VALUE_DTO_COMPARATOR = new AttrValueDTOComparator();
 
     private final ProductService productService;
+    private final CategoryService categoryService;
     private final DtoFactory dtoFactory;
 
     private final DtoAttributeService dtoAttributeService;
@@ -72,9 +75,7 @@ public class DtoProductServiceImpl
     private final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
     private final GenericDAO<ProductAssociation, Long> productAssociationDao;
 
-    private final ProductTypeAttrService productTypeAttrService;
     private final DtoProductTypeAttrService dtoProductTypeAttrService;
-
 
     private final Assembler productSkuDTOAssembler;
     private final Assembler attrValueAssembler;
@@ -87,31 +88,32 @@ public class DtoProductServiceImpl
 
     /**
      * IoC constructor.
-     *  @param dtoFactory         factory for creating DTO object instances
-     * @param productService     domain objects product service
-     * @param adaptersRepository value converter repository
-     * @param dtoAttributeGroupService attribute group service
-     * @param dtoEtypeService    etype service
-     * @param imageService       {@link ImageService} to manipulate  related images.
-     * @param fileService {@link FileService} to manipulate related files
-     * @param productAssociationDao  dao
-     * @param systemService      system service
+     *
+     * @param dtoFactory                factory for creating DTO object instances
+     * @param productService            domain objects product service
+     * @param adaptersRepository        value converter repository
+     * @param dtoAttributeGroupService  attribute group service
+     * @param dtoEtypeService           etype service
+     * @param imageService              {@link ImageService} to manipulate  related images.
+     * @param fileService               {@link FileService} to manipulate related files
+     * @param productAssociationDao     dao
+     * @param systemService             system service
      */
-    public DtoProductServiceImpl(
-            final DtoFactory dtoFactory,
-            final GenericService<Product> productService,
-            final AdaptersRepository adaptersRepository,
-            final DtoAttributeService dtoAttributeService,
-            final DtoAttributeGroupService dtoAttributeGroupService,
-            final DtoEtypeService dtoEtypeService,
-            final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao,
-            final GenericDAO<ProductAssociation, Long> productAssociationDao,
-            final ImageService imageService,
-            final FileService fileService,
-            final DtoProductTypeAttrService dtoProductTypeAttrService,
-            final DtoProductCategoryService dtoProductCategoryService,
-            final SystemService systemService,
-            final LanguageService languageService) {
+    public DtoProductServiceImpl(final DtoFactory dtoFactory,
+                                 final GenericService<Product> productService,
+                                 final CategoryService categoryService,
+                                 final AdaptersRepository adaptersRepository,
+                                 final DtoAttributeService dtoAttributeService,
+                                 final DtoAttributeGroupService dtoAttributeGroupService,
+                                 final DtoEtypeService dtoEtypeService,
+                                 final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao,
+                                 final GenericDAO<ProductAssociation, Long> productAssociationDao,
+                                 final ImageService imageService,
+                                 final FileService fileService,
+                                 final DtoProductTypeAttrService dtoProductTypeAttrService,
+                                 final DtoProductCategoryService dtoProductCategoryService,
+                                 final SystemService systemService,
+                                 final LanguageService languageService) {
         super(dtoFactory, productService, adaptersRepository);
         this.dtoAttributeGroupService = dtoAttributeGroupService;
         this.dtoEtypeService = dtoEtypeService;
@@ -123,6 +125,7 @@ public class DtoProductServiceImpl
 
 
         this.productService = (ProductService) productService;
+        this.categoryService = categoryService;
         this.dtoFactory = dtoFactory;
         this.dtoProductCategoryService = dtoProductCategoryService;
         this.dtoAttributeService = dtoAttributeService;
@@ -140,8 +143,6 @@ public class DtoProductServiceImpl
                 ProductSku.class);
 
         this.dtoProductTypeAttrService = dtoProductTypeAttrService;
-
-        this.productTypeAttrService = (ProductTypeAttrService) dtoProductTypeAttrService.getService();
 
         this.languageService = languageService;
 
@@ -258,6 +259,110 @@ public class DtoProductServiceImpl
         fillDTOs(entities, dtos);
 
         return dtos;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SearchResult<ProductDTO> findProducts(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, List> params = filter.reduceParameters("filter", "supplierCatalogCodes");
+        final List filterParam = params.get("filter");
+        final List supplierCatalogCodesParam = params.get("supplierCatalogCodes");
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final ProductService productService = (ProductService) service;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+            final String textFilter = ((String) filterParam.get(0)).trim();
+            final Pair<String, String> tagOrCodeOrBrandOrType = ComplexSearchUtils.checkSpecialSearch(textFilter, TAG_OR_CODE_OR_BRAND_OR_TYPE);
+
+            if (tagOrCodeOrBrandOrType != null) {
+
+                if ("*".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                    // If this by PK then to by PK
+                    final long byPk = NumberUtils.toLong(tagOrCodeOrBrandOrType.getSecond());
+                    currentFilter.put("productId", Collections.singletonList(byPk));
+
+                } else if ("!".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("guid", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    currentFilter.put("code", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    currentFilter.put("manufacturerCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    currentFilter.put("manufacturerPartCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    currentFilter.put("supplierCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    currentFilter.put("pimCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    currentFilter.put("tag", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+
+                } else if ("#".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("guid", Collections.singletonList(tagOrCodeOrBrandOrType.getSecond()));
+                    currentFilter.put("code", Collections.singletonList(tagOrCodeOrBrandOrType.getSecond()));
+                    currentFilter.put("manufacturerCode", Collections.singletonList(tagOrCodeOrBrandOrType.getSecond()));
+                    currentFilter.put("manufacturerPartCode", Collections.singletonList(tagOrCodeOrBrandOrType.getSecond()));
+                    currentFilter.put("supplierCode", Collections.singletonList(tagOrCodeOrBrandOrType.getSecond()));
+                    currentFilter.put("pimCode", Collections.singletonList(tagOrCodeOrBrandOrType.getSecond()));
+                    currentFilter.put("tag", Collections.singletonList(tagOrCodeOrBrandOrType.getSecond()));
+
+                } else if ("?".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("brand.guid", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    currentFilter.put("brand.name", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    currentFilter.put("producttype.guid", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    currentFilter.put("producttype.name", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+
+                } else if ("^".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                    final Long categoryId = categoryService.findCategoryIdByGUID(tagOrCodeOrBrandOrType.getSecond());
+                    if (categoryId == null) {
+                        return new SearchResult<>(filter, Collections.emptyList(), 0);
+                    }
+
+                    currentFilter.put("categoryIds", Collections.singletonList(categoryId));
+
+                }
+
+            } else {
+
+                SearchContext.JoinMode.OR.setMode(currentFilter);
+                currentFilter.put("guid", Collections.singletonList(textFilter));
+                currentFilter.put("code", Collections.singletonList(textFilter));
+                currentFilter.put("manufacturerCode", Collections.singletonList(textFilter));
+                currentFilter.put("manufacturerPartCode", Collections.singletonList(textFilter));
+                currentFilter.put("supplierCode", Collections.singletonList(textFilter));
+                currentFilter.put("pimCode", Collections.singletonList(textFilter));
+                currentFilter.put("name", Collections.singletonList(textFilter));
+
+            }
+
+        }
+
+        // Filter by accessible categoryId
+        if (CollectionUtils.isNotEmpty(supplierCatalogCodesParam)) {
+            currentFilter.put("supplierCatalogCodes", supplierCatalogCodesParam);
+        }
+
+        final int count = productService.findProductCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<ProductDTO> entities = new ArrayList<>();
+            final List<Product> products = productService.findProducts(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(products, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
     }
 
     /**

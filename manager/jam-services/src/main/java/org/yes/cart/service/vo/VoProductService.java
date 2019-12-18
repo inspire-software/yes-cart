@@ -40,7 +40,7 @@ public interface VoProductService {
      *
      * @throws Exception errors
      */
-    List<VoProduct> getFilteredProducts(String filter, int max) throws Exception;
+    VoSearchResult<VoProduct> getFilteredProducts(VoSearchContext filter) throws Exception;
 
     /**
      * Get product by id.
@@ -127,7 +127,7 @@ public interface VoProductService {
      *
      * @throws Exception errors
      */
-    List<VoProductSku> getFilteredProductSkus(String filter, int max) throws Exception;
+    VoSearchResult<VoProductSku> getFilteredProductSkus(VoSearchContext filter) throws Exception;
 
     /**
      * Get product by id.

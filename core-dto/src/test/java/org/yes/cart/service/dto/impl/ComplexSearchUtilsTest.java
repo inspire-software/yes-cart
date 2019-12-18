@@ -44,7 +44,15 @@ public class ComplexSearchUtilsTest {
         assertNotNull(search);
         assertEquals("#", search.getFirst());
         assertEquals("tag", search.getSecond());
+        search = ComplexSearchUtils.checkSpecialSearch("# tag ", new char[]{'#'});
+        assertNotNull(search);
+        assertEquals("#", search.getFirst());
+        assertEquals("tag", search.getSecond());
         search = ComplexSearchUtils.checkSpecialSearch("?phrase", new char[]{'#', '?'});
+        assertNotNull(search);
+        assertEquals("?", search.getFirst());
+        assertEquals("phrase", search.getSecond());
+        search = ComplexSearchUtils.checkSpecialSearch("?  phrase  ", new char[]{'#', '?'});
         assertNotNull(search);
         assertEquals("?", search.getFirst());
         assertEquals("phrase", search.getSecond());
@@ -71,6 +79,10 @@ public class ComplexSearchUtilsTest {
         assertEquals("-", search.getFirst());
         assertEquals("1.01", search.getSecond().toPlainString());
         search = ComplexSearchUtils.checkNumericSearch("+1", new char[] { '+', '-' }, 3);
+        assertNotNull(search);
+        assertEquals("+", search.getFirst());
+        assertEquals("1.000", search.getSecond().toPlainString());
+        search = ComplexSearchUtils.checkNumericSearch("+ 1 ", new char[] { '+', '-' }, 3);
         assertNotNull(search);
         assertEquals("+", search.getFirst());
         assertEquals("1.000", search.getSecond().toPlainString());
@@ -132,6 +144,11 @@ public class ComplexSearchUtilsTest {
         assertEquals("1982-09-30 00:00:00", DateUtils.formatSDT(search.getSecond())); // Sep only has 30 days
 
         search = ComplexSearchUtils.checkDateRangeSearch("1982-09<2017-03-12");
+        assertNotNull(search);
+        assertEquals("1982-09-01 00:00:00", DateUtils.formatSDT(search.getFirst()));
+        assertEquals("2017-03-12 00:00:00", DateUtils.formatSDT(search.getSecond()));
+
+        search = ComplexSearchUtils.checkDateRangeSearch("1982-09 < 2017-03-12");
         assertNotNull(search);
         assertEquals("1982-09-01 00:00:00", DateUtils.formatSDT(search.getFirst()));
         assertEquals("2017-03-12 00:00:00", DateUtils.formatSDT(search.getSecond()));

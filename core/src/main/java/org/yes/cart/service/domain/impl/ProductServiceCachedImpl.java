@@ -22,7 +22,6 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.dto.ProductSearchResultNavDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
@@ -31,7 +30,6 @@ import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.service.domain.ProductService;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -415,6 +413,23 @@ public class ProductServiceCachedImpl implements ProductService {
     @Override
     public List<String> findProductSupplierCatalogCodes() {
         return productService.findProductSupplierCatalogCodes();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Product> findProducts(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return productService.findProducts(start, offset, sort, sortDescending, filter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findProductCount(final Map<String, List> filter) {
+        return productService.findProductCount(filter);
     }
 
     /**

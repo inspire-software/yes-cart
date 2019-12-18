@@ -72,7 +72,7 @@ public class ProductTypeServiceImpl extends BaseGenericServiceImpl<ProductType> 
         final List<Object> params = new ArrayList<>();
 
         if (count) {
-            hqlCriteria.append("select count(p) from ProductTypeEntity p ");
+            hqlCriteria.append("select count(p.producttypeId) from ProductTypeEntity p ");
         } else {
             hqlCriteria.append("select p from ProductTypeEntity p ");
         }

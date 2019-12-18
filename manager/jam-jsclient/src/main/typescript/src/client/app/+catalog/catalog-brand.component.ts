@@ -71,8 +71,7 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
     return {
       searchContext: {
         parameters: {
-          filter: [],
-          statuses: []
+          filter: []
         },
         start: 0,
         size: Config.UI_TABLE_PAGE_SIZE,

@@ -257,7 +257,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         final List<Object> params = new ArrayList<>();
 
         if (count) {
-            hqlCriteria.append("select count(c) from CategoryEntity c ");
+            hqlCriteria.append("select count(c.categoryId) from CategoryEntity c ");
         } else {
             hqlCriteria.append("select c from CategoryEntity c ");
         }

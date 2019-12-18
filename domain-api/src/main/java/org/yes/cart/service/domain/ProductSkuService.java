@@ -25,6 +25,7 @@ import org.yes.cart.search.dto.NavigationContext;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -124,6 +125,34 @@ public interface ProductSkuService extends GenericService<ProductSku> {
      * @param sku  given sku.
      */
     void removeAllEnsembleOptions(final ProductSku sku);
+
+
+    /**
+     * Find SKU by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of SKU.
+     */
+    List<ProductSku> findProductSkus(int start,
+                                     int offset,
+                                     String sort,
+                                     boolean sortDescending,
+                                     Map<String, List> filter);
+
+    /**
+     * Find SKU by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findProductSkuCount(Map<String, List> filter);
+
 
 
 }
