@@ -14,7 +14,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredProducts; let i = index" class="{{row == selectedProduct ? 'active' : ''}}">
-        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span class="label label-info">{{row.supplierCatalogCode}}</span> {{row.code}}</a></td>
         <td title="{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.manufacturerCode}}</a>&nbsp;</td>
         <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a> <span [innerHTML]="getUri(row)"></span></td>
         <td title="{{ 'PRODUCT_BRAND' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.brand.name}}</a></td>
