@@ -60,19 +60,12 @@ public interface ShopFederationStrategy {
     boolean isSupplierCatalogAccessibleByCurrentManager(final String catalogCode);
 
     /**
-     * @param catalogCode category catalog code
-     *
-     * @return true if current manager has access to this catalog
-     */
-    boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode);
-
-    /**
      * @return set of PK's of shops to which current manager has access
      */
     Set<Long> getAccessibleShopIdsByCurrentManager();
 
     /**
-     * @return set of PK's of shops to which current manager has access
+     * @return set of shop codes to which current manager has access
      */
     Set<String> getAccessibleShopCodesByCurrentManager();
 

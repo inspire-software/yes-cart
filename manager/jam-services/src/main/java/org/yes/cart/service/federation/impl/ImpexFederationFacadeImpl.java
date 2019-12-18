@@ -84,14 +84,6 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
      * {@inheritDoc}
      */
     @Override
-    public boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode) {
-        return shopFederationStrategy.isCategoryCatalogAccessibleByCurrentManager(catalogCode);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
     }

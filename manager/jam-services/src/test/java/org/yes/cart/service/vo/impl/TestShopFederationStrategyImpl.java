@@ -37,11 +37,6 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
     }
 
     @Override
-    public boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode) {
-        return true;
-    }
-
-    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return null;
     }

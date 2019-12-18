@@ -39,11 +39,6 @@ public class SystemAdminFederationFacade implements FederationFacade {
     }
 
     @Override
-    public boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode) {
-        return true;
-    }
-
-    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return null;
     }

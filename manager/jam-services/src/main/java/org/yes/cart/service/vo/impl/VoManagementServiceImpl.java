@@ -389,10 +389,24 @@ public class VoManagementServiceImpl implements VoManagementService {
 
             // Categories
             final Set<String> categoriesToRevoke = new HashSet<>();
-            for (final String managerCat : managementService.getAssignedManagerCategoryCatalogs(voManager.getEmail())) {
-                if (federationFacade.isCategoryCatalogAccessibleByCurrentManager(managerCat)) {
-                    categoriesToRevoke.add(managerCat);
-                } // else skip updates for inaccessible suppliers
+            final List<String> codes = managementService.getAssignedManagerCategoryCatalogs(voManager.getEmail());
+            if (CollectionUtils.isNotEmpty(codes)) {
+                final SearchContext filter = new SearchContext(
+                        Collections.singletonMap("GUIDs", new ArrayList<>(codes)),
+                        0,
+                        50,
+                        "name",
+                        false,
+                        "GUIDs"
+                );
+                final SearchResult<CategoryDTO> assigned = dtoCategoryService.findCategories(filter);
+                if (!assigned.getItems().isEmpty()) {
+                    for (final CategoryDTO category : assigned.getItems()) {
+                        if (federationFacade.isManageable(category.getCategoryId(), CategoryDTO.class)) {
+                            categoriesToRevoke.add(category.getGuid());
+                        } // else skip updates for inaccessible suppliers
+                    }
+                }
             }
             for (final VoManagerCategoryCatalog managerCat : voManager.getManagerCategoryCatalogs()) {
                 if (federationFacade.isManageable(managerCat.getCategoryId(), CategoryDTO.class)) {

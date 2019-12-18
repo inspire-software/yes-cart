@@ -67,15 +67,6 @@ public class TestImpexFederationFacadeImpl implements FederationFacade {
         return true;
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode) {
-        return true;
-    }
-
     /**
      * {@inheritDoc}
      */

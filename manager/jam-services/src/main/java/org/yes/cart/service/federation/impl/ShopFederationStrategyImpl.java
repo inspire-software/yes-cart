@@ -113,18 +113,6 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
      * {@inheritDoc}
      */
     @Override
-    public boolean isCategoryCatalogAccessibleByCurrentManager(final String catalogCode) {
-        final AdminContext ctx = getCurrent();
-        if (ctx.isAdmin()) {
-            return true;
-        }
-        return ctx.getCatalogCodes().contains(catalogCode);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return getCurrent().getShopIds();
     }
