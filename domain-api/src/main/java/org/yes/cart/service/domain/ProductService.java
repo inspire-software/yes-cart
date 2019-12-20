@@ -18,7 +18,6 @@ package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.dto.ProductSearchResultNavDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
@@ -26,7 +25,6 @@ import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.dto.FilteredNavigationRecordRequest;
 import org.yes.cart.search.dto.NavigationContext;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -169,19 +167,6 @@ public interface ProductService extends GenericService<Product> {
      * @return product if found, otherwise null
      */
     Product getProductById(Long productId, boolean withAttribute);
-
-    /**
-     * Get the all products in category.
-     *
-     * @param categoryId  category id
-     * @param firstResult index of first result
-     * @param maxResults  quantity results to return
-     *
-     * @return list of products
-     */
-    List<Product> findProductByCategory(long categoryId,
-                                        int firstResult,
-                                        int maxResults);
 
     /**
      * Get list of products by id list.

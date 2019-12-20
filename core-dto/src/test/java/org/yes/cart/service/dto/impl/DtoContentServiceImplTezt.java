@@ -33,13 +33,14 @@ import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.ContentDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.service.domain.ContentService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoContentService;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -60,6 +61,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
 
     private DtoFactory dtoFactory;
     private ContentService service;
+    private ShopService shopService;
     private DtoContentService dtoService;
     private DtoAttributeService dtoAttrService;
 
@@ -82,6 +84,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         dtoService = (DtoContentService) ctx().getBean(DtoServiceSpringKeys.DTO_CONTENT_SERVICE);
         dtoAttrService = (DtoAttributeService) ctx().getBean(DtoServiceSpringKeys.DTO_ATTRIBUTE_SERVICE);
         service = (ContentService) ctx().getBean(ServiceSpringKeys.CONTENT_SERVICE);
+        shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
 
         final ContentService serviceMode = (ContentService) ctx().getBean(cmsServiceMode);
         ((ConfigurationRegistry) service).register("CMS", serviceMode);
@@ -102,16 +105,35 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testFindBy() throws Exception {
+    public void testFindContent() throws Exception {
 
-        List<ContentDTO> list = dtoService.findBy(10L,"^SHOIP1", 0, 10);
-        assertTrue(list.size() > 1);
+        final List<Long> contentIds = new ArrayList<>(shopService.getShopContentIds(10L));
 
-        list = dtoService.findBy(10L,"@SHOIP1_mail_customer-registered.html", 0, 10);
-        assertEquals(1, list.size());
+        final Map<String, List> filterByParentParams = new HashMap<>();
+        filterByParentParams.put("filter", Collections.singletonList("^ SHOIP1"));
+        filterByParentParams.put("contentIds", contentIds);
+        final SearchContext filterByParent = new SearchContext(filterByParentParams, 0, 10, "guid", false, "filter", "contentIds");
+        SearchResult<ContentDTO> list = dtoService.findContent(filterByParent);
+        assertTrue(list.getTotal() > 1);
+        assertEquals("SHOIP1", list.getItems().get(0).getName());
 
-        list = dtoService.findBy(10L,null, 0, 1);
-        assertTrue(list.size() > 1); // TODO: fix this, there is a check to find content belongs to shop, so page size cannot be applied
+        final Map<String, List> filterByUriParams = new HashMap<>();
+        filterByUriParams.put("filter", Collections.singletonList("@SHOIP1_mail_customer-registered.html"));
+        filterByUriParams.put("contentIds", contentIds);
+        final SearchContext filterByUri = new SearchContext(filterByUriParams, 0, 10, "name", false, "filter", "contentIds");
+        list = dtoService.findContent(filterByUri);
+        assertEquals(1, list.getTotal());
+        assertEquals("SHOIP1_mail_customer-registered.html", list.getItems().get(0).getUri());
+
+        final Map<String, List> filterNoneParams = new HashMap<>();
+        filterNoneParams.put("contentIds", contentIds);
+        final SearchContext filterNone = new SearchContext(filterNoneParams, 0, 10, "name", false, "filter", "contentIds");
+        list = dtoService.findContent(filterNone);
+        assertTrue(list.getTotal() > 1);
+        list.getItems().forEach(content -> {
+            assertTrue(content.getGuid(), content.getGuid().contains("SHOIP1"));
+        });
+
 
     }
 

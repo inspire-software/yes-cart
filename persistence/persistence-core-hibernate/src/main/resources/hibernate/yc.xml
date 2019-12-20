@@ -3077,15 +3077,6 @@
        ]]>
     </query>
 
-    <query name="PRODUCTS.BY.CATEGORYIDS">
-        <![CDATA[
-       select p from ProductEntity p, ProductCategoryEntity pc
-            where p.productId = pc.product.productId
-            and pc.category.categoryId in (?1)
-            order by pc.rank, p.code
-       ]]>
-    </query>
-
     <query name="PRODUCT.IN.CATEGORY">
         <![CDATA[
        select pc from  ProductCategoryEntity pc

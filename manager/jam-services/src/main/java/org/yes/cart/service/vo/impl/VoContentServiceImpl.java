@@ -21,7 +21,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.*;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoContentService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -41,6 +44,8 @@ public class VoContentServiceImpl implements VoContentService {
     private final DtoContentService dtoContentService;
     private final DtoAttributeService dtoAttributeService;
 
+    private final ShopService shopService;
+
     private final FederationFacade federationFacade;
     private final VoAssemblySupport voAssemblySupport;
     private final VoIOSupport voIOSupport;
@@ -52,11 +57,13 @@ public class VoContentServiceImpl implements VoContentService {
 
     public VoContentServiceImpl(final DtoContentService dtoContentService,
                                  final DtoAttributeService dtoAttributeService,
+                                 final ShopService shopService,
                                  final FederationFacade federationFacade,
                                  final VoAssemblySupport voAssemblySupport,
                                  final VoIOSupport voIOSupport) {
         this.dtoContentService = dtoContentService;
         this.dtoAttributeService = dtoAttributeService;
+        this.shopService = shopService;
         this.federationFacade = federationFacade;
         this.voAssemblySupport = voAssemblySupport;
         this.voIOSupport = voIOSupport;
@@ -166,14 +173,42 @@ public class VoContentServiceImpl implements VoContentService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoContent> getFilteredContent(final long shopId, final String filter, final int max) throws Exception {
-        if (federationFacade.isManageable(shopId, ShopDTO.class)){
+    public VoSearchResult<VoContent> getFilteredContent(final long shopId, final VoSearchContext filter) throws Exception {
 
-            final List<ContentDTO> contentDTO = dtoContentService.findBy(shopId, filter, 0, max);
-            return voAssemblySupport.assembleVos(VoContent.class, ContentDTO.class, contentDTO);
+        final VoSearchResult<VoContent> result = new VoSearchResult<>();
+        final List<VoContent> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
+        final Map<String, List> params = new HashMap<>();
+        if (filter.getParameters() != null) {
+            params.putAll(filter.getParameters());
         }
-        return Collections.emptyList();
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
+            params.put("contentIds", new ArrayList(shopService.getShopContentIds(shopId)));
+        } else {
+            return result;
+        }
+
+        final SearchContext searchContext = new SearchContext(
+                params,
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "contentIds"
+        );
+
+        final SearchResult<ContentDTO> batch = dtoContentService.findContent(searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoContent.class, ContentDTO.class, batch.getItems()));
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
+
+
     }
 
     /** {@inheritDoc} */

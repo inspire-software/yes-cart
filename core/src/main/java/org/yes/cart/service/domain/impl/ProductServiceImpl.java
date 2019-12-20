@@ -463,20 +463,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return new Pair<>(total, active);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Product> findProductByCategory(final long categoryId,
-                                               final int firstResult,
-                                               final int maxResults) {
-        return productDao.findRangeByNamedQuery("PRODUCTS.BY.CATEGORYIDS",
-                firstResult,
-                maxResults,
-                Collections.singleton(categoryId)
-        );
-    }
-
 
     /**
      * {@inheritDoc}

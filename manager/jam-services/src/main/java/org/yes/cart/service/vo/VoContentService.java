@@ -76,7 +76,7 @@ public interface VoContentService {
      *
      * @throws Exception errors
      */
-    List<VoContent> getFilteredContent(long shopId, String filter, int max) throws Exception;
+    VoSearchResult<VoContent> getFilteredContent(long shopId, VoSearchContext filter) throws Exception;
 
     /**
      * Get summary information for given shop.

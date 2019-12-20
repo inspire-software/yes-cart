@@ -89,21 +89,6 @@ public interface ContentService extends GenericService<Content> {
      */
     Set<Content> getChildContentRecursive(long contentId);
 
-
-    /**
-     * Get contents by criteria.
-     *
-     * @param shopId shop id
-     * @param code code (GUID)
-     * @param name base name
-     * @param uri URI
-     * @param page page number starting from 0
-     * @param pageSize size of page
-     *
-     * @return one page of results
-     */
-    List<Content> findBy(long shopId, String code, String name, String uri, int page, int pageSize);
-
     /**
      * Get content body for a particular content.
      * See CONTENT_BODY setting.
@@ -226,6 +211,35 @@ public interface ContentService extends GenericService<Content> {
      * @return true in case if content belongs to tree that starts from <code>topContent</code>
      */
     boolean isContentHasSubcontent(long topContentId, long subContentId);
+
+
+
+    /**
+     * Find content by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of brands.
+     */
+    List<Content> findContent(int start,
+                              int offset,
+                              String sort,
+                              boolean sortDescending,
+                              Map<String, List> filter);
+
+    /**
+     * Find content by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findContentCount(Map<String, List> filter);
+
 
 
 }

@@ -263,17 +263,12 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         }
 
         final List categoryIds = currentFilter != null ? currentFilter.remove("categoryIds") : null;
-
-        HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
-
         if (categoryIds != null) {
-            if (params.size() > 0) {
-                hqlCriteria.append(" and (c.categoryId in (?").append(params.size() + 1).append(")) ");
-            } else {
-                hqlCriteria.append(" where (c.categoryId in (?1)) ");
-            }
+            hqlCriteria.append(" where (c.categoryId in (?1)) ");
             params.add(categoryIds);
         }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
 
 
         if (StringUtils.isNotBlank(sort)) {

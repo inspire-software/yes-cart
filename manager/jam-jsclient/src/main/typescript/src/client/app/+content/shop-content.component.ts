@@ -15,10 +15,10 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ShopService, ContentService, ShopEventBus } from './../shared/services/index';
+import { ShopService, ContentService, UserEventBus, ShopEventBus } from './../shared/services/index';
 import { ContentMinSelectComponent } from './../shared/content/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ShopVO, ShopUrlVO, ShopLanguagesVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair } from './../shared/model/index';
+import { ShopVO, ShopUrlVO, ShopLanguagesVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -51,15 +51,12 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   private shopIdSub:any;
   private shopSub:any;
 
-  private contents:Array<ContentVO> = [];
+  private contents:SearchResultVO<ContentVO>;
   private contentFilter:string;
   private contentFilterRequired:boolean = true;
-  private contentFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedContent:ContentVO;
 
@@ -85,6 +82,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
               private _route: ActivatedRoute,
               private _router: Router) {
     LogUtil.debug('ShopContentComponent constructed');
+    this.contents = this.newSearchResultInstance();
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
       this.shop = shopevt;
       this.forceShowAll = false;
@@ -107,6 +105,23 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     };
   }
 
+  newSearchResultInstance():SearchResultVO<ContentVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: [],
+          statuses: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    };
+  }
+
   ngOnInit() {
     LogUtil.debug('ShopContentComponent ngOnInit');
 
@@ -126,6 +141,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     this.delayedFiltering = Futures.perpetual(function() {
       that.getFilteredContents();
     }, this.delayedFilteringMs);
+
   }
 
   ngOnDestroy() {
@@ -138,14 +154,33 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
 
   protected onFilterChange(event:any) {
-
+    this.contents.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
     LogUtil.debug('ShopContentComponent refresh handler');
-    this.getFilteredContents();
+    if (UserEventBus.getUserEventBus().current() != null) {
+      this.getFilteredContents();
+    }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('ShopContentComponent onPageSelected', page);
+    this.contents.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('ShopContentComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.contents.searchContext.sortBy = null;
+      this.contents.searchContext.sortDesc = false;
+    } else {
+      this.contents.searchContext.sortBy = sort.first;
+      this.contents.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onContentSelected(data:ContentVO) {
@@ -197,7 +232,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   protected onContentTreeDataSelected(event:FormValidationEvent<ContentVO>) {
     LogUtil.debug('ShopContentComponent onContentTreeDataSelected handler', event);
     if (event.valid) {
-      this.contentFilter = '^' + event.source.name;
+      this.contentFilter = '^' + event.source.guid;
       this.getFilteredContents();
     }
   }
@@ -341,8 +376,11 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
     if (this.shop != null && !this.contentFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      let _sub:any = this._contentService.getFilteredContent(this.shop.shopId, this.contentFilter, max).subscribe( allcontents => {
+
+      this.contents.searchContext.parameters.filter = [ this.contentFilter ];
+      this.contents.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._contentService.getFilteredContent(this.shop.shopId, this.contents.searchContext).subscribe( allcontents => {
         LogUtil.debug('ShopContentComponent getFilteredContent', allcontents);
         this.contents = allcontents;
         this.selectedContent = null;
@@ -350,19 +388,17 @@ export class ShopContentComponent implements OnInit, OnDestroy {
         this.viewMode = ShopContentComponent.CONTENTS;
         this.changed = false;
         this.validForSave = false;
-        this.contentFilterCapped = this.contents.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.contents = [];
+      this.contents = this.newSearchResultInstance();
       this.selectedContent = null;
       this.contentEdit = null;
       this.contentEditAttributes = null;
       this.viewMode = ShopContentComponent.CONTENTS;
       this.changed = false;
       this.validForSave = false;
-      this.contentFilterCapped = false;
     }
   }
 

@@ -160,4 +160,13 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(contentService.isContentHasSubcontent(10106L, 10109L));
     }
 
+    @Test
+    public void testFindContent() throws Exception {
+
+        final Map<String, List> filter = Collections.singletonMap("name", Collections.singletonList("SHOIP1_mail_customer-registered.html"));
+        assertEquals(1, contentService.findContentCount(filter));
+        final List<Content> cms = contentService.findContent(0, 10, "name", false, filter);
+        assertFalse(cms.isEmpty());
+        assertEquals("SHOIP1_mail_customer-registered.html", cms.get(0).getName());
+    }
 }

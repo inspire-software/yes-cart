@@ -19,10 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttrValueContent;
-import org.yes.cart.domain.vo.VoContent;
-import org.yes.cart.domain.vo.VoContentBody;
-import org.yes.cart.domain.vo.VoContentWithBody;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.vo.VoContentService;
 
 import java.util.Arrays;
@@ -52,15 +49,22 @@ public class VoContentServiceImplTest extends BaseCoreDBTestCase {
         List<VoContent> contentAll = voContentService.getAll(20L);
         assertNotNull(contentAll);
 
-        List<VoContent> contentNoFilter = voContentService.getFilteredContent(20L, null, 10);
+        VoSearchContext ctxNone = new VoSearchContext();
+        ctxNone.setSize(10);
+
+        VoSearchResult<VoContent> contentNoFilter = voContentService.getFilteredContent(20L, ctxNone);
         assertNotNull(contentNoFilter);
-        assertFalse(contentNoFilter.isEmpty());
+        assertFalse(contentNoFilter.getItems().isEmpty());
 
-        List<VoContent> contentFind = voContentService.getFilteredContent(20L, "SHOIP2 Content 0021", 10);
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("SHOIP2 Content 0021")));
+        ctxFind.setSize(10);
+
+        VoSearchResult<VoContent> contentFind = voContentService.getFilteredContent(20L, ctxFind);
         assertNotNull(contentFind);
-        assertFalse(contentFind.isEmpty());
+        assertFalse(contentFind.getItems().isEmpty());
 
-        final VoContent c10108 = contentFind.get(0);
+        final VoContent c10108 = contentFind.getItems().get(0);
         assertEquals(10108L, c10108.getContentId());
         assertEquals("SHOIP2 Content 0021", c10108.getName());
 
@@ -82,15 +86,21 @@ public class VoContentServiceImplTest extends BaseCoreDBTestCase {
             }
         }
 
-        List<VoContent> contentByURI = voContentService.getFilteredContent(10L, "@SHOIP1_menu_item_1_1", 10);
+        VoSearchContext ctxFindUri = new VoSearchContext();
+        ctxFindUri.setParameters(Collections.singletonMap("filter", Collections.singletonList("@SHOIP1_menu_item_1_1")));
+        ctxFindUri.setSize(10);
+        VoSearchResult<VoContent> contentByURI = voContentService.getFilteredContent(10L, ctxFindUri);
         assertNotNull(contentByURI);
-        assertEquals(1, contentByURI.size());
-        assertEquals("SHOIP1_menu_item_1_1", contentByURI.get(0).getUri());
+        assertEquals(1, contentByURI.getTotal());
+        assertEquals("SHOIP1_menu_item_1_1", contentByURI.getItems().get(0).getUri());
 
-        List<VoContent> contentSubTree = voContentService.getFilteredContent(10L, "^SHOIP1_menu_item_1", 10);
+        VoSearchContext ctxFindByParent = new VoSearchContext();
+        ctxFindByParent.setParameters(Collections.singletonMap("filter", Collections.singletonList("^SHOIP1_menu_item_1")));
+        ctxFindByParent.setSize(10);
+        VoSearchResult<VoContent> contentSubTree = voContentService.getFilteredContent(10L, ctxFindByParent);
         assertNotNull(contentSubTree);
-        assertEquals(3, contentSubTree.size());
-        assertTrue(contentSubTree.stream().allMatch(cat -> Arrays.asList("SHOIP1_menu_item_1", "SHOIP1_menu_item_11", "SHOIP1_menu_item_12").contains(cat.getGuid())));
+        assertEquals(3, contentSubTree.getTotal());
+        assertTrue(contentSubTree.getItems().stream().allMatch(cat -> Arrays.asList("SHOIP1_menu_item_1", "SHOIP1_menu_item_11", "SHOIP1_menu_item_12").contains(cat.getGuid())));
 
 
     }
@@ -115,7 +125,11 @@ public class VoContentServiceImplTest extends BaseCoreDBTestCase {
         final VoContentWithBody updated = voContentService.updateContent(created);
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
-        assertFalse(voContentService.getFilteredContent(20L, "TEST CRUD UPDATE", 10).isEmpty());
+        VoSearchContext ctx = new VoSearchContext();
+        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setSize(10);
+
+        assertTrue(voContentService.getFilteredContent(20L, ctx).getTotal() > 0);
 
         final List<VoAttrValueContent> attributes = voContentService.getContentAttributes(updated.getContentId());
         assertNotNull(attributes);
@@ -158,7 +172,7 @@ public class VoContentServiceImplTest extends BaseCoreDBTestCase {
 
         voContentService.removeContent(updated.getContentId());
 
-        assertTrue(voContentService.getFilteredContent(20L, "TEST CRUD UPDATE", 10).isEmpty());
+        assertFalse(voContentService.getFilteredContent(20L, ctx).getTotal() > 0);
 
     }
 }

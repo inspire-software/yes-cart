@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttrValueContent;
-import org.yes.cart.domain.vo.VoContent;
-import org.yes.cart.domain.vo.VoContentBody;
-import org.yes.cart.domain.vo.VoContentWithBody;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.ContentEndpointController;
 import org.yes.cart.service.vo.VoContentService;
 import org.yes.cart.service.vo.VoMailService;
@@ -86,8 +83,8 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoContent> getFilteredContent(@PathVariable("shopId") final long shopId, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voContentService.getFilteredContent(shopId, filter, max);
+    VoSearchResult<VoContent> getFilteredContent(@PathVariable("shopId") final long shopId, @RequestBody final VoSearchContext filter) throws Exception {
+        return voContentService.getFilteredContent(shopId, filter);
     }
 
     @Override

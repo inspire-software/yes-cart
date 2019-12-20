@@ -75,11 +75,7 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <div *ngIf="contentFilterCapped">
-      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-    </div>
-
-    <yc-contents [contents]="contents" (dataSelected)="onContentSelected($event)"></yc-contents>
+    <yc-contents [contents]="contents" (dataSelected)="onContentSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-contents>
   </div>
 
   <div [hidden]="viewMode !== 'content'" class="{{ loading ? 'loading-data' : '' }}">

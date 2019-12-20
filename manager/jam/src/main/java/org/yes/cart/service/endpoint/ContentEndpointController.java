@@ -20,10 +20,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttrValueContent;
-import org.yes.cart.domain.vo.VoContent;
-import org.yes.cart.domain.vo.VoContentBody;
-import org.yes.cart.domain.vo.VoContentWithBody;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -53,9 +50,9 @@ public interface ContentEndpointController {
     List<Long> getShopBranchesContentPaths(@PathVariable("shopId") long shopId, @RequestParam(value = "expand", required = false) String expand) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
-    @RequestMapping(value = "/shop/{shopId}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shop/{shopId}/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoContent> getFilteredContent(@PathVariable("shopId") long shopId, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
+    VoSearchResult<VoContent> getFilteredContent(@PathVariable("shopId") long shopId, @RequestBody VoSearchContext filter) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
     @RequestMapping(value = "/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

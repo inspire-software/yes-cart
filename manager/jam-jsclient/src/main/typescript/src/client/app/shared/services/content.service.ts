@@ -18,7 +18,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { ContentWithBodyVO, ContentVO, AttrValueContentVO, ContentBodyVO, Pair } from '../model/index';
+import {
+  ContentWithBodyVO, ContentVO, AttrValueContentVO, ContentBodyVO,
+  Pair, SearchContextVO, SearchResultVO
+} from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -90,13 +93,13 @@ export class ContentService {
    * Get list of all filtered content, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredContent(shopId:number, filter:string, max:number) {
+  getFilteredContent(shopId:number, filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/shop/' + shopId + '/filtered/' + max, body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
-      .map(res => <ContentVO[]> this.json(res))
+    return this.http.post(this._serviceBaseUrl + '/shop/' + shopId + '/filtered', body,
+          Util.requestOptions())
+      .map(res => <SearchResultVO<ContentVO>> this.json(res))
       .catch(this.handleError);
   }
 

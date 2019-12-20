@@ -178,16 +178,6 @@ public class ProductServiceCachedImpl implements ProductService {
         return productService.findProductQtyAll();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Product> findProductByCategory(final long categoryId,
-                                               final int firstResult,
-                                               final int maxResults) {
-        return productService.findProductByCategory(categoryId, firstResult, maxResults);
-    }
-
 
     /**
      * {@inheritDoc}

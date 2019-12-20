@@ -243,42 +243,6 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testFindBy() throws Exception {
-
-        // code exact
-        List<ProductDTO> list = dtoService.findBy("!FEATURED-PRODUCT3", 0, 10);
-        assertEquals(1, list.size());
-        assertEquals("FEATURED-PRODUCT3", list.get(0).getCode());
-
-        // code partial
-        list = dtoService.findBy("#featured", 0, 10);
-        assertEquals(9, list.size());
-        assertTrue(list.get(0).getCode().startsWith("FEATURED-PRODUCT"));
-
-        // PK
-        list = dtoService.findBy("*15053", 0, 10);
-        assertEquals(1, list.size());
-        assertEquals("FEATURED-PRODUCT3", list.get(0).getCode());
-
-        // by brand
-        list = dtoService.findBy("?samsung", 0, 10);
-        assertFalse(list.isEmpty());
-        assertEquals("Samsung", list.get(0).getBrandDTO().getName());
-
-        // by category
-        list = dtoService.findBy("^featured products", 0, 10);
-        assertFalse(list.isEmpty());
-        assertEquals("Featured products", list.get(0).getProductCategoryDTOs().iterator().next().getCategoryName());
-
-        // basic
-        list = dtoService.findBy("bender", 0, 10);
-        assertFalse(list.isEmpty());
-        assertTrue(list.get(0).getCode().startsWith("BENDER"));
-
-    }
-
-
-    @Test
     public void testFindProduct() throws Exception {
 
         // code exact

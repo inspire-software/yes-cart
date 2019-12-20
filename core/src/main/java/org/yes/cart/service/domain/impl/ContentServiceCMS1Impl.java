@@ -29,6 +29,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.entity.impl.ContentCategoryAdapter;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.theme.templates.TemplateProcessor;
@@ -380,62 +381,83 @@ public class ContentServiceCMS1Impl implements ContentService, Configuration {
     }
 
 
+
+    private Pair<String, Object[]> findContentQuery(final boolean count,
+                                                    final String sort,
+                                                    final boolean sortDescending,
+                                                    final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(c.categoryId) from CategoryEntity c ");
+        } else {
+            hqlCriteria.append("select c from CategoryEntity c ");
+        }
+
+        final List categoryIds = currentFilter != null ? currentFilter.remove("contentIds") : null;
+        if (categoryIds != null) {
+            hqlCriteria.append(" where (c.categoryId in (?1)) ");
+            params.add(categoryIds);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
+
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by c." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Content> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
+    public List<Content> findContent(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
 
-        final String codeP = HQLUtils.criteriaIlikeAnywhere(code);
-        final String nameP = HQLUtils.criteriaIlikeAnywhere(name);
-        final String uriP = HQLUtils.criteriaIlikeAnywhere(uri);
+        final Pair<String, Object[]> query = findContentQuery(false, sort, sortDescending, filter);
 
-        final Content root = proxy().getRootContent(shopId);
-        List<Content> cns;
-        if ((codeP != null || nameP != null) && uriP != null) {
-            final List<Category> cnCats = categoryDao.findRangeByNamedQuery("CMS1.CONTENT.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
-            final List<Content> cnt = new ArrayList<>();
-            for (final Category cat : cnCats) {
-                cnt.add(new ContentCategoryAdapter(cat));
-            }
-            cns = cnt;
-        } else if (codeP == null && nameP == null && uriP != null) {
-            final List<Category> cnCats = categoryDao.findRangeByNamedQuery("CMS1.CONTENT.BY.URI", page * pageSize, pageSize, uriP);
-            final List<Content> cnt = new ArrayList<>();
-            for (final Category cat : cnCats) {
-                cnt.add(new ContentCategoryAdapter(cat));
-            }
-            cns = cnt;
-        } else {
-            cns = findChildContentWithAvailability(root.getContentId(), false);
+        final List<Category> cats = (List) getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+
+        final List<Content> cnt = new ArrayList<>();
+        for (final Category cat : cats) {
+            cnt.add(new ContentCategoryAdapter(cat));
         }
+        return cnt;
 
-        final Iterator<Content> catsIt = cns.iterator();
-        while (catsIt.hasNext()) {
-            Content content = catsIt.next();
-            if (content.isRoot()) {
-                catsIt.remove();
-            } else {
-                final long currentCatId = content.getContentId();
-                while (content.getParentId() != root.getContentId()) {
-                    if (content.isRoot()) {
-                        // if this is root and not shop root matches then this is not this shop's content
-                        catsIt.remove();
-                        break;
-                    }
-                    content = proxy().findById(content.getParentId());
-                    if (content == null) {
-                        // could have happened if import created some reassignments and we loose path to root
-                        catsIt.remove();
-                        LOG.warn("Found orphan content {}", currentCatId);
-                        break;
-                    }
-                }
-            }
-        }
-        return cns;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findContentCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findContentQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
+    }
 
 
     /**

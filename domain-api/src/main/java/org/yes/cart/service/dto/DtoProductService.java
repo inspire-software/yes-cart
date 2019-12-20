@@ -47,17 +47,6 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
      */
     SearchResult<ProductDTO> findProducts(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
-    /**
-     * Find products by filter.
-     *
-     * @param filter filter for partial match.
-     * @param page page number starting from 0
-     * @param pageSize size of page
-     *
-     * @return list of products
-     */
-    List<ProductDTO> findBy(String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
 
     /**
      * Get product sku by code.

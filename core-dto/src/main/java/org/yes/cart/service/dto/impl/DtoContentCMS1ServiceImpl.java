@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.config.Configuration;
 import org.yes.cart.config.ConfigurationContext;
@@ -38,12 +39,14 @@ import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
 import org.yes.cart.domain.entity.impl.AttrValueEntityContentCategoryAdapter;
 import org.yes.cart.domain.entity.impl.ContentCategoryAdapter;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
+import org.yes.cart.service.dto.AttrValueDTOComparator;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoContentService;
-import org.yes.cart.service.dto.AttrValueDTOComparator;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -275,49 +278,46 @@ public class DtoContentCMS1ServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public List<ContentDTO> findBy(final long shopId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<ContentDTO> findContent(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        ContentService contentService = (ContentService) service;
+        final Map<String, List> params = filter.reduceParameters("filter", "contentIds", "GUIDs");
+        final List filterParam = params.get("filter");
+        final List contentParam = params.get("contentIds");
+        final List guidsParam = params.get("GUIDs");
 
-        final List<ContentDTO> contentDTO = new ArrayList<>(pageSize);
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
 
-        if (StringUtils.isNotBlank(filter)) {
-            final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
+        final ContentService contentService = (ContentService) service;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+            final String textFilter = ((String) filterParam.get(0)).trim();
+
+            final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(textFilter, PARENT_OR_URI);
 
             if (parentOrUri == null) {
 
-                fillDTOs(contentService.findBy(shopId, filter, filter, filter, page, pageSize), contentDTO);
+                SearchContext.JoinMode.OR.setMode(currentFilter);
+                currentFilter.put("guid", Collections.singletonList(textFilter));
+                currentFilter.put("name", Collections.singletonList(textFilter));
+                currentFilter.put("seoInternal.uri", Collections.singletonList(textFilter));
 
             } else {
 
                 if ("@".equals(parentOrUri.getFirst())) {
 
-                    fillDTOs(contentService.findBy(shopId, null, null, parentOrUri.getSecond(), page, pageSize), contentDTO);
+                    currentFilter.put("seoInternal.uri", Collections.singletonList(parentOrUri.getSecond()));
 
                 } else if ("^".equals(parentOrUri.getFirst())) {
 
-                    final List<Content> parents = contentService.findBy(shopId, parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
+                    final Long parentCatId = contentService.findContentIdByGUID(parentOrUri.getSecond());
+                    if (parentCatId != null) {
 
-                    if (!parents.isEmpty()) {
-
-                        final Set<Long> dedup = new HashSet<>();
-                        final List<Content> parentsWithChildren = new ArrayList<>();
-                        for (final Content parent : parents) {
-
-                            if (!dedup.contains(parent.getContentId())) {
-                                parentsWithChildren.add(parent);
-                                dedup.add(parent.getContentId());
-                            }
-                            for (final Content child : contentService.findChildContentWithAvailability(parent.getContentId(), false)) {
-                                if (!dedup.contains(child.getContentId())) {
-                                    parentsWithChildren.add(child);
-                                    dedup.add(child.getContentId());
-                                }
-                            }
-
-                        }
-
-                        fillDTOs(parentsWithChildren, contentDTO);
+                        SearchContext.JoinMode.OR.setMode(currentFilter);
+                        currentFilter.put("categoryId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(parentCatId)));
+                        currentFilter.put("parentId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(parentCatId)));
 
                     }
 
@@ -325,13 +325,30 @@ public class DtoContentCMS1ServiceImpl
 
             }
 
-        } else {
-
-            fillDTOs(contentService.findBy(shopId, null, null, null, page, pageSize), contentDTO);
-
         }
 
-        return contentDTO;
+        // Filter by GUID
+        if (CollectionUtils.isNotEmpty(guidsParam)) {
+            currentFilter.put("guid", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(guidsParam)));
+        }
+
+        // Filter by accessible categoryId
+        if (CollectionUtils.isNotEmpty(contentParam)) {
+            currentFilter.put("contentIds", contentParam);
+        }
+
+        final int count = contentService.findContentCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<ContentDTO> entities = new ArrayList<>();
+            final List<Content> categories = contentService.findContent(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(categories, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
     }
 
 

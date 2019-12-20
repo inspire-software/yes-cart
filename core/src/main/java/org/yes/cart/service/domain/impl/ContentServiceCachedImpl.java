@@ -167,11 +167,17 @@ public class ContentServiceCachedImpl implements ContentService, ConfigurationRe
      * {@inheritDoc}
      */
     @Override
-    public List<Content> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
-        return contentService.findBy(shopId, code, name, uri, page, pageSize);
+    public List<Content> findContent(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return contentService.findContent(start, offset, sort, sortDescending, filter);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findContentCount(final Map<String, List> filter) {
+        return contentService.findContentCount(filter);
+    }
 
     /**
      * {@inheritDoc} Just to cache

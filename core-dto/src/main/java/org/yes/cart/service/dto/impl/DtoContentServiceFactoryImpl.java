@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.ContentDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
@@ -57,8 +59,8 @@ public class DtoContentServiceFactoryImpl implements DtoContentService, Configur
     }
 
     @Override
-    public List<ContentDTO> findBy(final long shopId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return active.findBy(shopId, filter, page, pageSize);
+    public SearchResult<ContentDTO> findContent(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return active.findContent(filter);
     }
 
     @Override

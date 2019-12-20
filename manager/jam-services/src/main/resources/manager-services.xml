@@ -94,9 +94,10 @@
     <bean id="voContentService" class="org.yes.cart.service.vo.impl.VoContentServiceImpl">
         <constructor-arg index="0" ref="dtoContentService"/>
         <constructor-arg index="1" ref="dtoAttributeService"/>
-        <constructor-arg index="2" ref="uiFederationFacade"/>
-        <constructor-arg index="3" ref="voAssemblySupport"/>
-        <constructor-arg index="4" ref="voIOSupport"/>
+        <constructor-arg index="2" ref="shopService"/>
+        <constructor-arg index="3" ref="uiFederationFacade"/>
+        <constructor-arg index="4" ref="voAssemblySupport"/>
+        <constructor-arg index="5" ref="voIOSupport"/>
         <property name="skipContentAttributesInView" value="CONTENT_BODY_"/>
     </bean>
 

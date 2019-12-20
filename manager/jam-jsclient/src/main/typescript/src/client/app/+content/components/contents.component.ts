@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ContentVO } from './../../shared/model/index';
+import { ContentVO, Pair, SearchResultVO } from './../../shared/model/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
@@ -30,19 +30,23 @@ export class ContentsComponent implements OnInit, OnDestroy {
 
   @Output() dataSelected: EventEmitter<ContentVO> = new EventEmitter<ContentVO>();
 
-  private _contents:Array<ContentVO> = [];
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
+
+  private _contents:SearchResultVO<ContentVO> = null;
 
   private filteredContents:Array<ContentVO>;
 
+  //sorting
+  private sortColumn:string = null;
+  private sortDesc:boolean = false;
+
   //paging
-  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS;
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
   private totalItems:number = 0;
-  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
-  // Must use separate variables (not currentPage) for table since that causes
-  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  private pageStart:number = 0;
-  private pageEnd:number = this.itemsPerPage;
+  private currentPage:number = 1;
 
   constructor() {
     LogUtil.debug('ContentsComponent constructed');
@@ -53,7 +57,7 @@ export class ContentsComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set contents(contents:Array<ContentVO>) {
+  set contents(contents:SearchResultVO<ContentVO>) {
     this._contents = contents;
     this.filterContents();
   }
@@ -64,22 +68,21 @@ export class ContentsComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(null);
   }
 
-  resetLastPageEnd() {
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
+  onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
     }
   }
 
-  onPageChanged(event:any) {
-    this.pageStart = (event.page - 1) * this.itemsPerPage;
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortSelected.emit(null);
+      } else {  // same column asc, change to desc
+        this.sortSelected.emit({ first: event, second: true });
+      }
+    } else { // different column, start asc sort
+      this.sortSelected.emit({ first: event, second: false });
     }
   }
 
@@ -110,18 +113,27 @@ export class ContentsComponent implements OnInit, OnDestroy {
 
   private filterContents() {
 
-    this.filteredContents = this._contents;
     LogUtil.debug('ContentsComponent filterContents', this.filteredContents);
 
-    if (this.filteredContents === null) {
+    if (this._contents != null) {
+
+      this.filteredContents = this._contents.items != null ? this._contents.items : [];
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = this._contents.searchContext.size;
+      this.totalItems = this._contents.total;
+      this.currentPage = this._contents.searchContext.start + 1;
+      this.sortColumn = this._contents.searchContext.sortBy;
+      this.sortDesc = this._contents.searchContext.sortDesc;
+    } else {
       this.filteredContents = [];
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = Config.UI_TABLE_PAGE_SIZE;
+      this.totalItems = 0;
+      this.currentPage = 1;
+      this.sortColumn = null;
+      this.sortDesc = false;
     }
 
-    let _total = this.filteredContents.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
   }
 
 }

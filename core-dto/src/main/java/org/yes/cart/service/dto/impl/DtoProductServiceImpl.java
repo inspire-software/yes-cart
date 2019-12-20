@@ -41,7 +41,6 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.*;
 import org.yes.cart.service.misc.LanguageService;
-import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
 
@@ -169,97 +168,6 @@ public class DtoProductServiceImpl
         Arrays.sort(AVAILABILITY);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<ProductDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        final List<ProductDTO> dtos = new ArrayList<>();
-
-        List<Product> entities = Collections.emptyList();
-
-        if (StringUtils.isNotBlank(filter)) {
-
-            final Pair<String, String> tagOrCodeOrBrandOrType = ComplexSearchUtils.checkSpecialSearch(filter, TAG_OR_CODE_OR_BRAND_OR_TYPE);
-
-            if (tagOrCodeOrBrandOrType != null) {
-
-                if ("*".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                    // If this by PK then to by PK
-                    final long byPk = NumberUtils.toLong(tagOrCodeOrBrandOrType.getSecond());
-                    if (page == 0 && byPk > 0) {
-                        final ProductDTO product = getById(byPk);
-                        if (product != null) {
-                            dtos.add(product);
-                        }
-                    }
-                    return dtos;
-
-                } else if ("!".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                    entities = getService().getGenericDao().findRangeByCriteria(
-                            " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.tag) like ?1 order by e.code",
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIeq(tagOrCodeOrBrandOrType.getSecond())
-                    );
-
-                } else if ("#".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                    entities = getService().getGenericDao().findRangeByCriteria(
-                            " where lower(e.guid) like ?1 or lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.tag) like ?1 order by e.code",
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond())
-                    );
-
-                } else if ("?".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                    entities = getService().getGenericDao().findRangeByCriteria(
-                            " where lower(e.brand.guid) like ?1 or lower(e.brand.name) like ?1 or lower(e.producttype.guid) like ?1 or lower(e.producttype.name) like ?1 order by e.code",
-                            page * pageSize, pageSize,
-                            HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond())
-                    );
-
-                } else if ("^".equals(tagOrCodeOrBrandOrType.getFirst())) {
-
-                    final List<Object> categoryIds = productService.getGenericDao().findQueryObjectByNamedQuery("CATEGORY.IDS.BY.NAME.OR.GUID", HQLUtils.criteriaIlikeAnywhere(tagOrCodeOrBrandOrType.getSecond()));
-                    if (CollectionUtils.isEmpty(categoryIds)) {
-                        return Collections.emptyList();
-                    }
-
-                    entities = getService().getGenericDao().findRangeByNamedQuery(
-                            "PRODUCTS.BY.CATEGORYIDS",
-                            page * pageSize, pageSize,
-                            categoryIds
-                    );
-
-                }
-
-            } else {
-
-                entities = getService().getGenericDao().findRangeByCriteria(
-                        " where lower(e.code) like ?1 or lower(e.manufacturerCode) like ?1 or lower(e.manufacturerPartCode) like ?1 or lower(e.supplierCode) like ?1 or lower(e.pimCode) like ?1 or lower(e.name) like ?1 order by e.code",
-                        page * pageSize, pageSize,
-                        HQLUtils.criteriaIlikeAnywhere(filter)
-                );
-
-            }
-
-        } else {
-
-            entities = getService().getGenericDao().findRangeByCriteria(
-                    null,
-                    page * pageSize, pageSize
-            );
-
-        }
-
-        fillDTOs(entities, dtos);
-
-        return dtos;
-    }
 
     /**
      * {@inheritDoc}
