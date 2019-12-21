@@ -17,24 +17,26 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.TaxDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.TaxDTOImpl;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.Tax;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.TaxService;
 import org.yes.cart.service.dto.DtoTaxService;
 import org.yes.cart.utils.HQLUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -45,30 +47,22 @@ public class DtoTaxServiceImpl
     extends AbstractDtoServiceImpl<TaxDTO, TaxDTOImpl, Tax>
         implements DtoTaxService {
 
+    private final ShopService shopService;
+
     /**
      * Construct base dto service.
      *
      * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param taxGenericService  {@link org.yes.cart.service.domain.GenericService}
-     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param taxGenericService        {@link org.yes.cart.service.domain.GenericService}
+     * @param adaptersRepository       {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param shopService              shop service
      */
     public DtoTaxServiceImpl(final DtoFactory dtoFactory,
                              final GenericService<Tax> taxGenericService,
-                             final AdaptersRepository adaptersRepository) {
+                             final AdaptersRepository adaptersRepository,
+                             final ShopService shopService) {
         super(dtoFactory, taxGenericService, adaptersRepository);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public List<TaxDTO> findByParameters(final String code,
-                                         final String shopCode,
-                                         final String currency)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        final List<Tax> taxes = ((TaxService) service).findByParameters(code, shopCode, currency);
-        final List<TaxDTO> dtos = new ArrayList<>();
-        fillDTOs(taxes, dtos);
-        return dtos;
+        this.shopService = shopService;
     }
 
     private final static char[] RATE = new char[] { '%' };
@@ -76,6 +70,101 @@ public class DtoTaxServiceImpl
     static {
         Arrays.sort(RATE);
         Arrays.sort(EXCLUSIVE_INCLUSIVE);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public SearchResult<TaxDTO> findTaxes(final String shopCode, final String currency, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, List> params = filter.reduceParameters("filter", "types", "actions");
+        final List filterParam = params.get("filter");
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final TaxService taxService = (TaxService) service;
+
+        if (StringUtils.isNotBlank(shopCode) && StringUtils.isNotBlank(currency)) {
+            // only allow lists for shop+currency selection
+            final Map<String, List> currentFilter = new HashMap<>();
+            if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+                final String textFilter = ((String) filterParam.get(0)).trim();
+
+                if (StringUtils.isNotBlank(textFilter)) {
+
+                    final Pair<String, String> exclOrIncSearch = ComplexSearchUtils.checkSpecialSearch(textFilter, EXCLUSIVE_INCLUSIVE);
+                    final Pair<String, BigDecimal> rateSearch = ComplexSearchUtils.checkNumericSearch(exclOrIncSearch != null ? textFilter.substring(1) : textFilter, RATE, 2);
+
+                    if (exclOrIncSearch != null) {
+
+                        currentFilter.put("exclusiveOfPrice", Collections.singletonList("+".equals(exclOrIncSearch.getFirst())));
+
+                        final boolean all = exclOrIncSearch.getFirst().equals(exclOrIncSearch.getSecond().substring(0, 1));
+
+                        if (!all) {
+
+                            if (rateSearch != null) {
+
+                                currentFilter.put("taxRate", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(rateSearch.getSecond())));
+
+                            } else {
+
+                                final String search = exclOrIncSearch.getSecond();
+
+                                SearchContext.JoinMode.OR.setMode(currentFilter);
+                                currentFilter.put("code", Collections.singletonList(search));
+                                currentFilter.put("description", Collections.singletonList(search));
+
+                            }
+
+                        }
+
+                    } else {
+
+                        if (rateSearch != null) {
+
+                            currentFilter.put("taxRate", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(rateSearch.getSecond())));
+
+                        } else {
+
+                            SearchContext.JoinMode.OR.setMode(currentFilter);
+                            currentFilter.put("code", Collections.singletonList(textFilter));
+                            currentFilter.put("description", Collections.singletonList(textFilter));
+
+                        }
+                    }
+
+                }
+
+            }
+
+            final Shop currentShop = shopService.getShopByCode(shopCode);
+            if (currentShop == null) {
+                return new SearchResult<>(filter, Collections.emptyList(), 0);
+            }
+            if (currentShop.getMaster() != null) {
+                currentFilter.put("shopCodes", Collections.singletonList(currentShop.getMaster().getCode()));
+            } else {
+                currentFilter.put("shopCodes", Collections.singletonList(shopCode));
+            }
+            currentFilter.put("currencies", Collections.singletonList(currency));
+
+            final int count = taxService.findTaxCount(currentFilter);
+            if (count > startIndex) {
+
+                final List<TaxDTO> entities = new ArrayList<>();
+                final List<Tax> taxes = taxService.findTaxes(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+                fillDTOs(taxes, entities);
+
+                return new SearchResult<>(filter, entities, count);
+
+            }
+
+        }
+
+        return new SearchResult<>(filter, Collections.emptyList(), 0);
     }
 
     /** {@inheritDoc} */

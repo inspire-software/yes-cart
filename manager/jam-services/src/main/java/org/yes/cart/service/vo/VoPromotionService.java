@@ -16,14 +16,9 @@
 
 package org.yes.cart.service.vo;
 
-import org.yes.cart.domain.vo.VoCart;
-import org.yes.cart.domain.vo.VoPromotion;
-import org.yes.cart.domain.vo.VoPromotionCoupon;
-import org.yes.cart.domain.vo.VoPromotionTest;
+import org.yes.cart.domain.vo.*;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -40,7 +35,7 @@ public interface VoPromotionService {
      *
      * @throws Exception errors
      */
-    List<VoPromotion> getFilteredPromotion(String shopCode, String currency, String filter, List<String> types, List<String> actions, int max) throws Exception;
+    VoSearchResult<VoPromotion> getFilteredPromotion(String shopCode, String currency, VoSearchContext filter) throws Exception;
 
     /**
      * Get promotion by id.
@@ -104,18 +99,19 @@ public interface VoPromotionService {
      *
      * @throws Exception errors
      */
-    List<VoPromotionCoupon> getFilteredPromotionCoupons(long promotionId, String filter, int max) throws Exception;
+    VoSearchResult<VoPromotionCoupon> getFilteredPromotionCoupons(long promotionId, VoSearchContext filter) throws Exception;
 
     /**
      * Create new promotion coupons.
      *
-     * @param vo given instance template to persist
+     * To retrieve new coupond use {{@link #getFilteredPromotion(String, String, VoSearchContext)}} with
+     * filter "yyyy-MM-dd HH:mm:ss<"
      *
-     * @return persisted instance
+     * @param vo given instance template to persist
      *
      * @throws Exception errors
      */
-    List<VoPromotionCoupon> createPromotionCoupons(VoPromotionCoupon vo) throws Exception;
+    void createPromotionCoupons(VoPromotionCoupon vo) throws Exception;
 
     /**
      * Remove promotion coupon by id.

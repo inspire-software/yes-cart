@@ -19,6 +19,7 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
+import org.yes.cart.utils.DomainApiUtils;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -279,6 +280,11 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
     @Override
     public void setEnabledTo(final LocalDateTime enabledTo) {
         this.enabledTo = enabledTo;
+    }
+
+    @Override
+    public boolean isAvailable(final LocalDateTime now) {
+        return DomainApiUtils.isObjectAvailableNow(this.enabled, this.enabledFrom, this.enabledTo, now);
     }
 
     @Override

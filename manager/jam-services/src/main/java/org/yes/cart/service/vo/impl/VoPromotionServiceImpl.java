@@ -21,21 +21,17 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.domain.entity.Promotion;
-import org.yes.cart.domain.vo.VoCart;
-import org.yes.cart.domain.vo.VoPromotion;
-import org.yes.cart.domain.vo.VoPromotionCoupon;
-import org.yes.cart.domain.vo.VoPromotionTest;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPromotionService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.*;
 
 /**
@@ -65,18 +61,35 @@ public class VoPromotionServiceImpl implements VoPromotionService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoPromotion> getFilteredPromotion(final String shopCode, final String currency, final String filter, final List<String> types, final List<String> actions, final int max) throws Exception {
+    public VoSearchResult<VoPromotion> getFilteredPromotion(final String shopCode, final String currency, final VoSearchContext filter) throws Exception {
 
-        final List<VoPromotion> list = new ArrayList<>();
+        final VoSearchResult<VoPromotion> result = new VoSearchResult<>();
+        final List<VoPromotion> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
-
-            final List<PromotionDTO> dtos = dtoPromotionService.findBy(shopCode, currency, filter, types, actions, 0, max);
-            return voAssemblySupport.assembleVos(VoPromotion.class, PromotionDTO.class, dtos);
-
+        if (!federationFacade.isManageable(shopCode, ShopDTO.class)) {
+            return result;
         }
 
-        return list;
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "types", "actions"
+        );
+
+
+        final SearchResult<PromotionDTO> batch = dtoPromotionService.findPromotions(shopCode, currency, searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoPromotion.class, PromotionDTO.class, batch.getItems()));
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
     }
 
     /**
@@ -160,12 +173,33 @@ public class VoPromotionServiceImpl implements VoPromotionService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoPromotionCoupon> getFilteredPromotionCoupons(final long promotionId, final String filter, final int max) throws Exception {
+    public VoSearchResult<VoPromotionCoupon> getFilteredPromotionCoupons(final long promotionId, final VoSearchContext filter) throws Exception {
 
         getPromotionById(promotionId); // check access
 
-        final List<PromotionCouponDTO> dtos = dtoPromotionCouponService.findBy(promotionId, filter, 0, max);
-        return voAssemblySupport.assembleVos(VoPromotionCoupon.class, PromotionCouponDTO.class, dtos);
+        final VoSearchResult<VoPromotionCoupon> result = new VoSearchResult<>();
+        final List<VoPromotionCoupon> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
+
+
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter"
+        );
+
+        final SearchResult<PromotionCouponDTO> batch = dtoPromotionCouponService.findCoupons(promotionId, searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoPromotionCoupon.class, PromotionCouponDTO.class, batch.getItems()));
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
 
     }
 
@@ -173,19 +207,13 @@ public class VoPromotionServiceImpl implements VoPromotionService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoPromotionCoupon> createPromotionCoupons(final VoPromotionCoupon vo) throws Exception {
+    public void createPromotionCoupons(final VoPromotionCoupon vo) throws Exception {
 
         getPromotionById(vo.getPromotionId()); // check access
-
-        final Instant now = TimeContext.getTime();
 
         dtoPromotionCouponService.create(
                 voAssemblySupport.assembleDto(PromotionCouponDTO.class, VoPromotionCoupon.class, dtoPromotionCouponService.getNew(), vo)
         );
-
-
-        final List<PromotionCouponDTO> dtos = dtoPromotionCouponService.findBy(vo.getPromotionId(), now);
-        return voAssemblySupport.assembleVos(VoPromotionCoupon.class, PromotionCouponDTO.class, dtos);
 
     }
 

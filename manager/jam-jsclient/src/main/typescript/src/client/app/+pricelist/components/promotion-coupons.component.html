@@ -4,20 +4,18 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CODE' | translate }}</th>
-        <th>{{ 'PROMOTION_COUPON_LIMIT' | translate }}</th>
-        <th>{{ 'PROMOTION_COUPON_LIMIT_PER_CUSTOMER' | translate }}</th>
-        <th>{{ 'PROMOTION_COUPON_USAGE_COUNT' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('code')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'code'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('usageLimit')">{{ 'PROMOTION_COUPON_LIMIT' | translate }} <span [hidden]="sortColumn != 'usageLimit'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('usageLimitPerCustomer')">{{ 'PROMOTION_COUPON_LIMIT_PER_CUSTOMER' | translate }} <span [hidden]="sortColumn != 'usageLimitPerCustomer'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('usageCount')">{{ 'PROMOTION_COUPON_USAGE_COUNT' | translate }} <span [hidden]="sortColumn != 'usageCount'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredCoupons; let i = index" class="{{row == selectedCoupon ? 'active' : ''}}">
-        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
-          <td title="{{ 'PROMOTION_COUPON_LIMIT' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.usageLimit}}</a></td>
-          <td title="{{ 'PROMOTION_COUPON_LIMIT_PER_CUSTOMER' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.usageLimitPerCustomer}}</a></td>
-          <td title="{{ 'PROMOTION_COUPON_USAGE_COUNT' | translate }}" class="{{ isExhausted(row) ? 'bg-danger' : '' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.usageCount }}</a></td>
-        </ng-template>
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+        <td title="{{ 'PROMOTION_COUPON_LIMIT' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.usageLimit}}</a></td>
+        <td title="{{ 'PROMOTION_COUPON_LIMIT_PER_CUSTOMER' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.usageLimitPerCustomer}}</a></td>
+        <td title="{{ 'PROMOTION_COUPON_USAGE_COUNT' | translate }}" class="{{ isExhausted(row) ? 'bg-danger' : '' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.usageCount }}</a></td>
       </tr>
       </tbody>
     </table>

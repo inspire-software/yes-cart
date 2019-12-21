@@ -240,7 +240,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
                 final List<PromotionDTO> promotions = dtoPromotionService.findByCodes(promoCodes);
                 vo.setPromotions(voAssemblySupport.assembleVos(VoPromotion.class, PromotionDTO.class, promotions));
             } else {
-                vo.setPromotions(Collections.EMPTY_LIST);
+                vo.setPromotions(Collections.emptyList());
             }
 
             vo.setPayments(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, customerOrderPaymentService.findPayments(vo.getOrdernum(), null, (String) null, (String) null)));

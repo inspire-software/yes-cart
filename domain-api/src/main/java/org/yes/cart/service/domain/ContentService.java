@@ -223,7 +223,7 @@ public interface ContentService extends GenericService<Content> {
      * @param sortDescending    optional sort property direction
      * @param filter            optional filters (e.g. name, guid)
      *
-     * @return list of brands.
+     * @return list of content.
      */
     List<Content> findContent(int start,
                               int offset,

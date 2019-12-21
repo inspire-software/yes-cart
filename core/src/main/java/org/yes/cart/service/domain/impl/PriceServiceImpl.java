@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.SkuPriceQuantityComparator;
+import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.TimeContext;
 
@@ -416,11 +417,85 @@ public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implement
         }
     }
 
+
+
+
+    private Pair<String, Object[]> findPriceQuery(final boolean count,
+                                                  final String sort,
+                                                  final boolean sortDescending,
+                                                  final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(p.skuPriceId) from SkuPriceEntity p ");
+        } else {
+            hqlCriteria.append("select p from SkuPriceEntity p ");
+        }
+
+        final List shopIds = currentFilter != null ? currentFilter.remove("shopIds") : null;
+        if (shopIds != null) {
+            hqlCriteria.append(" where (p.shop.shopId in (?1)) ");
+            params.add(shopIds);
+        }
+        final List currencies = currentFilter != null ? currentFilter.remove("currencies") : null;
+        if (currencies != null) {
+            if (params.isEmpty()) {
+                hqlCriteria.append(" where (p.currency in ?1) ");
+            } else {
+                hqlCriteria.append(" and (p.currency in ?2) ");
+            }
+            params.add(currencies);
+        }
+
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "p", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by p." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void refresh(final String shopCode, final String currency) {
-        // not supported
+    public List<SkuPrice> findPrices(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findPriceQuery(false, sort, sortDescending, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findPriceCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findPriceQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
     }
 }

@@ -20,7 +20,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.PriceListDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.impl.PriceListDTOImpl;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.VoPriceList;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.service.dto.DtoPriceListsService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
@@ -55,18 +59,35 @@ public class VoPriceServiceImpl implements VoPriceService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoPriceList> getFilteredPrices(final long shopId, final String currency, final String filter, final int max) throws Exception {
+    public VoSearchResult<VoPriceList> getFilteredPrices(final long shopId, final String currency, final VoSearchContext filter) throws Exception {
 
-        final List<VoPriceList> list = new ArrayList<>();
+        final VoSearchResult<VoPriceList> result = new VoSearchResult<>();
+        final List<VoPriceList> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
-
-            final List<PriceListDTO> dtos = dtoPriceListsService.findBy(shopId, currency, filter, 0, max);
-            return voAssemblySupport.assembleVos(VoPriceList.class, PriceListDTO.class, dtos);
-
+        if (!federationFacade.isManageable(shopId, ShopDTO.class)) {
+            return result;
         }
 
-        return list;
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter"
+        );
+
+
+        final SearchResult<PriceListDTO> batch = dtoPriceListsService.findPrices(shopId, currency, searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoPriceList.class, PriceListDTO.class, batch.getItems()));
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
     }
 
     /**

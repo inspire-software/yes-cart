@@ -18,11 +18,13 @@ package org.yes.cart.service.vo.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.domain.vo.VoSearchContext;
 import org.yes.cart.domain.vo.VoTax;
 import org.yes.cart.domain.vo.VoTaxConfig;
 import org.yes.cart.service.vo.VoTaxService;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -45,29 +47,44 @@ public class VoTaxServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetTaxes() throws Exception {
 
-        final List<VoTax> taxesNoFilter = voTaxService.getFilteredTax("SHOIP1", "EUR", null, 10);
+        VoSearchContext ctxAny = new VoSearchContext();
+        ctxAny.setParameters(Collections.emptyMap());
+        ctxAny.setSize(10);
+        final List<VoTax> taxesNoFilter = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxAny).getItems();
         assertNotNull(taxesNoFilter);
         assertFalse(taxesNoFilter.isEmpty());
 
-        final List<VoTax> taxesFind = voTaxService.getFilteredTax("SHOIP1", "EUR", "VAT (CC_TEST1)", 10);
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("VAT (CC_TEST1)")));
+        ctxFind.setSize(10);
+        final List<VoTax> taxesFind = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxFind).getItems();
         assertNotNull(taxesFind);
         assertFalse(taxesFind.isEmpty());
         assertEquals("VAT (CC_TEST1)", taxesFind.get(0).getCode());
 
-        final List<VoTax> taxesExclusive = voTaxService.getFilteredTax("SHOIP1", "EUR", "++", 10);
+        VoSearchContext ctxExclusive = new VoSearchContext();
+        ctxExclusive.setParameters(Collections.singletonMap("filter", Collections.singletonList("++")));
+        ctxExclusive.setSize(10);
+        final List<VoTax> taxesExclusive = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxExclusive).getItems();
         assertNotNull(taxesExclusive);
         assertFalse(taxesExclusive.isEmpty());
         assertTrue(taxesExclusive.get(0).isExclusiveOfPrice());
 
-        final List<VoTax> taxesInclusive = voTaxService.getFilteredTax("SHOIP1", "EUR", "--", 10);
+        VoSearchContext ctxInclusive = new VoSearchContext();
+        ctxInclusive.setParameters(Collections.singletonMap("filter", Collections.singletonList("--")));
+        ctxInclusive.setSize(10);
+        final List<VoTax> taxesInclusive = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxInclusive).getItems();
         assertNotNull(taxesInclusive);
         assertFalse(taxesInclusive.isEmpty());
         assertFalse(taxesInclusive.get(0).isExclusiveOfPrice());
 
-        final List<VoTax> taxesByRate = voTaxService.getFilteredTax("SHOIP1", "EUR", "%5", 10);
+        VoSearchContext ctxRate = new VoSearchContext();
+        ctxRate.setParameters(Collections.singletonMap("filter", Collections.singletonList("%5")));
+        ctxRate.setSize(10);
+        final List<VoTax> taxesByRate = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxRate).getItems();
         assertNotNull(taxesByRate);
         assertFalse(taxesByRate.isEmpty());
-        assertTrue(new BigDecimal(5).compareTo(taxesByRate.get(0).getTaxRate()) == 0);
+        assertTrue(taxesByRate.stream().allMatch(tax -> new BigDecimal(5).compareTo(tax.getTaxRate()) == 0));
 
     }
 
@@ -92,12 +109,15 @@ public class VoTaxServiceImplTest extends BaseCoreDBTestCase {
         final VoTax updated = voTaxService.updateTax(afterCreated);
         assertEquals("Test", updated.getDescription());
 
+        VoSearchContext ctxExact = new VoSearchContext();
+        ctxExact.setParameters(Collections.singletonMap("filter", Collections.singletonList("TESTCRUD")));
+        ctxExact.setSize(10);
 
-        assertFalse(voTaxService.getFilteredTax("SHOIP2", "USD", "TESTCRUD", 10).isEmpty());
+        assertFalse(voTaxService.getFilteredTax("SHOIP2", "USD", ctxExact).getItems().isEmpty());
 
         voTaxService.removeTax(updated.getTaxId());
 
-        assertTrue(voTaxService.getFilteredTax("SHOIP2", "USD", "TESTCRUD", 10).isEmpty());
+        assertTrue(voTaxService.getFilteredTax("SHOIP2", "USD", ctxExact).getItems().isEmpty());
 
     }
 
@@ -105,7 +125,11 @@ public class VoTaxServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testTaxConfigCRD() throws Exception {
 
-        final VoTax tax = voTaxService.getFilteredTax("SHOIP1", "EUR", null, 10).get(0);
+        VoSearchContext ctxAny = new VoSearchContext();
+        ctxAny.setParameters(Collections.emptyMap());
+        ctxAny.setSize(10);
+
+        final VoTax tax = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxAny).getItems().get(0);
 
         final VoTaxConfig taxConfig = new VoTaxConfig();
         taxConfig.setTaxId(tax.getTaxId());
@@ -116,11 +140,11 @@ public class VoTaxServiceImplTest extends BaseCoreDBTestCase {
         final VoTaxConfig afterCreated = voTaxService.getTaxConfigById(created.getTaxConfigId());
         assertNotNull(afterCreated);
 
-        assertTrue(voTaxService.getFilteredTaxConfig(tax.getTaxId(), null, 10).stream().anyMatch(tc -> tc.getTaxConfigId() == created.getTaxConfigId()));
+        assertTrue(voTaxService.getFilteredTaxConfig(tax.getTaxId(), ctxAny).getItems().stream().anyMatch(tc -> tc.getTaxConfigId() == created.getTaxConfigId()));
 
         voTaxService.removeTaxConfig(created.getTaxConfigId());
 
-        assertFalse(voTaxService.getFilteredTaxConfig(tax.getTaxId(), null, 10).stream().anyMatch(tc -> tc.getTaxConfigId() == created.getTaxConfigId()));
+        assertFalse(voTaxService.getFilteredTaxConfig(tax.getTaxId(), ctxAny).getItems().stream().anyMatch(tc -> tc.getTaxConfigId() == created.getTaxConfigId()));
 
     }
 }

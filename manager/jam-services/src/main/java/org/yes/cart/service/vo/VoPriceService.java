@@ -17,8 +17,8 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.VoPriceList;
-
-import java.util.List;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 
 /**
  * User: denispavlov
@@ -32,7 +32,7 @@ public interface VoPriceService {
      *
      * @throws Exception errors
      */
-    List<VoPriceList> getFilteredPrices(long shopId, String currency, String filter, int max) throws Exception;
+    VoSearchResult<VoPriceList> getFilteredPrices(long shopId, String currency, VoSearchContext filter) throws Exception;
 
     /**
      * Get price list by id.

@@ -24,6 +24,7 @@ import org.yes.cart.domain.entity.TaxConfig;
 import org.yes.cart.service.domain.TaxConfigService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -47,15 +48,6 @@ public class TaxConfigServiceCachedImpl implements TaxConfigService {
 
     /** {@inheritDoc} */
     @Override
-    public List<TaxConfig> findByTaxId(final long taxId,
-                                       final String countryCode,
-                                       final String stateCode,
-                                       final String productCode) {
-        return taxConfigService.findByTaxId(taxId, countryCode, stateCode, productCode);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public TaxConfig create(final TaxConfig instance) {
         return taxConfigService.create(instance);
@@ -73,6 +65,19 @@ public class TaxConfigServiceCachedImpl implements TaxConfigService {
     @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public void delete(final TaxConfig instance) {
         taxConfigService.delete(instance);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public List<TaxConfig> findTaxConfigs(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return taxConfigService.findTaxConfigs(start, offset, sort, sortDescending, filter);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int findTaxConfigCount(final Map<String, List> filter) {
+        return taxConfigService.findTaxConfigCount(filter);
     }
 
     /** {@inheritDoc} */

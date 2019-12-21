@@ -45,7 +45,6 @@ import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
 import org.yes.cart.utils.HQLUtils;
 
-import java.lang.System;
 import java.util.*;
 
 /**
@@ -63,7 +62,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     private final GenericDAO<ProductCategory, Long> productCategoryDao;
     private final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao;
     private final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport;
-    private final Random rand;
 
     /**
      * Construct product service.
@@ -94,8 +92,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         this.productCategoryDao = productCategoryDao;
         this.productTypeAttrDao = productTypeAttrDao;
         this.shopCategoryRelationshipSupport = shopCategoryRelationshipSupport;
-        rand = new Random();
-        rand.setSeed(System.currentTimeMillis());
     }
 
     /** {@inheritDoc} */

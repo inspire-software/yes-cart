@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.TaxConfigDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -24,17 +25,15 @@ import org.yes.cart.domain.dto.impl.TaxConfigDTOImpl;
 import org.yes.cart.domain.entity.Tax;
 import org.yes.cart.domain.entity.TaxConfig;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.dto.DtoTaxConfigService;
-import org.yes.cart.utils.HQLUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -64,15 +63,6 @@ public class DtoTaxConfigServiceImpl
         this.taxService = taxGenericService;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public List<TaxConfigDTO> findByTaxId(final long taxId, final String countryCode, final String stateCode, final String productCode) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<TaxConfig> configs = ((TaxConfigService) service).findByTaxId(taxId, countryCode, stateCode, productCode);
-        final List<TaxConfigDTO> dtos = new ArrayList<>();
-        fillDTOs(configs, dtos);
-        return dtos;
-    }
-
     private final static char[] LOCATION = new char[] { '@' };
     private final static char[] SKU = new char[] { '#', '!' };
     static {
@@ -80,84 +70,89 @@ public class DtoTaxConfigServiceImpl
         Arrays.sort(SKU);
     }
 
-    /** {@inheritDoc} */
     @Override
-    public List<TaxConfigDTO> findBy(final long taxId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<TaxConfigDTO> findTaxConfigs(final long taxId, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<TaxConfigDTO> dtos = new ArrayList<>();
+        final Map<String, List> params = filter.reduceParameters("filter");
+        final List filterParam = params.get("filter");
 
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
 
-        if (taxId > 0) {
-            // only allow lists for tax selection
+        final TaxConfigService taxConfigService = (TaxConfigService) service;
 
-            List<TaxConfig> entities;
+        if (taxId > 0L) {
 
-            if (StringUtils.isNotBlank(filter)) {
+            final Map<String, List> currentFilter = new HashMap<>();
+            if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
 
-                final Pair<String, String> locationSearch = ComplexSearchUtils.checkSpecialSearch(filter, LOCATION);
-                final Pair<String, String> skuSearch = locationSearch != null ? null : ComplexSearchUtils.checkSpecialSearch(filter, SKU);
+                final String textFilter = ((String) filterParam.get(0)).trim();
 
-                if (locationSearch != null) {
+                if (StringUtils.isNotBlank(textFilter)) {
 
-                    final String location = locationSearch.getSecond();
+                    final Pair<String, String> locationSearch = ComplexSearchUtils.checkSpecialSearch(textFilter, LOCATION);
+                    final Pair<String, String> skuSearch = locationSearch != null ? null : ComplexSearchUtils.checkSpecialSearch(textFilter, SKU);
 
-                    entities = getService().getGenericDao().findRangeByCriteria(
-                            " where e.tax.taxId = ?1 and (lower(e.countryCode) = ?2 or lower(e.stateCode) like ?3) order by e.countryCode, e.countryCode, e.productCode",
-                            page * pageSize, pageSize,
-                            taxId,
-                            HQLUtils.criteriaIeq(location),
-                            HQLUtils.criteriaIlikeAnywhere(location)
-                    );
+                    if (locationSearch != null) {
 
-                } else if (skuSearch != null) {
+                        final String location = locationSearch.getSecond();
 
-                    final String sku = skuSearch.getSecond();
+                        SearchContext.JoinMode.OR.setMode(currentFilter);
+                        currentFilter.put("countryCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(location)));
+                        currentFilter.put("stateCode", Collections.singletonList(location));
 
-                    if ("!".equals(sku)) {
+                    } else if (skuSearch != null) {
 
-                        entities = getService().getGenericDao().findRangeByCriteria(
-                                " where e.tax.taxId = ?1 and (e.productCode = '' or e.productCode is null) order by e.countryCode, e.countryCode",
-                                page * pageSize, pageSize,
-                                taxId
-                        );
+                        final String sku = skuSearch.getSecond();
+
+                        if ("!".equals(sku)) {
+
+                            SearchContext.JoinMode.OR.setMode(currentFilter);
+                            currentFilter.put("productCode", Collections.singletonList(SearchContext.MatchMode.EMPTY.toParam(null)));
+                            currentFilter.put("productCode", Collections.singletonList(SearchContext.MatchMode.NULL.toParam(null)));
+
+                        } else {
+
+                            if ("!".equals(skuSearch.getFirst())) {
+                                currentFilter.put("productCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(sku)));
+                            } else {
+                                currentFilter.put("productCode", Collections.singletonList(sku));
+                            }
+
+                        }
 
                     } else {
 
-                        entities = getService().getGenericDao().findRangeByCriteria(
-                                " where e.tax.taxId = ?1 and lower(e.productCode) like ?2 order by e.countryCode, e.countryCode",
-                                page * pageSize, pageSize,
-                                taxId,
-                                "!".equals(skuSearch.getFirst()) ? HQLUtils.criteriaIeq(sku) : HQLUtils.criteriaIlikeAnywhere(sku)
-                        );
+                        SearchContext.JoinMode.OR.setMode(currentFilter);
+                        currentFilter.put("countryCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(textFilter)));
+                        currentFilter.put("stateCode", Collections.singletonList(textFilter));
+                        currentFilter.put("productCode", Collections.singletonList(textFilter));
 
                     }
 
-                } else {
-
-                    entities = getService().getGenericDao().findRangeByCriteria(
-                            " where e.tax.taxId = ?1 and (lower(e.countryCode) = ?2 or lower(e.stateCode) like ?3 or lower(e.productCode) like ?3) order by e.countryCode, e.countryCode, e.productCode",
-                            page * pageSize, pageSize,
-                            taxId,
-                            HQLUtils.criteriaIeq(filter),
-                            HQLUtils.criteriaIlikeAnywhere(filter)
-                    );
 
                 }
 
-            } else {
+            }
 
-                entities = getService().getGenericDao().findRangeByCriteria(
-                        " where e.tax.taxId = ?1 order by e.countryCode, e.countryCode, e.productCode",
-                        page * pageSize, pageSize,
-                        taxId
-                );
+
+            currentFilter.put("taxIds", Collections.singletonList(taxId));
+
+
+            final int count = taxConfigService.findTaxConfigCount(currentFilter);
+            if (count > startIndex) {
+
+                final List<TaxConfigDTO> entities = new ArrayList<>();
+                final List<TaxConfig> configs = taxConfigService.findTaxConfigs(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+                fillDTOs(configs, entities);
+
+                return new SearchResult<>(filter, entities, count);
 
             }
 
-            fillDTOs(entities, dtos);
         }
-
-        return dtos;
+        return new SearchResult<>(filter, Collections.emptyList(), 0);
 
     }
 

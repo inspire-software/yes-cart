@@ -23,11 +23,11 @@ import org.yes.cart.constants.DtoServiceSpringKeys;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.Promotion;
+import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.utils.DateUtils;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -49,257 +49,184 @@ public class DtoPromotionServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testFindByParameters() throws Exception {
-
-        PromotionDTO promotionDTO = getDto();
-        promotionDTO = dtoPromotionService.create(promotionDTO);
-
-        // retrieve specific
-        List<PromotionDTO> promos = dtoPromotionService.findByParameters(
-                promotionDTO.getCode(),
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                promotionDTO.getTag(),
-                promotionDTO.getPromoType(),
-                promotionDTO.getPromoAction(),
-                promotionDTO.isEnabled());
-
-        assertNotNull(promos);
-        assertEquals(1, promos.size());
+    public void testFindPromotions() throws Exception {
+        PromotionDTO p1 = getDto();
+        p1 = dtoPromotionService.create(p1);
+        final String shopCode = p1.getShopCode();
+        final String currency = p1.getCurrency();
+        PromotionDTO p2 = getDto();
+        p2.setEnabled(false);
+        p2 = dtoPromotionService.create(p2);
+        PromotionDTO p3 = getDto();
+        p3.setPromoType(Promotion.TYPE_ITEM);
+        p3 = dtoPromotionService.create(p3);
 
         // retrieve all
-        promos = dtoPromotionService.findByParameters(
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+        final SearchContext all = new SearchContext(Collections.emptyMap(), 0, 10, "code", false, "filter", "types", "actions");
+        List<PromotionDTO> promos = dtoPromotionService.findPromotions(shopCode, currency, all).getItems();
 
         assertNotNull(promos);
-        assertEquals(3, promos.size());
-
-        // retrieve non-existent
-        promos = dtoPromotionService.findByParameters(
-                "zzzz",
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        assertNotNull(promos);
-        assertEquals(0, promos.size());
-
-        dtoPromotionService.remove(promotionDTO.getPromotionId());
-    }
-
-    @Test
-    public void testFindBy() throws Exception {
-        PromotionDTO promotionDTO = getDto();
-        promotionDTO = dtoPromotionService.create(promotionDTO);
-
-        // retrieve all
-        List<PromotionDTO> promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                null,
-                null,
-                null,
-                0,
-                10);
-
-        assertNotNull(promos);
-        assertEquals(3, promos.size());
+        assertEquals(5, promos.size());
 
 
         // basic
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                promotionDTO.getCode(),
-                null,
-                null,
-                0,
-                10);
+        final SearchContext basic = new SearchContext(Collections.singletonMap("filter", Collections.singletonList(p1.getCode())), 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, basic).getItems();
 
         assertNotNull(promos);
         assertEquals(1, promos.size());
 
-
         // basic with types
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                promotionDTO.getCode(),
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> basicWithTypesParams = new HashMap<>();
+        basicWithTypesParams.put("filter", Collections.singletonList(p1.getCode()));
+        basicWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        basicWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext basicWithTypes = new SearchContext(basicWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, basicWithTypes).getItems();
 
         assertNotNull(promos);
         assertEquals(1, promos.size());
 
         // all enabled
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "++",
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> enabledAllWithTypesParams = new HashMap<>();
+        enabledAllWithTypesParams.put("filter", Collections.singletonList("++"));
+        enabledAllWithTypesParams.put("types", Arrays.asList(Promotion.TYPE_ORDER, Promotion.TYPE_ITEM));
+        final SearchContext enabledAllWithTypes = new SearchContext(enabledAllWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, enabledAllWithTypes).getItems();
 
         assertNotNull(promos);
-        assertEquals(1, promos.size());
+        assertEquals(2, promos.size());
+        assertTrue(promos.stream().allMatch(PromotionDTO::isEnabled));
 
         // all disabled
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "--",
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> disabledAllWithTypesParams = new HashMap<>();
+        disabledAllWithTypesParams.put("filter", Collections.singletonList("--"));
+        enabledAllWithTypesParams.put("types", Arrays.asList(Promotion.TYPE_ORDER, Promotion.TYPE_ITEM));
+        final SearchContext disabledAllWithTypes = new SearchContext(disabledAllWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, disabledAllWithTypes).getItems();
 
         assertNotNull(promos);
-        assertEquals(0, promos.size());
+        assertEquals(3, promos.size());
+        assertTrue(promos.stream().noneMatch(PromotionDTO::isEnabled));
 
         // condition
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "?order.amount",
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> conditionWithTypesParams = new HashMap<>();
+        conditionWithTypesParams.put("filter", Collections.singletonList("?order.amount"));
+        conditionWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        conditionWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext conditionWithTypes = new SearchContext(conditionWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, conditionWithTypes).getItems();
 
         assertNotNull(promos);
-        assertEquals(1, promos.size());
+        assertEquals(2, promos.size());
+        assertTrue(promos.stream().allMatch(promo -> promo.getEligibilityCondition().contains("order.amount")
+                && Promotion.TYPE_ORDER.equals(promo.getPromoType())
+                && Promotion.ACTION_PERCENT_DISCOUNT.equals(promo.getPromoAction())));
 
         // enabled condition
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "+?order.amount",
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> enabledWithTypesParams = new HashMap<>();
+        enabledWithTypesParams.put("filter", Collections.singletonList("+?order.amount"));
+        enabledWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        enabledWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext enabledWithTypes = new SearchContext(enabledWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, enabledWithTypes).getItems();
 
         assertNotNull(promos);
         assertEquals(1, promos.size());
+        assertEquals(p1.getCode(), promos.get(0).getCode());
 
         // disabled condition
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "-?order.amount",
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> disabledWithTypesParams = new HashMap<>();
+        disabledWithTypesParams.put("filter", Collections.singletonList("-?order.amount"));
+        disabledWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        disabledWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext disabledWithTypes = new SearchContext(disabledWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, disabledWithTypes).getItems();
 
         assertNotNull(promos);
-        assertEquals(0, promos.size());
+        assertEquals(1, promos.size());
+        assertEquals(p2.getCode(), promos.get(0).getCode());
 
 
         // code
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "#" + promotionDTO.getCode(),
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> codeWithTypesParams = new HashMap<>();
+        codeWithTypesParams.put("filter", Collections.singletonList("#" + p1.getCode()));
+        codeWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        codeWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext codeWithTypes = new SearchContext(codeWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, codeWithTypes).getItems();
 
         assertNotNull(promos);
         assertEquals(1, promos.size());
 
         // enabled code
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "+#" + promotionDTO.getCode(),
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> enabledCodeWithTypesParams = new HashMap<>();
+        enabledCodeWithTypesParams.put("filter", Collections.singletonList("+#" + p1.getCode()));
+        enabledCodeWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        enabledCodeWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext enabledCodeWithTypes = new SearchContext(enabledCodeWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, enabledCodeWithTypes).getItems();
 
         assertNotNull(promos);
         assertEquals(1, promos.size());
 
         // disabled code
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "-#" + promotionDTO.getCode(),
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> disabledCodeWithTypesParams = new HashMap<>();
+        disabledCodeWithTypesParams.put("filter", Collections.singletonList("-#" + p1.getCode()));
+        disabledCodeWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        disabledCodeWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext disabledCodeWithTypes = new SearchContext(disabledCodeWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, disabledCodeWithTypes).getItems();
 
         assertNotNull(promos);
         assertEquals(0, promos.size());
 
         // enabled basic
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "+" + promotionDTO.getCode(),
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> enabledBasicWithTypesParams = new HashMap<>();
+        enabledBasicWithTypesParams.put("filter", Collections.singletonList("+" + p1.getCode()));
+        enabledBasicWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        enabledBasicWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext enabledBasicWithTypes = new SearchContext(enabledBasicWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, enabledBasicWithTypes).getItems();
 
         assertNotNull(promos);
         assertEquals(1, promos.size());
 
         // disabled basic
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "-" + promotionDTO.getCode(),
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> disabledBasicWithTypesParams = new HashMap<>();
+        disabledBasicWithTypesParams.put("filter", Collections.singletonList("-" + p1.getCode()));
+        disabledBasicWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        disabledBasicWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext disabledBasicWithTypes = new SearchContext(disabledBasicWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, disabledBasicWithTypes).getItems();
 
         assertNotNull(promos);
         assertEquals(0, promos.size());
 
         // time search
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                "<2017",
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> timeWithTypesParams = new HashMap<>();
+        timeWithTypesParams.put("filter", Collections.singletonList("<2017"));
+        timeWithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        timeWithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext timeWithTypes = new SearchContext(timeWithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, timeWithTypes).getItems();
 
         assertNotNull(promos);
-        assertFalse(promos.isEmpty());
+        assertTrue(promos.isEmpty());
 
-        // basic search
-        promos = dtoPromotionService.findBy(
-                promotionDTO.getShopCode(),
-                promotionDTO.getCurrency(),
-                promotionDTO.getCode(),
-                Collections.singletonList(promotionDTO.getPromoType()),
-                Collections.singletonList(promotionDTO.getPromoAction()),
-                0,
-                10);
+        final Map<String, List> time2WithTypesParams = new HashMap<>();
+        time2WithTypesParams.put("filter", Collections.singletonList("2017<"));
+        time2WithTypesParams.put("types", Collections.singletonList(Promotion.TYPE_ORDER));
+        time2WithTypesParams.put("actions", Collections.singletonList(Promotion.ACTION_PERCENT_DISCOUNT));
+        final SearchContext time2WithTypes = new SearchContext(time2WithTypesParams, 0, 10, "name", false, "filter", "types", "actions");
+        promos = dtoPromotionService.findPromotions(shopCode, currency, time2WithTypes).getItems();
 
         assertNotNull(promos);
-        assertEquals(1, promos.size());
+        assertEquals(2, promos.size());
 
-        dtoPromotionService.remove(promotionDTO.getPromotionId());
+        dtoPromotionService.remove(p1.getPromotionId());
+        dtoPromotionService.remove(p2.getPromotionId());
+        dtoPromotionService.remove(p3.getPromotionId());
     }
 
     @Test
@@ -336,7 +263,7 @@ public class DtoPromotionServiceImplTezt extends BaseCoreDBTestCase {
         PromotionDTO promotionDTO = dtoFactory.getByIface(PromotionDTO.class);
         promotionDTO.setShopCode("SHOIP1");
         promotionDTO.setCurrency("EUR");
-        promotionDTO.setCode("TESTCODE");
+        promotionDTO.setCode(UUID.randomUUID().toString());
         promotionDTO.setPromoType(Promotion.TYPE_ORDER);
         promotionDTO.setPromoAction(Promotion.ACTION_PERCENT_DISCOUNT);
         promotionDTO.setEligibilityCondition("order.amount > 100");

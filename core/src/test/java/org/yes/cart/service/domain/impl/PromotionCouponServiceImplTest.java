@@ -24,7 +24,9 @@ import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.utils.DateUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -60,7 +62,9 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
 
         List<PromotionCoupon> coupons;
 
-        coupons = promotionCouponService.findByPromotionId(couponPromotion.getPromotionId());
+        final Map<String, List> filter = Collections.singletonMap("promotionIds", Collections.singletonList(couponPromotion.getPromotionId()));
+
+        coupons = promotionCouponService.findPromotionCoupons(0, 10, null, false, filter);
 
         assertNotNull(coupons);
         assertEquals(1, coupons.size());
@@ -110,7 +114,9 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
 
         List<PromotionCoupon> coupons;
 
-        coupons = promotionCouponService.findByPromotionId(couponPromotion.getPromotionId());
+        final Map<String, List> filter = Collections.singletonMap("promotionIds", Collections.singletonList(couponPromotion.getPromotionId()));
+
+        coupons = promotionCouponService.findPromotionCoupons(0, 10, null, false, filter);
 
         assertNotNull(coupons);
         assertEquals(5, coupons.size());
@@ -150,7 +156,9 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
         List<PromotionCoupon> coupons;
         PromotionCoupon validCoupon;
 
-        coupons = promotionCouponService.findByPromotionId(couponPromotion.getPromotionId());
+        final Map<String, List> filter = Collections.singletonMap("promotionIds", Collections.singletonList(couponPromotion.getPromotionId()));
+
+        coupons = promotionCouponService.findPromotionCoupons(0, 10, null, false, filter);
 
         assertNotNull(coupons);
         assertEquals(1, coupons.size());
@@ -166,7 +174,7 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
         couponPromotion.setEnabled(false);
         promotionService.update(couponPromotion);
 
-        coupons = promotionCouponService.findByPromotionId(couponPromotion.getPromotionId());
+        coupons = promotionCouponService.findPromotionCoupons(0, 10, null, false, filter);
 
         assertNotNull(coupons);
         assertEquals(1, coupons.size());
@@ -203,7 +211,9 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
         List<PromotionCoupon> coupons;
         PromotionCoupon validCoupon;
 
-        coupons = promotionCouponService.findByPromotionId(couponPromotion.getPromotionId());
+        final Map<String, List> filter = Collections.singletonMap("promotionIds", Collections.singletonList(couponPromotion.getPromotionId()));
+
+        coupons = promotionCouponService.findPromotionCoupons(0, 10, null, false, filter);
 
         assertNotNull(coupons);
         assertEquals(1, coupons.size());
@@ -244,7 +254,9 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
         List<PromotionCoupon> coupons;
         PromotionCoupon validCoupon;
 
-        coupons = promotionCouponService.findByPromotionId(couponPromotion.getPromotionId());
+        final Map<String, List> filter = Collections.singletonMap("promotionIds", Collections.singletonList(couponPromotion.getPromotionId()));
+
+        coupons = promotionCouponService.findPromotionCoupons(0, 10, null, false, filter);
 
         assertNotNull(coupons);
         assertEquals(1, coupons.size());
@@ -284,7 +296,9 @@ public class PromotionCouponServiceImplTest extends BaseCoreDBTestCase {
         List<PromotionCoupon> coupons;
         PromotionCoupon validCoupon;
 
-        coupons = promotionCouponService.findByPromotionId(couponPromotion.getPromotionId());
+        final Map<String, List> filter = Collections.singletonMap("promotionIds", Collections.singletonList(couponPromotion.getPromotionId()));
+
+        coupons = promotionCouponService.findPromotionCoupons(0, 10, null, false, filter);
 
         assertNotNull(coupons);
         assertEquals(1, coupons.size());

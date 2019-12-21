@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.Tax;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -46,17 +47,33 @@ public interface TaxService extends GenericService<Tax> {
      */
     List<Tax> getTaxesByShopCode(String shopCode, String currency);
 
+
     /**
-     * Manager search function to find taxes by given parameters.
+     * Find taxes by given search criteria. Search will be performed using like operation.
      *
-     * @param code tax code
-     * @param shopCode optional shop code
-     * @param currency optional currency
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
      *
-     * @return taxes that satisfy criteria
+     * @return list of taxes.
      */
-    List<Tax> findByParameters(String code,
-                               String shopCode,
-                               String currency);
+    List<Tax> findTaxes(int start,
+                        int offset,
+                        String sort,
+                        boolean sortDescending,
+                        Map<String, List> filter);
+
+    /**
+     * Find taxes by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findTaxCount(Map<String, List> filter);
+
+
 
 }

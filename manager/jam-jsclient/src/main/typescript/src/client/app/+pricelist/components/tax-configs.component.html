@@ -4,18 +4,16 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'LOCATION_COUNTRY' | translate }}</th>
-        <th>{{ 'LOCATION_STATE_CODE' | translate }}</th>
-        <th>{{ 'SKU' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('countryCode')">{{ 'LOCATION_COUNTRY' | translate }} <span [hidden]="sortColumn != 'countryCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('stateCode')">{{ 'LOCATION_STATE_CODE' | translate }} <span [hidden]="sortColumn != 'stateCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('productCode')">{{ 'SKU' | translate }} <span [hidden]="sortColumn != 'productCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredTaxconfigs; let i = index" class="{{row == selectedTaxConfig ? 'active' : ''}}">
-        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'LOCATION_COUNTRY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.countryCode ? row.countryCode : '***'}}</a>&nbsp;</td>
-          <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.stateCode ? row.stateCode : '***' }}</a>&nbsp;</td>
-          <td title="{{ 'SKU' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productCode ? row.productCode : '***' }}</a>&nbsp;</td>
-        </ng-template>
+        <td title="{{ 'LOCATION_COUNTRY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.countryCode ? row.countryCode : '***'}}</a>&nbsp;</td>
+        <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.stateCode ? row.stateCode : '***' }}</a>&nbsp;</td>
+        <td title="{{ 'SKU' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productCode ? row.productCode : '***' }}</a>&nbsp;</td>
       </tr>
       </tbody>
     </table>

@@ -17,11 +17,10 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.PriceListDTO;
-import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-
-import java.util.List;
 
 /**
  * Bulk price lists service.
@@ -32,32 +31,21 @@ import java.util.List;
  */
 public interface DtoPriceListsService {
 
-    /**
-     * List of all shops.
-     *
-     * @return list of shops
-     */
-    List<ShopDTO> getShops() throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * List of all currencies.
+     * Get price list by criteria.
      *
-     * @param shop shop instance
-     * @return list of currencies
-     */
-    List<String> getShopCurrencies(ShopDTO shop) throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-    /**
-     * Price lists by filter
-     *
-     * @param shopId shop
-     * @param currency currency
      * @param filter filter
-     * @param page start page
-     * @param pageSize page size
-     * @return price lists
+     *
+     * @return list
+     *
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
      */
-    List<PriceListDTO> findBy(long shopId, String currency, String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<PriceListDTO> findPrices(long shopId,
+                                          String currency,
+                                          SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
     /**
      * Get by id

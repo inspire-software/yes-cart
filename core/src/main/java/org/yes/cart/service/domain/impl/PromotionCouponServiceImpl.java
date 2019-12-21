@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.GenericDAO;
@@ -25,10 +26,14 @@ import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.promotion.PromotionCouponCodeGenerator;
 import org.yes.cart.service.domain.PromotionCouponService;
+import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -48,12 +53,6 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
         super(promotionCouponDao);
         this.promotionDao = promotionDao;
         this.couponCodeGenerator = couponCodeGenerator;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public List<PromotionCoupon> findByPromotionId(Long promotionId) {
-        return getGenericDao().findByNamedQuery("COUPONS.BY.PROMOTION.ID", promotionId);
     }
 
     @Override
@@ -187,5 +186,74 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
 
         getGenericDao().executeUpdate("REMOVE.ALL.COUPONS.BY.PROMOTION.ID", promotionId);
 
+    }
+
+
+
+
+
+    private Pair<String, Object[]> findPromotionCouponQuery(final boolean count,
+                                                            final String sort,
+                                                            final boolean sortDescending,
+                                                            final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(p.promotioncouponId) from PromotionCouponEntity p ");
+        } else {
+            hqlCriteria.append("select p from PromotionCouponEntity p ");
+        }
+
+        final List promotionIds = currentFilter != null ? currentFilter.remove("promotionIds") : null;
+        if (promotionIds != null) {
+            hqlCriteria.append(" where (p.promotion.promotionId in (?1)) ");
+            params.add(promotionIds);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "p", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by p." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+
+    /** {@inheritDoc} */
+    @Override
+    public List<PromotionCoupon> findPromotionCoupons(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findPromotionCouponQuery(false, sort, sortDescending, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int findPromotionCouponCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findPromotionCouponQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
     }
 }

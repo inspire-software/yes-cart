@@ -24,6 +24,7 @@ import org.yes.cart.domain.entity.Tax;
 import org.yes.cart.service.domain.TaxService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -54,8 +55,14 @@ public class TaxServiceCachedImpl implements TaxService {
 
     /** {@inheritDoc} */
     @Override
-    public List<Tax> findByParameters(final String code, final String shopCode, final String currency) {
-        return taxService.findByParameters(code, shopCode, currency);
+    public List<Tax> findTaxes(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return taxService.findTaxes(start, offset, sort, sortDescending, filter);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int findTaxCount(final Map<String, List> filter) {
+        return taxService.findTaxCount(filter);
     }
 
     /** {@inheritDoc} */

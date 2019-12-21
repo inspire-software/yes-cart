@@ -24,10 +24,7 @@ import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.domain.TaxService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -58,7 +55,8 @@ public class TaxConfigServiceImplTest extends BaseCoreDBTestCase {
 
         taxConfigService.create(cfgShopLevel);
 
-        final List<TaxConfig> cfgShopLevelRes = taxConfigService.findByTaxId(vat.getTaxId(), null, null, null);
+        final Map<String, List> filterByTax = Collections.singletonMap("taxIds", Collections.singletonList(vat.getTaxId()));
+        final List<TaxConfig> cfgShopLevelRes = taxConfigService.findTaxConfigs(0, 10, null, false, filterByTax);
         assertEquals(1, cfgShopLevelRes.size());
         assertEquals(cfgShopLevel.getTaxConfigId(), cfgShopLevelRes.get(0).getTaxConfigId());
 
@@ -68,7 +66,10 @@ public class TaxConfigServiceImplTest extends BaseCoreDBTestCase {
 
         taxConfigService.create(cfgCountryLevel);
 
-        final List<TaxConfig> cfgCountryLevelRes = taxConfigService.findByTaxId(vat.getTaxId(), "GB", null, null);
+        final Map<String, List> filterByTaxAndCountry = new HashMap<>();
+        filterByTaxAndCountry.put("taxIds", Collections.singletonList(vat.getTaxId()));
+        filterByTaxAndCountry.put("countryCode", Collections.singletonList("GB"));
+        final List<TaxConfig> cfgCountryLevelRes = taxConfigService.findTaxConfigs(0, 10, null, false, filterByTaxAndCountry);
         assertEquals(1, cfgCountryLevelRes.size());
         assertEquals(cfgCountryLevel.getTaxConfigId(), cfgCountryLevelRes.get(0).getTaxConfigId());
 
@@ -79,7 +80,11 @@ public class TaxConfigServiceImplTest extends BaseCoreDBTestCase {
 
         taxConfigService.create(cfgStateLevel);
 
-        final List<TaxConfig> cfgStateLevelRes = taxConfigService.findByTaxId(vat.getTaxId(), "GB", "GB-CAM", null);
+        final Map<String, List> filterByTaxAndState = new HashMap<>();
+        filterByTaxAndState.put("taxIds", Collections.singletonList(vat.getTaxId()));
+        filterByTaxAndState.put("countryCode", Collections.singletonList("GB"));
+        filterByTaxAndState.put("stateCode", Collections.singletonList("GB-CAM"));
+        final List<TaxConfig> cfgStateLevelRes = taxConfigService.findTaxConfigs(0, 10, null, false, filterByTaxAndState);
         assertEquals(1, cfgStateLevelRes.size());
         assertEquals(cfgStateLevel.getTaxConfigId(), cfgStateLevelRes.get(0).getTaxConfigId());
 
@@ -89,19 +94,22 @@ public class TaxConfigServiceImplTest extends BaseCoreDBTestCase {
 
         taxConfigService.create(cfgProductLevel);
 
-        final List<TaxConfig> cfgProductLevelRes = taxConfigService.findByTaxId(vat.getTaxId(), null, null, "ABC-001");
+        final Map<String, List> filterByTaxAndSKU = new HashMap<>();
+        filterByTaxAndSKU.put("taxIds", Collections.singletonList(vat.getTaxId()));
+        filterByTaxAndSKU.put("productCode", Collections.singletonList("ABC-001"));
+        final List<TaxConfig> cfgProductLevelRes = taxConfigService.findTaxConfigs(0, 10, null, false, filterByTaxAndSKU);
         assertEquals(1, cfgProductLevelRes.size());
         assertEquals(cfgProductLevel.getTaxConfigId(), cfgProductLevelRes.get(0).getTaxConfigId());
 
 
-        final List<TaxConfig> cfgAllLevelRes = taxConfigService.findByTaxId(vat.getTaxId(), null, null, null);
+        final List<TaxConfig> cfgAllLevelRes = taxConfigService.findTaxConfigs(0, 10, null, false, filterByTax);
         assertEquals(4, cfgAllLevelRes.size());
 
         for (final TaxConfig tc : cfgAllLevelRes) {
             taxConfigService.delete(tc);
         }
 
-        final List<TaxConfig> cfgAllLevelResAfterDelete = taxConfigService.findByTaxId(vat.getTaxId(), null, null, null);
+        final List<TaxConfig> cfgAllLevelResAfterDelete = taxConfigService.findTaxConfigs(0, 10, null, false, filterByTax);
         assertTrue(cfgAllLevelResAfterDelete.isEmpty());
 
     }

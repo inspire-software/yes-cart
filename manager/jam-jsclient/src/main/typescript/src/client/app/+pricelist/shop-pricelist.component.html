@@ -107,11 +107,7 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <div *ngIf="pricelistFilterCapped">
-      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-    </div>
-
-    <yc-pricelist [pricelist]="pricelist" (dataSelected)="onPricelistSelected($event)"></yc-pricelist>
+    <yc-pricelist [pricelist]="pricelist" (dataSelected)="onPricelistSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-pricelist>
   </div>
 
   <div [hidden]="viewMode !== 'price'" class="{{ loading ? 'loading-data' : '' }}">
@@ -157,5 +153,7 @@
   </yc-modal>
 
   <yc-promotion-test-config #runTestModalDialog (dataConfigured)="onRunTestResult($event)"></yc-promotion-test-config>
+
+  <yc-product-sku-select #selectProductModalSkuDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
 
 </div>

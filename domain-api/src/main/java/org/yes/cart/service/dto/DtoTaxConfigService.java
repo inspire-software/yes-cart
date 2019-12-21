@@ -17,10 +17,10 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.TaxConfigDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-
-import java.util.List;
 
 /**
  * User: denispavlov
@@ -29,38 +29,19 @@ import java.util.List;
  */
 public interface DtoTaxConfigService extends GenericDTOService<TaxConfigDTO> {
 
-    /**
-     * Manager search function.
-     *
-     * @param taxId tax id
-     * @param countryCode country code (optional)
-     * @param stateCode state code (optional)
-     * @param productCode product code (optional)
-     *
-     * @return list of tax configs
-     */
-    List<TaxConfigDTO> findByTaxId(long taxId,
-                                   String countryCode,
-                                   String stateCode,
-                                   String productCode)
-
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Manager search function.
+     * Get tax configs list by criteria.
      *
-     * @param taxId tax id
      * @param filter filter
-     * @param page start page
-     * @param pageSize page size
      *
-     * @return list of tax configs
+     * @return list
+     *
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
      */
-    List<TaxConfigDTO> findBy(long taxId,
-                              String filter,
-                              int page,
-                              int pageSize)
+    SearchResult<TaxConfigDTO> findTaxConfigs(long taxId,
+                                              SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 }

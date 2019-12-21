@@ -17,7 +17,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/services/index';
 import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { PromotionVO, ShopVO, Pair, CartVO, PromotionTestVO } from './../shared/model/index';
+import { PromotionVO, ShopVO, Pair, CartVO, PromotionTestVO, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -61,15 +61,12 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   private forceShowAll:boolean = false;
   private viewMode:string = ShopPromotionsComponent.PROMOTIONS;
 
-  private promotions:Array<PromotionVO> = [];
+  private promotions:SearchResultVO<PromotionVO>;
   private promotionFilter:string;
   private promotionFilterRequired:boolean = true;
-  private promotionFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedPromotion:PromotionVO;
 
@@ -104,8 +101,8 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   constructor(private _promotionService:PricingService) {
     LogUtil.debug('ShopPromotionsComponent constructed');
+    this.promotions = this.newSearchResultInstance();
   }
-
 
   get selectedShop():ShopVO {
     return ShopPromotionsComponent._selectedShop;
@@ -142,6 +139,24 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       couponTriggered: false, canBeCombined: true,
       enabled: false, enabledFrom: null, enabledTo: null,
       tag: null
+    };
+  }
+
+  newSearchResultInstance():SearchResultVO<PromotionVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: [],
+          promoTypes: [],
+          promoActions: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
     };
   }
 
@@ -287,9 +302,8 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
 
   protected onFilterChange(event:any) {
-
+    this.promotions.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
@@ -298,6 +312,24 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       this.presetFromCookie();
       this.getFilteredPromotions();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('ShopPromotionsComponent onPageSelected', page);
+    this.promotions.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('ShopPromotionsComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.promotions.searchContext.sortBy = null;
+      this.promotions.searchContext.sortDesc = false;
+    } else {
+      this.promotions.searchContext.sortBy = sort.first;
+      this.promotions.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onPromotionSelected(data:PromotionVO) {
@@ -514,7 +546,6 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
     if (this.selectedShop != null && this.selectedCurrency != null && !this.promotionFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
 
       let types:string[] = [];
       ShopPromotionsComponent._promoTypes.forEach((_type:Pair<string, boolean>) => {
@@ -530,7 +561,12 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
         }
       });
 
-      let _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotionFilter, types, actions, max).subscribe( allpromotions => {
+      this.promotions.searchContext.parameters.filter = [ this.promotionFilter ];
+      this.promotions.searchContext.parameters.promoTypes = types;
+      this.promotions.searchContext.parameters.promoActions = actions;
+      this.promotions.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotions.searchContext).subscribe( allpromotions => {
         LogUtil.debug('ShopPromotionsComponent getFilteredPromotions', allpromotions);
         this.promotions = allpromotions;
         this.selectedPromotion = null;
@@ -539,19 +575,17 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
         this.changed = false;
         this.validForSave = false;
         this.validForSaveAndDisabled = false;
-        this.promotionFilterCapped = this.promotions.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.promotions = [];
+      this.promotions = this.newSearchResultInstance();
       this.selectedPromotion = null;
       this.promotionEdit = null;
       this.viewMode = ShopPromotionsComponent.PROMOTIONS;
       this.changed = false;
       this.validForSave = false;
       this.validForSaveAndDisabled = false;
-      this.promotionFilterCapped = false;
     }
   }
 

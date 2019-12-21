@@ -42,7 +42,12 @@ public class PromotionContextFactoryCachedImpl implements PromotionContextFactor
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = "promotionService-factoryGetInstance")
+    @CacheEvict(value = {
+            "promotionService-factoryGetInstance",
+            "priceService-minimalPrice",
+            "priceService-allCurrentPrices",
+            "priceService-allPrices"
+    })
     public void refresh(final String shopCode, final String currency) {
         // evict cache
     }

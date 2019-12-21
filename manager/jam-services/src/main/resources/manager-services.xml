@@ -250,8 +250,9 @@
     <bean id="voTaxService" class="org.yes.cart.service.vo.impl.VoTaxServiceImpl">
         <constructor-arg index="0" ref="dtoTaxService"/>
         <constructor-arg index="1" ref="dtoTaxConfigService"/>
-        <constructor-arg index="2" ref="uiFederationFacade"/>
-        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="2" ref="shopService"/>
+        <constructor-arg index="3" ref="uiFederationFacade"/>
+        <constructor-arg index="4" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voPromotionService" class="org.yes.cart.service.vo.impl.VoPromotionServiceImpl">

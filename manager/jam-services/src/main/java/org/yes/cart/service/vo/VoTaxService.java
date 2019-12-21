@@ -16,10 +16,10 @@
 
 package org.yes.cart.service.vo;
 
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.domain.vo.VoTax;
 import org.yes.cart.domain.vo.VoTaxConfig;
-
-import java.util.List;
 
 /**
  * User: denispavlov
@@ -33,7 +33,7 @@ public interface VoTaxService {
      *
      * @throws Exception errors
      */
-    List<VoTax> getFilteredTax(String shopCode, String currency, String filter, int max) throws Exception;
+    VoSearchResult<VoTax> getFilteredTax(String shopCode, String currency, VoSearchContext filter) throws Exception;
 
     /**
      * Get tax by id.
@@ -88,7 +88,7 @@ public interface VoTaxService {
      *
      * @throws Exception errors
      */
-    List<VoTaxConfig> getFilteredTaxConfig(long taxId, String filter, int max) throws Exception;
+    VoSearchResult<VoTaxConfig> getFilteredTaxConfig(long taxId, VoSearchContext filter) throws Exception;
 
     /**
      * Get tax by id.

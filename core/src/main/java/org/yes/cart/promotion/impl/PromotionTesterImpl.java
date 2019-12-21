@@ -110,10 +110,8 @@ public class PromotionTesterImpl implements PromotionTester {
     private void ensureNoCache(final Shop shop, final String currency) {
         // Ensure no cache
         factory.refresh(shop.getCode(), currency);
-        priceService.refresh(shop.getCode(), currency);
         if (shop.getMaster() != null) {
             factory.refresh(shop.getMaster().getCode(), currency);
-            priceService.refresh(shop.getMaster().getCode(), currency);
         }
     }
 

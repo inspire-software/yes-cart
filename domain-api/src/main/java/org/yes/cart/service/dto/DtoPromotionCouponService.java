@@ -17,11 +17,10 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.PromotionCouponDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-
-import java.time.Instant;
-import java.util.List;
 
 /**
  * User: denispavlov
@@ -31,47 +30,18 @@ import java.util.List;
 public interface DtoPromotionCouponService extends GenericDTOService<PromotionCouponDTO> {
 
     /**
-     * Load all coupons belonging to a promotion.
+     * Get coupons list by criteria.
      *
-     * @param promotionId promotion PK
-     *
-     * @return promotions that satisfy criteria
-     */
-    List<PromotionCouponDTO> getCouponsByPromotionId(Long promotionId)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-    /**
-     * Generate downloadable csv file containing list of coupons for a promotion.
-     *
-     * @param promotionId promotion pk
-     *
-     * @return csv file with list of coupons
-     */
-    byte[] getCouponsByPromotionIdExport(Long promotionId)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-
-    /**
-     * Promotions by filter
-     *
-     * @param promotionId promotion PK
      * @param filter filter
-     * @param page start page
-     * @param pageSize page size
-     * @return coupons
-     */
-    List<PromotionCouponDTO> findBy(long promotionId, String filter, int page, int pageSize)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-    /**
-     * Promotions by filter
      *
-     * @param promotionId promotion PK
-     * @param createdAfter created after
-     * @return coupons
+     * @return list
+     *
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
      */
-    List<PromotionCouponDTO> findBy(long promotionId, Instant createdAfter)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<PromotionCouponDTO> findCoupons(long promotionId,
+                                                 SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
 
     /**

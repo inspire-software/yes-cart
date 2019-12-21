@@ -113,11 +113,7 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <div *ngIf="promotionFilterCapped">
-      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-    </div>
-
-    <yc-promotions [promotions]="promotions" [selectedShopCode]="selectedShopCode" (dataSelected)="onPromotionSelected($event)"></yc-promotions>
+    <yc-promotions [promotions]="promotions" [selectedShopCode]="selectedShopCode" (dataSelected)="onPromotionSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-promotions>
   </div>
 
   <div [hidden]="viewMode !== 'promotion'" class="{{ loading ? 'loading-data' : '' }}">

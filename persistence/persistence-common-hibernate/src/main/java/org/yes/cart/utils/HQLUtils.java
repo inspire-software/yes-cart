@@ -165,6 +165,7 @@ public final class HQLUtils {
 
                         String matchProp;
                         String matchMode = " like ";
+                        boolean nullCheck = false;
                         Object matchValue;
                         if (val instanceof String) {
 
@@ -176,19 +177,6 @@ public final class HQLUtils {
 
                         } else if (val instanceof Pair) {
 
-                            matchProp = " " + selector + "." + props.getKey() + " ";
-                            matchValue = ((Pair) val).getSecond();
-                            if (matchValue == null) {
-                                continue; // skip empty values
-                            }
-                            final boolean isString = matchValue instanceof String;
-                            if (isString) {
-                                if (StringUtils.isBlank((String) matchValue)) {
-                                    continue; // skip empty values
-                                }
-                                matchProp = " lower(" + selector + "." + props.getKey() + ") ";
-                                matchValue = HQLUtils.criteriaIeq((String) matchValue);
-                            }
 
                             final SearchContext.MatchMode mm = (SearchContext.MatchMode) ((Pair) val).getFirst();
                             switch (mm) {
@@ -210,6 +198,40 @@ public final class HQLUtils {
                                 case ANY:
                                     matchMode = " in ";
                                     break;
+                                case NULL:
+                                    matchMode = " is null ";
+                                    nullCheck = true;
+                                    break;
+                                case NOTNULL:
+                                    matchMode = " is not null ";
+                                    nullCheck = true;
+                                    break;
+                                case EMPTY:
+                                    matchMode = " = '' ";
+                                    nullCheck = true;
+                                    break;
+                                case NOTEMPTY:
+                                    matchMode = " != '' ";
+                                    nullCheck = true;
+                                    break;
+                            }
+
+                            matchProp = " " + selector + "." + props.getKey() + " ";
+                            if (!nullCheck) {
+                                matchValue = ((Pair) val).getSecond();
+                                if (matchValue == null) {
+                                    continue; // skip empty values
+                                }
+                                final boolean isString = matchValue instanceof String;
+                                if (isString) {
+                                    if (StringUtils.isBlank((String) matchValue)) {
+                                        continue; // skip empty values
+                                    }
+                                    matchProp = " lower(" + selector + "." + props.getKey() + ") ";
+                                    matchValue = HQLUtils.criteriaIeq((String) matchValue);
+                                }
+                            } else {
+                                matchValue = null;
                             }
 
                         } else {
@@ -231,8 +253,12 @@ public final class HQLUtils {
                             }
                         }
 
-                        toAppendTo.append(" (" + matchProp + matchMode + "?" + pIdx + ") \n");
-                        params.add(matchValue);
+                        if (nullCheck) {
+                            toAppendTo.append(" (" + matchProp + matchMode + ") \n");
+                        } else {
+                            toAppendTo.append(" (" + matchProp + matchMode + "?" + pIdx + ") \n");
+                            params.add(matchValue);
+                        }
                         hasOneCriteria = true;
 
                     }

@@ -20,12 +20,12 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Tax;
 import org.yes.cart.domain.entity.TaxConfig;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.domain.TaxService;
 import org.yes.cart.utils.HQLUtils;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -111,22 +111,72 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
         }
     };
 
-    /** {@inheritDoc} */
-    @Override
-    public List<TaxConfig> findByTaxId(final long taxId,
-                                       final String countryCode,
-                                       final String stateCode,
-                                       final String productCode) {
 
-        return getGenericDao().findByNamedQuery(
-                "TAXCONFIG.BY.TAX.COUNTRY.STATE.PRODUCT",
-                taxId,
-                HQLUtils.criteriaEq(countryCode),
-                HQLUtils.criteriaEq(stateCode),
-                HQLUtils.criteriaEq(productCode)
-            );
+
+
+    private Pair<String, Object[]> findTaxConfigQuery(final boolean count,
+                                                      final String sort,
+                                                      final boolean sortDescending,
+                                                      final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(c.taxConfigId) from TaxConfigEntity c ");
+        } else {
+            hqlCriteria.append("select c from TaxConfigEntity c ");
+        }
+
+        final List taxIds = currentFilter != null ? currentFilter.remove("taxIds") : null;
+        if (taxIds != null) {
+            hqlCriteria.append(" where (c.tax.taxId in (?1)) ");
+            params.add(taxIds);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by c." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
     }
 
+
+
+    /** {@inheritDoc} */
+    @Override
+    public List<TaxConfig> findTaxConfigs(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findTaxConfigQuery(false, sort, sortDescending, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int findTaxConfigCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findTaxConfigQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
+    }
 
     private void cleanRegionalTaxCodes(final TaxConfig entity) {
         if (entity.getCountryCode() != null && StringUtils.isBlank(entity.getCountryCode())) {

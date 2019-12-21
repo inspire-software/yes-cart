@@ -25,6 +25,7 @@ import org.yes.cart.service.domain.PriceService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -159,14 +160,20 @@ public class PriceServiceCachedImpl implements PriceService {
         priceService.delete(instance);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    @CacheEvict(value = {
-            "priceService-minimalPrice",
-            "priceService-allCurrentPrices",
-            "priceService-allPrices"
-    }, allEntries = true)
-    public void refresh(final String shopCode, final String currency) {
-        // clear all
+    public List<SkuPrice> findPrices(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return priceService.findPrices(start, offset, sort, sortDescending, filter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findPriceCount(final Map<String, List> filter) {
+        return priceService.findPriceCount(filter);
     }
 
     /**

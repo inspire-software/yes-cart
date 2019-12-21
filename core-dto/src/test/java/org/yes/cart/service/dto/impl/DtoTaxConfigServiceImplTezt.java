@@ -23,10 +23,12 @@ import org.yes.cart.constants.DtoServiceSpringKeys;
 import org.yes.cart.domain.dto.TaxConfigDTO;
 import org.yes.cart.domain.dto.TaxDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.dto.DtoTaxConfigService;
 import org.yes.cart.service.dto.DtoTaxService;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -53,53 +55,8 @@ public class DtoTaxConfigServiceImplTezt extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testFindByParameters() throws Exception {
-        TaxDTO taxDTO = getDto();
-        taxDTO = dtoTaxService.create(taxDTO);
+    public void testFindTaxConfigs() throws Exception {
 
-        TaxConfigDTO taxConfigDTO1 = getDto(taxDTO, "CC_TEST1");
-        taxConfigDTO1 = dtoTaxConfigService.create(taxConfigDTO1);
-
-        TaxConfigDTO taxConfigDTO2 = getDto(taxDTO, "CC_TEST2");
-        taxConfigDTO2 = dtoTaxConfigService.create(taxConfigDTO2);
-
-        // retrieve specific
-        List<TaxConfigDTO> taxCfgs = dtoTaxConfigService.findByTaxId(
-                taxDTO.getTaxId(),
-                null,
-                null,
-                "CC_TEST1");
-
-        assertNotNull(taxCfgs);
-        assertEquals(1, taxCfgs.size());
-
-        // retrieve all
-        taxCfgs = dtoTaxConfigService.findByTaxId(
-                taxDTO.getTaxId(),
-                null,
-                null,
-                null);
-
-        assertNotNull(taxCfgs);
-        assertEquals(2, taxCfgs.size());
-
-        // retrieve non-existent
-        taxCfgs = dtoTaxConfigService.findByTaxId(
-                taxDTO.getTaxId(),
-                "zzzz",
-                null,
-                null);
-
-        assertNotNull(taxCfgs);
-        assertEquals(0, taxCfgs.size());
-
-        dtoTaxConfigService.remove(taxConfigDTO1.getTaxConfigId());
-        dtoTaxConfigService.remove(taxConfigDTO2.getTaxConfigId());
-        dtoTaxService.remove(taxDTO.getTaxId());
-    }
-
-    @Test
-    public void testFindBy() throws Exception {
         TaxDTO taxDTO = getDto();
         taxDTO = dtoTaxService.create(taxDTO);
 
@@ -110,43 +67,31 @@ public class DtoTaxConfigServiceImplTezt extends BaseCoreDBTestCase {
         taxConfigDTO2 = dtoTaxConfigService.create(taxConfigDTO2);
 
         // retrieve specific
-        List<TaxConfigDTO> taxCfgs = dtoTaxConfigService.findBy(
-                taxDTO.getTaxId(),
-                "!CC_TEST1",
-                0,
-                10);
+        final SearchContext filterByCode = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!CC_TEST1")), 0, 20, "productCode", false, "filter");
+        List<TaxConfigDTO> taxCfgs = dtoTaxConfigService.findTaxConfigs(taxDTO.getTaxId(), filterByCode).getItems();
 
         assertNotNull(taxCfgs);
         assertEquals(1, taxCfgs.size());
         assertEquals("CC_TEST1", taxCfgs.get(0).getProductCode());
 
         // retrieve all
-        taxCfgs = dtoTaxConfigService.findBy(
-                taxDTO.getTaxId(),
-                "#CC_TEST",
-                0,
-                10);
+        final SearchContext filterAllCodes = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("#CC_TEST")), 0, 20, "productCode", false, "filter");
+        taxCfgs = dtoTaxConfigService.findTaxConfigs(taxDTO.getTaxId(), filterAllCodes).getItems();
 
         assertNotNull(taxCfgs);
         assertEquals(2, taxCfgs.size());
 
         // retrieve by country
-        taxCfgs = dtoTaxConfigService.findBy(
-                taxDTO.getTaxId(),
-                "@ua",
-                0,
-                10);
+        final SearchContext filterByCountry = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("@ua")), 0, 20, "productCode", false, "filter");
+        taxCfgs = dtoTaxConfigService.findTaxConfigs(taxDTO.getTaxId(), filterByCountry).getItems();
 
         assertNotNull(taxCfgs);
         assertEquals(1, taxCfgs.size());
         assertEquals("UA", taxCfgs.get(0).getCountryCode());
 
         // retrieve partial
-        taxCfgs = dtoTaxConfigService.findBy(
-                taxDTO.getTaxId(),
-                "CC",
-                0,
-                10);
+        final SearchContext filterPartial = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("CC")), 0, 20, "productCode", false, "filter");
+        taxCfgs = dtoTaxConfigService.findTaxConfigs(taxDTO.getTaxId(), filterPartial).getItems();
 
         assertNotNull(taxCfgs);
         assertEquals(2, taxCfgs.size());

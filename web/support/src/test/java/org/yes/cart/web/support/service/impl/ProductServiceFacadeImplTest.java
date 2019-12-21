@@ -33,7 +33,6 @@ import org.yes.cart.web.support.service.ProductServiceFacade;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -4255,7 +4254,7 @@ public class ProductServiceFacadeImplTest {
         final PromotionService promotionService = context.mock(PromotionService.class, "promotionService");
 
         context.checking(new Expectations() {{
-            allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Collections.emptyList()));
+            allowing(promotionService).findPromotionByCode("CODE1", true); will(returnValue(null));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, promotionService, null, null, null);
@@ -4279,7 +4278,7 @@ public class ProductServiceFacadeImplTest {
         final LocalDateTime end = TimeContext.getLocalDateTime();
 
         context.checking(new Expectations() {{
-            allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Collections.singletonList(code1)));
+            allowing(promotionService).findPromotionByCode("CODE1", true); will(returnValue(code1));
             allowing(code1).getCode(); will(returnValue("CODE1"));
             allowing(code1).getPromoType(); will(returnValue("T1"));
             allowing(code1).getPromoAction(); will(returnValue("A1"));
@@ -4325,7 +4324,7 @@ public class ProductServiceFacadeImplTest {
         final LocalDateTime end = TimeContext.getLocalDateTime();
 
         context.checking(new Expectations() {{
-            allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Collections.singletonList(code1)));
+            allowing(promotionService).findPromotionByCode("CODE1", true); will(returnValue(code1));
             allowing(code1).getCode(); will(returnValue("CODE1"));
             allowing(code1).getPromoType(); will(returnValue("T1"));
             allowing(code1).getPromoAction(); will(returnValue("A1"));
@@ -4373,8 +4372,8 @@ public class ProductServiceFacadeImplTest {
         final LocalDateTime end = TimeContext.getLocalDateTime();
 
         context.checking(new Expectations() {{
-            allowing(promotionService).findByParameters("CODE0", null, null, null, null, null, Boolean.TRUE);
-            will(returnValue(Collections.singletonList(code0)));
+            allowing(promotionService).findPromotionByCode("CODE0", true);
+            will(returnValue(code0));
             allowing(code0).getCode();
             will(returnValue("CODE0"));
             allowing(code0).getPromoType();
@@ -4395,8 +4394,8 @@ public class ProductServiceFacadeImplTest {
             will(returnValue(start));
             allowing(code0).getEnabledTo();
             will(returnValue(end));
-            allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE);
-            will(returnValue(Collections.singletonList(code1)));
+            allowing(promotionService).findPromotionByCode("CODE1", true);
+            will(returnValue(code1));
             allowing(code1).getCode();
             will(returnValue("CODE1"));
             allowing(code1).getPromoType();
@@ -4417,8 +4416,8 @@ public class ProductServiceFacadeImplTest {
             will(returnValue(start));
             allowing(code1).getEnabledTo();
             will(returnValue(end));
-            allowing(promotionService).findByParameters("CODE2", null, null, null, null, null, Boolean.TRUE);
-            will(returnValue(Collections.singletonList(code2)));
+            allowing(promotionService).findPromotionByCode("CODE2", true);
+            will(returnValue(code2));
             allowing(code2).getCode();
             will(returnValue("CODE2"));
             allowing(code2).getPromoType();

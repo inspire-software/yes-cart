@@ -129,16 +129,12 @@
     <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
   </div>
 
-  <div *ngIf="taxconfigsFilterCapped && viewMode === 'taxconfigs'">
-    <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-  </div>
-
   <div [hidden]="viewMode !== 'taxes'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-taxes [taxes]="taxes" (dataSelected)="onTaxSelected($event)"></yc-taxes>
+    <yc-taxes [taxes]="taxes" [selectedShopCode]="selectedShopCode" (dataSelected)="onTaxSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-taxes>
   </div>
 
   <div [hidden]="viewMode !== 'taxconfigs'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-tax-configs [taxconfigs]="taxconfigs" (dataSelected)="onTaxconfigSelected($event)"></yc-tax-configs>
+    <yc-tax-configs [taxconfigs]="taxconfigs" (dataSelected)="onTaxconfigSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-tax-configs>
   </div>
 
   <div [hidden]="viewMode !== 'pricelisttest'"  class="{{ loading ? 'loading-data' : '' }}">
@@ -288,5 +284,7 @@
   </yc-modal>
 
   <yc-promotion-test-config #runTestModalDialog (dataConfigured)="onRunTestResult($event)"></yc-promotion-test-config>
+
+  <yc-product-sku-select #selectProductModalSkuDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
 
 </div>

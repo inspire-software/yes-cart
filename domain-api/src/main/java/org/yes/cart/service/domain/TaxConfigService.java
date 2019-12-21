@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.TaxConfig;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -40,16 +41,34 @@ public interface TaxConfigService extends GenericService<TaxConfig> {
      */
     Long getTaxIdBy(String shopCode, String currency, String countryCode, String stateCode, String productCode);
 
+
+
     /**
-     * Manager search function.
+     * Find tax configs by given search criteria. Search will be performed using like operation.
      *
-     * @param taxId tax id
-     * @param countryCode country code (optional)
-     * @param stateCode state code (optional)
-     * @param productCode product code (optional)
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
      *
-     * @return list of tax configs
+     * @return list of coupons.
      */
-    List<TaxConfig> findByTaxId(long taxId, String countryCode, String stateCode, String productCode);
+    List<TaxConfig> findTaxConfigs(int start,
+                                   int offset,
+                                   String sort,
+                                   boolean sortDescending,
+                                   Map<String, List> filter);
+
+    /**
+     * Find tax configs by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findTaxConfigCount(Map<String, List> filter);
+
+
 
 }

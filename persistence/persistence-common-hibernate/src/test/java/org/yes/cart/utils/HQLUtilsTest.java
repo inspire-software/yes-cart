@@ -168,6 +168,22 @@ public class HQLUtilsTest {
                 "select from XEntity e  where (\n ( lower(e.prop1)  = ?1) \n)",
                 "val1");
 
+        filter.clear();
+
+        filter.put("prop1", Collections.singletonList(SearchContext.MatchMode.NOTNULL.toParam(null)));
+        filter.put("prop2", Collections.singletonList(SearchContext.MatchMode.NULL.toParam(null)));
+
+        assertWithFilter(filter,
+                "select from XEntity e  where (\n ( e.prop1  is not null ) \n and  ( e.prop2  is null ) \n)");
+
+        filter.clear();
+
+        filter.put("prop1", Collections.singletonList(SearchContext.MatchMode.NOTEMPTY.toParam(null)));
+        filter.put("prop2", Collections.singletonList(SearchContext.MatchMode.EMPTY.toParam(null)));
+
+        assertWithFilter(filter,
+                "select from XEntity e  where (\n ( e.prop1  != '' ) \n and  ( e.prop2  = '' ) \n)");
+
 
     }
 

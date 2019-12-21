@@ -20,8 +20,15 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.TaxConfigDTO;
 import org.yes.cart.domain.dto.TaxDTO;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.domain.vo.VoTax;
 import org.yes.cart.domain.vo.VoTaxConfig;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.DtoTaxConfigService;
 import org.yes.cart.service.dto.DtoTaxService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -41,14 +48,17 @@ public class VoTaxServiceImpl implements VoTaxService {
     private final DtoTaxService dtoTaxService;
     private final DtoTaxConfigService dtoTaxConfigService;
 
+    private final ShopService shopService;
     private final FederationFacade federationFacade;
     private final VoAssemblySupport voAssemblySupport;
 
 
     public VoTaxServiceImpl(final DtoTaxService dtoTaxService,
                             final DtoTaxConfigService dtoTaxConfigService,
+                            final ShopService shopService,
                             final FederationFacade federationFacade,
                             final VoAssemblySupport voAssemblySupport) {
+        this.shopService = shopService;
         this.dtoTaxService = dtoTaxService;
         this.dtoTaxConfigService = dtoTaxConfigService;
         this.federationFacade = federationFacade;
@@ -59,18 +69,35 @@ public class VoTaxServiceImpl implements VoTaxService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoTax> getFilteredTax(final String shopCode, final String currency, final String filter, final int max) throws Exception {
+    public VoSearchResult<VoTax> getFilteredTax(final String shopCode, final String currency, final VoSearchContext filter) throws Exception {
 
-        final List<VoTax> list = new ArrayList<>();
+        final VoSearchResult<VoTax> result = new VoSearchResult<>();
+        final List<VoTax> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
-
-            final List<TaxDTO> dtos = dtoTaxService.findBy(shopCode, currency, filter, 0, max);
-            return voAssemblySupport.assembleVos(VoTax.class, TaxDTO.class, dtos);
-
+        if (!federationFacade.isManageable(shopCode, ShopDTO.class)) {
+            return result;
         }
 
-        return list;
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter"
+        );
+
+
+        final SearchResult<TaxDTO> batch = dtoTaxService.findTaxes(shopCode, currency, searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoTax.class, TaxDTO.class, batch.getItems()));
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
     }
 
     /**
@@ -108,6 +135,10 @@ public class VoTaxServiceImpl implements VoTaxService {
     @Override
     public VoTax createTax(final VoTax vo) throws Exception {
         if (federationFacade.isManageable(vo.getShopCode(), ShopDTO.class)) {
+            final Shop shop = shopService.getShopByCode(vo.getShopCode());
+            if (shop.getMaster() != null) {
+                vo.setShopCode(shop.getMaster().getCode());
+            }
             TaxDTO dto = dtoTaxService.getNew();
             dto = dtoTaxService.create(
                     voAssemblySupport.assembleDto(TaxDTO.class, VoTax.class, dto, vo)
@@ -133,13 +164,34 @@ public class VoTaxServiceImpl implements VoTaxService {
      * {@inheritDoc}
      */
     @Override
-    public List<VoTaxConfig> getFilteredTaxConfig(final long taxId, final String filter, final int max) throws Exception {
+    public VoSearchResult<VoTaxConfig> getFilteredTaxConfig(final long taxId, final VoSearchContext filter) throws Exception {
 
         getTaxById(taxId); // check access
 
-        final List<TaxConfigDTO> configs = dtoTaxConfigService.findBy(taxId, filter, 0, max);
+        final VoSearchResult<VoTaxConfig> result = new VoSearchResult<>();
+        final List<VoTaxConfig> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        return voAssemblySupport.assembleVos(VoTaxConfig.class, TaxConfigDTO.class, configs);
+
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter"
+        );
+
+        final SearchResult<TaxConfigDTO> batch = dtoTaxConfigService.findTaxConfigs(taxId, searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoTaxConfig.class, TaxConfigDTO.class, batch.getItems()));
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
+
     }
 
     /**

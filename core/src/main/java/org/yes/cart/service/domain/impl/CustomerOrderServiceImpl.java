@@ -192,9 +192,9 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
         if (CollectionUtils.isNotEmpty(statuses)) {
             if (params.isEmpty()) {
-                hqlCriteria.append(" where o.orderStatus in ?1 ");
+                hqlCriteria.append(" where (o.orderStatus in ?1) ");
             } else {
-                hqlCriteria.append(" and o.orderStatus in ?2 ");
+                hqlCriteria.append(" and (o.orderStatus in ?2) ");
             }
             params.add(statuses);
         }

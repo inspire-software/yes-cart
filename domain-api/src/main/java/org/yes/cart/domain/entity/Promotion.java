@@ -217,4 +217,13 @@ public interface Promotion extends Auditable, Codable, Taggable, Rankable, Namea
     void setEnabledTo(LocalDateTime enabledTo);
 
 
+    /**
+     * Returns true if promotion is enabled and now is within from/to date range.
+     *
+     * @param now    time now
+     *
+     * @return true if the product is available now
+     */
+    boolean isAvailable(LocalDateTime now);
+
 }

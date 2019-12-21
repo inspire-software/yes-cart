@@ -17,6 +17,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.PromotionDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -34,44 +36,21 @@ import java.util.Set;
  */
 public interface DtoPromotionService extends GenericDTOService<PromotionDTO> {
 
-    /**
-     * Customer search function to find promotions by given parameters.
-     *
-     * @param code promo code
-     * @param shopCode optional shop code
-     * @param currency optional currency
-     * @param tag optional tag
-     * @param type optional type
-     * @param action optional action
-     * @param enabled optional enabled
-     *
-     * @return promotions that satisfy criteria
-     */
-    List<PromotionDTO> findByParameters(String code,
-                                        String shopCode,
-                                        String currency,
-                                        String tag,
-                                        String type,
-                                        String action,
-                                        Boolean enabled)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
 
 
     /**
-     * Promotions by filter
+     * Get promotions list by criteria.
      *
-     * @param shopCode shop
-     * @param currency currency
      * @param filter filter
-     * @param types types
-     * @param actions actions
-     * @param page start page
-     * @param pageSize page size
-     * @return promotions
+     *
+     * @return list
+     *
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
      */
-    List<PromotionDTO> findBy(String shopCode, String currency, String filter, List<String> types, List<String> actions, int page, int pageSize)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<PromotionDTO> findPromotions(String shopCode,
+                                              String currency,
+                                              SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**

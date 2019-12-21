@@ -4007,20 +4007,6 @@
         ]]>
     </query>
 
-    <query name="PROMOTION.BY.CODE.SHOPCODE.CURRENCY.TAG.TYPE.ACTION.ACTIVE">
-        <![CDATA[
-            select p from PromotionEntity p where
-                (?1 is null or p.shopCode = ?1) and
-                (?2 is null or p.currency = ?2) and
-                (?3 is null or lower(p.code) like ?3) and
-                (?4 is null or lower(p.tag) like ?4) and
-                (?5 is null or p.promoType = ?5) and
-                (?6 is null or p.promoAction = ?6) and
-                (?7 is null or p.enabled = ?7)
-
-        ]]>
-    </query>
-
 
     <query name="PROMOTION.BY.SHOPCODE.CURRENCY">
         <![CDATA[
@@ -4036,14 +4022,6 @@
              and (p.enabledFrom < ?4 OR p.enabledFrom IS NULL)
              and (p.enabledTo > ?5 OR p.enabledTo IS NULL)
             order by p.enabledFrom asc, p.enabledTo asc, p.rank asc, p.promotionId asc
-        ]]>
-    </query>
-
-    <query name="COUPONS.BY.PROMOTION.ID">
-        <![CDATA[
-            select c from PromotionCouponEntity c
-            where c.promotion.promotionId = ?1
-            order by c.code asc
         ]]>
     </query>
 
@@ -4098,28 +4076,9 @@
         ]]>
     </query>
 
-    <query name="TAX.BY.CODE.SHOPCODE.CURRENCY">
-        <![CDATA[
-            select t from TaxEntity t where
-                (?1 is null or t.shopCode = ?1) and
-                (?2 is null or t.currency = ?2) and
-                (?3 is null or lower(t.code) like ?3)
-        ]]>
-    </query>
-
     <query name="TAX.BY.SHOPCODE.CURRENCY">
         <![CDATA[
             select t from TaxEntity t where t.shopCode = ?1 and t.currency = ?2
-        ]]>
-    </query>
-
-    <query name="TAXCONFIG.BY.TAX.COUNTRY.STATE.PRODUCT">
-        <![CDATA[
-            select tc from TaxConfigEntity tc where
-                tc.tax.taxId = ?1 and
-                (?2 is null or tc.countryCode = ?2) and
-                (?3 is null or tc.stateCode = ?3) and
-                (?4 is null or tc.productCode = ?4)
         ]]>
     </query>
 

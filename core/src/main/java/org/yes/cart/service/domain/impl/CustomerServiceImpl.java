@@ -195,16 +195,14 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
         if (disabled != null) {
             if (params.isEmpty()) {
-                hqlCriteria.append(" where cse.disabled = ?1 ");
+                hqlCriteria.append(" where (cse.disabled = ?1) ");
             } else {
-                hqlCriteria.append(" and cse.disabled = ?2 ");
+                hqlCriteria.append(" and (cse.disabled = ?2) ");
             }
             params.add(disabled);
         }
 
         HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
-
-        // hqlCriteria.append(" group by cse.customer ");
 
         if (StringUtils.isNotBlank(sort)) {
 

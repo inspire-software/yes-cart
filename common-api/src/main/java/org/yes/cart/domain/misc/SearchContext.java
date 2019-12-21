@@ -69,7 +69,7 @@ public class SearchContext {
 
     public enum MatchMode {
 
-        LT("<"), LE("<="), NE("="), EQ("="), GE(">="), GT(">"), NULL("null"), NOTNULL("not null"), ANY("*");
+        LT("<"), LE("<="), NE("="), EQ("="), GE(">="), GT(">"), NULL("null"), NOTNULL("not null"), EMPTY("empty"), NOTEMPTY("not empty"), ANY("*");
 
         private final String mode;
 

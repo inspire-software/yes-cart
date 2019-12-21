@@ -17,13 +17,13 @@
 package org.yes.cart.service.domain.impl;
 
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -45,16 +45,12 @@ public class PromotionServiceCachedImpl implements PromotionService {
         return promotionService.getPromotionsByShopCode(shopCode, currency, active);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<Promotion> findByParameters(final String code,
-                                            final String shopCode,
-                                            final String currency,
-                                            final String tag,
-                                            final String type,
-                                            final String action,
-                                            final Boolean enabled) {
-        return promotionService.findByParameters(code, shopCode, currency, tag, type, action, enabled);
+    public Promotion findPromotionByCode(final String code, final boolean active) {
+        return promotionService.findPromotionByCode(code, active);
     }
 
     /**
@@ -63,6 +59,23 @@ public class PromotionServiceCachedImpl implements PromotionService {
     @Override
     public Long findPromotionIdByCode(final String code) {
         return promotionService.findPromotionIdByCode(code);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Promotion> findPromotions(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return promotionService.findPromotions(start, offset, sort, sortDescending, filter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findPromotionCount(final Map<String, List> filter) {
+        return promotionService.findPromotionCount(filter);
     }
 
     /**

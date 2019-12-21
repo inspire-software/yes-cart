@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.SkuPrice;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Price service.
@@ -108,12 +109,35 @@ public interface PriceService extends GenericService<SkuPrice> {
                                 String selectedSku,
                                 String currencyCode);
 
+
+
     /**
-     * Get promotion context for given shop for current time frame.
+     * Find prices by given search criteria. Search will be performed using like operation.
      *
-     * @param shopCode shop code
-     * @param currency currency
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of prices.
      */
-    void refresh(String shopCode, String currency);
+    List<SkuPrice> findPrices(int start,
+                              int offset,
+                              String sort,
+                              boolean sortDescending,
+                              Map<String, List> filter);
+
+    /**
+     * Find prices by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findPriceCount(Map<String, List> filter);
+
+
+
 
 }

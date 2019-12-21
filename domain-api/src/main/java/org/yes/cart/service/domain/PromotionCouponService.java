@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.PromotionCoupon;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -26,15 +27,6 @@ import java.util.List;
  * Time: 11:03 PM
  */
 public interface PromotionCouponService extends GenericService<PromotionCoupon> {
-
-    /**
-     * Get all coupons for given promotion.
-     *
-     * @param promotionId promotion PK
-     *
-     * @return list of coupons
-     */
-    List<PromotionCoupon> findByPromotionId(Long promotionId);
 
     /**
      * Get all coupons for given promotion.
@@ -90,5 +82,36 @@ public interface PromotionCouponService extends GenericService<PromotionCoupon> 
      * @param promotionId promo ID
      */
     void removeAll(long promotionId);
+
+
+
+    /**
+     * Find promotion coupons by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of coupons.
+     */
+    List<PromotionCoupon> findPromotionCoupons(int start,
+                                               int offset,
+                                               String sort,
+                                               boolean sortDescending,
+                                               Map<String, List> filter);
+
+    /**
+     * Find promotion coupons by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findPromotionCouponCount(Map<String, List> filter);
+
+
+
 
 }

@@ -1176,12 +1176,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             final int pos = code.indexOf(':');
             if (pos == -1) {
                 // simple promo
-                final List<Promotion> promotions = promotionService.findByParameters(code, null, null, null, null, null, Boolean.TRUE);
-                if (promotions.isEmpty()) {
+                final Promotion promotion = promotionService.findPromotionByCode(code, true);
+                if (promotion == null) {
                     continue;
                 }
 
-                final Promotion data = promotions.get(0);
+                final Promotion data = promotion;
 
                 result.put(code, new PromotionModelImpl(
                         code,
@@ -1200,12 +1200,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 final String realCode = code.substring(0, pos);
                 final String coupon = code.substring(pos + 1);
 
-                final List<Promotion> promotions = promotionService.findByParameters(realCode, null, null, null, null, null, Boolean.TRUE);
-                if (promotions.isEmpty()) {
+                final Promotion promotion = promotionService.findPromotionByCode(realCode, true);
+                if (promotion == null) {
                     continue;
                 }
 
-                final Promotion data = promotions.get(0);
+                final Promotion data = promotion;
 
                 result.put(code, new PromotionModelImpl(
                         realCode,

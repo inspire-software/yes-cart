@@ -4,20 +4,18 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CODE' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('code')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'code'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'DESCRIPTION' | translate }}</th>
-        <th>{{ 'TAX_RATE' | translate }}</th>
-        <th>{{ 'TAX_TYPE' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('taxRate')">{{ 'TAX_RATE' | translate }} <span [hidden]="sortColumn != 'taxRate'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('exclusiveOfPrice')">{{ 'TAX_TYPE' | translate }} <span [hidden]="sortColumn != 'exclusiveOfPrice'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredTaxes; let i = index" class="{{row == selectedTax ? 'active' : ''}}">
-        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
-          <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}</a>&nbsp;</td>
-          <td title="{{ 'TAX_RATE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.taxRate | ycprice }}%</a></td>
-          <td title="{{ 'TAX_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ (row.exclusiveOfPrice ? 'TAX_TYPE_EXCLUSIVE' : 'TAX_TYPE_INCLUSIVE') | translate }}</a></td>
-        </ng-template>
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}} <span [hidden]="row.shopCode == selectedShopCode"><i class="fa fa-share-alt-square" title="{{row.shopCode}}"></i></span></a></td>
+        <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}</a>&nbsp;</td>
+        <td title="{{ 'TAX_RATE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.taxRate | ycprice }}%</a></td>
+        <td title="{{ 'TAX_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ (row.exclusiveOfPrice ? 'TAX_TYPE_EXCLUSIVE' : 'TAX_TYPE_INCLUSIVE') | translate }}</a></td>
       </tr>
       </tbody>
     </table>

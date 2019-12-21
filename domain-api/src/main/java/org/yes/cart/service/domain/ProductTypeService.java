@@ -55,7 +55,7 @@ public interface ProductTypeService extends GenericService<ProductType> {
      * @param sortDescending    optional sort property direction
      * @param filter            optional filters (e.g. name, guid)
      *
-     * @return list of brands.
+     * @return list of types.
      */
     List<ProductType> findProductTypes(int start,
                                        int offset,

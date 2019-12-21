@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.Promotion;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -40,34 +41,53 @@ public interface PromotionService extends GenericService<Promotion> {
     List<Promotion> getPromotionsByShopCode(String shopCode, String currency, boolean active);
 
     /**
-     * Manager search function to find promotions by given parameters.
+     * Get promotion id by given code
      *
-     * @param code promo code
-     * @param shopCode optional shop code
-     * @param currency optional currency
-     * @param tag tag
-     * @param type optional type
-     * @param action optional action
-     * @param enabled optional enabled
+     * @param code given code
+     * @param active true if only active promotions to be retrieved
      *
-     * @return promotions that satisfy criteria
+     * @return promotion id if found otherwise null
      */
-    List<Promotion> findByParameters(String code,
-                                     String shopCode,
-                                     String currency,
-                                     String tag,
-                                     String type,
-                                     String action,
-                                     Boolean enabled);
-
+    Promotion findPromotionByCode(String code, boolean active);
 
     /**
      * Get promotion id by given code
      *
      * @param code given code
+     *
      * @return promotion id if found otherwise null
      */
     Long findPromotionIdByCode(String code);
+
+
+
+
+    /**
+     * Find promotions by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of promotions.
+     */
+    List<Promotion> findPromotions(int start,
+                                   int offset,
+                                   String sort,
+                                   boolean sortDescending,
+                                   Map<String, List> filter);
+
+    /**
+     * Find promotions by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findPromotionCount(Map<String, List> filter);
+
 
 
 }

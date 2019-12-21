@@ -17,22 +17,24 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl;
 import org.yes.cart.domain.entity.PromotionCoupon;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
-import org.yes.cart.utils.HQLUtils;
+import org.yes.cart.utils.DateUtils;
 
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -56,102 +58,71 @@ public class DtoPromotionCouponServiceImpl
         super(dtoFactory, promotionCouponGenericService, adaptersRepository);
     }
 
-    /** {@inheritDoc} */
     @Override
-    public List<PromotionCouponDTO> getCouponsByPromotionId(Long promotionId)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<PromotionCouponDTO> findCoupons(final long promotionId, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<PromotionCoupon> coupons = ((PromotionCouponService) service).findByPromotionId(promotionId);
-        final List<PromotionCouponDTO> dtos = new ArrayList<>();
-        fillDTOs(coupons, dtos);
-        return dtos;
-    }
+        final Map<String, List> params = filter.reduceParameters("filter");
+        final List filterParam = params.get("filter");
 
-    /** {@inheritDoc} */
-    @Override
-    public List<PromotionCouponDTO> findBy(final long promotionId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<PromotionCouponDTO> dtos = new ArrayList<>();
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final PromotionCouponService promotionCouponService = (PromotionCouponService) service;
 
         if (promotionId > 0L) {
 
-            List<PromotionCoupon> entities;
+            final Map<String, List> currentFilter = new HashMap<>();
+            if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
 
-            if (StringUtils.isNotBlank(filter)) {
+                final String textFilter = ((String) filterParam.get(0)).trim();
 
-                entities = getService().getGenericDao().findRangeByCriteria(
-                        " where e.promotion.promotionId = ?1 and lower(e.code) like ?2 order by e.code",
-                        page * pageSize, pageSize,
-                        promotionId,
-                        HQLUtils.criteriaIlikeAnywhere(filter)
-                );
+                if (StringUtils.isNotBlank(textFilter)) {
 
-            } else {
+                    final Pair<LocalDateTime, LocalDateTime> dateSearch = ComplexSearchUtils.checkDateRangeSearch(textFilter);
 
-                entities = getService().getGenericDao().findRangeByCriteria(
-                        " where e.promotion.promotionId = ?1 order by e.code",
-                        page * pageSize, pageSize,
-                        promotionId
-                );
+                    if (dateSearch != null) {
 
-            }
+                        final LocalDateTime from = dateSearch.getFirst();
+                        final LocalDateTime to = dateSearch.getSecond();
 
-            fillDTOs(entities, dtos);
+                        final List range = new ArrayList(2);
+                        if (from != null) {
+                            range.add(SearchContext.MatchMode.GT.toParam(DateUtils.iFrom(from)));
+                        }
+                        if (to != null) {
+                            range.add(SearchContext.MatchMode.LE.toParam(DateUtils.iFrom(to)));
+                        }
 
-        }
+                        currentFilter.put("createdTimestamp", range);
 
-        return dtos;
-    }
+                    } else {
 
-    @Override
-    public List<PromotionCouponDTO> findBy(final long promotionId, final Instant createdAfter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<PromotionCouponDTO> dtos = new ArrayList<>();
+                        currentFilter.put("code", Collections.singletonList(textFilter));
 
-        if (promotionId > 0L) {
+                    }
 
-            List<PromotionCoupon> entities;
-
-            if (createdAfter != null) {
-
-                entities = getService().getGenericDao().findByCriteria(
-                        " where e.promotion.promotionId = ?1 and e.createdTimestamp >= ?2 order by e.code",
-                        promotionId,
-                        createdAfter
-                );
-
-            } else {
-
-                entities = getService().getGenericDao().findByCriteria(
-                        " where e.promotion.promotionId = ?1 order by e.code",
-                        promotionId
-                );
+                }
 
             }
 
-            fillDTOs(entities, dtos);
+
+            currentFilter.put("promotionIds", Collections.singletonList(promotionId));
+
+
+            final int count = promotionCouponService.findPromotionCouponCount(currentFilter);
+            if (count > startIndex) {
+
+                final List<PromotionCouponDTO> entities = new ArrayList<>();
+                final List<PromotionCoupon> coupons = promotionCouponService.findPromotionCoupons(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+                fillDTOs(coupons, entities);
+
+                return new SearchResult<>(filter, entities, count);
+
+            }
 
         }
-
-        return dtos;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public byte[] getCouponsByPromotionIdExport(Long promotionId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        final StringBuilder csv = new StringBuilder();
-
-        final List<PromotionCoupon> coupons = ((PromotionCouponService) service).findByPromotionId(promotionId);
-        for (final PromotionCoupon coupon : coupons) {
-
-            csv
-                    .append(coupon.getCode()).append(',')
-                    .append(coupon.getUsageLimit()).append(',')
-                    .append(coupon.getUsageLimitPerCustomer()).append(',')
-                    .append(coupon.getUsageCount()).append('\n');
-
-        }
-        return csv.toString().getBytes(StandardCharsets.UTF_8);
-
+        return new SearchResult<>(filter, Collections.emptyList(), 0);
     }
 
     /** {@inheritDoc} */
