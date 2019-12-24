@@ -17,10 +17,13 @@ package org.yes.cart.domain.vo.converter;
 
 import com.inspiresoftware.lib.dto.geda.adapter.BeanFactory;
 import com.inspiresoftware.lib.dto.geda.adapter.ValueConverter;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoAttrValue;
+import org.yes.cart.domain.vo.VoUtils;
+import org.yes.cart.service.domain.AttributeService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +37,19 @@ import java.util.Map;
  */
 public class CustomValuesListConverter implements ValueConverter {
 
+    private final AttributeService attributeService;
+
+    public CustomValuesListConverter(final AttributeService attributeService) {
+        this.attributeService = attributeService;
+    }
+
     @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
         final List<VoAttrValue> list = new ArrayList<>();
         if (object instanceof Map) {
+
+            final Map<String, I18NModel> attrNames = this.attributeService.getAllAttributeNames();
+
             final Map<String, Pair<String, Map<String, String>>> values = (Map<String, Pair<String, Map<String, String>>>) object;
             for (final Map.Entry<String, Pair<String, Map<String, String>>> entry : values.entrySet()) {
                 final List<MutablePair<String, String>> names = new ArrayList<>();
@@ -51,7 +63,14 @@ public class CustomValuesListConverter implements ValueConverter {
 
                 final VoAttrValue av = new VoAttrValue();
                 av.getAttribute().setCode(entry.getKey());
-                av.getAttribute().setName(entry.getKey());
+                final I18NModel attrName = attrNames.get(entry.getKey());
+                if (attrName != null) {
+                    final String defaultName = attrName.getValue(I18NModel.DEFAULT);
+                    av.getAttribute().setName(StringUtils.isNotBlank(defaultName) ? defaultName : entry.getKey());
+                    av.getAttribute().setDisplayNames(VoUtils.adaptMapToPairs(attrName.getAllValues()));
+                } else {
+                    av.getAttribute().setName(entry.getKey());
+                }
                 av.getAttribute().setSecure(secure);
                 av.setVal(entry.getValue().getFirst());
                 av.setDisplayVals(names);

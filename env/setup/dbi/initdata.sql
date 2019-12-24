@@ -969,6 +969,25 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11151,  'CUSTOMER_BLOCK_CHKOUT_X', 'CUSTOMER_BLOCK_CHECKOUT_X',  1,  NULL,  'Block checkout over X',  'Order amount that blocks checkou. e.g. 10000t', 1006,  1006, 0, 0, 0, 0);
 
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11153,  'ORDER_MANAGER_NAME', 'ORDER_MANAGER_NAME',  0,  NULL,  'Order Manager Name',  'Order Manager Name', 1000,  1006, 0, 0, 0, 0,
+  'en#~#Order Manager Name#~#uk#~#Менеджер замовлення#~#ru#~#Менеджер заказа#~#de#~#Auftragsmanager');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11154,  'ORDER_MANAGER_EMAIL', 'ORDER_MANAGER_EMAIL',  0,  NULL,  'Order Manager Email',  'Order Manager Email', 1000,  1006, 0, 0, 0, 0,
+  'en#~#Order Manager Email#~#uk#~#Email Менеджера замовлення#~#ru#~#Email Менеджера заказа#~#de#~#E-Mail des Auftragsmanagers');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11155,  'managedListLine', 'managedListLine',  0,  NULL,  'List',  'List', 1000,  1006, 0, 0, 0, 0,
+  'en#~#List#~#uk#~#Список#~#ru#~#Список#~#de#~#Liste');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11156,  'ItemCostPrice', 'ItemCostPrice',  0,  NULL,  'Cost',  'Cost', 1000,  1006, 0, 0, 0, 0,
+  'en#~#Procurement#~#uk#~#Закупівля#~#ru#~#Закупка#~#de#~#Beschaffung');
+
+
+
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11200,  'default_addressform', 'default_addressform',  0,
   'default_salutation,default_firstname,default_lastname,default_addressline2,default_addressline1,default_city,default_postcode,default_stateCode,default_countryCode',

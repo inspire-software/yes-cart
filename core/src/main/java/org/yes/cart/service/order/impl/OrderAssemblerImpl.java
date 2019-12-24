@@ -385,6 +385,17 @@ public class OrderAssemblerImpl implements OrderAssembler {
                         shoppingCart.getShoppingContext().getManagerName() + " / " + shoppingCart.getShoppingContext().getManagerEmail(),
                         newDefaultModel("AUDITEXPORT")
                 );
+
+                customerOrder.putValue("ORDER_MANAGER_NAME",
+                        shoppingCart.getShoppingContext().getManagerName(),
+                        new NonI18NModel(shoppingCart.getShoppingContext().getManagerName())
+                );
+
+                customerOrder.putValue("ORDER_MANAGER_EMAIL",
+                        shoppingCart.getShoppingContext().getManagerName(),
+                        new NonI18NModel(shoppingCart.getShoppingContext().getManagerName())
+                );
+
             }
         }
 
@@ -723,7 +734,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
     private I18NModel convertToValueI18nModel(final I18NModel nameModel, final I18NModel value, final String defaultPrefix) {
         final I18NModel display = new StringI18NModel();
-        display.putValue(I18NModel.DEFAULT, defaultPrefix + ": " + value.getValue(I18NModel.DEFAULT));
+        if (StringUtils.isNotBlank(defaultPrefix)) {
+            display.putValue(I18NModel.DEFAULT, defaultPrefix + ": " + value.getValue(I18NModel.DEFAULT));
+        } else {
+            display.putValue(I18NModel.DEFAULT, value.getValue(I18NModel.DEFAULT));
+        }
         if (nameModel != null) {
             for (final Map.Entry<String, String> name : nameModel.getAllValues().entrySet()) {
                 display.putValue(name.getKey(), name.getValue() + ": " + value.getValue(name.getKey()));

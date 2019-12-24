@@ -292,6 +292,24 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11325,  'SHOP_CUSTOMER_RECORDS_COLUMNS', 'SHOP_CUSTOMER_RECORDS_COLUMNS',  0,  NULL,  'Manager: Quantity of customer pods in one row in list',
    'Quantity of product pods in one row to show on category page',  1006, 1001, 0, 0, 0, 0);
 
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11153,  'ORDER_MANAGER_NAME', 'ORDER_MANAGER_NAME',  0,  NULL,  'Order Manager Name',  'Order Manager Name', 1000,  1006, 0, 0, 0, 0,
+  'en#~#Order Manager Name#~#uk#~#Менеджер замовлення#~#ru#~#Менеджер заказа#~#de#~#Auftragsmanager');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11154,  'ORDER_MANAGER_EMAIL', 'ORDER_MANAGER_EMAIL',  0,  NULL,  'Order Manager Email',  'Order Manager Email', 1000,  1006, 0, 0, 0, 0,
+  'en#~#Order Manager Email#~#uk#~#Email Менеджера замовлення#~#ru#~#Email Менеджера заказа#~#de#~#E-Mail des Auftragsmanagers');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11155,  'managedListLine', 'managedListLine',  0,  NULL,  'List',  'List', 1000,  1006, 0, 0, 0, 0,
+  'en#~#List#~#uk#~#Список#~#ru#~#Список#~#de#~#Liste');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11156,  'ItemCostPrice', 'ItemCostPrice',  0,  NULL,  'Cost',  'Cost', 1000,  1006, 0, 0, 0, 0,
+  'en#~#Procurement#~#uk#~#Закупівля#~#ru#~#Закупка#~#de#~#Beschaffung');
+
+
 --
 -- YC-802 Improved data federation
 --

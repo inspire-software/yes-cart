@@ -18,7 +18,6 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -154,6 +153,12 @@ public class VoCustomerOrderInfo {
 
     @DtoField(value = "allValues", converter = "CustomValuesList", readOnly = true)
     private List<VoAttrValue> allValues;
+
+    private boolean managedOrder;
+
+    private String managerName;
+
+    private String managerEmail;
 
     public long getCustomerorderId() {
         return customerorderId;
@@ -531,11 +536,50 @@ public class VoCustomerOrderInfo {
         this.requestedDeliveryDate = requestedDeliveryDate;
     }
 
+    public boolean isManagedOrder() {
+        return managedOrder;
+    }
+
+    public void setManagedOrder(final boolean managedOrder) {
+        this.managedOrder = managedOrder;
+    }
+
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManagerName(final String managerName) {
+        this.managerName = managerName;
+    }
+
+    public String getManagerEmail() {
+        return managerEmail;
+    }
+
+    public void setManagerEmail(final String managerEmail) {
+        this.managerEmail = managerEmail;
+    }
+
     public List<VoAttrValue> getAllValues() {
         return allValues;
     }
 
     public void setAllValues(final List<VoAttrValue> allValues) {
         this.allValues = allValues;
+        this.remapOrderValues();
+    }
+
+    private void remapOrderValues() {
+        if (this.allValues != null) {
+            for (final VoAttrValue av : this.allValues) {
+                if ("ORDER_MANAGER_NAME".equals(av.getAttribute().getCode())) {
+                    this.managerName = av.getVal();
+                    this.managedOrder = true;
+                } else if ("ORDER_MANAGER_EMAIL".equals(av.getAttribute().getCode())) {
+                    this.managerEmail = av.getVal();
+                    this.managedOrder = true;
+                }
+            }
+        }
     }
 }

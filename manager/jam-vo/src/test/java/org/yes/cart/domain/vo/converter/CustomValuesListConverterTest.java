@@ -16,16 +16,16 @@
 
 package org.yes.cart.domain.vo.converter;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoAttrValue;
+import org.yes.cart.service.domain.AttributeService;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -36,8 +36,18 @@ import static org.junit.Assert.*;
  */
 public class CustomValuesListConverterTest {
 
+    private Mockery context = new JUnit4Mockery();
+
     @Test
     public void testConvert() throws Exception {
+
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+
+        context.checking(new Expectations() {{
+            allowing(attributeService).getAllAttributeNames();
+            will(returnValue(Collections.singletonMap("ABC2", new StringI18NModel(Collections.singletonMap("xx", "Def 2 Attr")))));
+        }});
+
 
         final Map<String, Pair<String, Map<String, String>>> custom = new LinkedHashMap<>();
         custom.put("ABC1", new Pair<>("DEF1", Collections.singletonMap("EN", "Def 1")));
@@ -46,7 +56,7 @@ public class CustomValuesListConverterTest {
         custom.put("ABC4", new Pair<>("DEF4", Collections.singletonMap("xx", "SUPPLIER")));
 
 
-        final CustomValuesListConverter converter = new CustomValuesListConverter();
+        final CustomValuesListConverter converter = new CustomValuesListConverter(attributeService);
 
         final List<VoAttrValue> empty = (List) converter.convertToDto(null, null);
         assertNotNull(empty);
@@ -64,7 +74,7 @@ public class CustomValuesListConverterTest {
         assertEquals("Def 1", list.get(0).getDisplayVals().get(0).getSecond());
 
         assertEquals("ABC2", list.get(1).getAttribute().getCode());
-        assertEquals("ABC2", list.get(1).getAttribute().getName());
+        assertEquals("Def 2 Attr", list.get(1).getAttribute().getName());
         assertFalse(list.get(1).getAttribute().isSecure());
         assertEquals("DEF2", list.get(1).getVal());
         assertTrue(list.get(1).getDisplayVals().isEmpty());

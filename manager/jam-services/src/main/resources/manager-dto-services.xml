@@ -75,7 +75,9 @@
     <bean id="voMapToListPairs"                     class="org.yes.cart.domain.vo.converter.MapToMutablePairListConverter"/>
     <bean id="voCSVToList"                          class="org.yes.cart.domain.vo.converter.CSVToListConverter"/>
     <bean id="voCSVToListDatesPairs"                class="org.yes.cart.domain.vo.converter.CSVToListDatesPairsConverter"/>
-    <bean id="voCustomValuesList"                   class="org.yes.cart.domain.vo.converter.CustomValuesListConverter"/>
+    <bean id="voCustomValuesList"                   class="org.yes.cart.domain.vo.converter.CustomValuesListConverter">
+        <constructor-arg index="0" ref="attributeService"/>
+    </bean>
     <bean id="voProductTypeAttrNavigationRanges"    class="org.yes.cart.domain.vo.converter.StringToProductTypeAttrNavigationRangesConverter"/>
     <bean id="voCategoryNavigationPriceTiers"       class="org.yes.cart.domain.vo.converter.StringToCategoryNavigationPriceTiersConverter"/>
     <bean id="voStringToMappingConverter"           class="org.yes.cart.domain.vo.converter.StringToMappingConverter"/>

@@ -146,8 +146,11 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
   }
 
   getXXDisplayValue(val: AttrValueVO): string {
-    if (val.displayVals != null && val.displayVals.length == 1 && val.displayVals[0].first == 'xx') {
-      return val.displayVals[0].second;
+    if (val.displayVals != null) {
+      let xxPair = val.displayVals.find(av => av.first == 'xx');
+      if (xxPair) {
+        return  xxPair.second;
+      }
     }
     return null;
   }
@@ -174,11 +177,34 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     return vals;
   }
 
+
+  getAttributeName(attr:AttrValueVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = attr.attribute.displayNames;
+    let def = attr.attribute.name != null ? attr.attribute.name : attr.attribute.code;
+
+    if (i18n == null) {
+      return def;
+    }
+
+    let namePair = i18n.find(_name => {
+      return _name.first == lang;
+    });
+
+    if (namePair != null) {
+      return namePair.second;
+    }
+
+    return def;
+  }
+
   getDisplayValue(attr:AttrValueVO, useDefault:boolean = true):string {
 
     let lang = I18nEventBus.getI18nEventBus().current();
+    let attrName = this.getAttributeName(attr);
     let i18n = attr.displayVals;
-    let def = useDefault ? attr.attribute.code + ': ' + attr.val : '';
+    let def = useDefault ? attrName + ': ' + attr.val : '';
 
     if (i18n == null) {
       return def;
@@ -226,6 +252,9 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
 
   protected getUserIcon(row:CustomerOrderVO) {
     if (row.customerId > 0) {
+      if (row.managedOrder) {
+        return '<i class="fa fa-user-plus" title="' + row.managerName + ' / ' + row.managerEmail + '"></i>';
+      }
       return '<i class="fa fa-user"></i>';
     }
     return '';

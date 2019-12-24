@@ -46,6 +46,10 @@ export interface CustomerOrderInfoVO {
   middlename : string;
   customerId : number;
 
+  managedOrder : boolean;
+  managerName : string;
+  managerEmail : string;
+
   currency : string;
   orderTotal : number; // GrossPrice + SUM(delivery.GrossPrice)
   orderTotalTax : number; // GrossPrice + SUM(delivery.GrossPrice)

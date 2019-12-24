@@ -114,6 +114,9 @@ export class CustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected getUserIcon(row:CustomerOrderInfoVO) {
     if (row.customerId > 0) {
+      if (row.managedOrder) {
+        return '<i class="fa fa-user-plus" title="' + row.managerName + ' / ' + row.managerEmail  + '"></i>';
+      }
       return '<i class="fa fa-user"></i>';
     }
     return '';
