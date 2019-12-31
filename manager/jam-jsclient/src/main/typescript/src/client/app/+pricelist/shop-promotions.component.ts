@@ -147,8 +147,8 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       searchContext: {
         parameters: {
           filter: [],
-          promoTypes: [],
-          promoActions: []
+          types: [],
+          actions: []
         },
         start: 0,
         size: Config.UI_TABLE_PAGE_SIZE,
@@ -562,8 +562,8 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       });
 
       this.promotions.searchContext.parameters.filter = [ this.promotionFilter ];
-      this.promotions.searchContext.parameters.promoTypes = types;
-      this.promotions.searchContext.parameters.promoActions = actions;
+      this.promotions.searchContext.parameters.types = types;
+      this.promotions.searchContext.parameters.actions = actions;
       this.promotions.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
 
       let _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotions.searchContext).subscribe( allpromotions => {
