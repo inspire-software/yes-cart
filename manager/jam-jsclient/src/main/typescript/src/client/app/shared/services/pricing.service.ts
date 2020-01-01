@@ -23,7 +23,7 @@ import {
   TaxVO, TaxConfigVO,
   PromotionVO, PromotionCouponVO,
   CartVO, PromotionTestVO,
-  Pair, SearchContextVO, SearchResultVO
+  SearchContextVO, SearchResultVO
 } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';

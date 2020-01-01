@@ -291,7 +291,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
     if (ModalAction.POSITIVE === modalresult.action) {
       let supplier:ProductSupplierCatalogVO = { code: this.newSupplier.code };
       this._suppliers[supplier.code] = supplier;
-      this.onAvailableSupplierClick({ first: supplier, second: { managerId: this.manager.managerId, code: supplier.code }})
+      this.onAvailableSupplierClick({ first: supplier, second: { managerId: this.manager.managerId, code: supplier.code }});
     }
   }
 

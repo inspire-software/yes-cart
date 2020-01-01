@@ -22,7 +22,6 @@ import { ITreeNode } from './../../shared/tree-view/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
-import { Util } from './../../shared/services/util';
 
 @Component({
   selector: 'yc-manager-categories-min',

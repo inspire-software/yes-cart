@@ -320,7 +320,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
         this.loading = false;
         _sub2.unsubscribe();
         this.getAllManagers();
-      })
+      });
     });
   }
 

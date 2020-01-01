@@ -69,7 +69,7 @@ export class PIMService {
 
     return this.http.post(this._serviceBaseUrl + '/product/filtered', body,
           Util.requestOptions())
-      .map(res => <ProductVO[]> this.json(res))
+      .map(res => <SearchResultVO<ProductVO>> this.json(res))
       .catch(this.handleError);
   }
 
@@ -166,7 +166,7 @@ export class PIMService {
 
     return this.http.post(this._serviceBaseUrl + '/product/sku/filtered', body,
           Util.requestOptions())
-      .map(res => <ProductSkuVO[]> this.json(res))
+      .map(res => <SearchResultVO<ProductSkuVO>> this.json(res))
       .catch(this.handleError);
   }
 
