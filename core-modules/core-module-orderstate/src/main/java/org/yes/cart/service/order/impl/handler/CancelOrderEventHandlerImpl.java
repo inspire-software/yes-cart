@@ -130,7 +130,8 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                 final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
                 if (selected == null) {
-                    LOG.warn(Markers.alert(),
+                    LOG.warn(
+                            Markers.alert(),
                             "Warehouse is not found for delivery detail {}:{}",
                             delivery.getDeliveryNum(), det.getProductSkuCode()
                     );
@@ -141,6 +142,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                         final BigDecimal rem = inventoryResolver.voidReservation(selected, skuCode, toCredit);
                         if (MoneyUtils.isPositive(rem)) {
                             LOG.warn(
+                                    Markers.alert(),
                                     "Could not void all reservation {}:{}",
                                     delivery.getDeliveryNum(), det.getProductSkuCode()
                             );
@@ -150,6 +152,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                         final BigDecimal rem = inventoryResolver.credit(selected, skuCode, toCredit);
                         if (MoneyUtils.isPositive(rem)) {
                             LOG.warn(
+                                    Markers.alert(),
                                     "Could not credit all reservation {}:{}",
                                     delivery.getDeliveryNum(), det.getProductSkuCode()
                             );

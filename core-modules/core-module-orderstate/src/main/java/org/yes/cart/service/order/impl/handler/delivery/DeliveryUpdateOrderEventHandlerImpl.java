@@ -379,7 +379,8 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                 final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
                 if (selected == null) {
-                    LOG.warn(Markers.alert(),
+                    LOG.warn(
+                            Markers.alert(),
                             "Warehouse is not found for delivery detail {}:{}",
                             orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                     );

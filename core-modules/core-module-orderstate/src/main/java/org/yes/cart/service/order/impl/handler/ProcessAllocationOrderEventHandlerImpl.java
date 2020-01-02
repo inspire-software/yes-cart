@@ -29,6 +29,7 @@ import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.utils.MoneyUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -119,6 +120,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
                 if (selected == null) {
                     LOG.error(
+                            Markers.alert(),
                             "Warehouse is not found for delivery detail {}:{}",
                             orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                     );

@@ -29,6 +29,7 @@ import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.utils.TimeContext;
+import org.yes.cart.utils.log.Markers;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -80,6 +81,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl extends ProcessAllo
 
                     if (selected == null) {
                         LOG.warn(
+                                Markers.alert(),
                                 "Warehouse is not found for delivery detail {}:{}",
                                 orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                         );
@@ -92,6 +94,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl extends ProcessAllo
                     );
                     if (stock == null || !stock.isAvailable(now()) || !stock.isAvailableToAllocate(det.getQty())) {
                         LOG.info(
+                                Markers.alert(),
                                 "Not enough stock for delivery detail {}:{}",
                                 orderDelivery.getDeliveryNum(), det.getProductSkuCode()
                         );
