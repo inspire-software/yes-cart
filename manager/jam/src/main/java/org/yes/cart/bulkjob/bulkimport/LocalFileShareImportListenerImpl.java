@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.bulkcommon.service.ImportDirectorService;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
@@ -184,24 +182,14 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
         if (shopDirs != null) {
 
-            SecurityContextHolder.getContext().setAuthentication(GLOBAL);
-
             final String importDirPath = importDirectorService.getImportDirectory();
             LOG.info("Detected import directory root {}", importDirPath);
-
-            final List<Map<String, String>> importGroupsMap = importDirectorService.getImportGroups("en");
-            final Set<String> importGroupNames = new HashSet<>();
-            for (final Map<String, String> group : importGroupsMap) {
-                importGroupNames.add(group.get("name"));
-            }
-            LOG.info("Detected import groups: {}", StringUtils.join(importGroupNames, ","));
-
 
             try {
 
                 for (final File shopDir : shopDirs) {
 
-                    runShopRootScan(shopDir, importDirPath, importGroupNames);
+                    runShopRootScan(shopDir, importDirPath);
 
                 }
 
@@ -209,16 +197,12 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                 LOG.error(Markers.alert(), "Auto import failure: " + exp.getMessage(), exp);
 
-            } finally {
-
-                SecurityContextHolder.clearContext();
-
             }
 
         }
     }
 
-    private void runShopRootScan(final File shopDir, final String importDirPath, final Set<String> importGroupNames) {
+    private void runShopRootScan(final File shopDir, final String importDirPath) {
 
         final Shop shop = shopService.getShopByCode(shopDir.getName());
         if (shop != null) {
@@ -237,7 +221,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                     return;
                 }
 
-                final Map<Pattern, Map<String, String>> patternGroupMap = loadShopAutoImportConfigurations(configProps, importGroupNames);
+                final Map<Pattern, Map<String, String>> patternGroupMap = loadShopAutoImportConfigurations(configProps);
 
                 final File processed = ensureDirectoryExists(shopDir, shop, "processed");
 
@@ -275,81 +259,77 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                     }
 
                     final String groupName = groupData.get("group");
+                    final String user = groupData.get("user");
+                    final String pass = groupData.get("pass");
 
-                    LOG.info("Importing '{}' for shop {} using group {}", toImport.getAbsolutePath(), shop.getCode(), groupName);
+                    final Authentication shopAuth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, pass));
+                    if (shopAuth.isAuthenticated()) {
+                        SecurityContextHolder.getContext().setAuthentication(new RunAsUserAuthentication(user, pass, shopAuth.getAuthorities()));
 
-                    final String destination = moveFileToImportDirectory(toImport, targetDirectory);
+                        final long startImport = getTimeNow();
 
-
-                    try {
-
-                        final String user = groupData.get("user");
-                        final String pass = groupData.get("pass");
-
-                        final Authentication shopAuth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, pass));
-                        if (shopAuth.isAuthenticated()) {
-                            SecurityContextHolder.getContext().setAuthentication(new RunAsUserAuthentication(user, pass, shopAuth.getAuthorities()));
-
-                            final long startImport = getTimeNow();
-
-                            // Make this synchronous since we are already in async process
-                            final String importToken = importDirectorService.doImport(groupName, destination, false);
-                            final JobStatus importStatus = importDirectorService.getImportStatus(importToken);
-
-                            final long finishImport = getTimeNow();
-                            final long msImport = (finishImport - startImport);
-                            final long secImport = msImport > 0 ? msImport / 1000 : 0;
-
-                            LOG.info("Importing '{}' for shop {} using group {} ... completed [{}] in {}s", toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion(), secImport);
-
-                            final AsyncContext cacheCtx = createCtx(AttributeNamesKeys.System.SYSTEM_CONNECTOR_TIMEOUT_MS);
-                            clusterService.evictAllCache(cacheCtx);
-
-                            if (importStatus.getCompletion() == JobStatus.Completion.OK) {
-
-                                final boolean reindex = Boolean.valueOf(groupData.get("reindex"));
-                                if (reindex) {
-
-                                    final long startIndex = getTimeNow();
-
-                                    LOG.info("Re-indexed products for shop {} using group {} ... starting", shop.getCode(), groupName);
-
-                                    final AsyncContext reindexCtx = createCtx(AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
-                                    Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
-                                    final String indexToken = reindexService.reindexAllProducts(reindexCtx);
-                                    while (true) {
-                                        Thread.sleep(INDEX_PING_INTERVAL);
-                                        JobStatus reindexStatus = reindexService.getIndexJobStatus(reindexCtx, indexToken);
-                                        if (reindexStatus.getState() == JobStatus.State.FINISHED) {
-
-                                            final long finishIndex = getTimeNow();
-                                            final long msIndex = (finishIndex - startIndex);
-                                            final long secIndex = msIndex > 0 ? msIndex / 1000 : 0;
-
-                                            LOG.info("Re-indexed products for shop {} using group {} ... completed [{}] in {}s", shop.getCode(), groupName, reindexStatus.getCompletion(), secIndex);
-
-                                            clusterService.evictAllCache(cacheCtx);
-                                            Thread.sleep(WARMUP_GET_READY_TIMEOUT);
-                                            clusterService.warmUp(cacheCtx);
-
-                                            break;
-                                        }
-                                    }
-
-                                }
-                            }
-
-
-
-                        } else {
-                            LOG.warn("Invalid credentials for '{}' for shop {} using group {}", user, shop.getCode(), groupName);
+                        if (!getImportGroupNames().contains(groupName)) {
+                            LOG.warn("Configuration {} is not a valid import group ... skipping", groupName);
+                            continue;
                         }
 
-                    } finally {
-                        // Reinstate global context of AutoImport
-                        SecurityContextHolder.getContext().setAuthentication(GLOBAL);
-                    }
+                        LOG.info("Importing '{}' for shop {} using group {}", toImport.getAbsolutePath(), shop.getCode(), groupName);
 
+                        final String destination = moveFileToImportDirectory(toImport, targetDirectory);
+
+
+                        // Make this synchronous since we are already in async process
+                        final String importToken = importDirectorService.doImport(groupName, destination, false);
+                        final JobStatus importStatus = importDirectorService.getImportStatus(importToken);
+
+                        final long finishImport = getTimeNow();
+                        final long msImport = (finishImport - startImport);
+                        final long secImport = msImport > 0 ? msImport / 1000 : 0;
+
+                        LOG.info("Importing '{}' for shop {} using group {} ... completed [{}] in {}s", toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion(), secImport);
+
+                        final AsyncContext cacheCtx = createCtx(AttributeNamesKeys.System.SYSTEM_CONNECTOR_TIMEOUT_MS);
+                        clusterService.evictAllCache(cacheCtx);
+
+                        if (importStatus.getCompletion() == JobStatus.Completion.OK) {
+
+                            final boolean reindex = Boolean.valueOf(groupData.get("reindex"));
+                            if (reindex) {
+
+                                final long startIndex = getTimeNow();
+
+                                LOG.info("Re-indexed products for shop {} using group {} ... starting", shop.getCode(), groupName);
+
+                                final AsyncContext reindexCtx = createCtx(AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
+                                Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
+                                final String indexToken = reindexService.reindexAllProducts(reindexCtx);
+                                while (true) {
+                                    Thread.sleep(INDEX_PING_INTERVAL);
+                                    JobStatus reindexStatus = reindexService.getIndexJobStatus(reindexCtx, indexToken);
+                                    if (reindexStatus.getState() == JobStatus.State.FINISHED) {
+
+                                        final long finishIndex = getTimeNow();
+                                        final long msIndex = (finishIndex - startIndex);
+                                        final long secIndex = msIndex > 0 ? msIndex / 1000 : 0;
+
+                                        LOG.info("Re-indexed products for shop {} using group {} ... completed [{}] in {}s", shop.getCode(), groupName, reindexStatus.getCompletion(), secIndex);
+
+                                        clusterService.evictAllCache(cacheCtx);
+                                        Thread.sleep(WARMUP_GET_READY_TIMEOUT);
+                                        clusterService.warmUp(cacheCtx);
+
+                                        break;
+                                    }
+                                }
+
+                            }
+                        }
+
+
+
+                    } else {
+                        LOG.warn("Invalid credentials for '{}' for shop {} using group {}", user, shop.getCode(), groupName);
+                    }
 
                 }
             } catch (Exception exp) {
@@ -365,7 +345,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
         return System.currentTimeMillis();
     }
 
-    private Map<Pattern, Map<String, String>> loadShopAutoImportConfigurations(final File configProps, final Set<String> importGroupNames) throws IOException {
+    private Map<Pattern, Map<String, String>> loadShopAutoImportConfigurations(final File configProps) throws IOException {
 
         final Properties configuration = new Properties();
         configuration.load(new FileInputStream(configProps));
@@ -378,9 +358,6 @@ public class LocalFileShareImportListenerImpl implements Runnable {
             final String cfgGroup = configuration.getProperty("config." + i + ".group");
             if (StringUtils.isBlank(cfgGroup)) {
                 break;  // finished as there are not more configs (by convention)
-            } else if (!importGroupNames.contains(cfgGroup)) {
-                LOG.warn("Configuration {} is not a valid import group ... skipping", cfgGroup);
-                continue;
             }
 
             final String cfgRegex = configuration.getProperty("config." + i + ".regex");
@@ -449,6 +426,19 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
     }
 
+    private Set<String> getImportGroupNames() {
+
+        final List<Map<String, String>> importGroupsMap = importDirectorService.getImportGroups("en");
+        final Set<String> importGroupNames = new HashSet<>();
+        for (final Map<String, String> group : importGroupsMap) {
+            importGroupNames.add(group.get("name"));
+        }
+        LOG.info("Detected import groups: {}", StringUtils.join(importGroupNames, ","));
+
+        return importGroupNames;
+
+    }
+
     /**
      * As this is asynchronous process we can have multitude of files, maybe even for
      * multiple imports. Therefore to apply them correctly we need to sort the files in correct
@@ -494,17 +484,6 @@ public class LocalFileShareImportListenerImpl implements Runnable {
     }
 
     private static final String PRINCIPAL = "AutoImport";
-
-    /**
-     * This is a custom authentication to allow listener to send command to bulk import service
-     */
-    private static final Authentication GLOBAL = new RunAsUserAuthentication(
-            PRINCIPAL, null,
-            Arrays.asList(new GrantedAuthority[]{
-                    new SimpleGrantedAuthority("ROLE_SMADMIN"),
-                    new SimpleGrantedAuthority("ROLE_AUTO")
-            })
-    );
 
     private AsyncContext createCtx(final String cacheTimeOutKey) {
         final Map<String, Object> param = new HashMap<>();
