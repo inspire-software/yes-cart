@@ -26,6 +26,7 @@ import org.yes.cart.service.domain.WarehouseService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -97,6 +98,18 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     }, allEntries = true)
     public void unassignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
         warehouseService.unassignWarehouse(warehouseId, shopId, soft);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Warehouse> findWarehouses(final int start, final int offset, final String sort, final boolean sortDescending, final Set<Long> shops, final Map<String, List> filter) {
+        return warehouseService.findWarehouses(start, offset, sort, sortDescending, shops, filter);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int findWarehouseCount(final Set<Long> shops, final Map<String, List> filter) {
+        return warehouseService.findWarehouseCount(shops, filter);
     }
 
     /** {@inheritDoc} */

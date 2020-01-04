@@ -17,11 +17,10 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.InventoryDTO;
-import org.yes.cart.domain.dto.WarehouseDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-
-import java.util.List;
 
 /**
  * Bulk inventory service.
@@ -32,24 +31,20 @@ import java.util.List;
  */
 public interface DtoInventoryService {
 
-    /**
-     * List of all warehouses.
-     *
-     * @return list of warehouses
-     */
-    List<WarehouseDTO> getWarehouses() throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Inventory by filter.
+     * Get inventory list by criteria.
      *
-     * @param warehouseId warehouse id
-     * @param filter criteria
-     * @param page start page
-     * @param pageSize page size
+     * @param filter filter
      *
-     * @return inventory
+     * @return list
+     *
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
      */
-    List<InventoryDTO> findBy(long warehouseId, String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<InventoryDTO> findInventory(long warehouseId,
+                                             SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
     /**
      * Create or update inventory object.

@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -37,7 +38,7 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      * @param productId   given product id
      * @param warehouseId given warehouse id.
      *
-     * @return list of founded {@link SkuWarehouse}
+     * @return list of found {@link SkuWarehouse}
      */
     List<SkuWarehouse> getProductSkusOnWarehouse(long productId, long warehouseId);
 
@@ -136,5 +137,36 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      * @return product SKU if found otherwise null
      */
     List<String> findProductSkuByUnavailableBefore(LocalDateTime before);
+
+
+
+
+    /**
+     * Find inventory by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of prices.
+     */
+    List<SkuWarehouse> findSkuWarehouses(int start,
+                                         int offset,
+                                         String sort,
+                                         boolean sortDescending,
+                                         Map<String, List> filter);
+
+    /**
+     * Find inventory by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findSkuWarehouseCount(Map<String, List> filter);
+
+
 
 }

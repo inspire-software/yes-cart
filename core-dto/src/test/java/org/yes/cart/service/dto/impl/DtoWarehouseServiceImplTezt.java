@@ -24,13 +24,14 @@ import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoWarehouseService;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -100,6 +101,39 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testFindWarehouses() throws Exception {
+
+        final Set<Long> shopIds = new HashSet<>(Arrays.asList(10L, 20L));
+        SearchContext ctx;
+        SearchResult<WarehouseDTO> rez;
+
+        // check by code
+        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("WAREHOUSE_1")), 0, 10, "code", false, "filter");
+        rez = dtoService.findWarehouses(shopIds, ctx);
+        assertEquals(1, rez.getTotal());
+        assertEquals(1, rez.getItems().size());
+        assertEquals("WAREHOUSE_1", rez.getItems().get(0).getCode());
+
+        // check all
+        ctx = new SearchContext(Collections.emptyMap(), 0, 10, "code", false, "filter");
+        rez = dtoService.findWarehouses(shopIds, ctx);
+        assertEquals(2, rez.getTotal());
+        assertEquals(2, rez.getItems().size());
+        assertEquals("WAREHOUSE_1", rez.getItems().get(0).getCode());
+        assertEquals("WAREHOUSE_2", rez.getItems().get(1).getCode());
+
+        // check all shops
+        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("WAREHOUSE_")), 0, 10, "code", false, "filter");
+        rez = dtoService.findWarehouses(Collections.emptySet(), ctx);
+        assertEquals(3, rez.getTotal());
+        assertEquals(3, rez.getItems().size());
+        assertEquals("WAREHOUSE_1", rez.getItems().get(0).getCode());
+        assertEquals("WAREHOUSE_2", rez.getItems().get(1).getCode());
+        assertEquals("WAREHOUSE_3", rez.getItems().get(2).getCode());
+
+    }
+
+    @Test
     public void testAssignWarehouse() throws Exception {
         WarehouseDTO dto = getDto(2);
         dto = dtoService.create(dto);
@@ -107,6 +141,8 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
         dtoService.assignWarehouse(dto.getWarehouseId(), 30L, true);
         Map<WarehouseDTO, Boolean> dtos = dtoService.findByShopId(30L, true);
         assertEquals(1, dtos.size());
+        WarehouseDTO updated = dtoService.getById(dto.getWarehouseId());
+        assertEquals(1, updated.getWarehouseShop().size());
         dtos = dtoService.findByShopId(30L, false);
         assertEquals(0, dtos.size());
         dtoService.assignWarehouse(dto.getWarehouseId(), 30L, false);
@@ -155,7 +191,7 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
     private WarehouseDTO getDto(int idx) {
         WarehouseDTO dto = dtoFactory.getByIface(WarehouseDTO.class);
         dto.setCode("W" + idx);
-        dto.setName("warehouese" + idx);
+        dto.setName("w" + idx);
         dto.setDescription("description" + idx);
         return dto;
     }

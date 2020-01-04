@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -140,6 +141,18 @@ public class SkuWarehouseServiceCachedImpl implements SkuWarehouseService {
     @Override
     public List<String> findProductSkuByUnavailableBefore(final LocalDateTime before) {
         return skuWarehouseService.findProductSkuByUnavailableBefore(before);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<SkuWarehouse> findSkuWarehouses(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return skuWarehouseService.findSkuWarehouses(start, offset, sort, sortDescending, filter);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int findSkuWarehouseCount(final Map<String, List> filter) {
+        return skuWarehouseService.findSkuWarehouseCount(filter);
     }
 
     /** {@inheritDoc} */

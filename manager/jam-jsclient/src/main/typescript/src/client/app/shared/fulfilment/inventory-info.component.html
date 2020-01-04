@@ -4,7 +4,7 @@
        positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
        [valid]="true"
        (closed)="onConfirmationResult($event)">
-  <div *ngIf="orders.length == 0">
+  <div *ngIf="!loading && orders.length == 0">
     <p class="bg-warning text-padding">{{ 'INVENTORY_ORDER_RESERVED_NONE' | translate }}</p>
   </div>
   <div class=" {{ loading ? 'loading-data' : '' }}" style="max-height: 400px;overflow-y: auto">

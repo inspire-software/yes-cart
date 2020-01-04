@@ -20,10 +20,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.yes.cart.domain.vo.VoFulfilmentCentre;
-import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
-import org.yes.cart.domain.vo.VoInventory;
-import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -37,9 +34,9 @@ import java.util.List;
 public interface FulfilmentEndpointController {
 
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/centre/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/centre/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoFulfilmentCentre> getAllFulfilmentCentres() throws Exception;
+    VoSearchResult<VoFulfilmentCentre> getFilteredFulfilmentCentres(@RequestBody VoSearchContext filter) throws Exception;
 
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/centre/shop/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -78,9 +75,9 @@ public interface FulfilmentEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMWAREHOUSEUSER"})
-    @RequestMapping(value = "/inventory/centre/{id}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/inventory/centre/{id}/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoInventory> getFilteredInventory(@PathVariable("id") long centreId, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
+    VoSearchResult<VoInventory> getFilteredInventory(@PathVariable("id") long centreId, @RequestBody VoSearchContext filter) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMWAREHOUSEUSER"})
     @RequestMapping(value = "/inventory/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.Warehouse;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -28,6 +29,38 @@ import java.util.Map;
  * Time: 11:13:01
  */
 public interface WarehouseService extends GenericService<Warehouse> {
+
+
+    /**
+     * Find warehouse by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param shops             optional shops to search in
+     * @param filter            optional filters (e.g. firstname, lastname)
+     *
+     * @return list of warehouses, that match search criteria or empty list if nobody found or null if no search criteria provided.
+     */
+    List<Warehouse> findWarehouses(int start,
+                                   int offset,
+                                   String sort,
+                                   boolean sortDescending,
+                                   Set<Long> shops,
+                                   Map<String, List> filter);
+
+    /**
+     * Find warehouses by given search criteria. Search will be performed using like operation.
+     *
+     * @param shops             optional shops to search in
+     * @param filter            optional filters (e.g. firstname, lastname)
+     *
+     * @return count
+     */
+    int findWarehouseCount(Set<Long> shops,
+                           Map<String, List> filter);
+
 
     /**
      * Find warehouses, that assigned to given shop id.

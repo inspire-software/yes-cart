@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoFulfilmentCentre;
 import org.yes.cart.domain.vo.VoInventory;
+import org.yes.cart.domain.vo.VoSearchContext;
 import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
 import org.yes.cart.service.vo.VoFulfilmentService;
 
@@ -49,7 +50,11 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetCentres() throws Exception {
 
-        final List<VoFulfilmentCentre> fcs = voFulfilmentService.getAllFulfilmentCentres();
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("warehouse")));
+        ctxFind.setSize(10);
+
+        final List<VoFulfilmentCentre> fcs = voFulfilmentService.getFilteredFulfilmentCentres(ctxFind).getItems();
         assertNotNull(fcs);
         assertFalse(fcs.isEmpty());
 
@@ -83,38 +88,62 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
         final VoFulfilmentCentre updated = voFulfilmentService.updateFulfilmentCentre(created);
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
-        assertTrue(voFulfilmentService.getAllFulfilmentCentres().stream().anyMatch(fc -> fc.getWarehouseId() == updated.getWarehouseId()));
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList(fulfilmentCentre.getCode())));
+        ctxFind.setSize(10);
+
+        assertTrue(voFulfilmentService.getFilteredFulfilmentCentres(ctxFind).getItems().stream().anyMatch(fc -> fc.getWarehouseId() == updated.getWarehouseId()));
 
         voFulfilmentService.removeFulfilmentCentre(updated.getWarehouseId());
 
-        assertFalse(voFulfilmentService.getAllFulfilmentCentres().stream().anyMatch(fc -> fc.getWarehouseId() == updated.getWarehouseId()));
+        assertFalse(voFulfilmentService.getFilteredFulfilmentCentres(ctxFind).getItems().stream().anyMatch(fc -> fc.getWarehouseId() == updated.getWarehouseId()));
 
     }
 
     @Test
     public void testGetInventory() throws Exception {
 
-        final List<VoInventory> invNone = voFulfilmentService.getFilteredInventory(3L, "XXXXX", 10);
+        VoSearchContext ctxFindNone = new VoSearchContext();
+        ctxFindNone.setParameters(Collections.singletonMap("filter", Collections.singletonList("XXXXX")));
+        ctxFindNone.setSize(10);
+
+        final List<VoInventory> invNone = voFulfilmentService.getFilteredInventory(3L, ctxFindNone).getItems();
         assertNotNull(invNone);
         assertTrue(invNone.isEmpty());
 
-        final List<VoInventory> invByName = voFulfilmentService.getFilteredInventory(2L, "Ben", 10);
+        VoSearchContext ctxFindName = new VoSearchContext();
+        ctxFindName.setParameters(Collections.singletonMap("filter", Collections.singletonList("Ben")));
+        ctxFindName.setSize(10);
+
+        final List<VoInventory> invByName = voFulfilmentService.getFilteredInventory(2L, ctxFindName).getItems();
         assertNotNull(invByName);
         assertFalse(invByName.isEmpty());
         assertTrue(invByName.get(0).getSkuCode().contains("BENDER"));
 
-        final List<VoInventory> invByCode = voFulfilmentService.getFilteredInventory(2L, "!BENDER-ua", 10);
+        VoSearchContext ctxFindCode = new VoSearchContext();
+        ctxFindCode.setParameters(Collections.singletonMap("filter", Collections.singletonList("!BENDER-ua")));
+        ctxFindCode.setSize(10);
+
+        final List<VoInventory> invByCode = voFulfilmentService.getFilteredInventory(2L, ctxFindCode).getItems();
         assertNotNull(invByCode);
         assertFalse(invByCode.isEmpty());
         assertEquals("BENDER-ua", invByCode.get(0).getSkuCode());
 
-        final List<VoInventory> invReserved = voFulfilmentService.getFilteredInventory(2L, "+1", 10);
+        VoSearchContext ctxFindReserved = new VoSearchContext();
+        ctxFindReserved.setParameters(Collections.singletonMap("filter", Collections.singletonList("+1")));
+        ctxFindReserved.setSize(10);
+
+        final List<VoInventory> invReserved = voFulfilmentService.getFilteredInventory(2L, ctxFindReserved).getItems();
         assertNotNull(invReserved);
         assertFalse(invReserved.isEmpty());
         assertEquals("PRODUCT6", invReserved.get(0).getSkuCode());
         assertTrue(BigDecimal.ZERO.compareTo(invReserved.get(0).getReserved()) < 0);
 
-        final List<VoInventory> invAvailable = voFulfilmentService.getFilteredInventory(2L, "<2010-01-01", 10);
+        VoSearchContext ctxFindDate = new VoSearchContext();
+        ctxFindDate.setParameters(Collections.singletonMap("filter", Collections.singletonList("2010-01-01<")));
+        ctxFindDate.setSize(10);
+
+        final List<VoInventory> invAvailable = voFulfilmentService.getFilteredInventory(2L, ctxFindDate).getItems();
         assertNotNull(invAvailable);
         assertFalse(invAvailable.isEmpty());
 
@@ -123,7 +152,11 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testInventoryCRUD() throws Exception {
 
-        assertTrue(voFulfilmentService.getFilteredInventory(3L, "TESTCRUD", 10).isEmpty());
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("TESTCRUD")));
+        ctxFind.setSize(10);
+
+        assertTrue(voFulfilmentService.getFilteredInventory(3L, ctxFind).getItems().isEmpty());
 
         final VoInventory inventory = new VoInventory();
         inventory.setSkuCode("TESTCRUD");
@@ -135,7 +168,7 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
         final VoInventory created = voFulfilmentService.createInventory(inventory);
         assertTrue(created.getSkuWarehouseId() > 0L);
 
-        assertFalse(voFulfilmentService.getFilteredInventory(3L, "TESTCRUD", 10).isEmpty());
+        assertFalse(voFulfilmentService.getFilteredInventory(3L, ctxFind).getItems().isEmpty());
 
         VoInventory afterCreated = voFulfilmentService.getInventoryById(created.getSkuWarehouseId());
         assertNotNull(afterCreated);
@@ -146,7 +179,7 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
         final VoInventory updated = voFulfilmentService.updateInventory(created);
         assertTrue(new BigDecimal("1000").compareTo(updated.getQuantity()) == 0);
 
-        assertFalse(voFulfilmentService.getFilteredInventory(3L, "TESTCRUD", 10).isEmpty());
+        assertFalse(voFulfilmentService.getFilteredInventory(3L, ctxFind).getItems().isEmpty());
 
         voFulfilmentService.removeInventory(updated.getSkuWarehouseId());
 

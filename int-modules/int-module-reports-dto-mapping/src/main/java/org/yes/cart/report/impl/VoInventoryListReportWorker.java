@@ -16,9 +16,12 @@
 
 package org.yes.cart.report.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.vo.VoFulfilmentCentre;
 import org.yes.cart.domain.vo.VoInventory;
+import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
 import org.yes.cart.service.vo.VoFulfilmentService;
@@ -45,7 +48,9 @@ public class VoInventoryListReportWorker implements ReportWorker {
     public List<ReportPair> getParameterValues(final String lang, final String param, final Map<String, Object> currentSelection) {
         if ("warehouse".equals(param)) {
             try {
-                final List<VoFulfilmentCentre> warehouses = fulfilmentService.getAllFulfilmentCentres();
+                final VoSearchContext context = new VoSearchContext();
+                context.setSize(100);
+                final List<VoFulfilmentCentre> warehouses = fulfilmentService.getFilteredFulfilmentCentres(context).getItems();
                 final List<ReportPair> select = new ArrayList<>();
                 for (final VoFulfilmentCentre warehouse : warehouses) {
                     select.add(new ReportPair(warehouse.getCode() + ": " + warehouse.getName(), String.valueOf(warehouse.getWarehouseId())));
@@ -70,19 +75,22 @@ public class VoInventoryListReportWorker implements ReportWorker {
         final long warehouseId = NumberUtils.toLong(warehouse);
         if (warehouseId > 0L) {
             try {
-                final List<VoInventory> result = fulfilmentService.getFilteredInventory(warehouseId, skuCode, Integer.MAX_VALUE);
-                result.sort((i1, i2) -> {
-                    int comp = i1.getSkuCode().compareTo(i2.getSkuCode());
-                    if (comp == 0) {
-                        comp = i1.getQuantity().compareTo(i2.getQuantity());
-                        if (comp == 0) {
-                            return Long.compare(i1.getSkuWarehouseId(), i2.getSkuWarehouseId());
-                        }
-                    }
-                    return comp;
-                });
+                final VoSearchContext ctx = new VoSearchContext();
+                if (StringUtils.isNotBlank(skuCode)) {
+                    ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList(skuCode)));
+                }
+                ctx.setSize(100);
 
-                return (List) result;
+                final List<VoInventory> all = new ArrayList<>();
+                while (true) {
+                    final VoSearchResult<VoInventory> res = fulfilmentService.getFilteredInventory(warehouseId, ctx);
+                    all.addAll(res.getItems());
+                    if (ctx.getSize() > res.getItems().size()) {
+                        break;
+                    }
+                    ctx.setStart(ctx.getStart() + 1);
+                }
+                return (List) all;
             } catch (Exception e) {
                 // do nothing
             }

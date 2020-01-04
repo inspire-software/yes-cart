@@ -18,7 +18,11 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { CustomerVO, CustomerInfoVO, AttrValueCustomerVO, AddressBookVO, AddressVO, Pair, SearchContextVO, SearchResultVO } from '../model/index';
+import {
+  CustomerVO, CustomerInfoVO, AttrValueCustomerVO,
+  AddressBookVO, AddressVO,
+  Pair, SearchContextVO, SearchResultVO
+} from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';

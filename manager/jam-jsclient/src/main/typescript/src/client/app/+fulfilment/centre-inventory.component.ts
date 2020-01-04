@@ -16,8 +16,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FulfilmentService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { ProductSkuSelectComponent } from './../shared/catalog/index';
 import { FulfilmentCentreSelectComponent, InventoryInfoComponent } from './../shared/fulfilment/index';
-import { InventoryVO, FulfilmentCentreInfoVO } from './../shared/model/index';
+import { InventoryVO, FulfilmentCentreInfoVO, ProductSkuVO, Pair, SearchResultVO, SearchContextVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -42,15 +43,12 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   private forceShowAll:boolean = false;
   private viewMode:string = CentreInventoryComponent.OFFERS;
 
-  private inventory:Array<InventoryVO> = [];
+  private inventory:SearchResultVO<InventoryVO>;
   private inventoryFilter:string;
   private inventoryFilterRequired:boolean = true;
-  private inventoryFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedInventory:InventoryVO;
 
@@ -61,6 +59,9 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   @ViewChild('selectCentreModalDialog')
   private selectCentreModalDialog:FulfilmentCentreSelectComponent;
+
+  @ViewChild('selectProductModalSkuDialog')
+  private selectProductModalSkuDialog:ProductSkuSelectComponent;
 
   @ViewChild('inventoryInfoDialog')
   private inventoryInfoDialog:InventoryInfoComponent;
@@ -78,6 +79,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   constructor(private _fulfilmentService:FulfilmentService) {
     LogUtil.debug('CentreInventoryComponent constructed');
+    this.inventory = this.newSearchResultInstance();
   }
 
   get selectedCentre():FulfilmentCentreInfoVO {
@@ -104,6 +106,22 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
       minOrderQuantity: undefined, maxOrderQuantity: undefined, stepOrderQuantity: undefined,
       restockDate: null,
       restockNotes: []
+    };
+  }
+
+  newSearchResultInstance():SearchResultVO<InventoryVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
     };
   }
 
@@ -135,16 +153,22 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     if (this.selectedCentre == null) {
       let ffCode = CookieUtil.readCookie(CentreInventoryComponent.COOKIE_CENTRE, null);
       if (ffCode != null) {
-        let _sub:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe(
+        let ffCtx:SearchContextVO = {
+          parameters: {
+            filter: [ ffCode ]
+          },
+          start: 0,
+          size: 1,
+          sortBy: null,
+          sortDesc: false
+        };
+        let _sub:any = this._fulfilmentService.getFilteredFulfilmentCentres(ffCtx).subscribe(
           rez => {
             _sub.unsubscribe();
-            let ffs:FulfilmentCentreInfoVO[] = rez;
-            ffs.forEach(ff => {
-              if (ffCode == ff.code) {
-                this.selectedCentre = ff;
-                LogUtil.debug('CentreInventoryComponent ngOnInit preselect ff centre', ff);
-              }
-            });
+            if (rez.total > 0) {
+              LogUtil.debug('CentreInventoryComponent ngOnInit preselect ff centre', rez.items[0]);
+              this.selectedCentre = rez.items[0];
+            }
           }
         );
 
@@ -168,9 +192,8 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   }
 
   protected onFilterChange(event:any) {
-
+    this.inventory.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
@@ -179,6 +202,24 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
       this.presetFromCookie();
       this.getFilteredInventory();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('CentreInventoryComponent onPageSelected', page);
+    this.inventory.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('CentreInventoryComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.inventory.searchContext.sortBy = null;
+      this.inventory.searchContext.sortDesc = false;
+    } else {
+      this.inventory.searchContext.sortBy = sort.first;
+      this.inventory.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onInventorySelected(data:InventoryVO) {
@@ -207,8 +248,16 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchExact() {
-    this.inventoryFilter = '!';
-    this.searchHelpShow = false;
+    this.selectProductModalSkuDialog.showDialog();
+  }
+
+  protected onProductSkuSelected(event:FormValidationEvent<ProductSkuVO>) {
+    LogUtil.debug('ShopPriceListComponent onProductSkuSelected');
+    if (event.valid) {
+      this.inventoryFilter = '!' + event.source.code;
+      this.searchHelpShow = false;
+      this.getFilteredInventory();
+    }
   }
 
   protected onForceShowAll() {
@@ -349,8 +398,11 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
     if (this.selectedCentre != null && !this.inventoryFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      let _sub:any = this._fulfilmentService.getFilteredInventory(this.selectedCentre, this.inventoryFilter, max).subscribe( allinventory => {
+
+      this.inventory.searchContext.parameters.filter = [ this.inventoryFilter ];
+      this.inventory.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._fulfilmentService.getFilteredInventory(this.selectedCentre, this.inventory.searchContext).subscribe( allinventory => {
         LogUtil.debug('CentreInventoryComponent getFilteredInventory', allinventory);
         this.inventory = allinventory;
         this.selectedInventory = null;
@@ -358,18 +410,16 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
         this.viewMode = CentreInventoryComponent.OFFERS;
         this.changed = false;
         this.validForSave = false;
-        this.inventoryFilterCapped = this.inventory.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.inventory = [];
+      this.inventory = this.newSearchResultInstance();
       this.selectedInventory = null;
       this.inventoryEdit = null;
       this.viewMode = CentreInventoryComponent.OFFERS;
       this.changed = false;
       this.validForSave = false;
-      this.inventoryFilterCapped = false;
     }
   }
 

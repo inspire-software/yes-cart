@@ -18,7 +18,11 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopFulfilmentCentreVO, InventoryVO } from '../model/index';
+import {
+  FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopFulfilmentCentreVO,
+  InventoryVO,
+  Pair, SearchContextVO, SearchResultVO
+} from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -45,11 +49,16 @@ export class FulfilmentService {
    * Get list of all fulfilment centres, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getAllFulfilmentCentres() {
-    return this.http.get(this._serviceBaseUrl + '/centre/all', Util.requestOptions())
-      .map(res => <FulfilmentCentreVO[]> this.json(res))
+  getFilteredFulfilmentCentres(filter:SearchContextVO) {
+
+    let body = JSON.stringify(filter);
+
+    return this.http.post(this._serviceBaseUrl + '/centre/filtered', body,
+      Util.requestOptions())
+      .map(res => <SearchResultVO<FulfilmentCentreVO>> this.json(res))
       .catch(this.handleError);
   }
+
 
   /**
    * Get list of all fulfilment centres, which are accessible to manage or view,
@@ -137,13 +146,13 @@ export class FulfilmentService {
    * Get list of all inventory, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredInventory(centre:FulfilmentCentreInfoVO, filter:string, max:number) {
+  getFilteredInventory(centre:FulfilmentCentreInfoVO, filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/inventory/centre/' + centre.warehouseId + '/filtered/' + max, body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
-      .map(res => <InventoryVO[]> this.json(res))
+    return this.http.post(this._serviceBaseUrl + '/inventory/centre/' + centre.warehouseId + '/filtered', body,
+          Util.requestOptions())
+      .map(res => <SearchResultVO<InventoryVO>> this.json(res))
       .catch(this.handleError);
   }
 

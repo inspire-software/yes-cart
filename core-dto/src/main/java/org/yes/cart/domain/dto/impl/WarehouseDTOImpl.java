@@ -17,9 +17,16 @@
 package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
+import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
+import org.yes.cart.domain.entity.ShopWarehouse;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,6 +74,17 @@ public class WarehouseDTOImpl implements WarehouseDTO {
 
     @DtoField(value = "displayName", converter = "i18nModelConverter")
     private Map<String, String> displayNames;
+
+    @DtoCollection(
+            value = "warehouseShop",
+            dtoBeanKey = "org.yes.cart.domain.dto.ShopWarehouseDTO",
+            entityGenericType = ShopWarehouse.class,
+            entityCollectionClass = HashSet.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
+            readOnly = true
+    )
+    private List<ShopWarehouseDTO> warehouseShop;
 
 
     /** {@inheritDoc}*/
@@ -222,6 +240,18 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     @Override
     public void setMultipleShippingSupported(final boolean multipleShippingSupported) {
         this.multipleShippingSupported = multipleShippingSupported;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public List<ShopWarehouseDTO> getWarehouseShop() {
+        return warehouseShop;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public void setWarehouseShop(final List<ShopWarehouseDTO> warehouseShop) {
+        this.warehouseShop = warehouseShop;
     }
 
     @Override

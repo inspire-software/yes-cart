@@ -89,11 +89,7 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <div *ngIf="inventoryFilterCapped">
-      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-    </div>
-
-    <yc-inventory [inventory]="inventory" (dataSelected)="onInventorySelected($event)"></yc-inventory>
+    <yc-inventory [inventory]="inventory" (dataSelected)="onInventorySelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-inventory>
 
   </div>
 
@@ -112,6 +108,8 @@
 
 
   <yc-fulfilment-centre-select #selectCentreModalDialog (dataSelected)="onFulfilmentCentreSelected($event)"></yc-fulfilment-centre-select>
+
+  <yc-product-sku-select #selectProductModalSkuDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
 
   <yc-inventory-info #inventoryInfoDialog [skuCode]="selectedSkuCode"></yc-inventory-info>
 

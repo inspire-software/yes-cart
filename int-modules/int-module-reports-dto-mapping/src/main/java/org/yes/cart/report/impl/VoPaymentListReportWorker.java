@@ -20,16 +20,15 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.domain.vo.VoPayment;
 import org.yes.cart.domain.vo.VoSearchContext;
+import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
 import org.yes.cart.service.vo.VoPaymentService;
 import org.yes.cart.utils.DateUtils;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -87,9 +86,22 @@ public class VoPaymentListReportWorker implements ReportWorker {
 
         try {
             final VoSearchContext ctx = new VoSearchContext();
-            ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList(filter.length() > 0 ? filter.toString() : null)));
-            ctx.setSize(1000);
-            return (List) paymentService.getFilteredPayments(ctx).getItems();
+            if (filter.length() > 0) {
+                ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList(filter)));
+            }
+            ctx.setSize(100);
+
+            final List<VoPayment> all = new ArrayList<>();
+            while (true) {
+                final VoSearchResult<VoPayment> res = paymentService.getFilteredPayments(ctx);
+                all.addAll(res.getItems());
+                if (ctx.getSize() > res.getItems().size()) {
+                    break;
+                }
+                ctx.setStart(ctx.getStart() + 1);
+            }
+
+            return (List) all;
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             return Collections.emptyList();

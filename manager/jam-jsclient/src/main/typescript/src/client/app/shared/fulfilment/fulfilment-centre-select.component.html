@@ -18,6 +18,10 @@
           </div>
         </form>
       </li>
+
+      <li *ngIf="centreFilterCapped">
+        <p class="bg-warning text-padding block-margin-spacer">{{ 'FILTER_CAPPED' | translate }}</p>
+      </li>
     </ul>
 
     <ul class="nav nav-second-level item-list">
@@ -27,7 +31,5 @@
       </li>
 
     </ul>
-
   </div>
-
 </yc-modal>

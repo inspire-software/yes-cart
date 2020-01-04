@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -214,5 +215,19 @@ public interface WarehouseDTO extends Identifiable {
      */
     void setMultipleShippingSupported(boolean multipleShippingSupported);
 
+
+    /**
+     * Get shop warehouse relation.
+     *
+     * @return  shop warehouse relation.
+     */
+    List<ShopWarehouseDTO> getWarehouseShop();
+
+    /**
+     * Set shop warehouse relation.
+     * 
+     * @param warehouseShop  shop warehouse relation.
+     */
+    void setWarehouseShop(List<ShopWarehouseDTO> warehouseShop);
 
 }

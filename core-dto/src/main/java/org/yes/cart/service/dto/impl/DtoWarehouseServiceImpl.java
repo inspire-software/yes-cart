@@ -19,6 +19,8 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
@@ -30,6 +32,8 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopWarehouse;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
@@ -108,19 +112,47 @@ public class DtoWarehouseServiceImpl
         return Warehouse.class;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Map<WarehouseDTO, Map<ShopDTO, Boolean>> getAllWithShops() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Warehouse> all = getService().findAll();
-        final Map<WarehouseDTO, Map<ShopDTO, Boolean>> dtos = new LinkedHashMap<>(all.size() * 2);
-        for (final Warehouse warehouse : all) {
-            final WarehouseDTO dto = getNew();
-            assembler.assembleDto(dto, warehouse, getAdaptersRepository(), entityFactory);
-            createPostProcess(dto, warehouse);
-            final Map<ShopDTO, Boolean> assignments = getShopAssignmentsForWarehouse(warehouse);
-            dtos.put(dto, assignments);
+    public SearchResult<WarehouseDTO> findWarehouses(final Set<Long> shopIds, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, List> params = filter.reduceParameters("filter");
+        final List filterParam = params.get("filter");
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+
+        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+
+            final String basic = ((String) filterParam.get(0)).trim();
+
+            SearchContext.JoinMode.OR.setMode(currentFilter);
+            currentFilter.put("code", Collections.singletonList(basic));
+            currentFilter.put("name", Collections.singletonList(basic));
+            currentFilter.put("description", Collections.singletonList(basic));
+            currentFilter.put("guid", Collections.singletonList(basic));
+
         }
-        return dtos;
+        final WarehouseService warehouseService = (WarehouseService) service;
+
+        final int count = warehouseService.findWarehouseCount(shopIds, currentFilter);
+        if (count > startIndex) {
+
+            final List<WarehouseDTO> entities = new ArrayList<>();
+            final List<Warehouse> warehouses = warehouseService.findWarehouses(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopIds, currentFilter);
+
+            fillDTOs(warehouses, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
+
+
     }
 
     /**

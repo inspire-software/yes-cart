@@ -24,13 +24,13 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.InventoryDTO;
-import org.yes.cart.domain.dto.ProductDTO;
-import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -88,58 +88,59 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
     /** {@inheritDoc} */
     @Override
-    public List<InventoryDTO> findBy(final long warehouseId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<InventoryDTO> findInventory(final long warehouseId, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<InventoryDTO> inventory = new ArrayList<>();
+        final Map<String, List> params = filter.reduceParameters("filter");
+        final List filterParam = params.get("filter");
 
-        List<SkuWarehouse> entities = Collections.emptyList();
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final SkuWarehouseService skuWarehouseService = this.skuWarehouseService;
 
         if (warehouseId > 0L) {
             // only allow lists for warehouse inventory lists
 
-            if (StringUtils.isNotBlank(filter)) {
+            final Map<String, List> currentFilter = new HashMap<>();
+            if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
 
-                final Pair<LocalDateTime, LocalDateTime> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
+                final String textFilter = ((String) filterParam.get(0)).trim();
+
+                final Pair<LocalDateTime, LocalDateTime> dateSearch = ComplexSearchUtils.checkDateRangeSearch(textFilter);
 
                 if (dateSearch != null) {
 
-                    entities = skuWarehouseDAO.findRangeByCriteria(
-                            " where (?1 is null or e.availablefrom <= ?1) and (?2 is null or e.availableto >= ?2) order by e.skuCode",
-                            page * pageSize, pageSize,
-                            dateSearch.getFirst(),
-                            dateSearch.getSecond()
-                    );
+                    final LocalDateTime from = dateSearch.getFirst();
+                    final LocalDateTime to = dateSearch.getSecond();
+
+                    if (from != null) {
+                        currentFilter.put("availablefrom", Collections.singletonList(SearchContext.MatchMode.GE.toParam(from)));
+                    }
+                    if (to != null) {
+                        currentFilter.put("availableto", Collections.singletonList(SearchContext.MatchMode.LE.toParam(to)));
+                    }
 
                 } else {
 
-                    final Pair<String, BigDecimal> lowOrReserved = ComplexSearchUtils.checkNumericSearch(filter, LOW_OR_RESERVED, Constants.INVENTORY_SCALE);
+
+                    final Pair<String, BigDecimal> lowOrReserved = ComplexSearchUtils.checkNumericSearch(textFilter, LOW_OR_RESERVED, Constants.INVENTORY_SCALE);
 
                     if (lowOrReserved != null) {
 
                         if ("-".equals(lowOrReserved.getFirst())) {
-                            entities = skuWarehouseDAO.findRangeByCriteria(
-                                    " where e.warehouse.warehouseId = ?1 and e.quantity <= ?2",
-                                    page * pageSize, pageSize,
-                                    warehouseId,
-                                    lowOrReserved.getSecond()
-                            );
+                            currentFilter.put("quantity", Collections.singletonList(SearchContext.MatchMode.LE.toParam(lowOrReserved.getSecond())));
                         } else if ("+".equals(lowOrReserved.getFirst())) {
-                            entities = skuWarehouseDAO.findRangeByCriteria(
-                                    " where e.warehouse.warehouseId = ?1 and e.reserved >= ?2",
-                                    page * pageSize, pageSize,
-                                    warehouseId,
-                                    lowOrReserved.getSecond()
-                            );
+                            currentFilter.put("reserved", Collections.singletonList(SearchContext.MatchMode.GE.toParam(lowOrReserved.getSecond())));
                         }
 
                     } else {
 
-                        final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
+                        final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(textFilter, CODE);
 
                         if (byCode != null) {
 
                             final List<ProductSku> skus = productSkuDAO.findRangeByCriteria(
-                                    " where lower(e.product.code) = ?1 or lower(e.product.manufacturerCode) = ?1 or lower(e.product.pimCode) = ?1 or lower(e.barCode) = ?1 or lower(e.manufacturerCode) = ?1",
+                                    " where lower(e.code) = ?1 or lower(e.product.code) = ?1 or lower(e.product.manufacturerCode) = ?1 or lower(e.product.pimCode) = ?1 or lower(e.barCode) = ?1 or lower(e.manufacturerCode) = ?1",
                                     0, pageSize,
                                     HQLUtils.criteriaIeq(byCode.getSecond())
                             );
@@ -151,32 +152,22 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
                             if (skuCodes.isEmpty()) {
 
-                                entities = skuWarehouseDAO.findRangeByCriteria(
-                                        " where e.warehouse.warehouseId = ?1 and lower(e.skuCode) = ?2 order by e.skuCode",
-                                        page * pageSize, pageSize,
-                                        warehouseId,
-                                        HQLUtils.criteriaIeq(byCode.getSecond())
-                                );
+                                currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(byCode.getSecond())));
 
                             } else {
 
-                                entities = skuWarehouseDAO.findRangeByCriteria(
-                                        " where e.warehouse.warehouseId = ?1 and (e.skuCode in (?2) or lower(e.skuCode) = ?3) order by e.skuCode",
-                                        page * pageSize, pageSize,
-                                        warehouseId,
-                                        skuCodes,
-                                        HQLUtils.criteriaIeq(byCode.getSecond())
-                                );
+                                SearchContext.JoinMode.OR.setMode(currentFilter);
+                                currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(byCode.getSecond())));
+                                currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(skuCodes)));
 
                             }
-
 
                         } else {
 
                             final List<ProductSku> skus = productSkuDAO.findRangeByCriteria(
-                                    " where lower(e.product.code) like ?1 or lower(e.product.name) like ?1 or lower(e.name) like ?1",
+                                    " where lower(e.code) = ?1 or  lower(e.product.code) like ?1 or lower(e.product.name) like ?1 or lower(e.name) like ?1",
                                     0, pageSize,
-                                    HQLUtils.criteriaIlikeAnywhere(filter)
+                                    HQLUtils.criteriaIlikeAnywhere(textFilter)
                             );
 
                             final List<String> skuCodes = new ArrayList<>();
@@ -186,54 +177,43 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
                             if (skuCodes.isEmpty()) {
 
-                                entities = skuWarehouseDAO.findRangeByCriteria(
-                                        " where e.warehouse.warehouseId = ?1 and lower(e.skuCode) like ?2 order by e.skuCode",
-                                        page * pageSize, pageSize,
-                                        warehouseId,
-                                        HQLUtils.criteriaIlikeAnywhere(filter)
-                                );
+                                currentFilter.put("skuCode", Collections.singletonList(textFilter));
 
                             } else {
 
-                                entities = skuWarehouseDAO.findRangeByCriteria(
-                                        " where e.warehouse.warehouseId = ?1 and (e.skuCode in (?2) or lower(e.skuCode) like ?3) order by e.skuCode",
-                                        page * pageSize, pageSize,
-                                        warehouseId,
-                                        skuCodes,
-                                        HQLUtils.criteriaIlikeAnywhere(filter)
-                                );
+                                SearchContext.JoinMode.OR.setMode(currentFilter);
+                                currentFilter.put("skuCode", Collections.singletonList(textFilter));
+                                currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(skuCodes)));
 
                             }
+
                         }
                     }
+
                 }
-            } else {
-
-                entities = skuWarehouseDAO.findRangeByCriteria(
-                        " where e.warehouse.warehouseId = ?1 order by e.skuCode",
-                        page * pageSize, pageSize,
-                        warehouseId
-                );
 
             }
 
-            final Map<String, Object> adapters = adaptersRepository.getAll();
-            for (final SkuWarehouse entity : entities) {
-                final InventoryDTO dto = dtoFactory.getByIface(InventoryDTO.class);
-                skuWarehouseAsm.assembleDto(dto, entity, adapters, dtoFactory);
-                inventory.add(dto);
-            }
+            currentFilter.put("warehouseIds", Collections.singletonList(warehouseId));
 
+            final int count = skuWarehouseService.findSkuWarehouseCount(currentFilter);
+            if (count > startIndex) {
+
+                final List<InventoryDTO> entities = new ArrayList<>();
+                final List<SkuWarehouse> skuWarehouses = skuWarehouseService.findSkuWarehouses(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+                final Map<String, Object> adapters = adaptersRepository.getAll();
+                for (final SkuWarehouse entity : skuWarehouses) {
+                    final InventoryDTO dto = dtoFactory.getByIface(InventoryDTO.class);
+                    skuWarehouseAsm.assembleDto(dto, entity, adapters, dtoFactory);
+                    entities.add(dto);
+                }
+
+                return new SearchResult<>(filter, entities, count);
+
+            }
         }
-
-        return inventory;
-
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public List<WarehouseDTO> getWarehouses() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoWarehouseService.getAll();
+        return new SearchResult<>(filter, Collections.emptyList(), 0);
     }
 
     /** {@inheritDoc} */

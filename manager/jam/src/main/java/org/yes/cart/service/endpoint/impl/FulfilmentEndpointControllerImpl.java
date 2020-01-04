@@ -20,10 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.vo.VoFulfilmentCentre;
-import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
-import org.yes.cart.domain.vo.VoInventory;
-import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.cluster.ProductAsyncSupport;
 import org.yes.cart.service.endpoint.FulfilmentEndpointController;
 import org.yes.cart.service.vo.VoFulfilmentService;
@@ -49,72 +46,85 @@ public class FulfilmentEndpointControllerImpl implements FulfilmentEndpointContr
     }
 
     @Override
-    public @ResponseBody List<VoFulfilmentCentre> getAllFulfilmentCentres() throws Exception {
-        return voFulfilmentService.getAllFulfilmentCentres();
+    public @ResponseBody
+    VoSearchResult<VoFulfilmentCentre> getFilteredFulfilmentCentres(@RequestBody final VoSearchContext filter) throws Exception {
+        return voFulfilmentService.getFilteredFulfilmentCentres(filter);
     }
 
     @Override
-    public @ResponseBody List<VoShopFulfilmentCentre> getShopFulfilmentCentres(@PathVariable("id") final long shopId) throws Exception {
+    public @ResponseBody
+    List<VoShopFulfilmentCentre> getShopFulfilmentCentres(@PathVariable("id") final long shopId) throws Exception {
         return voFulfilmentService.getShopFulfilmentCentres(shopId);
     }
 
     @Override
-    public @ResponseBody VoFulfilmentCentre getFulfilmentCentreById(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    VoFulfilmentCentre getFulfilmentCentreById(@PathVariable("id") final long id) throws Exception {
         return voFulfilmentService.getFulfilmentCentreById(id);
     }
 
     @Override
-    public @ResponseBody VoFulfilmentCentre createFulfilmentCentre(@RequestBody final VoFulfilmentCentre vo) throws Exception {
+    public @ResponseBody
+    VoFulfilmentCentre createFulfilmentCentre(@RequestBody final VoFulfilmentCentre vo) throws Exception {
         return voFulfilmentService.createFulfilmentCentre(vo);
     }
 
     @Override
-    public @ResponseBody VoFulfilmentCentre createShopFulfilmentCentre(@RequestBody final VoFulfilmentCentreInfo vo,@PathVariable("id")  final long shopId) throws Exception {
+    public @ResponseBody
+    VoFulfilmentCentre createShopFulfilmentCentre(@RequestBody final VoFulfilmentCentreInfo vo,@PathVariable("id")  final long shopId) throws Exception {
         return voFulfilmentService.createShopFulfilmentCentre(vo, shopId);
     }
 
     @Override
-    public @ResponseBody VoFulfilmentCentre updateFulfilmentCentre(@RequestBody final VoFulfilmentCentre vo) throws Exception {
+    public @ResponseBody
+    VoFulfilmentCentre updateFulfilmentCentre(@RequestBody final VoFulfilmentCentre vo) throws Exception {
         return voFulfilmentService.updateFulfilmentCentre(vo);
     }
 
     @Override
-    public @ResponseBody List<VoShopFulfilmentCentre> updateShopFulfilmentCentres(@RequestBody final List<VoShopFulfilmentCentre> vo) throws Exception {
+    public @ResponseBody
+    List<VoShopFulfilmentCentre> updateShopFulfilmentCentres(@RequestBody final List<VoShopFulfilmentCentre> vo) throws Exception {
         return voFulfilmentService.updateShopFulfilmentCentres(vo);
     }
 
     @Override
-    public @ResponseBody void removeFulfilmentCentre(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    void removeFulfilmentCentre(@PathVariable("id") final long id) throws Exception {
         voFulfilmentService.removeFulfilmentCentre(id);
     }
 
 
     @Override
-    public @ResponseBody List<VoInventory> getFilteredInventory(@PathVariable("id") final long centreId, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voFulfilmentService.getFilteredInventory(centreId, filter, max);
+    public @ResponseBody
+    VoSearchResult<VoInventory> getFilteredInventory(@PathVariable("id") final long centreId, @RequestBody final VoSearchContext filter) throws Exception {
+        return voFulfilmentService.getFilteredInventory(centreId, filter);
     }
 
     @Override
-    public @ResponseBody VoInventory getInventoryById(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    VoInventory getInventoryById(@PathVariable("id") final long id) throws Exception {
         return voFulfilmentService.getInventoryById(id);
     }
 
     @Override
-    public @ResponseBody VoInventory createInventory(@RequestBody final VoInventory vo) throws Exception {
+    public @ResponseBody
+    VoInventory createInventory(@RequestBody final VoInventory vo) throws Exception {
         final VoInventory inventory = voFulfilmentService.createInventory(vo);
         productAsyncSupport.asyncIndexSku(inventory.getSkuCode());
         return inventory;
     }
 
     @Override
-    public @ResponseBody VoInventory updateInventory(@RequestBody final VoInventory vo) throws Exception {
+    public @ResponseBody
+    VoInventory updateInventory(@RequestBody final VoInventory vo) throws Exception {
         final VoInventory inventory = voFulfilmentService.updateInventory(vo);
         productAsyncSupport.asyncIndexSku(inventory.getSkuCode());
         return inventory;
     }
 
     @Override
-    public @ResponseBody void removeInventory(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    void removeInventory(@PathVariable("id") final long id) throws Exception {
         final VoInventory inventory = voFulfilmentService.getInventoryById(id);
         if (inventory != null) {
             voFulfilmentService.removeInventory(id);

@@ -24,18 +24,19 @@
     <bean id="voKeyToClassFactoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
-                <entry key="VoAttribute" value="org.yes.cart.domain.vo.VoAttribute"/>
-                <entry key="VoAttrValueCustomer" value="org.yes.cart.domain.vo.VoAttrValueCustomer"/>
-                <entry key="VoBrand" value="org.yes.cart.domain.vo.VoBrand"/>
-                <entry key="VoProductTypeInfo" value="org.yes.cart.domain.vo.VoProductTypeInfo"/>
-                <entry key="VoProductCategory" value="org.yes.cart.domain.vo.VoProductCategory"/>
-                <entry key="VoProductSku" value="org.yes.cart.domain.vo.VoProductSku"/>
+                <entry key="VoAttribute"                    value="org.yes.cart.domain.vo.VoAttribute"/>
+                <entry key="VoAttrValueCustomer"            value="org.yes.cart.domain.vo.VoAttrValueCustomer"/>
+                <entry key="VoBrand"                        value="org.yes.cart.domain.vo.VoBrand"/>
+                <entry key="VoProductTypeInfo"              value="org.yes.cart.domain.vo.VoProductTypeInfo"/>
+                <entry key="VoProductCategory"              value="org.yes.cart.domain.vo.VoProductCategory"/>
+                <entry key="VoProductSku"                   value="org.yes.cart.domain.vo.VoProductSku"/>
+                <entry key="VoFulfilmentCentreShopLink"     value="org.yes.cart.domain.vo.VoFulfilmentCentreShopLink"/>
 
-                <entry key="VoCart" value="org.yes.cart.domain.vo.VoCart"/>
-                <entry key="VoCartItem" value="org.yes.cart.domain.vo.VoCartItem"/>
-                <entry key="VoCartOrderInfo" value="org.yes.cart.domain.vo.VoCartOrderInfo"/>
-                <entry key="VoCartShoppingContext" value="org.yes.cart.domain.vo.VoCartShoppingContext"/>
-                <entry key="VoCartTotal" value="org.yes.cart.domain.vo.VoCartTotal"/>
+                <entry key="VoCart"                         value="org.yes.cart.domain.vo.VoCart"/>
+                <entry key="VoCartItem"                     value="org.yes.cart.domain.vo.VoCartItem"/>
+                <entry key="VoCartOrderInfo"                value="org.yes.cart.domain.vo.VoCartOrderInfo"/>
+                <entry key="VoCartShoppingContext"          value="org.yes.cart.domain.vo.VoCartShoppingContext"/>
+                <entry key="VoCartTotal"                    value="org.yes.cart.domain.vo.VoCartTotal"/>
             </map>
         </constructor-arg>
     </bean>

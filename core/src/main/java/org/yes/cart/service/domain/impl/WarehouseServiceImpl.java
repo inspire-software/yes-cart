@@ -16,11 +16,15 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
 
@@ -143,4 +147,72 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
 
     }
 
+
+    private Pair<String, Object[]> findWarehouseQuery(final boolean count,
+                                                      final String sort,
+                                                      final boolean sortDescending,
+                                                      final Set<Long> shops,
+                                                      final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(distinct w.warehouseId) from WarehouseEntity w left join w.warehouseShop wse ");
+        } else {
+            hqlCriteria.append("select distinct w from WarehouseEntity w left join fetch w.warehouseShop wse ");
+        }
+
+        if (CollectionUtils.isNotEmpty(shops)) {
+            hqlCriteria.append(" where (wse.shop.shopId in (?1)) ");
+            params.add(shops);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "w", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by w." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Warehouse> findWarehouses(final int start, final int offset, final String sort, final boolean sortDescending, final Set<Long> shops, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findWarehouseQuery(false, sort, sortDescending, shops, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findWarehouseCount(final Set<Long> shops, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findWarehouseQuery(true, null, false, shops, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
+    }
 }

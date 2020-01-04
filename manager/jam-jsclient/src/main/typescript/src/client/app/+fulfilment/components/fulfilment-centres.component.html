@@ -4,20 +4,25 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CODE' | translate }}</th>
-        <th>{{ 'NAME' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('code')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'code'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'NAME' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'DESCRIPTION' | translate }}</th>
         <th>{{ 'TAB_CONFIGURATIONS' | translate }}</th>
+        <th>{{ 'TAB_SHOPS' | translate }}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredCentres; let i = index" class="{{row == selectedCentre ? 'active' : ''}}">
-        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
-          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
-          <td title="{{ 'TAB_CONFIGURATIONS' | translate }}"><a class="js-click" (click)="onSelectRow(row)"> <span [innerHTML]="getFfFlags(row)"></span>&nbsp;</a></td>
-        </ng-template>
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+        <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
+        <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
+        <td title="{{ 'TAB_CONFIGURATIONS' | translate }}"><a class="js-click" (click)="onSelectRow(row)"> <span [innerHTML]="getFfFlags(row)"></span>&nbsp;</a></td>
+        <td title="{{ 'TAB_SHOPS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
+            <span *ngFor="let fcShop of getShopNames(row)">
+              <span class="label {{ fcShop.active ? 'label-info' : 'label-default'}}" title="{{fcShop.name}}">{{fcShop.code}}</span>&nbsp;
+            </span>
+          &nbsp;
+        </a></td>
       </tr>
       </tbody>
     </table>

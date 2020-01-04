@@ -39,23 +39,11 @@ public class ShopWarehouseDTOImpl implements ShopWarehouseDTO {
     @DtoField(value = "warehouse.warehouseId", readOnly = true)
     private long warehouseId;
 
-    @DtoField(value = "warehouse.name", readOnly = true)
-    private String warehouseName;
-
     @DtoField(value = "rank")
     private int rank;
 
-    /** {@inheritDoc} */
-    @Override
-    public String getWarehouseName() {
-        return warehouseName;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setWarehouseName(final String warehouseName) {
-        this.warehouseName = warehouseName;
-    }
+    @DtoField(value = "disabled")
+    private boolean disabled;
 
     /** {@inheritDoc} */
     @Override
@@ -111,14 +99,26 @@ public class ShopWarehouseDTOImpl implements ShopWarehouseDTO {
         this.rank = rank;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
+    }
+
     @Override
     public String toString() {
         return "ShopWarehouseDTOImpl{" +
                 "shopWarehouseId=" + shopWarehouseId +
                 ", shopId=" + shopId +
                 ", warehouseId=" + warehouseId +
-                ", warehouseName='" + warehouseName + '\'' +
                 ", rank=" + rank +
+                ", disabled=" + disabled +
                 '}';
     }
 }

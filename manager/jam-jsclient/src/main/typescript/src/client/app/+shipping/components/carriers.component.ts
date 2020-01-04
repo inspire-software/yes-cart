@@ -128,7 +128,7 @@ export class CarriersComponent implements OnInit, OnDestroy {
         let key = 'S' + carrierShop.shopId;
         if (this._shops.hasOwnProperty(key)) {
           let shop:ShopVO = this._shops[key];
-          shops.push({ code: shop.code, name: shop.name, active: !shop.disabled && !carrierShop.disabled });
+          shops.push({ code: (shop.masterCode ? shop.masterCode + ': ' : '') + shop.code, name: shop.name, active: !shop.disabled && !carrierShop.disabled });
         }
       });
     }

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
-import { FulfilmentCentreInfoVO } from './../model/index';
+import { FulfilmentCentreInfoVO, SearchContextVO } from './../model/index';
 import { FulfilmentService } from './../services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { Futures, Future, FormValidationEvent } from './../event/index';
@@ -38,7 +38,6 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
 
   private validForSelect:boolean = false;
 
-  private centres : FulfilmentCentreInfoVO[] = [];
   private filteredCentres : FulfilmentCentreInfoVO[] = [];
   private centreFilter : string;
 
@@ -46,6 +45,9 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+
+  private centreFilterCapped:boolean = false;
 
   private loading:boolean = false;
 
@@ -53,7 +55,7 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
     LogUtil.debug('FulfilmentCentreSelectComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
-      that.filterCentres();
+      that.getAllCentres();
     }, this.delayedFilteringMs);
   }
 
@@ -85,9 +87,7 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
   public showDialog() {
     LogUtil.debug('CarrierSlaSelectComponent showDialog');
     this.centreModalDialog.show();
-    if (this.centres.length == 0) {
-      this.getAllCentres();
-    }
+    this.delayedFiltering.delay();
   }
 
 
@@ -102,39 +102,26 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
   private getAllCentres() {
 
     this.loading = true;
-    let _sub:any = this._centreService.getAllFulfilmentCentres().subscribe( allcentres => {
+    let _ctx:SearchContextVO = {
+      parameters : {
+        filter: [ this.centreFilter ]
+      },
+      start : 0,
+      size : this.filterCap,
+      sortBy : null,
+      sortDesc : false
+    };
+    let _sub:any = this._centreService.getFilteredFulfilmentCentres(_ctx).subscribe( allcentres => {
       LogUtil.debug('FulfilmentCentreSelectComponent getAllCentres', allcentres);
       this.selectedCentre = null;
       this.changed = false;
       this.validForSelect = false;
-      this.centres = allcentres;
-      this.filterCentres();
+      this.filteredCentres = allcentres;
+      this.filteredCentres = allcentres != null ? allcentres.items : [];
+      this.centreFilterCapped = allcentres != null && allcentres.total > this.filterCap;
       this.loading = false;
       _sub.unsubscribe();
     });
-  }
-
-
-  private filterCentres() {
-
-    let _filter = this.centreFilter ? this.centreFilter.toLowerCase() : null;
-
-    if (_filter) {
-      this.filteredCentres = this.centres.filter(centre =>
-        centre.code.toLowerCase().indexOf(_filter) !== -1 ||
-        centre.name.toLowerCase().indexOf(_filter) !== -1 ||
-        centre.description && centre.description.toLowerCase().indexOf(_filter) !== -1
-      );
-      LogUtil.debug('FulfilmentCentresComponent filterCentres', _filter);
-    } else {
-      this.filteredCentres = this.centres;
-      LogUtil.debug('FulfilmentCentresComponent filterCentres no filter');
-    }
-
-    if (this.filteredCentres === null) {
-      this.filteredCentres = [];
-    }
-
   }
 
 }

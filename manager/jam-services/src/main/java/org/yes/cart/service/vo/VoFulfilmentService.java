@@ -36,7 +36,7 @@ public interface VoFulfilmentService {
      *
      * @throws Exception errors
      */
-    List<VoFulfilmentCentre> getAllFulfilmentCentres() throws Exception;
+    VoSearchResult<VoFulfilmentCentre> getFilteredFulfilmentCentres(VoSearchContext filter) throws Exception;
 
     /**
      * Get all vo in the system, filtered according to rights
@@ -133,13 +133,12 @@ public interface VoFulfilmentService {
      *
      * @param centreId centre pk
      * @param filter filter
-     * @param max max results
      *
      * @return results
      *
      * @throws Exception errors
      */
-    List<VoInventory> getFilteredInventory(long centreId, String filter, int max) throws Exception;
+    VoSearchResult<VoInventory> getFilteredInventory(long centreId, VoSearchContext filter) throws Exception;
 
     /**
      * Get inventory by id.

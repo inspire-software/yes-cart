@@ -21,9 +21,12 @@ import org.apache.commons.collections.MapUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.InventoryDTO;
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.impl.InventoryDTOImpl;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
@@ -34,6 +37,7 @@ import org.yes.cart.service.vo.VoFulfilmentService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -59,24 +63,35 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
     }
 
     @Override
-    public List<VoFulfilmentCentre> getAllFulfilmentCentres() throws Exception {
-        final Map<WarehouseDTO, Map<ShopDTO, Boolean>> all = dtoWarehouseService.getAllWithShops();
-        federationFacade.applyFederationFilter(all.keySet(), WarehouseDTO.class);
-        final VoAssemblySupport.VoAssembler<VoFulfilmentCentre, WarehouseDTO> asmC =
-                voAssemblySupport.with(VoFulfilmentCentre.class, WarehouseDTO.class);
-        final List<VoFulfilmentCentre> vos = new ArrayList<>(all.size());
-        for (final Map.Entry<WarehouseDTO, Map<ShopDTO, Boolean>> dto : all.entrySet()) {
-            final VoFulfilmentCentre vo = asmC.assembleVo(new VoFulfilmentCentre(), dto.getKey());
-            for (final Map.Entry<ShopDTO, Boolean> assign : dto.getValue().entrySet()) {
-                final VoFulfilmentCentreShopLink link = new VoFulfilmentCentreShopLink();
-                link.setWarehouseId(vo.getWarehouseId());
-                link.setShopId(assign.getKey().getShopId());
-                link.setDisabled(assign.getValue());
-                vo.getFulfilmentShops().add(link);
+    public VoSearchResult<VoFulfilmentCentre> getFilteredFulfilmentCentres(final VoSearchContext filter) throws Exception {
+
+        final VoSearchResult<VoFulfilmentCentre> result = new VoSearchResult<>();
+        final List<VoFulfilmentCentre> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
+
+        Set<Long> shopIds = null;
+        if (!federationFacade.isCurrentUserSystemAdmin()) {
+            shopIds = federationFacade.getAccessibleShopIdsByCurrentManager();
+            if (CollectionUtils.isEmpty(shopIds)) {
+                return result;
             }
-            vos.add(vo);
         }
-        return vos;
+
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                Math.min(filter.getSize(), 100),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter"
+        );
+
+        final SearchResult<WarehouseDTO> batch = dtoWarehouseService.findWarehouses(shopIds, searchContext);
+        results.addAll(voAssemblySupport.assembleVos(VoFulfilmentCentre.class, WarehouseDTO.class, batch.getItems()));
+        result.setTotal(batch.getTotal());
+
+        return result;
 
     }
 
@@ -133,16 +148,7 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
         if (federationFacade.isManageable(id, WarehouseDTO.class)) {
 
             final WarehouseDTO dto = dtoWarehouseService.getById(id);
-            final VoFulfilmentCentre vo = voAssemblySupport.assembleVo(VoFulfilmentCentre.class, WarehouseDTO.class, new VoFulfilmentCentre(), dto);
-            final Map<ShopDTO, Boolean> links = dtoWarehouseService.getAssignedWarehouseShops(id);
-            for (final Map.Entry<ShopDTO, Boolean> assign : links.entrySet()) {
-                final VoFulfilmentCentreShopLink link = new VoFulfilmentCentreShopLink();
-                link.setWarehouseId(vo.getWarehouseId());
-                link.setShopId(assign.getKey().getShopId());
-                link.setDisabled(assign.getValue());
-                vo.getFulfilmentShops().add(link);
-            }
-            return vo;
+            return voAssemblySupport.assembleVo(VoFulfilmentCentre.class, WarehouseDTO.class, new VoFulfilmentCentre(), dto);
 
         } else {
             throw new AccessDeniedException("Access is denied");
@@ -212,11 +218,12 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
                     voAssemblySupport.assembleDto(WarehouseDTO.class, VoFulfilmentCentreInfo.class, dto, vo)
             );
 
-            final Map<ShopDTO, Boolean> existingLinks = dtoWarehouseService.getAssignedWarehouseShops(vo.getWarehouseId());
-            for (final ShopDTO link : existingLinks.keySet()) {
-                if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
-                    dtoWarehouseService.unassignWarehouse(vo.getWarehouseId(), link.getShopId(), false);
-                } // else skip updates for inaccessible shops
+            if (CollectionUtils.isNotEmpty(dto.getWarehouseShop())) {
+                for (final ShopWarehouseDTO link : dto.getWarehouseShop()) {
+                    if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
+                        dtoWarehouseService.unassignWarehouse(vo.getWarehouseId(), link.getShopId(), false);
+                    } // else skip updates for inaccessible shops
+                }
             }
 
             for (final VoFulfilmentCentreShopLink link : vo.getFulfilmentShops()) {
@@ -268,18 +275,36 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
     }
 
     @Override
-    public List<VoInventory> getFilteredInventory(final long centreId, final String filter, final int max) throws Exception {
+    public VoSearchResult<VoInventory> getFilteredInventory(final long centreId, final VoSearchContext filter) throws Exception {
 
-        if (federationFacade.isManageable(centreId, WarehouseDTO.class)) {
+        final VoSearchResult<VoInventory> result = new VoSearchResult<>();
+        final List<VoInventory> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-            final List<InventoryDTO> dtos = dtoInventoryService.findBy(centreId, filter, 0, max);
-
-            return voAssemblySupport.assembleVos(VoInventory.class, InventoryDTO.class, dtos);
-
-        } else {
-            throw new AccessDeniedException("Access is denied");
+        if (!federationFacade.isManageable(centreId, WarehouseDTO.class)) {
+            return result;
         }
 
+
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter"
+        );
+
+
+        final SearchResult<InventoryDTO> batch = dtoInventoryService.findInventory(centreId, searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoInventory.class, InventoryDTO.class, batch.getItems()));
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
     }
 
     @Override

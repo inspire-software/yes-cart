@@ -16,14 +16,17 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.TimeContext;
 
@@ -31,9 +34,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -247,6 +248,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         return (List) getGenericDao().findQueryObjectByNamedQuery("SKUCODE.FOR.SKUWAREHOUSE.CHANGED.SINCE", lastUpdate);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> findProductSkuByUnavailableBefore(final LocalDateTime before) {
 
@@ -254,8 +256,71 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
     }
 
-    LocalDateTime now() {
-        return TimeContext.getLocalDateTime();
+
+
+    private Pair<String, Object[]> findSkuWarehouseQuery(final boolean count,
+                                                         final String sort,
+                                                         final boolean sortDescending,
+                                                         final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(w.skuWarehouseId) from SkuWarehouseEntity w ");
+        } else {
+            hqlCriteria.append("select w from SkuWarehouseEntity w ");
+        }
+
+        final List shopIds = currentFilter != null ? currentFilter.remove("warehouseIds") : null;
+        if (shopIds != null) {
+            hqlCriteria.append(" where (w.warehouse.warehouseId in (?1)) ");
+            params.add(shopIds);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "w", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by w." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+
+    /** {@inheritDoc} */
+    @Override
+    public List<SkuWarehouse> findSkuWarehouses(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findSkuWarehouseQuery(false, sort, sortDescending, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int findSkuWarehouseCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findSkuWarehouseQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
     }
 
     /** IoC.*/

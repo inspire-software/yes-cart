@@ -166,7 +166,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                     if (byCode != null) {
 
                         final List<ProductSku> skus = productSkuDAO.findRangeByCriteria(
-                                " where lower(e.product.code) = ?1 or lower(e.product.manufacturerCode) = ?1 or lower(e.product.pimCode) = ?1 or lower(e.barCode) = ?1 or lower(e.manufacturerCode) = ?1",
+                                " where lower(e.code) like ?1 or lower(e.product.code) = ?1 or lower(e.product.manufacturerCode) = ?1 or lower(e.product.pimCode) = ?1 or lower(e.barCode) = ?1 or lower(e.manufacturerCode) = ?1",
                                 0, pageSize,
                                 HQLUtils.criteriaIeq(byCode.getSecond())
                         );
@@ -192,7 +192,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                     } else {
 
                         final List<ProductSku> skus = productSkuDAO.findRangeByCriteria(
-                                " where lower(e.product.code) like ?1 or lower(e.product.name) like ?1 or lower(e.name) like ?1",
+                                " where lower(e.code) like ?1 or lower(e.product.code) like ?1 or lower(e.product.name) like ?1 or lower(e.name) like ?1",
                                 0, pageSize,
                                 HQLUtils.criteriaIlikeAnywhere(textFilter)
                         );

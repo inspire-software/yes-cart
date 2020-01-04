@@ -16,8 +16,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ShopEventBus, FulfilmentService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { FulfilmentCentreVO, ShopVO } from './../shared/model/index';
-import { FormValidationEvent } from './../shared/event/index';
+import { FulfilmentCentreVO, ShopVO, Pair, SearchResultVO } from './../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
@@ -33,8 +34,11 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
 
   private viewMode:string = FulfilmentComponent.CENTRES;
 
-  private centres:Array<FulfilmentCentreVO> = [];
+  private centres:SearchResultVO<FulfilmentCentreVO>;
   private centreFilter:string;
+
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   private selectedCentre:FulfilmentCentreVO;
 
@@ -59,6 +63,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
     this.shopAllSub = ShopEventBus.getShopEventBus().shopsUpdated$.subscribe(shopsevt => {
       this.shops = shopsevt;
     });
+    this.centres = this.newSearchResultInstance();
   }
 
   newCentreInstance():FulfilmentCentreVO {
@@ -70,9 +75,30 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
     };
   }
 
+  newSearchResultInstance():SearchResultVO<FulfilmentCentreVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    };
+  }
+
   ngOnInit() {
     LogUtil.debug('FulfilmentComponent ngOnInit');
     this.onRefreshHandler();
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.getFilteredCentres();
+    }, this.delayedFilteringMs);
+
   }
 
   ngOnDestroy() {
@@ -82,11 +108,35 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  protected onFilterChange(event:any) {
+    this.centres.searchContext.start = 0; // changing filter means we need to start from first page
+    this.delayedFiltering.delay();
+  }
+
   protected onRefreshHandler() {
     LogUtil.debug('FulfilmentComponent refresh handler');
     if (UserEventBus.getUserEventBus().current() != null) {
-      this.getAllCentres();
+      this.getFilteredCentres();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('FulfilmentComponent onPageSelected', page);
+    this.centres.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('FulfilmentComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.centres.searchContext.sortBy = null;
+      this.centres.searchContext.sortDesc = false;
+    } else {
+      this.centres.searchContext.sortBy = sort.first;
+      this.centres.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
   }
 
   protected onCentreSelected(data:FulfilmentCentreVO) {
@@ -126,7 +176,9 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDeleteSelected() {
-    this.onRowDelete(this.selectedCentre);
+    if (this.selectedCentre != null) {
+      this.onRowDelete(this.selectedCentre);
+    }
   }
 
 
@@ -153,24 +205,19 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._fulfilmentService.saveFulfilmentCentre(this.centreEdit).subscribe(
             rez => {
-            if (this.centreEdit.warehouseId > 0) {
-              let idx = this.centres.findIndex(rez => rez.warehouseId == this.centreEdit.warehouseId);
-              if (idx !== -1) {
-                this.centres[idx] = rez;
-                this.centres = this.centres.slice(0, this.centres.length); // reset to propagate changes
-                LogUtil.debug('FulfilmentComponent centre changed', rez);
-              }
-            } else {
-              this.centres.push(rez);
-              this.centreFilter = rez.name;
-              LogUtil.debug('FulfilmentComponent centre added', rez);
-            }
-            this.changed = false;
-            this.selectedCentre = rez;
-            this.centreEdit = null;
+              _sub.unsubscribe();
+              let pk = this.centreEdit.warehouseId;
+              LogUtil.debug('FulfilmentComponent centre changed', rez);
+              this.changed = false;
+              this.selectedCentre = rez;
+              this.centreEdit = null;
               this.loading = false;
-            this.viewMode = FulfilmentComponent.CENTRES;
-            _sub.unsubscribe();
+              this.viewMode = FulfilmentComponent.CENTRES;
+
+              if (this.centreFilter == null || this.centreFilter == '') {
+                this.centreFilter = rez.name;
+              }
+              this.getFilteredCentres();
           }
         );
       }
@@ -199,14 +246,12 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
 
        this.loading = true;
         let _sub:any = this._fulfilmentService.removeFulfilmentCentre(this.selectedCentre).subscribe(res => {
+          _sub.unsubscribe();
           LogUtil.debug('FulfilmentComponent removeCentre', this.selectedCentre);
-          let idx = this.centres.indexOf(this.selectedCentre);
-          this.centres.splice(idx, 1);
-          this.centres = this.centres.slice(0, this.centres.length); // reset to propagate changes
           this.selectedCentre = null;
           this.centreEdit = null;
           this.loading = false;
-          _sub.unsubscribe();
+          this.getFilteredCentres();
         });
       }
     }
@@ -215,12 +260,18 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
   protected onClearFilterCentre() {
 
     this.centreFilter = '';
+    this.getFilteredCentres();
 
   }
 
-  private getAllCentres() {
+  private getFilteredCentres() {
+
     this.loading = true;
-    let _sub:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe( allcentres => {
+
+    this.centres.searchContext.parameters.filter = [ this.centreFilter ];
+    this.centres.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+    let _sub:any = this._fulfilmentService.getFilteredFulfilmentCentres(this.centres.searchContext).subscribe( allcentres => {
       LogUtil.debug('FulfilmentComponent getAllCentres', allcentres);
       this.centres = allcentres;
       this.selectedCentre = null;

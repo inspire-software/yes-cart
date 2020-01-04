@@ -17,6 +17,9 @@
 package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
+import org.yes.cart.domain.dto.ShopWarehouseDTO;
+import org.yes.cart.domain.vo.matcher.NoopMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,14 @@ import java.util.List;
 @Dto
 public class VoFulfilmentCentre extends VoFulfilmentCentreInfo {
 
+    @DtoCollection(
+            value = "warehouseShop",
+            dtoBeanKey = "VoFulfilmentCentreShopLink",
+            entityGenericType = ShopWarehouseDTO.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = NoopMatcher.class,
+            readOnly = true
+    )
     private List<VoFulfilmentCentreShopLink> fulfilmentShops = new ArrayList<>();
 
     public List<VoFulfilmentCentreShopLink> getFulfilmentShops() {

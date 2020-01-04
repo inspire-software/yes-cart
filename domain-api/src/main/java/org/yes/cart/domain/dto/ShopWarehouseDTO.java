@@ -60,18 +60,6 @@ public interface ShopWarehouseDTO extends Identifiable {
     void setWarehouseId(long warehouseId);
 
     /**
-     * @return Warehouse name.
-     */
-    String getWarehouseName();
-
-    /**
-     * Set warehouse name.
-     *
-     * @param warehouseName warehouse name
-     */
-    void setWarehouseName(String warehouseName);
-
-    /**
      * Get the rank of warehouse usage in shop.
      * @return    rank of warehouse usage
      */
@@ -83,6 +71,21 @@ public interface ShopWarehouseDTO extends Identifiable {
      * @param rank of warehouse usage.
      */
     void setRank(int rank);
+
+
+    /**
+     * Disable this warehouse in shop.
+     *
+     * @return true if this is disabled
+     */
+    boolean isDisabled();
+
+    /**
+     * Disable this warehouse in shop.
+     *
+     * @param disabled true if this is disabled
+     */
+    void setDisabled(boolean disabled);
 
 
 }

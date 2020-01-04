@@ -19,12 +19,15 @@ package org.yes.cart.service.dto;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.SkuWarehouseService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -35,16 +38,15 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
 
 
     /**
-     * Get all warehouses and their shop assignments.
+     * Find warehouses by filter.
      *
-     * @return list of warehouses
-     * @throws org.yes.cart.exception.UnableToCreateInstanceException
-     *          in case of reflection problem
-     * @throws org.yes.cart.exception.UnmappedInterfaceException
-     *          in case of configuration problem
+     * @param shopIds   enforce access.
+     * @param filter    filter for partial match.
+     *
+     * @return list
      */
-    Map<WarehouseDTO, Map<ShopDTO, Boolean>> getAllWithShops()
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<WarehouseDTO> findWarehouses(Set<Long> shopIds,
+                                              SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Find warehouses, that assigned to given shop id.
