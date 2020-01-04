@@ -83,7 +83,15 @@ export class InventoryInfoComponent implements OnInit {
     LogUtil.debug('InventoryInfoComponent loading orders', this._skuCode);
     let lang = I18nEventBus.getI18nEventBus().current();
     this.loading = true;
-    let ctx:SearchContextVO = { parameters: { filter: [ '!' + this._skuCode ] }, start: 0, size: this.filterCap, sortBy: null, sortDesc: false };
+    let ctx:SearchContextVO = {
+      parameters: {
+        filter: [ '!' + this._skuCode ]
+      },
+      start: 0,
+      size: this.filterCap,
+      sortBy: null,
+      sortDesc: false
+    };
     let _subc:any = this._customerOrderService.getFilteredOrders(lang, ctx).subscribe(
         info => {
           LogUtil.debug('InventoryInfoComponent all orders', info);

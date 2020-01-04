@@ -379,7 +379,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
           filter: [ ]
         },
         start : 0,
-        size : Config.UI_FILTER_CAP,
+        size : 1000,
         sortBy : null,
         sortDesc : false
       };

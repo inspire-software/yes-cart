@@ -174,7 +174,7 @@ public class VoProductServiceImpl implements VoProductService {
         final SearchContext searchContext = new SearchContext(
                 params,
                 filter.getStart(),
-                Math.min(filter.getSize(), 100),
+                filter.getSize(),
                 filter.getSortBy(),
                 filter.isSortDesc(),
                 "filter", "supplierCatalogCodes"
@@ -430,7 +430,7 @@ public class VoProductServiceImpl implements VoProductService {
         final SearchContext searchContext = new SearchContext(
                 params,
                 filter.getStart(),
-                Math.min(filter.getSize(), 100),
+                filter.getSize(),
                 filter.getSortBy(),
                 filter.isSortDesc(),
                 "filter", "supplierCatalogCodes"

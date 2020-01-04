@@ -180,7 +180,7 @@ public class VoManagementServiceImpl implements VoManagementService {
                 final SearchContext filter = new SearchContext(
                         Collections.singletonMap("GUIDs", new ArrayList<>(managerDTO.getCategoryCatalogs())),
                         0,
-                        50,
+                        managerDTO.getCategoryCatalogs().size(),
                         "name",
                         false,
                         "GUIDs"
@@ -394,7 +394,7 @@ public class VoManagementServiceImpl implements VoManagementService {
                 final SearchContext filter = new SearchContext(
                         Collections.singletonMap("GUIDs", new ArrayList<>(codes)),
                         0,
-                        50,
+                        codes.size(),
                         "name",
                         false,
                         "GUIDs"

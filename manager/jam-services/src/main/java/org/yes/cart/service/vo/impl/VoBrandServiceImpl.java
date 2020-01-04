@@ -111,7 +111,7 @@ public class VoBrandServiceImpl implements VoBrandService {
         final SearchContext searchContext = new SearchContext(
                 filter.getParameters(),
                 filter.getStart(),
-                Math.min(filter.getSize(), 100),
+                filter.getSize(),
                 filter.getSortBy(),
                 filter.isSortDesc(),
                 "filter"

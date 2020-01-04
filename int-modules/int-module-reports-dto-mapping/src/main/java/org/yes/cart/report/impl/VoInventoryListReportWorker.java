@@ -19,9 +19,7 @@ package org.yes.cart.report.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.vo.VoFulfilmentCentre;
-import org.yes.cart.domain.vo.VoInventory;
 import org.yes.cart.domain.vo.VoSearchContext;
-import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
 import org.yes.cart.service.vo.VoFulfilmentService;
@@ -79,18 +77,9 @@ public class VoInventoryListReportWorker implements ReportWorker {
                 if (StringUtils.isNotBlank(skuCode)) {
                     ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList(skuCode)));
                 }
-                ctx.setSize(100);
+                ctx.setSize(Integer.MAX_VALUE);
 
-                final List<VoInventory> all = new ArrayList<>();
-                while (true) {
-                    final VoSearchResult<VoInventory> res = fulfilmentService.getFilteredInventory(warehouseId, ctx);
-                    all.addAll(res.getItems());
-                    if (ctx.getSize() > res.getItems().size()) {
-                        break;
-                    }
-                    ctx.setStart(ctx.getStart() + 1);
-                }
-                return (List) all;
+                return (List) fulfilmentService.getFilteredInventory(warehouseId, ctx).getItems();
             } catch (Exception e) {
                 // do nothing
             }
