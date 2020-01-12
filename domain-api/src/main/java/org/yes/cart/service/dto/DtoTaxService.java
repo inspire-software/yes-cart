@@ -22,28 +22,12 @@ import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
-import java.util.List;
-
 /**
  * User: denispavlov
  * Date: 29/10/2014
  * Time: 10:51
  */
 public interface DtoTaxService extends GenericDTOService<TaxDTO> {
-
-
-    /**
-     * Taxes by filter
-     *
-     * @param shopCode shop
-     * @param currency currency
-     * @param filter filter
-     * @param page start page
-     * @param pageSize page size
-     * @return taxes
-     */
-    List<TaxDTO> findBy(String shopCode, String currency, String filter, int page, int pageSize)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**
@@ -56,9 +40,7 @@ public interface DtoTaxService extends GenericDTOService<TaxDTO> {
      * @throws UnmappedInterfaceException error
      * @throws UnableToCreateInstanceException error
      */
-    SearchResult<TaxDTO> findTaxes(String shopCode,
-                                   String currency,
-                                   SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<TaxDTO> findTaxes(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
 

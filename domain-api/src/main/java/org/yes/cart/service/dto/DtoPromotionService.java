@@ -48,9 +48,7 @@ public interface DtoPromotionService extends GenericDTOService<PromotionDTO> {
      * @throws UnmappedInterfaceException error
      * @throws UnableToCreateInstanceException error
      */
-    SearchResult<PromotionDTO> findPromotions(String shopCode,
-                                              String currency,
-                                              SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<PromotionDTO> findPromotions(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**

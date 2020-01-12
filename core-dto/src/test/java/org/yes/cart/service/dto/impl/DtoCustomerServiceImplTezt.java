@@ -33,7 +33,6 @@ import org.yes.cart.service.dto.DtoCustomerService;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -74,27 +73,36 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         bob.setCustomerType("B2B");
         bob = dtoService.update(bob);
 
-        final Set<Long> shopIds = Collections.singleton(10L);
+        final List<Long> shopIds = Collections.singletonList(10L);
         SearchContext ctx;
         SearchResult<CustomerDTO> rez;
 
         // check by id
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("#" + jane.getCustomerId())), 0, 10, null, false, "filter");
-        rez = dtoService.findCustomers(shopIds, ctx);
+        ctx = createSearchContext(0, 10,
+                "filter", "#" + jane.getCustomerId(),
+                "shopIds", shopIds
+        );
+        rez = dtoService.findCustomers(ctx);
         assertEquals(1, rez.getTotal());
         assertEquals(1, rez.getItems().size());
         assertEquals("Jane", rez.getItems().get(0).getFirstname());
 
         // check by name
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("?bob")), 0, 10, null, false, "filter");
-        rez = dtoService.findCustomers(shopIds, ctx);
+        ctx = createSearchContext(0, 10,
+                "filter", "?bob",
+                "shopIds", shopIds
+        );
+        rez = dtoService.findCustomers(ctx);
         assertEquals(1, rez.getTotal());
         assertEquals(1, rez.getItems().size());
         assertEquals("Bob", rez.getItems().get(0).getFirstname());
 
         // check by type
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("$b2c")), 0, 10, null, false, "filter");
-        rez = dtoService.findCustomers(shopIds, ctx);
+        ctx = createSearchContext(0, 10,
+                "filter", "$b2c",
+                "shopIds", shopIds
+        );
+        rez = dtoService.findCustomers(ctx);
         assertTrue(rez.getTotal() > 0);
         assertEquals("B2C", rez.getItems().get(0).getCustomerType());
 

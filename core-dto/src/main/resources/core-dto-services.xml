@@ -193,14 +193,14 @@
     <bean id="dtoPriceListService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoPriceListsServiceImpl">
-                <constructor-arg index="0" ref="dtoShopService"/>
-                <constructor-arg index="1" ref="dtoProductSkuService"/>
-                <constructor-arg index="2" ref="priceService"/>
-                <constructor-arg index="3" ref="productSkuDao"/>
-                <constructor-arg index="4" ref="carrierSlaDao"/>
-                <constructor-arg index="5" ref="shopDao"/>
-                <constructor-arg index="6" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
-                <constructor-arg index="7" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="0" ref="dtoProductSkuService"/>
+                <constructor-arg index="1" ref="priceService"/>
+                <constructor-arg index="2" ref="productSkuDao"/>
+                <constructor-arg index="3" ref="carrierSlaDao"/>
+                <constructor-arg index="4" ref="shopDao"/>
+                <constructor-arg index="5" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="6" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="7" ref="shopService"/>
             </bean>
         </property>
     </bean>
@@ -522,6 +522,7 @@
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="taxService"/>
                 <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="3" ref="shopService"/>
             </bean>
         </property>
     </bean>
@@ -531,8 +532,9 @@
             <bean class="org.yes.cart.service.dto.impl.DtoTaxConfigServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="taxConfigService"/>
-                <constructor-arg index="2" ref="taxService"/>
-                <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="3" ref="taxService"/>
+                <constructor-arg index="4" ref="shopService"/>
             </bean>
         </property>
     </bean>

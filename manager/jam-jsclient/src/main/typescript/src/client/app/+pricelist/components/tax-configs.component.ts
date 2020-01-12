@@ -26,6 +26,8 @@ import { LogUtil } from './../../shared/log/index';
 
 export class TaxConfigsComponent implements OnInit, OnDestroy {
 
+  @Input() selectedShopCode: string;
+
   @Input() selectedTaxConfig:TaxConfigVO;
 
   @Output() dataSelected: EventEmitter<TaxConfigVO> = new EventEmitter<TaxConfigVO>();

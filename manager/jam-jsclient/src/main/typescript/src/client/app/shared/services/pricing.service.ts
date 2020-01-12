@@ -51,10 +51,10 @@ export class PricingService {
    * Get list of all price lists, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredPriceLists(shop:ShopVO, currency:string, filter:SearchContextVO) {
+  getFilteredPriceLists(filter:SearchContextVO) {
 
     let body = JSON.stringify(filter);
-    return this.http.post(this._serviceBaseUrl + '/price/shop/' + shop.shopId + '/currency/' + currency + '/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/price/filtered', body,
           Util.requestOptions())
         .map(res => <SearchResultVO<PriceListVO>> this.json(res))
         .catch(this.handleError);
@@ -108,11 +108,11 @@ export class PricingService {
    * Get list of all taxes, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredTax(shop:ShopVO, currency:string, filter:SearchContextVO) {
+  getFilteredTax(filter:SearchContextVO) {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/tax/shop/' + shop.code + '/currency/' + currency + '/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/tax/filtered', body,
           Util.requestOptions())
       .map(res => <SearchResultVO<TaxVO>> this.json(res))
       .catch(this.handleError);
@@ -166,11 +166,11 @@ export class PricingService {
    * Get list of all tax configs, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredTaxConfig(tax:TaxVO, filter:SearchContextVO) {
+  getFilteredTaxConfig(filter:SearchContextVO) {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/taxconfig/tax/' + tax.taxId + '/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/taxconfig/filtered', body,
         Util.requestOptions())
       .map(res => <SearchResultVO<TaxConfigVO>> this.json(res))
       .catch(this.handleError);
@@ -232,11 +232,11 @@ export class PricingService {
    * Get list of all promotions, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredPromotions(shop:ShopVO, currency:string, filter:SearchContextVO) {
+  getFilteredPromotions(filter:SearchContextVO) {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/promotion/shop/' + shop.code + '/currency/' + currency + '/filtered', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/promotion/filtered', body, Util.requestOptions())
       .map(res => <SearchResultVO<PromotionVO>> this.json(res))
       .catch(this.handleError);
   }
@@ -303,11 +303,11 @@ export class PricingService {
    * Get list of all promotion coupons, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredPromotionCoupons(promotion:PromotionVO, filter:SearchContextVO) {
+  getFilteredPromotionCoupons(filter:SearchContextVO) {
 
     let body = filter;
 
-    return this.http.post(this._serviceBaseUrl + '/promotioncoupon/' + promotion.promotionId + '/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/promotioncoupon/filtered', body,
           Util.requestOptions())
       .map(res => <SearchResultVO<PromotionCouponVO>> this.json(res))
       .catch(this.handleError);

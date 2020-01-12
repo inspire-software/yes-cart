@@ -25,7 +25,9 @@ import org.yes.cart.service.vo.VoTaxService;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -47,41 +49,60 @@ public class VoTaxServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetTaxes() throws Exception {
 
+        final Map<String, List> ctxAnyParams = new HashMap<>();
+        ctxAnyParams.put("shopCode", Collections.singletonList("SHOIP1"));
+        ctxAnyParams.put("currency", Collections.singletonList("EUR"));
         VoSearchContext ctxAny = new VoSearchContext();
-        ctxAny.setParameters(Collections.emptyMap());
+        ctxAny.setParameters(ctxAnyParams);
         ctxAny.setSize(10);
-        final List<VoTax> taxesNoFilter = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxAny).getItems();
+        final List<VoTax> taxesNoFilter = voTaxService.getFilteredTax(ctxAny).getItems();
         assertNotNull(taxesNoFilter);
         assertFalse(taxesNoFilter.isEmpty());
 
+        final Map<String, List> ctxFindParams = new HashMap<>();
+        ctxFindParams.put("shopCode", Collections.singletonList("SHOIP1"));
+        ctxFindParams.put("currency", Collections.singletonList("EUR"));
+        ctxFindParams.put("filter", Collections.singletonList("VAT (CC_TEST1)"));
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("VAT (CC_TEST1)")));
+        ctxFind.setParameters(ctxFindParams);
         ctxFind.setSize(10);
-        final List<VoTax> taxesFind = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxFind).getItems();
+        final List<VoTax> taxesFind = voTaxService.getFilteredTax(ctxFind).getItems();
         assertNotNull(taxesFind);
         assertFalse(taxesFind.isEmpty());
         assertEquals("VAT (CC_TEST1)", taxesFind.get(0).getCode());
 
+        final Map<String, List> ctxExclusiveParams = new HashMap<>();
+        ctxExclusiveParams.put("shopCode", Collections.singletonList("SHOIP1"));
+        ctxExclusiveParams.put("currency", Collections.singletonList("EUR"));
+        ctxExclusiveParams.put("filter", Collections.singletonList("++"));
         VoSearchContext ctxExclusive = new VoSearchContext();
-        ctxExclusive.setParameters(Collections.singletonMap("filter", Collections.singletonList("++")));
+        ctxExclusive.setParameters(ctxExclusiveParams);
         ctxExclusive.setSize(10);
-        final List<VoTax> taxesExclusive = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxExclusive).getItems();
+        final List<VoTax> taxesExclusive = voTaxService.getFilteredTax(ctxExclusive).getItems();
         assertNotNull(taxesExclusive);
         assertFalse(taxesExclusive.isEmpty());
         assertTrue(taxesExclusive.get(0).isExclusiveOfPrice());
 
+        final Map<String, List> ctxInclusiveParams = new HashMap<>();
+        ctxInclusiveParams.put("shopCode", Collections.singletonList("SHOIP1"));
+        ctxInclusiveParams.put("currency", Collections.singletonList("EUR"));
+        ctxInclusiveParams.put("filter", Collections.singletonList("--"));
         VoSearchContext ctxInclusive = new VoSearchContext();
-        ctxInclusive.setParameters(Collections.singletonMap("filter", Collections.singletonList("--")));
+        ctxInclusive.setParameters(ctxInclusiveParams);
         ctxInclusive.setSize(10);
-        final List<VoTax> taxesInclusive = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxInclusive).getItems();
+        final List<VoTax> taxesInclusive = voTaxService.getFilteredTax(ctxInclusive).getItems();
         assertNotNull(taxesInclusive);
         assertFalse(taxesInclusive.isEmpty());
         assertFalse(taxesInclusive.get(0).isExclusiveOfPrice());
 
+        final Map<String, List> ctxRateParams = new HashMap<>();
+        ctxRateParams.put("shopCode", Collections.singletonList("SHOIP1"));
+        ctxRateParams.put("currency", Collections.singletonList("EUR"));
+        ctxRateParams.put("filter", Collections.singletonList("%5"));
         VoSearchContext ctxRate = new VoSearchContext();
-        ctxRate.setParameters(Collections.singletonMap("filter", Collections.singletonList("%5")));
+        ctxRate.setParameters(ctxRateParams);
         ctxRate.setSize(10);
-        final List<VoTax> taxesByRate = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxRate).getItems();
+        final List<VoTax> taxesByRate = voTaxService.getFilteredTax(ctxRate).getItems();
         assertNotNull(taxesByRate);
         assertFalse(taxesByRate.isEmpty());
         assertTrue(taxesByRate.stream().allMatch(tax -> new BigDecimal(5).compareTo(tax.getTaxRate()) == 0));
@@ -109,15 +130,19 @@ public class VoTaxServiceImplTest extends BaseCoreDBTestCase {
         final VoTax updated = voTaxService.updateTax(afterCreated);
         assertEquals("Test", updated.getDescription());
 
+        final Map<String, List> ctxParams = new HashMap<>();
+        ctxParams.put("shopCode", Collections.singletonList("SHOIP2"));
+        ctxParams.put("currency", Collections.singletonList("USD"));
+        ctxParams.put("filter", Collections.singletonList("TESTCRUD"));
         VoSearchContext ctxExact = new VoSearchContext();
-        ctxExact.setParameters(Collections.singletonMap("filter", Collections.singletonList("TESTCRUD")));
+        ctxExact.setParameters(ctxParams);
         ctxExact.setSize(10);
 
-        assertFalse(voTaxService.getFilteredTax("SHOIP2", "USD", ctxExact).getItems().isEmpty());
+        assertFalse(voTaxService.getFilteredTax(ctxExact).getItems().isEmpty());
 
         voTaxService.removeTax(updated.getTaxId());
 
-        assertTrue(voTaxService.getFilteredTax("SHOIP2", "USD", ctxExact).getItems().isEmpty());
+        assertTrue(voTaxService.getFilteredTax(ctxExact).getItems().isEmpty());
 
     }
 
@@ -125,26 +150,39 @@ public class VoTaxServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testTaxConfigCRD() throws Exception {
 
-        VoSearchContext ctxAny = new VoSearchContext();
-        ctxAny.setParameters(Collections.emptyMap());
-        ctxAny.setSize(10);
+        final Map<String, List> ctxTParams = new HashMap<>();
+        ctxTParams.put("shopCode", Collections.singletonList("SHOIP1"));
+        ctxTParams.put("currency", Collections.singletonList("EUR"));
+        VoSearchContext ctxTAny = new VoSearchContext();
+        ctxTAny.setParameters(ctxTParams);
+        ctxTAny.setSize(10);
 
-        final VoTax tax = voTaxService.getFilteredTax("SHOIP1", "EUR", ctxAny).getItems().get(0);
+        final VoTax tax = voTaxService.getFilteredTax(ctxTAny).getItems().get(0);
 
         final VoTaxConfig taxConfig = new VoTaxConfig();
-        taxConfig.setTaxId(tax.getTaxId());
+        taxConfig.setTax(tax);
 
         final VoTaxConfig created = voTaxService.createTaxConfig(taxConfig);
         assertTrue(created.getTaxConfigId() > 0L);
+        assertNotNull(created.getTax());
+        assertEquals(created.getTax().getTaxId(), tax.getTaxId());
 
         final VoTaxConfig afterCreated = voTaxService.getTaxConfigById(created.getTaxConfigId());
         assertNotNull(afterCreated);
 
-        assertTrue(voTaxService.getFilteredTaxConfig(tax.getTaxId(), ctxAny).getItems().stream().anyMatch(tc -> tc.getTaxConfigId() == created.getTaxConfigId()));
+        final Map<String, List> ctxTcParams = new HashMap<>();
+        ctxTcParams.put("shopCode", Collections.singletonList("SHOIP1"));
+        ctxTcParams.put("currency", Collections.singletonList("EUR"));
+        VoSearchContext ctxTcAny = new VoSearchContext();
+        ctxTcAny.setParameters(ctxTcParams);
+        ctxTcAny.setSize(10);
+
+        assertTrue(voTaxService.getFilteredTaxConfig(ctxTcAny).getItems().stream().allMatch(tc -> tc.getTax() != null));
+        assertTrue(voTaxService.getFilteredTaxConfig(ctxTcAny).getItems().stream().anyMatch(tc -> tc.getTaxConfigId() == created.getTaxConfigId()));
 
         voTaxService.removeTaxConfig(created.getTaxConfigId());
 
-        assertFalse(voTaxService.getFilteredTaxConfig(tax.getTaxId(), ctxAny).getItems().stream().anyMatch(tc -> tc.getTaxConfigId() == created.getTaxConfigId()));
+        assertFalse(voTaxService.getFilteredTaxConfig(ctxTcAny).getItems().stream().anyMatch(tc -> tc.getTaxConfigId() == created.getTaxConfigId()));
 
     }
 }

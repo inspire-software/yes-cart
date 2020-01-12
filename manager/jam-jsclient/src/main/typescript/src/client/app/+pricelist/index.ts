@@ -3,5 +3,6 @@
  */
 export * from './shop-pricelist.component';
 export * from './shop-taxes.component';
+export * from './shop-taxconfigs.component';
 export * from './shop-promotions.component';
 

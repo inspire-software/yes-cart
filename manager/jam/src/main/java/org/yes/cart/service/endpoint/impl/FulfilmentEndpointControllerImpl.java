@@ -96,8 +96,8 @@ public class FulfilmentEndpointControllerImpl implements FulfilmentEndpointContr
 
     @Override
     public @ResponseBody
-    VoSearchResult<VoInventory> getFilteredInventory(@PathVariable("id") final long centreId, @RequestBody final VoSearchContext filter) throws Exception {
-        return voFulfilmentService.getFilteredInventory(centreId, filter);
+    VoSearchResult<VoInventory> getFilteredInventory(@RequestBody final VoSearchContext filter) throws Exception {
+        return voFulfilmentService.getFilteredInventory(filter);
     }
 
     @Override

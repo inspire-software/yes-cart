@@ -482,9 +482,10 @@ export class PromotionComponent implements OnInit, OnDestroy {
       this.loading = true;
 
       this.coupons.searchContext.parameters.filter = [ this.couponFilter ];
+      this.coupons.searchContext.parameters.promotionId = [ this._promotion.promotionId ];
       this.coupons.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
 
-      let _sub:any = this._promotionService.getFilteredPromotionCoupons(this._promotion, this.coupons.searchContext).subscribe(allcoupons => {
+      let _sub:any = this._promotionService.getFilteredPromotionCoupons(this.coupons.searchContext).subscribe(allcoupons => {
         LogUtil.debug('PromotionComponent getFilteredPromotionCoupons', allcoupons);
         this.coupons = allcoupons;
         this.selectedCoupon = null;

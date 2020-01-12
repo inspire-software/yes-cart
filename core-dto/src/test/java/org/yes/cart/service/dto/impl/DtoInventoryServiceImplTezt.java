@@ -29,7 +29,6 @@ import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,17 +61,20 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
     public void testFindInventory() throws Exception {
 
         // Test no stock when no warehouse
-        final SearchContext filterNone = new SearchContext(Collections.emptyMap(), 0, 10, "skuCode", false, "filter");
-        SearchResult<InventoryDTO> stock = dtoService.findInventory(0L, filterNone);
+        final SearchContext filterNone = createSearchContext("skuCode", false, 0, 10);
+        SearchResult<InventoryDTO> stock = dtoService.findInventory(filterNone);
         assertTrue(stock.getTotal() == 0);
 
         // Has stock when warehouse selected
-        stock = dtoService.findInventory(1L, filterNone);
+        stock = dtoService.findInventory(createSearchContext(filterNone, "centreId", 1L));
         assertFalse(stock.getTotal() == 0);
 
         // Test partial SKU match
-        final SearchContext filterPartial = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("CC_TEST")), 0, 10, "skuCode", false, "filter");
-        stock = dtoService.findInventory(1L, filterPartial);
+        final SearchContext filterPartial = createSearchContext("skuCode", false, 0, 10,
+                "filter", "CC_TEST",
+                "centreId", 1L
+        );
+        stock = dtoService.findInventory(filterPartial);
         assertFalse(stock.getTotal() == 0);
         assertEquals(1, stock.getItems().stream().filter(
                 inv -> "CC_TEST1".equals(inv.getSkuCode())).count());
@@ -87,34 +89,52 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(sku.contains("CC_TEST3"));
 
         // Test name SKU match
-        final SearchContext filterNamePartial = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("cc test 11")), 0, 10, "skuCode", false, "filter");
-        stock = dtoService.findInventory(1L, filterNamePartial);
+        final SearchContext filterNamePartial = createSearchContext("skuCode", false, 0, 10,
+                "filter", "cc test 11",
+                "centreId", 1L
+        );
+        stock = dtoService.findInventory(filterNamePartial);
         assertEquals(1, stock.getTotal());
         assertEquals("CC_TEST11", stock.getItems().get(0).getSkuCode());
 
         // Test exact SKU match
-        final SearchContext filterCodeExact = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!CC_TEST1")), 0, 10, "skuCode", false, "filter");
-        stock = dtoService.findInventory(1L, filterCodeExact);
+        final SearchContext filterCodeExact = createSearchContext("skuCode", false, 0, 10,
+                "filter", "!CC_TEST1",
+                "centreId", 1L
+        );
+        stock = dtoService.findInventory(filterCodeExact);
         assertEquals(1, stock.getTotal());
         assertEquals("CC_TEST1", stock.getItems().get(0).getSkuCode());
 
         // Test SKU no match
-        final SearchContext filterNoMatch = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!something really weird not matching")), 0, 10, "skuCode", false, "filter");
-        stock = dtoService.findInventory(1L, filterNoMatch);
+        final SearchContext filterNoMatch = createSearchContext("skuCode", false, 0, 10,
+                "filter", "!something really weird not matching",
+                "centreId", 1L
+        );
+        stock = dtoService.findInventory(filterNoMatch);
         assertEquals(0, stock.getTotal());
 
         // Test high reserved stock reserved >= X
-        final SearchContext filterReserved = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("+1")), 0, 10, "skuCode", false, "filter");
-        stock = dtoService.findInventory(1L, filterReserved);
+        final SearchContext filterReserved = createSearchContext("skuCode", false, 0, 10,
+                "filter", "+1",
+                "centreId", 1L
+        );
+        stock = dtoService.findInventory(filterReserved);
         assertEquals(0, stock.getTotal());
         // Test low stock qty <= X
-        final SearchContext filterLowStock = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("-5")), 0, 10, "skuCode", false, "filter");
-        stock = dtoService.findInventory(1L, filterLowStock);
+        final SearchContext filterLowStock = createSearchContext("skuCode", false, 0, 10,
+                "filter", "-5",
+                "centreId", 1L
+        );
+        stock = dtoService.findInventory(filterLowStock);
         assertFalse(stock.getTotal() == 0);
 
         // Dates
-        final SearchContext filterDates = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("2010-04-00<2040-04-09")), 0, 10, "skuCode", false, "filter");
-        stock = dtoService.findInventory(2L, filterDates);
+        final SearchContext filterDates = createSearchContext("skuCode", false, 0, 10,
+                "filter", "2010-04-00<2040-04-09",
+                "centreId", 2L
+        );
+        stock = dtoService.findInventory(filterDates);
         assertEquals(1, stock.getTotal());
         assertEquals("BENDER-ua", stock.getItems().get(0).getSkuCode());
 
@@ -156,17 +176,19 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testCreateInventory() throws Exception {
 
-        final SearchContext filterCodeExact = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!ABC-0002")), 0, 10, "skuCode", false, "filter");
-
         final WarehouseDTO wh = dtoWarehouseService.getAll().get(0);
+        final SearchContext filterCodeExact = createSearchContext("skuCode", false, 0, 10,
+                "filter", "!ABC-0002",
+                "centreId", wh.getWarehouseId()
+        );
 
-        assertTrue(dtoService.findInventory(wh.getWarehouseId(), filterCodeExact).getItems().isEmpty());
+        assertTrue(dtoService.findInventory(filterCodeExact).getItems().isEmpty());
 
         InventoryDTO dto = getDto("ABC-0002", wh.getCode());
         dto = dtoService.createInventory(dto);
         assertTrue(dto.getSkuWarehouseId() > 0L);
 
-        final List<InventoryDTO> stock = dtoService.findInventory(wh.getWarehouseId(), filterCodeExact).getItems();
+        final List<InventoryDTO> stock = dtoService.findInventory(filterCodeExact).getItems();
         assertFalse(stock.isEmpty());
 
         assertEquals("ABC-0002", stock.get(0).getSkuCode());
@@ -177,17 +199,19 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdateInventory() throws Exception {
 
-        final SearchContext filterCodeExact = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!ABC-0003")), 0, 10, "skuCode", false, "filter");
-
         final WarehouseDTO wh = dtoWarehouseService.getAll().get(0);
+        final SearchContext filterCodeExact = createSearchContext("skuCode", false, 0, 10,
+                "filter", "!ABC-0003",
+                "centreId", wh.getWarehouseId()
+        );
 
-        assertTrue(dtoService.findInventory(wh.getWarehouseId(), filterCodeExact).getItems().isEmpty());
+        assertTrue(dtoService.findInventory(filterCodeExact).getItems().isEmpty());
 
         InventoryDTO dto = getDto("ABC-0003", wh.getCode());
         dto = dtoService.createInventory(dto);
         assertTrue(dto.getSkuWarehouseId() > 0L);
 
-        List<InventoryDTO> stock = dtoService.findInventory(wh.getWarehouseId(), filterCodeExact).getItems();
+        List<InventoryDTO> stock = dtoService.findInventory(filterCodeExact).getItems();
         assertFalse(stock.isEmpty());
 
         assertEquals("ABC-0003", stock.get(0).getSkuCode());
@@ -196,7 +220,7 @@ public class DtoInventoryServiceImplTezt extends BaseCoreDBTestCase {
         dto.setQuantity(BigDecimal.ONE);
         dto = dtoService.updateInventory(dto);
 
-        stock = dtoService.findInventory(wh.getWarehouseId(), filterCodeExact).getItems();
+        stock = dtoService.findInventory(filterCodeExact).getItems();
         assertFalse(stock.isEmpty());
 
         assertEquals("ABC-0003", stock.get(0).getSkuCode());

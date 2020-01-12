@@ -33,7 +33,7 @@ public interface VoTaxService {
      *
      * @throws Exception errors
      */
-    VoSearchResult<VoTax> getFilteredTax(String shopCode, String currency, VoSearchContext filter) throws Exception;
+    VoSearchResult<VoTax> getFilteredTax(VoSearchContext filter) throws Exception;
 
     /**
      * Get tax by id.
@@ -88,7 +88,7 @@ public interface VoTaxService {
      *
      * @throws Exception errors
      */
-    VoSearchResult<VoTaxConfig> getFilteredTaxConfig(long taxId, VoSearchContext filter) throws Exception;
+    VoSearchResult<VoTaxConfig> getFilteredTaxConfig(VoSearchContext filter) throws Exception;
 
     /**
      * Get tax by id.

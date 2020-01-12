@@ -26,6 +26,7 @@ import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionService;
+import org.yes.cart.service.dto.impl.FilterSearchUtils;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPromotionService;
@@ -61,12 +62,15 @@ public class VoPromotionServiceImpl implements VoPromotionService {
      * {@inheritDoc}
      */
     @Override
-    public VoSearchResult<VoPromotion> getFilteredPromotion(final String shopCode, final String currency, final VoSearchContext filter) throws Exception {
+    public VoSearchResult<VoPromotion> getFilteredPromotion(final VoSearchContext filter) throws Exception {
 
         final VoSearchResult<VoPromotion> result = new VoSearchResult<>();
         final List<VoPromotion> results = new ArrayList<>();
         result.setSearchContext(filter);
         result.setItems(results);
+
+        final String shopCode = FilterSearchUtils.getStringFilter(filter.getParameters().get("shopCode"));
+        final String currency = FilterSearchUtils.getStringFilter(filter.getParameters().get("currency"));
 
         if (!federationFacade.isManageable(shopCode, ShopDTO.class)) {
             return result;
@@ -78,11 +82,11 @@ public class VoPromotionServiceImpl implements VoPromotionService {
                 filter.getSize(),
                 filter.getSortBy(),
                 filter.isSortDesc(),
-                "filter", "types", "actions"
+                "filter", "types", "actions", "shopCode", "currency"
         );
 
 
-        final SearchResult<PromotionDTO> batch = dtoPromotionService.findPromotions(shopCode, currency, searchContext);
+        final SearchResult<PromotionDTO> batch = dtoPromotionService.findPromotions(searchContext);
         if (!batch.getItems().isEmpty()) {
             results.addAll(voAssemblySupport.assembleVos(VoPromotion.class, PromotionDTO.class, batch.getItems()));
         }
@@ -173,7 +177,9 @@ public class VoPromotionServiceImpl implements VoPromotionService {
      * {@inheritDoc}
      */
     @Override
-    public VoSearchResult<VoPromotionCoupon> getFilteredPromotionCoupons(final long promotionId, final VoSearchContext filter) throws Exception {
+    public VoSearchResult<VoPromotionCoupon> getFilteredPromotionCoupons(final VoSearchContext filter) throws Exception {
+
+        final long promotionId = FilterSearchUtils.getIdFilter(filter.getParameters().get("promotionId"));
 
         getPromotionById(promotionId); // check access
 
@@ -189,10 +195,10 @@ public class VoPromotionServiceImpl implements VoPromotionService {
                 filter.getSize(),
                 filter.getSortBy(),
                 filter.isSortDesc(),
-                "filter"
+                "filter", "promotionId"
         );
 
-        final SearchResult<PromotionCouponDTO> batch = dtoPromotionCouponService.findCoupons(promotionId, searchContext);
+        final SearchResult<PromotionCouponDTO> batch = dtoPromotionCouponService.findCoupons(searchContext);
         if (!batch.getItems().isEmpty()) {
             results.addAll(voAssemblySupport.assembleVos(VoPromotionCoupon.class, PromotionCouponDTO.class, batch.getItems()));
         }

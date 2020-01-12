@@ -18,8 +18,6 @@ package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.*;
 
-import java.util.List;
-
 /**
  * User: denispavlov
  * Date: 20/09/2016
@@ -35,7 +33,7 @@ public interface VoPromotionService {
      *
      * @throws Exception errors
      */
-    VoSearchResult<VoPromotion> getFilteredPromotion(String shopCode, String currency, VoSearchContext filter) throws Exception;
+    VoSearchResult<VoPromotion> getFilteredPromotion(VoSearchContext filter) throws Exception;
 
     /**
      * Get promotion by id.
@@ -99,12 +97,12 @@ public interface VoPromotionService {
      *
      * @throws Exception errors
      */
-    VoSearchResult<VoPromotionCoupon> getFilteredPromotionCoupons(long promotionId, VoSearchContext filter) throws Exception;
+    VoSearchResult<VoPromotionCoupon> getFilteredPromotionCoupons(VoSearchContext filter) throws Exception;
 
     /**
      * Create new promotion coupons.
      *
-     * To retrieve new coupond use {{@link #getFilteredPromotion(String, String, VoSearchContext)}} with
+     * To retrieve new coupond use {{@link #getFilteredPromotion(VoSearchContext)}} with
      * filter "yyyy-MM-dd HH:mm:ss<"
      *
      * @param vo given instance template to persist

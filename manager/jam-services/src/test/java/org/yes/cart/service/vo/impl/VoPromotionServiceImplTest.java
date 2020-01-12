@@ -48,16 +48,24 @@ public class VoPromotionServiceImplTest extends BaseCoreDBTestCase {
 
 
         VoSearchContext ctxAll = new VoSearchContext();
+        ctxAll.setParameters(createSearchContextParams(
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxAll.setSize(10);
 
-        List<VoPromotion> promoNoFilter = voPromotionService.getFilteredPromotion("SHOIP1", "EUR", ctxAll).getItems();
+        List<VoPromotion> promoNoFilter = voPromotionService.getFilteredPromotion(ctxAll).getItems();
         assertNotNull(promoNoFilter);
         assertFalse(promoNoFilter.isEmpty());
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("Promo 002")));
+        ctxFind.setParameters(createSearchContextParams(
+                "filter", "Promo 002",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxFind.setSize(10);
-        List<VoPromotion> promoFind = voPromotionService.getFilteredPromotion("SHOIP1", "EUR", ctxFind).getItems();
+        List<VoPromotion> promoFind = voPromotionService.getFilteredPromotion(ctxFind).getItems();
         assertNotNull(promoFind);
         assertFalse(promoFind.isEmpty());
 
@@ -65,38 +73,54 @@ public class VoPromotionServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("PROMO002", promo2.getCode());
 
         VoSearchContext ctxByCode = new VoSearchContext();
-        ctxByCode.setParameters(Collections.singletonMap("filter", Collections.singletonList("#PROMO002")));
+        ctxByCode.setParameters(createSearchContextParams(
+                "filter", "#PROMO002",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxByCode.setSize(10);
-        List<VoPromotion> ptExact = voPromotionService.getFilteredPromotion("SHOIP1", "EUR", ctxByCode).getItems();
+        List<VoPromotion> ptExact = voPromotionService.getFilteredPromotion(ctxByCode).getItems();
         assertNotNull(ptExact);
         assertFalse(ptExact.isEmpty());
         assertEquals("PROMO002", ptExact.get(0).getCode());
 
         VoSearchContext ctxByConditions = new VoSearchContext();
-        ctxByConditions.setParameters(Collections.singletonMap("filter", Collections.singletonList("?true")));
+        ctxByConditions.setParameters(createSearchContextParams(
+                "filter", "?true",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxByConditions.setSize(10);
-        List<VoPromotion> promoByConditionOrContext1 = voPromotionService.getFilteredPromotion("SHOIP1", "EUR", ctxByConditions).getItems();
+        List<VoPromotion> promoByConditionOrContext1 = voPromotionService.getFilteredPromotion(ctxByConditions).getItems();
         assertNotNull(promoByConditionOrContext1);
         assertFalse(promoByConditionOrContext1.isEmpty());
 
         VoSearchContext ctxByConditionsEnabled = new VoSearchContext();
-        ctxByConditionsEnabled.setParameters(Collections.singletonMap("filter", Collections.singletonList("+?true")));
+        ctxByConditionsEnabled.setParameters(createSearchContextParams(
+                "filter", "+?true",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxByConditionsEnabled.setSize(10);
-        List<VoPromotion> promoEnabled = voPromotionService.getFilteredPromotion("SHOIP1", "EUR", ctxByConditionsEnabled).getItems();
+        List<VoPromotion> promoEnabled = voPromotionService.getFilteredPromotion(ctxByConditionsEnabled).getItems();
         assertNotNull(promoEnabled);
         assertTrue(promoEnabled.isEmpty());
 
         VoSearchContext ctxByConditionsDisabled = new VoSearchContext();
-        ctxByConditionsDisabled.setParameters(Collections.singletonMap("filter", Collections.singletonList("-?true")));
+        ctxByConditionsDisabled.setParameters(createSearchContextParams(
+                "filter", "-?true",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxByConditionsDisabled.setSize(10);
-        List<VoPromotion> promoDisabled = voPromotionService.getFilteredPromotion("SHOIP1", "EUR", ctxByConditionsDisabled).getItems();
+        List<VoPromotion> promoDisabled = voPromotionService.getFilteredPromotion(ctxByConditionsDisabled).getItems();
         assertNotNull(promoDisabled);
         assertFalse(promoDisabled.isEmpty());
 
     }
 
     @Test
-    public void testProductTypeCRUD() throws Exception {
+    public void testPromotionCRUD() throws Exception {
 
         final VoPromotion promotion = new VoPromotion();
         promotion.setCode("TESTCRUD");
@@ -126,10 +150,14 @@ public class VoPromotionServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(updated.isEnabled());
 
         VoSearchContext ctxByCode = new VoSearchContext();
-        ctxByCode.setParameters(Collections.singletonMap("filter", Collections.singletonList("#TESTCRUD")));
+        ctxByCode.setParameters(createSearchContextParams(
+                "filter", "#TESTCRUD",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxByCode.setSize(10);
 
-        assertFalse(voPromotionService.getFilteredPromotion("SHOIP1", "EUR",ctxByCode).getItems().isEmpty());
+        assertFalse(voPromotionService.getFilteredPromotion(ctxByCode).getItems().isEmpty());
 
         voPromotionService.updateDisabledFlag(updated.getPromotionId(), false);
         assertTrue(voPromotionService.getPromotionById(updated.getPromotionId()).isEnabled());
@@ -138,9 +166,12 @@ public class VoPromotionServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(voPromotionService.getPromotionById(updated.getPromotionId()).isEnabled());
 
         VoSearchContext ctxAnyCoupon = new VoSearchContext();
+        ctxAnyCoupon.setParameters(createSearchContextParams(
+                "promotionId", updated.getPromotionId()
+        ));
         ctxAnyCoupon.setSize(10);
 
-        final List<VoPromotionCoupon> coupons = voPromotionService.getFilteredPromotionCoupons(updated.getPromotionId(), ctxAnyCoupon).getItems();
+        final List<VoPromotionCoupon> coupons = voPromotionService.getFilteredPromotionCoupons(ctxAnyCoupon).getItems();
         assertNotNull(coupons);
         assertTrue(coupons.isEmpty());
 
@@ -151,27 +182,30 @@ public class VoPromotionServiceImplTest extends BaseCoreDBTestCase {
         couponsCreate.setUsageLimitPerCustomer(1);
 
         voPromotionService.createPromotionCoupons(couponsCreate);
-        final List<VoPromotionCoupon> afterCouponsCreated = voPromotionService.getFilteredPromotionCoupons(updated.getPromotionId(), ctxAnyCoupon).getItems();
+        final List<VoPromotionCoupon> afterCouponsCreated = voPromotionService.getFilteredPromotionCoupons(ctxAnyCoupon).getItems();
         assertNotNull(afterCouponsCreated);
         assertEquals(5, afterCouponsCreated.size());
 
         voPromotionService.removePromotionCoupon(afterCouponsCreated.get(0).getPromotioncouponId());
 
-        final List<VoPromotionCoupon> afterCouponRemoved = voPromotionService.getFilteredPromotionCoupons(updated.getPromotionId(), ctxAnyCoupon).getItems();
+        final List<VoPromotionCoupon> afterCouponRemoved = voPromotionService.getFilteredPromotionCoupons(ctxAnyCoupon).getItems();
         assertNotNull(afterCouponRemoved);
         assertEquals(4, afterCouponRemoved.size());
 
         VoSearchContext ctxCouponByCode = new VoSearchContext();
-        ctxCouponByCode.setParameters(Collections.singletonMap("filter", Collections.singletonList(afterCouponRemoved.get(0).getCode())));
+        ctxCouponByCode.setParameters(createSearchContextParams(
+                "filter", afterCouponRemoved.get(0).getCode(),
+                "promotionId", updated.getPromotionId()
+        ));
         ctxCouponByCode.setSize(10);
 
-        final List<VoPromotionCoupon> couponsFind = voPromotionService.getFilteredPromotionCoupons(updated.getPromotionId(), ctxCouponByCode).getItems();
+        final List<VoPromotionCoupon> couponsFind = voPromotionService.getFilteredPromotionCoupons(ctxCouponByCode).getItems();
         assertNotNull(couponsFind);
         assertEquals(1, couponsFind.size());
 
         voPromotionService.removePromotion(updated.getPromotionId());
 
-        assertTrue(voPromotionService.getFilteredPromotion("SHOIP1", "EUR",ctxCouponByCode).getItems().isEmpty());
+        assertTrue(voPromotionService.getFilteredPromotion(ctxByCode).getItems().isEmpty());
 
     }
 

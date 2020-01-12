@@ -23,7 +23,6 @@ import org.yes.cart.domain.vo.VoSearchContext;
 import org.yes.cart.service.vo.VoPriceService;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -47,18 +46,26 @@ public class VoPriceServiceImplTest extends BaseCoreDBTestCase {
     public void testGetPrices() throws Exception {
 
         VoSearchContext ctxNone = new VoSearchContext();
-        ctxNone.setParameters(Collections.singletonMap("filter", Collections.singletonList("XXXX")));
+        ctxNone.setParameters(createSearchContextParams(
+                "filter", "XXXX",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxNone.setSize(10);
 
-        final List<VoPriceList> pl = voPriceService.getFilteredPrices(10L, "EUR", ctxNone).getItems();
+        final List<VoPriceList> pl = voPriceService.getFilteredPrices(ctxNone).getItems();
         assertNotNull(pl);
         assertTrue(pl.isEmpty());
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("CC_TEST1")));
+        ctxFind.setParameters(createSearchContextParams(
+                "filter", "CC_TEST1",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxFind.setSize(10);
 
-        final List<VoPriceList> pl2 = voPriceService.getFilteredPrices(10L, "EUR", ctxFind).getItems();
+        final List<VoPriceList> pl2 = voPriceService.getFilteredPrices(ctxFind).getItems();
         assertNotNull(pl2);
         assertFalse(pl2.isEmpty());
         assertEquals("CC_TEST1", pl2.get(0).getSkuCode());
@@ -89,14 +96,18 @@ public class VoPriceServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(new BigDecimal("19.99").compareTo(updated.getRegularPrice()) == 0);
 
         VoSearchContext ctxExact = new VoSearchContext();
-        ctxExact.setParameters(Collections.singletonMap("filter", Collections.singletonList("!TESTCRUD")));
+        ctxExact.setParameters(createSearchContextParams(
+                "filter", "!TESTCRUD",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         ctxExact.setSize(10);
 
-        assertFalse(voPriceService.getFilteredPrices(10L, "EUR",ctxExact).getItems().isEmpty());
+        assertFalse(voPriceService.getFilteredPrices(ctxExact).getItems().isEmpty());
 
         voPriceService.removePrice(updated.getSkuPriceId());
 
-        assertTrue(voPriceService.getFilteredPrices(10L, "EUR",ctxExact).getItems().isEmpty());
+        assertTrue(voPriceService.getFilteredPrices(ctxExact).getItems().isEmpty());
 
     }
 }

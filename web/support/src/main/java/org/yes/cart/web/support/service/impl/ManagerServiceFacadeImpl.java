@@ -114,14 +114,15 @@ public class ManagerServiceFacadeImpl implements ManagerServiceFacade {
         if (filter.isEmpty()) {
             filter = searchContext.reduceParameters("email", "firstname", "lastname", "companyName1", "companyName2", "tag");
         }
+        filter.put("shopIds", Collections.singletonList(shopId));
 
         final int pageSize = Math.min(searchContext.getSize(), 50);
         final int startIndex = searchContext.getStart() * pageSize;
 
-        final int count = customerService.findCustomerCount(Collections.singleton(shopId), filter);
+        final int count = customerService.findCustomerCount(filter);
         if (count > startIndex) {
 
-            final List<Customer> customer = customerService.findCustomers(startIndex, pageSize, searchContext.getSortBy(), searchContext.isSortDesc(), Collections.singleton(shopId), filter);
+            final List<Customer> customer = customerService.findCustomers(startIndex, pageSize, searchContext.getSortBy(), searchContext.isSortDesc(), filter);
             return new SearchResult<>(searchContext, customer, count);
 
         }

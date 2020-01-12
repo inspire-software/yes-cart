@@ -30,7 +30,6 @@ import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.utils.DateUtils;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -65,8 +64,10 @@ public class DtoPromotionCouponServiceImplTezt extends BaseCoreDBTestCase {
 
 
         // retrieve specific
-        final SearchContext all = new SearchContext(Collections.emptyMap(), 0, 20, "code", false);
-        List<PromotionCouponDTO> coupons = dtoPromotionCouponService.findCoupons(promotionDTO.getPromotionId(), all).getItems();
+        final SearchContext all = createSearchContext("code", false, 0, 20,
+                "promotionId", promotionDTO.getPromotionId()
+        );
+        List<PromotionCouponDTO> coupons = dtoPromotionCouponService.findCoupons(all).getItems();
 
         assertNotNull(coupons);
         assertEquals(11, coupons.size());
@@ -76,7 +77,10 @@ public class DtoPromotionCouponServiceImplTezt extends BaseCoreDBTestCase {
         }
 
         // retrieve non-existent
-        coupons = dtoPromotionCouponService.findCoupons(123123L, all).getItems();
+        final SearchContext none = createSearchContext("code", false, 0, 20,
+                "promotionId", 123123L
+        );
+        coupons = dtoPromotionCouponService.findCoupons(none).getItems();
 
         assertNotNull(coupons);
         assertEquals(0, coupons.size());
@@ -93,24 +97,32 @@ public class DtoPromotionCouponServiceImplTezt extends BaseCoreDBTestCase {
         dtoPromotionCouponService.create(getMultiCouponDTO(promotionDTO));
 
         // find all
-        final SearchContext all = new SearchContext(Collections.emptyMap(), 0, 20, "code", false);
-        final List<PromotionCouponDTO> coupons = dtoPromotionCouponService.findCoupons(promotionDTO.getPromotionId(), all).getItems();
+        final SearchContext all = createSearchContext("code", false, 0, 20,
+                "promotionId", promotionDTO.getPromotionId()
+        );
+        final List<PromotionCouponDTO> coupons = dtoPromotionCouponService.findCoupons(all).getItems();
         assertNotNull(coupons);
         assertEquals(10, coupons.size());
 
-        List<PromotionCouponDTO> find = dtoPromotionCouponService.findCoupons(promotionDTO.getPromotionId(), all).getItems();
+        List<PromotionCouponDTO> find = dtoPromotionCouponService.findCoupons(all).getItems();
         assertNotNull(find);
         assertEquals(10, find.size());
         // find by code
-        final SearchContext filterByCode = new SearchContext(Collections.singletonMap("filter", Collections.singletonList(coupons.get(0).getCode())), 0, 20, "code", false, "filter");
-        find = dtoPromotionCouponService.findCoupons(promotionDTO.getPromotionId(), filterByCode).getItems();
+        final SearchContext filterByCode = createSearchContext("code", false, 0, 20,
+                "filter", coupons.get(0).getCode(),
+                "promotionId", promotionDTO.getPromotionId()
+        );
+        find = dtoPromotionCouponService.findCoupons(filterByCode).getItems();
         assertNotNull(find);
         assertEquals(1, find.size());
         // created 60 sec ago
         final Instant back60s = DateUtils.iFrom(System.currentTimeMillis() - 60000L);
         final String back60sString = DateUtils.format(back60s, "yyyy-MM-dd HH:mm:ss");
-        final SearchContext filterByTime = new SearchContext(Collections.singletonMap("filter", Collections.singletonList(back60sString + "<")), 0, 20, "code", false, "filter");
-        find = dtoPromotionCouponService.findCoupons(promotionDTO.getPromotionId(), filterByTime).getItems();
+        final SearchContext filterByTime = createSearchContext("code", false, 0, 20,
+                "filter", back60sString + "<",
+                "promotionId", promotionDTO.getPromotionId()
+        );
+        find = dtoPromotionCouponService.findCoupons(filterByTime).getItems();
         assertNotNull(find);
         assertEquals(10, find.size());
 
@@ -136,8 +148,10 @@ public class DtoPromotionCouponServiceImplTezt extends BaseCoreDBTestCase {
 
         dtoPromotionCouponService.create(getSingleCouponDTO(promotionDTO));
 
-        final SearchContext all = new SearchContext(Collections.emptyMap(), 0, 20, "code", false);
-        final List<PromotionCouponDTO> coupons = dtoPromotionCouponService.findCoupons(promotionDTO.getPromotionId(), all).getItems();
+        final SearchContext all = createSearchContext("code", false, 0, 20,
+                "promotionId", promotionDTO.getPromotionId()
+        );
+        final List<PromotionCouponDTO> coupons = dtoPromotionCouponService.findCoupons(all).getItems();
         assertNotNull(coupons);
         assertEquals(1, coupons.size());
 
@@ -159,14 +173,16 @@ public class DtoPromotionCouponServiceImplTezt extends BaseCoreDBTestCase {
 
         dtoPromotionCouponService.create(getSingleCouponDTO(promotionDTO));
 
-        final SearchContext all = new SearchContext(Collections.emptyMap(), 0, 20, "code", false);
-        final List<PromotionCouponDTO> coupons = dtoPromotionCouponService.findCoupons(promotionDTO.getPromotionId(), all).getItems();
+        final SearchContext all = createSearchContext("code", false, 0, 20,
+                "promotionId", promotionDTO.getPromotionId()
+        );
+        final List<PromotionCouponDTO> coupons = dtoPromotionCouponService.findCoupons(all).getItems();
         assertNotNull(coupons);
         assertEquals(1, coupons.size());
 
         dtoPromotionCouponService.remove(coupons.get(0).getPromotioncouponId());
 
-        assertTrue(dtoPromotionCouponService.findCoupons(promotionDTO.getPromotionId(), all).getItems().isEmpty());
+        assertTrue(dtoPromotionCouponService.findCoupons(all).getItems().isEmpty());
         dtoPromotionService.remove(promotionDTO.getPromotionId());
 
     }

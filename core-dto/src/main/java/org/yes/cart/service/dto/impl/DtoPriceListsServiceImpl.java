@@ -34,9 +34,9 @@ import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoPriceListsService;
 import org.yes.cart.service.dto.DtoProductSkuService;
-import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.MoneyUtils;
 
@@ -50,9 +50,9 @@ import java.util.*;
  */
 public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
-    private final DtoShopService dtoShopService;
     private final DtoProductSkuService dtoProductSkuService;
     private final PriceService priceService;
+    private final ShopService shopService;
 
     private final GenericDAO<SkuPrice, Long> skuPriceDAO;
     private final GenericDAO<ProductSku, Long> productSkuDAO;
@@ -64,15 +64,15 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
     private final Assembler skuPriceAsm;
 
-    public DtoPriceListsServiceImpl(final DtoShopService dtoShopService,
-                                    final DtoProductSkuService dtoProductSkuService,
+    public DtoPriceListsServiceImpl(final DtoProductSkuService dtoProductSkuService,
                                     final PriceService priceService,
                                     final GenericDAO<ProductSku, Long> productSkuDAO,
                                     final GenericDAO<CarrierSla, Long> carrierSlaDAO,
                                     final GenericDAO<Shop, Long> shopDAO,
                                     final DtoFactory dtoFactory,
-                                    final AdaptersRepository adaptersRepository) {
-        this.dtoShopService = dtoShopService;
+                                    final AdaptersRepository adaptersRepository,
+                                    final ShopService shopService) {
+        this.shopService = shopService;
         this.dtoProductSkuService = dtoProductSkuService;
         this.priceService = priceService;
         this.carrierSlaDAO = carrierSlaDAO;
@@ -92,23 +92,25 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
     private final static char[] TAG_OR_POLICY = new char[] { '#' };
 
     @Override
-    public SearchResult<PriceListDTO> findPrices(final long shopId, final String currency, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<PriceListDTO> findPrices(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, List> params = filter.reduceParameters("filter");
-        final List filterParam = params.get("filter");
+        final Map<String, List> params = filter.reduceParameters("filter", "shopCode", "currency");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final String shopCode = FilterSearchUtils.getStringFilter(params.get("shopCode"));
+        final String currency = FilterSearchUtils.getStringFilter(params.get("currency"));
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
 
         final PriceService priceService = this.priceService;
 
-        if (shopId > 0 && StringUtils.isNotBlank(currency)) {
+        final Shop shop = shopService.getShopByCode(shopCode);
+
+        if (shop != null && StringUtils.isNotBlank(currency)) {
             // only allow lists for shop+currency selection
 
             final Map<String, List> currentFilter = new HashMap<>();
-            if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
-
-                final String textFilter = ((String) filterParam.get(0)).trim();
+            if (StringUtils.isNotBlank(textFilter)) {
 
                 final Pair<String, String> tagSearch = ComplexSearchUtils.checkSpecialSearch(textFilter, TAG_OR_POLICY);
                 final Pair<LocalDateTime, LocalDateTime> dateSearch = tagSearch == null ? ComplexSearchUtils.checkDateRangeSearch(textFilter) : null;
@@ -121,7 +123,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                     if ("shipping".equalsIgnoreCase(tagOrPolicy)) {
 
                         final List<String> codes = new ArrayList<>();
-                        final List<CarrierSla> carrierSlas = carrierSlaDAO.findByCriteria(" inner join fetch e.carrier c join fetch c.shops s where s.shop.shopId = ?1", shopId);
+                        final List<CarrierSla> carrierSlas = carrierSlaDAO.findByCriteria(" inner join fetch e.carrier c join fetch c.shops s where s.shop.shopId = ?1", shop.getShopId());
                         if (CollectionUtils.isNotEmpty(carrierSlas)) {
                             for (final CarrierSla carrierSla : carrierSlas) {
                                 codes.add(carrierSla.getGuid());
@@ -229,7 +231,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
             }
 
-            currentFilter.put("shopIds", Collections.singletonList(shopId));
+            currentFilter.put("shopIds", Collections.singletonList(shop.getShopId()));
             currentFilter.put("currencies", Collections.singletonList(currency));
 
             final int count = priceService.findPriceCount(currentFilter);

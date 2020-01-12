@@ -10,7 +10,7 @@ import {
   PromotionComponent, PromotionCouponsComponent, PromotionsComponent, PromotionTestConfigComponent, PromotionTestResultComponent,
   TaxConfigsComponent, TaxesComponent
 } from './components/index';
-import { ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent } from './index';
+import { ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent, ShopTaxConfigsComponent } from './index';
 
 @NgModule({
     imports: [PriceListRoutingModule, CommonModule, SharedModule, ServicesModule],
@@ -18,13 +18,13 @@ import { ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent } f
       PriceListComponent, PriceComponent,
       PromotionComponent, PromotionCouponsComponent, PromotionsComponent,
       TaxConfigsComponent, TaxesComponent,
-      ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent, PromotionTestConfigComponent, PromotionTestResultComponent
+      ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent, ShopTaxConfigsComponent, PromotionTestConfigComponent, PromotionTestResultComponent
     ],
     exports: [
       PriceListComponent, PriceComponent,
       PromotionComponent, PromotionCouponsComponent, PromotionsComponent,
       TaxConfigsComponent, TaxesComponent,
-      ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent, PromotionTestConfigComponent, PromotionTestResultComponent
+      ShopPriceListComponent, ShopPromotionsComponent, ShopTaxesComponent, ShopTaxConfigsComponent, PromotionTestConfigComponent, PromotionTestResultComponent
     ]
 })
 

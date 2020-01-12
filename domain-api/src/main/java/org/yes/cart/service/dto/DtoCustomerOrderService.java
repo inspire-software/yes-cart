@@ -175,13 +175,11 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
     /**
      * Get orders by filter.
      *
-     * @param shopIds   enforce access.
      * @param filter    filter
      *
      * @return list of orders
      */
-    SearchResult<CustomerOrderDTO> findOrders(Set<Long> shopIds,
-                                              SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<CustomerOrderDTO> findOrders(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get localized name for all payment gateways on this server.

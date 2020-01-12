@@ -75,9 +75,9 @@ public interface FulfilmentEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMWAREHOUSEUSER"})
-    @RequestMapping(value = "/inventory/centre/{id}/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/inventory/centre/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoSearchResult<VoInventory> getFilteredInventory(@PathVariable("id") long centreId, @RequestBody VoSearchContext filter) throws Exception;
+    VoSearchResult<VoInventory> getFilteredInventory(@RequestBody VoSearchContext filter) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMWAREHOUSEUSER"})
     @RequestMapping(value = "/inventory/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

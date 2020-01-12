@@ -562,11 +562,13 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       });
 
       this.promotions.searchContext.parameters.filter = [ this.promotionFilter ];
+      this.promotions.searchContext.parameters.shopCode = [ this.selectedShop.code ];
+      this.promotions.searchContext.parameters.currency = [ this.selectedCurrency ];
       this.promotions.searchContext.parameters.types = types;
       this.promotions.searchContext.parameters.actions = actions;
       this.promotions.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
 
-      let _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotions.searchContext).subscribe( allpromotions => {
+      let _sub:any = this._promotionService.getFilteredPromotions(this.promotions.searchContext).subscribe( allpromotions => {
         LogUtil.debug('ShopPromotionsComponent getFilteredPromotions', allpromotions);
         this.promotions = allpromotions;
         this.selectedPromotion = null;

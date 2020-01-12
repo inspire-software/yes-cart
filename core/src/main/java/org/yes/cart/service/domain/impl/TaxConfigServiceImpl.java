@@ -26,6 +26,7 @@ import org.yes.cart.service.domain.TaxService;
 import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -130,9 +131,27 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
             hqlCriteria.append("select c from TaxConfigEntity c ");
         }
 
+        final List shopCode = currentFilter != null ? currentFilter.remove("shopCode") : null;
+        if (shopCode != null) {
+            final List currency = currentFilter.remove("currency");
+            final List<Tax> shopTaxes = taxService.getTaxesByShopCode((String) shopCode.get(0), (String) currency.get(0));
+            final List<Long> shopTaxIds;
+            if (!shopTaxes.isEmpty()) {
+                shopTaxIds = shopTaxes.stream().map(Tax::getTaxId).collect(Collectors.toList());
+            } else {
+                shopTaxIds = Collections.singletonList(0L);
+            }
+            hqlCriteria.append(" where (c.tax.taxId in (?1)) ");
+            params.add(shopTaxIds);
+        }
+
         final List taxIds = currentFilter != null ? currentFilter.remove("taxIds") : null;
         if (taxIds != null) {
-            hqlCriteria.append(" where (c.tax.taxId in (?1)) ");
+            if (params.isEmpty()) {
+                hqlCriteria.append(" where (c.tax.taxId in (?").append(params.size() + 1).append(")) ");
+            } else {
+                hqlCriteria.append(" and (c.tax.taxId in (?").append(params.size() + 1).append(")) ");
+            }
             params.add(taxIds);
         }
 

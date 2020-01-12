@@ -7,6 +7,9 @@
         <th><a class="js-click" (click)="onSortClick('countryCode')">{{ 'LOCATION_COUNTRY' | translate }} <span [hidden]="sortColumn != 'countryCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th><a class="js-click" (click)="onSortClick('stateCode')">{{ 'LOCATION_STATE_CODE' | translate }} <span [hidden]="sortColumn != 'stateCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th><a class="js-click" (click)="onSortClick('productCode')">{{ 'SKU' | translate }} <span [hidden]="sortColumn != 'productCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'TAX_RATE' | translate }}</th>
+        <th>{{ 'TAX_TYPE' | translate }}</th>
       </tr>
       </thead>
       <tbody>
@@ -14,6 +17,9 @@
         <td title="{{ 'LOCATION_COUNTRY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.countryCode ? row.countryCode : '***'}}</a>&nbsp;</td>
         <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.stateCode ? row.stateCode : '***' }}</a>&nbsp;</td>
         <td title="{{ 'SKU' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productCode ? row.productCode : '***' }}</a>&nbsp;</td>
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tax.code}} <span [hidden]="row.tax.shopCode == selectedShopCode"><i class="fa fa-share-alt-square" title="{{row.tax.shopCode}}"></i></span></a></td>
+        <td title="{{ 'TAX_RATE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.tax.taxRate | ycprice }}%</a></td>
+        <td title="{{ 'TAX_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ (row.tax.exclusiveOfPrice ? 'TAX_TYPE_EXCLUSIVE' : 'TAX_TYPE_INCLUSIVE') | translate }}</a></td>
       </tr>
       </tbody>
     </table>

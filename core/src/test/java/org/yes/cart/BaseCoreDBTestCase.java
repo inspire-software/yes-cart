@@ -28,17 +28,14 @@ import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.Collections.singletonMap;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -432,4 +429,50 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
         return cacheMap;
     }
+
+    protected SearchContext createSearchContext(final String sortBy,
+                                                final boolean sortDesc,
+                                                final int start,
+                                                final int size,
+                                                final Object ... params) {
+        final Map<String, List> parameters = createSearchContextParams(params);
+        return new SearchContext(parameters, start, size, sortBy, sortDesc, parameters.keySet().toArray(new String[parameters.size()]));
+
+    }
+
+    protected SearchContext createSearchContext(final int start,
+                                                final int size,
+                                                final Object ... params) {
+        return createSearchContext(null, false, start, size, params);
+
+    }
+
+    protected SearchContext createSearchContext(final SearchContext ctx,
+                                                final Object ... params) {
+        final Object[] all = new Object[params.length + ctx.getParameters().size()];
+        int i = 0;
+        for (final Map.Entry<String, List> entry : ctx.getParameters().entrySet()) {
+            all[i++] = entry.getKey();
+            all[i++] = entry.getValue();
+        }
+        System.arraycopy(params, 0, all, i, params.length);
+
+        return createSearchContext(ctx.getSortBy(), ctx.isSortDesc(), ctx.getStart(), ctx.getSize(), all);
+
+    }
+
+    protected Map<String, List> createSearchContextParams(final Object ... params) {
+        final Map<String, List> parameters = new HashMap<>();
+        if (params != null) {
+            for (int i = 0; i < params.length; i += 2) {
+                if (params[i + 1] instanceof List) {
+                    parameters.put((String) params[i], (List) params[i + 1]);
+                } else {
+                    parameters.put((String) params[i], Collections.singletonList(params[i + 1]));
+                }
+            }
+        }
+        return parameters;
+    }
+
 }

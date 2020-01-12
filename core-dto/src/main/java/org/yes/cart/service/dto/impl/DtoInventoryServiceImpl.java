@@ -88,10 +88,11 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
     /** {@inheritDoc} */
     @Override
-    public SearchResult<InventoryDTO> findInventory(final long warehouseId, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<InventoryDTO> findInventory(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, List> params = filter.reduceParameters("filter");
-        final List filterParam = params.get("filter");
+        final Map<String, List> params = filter.reduceParameters("filter", "centreId");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final long warehouseId = FilterSearchUtils.getIdFilter(params.get("centreId"));
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
@@ -102,9 +103,8 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
             // only allow lists for warehouse inventory lists
 
             final Map<String, List> currentFilter = new HashMap<>();
-            if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
 
-                final String textFilter = ((String) filterParam.get(0)).trim();
+            if (StringUtils.isNotBlank(textFilter)) {
 
                 final Pair<LocalDateTime, LocalDateTime> dateSearch = ComplexSearchUtils.checkDateRangeSearch(textFilter);
 
@@ -191,7 +191,6 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
                     }
 
                 }
-
             }
 
             currentFilter.put("warehouseIds", Collections.singletonList(warehouseId));

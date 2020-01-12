@@ -159,7 +159,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     private Pair<String, Object[]> findCustomerQuery(final boolean count,
                                                      final String sort,
                                                      final boolean sortDescending,
-                                                     final Set<Long> shops,
                                                      final Map<String, List> filter) {
 
         final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
@@ -188,6 +187,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             }
         }
 
+        final List shops = currentFilter != null ? currentFilter.remove("shopIds") : null;
         if (CollectionUtils.isNotEmpty(shops)) {
             hqlCriteria.append(" where (cse.shop.shopId in (?1) or cse.shop.master.shopId in (?1)) ");
             params.add(shops);
@@ -225,10 +225,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
                                         final int offset,
                                         final String sort,
                                         final boolean sortDescending,
-                                        final Set<Long> shops,
                                         final Map<String, List> filter) {
 
-        final Pair<String, Object[]> query = findCustomerQuery(false, sort, sortDescending, shops, filter);
+        final Pair<String, Object[]> query = findCustomerQuery(false, sort, sortDescending, filter);
 
         return getGenericDao().findRangeByQuery(
                 query.getFirst(),
@@ -241,10 +240,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     @Override
-    public int findCustomerCount(final Set<Long> shops,
-                                 final Map<String, List> filter) {
+    public int findCustomerCount(final Map<String, List> filter) {
 
-        final Pair<String, Object[]> query = findCustomerQuery(true, null, false, shops, filter);
+        final Pair<String, Object[]> query = findCustomerQuery(true, null, false, filter);
 
         return getGenericDao().findCountByQuery(
                 query.getFirst(),

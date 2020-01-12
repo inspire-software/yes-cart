@@ -474,9 +474,11 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       this.loading = true;
 
       this.pricelist.searchContext.parameters.filter = [ this.pricelistFilter ];
+      this.pricelist.searchContext.parameters.shopCode = [ this.selectedShop.code ];
+      this.pricelist.searchContext.parameters.currency = [ this.selectedCurrency ];
       this.pricelist.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
 
-      let _sub:any = this._priceService.getFilteredPriceLists(this.selectedShop, this.selectedCurrency, this.pricelist.searchContext).subscribe( allpricelist => {
+      let _sub:any = this._priceService.getFilteredPriceLists(this.pricelist.searchContext).subscribe( allpricelist => {
         LogUtil.debug('ShopPriceListComponent getFilteredPricelist', allpricelist);
         this.pricelist = allpricelist;
         this.selectedPricelist = null;

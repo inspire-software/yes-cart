@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.TaxConfigDTO;
@@ -28,15 +29,15 @@ import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.domain.vo.VoTax;
 import org.yes.cart.domain.vo.VoTaxConfig;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.DtoTaxConfigService;
 import org.yes.cart.service.dto.DtoTaxService;
+import org.yes.cart.service.dto.impl.FilterSearchUtils;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoTaxService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -69,33 +70,35 @@ public class VoTaxServiceImpl implements VoTaxService {
      * {@inheritDoc}
      */
     @Override
-    public VoSearchResult<VoTax> getFilteredTax(final String shopCode, final String currency, final VoSearchContext filter) throws Exception {
+    public VoSearchResult<VoTax> getFilteredTax(final VoSearchContext filter) throws Exception {
 
         final VoSearchResult<VoTax> result = new VoSearchResult<>();
         final List<VoTax> results = new ArrayList<>();
         result.setSearchContext(filter);
         result.setItems(results);
 
-        if (!federationFacade.isManageable(shopCode, ShopDTO.class)) {
-            return result;
+        final String shopCode = FilterSearchUtils.getStringFilter(filter.getParameters().get("shopCode"));
+        final String currency = FilterSearchUtils.getStringFilter(filter.getParameters().get("currency"));
+
+        if (federationFacade.isManageable(shopCode, ShopDTO.class) && StringUtils.isNotBlank(currency)) {
+
+            final SearchContext searchContext = new SearchContext(
+                    filter.getParameters(),
+                    filter.getStart(),
+                    filter.getSize(),
+                    filter.getSortBy(),
+                    filter.isSortDesc(),
+                    "filter", "shopCode", "currency"
+            );
+
+
+            final SearchResult<TaxDTO> batch = dtoTaxService.findTaxes(searchContext);
+            if (!batch.getItems().isEmpty()) {
+                results.addAll(voAssemblySupport.assembleVos(VoTax.class, TaxDTO.class, batch.getItems()));
+            }
+
+            result.setTotal(batch.getTotal());
         }
-
-        final SearchContext searchContext = new SearchContext(
-                filter.getParameters(),
-                filter.getStart(),
-                filter.getSize(),
-                filter.getSortBy(),
-                filter.isSortDesc(),
-                "filter"
-        );
-
-
-        final SearchResult<TaxDTO> batch = dtoTaxService.findTaxes(shopCode, currency, searchContext);
-        if (!batch.getItems().isEmpty()) {
-            results.addAll(voAssemblySupport.assembleVos(VoTax.class, TaxDTO.class, batch.getItems()));
-        }
-
-        result.setTotal(batch.getTotal());
 
         return result;
     }
@@ -164,31 +167,52 @@ public class VoTaxServiceImpl implements VoTaxService {
      * {@inheritDoc}
      */
     @Override
-    public VoSearchResult<VoTaxConfig> getFilteredTaxConfig(final long taxId, final VoSearchContext filter) throws Exception {
-
-        getTaxById(taxId); // check access
+    public VoSearchResult<VoTaxConfig> getFilteredTaxConfig(final VoSearchContext filter) throws Exception {
 
         final VoSearchResult<VoTaxConfig> result = new VoSearchResult<>();
         final List<VoTaxConfig> results = new ArrayList<>();
         result.setSearchContext(filter);
         result.setItems(results);
 
+        final String shopCode = FilterSearchUtils.getStringFilter(filter.getParameters().get("shopCode"));
+        final String currency = FilterSearchUtils.getStringFilter(filter.getParameters().get("currency"));
 
-        final SearchContext searchContext = new SearchContext(
-                filter.getParameters(),
-                filter.getStart(),
-                filter.getSize(),
-                filter.getSortBy(),
-                filter.isSortDesc(),
-                "filter"
-        );
+        if (federationFacade.isManageable(shopCode, ShopDTO.class) && StringUtils.isNotBlank(currency)) {
 
-        final SearchResult<TaxConfigDTO> batch = dtoTaxConfigService.findTaxConfigs(taxId, searchContext);
-        if (!batch.getItems().isEmpty()) {
-            results.addAll(voAssemblySupport.assembleVos(VoTaxConfig.class, TaxConfigDTO.class, batch.getItems()));
+            final Map<String, List> allShopTaxParams = new HashMap<>();
+            allShopTaxParams.put("shopCode", Collections.singletonList(shopCode));
+            allShopTaxParams.put("currency", Collections.singletonList(currency));
+            final VoSearchContext allShopTaxCtx = new VoSearchContext();
+            allShopTaxCtx.setParameters(allShopTaxParams);
+            allShopTaxCtx.setSize(1000);
+
+            final VoSearchResult<VoTax> res = getFilteredTax(allShopTaxCtx);
+
+            if (res.getTotal() > 0) {
+
+                final SearchContext searchContext = new SearchContext(
+                        filter.getParameters(),
+                        filter.getStart(),
+                        filter.getSize(),
+                        filter.getSortBy(),
+                        filter.isSortDesc(),
+                        "filter", "shopCode", "currency"
+                );
+
+                final SearchResult<TaxConfigDTO> batch = dtoTaxConfigService.findTaxConfigs(searchContext);
+                if (!batch.getItems().isEmpty()) {
+                    final Map<Long, VoTax> taxMap = res.getItems().stream().collect(Collectors.toMap(VoTax::getTaxId, item -> item));
+                    for (final TaxConfigDTO dto : batch.getItems()) {
+                        final VoTaxConfig cfg = voAssemblySupport.assembleVo(VoTaxConfig.class, TaxConfigDTO.class, new VoTaxConfig(), dto);
+                        cfg.setTax(taxMap.get(dto.getTaxId()));
+                        results.add(cfg);
+                    }
+                }
+
+                result.setTotal(batch.getTotal());
+
+            }
         }
-
-        result.setTotal(batch.getTotal());
 
         return result;
 
@@ -201,8 +225,10 @@ public class VoTaxServiceImpl implements VoTaxService {
     public VoTaxConfig getTaxConfigById(final long id) throws Exception {
 
         final TaxConfigDTO dto = dtoTaxConfigService.getById(id);
-        if (dto != null && getTaxById(dto.getTaxId()) != null) {
-            return voAssemblySupport.assembleVo(VoTaxConfig.class, TaxConfigDTO.class, new VoTaxConfig(), dto);
+        if (dto != null) {
+            VoTaxConfig cfg = voAssemblySupport.assembleVo(VoTaxConfig.class, TaxConfigDTO.class, new VoTaxConfig(), dto);
+            cfg.setTax(getTaxById(dto.getTaxId()));
+            return cfg;
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -215,9 +241,10 @@ public class VoTaxServiceImpl implements VoTaxService {
     @Override
     public VoTaxConfig createTaxConfig(final VoTaxConfig vo) throws Exception {
 
-        getTaxById(vo.getTaxId()); // check access
+        getTaxById(vo.getTax() != null ? vo.getTax().getTaxId() : 0L); // check access
 
         TaxConfigDTO dto = dtoTaxConfigService.getNew();
+        dto.setTaxId(vo.getTax().getTaxId());
         dto = dtoTaxConfigService.create(
                 voAssemblySupport.assembleDto(TaxConfigDTO.class, VoTaxConfig.class, dto, vo)
         );

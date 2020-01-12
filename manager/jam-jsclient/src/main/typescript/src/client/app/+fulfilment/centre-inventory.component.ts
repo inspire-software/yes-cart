@@ -400,9 +400,10 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
       this.loading = true;
 
       this.inventory.searchContext.parameters.filter = [ this.inventoryFilter ];
+      this.inventory.searchContext.parameters.centreId = [ this.selectedCentre.warehouseId ];
       this.inventory.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
 
-      let _sub:any = this._fulfilmentService.getFilteredInventory(this.selectedCentre, this.inventory.searchContext).subscribe( allinventory => {
+      let _sub:any = this._fulfilmentService.getFilteredInventory(this.inventory.searchContext).subscribe( allinventory => {
         LogUtil.debug('CentreInventoryComponent getFilteredInventory', allinventory);
         this.inventory = allinventory;
         this.selectedInventory = null;

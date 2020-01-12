@@ -92,7 +92,7 @@ export class BrandSelectComponent implements OnInit, OnDestroy {
 
 
   protected onSelectConfirmationResult(modalresult: ModalResult) {
-    LogUtil.debug('ProductTypeSelectComponent onSelectConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('BrandSelectComponent onSelectConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       this.dataSelected.emit({ source: this.selectedBrand, valid: true });
       this.selectedBrand = null;
@@ -111,7 +111,7 @@ export class BrandSelectComponent implements OnInit, OnDestroy {
         },
         start : 0,
         size : this.filterCap,
-        sortBy : null,
+        sortBy : 'name',
         sortDesc : false
       };
       let _sub:any = this._brandService.getFilteredBrands(_ctx).subscribe(allbrands => {

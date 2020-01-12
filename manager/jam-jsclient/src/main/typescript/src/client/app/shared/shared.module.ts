@@ -38,7 +38,7 @@ import { CarrierSlaSelectComponent } from './shipping/index';
 
 import { ShopSelectComponent } from './shop/index';
 
-import { CurrencySelectComponent } from './price/index';
+import { CurrencySelectComponent, TaxSelectComponent } from './price/index';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -66,7 +66,7 @@ import { CurrencySelectComponent } from './price/index';
     LicenseComponent, LicenseModalComponent,
     CarrierSlaSelectComponent,
     ShopSelectComponent,
-    CurrencySelectComponent,
+    CurrencySelectComponent, TaxSelectComponent,
     TreeViewComponent,
     LoginModalComponent,
   ],
@@ -84,7 +84,7 @@ import { CurrencySelectComponent } from './price/index';
     LicenseComponent, LicenseModalComponent,
     CarrierSlaSelectComponent,
     ShopSelectComponent,
-    CurrencySelectComponent,
+    CurrencySelectComponent, TaxSelectComponent,
     TreeViewComponent,
     CommonModule, RouterModule,
     FormsModule, ReactiveFormsModule,

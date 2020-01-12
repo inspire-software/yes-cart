@@ -25,7 +25,6 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -52,13 +51,11 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
     /**
      * Find customers by filter.
      *
-     * @param shopIds   enforce access.
      * @param filter    filter for partial match.
      *
      * @return list of customers
      */
-    SearchResult<CustomerDTO> findCustomers(Set<Long> shopIds,
-                                            SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<CustomerDTO> findCustomers(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Reset password to given user and send generated password via email.

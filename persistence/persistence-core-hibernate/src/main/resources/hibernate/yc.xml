@@ -4082,6 +4082,12 @@
         ]]>
     </query>
 
+    <query name="TAX.BY.SHOPCODES.CURRENCY">
+        <![CDATA[
+            select t from TaxEntity t where t.shopCode in ?1 and t.currency = ?2
+        ]]>
+    </query>
+
     <query name="TAXCONFIG.BY.COUNTRYCODE.STATECODE.PRODUCTCODE.IN.TAXES">
         <![CDATA[
             select tc from TaxConfigEntity tc where

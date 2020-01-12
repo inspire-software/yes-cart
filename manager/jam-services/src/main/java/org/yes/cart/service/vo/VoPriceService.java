@@ -32,7 +32,7 @@ public interface VoPriceService {
      *
      * @throws Exception errors
      */
-    VoSearchResult<VoPriceList> getFilteredPrices(long shopId, String currency, VoSearchContext filter) throws Exception;
+    VoSearchResult<VoPriceList> getFilteredPrices(VoSearchContext filter) throws Exception;
 
     /**
      * Get price list by id.

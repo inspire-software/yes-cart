@@ -85,24 +85,25 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
         result.setSearchContext(filter);
         result.setItems(results);
 
-        Set<Long> shopIds = null;
+        final Map<String, List> all = filter.getParameters() != null ? new HashMap<>(filter.getParameters()) : new HashMap<>();
         if (!federationFacade.isCurrentUserSystemAdmin()) {
-            shopIds = federationFacade.getAccessibleShopIdsByCurrentManager();
+            final Set<Long> shopIds = federationFacade.getAccessibleShopIdsByCurrentManager();
             if (CollectionUtils.isEmpty(shopIds)) {
                 return result;
             }
+            all.put("shopIds", new ArrayList(shopIds));
         }
 
         final SearchContext searchContext = new SearchContext(
-                filter.getParameters(),
+                all,
                 filter.getStart(),
                 filter.getSize(),
                 filter.getSortBy(),
                 filter.isSortDesc(),
-                "filter", "statuses"
+                "filter", "shopIds", "statuses"
         );
 
-        final SearchResult<CustomerOrderDTO> batch = dtoCustomerOrderService.findOrders(shopIds, searchContext);
+        final SearchResult<CustomerOrderDTO> batch = dtoCustomerOrderService.findOrders(searchContext);
 
         if (!batch.getItems().isEmpty()) {
 

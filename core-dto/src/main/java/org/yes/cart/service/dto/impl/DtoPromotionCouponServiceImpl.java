@@ -17,7 +17,6 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -59,10 +58,11 @@ public class DtoPromotionCouponServiceImpl
     }
 
     @Override
-    public SearchResult<PromotionCouponDTO> findCoupons(final long promotionId, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<PromotionCouponDTO> findCoupons(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, List> params = filter.reduceParameters("filter");
-        final List filterParam = params.get("filter");
+        final Map<String, List> params = filter.reduceParameters("filter", "promotionId");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final long promotionId = FilterSearchUtils.getIdFilter(params.get("promotionId"));
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
@@ -72,9 +72,7 @@ public class DtoPromotionCouponServiceImpl
         if (promotionId > 0L) {
 
             final Map<String, List> currentFilter = new HashMap<>();
-            if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
-
-                final String textFilter = ((String) filterParam.get(0)).trim();
+            if (StringUtils.isNotBlank(textFilter)) {
 
                 if (StringUtils.isNotBlank(textFilter)) {
 

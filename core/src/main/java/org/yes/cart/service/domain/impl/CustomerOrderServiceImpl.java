@@ -169,7 +169,6 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     private Pair<String, Object[]> findCustomerOrderQuery(final boolean count,
                                                           final String sort,
                                                           final boolean sortDescending,
-                                                          final Set<Long> shops,
                                                           final Map<String, List> filter) {
 
         final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
@@ -183,13 +182,13 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             hqlCriteria.append("select o from CustomerOrderEntity o ");
         }
 
-        final List statuses  = currentFilter != null ? currentFilter.remove("orderStatus") : null;
-
+        final List shops = currentFilter != null ? currentFilter.remove("shopIds") : null;
         if (CollectionUtils.isNotEmpty(shops)) {
             hqlCriteria.append(" where (o.shop.shopId in (?1) or o.shop.master.shopId in (?1)) ");
             params.add(shops);
         }
 
+        final List statuses  = currentFilter != null ? currentFilter.remove("orderStatus") : null;
         if (CollectionUtils.isNotEmpty(statuses)) {
             if (params.isEmpty()) {
                 hqlCriteria.append(" where (o.orderStatus in ?1) ");
@@ -224,10 +223,9 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                                           final int offset,
                                           final String sort,
                                           final boolean sortDescending,
-                                          final Set<Long> shops,
                                           final Map<String, List> filter) {
 
-        final Pair<String, Object[]> query = findCustomerOrderQuery(false, sort, sortDescending, shops, filter);
+        final Pair<String, Object[]> query = findCustomerOrderQuery(false, sort, sortDescending, filter);
 
         return getGenericDao().findRangeByQuery(
                 query.getFirst(),
@@ -240,10 +238,9 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * {@inheritDoc}
      */
     @Override
-    public int findOrderCount(final Set<Long> shops,
-                              final Map<String, List> filter) {
+    public int findOrderCount(final Map<String, List> filter) {
 
-        final Pair<String, Object[]> query = findCustomerOrderQuery(true, null, false, shops, filter);
+        final Pair<String, Object[]> query = findCustomerOrderQuery(true, null, false, filter);
 
         return getGenericDao().findCountByQuery(
                 query.getFirst(),

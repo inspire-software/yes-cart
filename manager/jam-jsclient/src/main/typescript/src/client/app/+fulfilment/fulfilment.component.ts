@@ -206,7 +206,6 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
         let _sub:any = this._fulfilmentService.saveFulfilmentCentre(this.centreEdit).subscribe(
             rez => {
               _sub.unsubscribe();
-              let pk = this.centreEdit.warehouseId;
               LogUtil.debug('FulfilmentComponent centre changed', rez);
               this.changed = false;
               this.selectedCentre = rez;

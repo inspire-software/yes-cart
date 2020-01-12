@@ -39,7 +39,6 @@ public interface CustomerService extends GenericService<Customer> {
      * @param offset            page size
      * @param sort              optional sort property
      * @param sortDescending    optional sort property direction
-     * @param shops             optional shops to search in
      * @param filter            optional filters (e.g. firstname, lastname)
      *
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
@@ -48,19 +47,16 @@ public interface CustomerService extends GenericService<Customer> {
                                  int offset,
                                  String sort,
                                  boolean sortDescending,
-                                 Set<Long> shops,
                                  Map<String, List> filter);
 
     /**
      * Find customer by given search criteria. Search will be performed using like operation.
      *
-     * @param shops             optional shops to search in
      * @param filter            optional filters (e.g. firstname, lastname)
      *
      * @return count
      */
-    int findCustomerCount(Set<Long> shops,
-                          Map<String, List> filter);
+    int findCustomerCount(Map<String, List> filter);
 
 
     /**

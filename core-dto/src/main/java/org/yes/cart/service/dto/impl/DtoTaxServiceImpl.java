@@ -17,7 +17,6 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.TaxDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -33,7 +32,6 @@ import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.TaxService;
 import org.yes.cart.service.dto.DtoTaxService;
-import org.yes.cart.utils.HQLUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -74,10 +72,12 @@ public class DtoTaxServiceImpl
 
     /** {@inheritDoc} */
     @Override
-    public SearchResult<TaxDTO> findTaxes(final String shopCode, final String currency, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<TaxDTO> findTaxes(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, List> params = filter.reduceParameters("filter", "types", "actions");
-        final List filterParam = params.get("filter");
+        final Map<String, List> params = filter.reduceParameters("filter", "types", "actions", "shopCode", "currency");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final String shopCode = FilterSearchUtils.getStringFilter(params.get("shopCode"));
+        final String currency = FilterSearchUtils.getStringFilter(params.get("currency"));
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
@@ -87,40 +87,18 @@ public class DtoTaxServiceImpl
         if (StringUtils.isNotBlank(shopCode) && StringUtils.isNotBlank(currency)) {
             // only allow lists for shop+currency selection
             final Map<String, List> currentFilter = new HashMap<>();
-            if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+            if (StringUtils.isNotBlank(textFilter)) {
 
-                final String textFilter = ((String) filterParam.get(0)).trim();
+                final Pair<String, String> exclOrIncSearch = ComplexSearchUtils.checkSpecialSearch(textFilter, EXCLUSIVE_INCLUSIVE);
+                final Pair<String, BigDecimal> rateSearch = ComplexSearchUtils.checkNumericSearch(exclOrIncSearch != null ? textFilter.substring(1) : textFilter, RATE, 2);
 
-                if (StringUtils.isNotBlank(textFilter)) {
+                if (exclOrIncSearch != null) {
 
-                    final Pair<String, String> exclOrIncSearch = ComplexSearchUtils.checkSpecialSearch(textFilter, EXCLUSIVE_INCLUSIVE);
-                    final Pair<String, BigDecimal> rateSearch = ComplexSearchUtils.checkNumericSearch(exclOrIncSearch != null ? textFilter.substring(1) : textFilter, RATE, 2);
+                    currentFilter.put("exclusiveOfPrice", Collections.singletonList("+".equals(exclOrIncSearch.getFirst())));
 
-                    if (exclOrIncSearch != null) {
+                    final boolean all = exclOrIncSearch.getFirst().equals(exclOrIncSearch.getSecond().substring(0, 1));
 
-                        currentFilter.put("exclusiveOfPrice", Collections.singletonList("+".equals(exclOrIncSearch.getFirst())));
-
-                        final boolean all = exclOrIncSearch.getFirst().equals(exclOrIncSearch.getSecond().substring(0, 1));
-
-                        if (!all) {
-
-                            if (rateSearch != null) {
-
-                                currentFilter.put("taxRate", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(rateSearch.getSecond())));
-
-                            } else {
-
-                                final String search = exclOrIncSearch.getSecond();
-
-                                SearchContext.JoinMode.OR.setMode(currentFilter);
-                                currentFilter.put("code", Collections.singletonList(search));
-                                currentFilter.put("description", Collections.singletonList(search));
-
-                            }
-
-                        }
-
-                    } else {
+                    if (!all) {
 
                         if (rateSearch != null) {
 
@@ -128,13 +106,29 @@ public class DtoTaxServiceImpl
 
                         } else {
 
+                            final String search = exclOrIncSearch.getSecond();
+
                             SearchContext.JoinMode.OR.setMode(currentFilter);
-                            currentFilter.put("code", Collections.singletonList(textFilter));
-                            currentFilter.put("description", Collections.singletonList(textFilter));
+                            currentFilter.put("code", Collections.singletonList(search));
+                            currentFilter.put("description", Collections.singletonList(search));
 
                         }
+
                     }
 
+                } else {
+
+                    if (rateSearch != null) {
+
+                        currentFilter.put("taxRate", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(rateSearch.getSecond())));
+
+                    } else {
+
+                        SearchContext.JoinMode.OR.setMode(currentFilter);
+                        currentFilter.put("code", Collections.singletonList(textFilter));
+                        currentFilter.put("description", Collections.singletonList(textFilter));
+
+                    }
                 }
 
             }
@@ -165,105 +159,6 @@ public class DtoTaxServiceImpl
         }
 
         return new SearchResult<>(filter, Collections.emptyList(), 0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public List<TaxDTO> findBy(final String shopCode, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        final List<TaxDTO> dtos = new ArrayList<>();
-
-
-        if (StringUtils.isNotBlank(shopCode) && StringUtils.isNotBlank(currency)) {
-            // only allow lists for shop+currency selection
-
-            List<Tax> entities;
-
-            if (StringUtils.isNotBlank(filter)) {
-
-                final Pair<String, String> exclOrIncSearch = ComplexSearchUtils.checkSpecialSearch(filter, EXCLUSIVE_INCLUSIVE);
-                final Pair<String, BigDecimal> rateSearch = ComplexSearchUtils.checkNumericSearch(exclOrIncSearch != null ? filter.substring(1) : filter, RATE, 2);
-
-                if (exclOrIncSearch != null) {
-
-                    final boolean all = exclOrIncSearch.getFirst().equals(exclOrIncSearch.getSecond().substring(0, 1));
-
-                    if (all) {
-
-                        entities = getService().getGenericDao().findRangeByCriteria(
-                                " where e.shopCode = ?1 and e.currency = ?2 and e.exclusiveOfPrice = ?3 order by e.code",
-                                page * pageSize, pageSize,
-                                shopCode,
-                                currency,
-                                "+".equals(exclOrIncSearch.getFirst())
-                        );
-
-                    } else {
-
-                        if (rateSearch != null) {
-
-                            entities = getService().getGenericDao().findRangeByCriteria(
-                                    " where e.shopCode = ?1 and e.currency = ?2 and e.exclusiveOfPrice = ?3 and e.taxRate = ?4 order by e.code",
-                                    page * pageSize, pageSize,
-                                    shopCode,
-                                    currency,
-                                    "+".equals(exclOrIncSearch.getFirst()),
-                                    rateSearch.getSecond()
-                            );
-
-                        } else {
-
-                            final String search = exclOrIncSearch.getSecond();
-
-                            entities = getService().getGenericDao().findRangeByCriteria(
-                                    " where e.shopCode = ?1 and e.currency = ?2 and e.exclusiveOfPrice = ?3 and (lower(e.code) like ?4 or lower(e.description) like ?4) order by e.code",
-                                    page * pageSize, pageSize,
-                                    shopCode,
-                                    currency,
-                                    "+".equals(exclOrIncSearch.getFirst()),
-                                    HQLUtils.criteriaIlikeAnywhere(search)
-                            );
-
-                        }
-
-                    }
-
-                } else {
-
-                    if (rateSearch != null) {
-                        entities = getService().getGenericDao().findRangeByCriteria(
-                                " where e.shopCode = ?1 and e.currency = ?2 and e.taxRate = ?3 order by e.code",
-                                page * pageSize, pageSize,
-                                shopCode,
-                                currency,
-                                rateSearch.getSecond()
-                        );
-                    } else {
-                        entities = getService().getGenericDao().findRangeByCriteria(
-                                " where e.shopCode = ?1 and e.currency = ?2 and (lower(e.code) like ?3 or lower(e.description) like ?3) order by e.code",
-                                page * pageSize, pageSize,
-                                shopCode,
-                                currency,
-                                HQLUtils.criteriaIlikeAnywhere(filter)
-                        );
-                    }
-                }
-
-            } else {
-
-                entities = getService().getGenericDao().findRangeByCriteria(
-                        " where e.shopCode = ?1 and e.currency = ?2 order by e.code",
-                        page * pageSize, pageSize,
-                        shopCode,
-                        currency
-                );
-
-            }
-
-            fillDTOs(entities, dtos);
-        }
-
-        return dtos;
     }
 
     /** {@inheritDoc} */

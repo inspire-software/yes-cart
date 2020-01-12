@@ -74,12 +74,15 @@ public class VoInventoryListReportWorker implements ReportWorker {
         if (warehouseId > 0L) {
             try {
                 final VoSearchContext ctx = new VoSearchContext();
+                final Map<String, List> params = new HashMap<>();
+                ctx.setParameters(params);
                 if (StringUtils.isNotBlank(skuCode)) {
-                    ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList(skuCode)));
+                    params.put("filter", Collections.singletonList(skuCode));
                 }
+                params.put("centreId", Collections.singletonList(warehouseId));
                 ctx.setSize(Integer.MAX_VALUE);
 
-                return (List) fulfilmentService.getFilteredInventory(warehouseId, ctx).getItems();
+                return (List) fulfilmentService.getFilteredInventory(ctx).getItems();
             } catch (Exception e) {
                 // do nothing
             }

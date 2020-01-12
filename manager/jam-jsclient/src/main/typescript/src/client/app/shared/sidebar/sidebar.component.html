@@ -52,16 +52,19 @@
     <div accordion-heading>{{ 'PANEL_MARKETING' | translate }} <i class="fa fa-pie-chart pull-right" title="{{ 'PANEL_MARKETING' | translate }}"></i></div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/promotions/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_PROMO' | translate }} <i class="fa fa-gift pull-right" title="{{ 'PANEL_MARKETING_PROMO' | translate }}"></i></a>
-      </li>
-      <li>
         <a [routerLink]="['/pricelist/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_PRICE' | translate }} <i class="fa fa-dollar pull-right" title="{{ 'PANEL_MARKETING_PRICE' | translate }}"></i></a>
       </li>
       <li>
         <a href="#"><span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_MARKETING_PRICE_RULES' | translate }} <i class="fa fa-sort-amount-asc pull-right" title="{{ 'PANEL_MARKETING_PRICE_RULES' | translate }}"></i></span></a>
       </li>
       <li>
-        <a [routerLink]="['/taxes/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_TAX' | translate }} <i class="fa fa-percent pull-right" title="{{ 'PANEL_MARKETING_TAX' | translate }}"></i></a>
+        <a [routerLink]="['/promotions/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_PROMO' | translate }} <i class="fa fa-gift pull-right" title="{{ 'PANEL_MARKETING_PROMO' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/taxconfigs/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_TAX_CFG' | translate }} <i class="fa fa-percent pull-right" title="{{ 'PANEL_MARKETING_TAX_CFG' | translate }}"></i></a>
+      </li>
+      <li>
+        <a [routerLink]="['/taxes/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_TAX' | translate }} <i class="fa fa-puzzle-piece pull-right" title="{{ 'PANEL_MARKETING_TAX' | translate }}"></i></a>
       </li>
     </ul>
   </accordion-group>

@@ -131,14 +131,13 @@ public interface VoFulfilmentService {
     /**
      * Get inventory for given fulfilment centre.
      *
-     * @param centreId centre pk
      * @param filter filter
      *
      * @return results
      *
      * @throws Exception errors
      */
-    VoSearchResult<VoInventory> getFilteredInventory(long centreId, VoSearchContext filter) throws Exception;
+    VoSearchResult<VoInventory> getFilteredInventory(VoSearchContext filter) throws Exception;
 
     /**
      * Get inventory by id.

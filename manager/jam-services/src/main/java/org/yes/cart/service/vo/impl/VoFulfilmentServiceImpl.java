@@ -30,6 +30,7 @@ import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
+import org.yes.cart.service.dto.impl.FilterSearchUtils;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoFulfilmentService;
@@ -275,12 +276,14 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
     }
 
     @Override
-    public VoSearchResult<VoInventory> getFilteredInventory(final long centreId, final VoSearchContext filter) throws Exception {
+    public VoSearchResult<VoInventory> getFilteredInventory(final VoSearchContext filter) throws Exception {
 
         final VoSearchResult<VoInventory> result = new VoSearchResult<>();
         final List<VoInventory> results = new ArrayList<>();
         result.setSearchContext(filter);
         result.setItems(results);
+
+        final long centreId = FilterSearchUtils.getIdFilter(filter.getParameters().get("centreId"));
 
         if (!federationFacade.isManageable(centreId, WarehouseDTO.class)) {
             return result;
@@ -293,11 +296,11 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
                 filter.getSize(),
                 filter.getSortBy(),
                 filter.isSortDesc(),
-                "filter"
+                "filter", "centreId"
         );
 
 
-        final SearchResult<InventoryDTO> batch = dtoInventoryService.findInventory(centreId, searchContext);
+        final SearchResult<InventoryDTO> batch = dtoInventoryService.findInventory(searchContext);
         if (!batch.getItems().isEmpty()) {
             results.addAll(voAssemblySupport.assembleVos(VoInventory.class, InventoryDTO.class, batch.getItems()));
         }

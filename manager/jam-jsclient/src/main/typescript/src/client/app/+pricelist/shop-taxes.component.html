@@ -24,29 +24,6 @@
       </form>
     </div>
 
-    <div class="col-xs-12 col-md-4 padding-lr-0" [hidden]="viewMode !== 'taxconfigs'">
-      <form class="width-100">
-        <div class="input-group">
-          <span class="input-group-btn">
-            <button type="button" (click)="onSearchHelpToggleTaxConfig()" class="btn {{ searchHelpTaxConfigShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
-              <i class="fa fa-question-circle-o"></i>
-            </button>
-          </span>
-          <span class="input-group-btn">
-            <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-square btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
-              <i class="fa fa-filter"></i>
-            </button>
-          </span>
-          <input class="form-control filter-input" type="text" name="taxconfigsFilter" [(ngModel)]="taxconfigsFilter" (ngModelChange)="onTaxConfigFilterChange($event)" autocomplete="off"/>
-          <span class="input-group-btn">
-            <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilterTaxConfig()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
-              <i class="fa fa-times-circle-o"></i>
-            </button>
-          </span>
-        </div>
-      </form>
-    </div>
-
     <div class="col-xs-12 {{ viewMode !== 'pricelisttest' ? 'col-md-8' : '' }} padding-lr-0 button-panel">
 
       <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'taxes'" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_BACK' | translate }}">
@@ -59,10 +36,6 @@
 
       <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'taxes'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
         <i class="fa fa-dollar"></i>
-      </button>
-
-      <button type="button" (click)="onRowListSelected()" [disabled]="selectedTax == null" [hidden]="viewMode === 'taxconfigs'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DETAILS' | translate }}">
-        <i class="fa fa-list"></i>
       </button>
 
       <button type="button" (click)="onTestRules()" [disabled]="selectedShop == null" class="btn  {{ viewMode === 'pricelisttest' ? 'btn-success' : 'btn-default' }} btn-circle btn-xl" title="{{ 'TEST' | translate }}">
@@ -99,14 +72,6 @@
     </div>
   </div>
 
-  <div *ngIf="searchHelpTaxConfigShow">
-    <div class="bg-info text-padding block-margin-spacer">
-      <p>{{ 'SEARCH_HELP_TAXCFG_LOCATION' | translate }} <span><button type="button" (click)="onSearchLocation()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_TAXCFG_SKU' | translate }} <span><button type="button" (click)="onSearchSKU()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_TAXCFG_SKU_EXACT' | translate }} <span><button type="button" (click)="onSearchSKUExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
-    </div>
-  </div>
-
   <div *ngIf="selectedShop == null">
     <p class="bg-danger text-padding">
       {{ 'SHOP_SELECTION_REQUIRED' | translate }}
@@ -125,16 +90,8 @@
     </p>
   </div>
 
-  <div *ngIf="taxconfigsFilterRequired && viewMode === 'taxconfigs'">
-    <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
-  </div>
-
   <div [hidden]="viewMode !== 'taxes'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-taxes [taxes]="taxes" [selectedShopCode]="selectedShopCode" (dataSelected)="onTaxSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-taxes>
-  </div>
-
-  <div [hidden]="viewMode !== 'taxconfigs'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-tax-configs [taxconfigs]="taxconfigs" (dataSelected)="onTaxconfigSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-tax-configs>
   </div>
 
   <div [hidden]="viewMode !== 'pricelisttest'"  class="{{ loading ? 'loading-data' : '' }}">
@@ -215,50 +172,6 @@
   </yc-modal>
 
 
-
-  <yc-modal #editTaxconfigModalDialog
-            title="{{ taxEdit != null ? taxEdit.code : '' }}"
-            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-            positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
-            [valid]="validForSaveTaxconfig"
-            (closed)="onEditTaxResult($event)">
-
-    <ng-template [ngIf]="taxconfigEdit">
-      <form role="form" [formGroup]="taxconfigEditForm">
-        <fieldset>
-          <div class="row">
-            <div class="col-xs-3">{{ 'SKU' | translate }}</div>
-            <div class="col-xs-9">
-              <input class="form-control" formControlName="productCode" name="productCode" type="text" [(ngModel)]="taxconfigEdit.productCode">
-              <div [hidden]="taxconfigEditForm.controls['productCode'].valid || taxconfigEditForm.controls['productCode'].pristine" class="alert alert-danger">
-                {{ 'ALPHANUM_REQUIRED' | translate }}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-3">{{ 'LOCATION_STATE_CODE' | translate }}</div>
-            <div class="col-xs-9">
-              <input class="form-control" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="taxconfigEdit.stateCode">
-              <div [hidden]="taxconfigEditForm.controls['stateCode'].valid || taxconfigEditForm.controls['stateCode'].pristine" class="alert alert-danger">
-                {{ 'ALPHANUM_REQUIRED' | translate }}
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-3">{{ 'LOCATION_COUNTRY' | translate }}</div>
-            <div class="col-xs-9">
-              <input class="form-control" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="taxconfigEdit.countryCode">
-              <div [hidden]="taxconfigEditForm.controls['countryCode'].valid || taxconfigEditForm.controls['countryCode'].pristine" class="alert alert-danger">
-                {{ 'COUNTRY_CODE_REQUIRED' | translate }}
-              </div>
-            </div>
-          </div>
-        </fieldset>
-      </form>
-    </ng-template>
-  </yc-modal>
-
-
   <yc-modal #selectShopModalDialog
             title="{{ 'PANEL_SHOPS' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
@@ -284,7 +197,5 @@
   </yc-modal>
 
   <yc-promotion-test-config #runTestModalDialog (dataConfigured)="onRunTestResult($event)"></yc-promotion-test-config>
-
-  <yc-product-sku-select #selectProductModalSkuDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
 
 </div>

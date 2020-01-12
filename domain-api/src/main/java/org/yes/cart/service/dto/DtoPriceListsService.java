@@ -42,9 +42,7 @@ public interface DtoPriceListsService {
      * @throws UnmappedInterfaceException error
      * @throws UnableToCreateInstanceException error
      */
-    SearchResult<PriceListDTO> findPrices(long shopId,
-                                          String currency,
-                                          SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<PriceListDTO> findPrices(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**

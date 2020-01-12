@@ -28,7 +28,6 @@ import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.service.dto.DtoPriceListsService;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 
 import static org.junit.Assert.*;
 
@@ -56,48 +55,75 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
     public void testFindPrice() throws Exception {
 
         // No price list without shop
-        final SearchContext filterNone = new SearchContext(Collections.emptyMap(), 0, 10, "skuCode", false, "filter");
-        SearchResult<PriceListDTO> pl = dtoService.findPrices(0L, null, filterNone);
+        final SearchContext filterNone = createSearchContext("skuCode", false, 0, 10);
+        SearchResult<PriceListDTO> pl = dtoService.findPrices(filterNone);
         assertTrue(pl.getTotal() == 0);
 
 
         // Price list available for shop and currency
-        pl = dtoService.findPrices(10L, "EUR", filterNone);
+        pl = dtoService.findPrices(createSearchContext(filterNone,
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        ));
         assertFalse(pl.getTotal() == 0);
 
         // Test partial SKU match
-        final SearchContext filterPartial = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("CC_TEST")), 0, 10, "skuCode", false, "filter");
-        pl = dtoService.findPrices(10L, "EUR", filterPartial);
+        final SearchContext filterPartial = createSearchContext("skuCode", false,  0, 10,
+                "filter", "CC_TEST",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        pl = dtoService.findPrices(filterPartial);
         assertFalse(pl.getTotal() == 0);
         assertEquals(3, pl.getItems().stream().filter(
                 price -> "CC_TEST1".equals(price.getSkuCode())).count());
 
         // Test name SKU match
-        final SearchContext filterNamePartial = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("cc test 11")), 0, 10, "skuCode", false, "filter");
-        pl = dtoService.findPrices(10L, "EUR", filterNamePartial);
+        final SearchContext filterNamePartial = createSearchContext( "skuCode", false, 0, 10,
+                "filter", "cc test 11",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        pl = dtoService.findPrices(filterNamePartial);
         assertEquals(1, pl.getTotal());
         assertEquals("CC_TEST11", pl.getItems().get(0).getSkuCode());
 
         // Test exact SKU match
-        final SearchContext filterCodeExact = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!CC_TEST1")), 0, 10, "skuCode", false, "filter");
-        pl = dtoService.findPrices(10L, "EUR", filterCodeExact);
+        final SearchContext filterCodeExact = createSearchContext( "skuCode", false, 0, 10,
+                "filter", "!CC_TEST1",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        pl = dtoService.findPrices(filterCodeExact);
         assertEquals(3, pl.getTotal());
         assertEquals("CC_TEST1", pl.getItems().get(0).getSkuCode());
 
         // Test SKU no match
-        final SearchContext filterNoMatch = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!something really weird not matching")), 0, 10, "skuCode", false, "filter");
-        pl = dtoService.findPrices(10L, "EUR", filterNoMatch);
+        final SearchContext filterNoMatch = createSearchContext("skuCode", false,  0, 10,
+                "filter", "!something really weird not matching",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        pl = dtoService.findPrices(filterNoMatch);
         assertEquals(0, pl.getTotal());
 
         // Pricing policy
-        final SearchContext filterByPolicy = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("#P1")), 0, 10, "skuCode", false, "filter");
-        pl = dtoService.findPrices(10L, "EUR", filterByPolicy);
+        final SearchContext filterByPolicy = createSearchContext("skuCode", false,  0, 10,
+                "filter", "#P1",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        pl = dtoService.findPrices(filterByPolicy);
         assertFalse(pl.getTotal() == 0);
         assertTrue(pl.getItems().stream().allMatch(price -> "P1".equals(price.getPricingPolicy())));
 
         // Shipping prices
-        final SearchContext filterByTag = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("#shipping")), 0, 10, "skuCode", false, "filter");
-        pl = dtoService.findPrices(10L, "EUR", filterByTag);
+        final SearchContext filterByTag = createSearchContext("skuCode", false, 0, 10,
+                "filter", "#shipping",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        pl = dtoService.findPrices(filterByTag);
         assertFalse(pl.getTotal() == 0);
         assertEquals("4_CARRIERSLA", pl.getItems().get(0).getSkuCode());
 
@@ -108,8 +134,12 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testCreatePrice() throws Exception {
 
-        final SearchContext filter = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!133456-a")), 0, 10, "skuCode", false, "filter");
-        assertEquals(0, dtoService.findPrices(10L, "EUR", filter).getTotal());
+        final SearchContext filter = createSearchContext("skuCode", false, 0, 10,
+                "filter", "!133456-a",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        assertEquals(0, dtoService.findPrices(filter).getTotal());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
@@ -121,7 +151,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        final SearchResult<PriceListDTO> saved = dtoService.findPrices(10L, "EUR", filter);
+        final SearchResult<PriceListDTO> saved = dtoService.findPrices(filter);
         assertEquals(1, saved.getTotal());
 
         final PriceListDTO pl = saved.getItems().get(0);
@@ -137,8 +167,12 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testCreatePriceZeroSales() throws Exception {
 
-        final SearchContext filter = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!133456-a0")), 0, 10, "skuCode", false, "filter");
-        assertEquals(0, dtoService.findPrices(10L, "EUR", filter).getTotal());
+        final SearchContext filter = createSearchContext("skuCode", false, 0, 10,
+                "filter", "!133456-a0",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        assertEquals(0, dtoService.findPrices(filter).getTotal());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("0.00"));
@@ -150,7 +184,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        final SearchResult<PriceListDTO> saved = dtoService.findPrices(10L, "EUR", filter);
+        final SearchResult<PriceListDTO> saved = dtoService.findPrices(filter);
         assertEquals(1, saved.getTotal());
 
         final PriceListDTO pl = saved.getItems().get(0);
@@ -167,8 +201,12 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdatePrice() throws Exception {
 
-        final SearchContext filter = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!133456-b")), 0, 10, "skuCode", false, "filter");
-        assertEquals(0, dtoService.findPrices(10L, "EUR", filter).getTotal());
+        final SearchContext filter = createSearchContext("skuCode", false, 0, 10,
+                "filter", "!133456-b",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        assertEquals(0, dtoService.findPrices(filter).getTotal());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
@@ -180,7 +218,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        SearchResult<PriceListDTO> saved = dtoService.findPrices(10L, "EUR", filter);
+        SearchResult<PriceListDTO> saved = dtoService.findPrices(filter);
         assertEquals(1, saved.getTotal());
 
         PriceListDTO pl = saved.getItems().get(0);
@@ -198,7 +236,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         dtoService.updatePrice(pl);
 
-        saved = dtoService.findPrices(10L, "EUR", filter);
+        saved = dtoService.findPrices(filter);
         assertEquals(1, saved.getTotal());
 
         pl = saved.getItems().get(0);
@@ -214,8 +252,12 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdatePriceZeroSales() throws Exception {
 
-        final SearchContext filter = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!133456-b0")), 0, 10, "skuCode", false, "filter");
-        assertEquals(0, dtoService.findPrices(10L, "EUR", filter).getTotal());
+        final SearchContext filter = createSearchContext("skuCode", false, 0, 10,
+                "filter", "!133456-b0",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        assertEquals(0, dtoService.findPrices(filter).getTotal());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
@@ -227,7 +269,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        SearchResult<PriceListDTO> saved = dtoService.findPrices(10L, "EUR", filter);
+        SearchResult<PriceListDTO> saved = dtoService.findPrices(filter);
         assertEquals(1, saved.getTotal());
 
         PriceListDTO pl = saved.getItems().get(0);
@@ -245,7 +287,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         dtoService.updatePrice(pl);
 
-        saved = dtoService.findPrices(10L, "EUR", filter);
+        saved = dtoService.findPrices(filter);
         assertEquals(1, saved.getTotal());
 
         pl = saved.getItems().get(0);
@@ -261,8 +303,12 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testRemovePrice() throws Exception {
 
-        final SearchContext filter = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!133456-c")), 0, 10, "skuCode", false, "filter");
-        assertEquals(0, dtoService.findPrices(10L, "EUR", filter).getTotal());
+        final SearchContext filter = createSearchContext("skuCode", false, 0, 10,
+                "filter", "!133456-c",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        assertEquals(0, dtoService.findPrices(filter).getTotal());
 
         PriceListDTO skuPriceDTO = new PriceListDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
@@ -272,7 +318,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createPrice(skuPriceDTO);
 
-        SearchResult<PriceListDTO> saved = dtoService.findPrices(10L, "EUR", filter);
+        SearchResult<PriceListDTO> saved = dtoService.findPrices(filter);
         assertEquals(1, saved.getTotal());
 
         PriceListDTO pl = saved.getItems().get(0);
@@ -283,7 +329,7 @@ public class DtoPriceListsServiceImplTezt extends BaseCoreDBTestCase {
 
         dtoService.removePrice(pl.getSkuPriceId());
 
-        saved = dtoService.findPrices(10L, "EUR", filter);
+        saved = dtoService.findPrices(filter);
         assertEquals(0, saved.getTotal());
 
     }

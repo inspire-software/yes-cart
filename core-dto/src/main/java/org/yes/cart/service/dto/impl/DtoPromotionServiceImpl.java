@@ -82,12 +82,14 @@ public class DtoPromotionServiceImpl
 
     /** {@inheritDoc} */
     @Override
-    public SearchResult<PromotionDTO> findPromotions(final String shopCode, final String currency, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<PromotionDTO> findPromotions(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, List> params = filter.reduceParameters("filter", "types", "actions");
-        final List filterParam = params.get("filter");
+        final Map<String, List> params = filter.reduceParameters("filter", "types", "actions", "shopCode", "currency");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
         final List typesParam = params.get("types");
         final List actionsParam = params.get("actions");
+        final String shopCode = FilterSearchUtils.getStringFilter(params.get("shopCode"));
+        final String currency = FilterSearchUtils.getStringFilter(params.get("currency"));
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
@@ -97,9 +99,7 @@ public class DtoPromotionServiceImpl
         if (StringUtils.isNotBlank(shopCode) && StringUtils.isNotBlank(currency)) {
             // only allow lists for shop+currency selection
             final Map<String, List> currentFilter = new HashMap<>();
-            if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
-
-                final String textFilter = ((String) filterParam.get(0)).trim();
+            if (StringUtils.isNotBlank(textFilter)) {
 
                 if (StringUtils.isNotBlank(textFilter)) {
 

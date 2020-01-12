@@ -21,7 +21,7 @@ import { Config } from '../config/env.config';
 import {
   FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopFulfilmentCentreVO,
   InventoryVO,
-  Pair, SearchContextVO, SearchResultVO
+  SearchContextVO, SearchResultVO
 } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
@@ -146,11 +146,11 @@ export class FulfilmentService {
    * Get list of all inventory, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredInventory(centre:FulfilmentCentreInfoVO, filter:SearchContextVO) {
+  getFilteredInventory(filter:SearchContextVO) {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/inventory/centre/' + centre.warehouseId + '/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/inventory/centre/filtered', body,
           Util.requestOptions())
       .map(res => <SearchResultVO<InventoryVO>> this.json(res))
       .catch(this.handleError);

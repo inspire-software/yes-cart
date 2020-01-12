@@ -18,7 +18,6 @@ import { I18nEventBus, ShopEventBus, ShippingService, FulfilmentService, Payment
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { CarrierVO, CarrierSlaVO, ShopVO, PaymentGatewayInfoVO, FulfilmentCentreVO, SearchContextVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
-import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({

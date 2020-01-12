@@ -92,18 +92,16 @@ public class CustomerServiceCachedImpl implements CustomerService {
                                         final int offset,
                                         final String sort,
                                         final boolean sortDescending,
-                                        final Set<Long> shops,
                                         final Map<String, List> filter) {
-        return customerService.findCustomers(start, offset, sort, sortDescending, shops, filter);
+        return customerService.findCustomers(start, offset, sort, sortDescending, filter);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int findCustomerCount(final Set<Long> shops,
-                                 final Map<String, List> filter) {
-        return customerService.findCustomerCount(shops, filter);
+    public int findCustomerCount(final Map<String, List> filter) {
+        return customerService.findCustomerCount(filter);
     }
 
     /**

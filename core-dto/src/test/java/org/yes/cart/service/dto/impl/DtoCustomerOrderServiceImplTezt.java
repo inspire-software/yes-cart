@@ -154,77 +154,96 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
         final ShoppingCart shoppingCart = getShoppingCart(true);
         final CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
 
-        final Set<Long> shopIds = Collections.singleton(10L);
         SearchContext ctx;
         SearchResult<CustomerOrderDTO> rez;
 
 
         // by PK
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("*" + order.getCustomerorderId())), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "filter", "*" + order.getCustomerorderId()
+        );
+        rez = dtoService.findOrders(ctx);
         assertEquals(1, rez.getTotal());
         assertEquals(1, rez.getItems().size());
         assertEquals(order.getCustomerorderId(), rez.getItems().get(0).getCustomerorderId());
 
         // by reference
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("#" + order.getOrdernum())), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "filter", "#" + order.getOrdernum()
+        );
+        rez = dtoService.findOrders(ctx);
         assertEquals(1, rez.getTotal());
         assertEquals(1, rez.getItems().size());
         assertEquals(order.getOrdernum(), rez.getItems().get(0).getOrdernum());
 
         // by customer
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("?" + order.getFirstname())), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "filter", "?" + order.getFirstname()
+        );
+        rez = dtoService.findOrders(ctx);
         assertEquals(1, rez.getTotal());
         assertEquals(1, rez.getItems().size());
         assertEquals(order.getFirstname(), rez.getItems().get(0).getFirstname());
 
         // by address
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("@" + order.getBillingAddress())), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "filter", "@" + order.getBillingAddress()
+        );
+        rez = dtoService.findOrders(ctx);
         assertTrue(rez.getTotal() > 1);
         assertTrue(rez.getItems().size() > 1);
         assertEquals(order.getBillingAddress(), rez.getItems().get(0).getBillingAddress());
 
         // by shop
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("^" + order.getShop().getCode())), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "filter", "^" + order.getShop().getCode()
+        );
+        rez = dtoService.findOrders(ctx);
         assertTrue(rez.getTotal() > 1);
         assertTrue(rez.getItems().size() > 1);
         assertEquals(order.getShop().getShopId(), rez.getItems().get(0).getShopId());
 
         // basic
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList(order.getOrdernum())), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "filter", order.getOrdernum()
+        );
+        rez = dtoService.findOrders(ctx);
         assertEquals(1, rez.getTotal());
         assertEquals(1, rez.getItems().size());
         assertEquals(order.getOrdernum(), rez.getItems().get(0).getOrdernum());
 
         // all
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList(null)), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10);
+        rez = dtoService.findOrders(ctx);
         assertTrue(rez.getTotal() > 1);
         assertTrue(rez.getItems().size() > 1);
 
         // time
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("2019-03<2019-04")), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "filter", "2019-03<2019-04"
+        );
+        rez = dtoService.findOrders(ctx);
         assertEquals(2, rez.getTotal());
         assertEquals(2, rez.getItems().size());
 
         // dry run for reservation check query
-        ctx = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!reservationcheck")), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "filter", "!reservationcheck"
+        );
+        rez = dtoService.findOrders(ctx);
         assertEquals(0, rez.getTotal());
 
         // with status
-        ctx = new SearchContext(Collections.singletonMap("statuses", Collections.singletonList("os.in.progress")), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "statuses", Collections.singletonList("os.in.progress")
+        );
+        rez = dtoService.findOrders(ctx);
         assertTrue(rez.getTotal() > 0);
 
-        ctx = new SearchContext(Collections.singletonMap("statuses", Collections.singletonList("invalid")), 0, 10, null, false, "filter", "statuses");
-        rez = dtoService.findOrders(shopIds, ctx);
+        ctx = createSearchContext( 0, 10,
+                "statuses", Collections.singletonList("invalid")
+        );
+        rez = dtoService.findOrders(ctx);
         assertTrue(rez.getTotal() == 0);
 
 

@@ -26,8 +26,6 @@ import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.dto.DtoTaxService;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,86 +50,6 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testFindBy() throws Exception {
-        TaxDTO taxDTO = getDto();
-        taxDTO = dtoTaxService.create(taxDTO);
-
-        // retrieve specific
-        List<TaxDTO> taxes = dtoTaxService.findBy(
-                taxDTO.getShopCode(),
-                taxDTO.getCurrency(),
-                taxDTO.getCode(),
-                0,
-                10);
-
-        assertNotNull(taxes);
-        assertEquals(1, taxes.size());
-
-        // retrieve all EUR
-        taxes = dtoTaxService.findBy(
-                "SHOIP1",
-                "EUR",
-                null,
-                0,
-                10);
-
-        assertNotNull(taxes);
-        assertEquals(8, taxes.size());
-
-
-        // retrieve exclusive EUR
-        taxes = dtoTaxService.findBy(
-                "SHOIP1",
-                "EUR",
-                "--",
-                0,
-                10);
-
-        assertNotNull(taxes);
-        assertEquals(6, taxes.size());
-
-        // retrieve exclusive EUR
-        taxes = dtoTaxService.findBy(
-                "SHOIP1",
-                "EUR",
-                "++",
-                0,
-                10);
-
-        assertNotNull(taxes);
-        assertEquals(2, taxes.size());
-
-
-        // retrieve exclusive EUR 10%
-        taxes = dtoTaxService.findBy(
-                "SHOIP1",
-                "EUR",
-                "-%10",
-                0,
-                10);
-
-        assertNotNull(taxes);
-        assertEquals(2, taxes.size());
-        assertEquals(10, taxes.get(0).getTaxRate().setScale(0, RoundingMode.HALF_UP).intValue());
-
-
-        // retrieve EUR 5%
-        taxes = dtoTaxService.findBy(
-                "SHOIP1",
-                "EUR",
-                "%5",
-                0,
-                10);
-
-        assertNotNull(taxes);
-        assertEquals(4, taxes.size());
-        assertEquals(5, taxes.get(0).getTaxRate().setScale(0, RoundingMode.HALF_UP).intValue());
-
-
-        dtoTaxService.remove(taxDTO.getTaxId());
-    }
-
-    @Test
     public void testFindTaxes() throws Exception {
         TaxDTO t1 = getDto();
         final String shopCode = t1.getShopCode();
@@ -145,16 +63,23 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
         t3 = dtoTaxService.create(t3);
 
         // retrieve specific
-        final SearchContext filterByCode = new SearchContext(Collections.singletonMap("filter", Collections.singletonList(t1.getCode())), 0, 10, "code", false, "filter");
-        List<TaxDTO> taxes = dtoTaxService.findTaxes(shopCode, currency, filterByCode).getItems();
+        final SearchContext filterByCode = createSearchContext("code", false, 0, 10,
+                "filter", t1.getCode(),
+                "shopCode", shopCode,
+                "currency", currency
+        );
+        List<TaxDTO> taxes = dtoTaxService.findTaxes(filterByCode).getItems();
 
         assertNotNull(taxes);
         assertEquals(1, taxes.size());
         assertEquals(t1.getCode(), taxes.get(0).getCode());
 
         // retrieve all EUR
-        final SearchContext filterAllEUR = new SearchContext(Collections.emptyMap(), 0, 20, "code", false, "filter");
-        taxes = dtoTaxService.findTaxes("SHOIP1", "EUR", filterAllEUR).getItems();
+        final SearchContext filterAllEUR = createSearchContext("code", false, 0, 20,
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        taxes = dtoTaxService.findTaxes(filterAllEUR).getItems();
 
         assertNotNull(taxes);
         assertEquals(10, taxes.size());
@@ -162,16 +87,24 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
 
 
         // retrieve exclusive EUR
-        final SearchContext filterInclEUR = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("--")), 0, 10, "code", false, "filter");
-        taxes = dtoTaxService.findTaxes("SHOIP1", "EUR", filterInclEUR).getItems();
+        final SearchContext filterInclEUR = createSearchContext("code", false, 0, 20,
+                "filter", "--",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        taxes = dtoTaxService.findTaxes(filterInclEUR).getItems();
 
         assertNotNull(taxes);
         assertEquals(7, taxes.size());
         assertTrue(taxes.stream().allMatch(tax -> "SHOIP1".equals(tax.getShopCode()) && "EUR".equals(tax.getCurrency()) && !tax.getExclusiveOfPrice()));
 
         // retrieve exclusive EUR
-        final SearchContext filterExclEUR = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("++")), 0, 10, "code", false, "filter");
-        taxes = dtoTaxService.findTaxes("SHOIP1", "EUR", filterExclEUR).getItems();
+        final SearchContext filterExclEUR = createSearchContext("code", false, 0, 20,
+                "filter", "++",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        taxes = dtoTaxService.findTaxes(filterExclEUR).getItems();
 
         assertNotNull(taxes);
         assertEquals(3, taxes.size());
@@ -179,8 +112,12 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
 
 
         // retrieve exclusive EUR 10%
-        final SearchContext filterInclEUR10 = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("-%10")), 0, 10, "code", false, "filter");
-        taxes = dtoTaxService.findTaxes("SHOIP1", "EUR", filterInclEUR10).getItems();
+        final SearchContext filterInclEUR10 = createSearchContext("code", false, 0, 20,
+                "filter", "-%10",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        taxes = dtoTaxService.findTaxes(filterInclEUR10).getItems();
 
         assertNotNull(taxes);
         assertEquals(2, taxes.size());
@@ -189,13 +126,27 @@ public class DtoTaxServiceImplTezt extends BaseCoreDBTestCase {
 
 
         // retrieve EUR 5%
-        final SearchContext filterEUR5 = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("%5")), 0, 10, "code", false, "filter");
-        taxes = dtoTaxService.findTaxes("SHOIP1", "EUR", filterEUR5).getItems();
+        final SearchContext filterEUR5 = createSearchContext("code", false, 0, 20,
+                "filter", "%5",
+                "shopCode", "SHOIP1",
+                "currency", "EUR"
+        );
+        taxes = dtoTaxService.findTaxes(filterEUR5).getItems();
 
         assertNotNull(taxes);
         assertEquals(4, taxes.size());
         assertTrue(taxes.stream().allMatch(tax -> "SHOIP1".equals(tax.getShopCode()) && "EUR".equals(tax.getCurrency())
                 && new BigDecimal(5).compareTo(tax.getTaxRate()) == 0));
+
+        // invalid shop
+        final SearchContext filterInvalid = createSearchContext("code", false, 0, 20,
+                "shopCode", "ZZZZ",
+                "currency", "EUR"
+        );
+        taxes = dtoTaxService.findTaxes(filterInvalid).getItems();
+
+        assertNotNull(taxes);
+        assertTrue(taxes.isEmpty());
 
 
         dtoTaxService.remove(t1.getTaxId());

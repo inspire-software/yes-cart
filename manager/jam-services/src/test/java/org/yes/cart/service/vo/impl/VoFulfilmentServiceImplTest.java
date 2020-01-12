@@ -104,46 +104,61 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
     public void testGetInventory() throws Exception {
 
         VoSearchContext ctxFindNone = new VoSearchContext();
-        ctxFindNone.setParameters(Collections.singletonMap("filter", Collections.singletonList("XXXXX")));
+        ctxFindNone.setParameters(createSearchContextParams(
+                "filter", "XXXXX",
+                "centreId", 3L
+        ));
         ctxFindNone.setSize(10);
 
-        final List<VoInventory> invNone = voFulfilmentService.getFilteredInventory(3L, ctxFindNone).getItems();
+        final List<VoInventory> invNone = voFulfilmentService.getFilteredInventory(ctxFindNone).getItems();
         assertNotNull(invNone);
         assertTrue(invNone.isEmpty());
 
         VoSearchContext ctxFindName = new VoSearchContext();
-        ctxFindName.setParameters(Collections.singletonMap("filter", Collections.singletonList("Ben")));
+        ctxFindName.setParameters(createSearchContextParams(
+                "filter", "Ben",
+                "centreId", 2L
+        ));
         ctxFindName.setSize(10);
 
-        final List<VoInventory> invByName = voFulfilmentService.getFilteredInventory(2L, ctxFindName).getItems();
+        final List<VoInventory> invByName = voFulfilmentService.getFilteredInventory(ctxFindName).getItems();
         assertNotNull(invByName);
         assertFalse(invByName.isEmpty());
         assertTrue(invByName.get(0).getSkuCode().contains("BENDER"));
 
         VoSearchContext ctxFindCode = new VoSearchContext();
-        ctxFindCode.setParameters(Collections.singletonMap("filter", Collections.singletonList("!BENDER-ua")));
+        ctxFindCode.setParameters(createSearchContextParams(
+                "filter", "!BENDER-ua",
+                "centreId", 2L
+        ));
         ctxFindCode.setSize(10);
 
-        final List<VoInventory> invByCode = voFulfilmentService.getFilteredInventory(2L, ctxFindCode).getItems();
+        final List<VoInventory> invByCode = voFulfilmentService.getFilteredInventory(ctxFindCode).getItems();
         assertNotNull(invByCode);
         assertFalse(invByCode.isEmpty());
         assertEquals("BENDER-ua", invByCode.get(0).getSkuCode());
 
         VoSearchContext ctxFindReserved = new VoSearchContext();
-        ctxFindReserved.setParameters(Collections.singletonMap("filter", Collections.singletonList("+1")));
+        ctxFindReserved.setParameters(createSearchContextParams(
+                "filter", "+1",
+                "centreId", 2L
+        ));
         ctxFindReserved.setSize(10);
 
-        final List<VoInventory> invReserved = voFulfilmentService.getFilteredInventory(2L, ctxFindReserved).getItems();
+        final List<VoInventory> invReserved = voFulfilmentService.getFilteredInventory(ctxFindReserved).getItems();
         assertNotNull(invReserved);
         assertFalse(invReserved.isEmpty());
         assertEquals("PRODUCT6", invReserved.get(0).getSkuCode());
         assertTrue(BigDecimal.ZERO.compareTo(invReserved.get(0).getReserved()) < 0);
 
         VoSearchContext ctxFindDate = new VoSearchContext();
-        ctxFindDate.setParameters(Collections.singletonMap("filter", Collections.singletonList("2010-01-01<")));
+        ctxFindDate.setParameters(createSearchContextParams(
+                "filter", "2010-01-01<",
+                "centreId", 2L
+        ));
         ctxFindDate.setSize(10);
 
-        final List<VoInventory> invAvailable = voFulfilmentService.getFilteredInventory(2L, ctxFindDate).getItems();
+        final List<VoInventory> invAvailable = voFulfilmentService.getFilteredInventory(ctxFindDate).getItems();
         assertNotNull(invAvailable);
         assertFalse(invAvailable.isEmpty());
 
@@ -153,10 +168,13 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
     public void testInventoryCRUD() throws Exception {
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("TESTCRUD")));
+        ctxFind.setParameters(createSearchContextParams(
+                "filter", "TESTCRUD",
+                "centreId", 3L
+        ));
         ctxFind.setSize(10);
 
-        assertTrue(voFulfilmentService.getFilteredInventory(3L, ctxFind).getItems().isEmpty());
+        assertTrue(voFulfilmentService.getFilteredInventory(ctxFind).getItems().isEmpty());
 
         final VoInventory inventory = new VoInventory();
         inventory.setSkuCode("TESTCRUD");
@@ -168,7 +186,7 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
         final VoInventory created = voFulfilmentService.createInventory(inventory);
         assertTrue(created.getSkuWarehouseId() > 0L);
 
-        assertFalse(voFulfilmentService.getFilteredInventory(3L, ctxFind).getItems().isEmpty());
+        assertFalse(voFulfilmentService.getFilteredInventory(ctxFind).getItems().isEmpty());
 
         VoInventory afterCreated = voFulfilmentService.getInventoryById(created.getSkuWarehouseId());
         assertNotNull(afterCreated);
@@ -179,7 +197,7 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
         final VoInventory updated = voFulfilmentService.updateInventory(created);
         assertTrue(new BigDecimal("1000").compareTo(updated.getQuantity()) == 0);
 
-        assertFalse(voFulfilmentService.getFilteredInventory(3L, ctxFind).getItems().isEmpty());
+        assertFalse(voFulfilmentService.getFilteredInventory(ctxFind).getItems().isEmpty());
 
         voFulfilmentService.removeInventory(updated.getSkuWarehouseId());
 

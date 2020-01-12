@@ -592,11 +592,12 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
 
     @Override
-    public SearchResult<CustomerOrderDTO> findOrders(final Set<Long> shopIds, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<CustomerOrderDTO> findOrders(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, List> params = filter.reduceParameters("filter", "statuses");
-        final List filterParam = params.get("filter");
+        final Map<String, List> params = filter.reduceParameters("filter", "statuses", "shopIds");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
         final List statusesParam = params.get("statuses");
+        final List shopIds = params.get("shopIds");
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
@@ -604,9 +605,8 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         final Map<String, List> currentFilter = new HashMap<>();
 
 
-        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+        if (StringUtils.isNotBlank(textFilter)) {
 
-            final String textFilter = ((String) filterParam.get(0)).trim();
             final Pair<String, String> orderNumberOrCustomerOrAddressOrSku = ComplexSearchUtils.checkSpecialSearch(textFilter, ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
             final Pair<LocalDateTime, LocalDateTime> dateSearch = orderNumberOrCustomerOrAddressOrSku == null ? ComplexSearchUtils.checkDateRangeSearch(textFilter) : null;
 
@@ -717,11 +717,15 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
             currentFilter.put("orderStatus", statusesParam);
         }
 
-        final int count = customerOrderService.findOrderCount(shopIds, currentFilter);
+        if (CollectionUtils.isNotEmpty(shopIds)) {
+            currentFilter.put("shopIds", shopIds);
+        }
+
+        final int count = customerOrderService.findOrderCount(currentFilter);
         if (count > startIndex) {
 
             final List<CustomerOrderDTO> entities = new ArrayList<>();
-            final List<CustomerOrder> orders = customerOrderService.findOrders(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopIds, currentFilter);
+            final List<CustomerOrder> orders = customerOrderService.findOrders(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
 
             fillDTOs(orders, entities);
 

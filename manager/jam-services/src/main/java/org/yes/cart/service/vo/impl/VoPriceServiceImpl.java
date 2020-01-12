@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.PriceListDTO;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -26,6 +28,7 @@ import org.yes.cart.domain.vo.VoPriceList;
 import org.yes.cart.domain.vo.VoSearchContext;
 import org.yes.cart.domain.vo.VoSearchResult;
 import org.yes.cart.service.dto.DtoPriceListsService;
+import org.yes.cart.service.dto.impl.FilterSearchUtils;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPriceService;
@@ -59,33 +62,35 @@ public class VoPriceServiceImpl implements VoPriceService {
      * {@inheritDoc}
      */
     @Override
-    public VoSearchResult<VoPriceList> getFilteredPrices(final long shopId, final String currency, final VoSearchContext filter) throws Exception {
+    public VoSearchResult<VoPriceList> getFilteredPrices(final VoSearchContext filter) throws Exception {
 
         final VoSearchResult<VoPriceList> result = new VoSearchResult<>();
         final List<VoPriceList> results = new ArrayList<>();
         result.setSearchContext(filter);
         result.setItems(results);
 
-        if (!federationFacade.isManageable(shopId, ShopDTO.class)) {
-            return result;
+        final String shopCode = FilterSearchUtils.getStringFilter(filter.getParameters().get("shopCode"));
+        final String currency = FilterSearchUtils.getStringFilter(filter.getParameters().get("currency"));
+
+        if (federationFacade.isManageable(shopCode, ShopDTO.class) && StringUtils.isNotBlank(currency)) {
+
+            final SearchContext searchContext = new SearchContext(
+                    filter.getParameters(),
+                    filter.getStart(),
+                    filter.getSize(),
+                    filter.getSortBy(),
+                    filter.isSortDesc(),
+                    "filter", "shopCode", "currency"
+            );
+
+
+            final SearchResult<PriceListDTO> batch = dtoPriceListsService.findPrices(searchContext);
+            if (!batch.getItems().isEmpty()) {
+                results.addAll(voAssemblySupport.assembleVos(VoPriceList.class, PriceListDTO.class, batch.getItems()));
+            }
+
+            result.setTotal(batch.getTotal());
         }
-
-        final SearchContext searchContext = new SearchContext(
-                filter.getParameters(),
-                filter.getStart(),
-                filter.getSize(),
-                filter.getSortBy(),
-                filter.isSortDesc(),
-                "filter"
-        );
-
-
-        final SearchResult<PriceListDTO> batch = dtoPriceListsService.findPrices(shopId, currency, searchContext);
-        if (!batch.getItems().isEmpty()) {
-            results.addAll(voAssemblySupport.assembleVos(VoPriceList.class, PriceListDTO.class, batch.getItems()));
-        }
-
-        result.setTotal(batch.getTotal());
 
         return result;
     }

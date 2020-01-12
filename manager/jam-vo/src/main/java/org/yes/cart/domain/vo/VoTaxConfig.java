@@ -30,8 +30,8 @@ public class VoTaxConfig {
     @DtoField(value = "taxConfigId", readOnly = true)
     private long taxConfigId;
 
-    @DtoField(value = "taxId")
-    private long taxId;
+    private VoTax tax;
+    
     @DtoField(value = "productCode")
     private String productCode;
     @DtoField(value = "stateCode")
@@ -50,12 +50,12 @@ public class VoTaxConfig {
         this.taxConfigId = taxConfigId;
     }
 
-    public long getTaxId() {
-        return taxId;
+    public VoTax getTax() {
+        return tax;
     }
 
-    public void setTaxId(final long taxId) {
-        this.taxId = taxId;
+    public void setTax(final VoTax tax) {
+        this.tax = tax;
     }
 
     public String getProductCode() {

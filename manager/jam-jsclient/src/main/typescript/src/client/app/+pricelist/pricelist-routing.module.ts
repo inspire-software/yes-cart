@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ShopPriceListComponent, ShopTaxesComponent, ShopPromotionsComponent } from './index';
+import { ShopPriceListComponent, ShopTaxesComponent, ShopTaxConfigsComponent, ShopPromotionsComponent } from './index';
 
 @NgModule({
   imports: [
@@ -12,6 +12,10 @@ import { ShopPriceListComponent, ShopTaxesComponent, ShopPromotionsComponent } f
       {
         path: 'taxes/shop',
         component: ShopTaxesComponent
+      },
+      {
+        path: 'taxconfigs/shop',
+        component: ShopTaxConfigsComponent
       },
       {
         path: 'promotions/shop',

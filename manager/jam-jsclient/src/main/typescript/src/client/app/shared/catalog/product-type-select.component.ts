@@ -111,7 +111,7 @@ export class ProductTypeSelectComponent implements OnInit, OnDestroy {
         },
         start : 0,
         size : this.filterCap,
-        sortBy : null,
+        sortBy : 'name',
         sortDesc : false
       };
       let _sub:any = this._typeService.getFilteredProductTypes(_ctx).subscribe(allproductTypes => {

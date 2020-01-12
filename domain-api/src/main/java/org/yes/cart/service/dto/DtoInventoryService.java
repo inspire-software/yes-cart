@@ -42,8 +42,7 @@ public interface DtoInventoryService {
      * @throws UnmappedInterfaceException error
      * @throws UnableToCreateInstanceException error
      */
-    SearchResult<InventoryDTO> findInventory(long warehouseId,
-                                             SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    SearchResult<InventoryDTO> findInventory(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**

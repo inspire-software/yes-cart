@@ -112,7 +112,7 @@ export interface TaxVO {
 export interface TaxConfigVO {
 
   taxConfigId : number;
-  taxId : number;
+  tax : TaxVO;
 
   productCode : string;
   stateCode : string;

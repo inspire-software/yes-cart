@@ -54,8 +54,8 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     @Override
     public @ResponseBody
-    VoSearchResult<VoPriceList> getFilteredPriceLists(@PathVariable("shopId") final long shopId, @PathVariable("currency") final String currency, @RequestBody final VoSearchContext filter) throws Exception {
-        return voPriceService.getFilteredPrices(shopId, currency, filter);
+    VoSearchResult<VoPriceList> getFilteredPriceLists(@RequestBody final VoSearchContext filter) throws Exception {
+        return voPriceService.getFilteredPrices(filter);
     }
 
     @Override
@@ -93,8 +93,8 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     @Override
     public @ResponseBody
-    VoSearchResult<VoTax> getFilteredTax(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final VoSearchContext filter) throws Exception {
-        return voTaxService.getFilteredTax(shopCode, currency, filter);
+    VoSearchResult<VoTax> getFilteredTax(@RequestBody final VoSearchContext filter) throws Exception {
+        return voTaxService.getFilteredTax(filter);
     }
 
     @Override
@@ -123,8 +123,8 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     @Override
     public @ResponseBody
-    VoSearchResult<VoTaxConfig> getFilteredTaxConfig(@PathVariable("taxId") final long taxId, @RequestBody final VoSearchContext filter) throws Exception {
-        return voTaxService.getFilteredTaxConfig(taxId, filter);
+    VoSearchResult<VoTaxConfig> getFilteredTaxConfig(@RequestBody final VoSearchContext filter) throws Exception {
+        return voTaxService.getFilteredTaxConfig(filter);
     }
 
     @Override
@@ -147,8 +147,8 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     @Override
     public @ResponseBody
-    VoSearchResult<VoPromotion> getFilteredPromotion(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final VoSearchContext filter) throws Exception {
-        return voPromotionService.getFilteredPromotion(shopCode, currency, filter);
+    VoSearchResult<VoPromotion> getFilteredPromotion(@RequestBody final VoSearchContext filter) throws Exception {
+        return voPromotionService.getFilteredPromotion(filter);
     }
 
     @Override
@@ -183,8 +183,8 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     @Override
     public @ResponseBody
-    VoSearchResult<VoPromotionCoupon> getFilteredPromotionCoupons(@PathVariable("promoId") final long promotionId, @RequestBody final VoSearchContext filter) throws Exception {
-        return voPromotionService.getFilteredPromotionCoupons(promotionId, filter);
+    VoSearchResult<VoPromotionCoupon> getFilteredPromotionCoupons(@RequestBody final VoSearchContext filter) throws Exception {
+        return voPromotionService.getFilteredPromotionCoupons(filter);
     }
 
     @Override
