@@ -101,63 +101,59 @@ public class DtoPromotionServiceImpl
             final Map<String, List> currentFilter = new HashMap<>();
             if (StringUtils.isNotBlank(textFilter)) {
 
-                if (StringUtils.isNotBlank(textFilter)) {
+                final Pair<LocalDateTime, LocalDateTime> dateSearch = ComplexSearchUtils.checkDateRangeSearch(textFilter);
 
-                    final Pair<LocalDateTime, LocalDateTime> dateSearch = ComplexSearchUtils.checkDateRangeSearch(textFilter);
+                if (dateSearch != null) {
 
-                    if (dateSearch != null) {
+                    final LocalDateTime from = dateSearch.getFirst();
+                    final LocalDateTime to = dateSearch.getSecond();
 
-                        final LocalDateTime from = dateSearch.getFirst();
-                        final LocalDateTime to = dateSearch.getSecond();
-
-                        if (from != null) {
-                            currentFilter.put("enabledFrom", Collections.singletonList(SearchContext.MatchMode.GE.toParam(from)));
-                        }
-                        if (to != null) {
-                            currentFilter.put("enabledTo", Collections.singletonList(SearchContext.MatchMode.LE.toParam(to)));
-                        }
-
-                    } else {
-
-                        final Pair<String, String> enabled = ComplexSearchUtils.checkSpecialSearch(textFilter, ENABLED);
-
-                        if (enabled != null) {
-                            currentFilter.put("active", Collections.singletonList("+".equals(enabled.getFirst())));
-                        }
-
-                        if (enabled == null || !enabled.getFirst().equals(enabled.getSecond())) {
-
-                            final Pair<String, String> tagOrCodeOrConditionOrAction = ComplexSearchUtils.checkSpecialSearch(enabled != null ? enabled.getSecond() : textFilter, TAG_OR_CODE_OR_CONDITION_OR_ACTION);
-
-                            if (tagOrCodeOrConditionOrAction != null) {
-
-                                if ("#".equals(tagOrCodeOrConditionOrAction.getFirst())) {
-
-                                    SearchContext.JoinMode.OR.setMode(currentFilter);
-                                    currentFilter.put("code", Collections.singletonList(tagOrCodeOrConditionOrAction.getSecond()));
-                                    currentFilter.put("tag", Collections.singletonList(tagOrCodeOrConditionOrAction.getSecond()));
-
-                                } else if ("?".equals(tagOrCodeOrConditionOrAction.getFirst())) {
-
-                                    SearchContext.JoinMode.OR.setMode(currentFilter);
-                                    currentFilter.put("eligibilityCondition", Collections.singletonList(tagOrCodeOrConditionOrAction.getSecond()));
-                                    currentFilter.put("promoActionContext", Collections.singletonList(tagOrCodeOrConditionOrAction.getSecond()));
-
-                                }
-
-                            } else {
-
-                                final String basic = enabled != null ? enabled.getSecond() : textFilter;
-
-                                SearchContext.JoinMode.OR.setMode(currentFilter);
-                                currentFilter.put("code", Collections.singletonList(basic));
-                                currentFilter.put("name", Collections.singletonList(basic));
-                                currentFilter.put("description", Collections.singletonList(basic));
-
-                            }
-                        }
+                    if (from != null) {
+                        currentFilter.put("enabledFrom", Collections.singletonList(SearchContext.MatchMode.GE.toParam(from)));
+                    }
+                    if (to != null) {
+                        currentFilter.put("enabledTo", Collections.singletonList(SearchContext.MatchMode.LE.toParam(to)));
                     }
 
+                } else {
+
+                    final Pair<String, String> enabled = ComplexSearchUtils.checkSpecialSearch(textFilter, ENABLED);
+
+                    if (enabled != null) {
+                        currentFilter.put("active", Collections.singletonList("+".equals(enabled.getFirst())));
+                    }
+
+                    if (enabled == null || !enabled.getFirst().equals(enabled.getSecond())) {
+
+                        final Pair<String, String> tagOrCodeOrConditionOrAction = ComplexSearchUtils.checkSpecialSearch(enabled != null ? enabled.getSecond() : textFilter, TAG_OR_CODE_OR_CONDITION_OR_ACTION);
+
+                        if (tagOrCodeOrConditionOrAction != null) {
+
+                            if ("#".equals(tagOrCodeOrConditionOrAction.getFirst())) {
+
+                                SearchContext.JoinMode.OR.setMode(currentFilter);
+                                currentFilter.put("code", Collections.singletonList(tagOrCodeOrConditionOrAction.getSecond()));
+                                currentFilter.put("tag", Collections.singletonList(tagOrCodeOrConditionOrAction.getSecond()));
+
+                            } else if ("?".equals(tagOrCodeOrConditionOrAction.getFirst())) {
+
+                                SearchContext.JoinMode.OR.setMode(currentFilter);
+                                currentFilter.put("eligibilityCondition", Collections.singletonList(tagOrCodeOrConditionOrAction.getSecond()));
+                                currentFilter.put("promoActionContext", Collections.singletonList(tagOrCodeOrConditionOrAction.getSecond()));
+
+                            }
+
+                        } else {
+
+                            final String basic = enabled != null ? enabled.getSecond() : textFilter;
+
+                            SearchContext.JoinMode.OR.setMode(currentFilter);
+                            currentFilter.put("code", Collections.singletonList(basic));
+                            currentFilter.put("name", Collections.singletonList(basic));
+                            currentFilter.put("description", Collections.singletonList(basic));
+
+                        }
+                    }
                 }
 
             }
