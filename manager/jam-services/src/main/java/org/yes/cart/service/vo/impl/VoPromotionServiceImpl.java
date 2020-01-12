@@ -72,26 +72,25 @@ public class VoPromotionServiceImpl implements VoPromotionService {
         final String shopCode = FilterSearchUtils.getStringFilter(filter.getParameters().get("shopCode"));
         final String currency = FilterSearchUtils.getStringFilter(filter.getParameters().get("currency"));
 
-        if (!federationFacade.isManageable(shopCode, ShopDTO.class)) {
-            return result;
+        if (federationFacade.isManageable(shopCode, ShopDTO.class) && StringUtils.isNotBlank(currency)) {
+
+            final SearchContext searchContext = new SearchContext(
+                    filter.getParameters(),
+                    filter.getStart(),
+                    filter.getSize(),
+                    filter.getSortBy(),
+                    filter.isSortDesc(),
+                    "filter", "types", "actions", "shopCode", "currency"
+            );
+
+
+            final SearchResult<PromotionDTO> batch = dtoPromotionService.findPromotions(searchContext);
+            if (!batch.getItems().isEmpty()) {
+                results.addAll(voAssemblySupport.assembleVos(VoPromotion.class, PromotionDTO.class, batch.getItems()));
+            }
+
+            result.setTotal(batch.getTotal());
         }
-
-        final SearchContext searchContext = new SearchContext(
-                filter.getParameters(),
-                filter.getStart(),
-                filter.getSize(),
-                filter.getSortBy(),
-                filter.isSortDesc(),
-                "filter", "types", "actions", "shopCode", "currency"
-        );
-
-
-        final SearchResult<PromotionDTO> batch = dtoPromotionService.findPromotions(searchContext);
-        if (!batch.getItems().isEmpty()) {
-            results.addAll(voAssemblySupport.assembleVos(VoPromotion.class, PromotionDTO.class, batch.getItems()));
-        }
-
-        result.setTotal(batch.getTotal());
 
         return result;
     }
