@@ -17,6 +17,10 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CountryDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -24,5 +28,14 @@ import org.yes.cart.domain.dto.CountryDTO;
  * Time: 11:13:01
  */
 public interface DtoCountryService extends GenericDTOService<CountryDTO> {
+
+    /**
+     * Find countries by filter.
+     *
+     * @param filter                 filter for partial match.
+     *
+     * @return list
+     */
+    SearchResult<CountryDTO> findCountries(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 }

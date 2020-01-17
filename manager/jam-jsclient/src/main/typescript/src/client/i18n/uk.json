@@ -308,6 +308,7 @@
   "LOCATION_COUNTRY_CODE": "ISO 3166-1-A2",
   "LOCATION_COUNTRY_ISO": "ISO 3166-1-N",
   "LOCATION_COUNTRY_NAME_LOCAL": "Назва (Локалізована)",
+  "LOCATION_STATES": "Області",
   "LOCATION_STATE_CODE": "Код області",
   "LOCATION_CITY": "Місто",
   "LOCATION_POST_CODE": "Поштовий індекс",

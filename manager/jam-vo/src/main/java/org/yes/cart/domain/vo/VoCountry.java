@@ -28,61 +28,15 @@ import java.util.List;
  * Time: 17:54
  */
 @Dto
-public class VoCountry {
+public class VoCountry extends VoCountryInfo {
 
-    @DtoField(value = "countryId", readOnly = true)
-    private long countryId;
+    private List<VoState> states;
 
-    @DtoField(value = "countryCode")
-    private String countryCode;
-
-    @DtoField(value = "isoCode")
-    private String isoCode;
-
-    @DtoField(value = "name")
-    private String name;
-
-    @DtoField(value = "displayNames", converter = "DisplayValues")
-    private List<MutablePair<String, String>> displayNames;
-
-    public long getCountryId() {
-        return countryId;
+    public List<VoState> getStates() {
+        return states;
     }
 
-    public void setCountryId(final long countryId) {
-        this.countryId = countryId;
+    public void setStates(final List<VoState> states) {
+        this.states = states;
     }
-
-    public String getCountryCode() {
-        return countryCode;
-    }
-
-    public void setCountryCode(final String countryCode) {
-        this.countryCode = countryCode;
-    }
-
-    public String getIsoCode() {
-        return isoCode;
-    }
-
-    public void setIsoCode(final String isoCode) {
-        this.isoCode = isoCode;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public List<MutablePair<String, String>> getDisplayNames() {
-        return displayNames;
-    }
-
-    public void setDisplayNames(final List<MutablePair<String, String>> displayNames) {
-        this.displayNames = displayNames;
-    }
-
 }

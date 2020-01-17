@@ -16,11 +16,18 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.State;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.StateService;
+import org.yes.cart.utils.HQLUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -28,14 +35,87 @@ import java.util.List;
  * Time: 14:12:54
  */
 public class StateServiceImpl extends BaseGenericServiceImpl<State> implements StateService {
+
     /**
      * Construct Service.
+     *
      * @param genericDao dao to use.
      */
     public StateServiceImpl(final GenericDAO<State, Long> genericDao) {
         super(genericDao);
     }
 
+
+
+    private Pair<String, Object[]> findStateQuery(final boolean count,
+                                                  final String sort,
+                                                  final boolean sortDescending,
+                                                  final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(s.stateId) from StateEntity s ");
+        } else {
+            hqlCriteria.append("select s from StateEntity s ");
+        }
+
+        final List countryCodes = currentFilter != null ? currentFilter.remove("countryCodes") : null;
+        if (CollectionUtils.isNotEmpty(countryCodes)) {
+            if (params.size() > 0) {
+                hqlCriteria.append(" and (s.countryCode in (?").append(params.size() + 1).append(")) ");
+            } else {
+                hqlCriteria.append(" where (s.countryCode in (?1)) ");
+            }
+            params.add(countryCodes);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "s", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by s." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public List<State> findStates(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findStateQuery(false, sort, sortDescending, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int findStateCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findStateQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
+    }
+
+    /** {@inheritDoc} */
     @Override
     public List<State> findByCountry(final String countryCode) {
 

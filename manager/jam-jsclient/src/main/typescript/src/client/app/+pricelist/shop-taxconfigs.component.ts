@@ -20,8 +20,13 @@ import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/se
 import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ProductSkuSelectComponent } from './../shared/catalog/index';
+import { CountrySelectComponent, CountryStateSelectComponent } from './../shared/shipping/index';
 import { TaxSelectComponent } from './../shared/price/index';
-import { TaxVO, ShopVO, TaxConfigVO, PromotionTestVO, CartVO, ProductSkuVO, Pair, SearchResultVO } from './../shared/model/index';
+import {
+  TaxVO, ShopVO, TaxConfigVO, PromotionTestVO, CartVO,
+  ProductSkuVO, CountryInfoVO, StateVO,
+  Pair, SearchResultVO
+} from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -78,6 +83,12 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
   @ViewChild('selectProductModalSkuDialog')
   private selectProductModalSkuDialog:ProductSkuSelectComponent;
 
+  @ViewChild('selectCountryModalDialog')
+  private selectCountryModalDialog:CountrySelectComponent;
+
+  @ViewChild('selectStateModalDialog')
+  private selectStateModalDialog:CountryStateSelectComponent;
+
   @ViewChild('selectTaxModalDialog')
   private selectTaxModalDialog:TaxSelectComponent;
 
@@ -98,7 +109,7 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
 
     this.taxconfigEditForm = fb.group({
        'productCode': ['', YcValidators.validCode],
-       'stateCode': ['', YcValidators.validCode],
+       'stateCode': ['', YcValidators.nonBlankTrimmed64],
        'countryCode': ['', YcValidators.validCountryCode],
        'tax': ['', Validators.required],
     });
@@ -330,11 +341,6 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
     this.searchHelpTaxConfigShow = !this.searchHelpTaxConfigShow;
   }
 
-  protected onSearchLocation() {
-    this.taxconfigsFilter = '@';
-    this.searchHelpTaxConfigShow = false;
-  }
-
   protected onSearchSKU() {
     this.taxconfigsFilter = '#!';
     this.searchHelpTaxConfigShow = false;
@@ -357,6 +363,44 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+
+  protected onCountryExact() {
+    this.selectCountryModalDialog.showDialog();
+  }
+
+  protected onCountrySelected(event:FormValidationEvent<CountryInfoVO>) {
+    LogUtil.debug('ShopTaxConfigsComponent onCountrySelected');
+    if (event.valid) {
+      if (this.taxconfigEdit != null) {
+        this.taxconfigEdit.stateCode = null;
+        this.taxconfigEdit.countryCode = event.source.countryCode;
+      } else {
+        this.taxconfigsFilter = '@' + event.source.countryCode;
+        this.searchHelpTaxConfigShow = false;
+        this.getFilteredTaxConfig();
+      }
+    }
+  }
+
+  protected onStateExact() {
+    this.selectStateModalDialog.showDialog();
+  }
+
+  protected onStateSelected(event:FormValidationEvent<StateVO>) {
+    LogUtil.debug('ShopTaxConfigsComponent onCountrySelected');
+    if (event.valid) {
+      if (this.taxconfigEdit != null) {
+        this.taxconfigEdit.stateCode = event.source.stateCode;
+        this.taxconfigEdit.countryCode = event.source.countryCode;
+      } else {
+        this.taxconfigsFilter = '@' + event.source.stateCode;
+        this.searchHelpTaxConfigShow = false;
+        this.getFilteredTaxConfig();
+      }
+    }
+  }
+
 
   protected onTaxExact() {
     this.selectTaxModalDialog.showDialog();

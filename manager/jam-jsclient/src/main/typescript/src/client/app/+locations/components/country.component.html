@@ -46,6 +46,52 @@
         </div>
       </tab>
 
+      <tab heading="{{ 'LOCATION_STATES' | translate }}"  (select)="tabSelected('SKU')">
+
+        <ng-template [ngIf]="!(country.countryId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </ng-template>
+
+        <ng-template [ngIf]="country.countryId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="row data-control">
+
+                <div class="col-xs-12 col-md-5 padding-lr-0">
+
+                  <form class="width-100">
+                    <div class="input-group">
+                      <input class="form-control filter-input" type="text" name="stateFilter" [(ngModel)]="stateFilter" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearStateFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <yc-states [states]="country.states" [filter]="stateFilter" (dataSelected)="onStateSelected($event)"></yc-states>
+            </div>
+          </div>
+        </ng-template>
+
+      </tab>
+
     </tabset>
 
   </form>

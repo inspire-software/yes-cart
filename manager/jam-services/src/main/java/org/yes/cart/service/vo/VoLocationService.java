@@ -16,8 +16,7 @@
 
 package org.yes.cart.service.vo;
 
-import org.yes.cart.domain.vo.VoCountry;
-import org.yes.cart.domain.vo.VoState;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public interface VoLocationService {
      *
      * @throws Exception errors
      */
-    List<VoCountry> getAllCountries() throws Exception;
+    VoSearchResult<VoCountryInfo> getFilteredCountries(VoSearchContext filter) throws Exception;
 
     /**
      * Get vo by id.
@@ -92,7 +91,17 @@ public interface VoLocationService {
      *
      * @throws Exception errors
      */
-    List<VoState> getAllStates(long id) throws Exception;
+    List<VoState> getCountryStatesAll(long id) throws Exception;
+
+
+    /**
+     * Get all vo in the system, filtered according to rights
+     *
+     * @return all countries states
+     *
+     * @throws Exception errors
+     */
+    VoSearchResult<VoState> getFilteredStates(VoSearchContext filter) throws Exception;
 
     /**
      * Get vo by id.

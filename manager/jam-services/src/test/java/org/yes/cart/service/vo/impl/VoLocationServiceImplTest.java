@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoCountry;
+import org.yes.cart.domain.vo.VoSearchContext;
 import org.yes.cart.domain.vo.VoState;
 import org.yes.cart.service.vo.VoLocationService;
 
@@ -63,11 +64,17 @@ public class VoLocationServiceImplTest extends BaseCoreDBTestCase {
         final VoCountry updated = voLocationService.updateCountry(created);
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
-        assertTrue(voLocationService.getAllCountries().stream().anyMatch(cnt -> cnt.getCountryId() == updated.getCountryId()));
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(createSearchContextParams(
+                "filter", "TEST CRUD UPDATE"
+        ));
+        ctxFind.setSize(10);
+
+        assertTrue(voLocationService.getFilteredCountries(ctxFind).getItems().stream().anyMatch(cnt -> cnt.getCountryId() == updated.getCountryId()));
 
         voLocationService.removeCountry(updated.getCountryId());
 
-        assertFalse(voLocationService.getAllCountries().stream().anyMatch(cnt -> cnt.getCountryId() == updated.getCountryId()));
+        assertFalse(voLocationService.getFilteredCountries(ctxFind).getItems().stream().anyMatch(cnt -> cnt.getCountryId() == updated.getCountryId()));
 
     }
 
@@ -83,7 +90,12 @@ public class VoLocationServiceImplTest extends BaseCoreDBTestCase {
         final VoState created = voLocationService.createState(state);
         assertTrue(created.getStateId() > 0L);
 
-        assertTrue(voLocationService.getAllStates(220L).stream().anyMatch(st -> st.getStateId() == created.getStateId()));
+        assertTrue(voLocationService.getCountryStatesAll(220L).stream().anyMatch(st -> st.getStateId() == created.getStateId()));
+
+        final VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(createSearchContextParams("countryCodes", "GB"));
+        ctxFind.setSize(10);
+        assertTrue(voLocationService.getFilteredStates(ctxFind).getItems().stream().anyMatch(st -> st.getStateId() == created.getStateId()));
 
         VoState afterCreated = voLocationService.getStateById(created.getStateId());
         assertNotNull(afterCreated);
@@ -94,11 +106,11 @@ public class VoLocationServiceImplTest extends BaseCoreDBTestCase {
         final VoState updated = voLocationService.updateState(created);
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
-        assertTrue(voLocationService.getAllStates(220L).stream().anyMatch(st -> st.getStateId() == updated.getStateId()));
+        assertTrue(voLocationService.getCountryStatesAll(220L).stream().anyMatch(st -> st.getStateId() == updated.getStateId()));
 
         voLocationService.removeState(updated.getStateId());
 
-        assertFalse(voLocationService.getAllStates(220L).stream().anyMatch(st -> st.getStateId() == updated.getStateId()));
+        assertFalse(voLocationService.getCountryStatesAll(220L).stream().anyMatch(st -> st.getStateId() == updated.getStateId()));
 
     }
 }

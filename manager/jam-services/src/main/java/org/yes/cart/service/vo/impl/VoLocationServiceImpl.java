@@ -19,8 +19,11 @@ package org.yes.cart.service.vo.impl;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CountryDTO;
 import org.yes.cart.domain.dto.StateDTO;
-import org.yes.cart.domain.vo.VoCountry;
-import org.yes.cart.domain.vo.VoState;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
+import org.yes.cart.domain.vo.*;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoCountryService;
 import org.yes.cart.service.dto.DtoStateService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -56,9 +59,28 @@ public class VoLocationServiceImpl implements VoLocationService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoCountry> getAllCountries() throws Exception {
-        final List<CountryDTO> all = dtoCountryService.getAll();
-        return voAssemblySupport.assembleVos(VoCountry.class, CountryDTO.class, all);
+    public VoSearchResult<VoCountryInfo> getFilteredCountries(VoSearchContext filter) throws Exception {
+
+        final VoSearchResult<VoCountryInfo> result = new VoSearchResult<>();
+        final List<VoCountryInfo> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
+
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter"
+        );
+
+        final SearchResult<CountryDTO> batch = dtoCountryService.findCountries(searchContext);
+        results.addAll(voAssemblySupport.assembleVos(VoCountryInfo.class, CountryDTO.class, batch.getItems()));
+        result.setTotal(batch.getTotal());
+
+        return result;
+
     }
 
     /** {@inheritDoc} */
@@ -66,7 +88,9 @@ public class VoLocationServiceImpl implements VoLocationService {
     public VoCountry getCountryById(final long id) throws Exception {
         final CountryDTO countryDTO = dtoCountryService.getById(id);
         if (countryDTO != null) {
-            return voAssemblySupport.assembleVo(VoCountry.class, CountryDTO.class, new VoCountry(), countryDTO);
+            final VoCountry country = voAssemblySupport.assembleVo(VoCountry.class, CountryDTO.class, new VoCountry(), countryDTO);
+            country.setStates(getCountryStatesInternal(countryDTO));
+            return country;
         }
         return null;
     }
@@ -111,14 +135,43 @@ public class VoLocationServiceImpl implements VoLocationService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoState> getAllStates(final long id) throws Exception {
+    public List<VoState> getCountryStatesAll(final long id) throws Exception {
         CountryDTO countryDTO = dtoCountryService.getById(id);
         final List<VoState> rez = new ArrayList<>();
         if (countryDTO != null) {
-            final List<StateDTO> all = dtoStateService.findByCountry(countryDTO.getCountryCode());
-            return voAssemblySupport.assembleVos(VoState.class, StateDTO.class, all);
+            return getCountryStatesInternal(countryDTO);
         }
         return rez;
+    }
+
+    List<VoState> getCountryStatesInternal(final CountryDTO countryDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<StateDTO> all = dtoStateService.findByCountry(countryDTO.getCountryCode());
+        return voAssemblySupport.assembleVos(VoState.class, StateDTO.class, all);
+    }
+
+    @Override
+    public VoSearchResult<VoState> getFilteredStates(final VoSearchContext filter) throws Exception {
+
+        final VoSearchResult<VoState> result = new VoSearchResult<>();
+        final List<VoState> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
+
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "countryCodes"
+        );
+
+        final SearchResult<StateDTO> batch = dtoStateService.findStates(searchContext);
+        results.addAll(voAssemblySupport.assembleVos(VoState.class, StateDTO.class, batch.getItems()));
+        result.setTotal(batch.getTotal());
+
+        return result;
+
     }
 
     /** {@inheritDoc} */

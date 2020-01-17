@@ -20,8 +20,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.yes.cart.domain.vo.VoCountry;
-import org.yes.cart.domain.vo.VoState;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -35,9 +34,9 @@ import java.util.List;
 public interface LocationEndpointController {
 
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/country/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/country/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCountry> getAllCountries() throws Exception;
+    VoSearchResult<VoCountryInfo> getFilteredCountries(@RequestBody VoSearchContext filter) throws Exception;
 
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/country/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -61,9 +60,14 @@ public interface LocationEndpointController {
 
 
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/state/all/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/country/state/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoState> getAllStates(@PathVariable("id") long id) throws Exception;
+    List<VoState> getCountryStatesAll(@PathVariable("id") long id) throws Exception;
+
+    @PreAuthorize("isFullyAuthenticated()")
+    @RequestMapping(value = "/country/state/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoSearchResult<VoState> getFilteredStates(@RequestBody VoSearchContext filter) throws Exception;
 
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/state/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

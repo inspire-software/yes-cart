@@ -16,8 +16,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { LocationService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { CountryVO, StateVO } from './../shared/model/index';
-import { FormValidationEvent } from './../shared/event/index';
+import { CountryInfoVO, CountryVO, StateVO, Pair, SearchResultVO } from './../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
@@ -30,13 +31,17 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   private static COUNTRIES:string = 'countries';
   private static COUNTRY:string = 'country';
-  private static STATES:string = 'states';
   private static STATE:string = 'state';
 
+  private forceShowAll:boolean = false;
   private viewMode:string = LocationsComponent.COUNTRIES;
 
-  private countries:Array<CountryVO> = [];
+  private countries:SearchResultVO<CountryInfoVO>;
   private countryFilter:string;
+  private countryFilterRequired:boolean = true;
+
+  private delayedFilteringCountry:Future;
+  private delayedFilteringCountryMs:number = Config.UI_INPUT_DELAY;
 
   private selectedCountry:CountryVO;
 
@@ -44,9 +49,6 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   @ViewChild('deleteConfirmationModalDialog')
   private deleteConfirmationModalDialog:ModalComponent;
-
-  private states:Array<StateVO> = [];
-  private stateFilter:string;
 
   private selectedState:StateVO;
 
@@ -61,43 +63,94 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   constructor(private _locationService:LocationService) {
     LogUtil.debug('LocationsComponent constructed');
+    this.countries = this.newSearchResultCountryInstance();
   }
 
   newCountryInstance():CountryVO {
-    return { countryId: 0, countryCode: '',  isoCode: '', name: '', displayNames: [] };
+    return {
+      countryId: 0,
+      countryCode: '',
+      isoCode: '',
+      name: '',
+      displayNames: [],
+      states: []
+    };
+  }
+
+  newSearchResultCountryInstance():SearchResultVO<CountryInfoVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    };
   }
 
   newStateInstance():StateVO {
     let country = this.selectedCountry != null ? this.selectedCountry.countryCode : '';
-    return { stateId: 0, countryCode: country, stateCode: '', name: '', displayNames: [] };
+    return {
+      stateId: 0,
+      countryCode: country,
+      stateCode: '',
+      name: '',
+      displayNames: []
+    };
   }
 
   ngOnInit() {
     LogUtil.debug('LocationsComponent ngOnInit');
     this.onRefreshHandler();
+    let that = this;
+    this.delayedFilteringCountry = Futures.perpetual(function() {
+      that.getFilteredCountires();
+    }, this.delayedFilteringCountryMs);
   }
 
   ngOnDestroy() {
     LogUtil.debug('LocationsComponent ngOnDestroy');
   }
 
+
+  protected onCountryFilterChange(event:any) {
+    this.countries.searchContext.start = 0; // changing filter means we need to start from first page
+    this.delayedFilteringCountry.delay();
+  }
+
   protected onRefreshHandler() {
     LogUtil.debug('LocationsComponent refresh handler');
     if (UserEventBus.getUserEventBus().current() != null) {
-      if (this.viewMode === LocationsComponent.COUNTRIES ||
-          this.viewMode === LocationsComponent.COUNTRY ||
-          this.selectedCountry == null) {
-        this.getAllLocations();
-      } else {
-        this.getAllStates();
-      }
+      this.getFilteredCountires();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('LocationsComponent onPageSelected', page);
+    this.countries.searchContext.start = page;
+    this.delayedFilteringCountry.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('LocationsComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.countries.searchContext.sortBy = null;
+      this.countries.searchContext.sortDesc = false;
+    } else {
+      this.countries.searchContext.sortBy = sort.first;
+      this.countries.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFilteringCountry.delay();
   }
 
   protected onCountrySelected(data:CountryVO) {
     LogUtil.debug('LocationsComponent onCountrySelected', data);
     this.selectedCountry = data;
-    this.stateFilter = '';
   }
 
   protected onCountryChanged(event:FormValidationEvent<CountryVO>) {
@@ -119,15 +172,18 @@ export class LocationsComponent implements OnInit, OnDestroy {
     this.stateEdit = event.source;
   }
 
+  protected onForceShowAll() {
+    this.forceShowAll = !this.forceShowAll;
+    this.getFilteredCountires();
+  }
+
   protected onBackToList() {
     LogUtil.debug('LocationsComponent onBackToList handler');
     if (this.viewMode === LocationsComponent.STATE) {
       this.stateEdit = null;
-      this.viewMode = LocationsComponent.STATES;
-    } else if (this.viewMode === LocationsComponent.STATES) {
-      this.stateEdit = null;
-      this.selectedState = null;
-      this.viewMode = LocationsComponent.COUNTRIES;
+      if (this.countryEdit != null) {
+        this.viewMode = LocationsComponent.COUNTRY;
+      }
     } else if (this.viewMode === LocationsComponent.COUNTRY) {
       this.countryEdit = null;
       this.stateEdit = null;
@@ -143,7 +199,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
     if (this.viewMode === LocationsComponent.COUNTRIES) {
       this.countryEdit = this.newCountryInstance();
       this.viewMode = LocationsComponent.COUNTRY;
-    } else if (this.viewMode === LocationsComponent.STATES) {
+    } else if (this.viewMode === LocationsComponent.COUNTRY) {
       this.stateEdit = this.newStateInstance();
       this.viewMode = LocationsComponent.STATE;
     }
@@ -166,10 +222,16 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   protected onRowEditCountry(row:CountryVO) {
     LogUtil.debug('LocationsComponent onRowEditCountry handler', row);
-    this.countryEdit = Util.clone(row);
-    this.changed = false;
-    this.validForSave = false;
-    this.viewMode = LocationsComponent.COUNTRY;
+    this.loading = true;
+    let _sub:any = this._locationService.getCountryById(row.countryId).subscribe(res => {
+      LogUtil.debug('LocationsComponent getCountryById', res);
+      this.countryEdit = res;
+      this.changed = false;
+      this.validForSave = false;
+      this.viewMode = LocationsComponent.COUNTRY;
+      this.loading = false;
+      _sub.unsubscribe();
+    });
   }
 
   protected onRowEditState(row:StateVO) {
@@ -189,18 +251,6 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onRowList(row:CountryVO) {
-    LogUtil.debug('LocationsComponent onRowList handler', row);
-    this.getAllStates();
-  }
-
-
-  protected onRowListSelected() {
-    if (this.selectedCountry != null) {
-      this.onRowList(this.selectedCountry);
-    }
-  }
-
   protected onSaveHandler() {
 
     if (this.validForSave && this.changed) {
@@ -212,24 +262,29 @@ export class LocationsComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._locationService.saveState(this.stateEdit).subscribe(
             rez => {
-            if (this.stateEdit.stateId > 0) {
-              let idx = this.states.findIndex(rez => rez.stateId == this.stateEdit.stateId);
-              if (idx !== -1) {
-                this.states[idx] = rez;
-                this.states = this.states.slice(0, this.states.length); // reset to propagate changes
-                LogUtil.debug('LocationsComponent state changed', rez);
+              let pk = this.stateEdit.stateId;
+              if (pk > 0) {
+                LogUtil.debug('LocationsComponent state edit', rez);
+                if (this.countryEdit != null) {
+                  let idx = this.countryEdit.states.findIndex(rez => rez.stateId == this.stateEdit.stateId);
+                  if (idx !== -1) {
+                    this.countryEdit.states[idx] = rez;
+                    this.countryEdit.states = this.countryEdit.states.slice(0, this.countryEdit.states.length); // reset to propagate changes
+                  }
+                }
+              } else {
+                if (this.countryEdit != null) {
+                  this.countryEdit.states.push(rez);
+                  this.countryEdit.states = this.countryEdit.states.slice(0, this.countryEdit.states.length); // reset to propagate changes
+                }
+                LogUtil.debug('LocationsComponent state added', rez);
               }
-            } else {
-              this.states.push(rez);
-              this.stateFilter = rez.name;
-              LogUtil.debug('LocationsComponent state added', rez);
-            }
-            this.changed = false;
-            this.selectedState = rez;
-            this.stateEdit = null;
+              this.changed = false;
+              this.selectedState = rez;
+              this.stateEdit = null;
               this.loading = false;
-            this.viewMode = LocationsComponent.STATES;
-            _sub.unsubscribe();
+              this.viewMode = LocationsComponent.COUNTRY;
+              _sub.unsubscribe();
           }
         );
       } else if (this.countryEdit != null) {
@@ -239,24 +294,19 @@ export class LocationsComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._locationService.saveCountry(this.countryEdit).subscribe(
             rez => {
-            if (this.countryEdit.countryId > 0) {
-              let idx = this.countries.findIndex(rez => rez.countryId == this.countryEdit.countryId);
-              if (idx !== -1) {
-                this.countries[idx] = rez;
-                this.countries = this.countries.slice(0, this.countries.length); // reset to propagate changes
+              let pk = this.countryEdit.countryId;
+              if (pk > 0) {
                 LogUtil.debug('LocationsComponent country changed', rez);
+              } else {
+                this.countryFilter = rez.name;
+                LogUtil.debug('LocationsComponent country added', rez);
               }
-            } else {
-              this.countries.push(rez);
-              this.countryFilter = rez.countryCode;
-              LogUtil.debug('LocationsComponent country added', rez);
-            }
-            this.changed = false;
-            this.selectedCountry = rez;
-            this.countryEdit = null;
-              this.loading = false;
-            this.viewMode = LocationsComponent.COUNTRIES;
-            _sub.unsubscribe();
+              this.changed = false;
+              this.selectedCountry = rez;
+              this.countryEdit = null;
+                this.loading = false;
+              _sub.unsubscribe();
+              this.getFilteredCountires();
           }
         );
       }
@@ -293,13 +343,19 @@ export class LocationsComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._locationService.removeState(this.selectedState).subscribe(res => {
           LogUtil.debug('LocationsComponent removeState', this.selectedState);
-          let idx = this.states.indexOf(this.selectedState);
-          this.states.splice(idx, 1);
-          this.states = this.states.slice(0, this.states.length); // reset to propagate changes
-          this.selectedState = null;
+          let pk = this.selectedState.stateId;
           this.stateEdit = null;
+          if (this.countryEdit != null) {
+            let idx2 = this.countryEdit.states.findIndex(rez => rez.stateId == pk);
+            if (idx2 !== -1) {
+              this.countryEdit.states.splice(idx2, 1);
+              this.countryEdit.states = this.countryEdit.states.slice(0, this.countryEdit.states.length); // reset to propagate changes
+            }
+          }
+          this.selectedState = null;
           this.loading = false;
           _sub.unsubscribe();
+          this.viewMode = LocationsComponent.COUNTRY;
         });
 
       } else if (this.selectedCountry != null) {
@@ -308,13 +364,11 @@ export class LocationsComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._locationService.removeCountry(this.selectedCountry).subscribe(res => {
           LogUtil.debug('LocationsComponent removeCountry', this.selectedCountry);
-          let idx = this.countries.indexOf(this.selectedCountry);
-          this.countries.splice(idx, 1);
-          this.countries = this.countries.slice(0, this.countries.length); // reset to propagate changes
           this.selectedCountry = null;
           this.countryEdit = null;
           this.loading = false;
           _sub.unsubscribe();
+          this.getFilteredCountires();
         });
       }
     }
@@ -323,47 +377,40 @@ export class LocationsComponent implements OnInit, OnDestroy {
   protected onClearFilterCountry() {
 
     this.countryFilter = '';
+    this.getFilteredCountires();
 
   }
 
-  protected onClearFilterState() {
+  private getFilteredCountires() {
+    this.countryFilterRequired = !this.forceShowAll && (this.countryFilter == null || this.countryFilter.length < 2);
 
-    this.stateFilter = '';
+    LogUtil.debug('LocationsComponent getFilteredCountires' + (this.forceShowAll ? ' forcefully': ''));
 
-  }
-
-  private getAllLocations() {
-    this.loading = true;
-    let _sub:any = this._locationService.getAllCountries().subscribe( allcountries => {
-      LogUtil.debug('LocationsComponent getAllCountries', allcountries);
-      this.countries = allcountries;
-      this.selectedCountry = null;
-      this.countryEdit = null;
-      this.viewMode = LocationsComponent.COUNTRIES;
-      this.changed = false;
-      this.validForSave = false;
-      this.loading = false;
-      _sub.unsubscribe();
-    });
-  }
-
-  private getAllStates() {
-    if (this.selectedCountry != null) {
+    if (!this.countryFilterRequired) {
       this.loading = true;
-      let _sub:any = this._locationService.getAllStates(this.selectedCountry).subscribe(allstates => {
-        LogUtil.debug('LocationsComponent getAllStates', allstates);
-        this.states = allstates;
-        this.selectedState = null;
-        this.stateEdit = null;
+
+      this.countries.searchContext.parameters.filter = [ this.countryFilter ];
+      this.countries.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._locationService.getFilteredCountries(this.countries.searchContext).subscribe( allcountries => {
+        LogUtil.debug('LocationsComponent getAllCountries', allcountries);
+        this.countries = allcountries;
+        this.selectedCountry = null;
         this.countryEdit = null;
-        this.viewMode = LocationsComponent.STATES;
+        this.viewMode = LocationsComponent.COUNTRIES;
         this.changed = false;
         this.validForSave = false;
         this.loading = false;
         _sub.unsubscribe();
       });
+    } else {
+      this.countries = this.newSearchResultCountryInstance();
+      this.selectedCountry = null;
+      this.countryEdit = null;
+      this.viewMode = LocationsComponent.COUNTRIES;
+      this.changed = false;
+      this.validForSave = false;
     }
   }
-
 
 }

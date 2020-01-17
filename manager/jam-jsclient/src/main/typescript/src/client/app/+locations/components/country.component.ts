@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { CountryVO } from './../../shared/model/index';
+import { CountryVO, StateVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
@@ -30,12 +30,15 @@ import { LogUtil } from './../../shared/log/index';
 export class CountryComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<CountryVO>> = new EventEmitter<FormValidationEvent<CountryVO>>();
+  @Output() dataSelected: EventEmitter<StateVO> = new EventEmitter<StateVO>();
 
   private _country:CountryVO;
 
   private delayedChange:Future;
 
   private countryForm:any;
+
+  private stateFilter:string;
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('CountryComponent constructed');
@@ -93,6 +96,18 @@ export class CountryComponent implements OnInit, OnDestroy {
 
   tabSelected(tab:any) {
     LogUtil.debug('CountryComponent tabSelected', tab);
+  }
+
+
+  protected onClearFilterState() {
+
+    this.stateFilter = '';
+
+  }
+
+  protected onStateSelected(data:StateVO) {
+    LogUtil.debug('CountryComponent onStateSelected', data);
+    this.dataSelected.emit(data);
   }
 
 }

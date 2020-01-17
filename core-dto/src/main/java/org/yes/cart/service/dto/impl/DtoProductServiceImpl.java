@@ -176,7 +176,7 @@ public class DtoProductServiceImpl
     public SearchResult<ProductDTO> findProducts(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final Map<String, List> params = filter.reduceParameters("filter", "supplierCatalogCodes");
-        final List filterParam = params.get("filter");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
         final List supplierCatalogCodesParam = params.get("supplierCatalogCodes");
 
         final int pageSize = filter.getSize();
@@ -185,9 +185,8 @@ public class DtoProductServiceImpl
         final ProductService productService = (ProductService) service;
 
         final Map<String, List> currentFilter = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+        if (StringUtils.isNotBlank(textFilter)) {
 
-            final String textFilter = ((String) filterParam.get(0)).trim();
             final Pair<String, String> tagOrCodeOrBrandOrType = ComplexSearchUtils.checkSpecialSearch(textFilter, TAG_OR_CODE_OR_BRAND_OR_TYPE);
 
             if (tagOrCodeOrBrandOrType != null) {

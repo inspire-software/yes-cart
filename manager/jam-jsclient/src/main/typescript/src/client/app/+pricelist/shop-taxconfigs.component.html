@@ -71,7 +71,7 @@
 
   <div *ngIf="searchHelpTaxConfigShow">
     <div class="bg-info text-padding block-margin-spacer">
-      <p>{{ 'SEARCH_HELP_TAXCFG_LOCATION' | translate }} <span><button type="button" (click)="onSearchLocation()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_TAXCFG_LOCATION' | translate }} <span><button type="button" (click)="onCountryExact()" class="btn btn-default btn-circle"><i class="fa fa-globe"></i></button></span>  <span><button type="button" (click)="onStateExact()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
       <p>{{ 'SEARCH_HELP_TAXCFG_SKU' | translate }} <span><button type="button" (click)="onSearchSKU()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
       <p>{{ 'SEARCH_HELP_TAXCFG_SKU_EXACT' | translate }} <span><button type="button" (click)="onSearchSKUExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
     </div>
@@ -162,7 +162,14 @@
           <div class="row">
             <div class="col-xs-3">{{ 'LOCATION_STATE_CODE' | translate }}</div>
             <div class="col-xs-9">
-              <input class="form-control" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="taxconfigEdit.stateCode">
+              <div class="input-group">
+                <input class="form-control" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="taxconfigEdit.stateCode">
+                <span class="input-group-btn">
+                  <button type="button" (click)="onStateExact()" class="btn btn-default">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                </span>
+              </div>
               <div [hidden]="taxconfigEditForm.controls['stateCode'].valid || taxconfigEditForm.controls['stateCode'].pristine" class="alert alert-danger">
                 {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>
@@ -171,7 +178,14 @@
           <div class="row">
             <div class="col-xs-3">{{ 'LOCATION_COUNTRY' | translate }}</div>
             <div class="col-xs-9">
-              <input class="form-control" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="taxconfigEdit.countryCode">
+              <div class="input-group">
+                <input class="form-control" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="taxconfigEdit.countryCode">
+                <span class="input-group-btn">
+                  <button type="button" (click)="onCountryExact()" class="btn btn-default">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                </span>
+              </div>
               <div [hidden]="taxconfigEditForm.controls['countryCode'].valid || taxconfigEditForm.controls['countryCode'].pristine" class="alert alert-danger">
                 {{ 'COUNTRY_CODE_REQUIRED' | translate }}
               </div>
@@ -210,6 +224,10 @@
   <yc-promotion-test-config #runTestModalDialog (dataConfigured)="onRunTestResult($event)"></yc-promotion-test-config>
 
   <yc-product-sku-select #selectProductModalSkuDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
+
+  <yc-country-select #selectCountryModalDialog (dataSelected)="onCountrySelected($event)"></yc-country-select>
+
+  <yc-country-state-select #selectStateModalDialog (dataSelected)="onStateSelected($event)"></yc-country-state-select>
 
   <yc-tax-select #selectTaxModalDialog
                  [selectedShopCode]="selectedShopCode"

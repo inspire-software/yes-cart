@@ -17,12 +17,20 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.CountryDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CountryDTOImpl;
 import org.yes.cart.domain.entity.Country;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.service.domain.CountryService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCountryService;
+
+import java.util.*;
 
 /**
  * Country dto service.
@@ -48,6 +56,45 @@ public class DtoCountryServiceImpl
         super(dtoFactory, countryGenericService, adaptersRepository);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SearchResult<CountryDTO> findCountries(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, List> params = filter.reduceParameters("filter");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final CountryService countryService = (CountryService) service;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+        if (StringUtils.isNotBlank(textFilter)) {
+
+            SearchContext.JoinMode.OR.setMode(currentFilter);
+            currentFilter.put("countryCode", Collections.singletonList(textFilter));
+            currentFilter.put("isoCode", Collections.singletonList(textFilter));
+            currentFilter.put("name", Collections.singletonList(textFilter));
+            currentFilter.put("guid", Collections.singletonList(textFilter));
+
+        }
+
+        final int count = countryService.findCountryCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<CountryDTO> entities = new ArrayList<>();
+            final List<Country> countries = countryService.findCountries(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(countries, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
+
+    }
 
     /**
      * {@inheritDoc}

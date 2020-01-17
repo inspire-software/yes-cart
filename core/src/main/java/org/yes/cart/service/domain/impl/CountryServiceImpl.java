@@ -16,9 +16,17 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Country;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CountryService;
+import org.yes.cart.utils.HQLUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -33,5 +41,69 @@ public class CountryServiceImpl extends BaseGenericServiceImpl<Country> implemen
      */
     public CountryServiceImpl(final GenericDAO<Country, Long> genericDao) {
         super(genericDao);
+    }
+
+
+    private Pair<String, Object[]> findCountryQuery(final boolean count,
+                                                    final String sort,
+                                                    final boolean sortDescending,
+                                                    final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(c.countryId) from CountryEntity c ");
+        } else {
+            hqlCriteria.append("select c from CountryEntity c ");
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by c." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Country> findCountries(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findCountryQuery(false, sort, sortDescending, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCountryCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findCountryQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
     }
 }

@@ -17,17 +17,21 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.StateDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.StateDTOImpl;
 import org.yes.cart.domain.entity.State;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.StateService;
 import org.yes.cart.service.dto.DtoStateService;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -50,6 +54,49 @@ public class DtoStateServiceImpl extends AbstractDtoServiceImpl<StateDTO, StateD
         super(dtoFactory, stateGenericService, adaptersRepository);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public SearchResult<StateDTO> findStates(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, List> params = filter.reduceParameters("filter", "countryCodes");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final List countries = params.get("countryCodes");
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final StateService stateService = (StateService) service;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+        if (StringUtils.isNotBlank(textFilter)) {
+
+            SearchContext.JoinMode.OR.setMode(currentFilter);
+            currentFilter.put("countryCode", Collections.singletonList(textFilter));
+            currentFilter.put("stateCode", Collections.singletonList(textFilter));
+            currentFilter.put("name", Collections.singletonList(textFilter));
+            currentFilter.put("guid", Collections.singletonList(textFilter));
+
+        }
+
+        if (CollectionUtils.isNotEmpty(countries)) {
+            currentFilter.put("countryCodes", countries);
+        }
+
+        final int count = stateService.findStateCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<StateDTO> entities = new ArrayList<>();
+            final List<State> states = stateService.findStates(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(states, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
+
+
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -73,6 +120,9 @@ public class DtoStateServiceImpl extends AbstractDtoServiceImpl<StateDTO, StateD
     @Override
     public List<StateDTO> findByCountry(final String countryCode) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<State> states = ((StateService)service).findByCountry(countryCode);
-        return getDTOs(states);
+        final List<StateDTO> out = getDTOs(states);
+        out.sort((a, b) -> a.getStateCode().compareToIgnoreCase(b.getStateCode()));
+        return out;
     }
+
 }

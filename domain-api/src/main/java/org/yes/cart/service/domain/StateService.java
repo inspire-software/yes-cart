@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.State;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -27,11 +28,40 @@ import java.util.List;
  */
 public interface StateService extends GenericService<State> {
 
+
+    /**
+     * Find country states by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list of countries.
+     */
+    List<State> findStates(int start,
+                           int offset,
+                           String sort,
+                           boolean sortDescending,
+                           Map<String, List> filter);
+
+    /**
+     * Find country states by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findStateCount(Map<String, List> filter);
+
+
     /**
      * Find by country code.
      *
      * @param countryCode country code.
-     * @return list of states , that belong to given country.
+     *
+     * @return list of states that belong to given country.
      */
     List<State> findByCountry(String countryCode);
 

@@ -39,6 +39,10 @@ export class StatesComponent implements OnInit, OnDestroy {
 
   private filteredStates:Array<StateVO>;
 
+  //sorting
+  private sortColumn:string = null;
+  private sortDesc:boolean = false;
+
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
@@ -98,6 +102,21 @@ export class StatesComponent implements OnInit, OnDestroy {
     }
   }
 
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = null;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterStates();
+  }
+
   protected onSelectRow(row:StateVO) {
     LogUtil.debug('StatesComponent onSelectRow handler', row);
     if (row == this.selectedState) {
@@ -126,6 +145,15 @@ export class StatesComponent implements OnInit, OnDestroy {
     if (this.filteredStates === null) {
       this.filteredStates = [];
     }
+
+    let _sortProp = this.sortColumn ? this.sortColumn : 'stateCode';
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    let _sort = function(a:any, b:any):number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
+
+    this.filteredStates.sort(_sort);
 
     let _total = this.filteredStates.length;
     this.totalItems = _total;

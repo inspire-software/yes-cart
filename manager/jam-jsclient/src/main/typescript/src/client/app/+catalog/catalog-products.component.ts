@@ -172,7 +172,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
   }
 
   protected onSortSelected(sort:Pair<string, boolean>) {
-    LogUtil.debug('CatalogBrandComponent ononSortSelected', sort);
+    LogUtil.debug('CatalogProductsComponent ononSortSelected', sort);
     if (sort == null) {
       this.products.searchContext.sortBy = null;
       this.products.searchContext.sortDesc = false;

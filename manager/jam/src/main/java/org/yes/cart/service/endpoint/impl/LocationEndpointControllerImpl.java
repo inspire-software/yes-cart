@@ -20,8 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.vo.VoCountry;
-import org.yes.cart.domain.vo.VoState;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.LocationEndpointController;
 import org.yes.cart.service.vo.VoLocationService;
 
@@ -43,52 +42,68 @@ public class LocationEndpointControllerImpl implements LocationEndpointControlle
     }
 
     @Override
-    public @ResponseBody List<VoCountry> getAllCountries() throws Exception {
-        return voLocationService.getAllCountries();
+    public @ResponseBody
+    VoSearchResult<VoCountryInfo> getFilteredCountries(@RequestBody VoSearchContext filter) throws Exception {
+        return voLocationService.getFilteredCountries(filter);
     }
 
     @Override
-    public @ResponseBody VoCountry getCountryById(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    VoCountry getCountryById(@PathVariable("id") final long id) throws Exception {
         return voLocationService.getCountryById(id);
     }
 
     @Override
-    public @ResponseBody VoCountry createCountry(@RequestBody final VoCountry voCategory) throws Exception {
+    public @ResponseBody
+    VoCountry createCountry(@RequestBody final VoCountry voCategory) throws Exception {
         return voLocationService.createCountry(voCategory);
     }
 
     @Override
-    public @ResponseBody VoCountry updateCountry(@RequestBody final VoCountry voCategory) throws Exception {
+    public @ResponseBody
+    VoCountry updateCountry(@RequestBody final VoCountry voCategory) throws Exception {
         return voLocationService.updateCountry(voCategory);
     }
 
     @Override
-    public @ResponseBody void removeCountry(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    void removeCountry(@PathVariable("id") final long id) throws Exception {
         voLocationService.removeCountry(id);
     }
 
     @Override
-    public @ResponseBody List<VoState> getAllStates(@PathVariable("id") final long id) throws Exception {
-        return voLocationService.getAllStates(id);
+    public @ResponseBody
+    List<VoState> getCountryStatesAll(@PathVariable("id") final long id) throws Exception {
+        return voLocationService.getCountryStatesAll(id);
     }
 
     @Override
-    public @ResponseBody VoState getStateById(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    VoSearchResult<VoState> getFilteredStates(@RequestBody VoSearchContext filter) throws Exception {
+       return voLocationService.getFilteredStates(filter);
+    }
+
+    @Override
+    public @ResponseBody
+    VoState getStateById(@PathVariable("id") final long id) throws Exception {
         return voLocationService.getStateById(id);
     }
 
     @Override
-    public @ResponseBody VoState createState(@RequestBody final VoState voState) throws Exception {
+    public @ResponseBody
+    VoState createState(@RequestBody final VoState voState) throws Exception {
         return voLocationService.createState(voState);
     }
 
     @Override
-    public @ResponseBody VoState updateState(@RequestBody final VoState voState) throws Exception {
+    public @ResponseBody
+    VoState updateState(@RequestBody final VoState voState) throws Exception {
         return voLocationService.updateState(voState);
     }
 
     @Override
-    public @ResponseBody void removeState(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    void removeState(@PathVariable("id") final long id) throws Exception {
         voLocationService.removeState(id);
     }
 }

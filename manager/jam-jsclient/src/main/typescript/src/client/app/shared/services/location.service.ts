@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { CountryVO, StateVO } from '../model/index';
+import { CountryInfoVO, CountryVO, StateVO, SearchContextVO, SearchResultVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -45,9 +45,13 @@ export class LocationService {
    * Get list of all countries,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getAllCountries() {
-    return this.http.get(this._serviceBaseUrl + '/country/all', Util.requestOptions())
-      .map(res => <CountryVO[]> this.json(res))
+  getFilteredCountries(filter:SearchContextVO) {
+
+    let body = JSON.stringify(filter);
+
+    return this.http.post(this._serviceBaseUrl + '/country/filtered', body,
+      Util.requestOptions())
+      .map(res => <SearchResultVO<CountryInfoVO>> this.json(res))
       .catch(this.handleError);
   }
 
@@ -99,9 +103,23 @@ export class LocationService {
    * Get list of all country states,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getAllStates(country:CountryVO) {
-    return this.http.get(this._serviceBaseUrl + '/state/all/' + country.countryId, Util.requestOptions())
+  getCountryStates(country:CountryVO) {
+    return this.http.get(this._serviceBaseUrl + '/country/state/' + country.countryId, Util.requestOptions())
       .map(res => <StateVO[]> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get list of all country states, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredStates(filter:SearchContextVO) {
+
+    let body = JSON.stringify(filter);
+
+    return this.http.post(this._serviceBaseUrl + '/country/state/filtered', body,
+      Util.requestOptions())
+      .map(res => <SearchResultVO<StateVO>> this.json(res))
       .catch(this.handleError);
   }
 

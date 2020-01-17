@@ -69,9 +69,9 @@ export class CarrierSlaSelectComponent implements OnInit, OnDestroy {
 
   }
 
-  onSelectClick(producttype: CarrierSlaVO) {
-    LogUtil.debug('CarrierSlaSelectComponent onSelectClick', producttype);
-    this.selectedCarrierSla = producttype;
+  onSelectClick(carrierSla: CarrierSlaVO) {
+    LogUtil.debug('CarrierSlaSelectComponent onSelectClick', carrierSla);
+    this.selectedCarrierSla = carrierSla;
     this.validForSelect = true;
   }
 

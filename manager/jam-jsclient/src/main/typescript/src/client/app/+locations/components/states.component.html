@@ -5,8 +5,8 @@
       <thead class="cf">
       <tr>
         <th>{{ 'LOCATION_COUNTRY_CODE' | translate }}</th>
-        <th>{{ 'LOCATION_STATE_CODE' | translate }}</th>
-        <th>{{ 'NAME' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('stateCode')">{{ 'LOCATION_STATE_CODE' | translate }} <span [hidden]="sortColumn != 'stateCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'NAME' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>

@@ -34,7 +34,7 @@ import { LoginModalComponent } from './auth/index';
 
 import { TreeViewComponent } from './tree-view/index';
 
-import { CarrierSlaSelectComponent } from './shipping/index';
+import { CarrierSlaSelectComponent, CountrySelectComponent, CountryStateSelectComponent } from './shipping/index';
 
 import { ShopSelectComponent } from './shop/index';
 
@@ -65,6 +65,7 @@ import { CurrencySelectComponent, TaxSelectComponent } from './price/index';
     ErrorModalComponent,
     LicenseComponent, LicenseModalComponent,
     CarrierSlaSelectComponent,
+    CountrySelectComponent, CountryStateSelectComponent,
     ShopSelectComponent,
     CurrencySelectComponent, TaxSelectComponent,
     TreeViewComponent,
@@ -83,6 +84,7 @@ import { CurrencySelectComponent, TaxSelectComponent } from './price/index';
     ErrorModalComponent,
     LicenseComponent, LicenseModalComponent,
     CarrierSlaSelectComponent,
+    CountrySelectComponent, CountryStateSelectComponent,
     ShopSelectComponent,
     CurrencySelectComponent, TaxSelectComponent,
     TreeViewComponent,

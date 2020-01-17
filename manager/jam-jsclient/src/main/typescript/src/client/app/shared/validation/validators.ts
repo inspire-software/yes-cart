@@ -44,6 +44,8 @@ export class YcValidators {
 
   static noWhitespace255 = Validators.compose([YcValidators.noWhitespace, Validators.maxLength(255)]);
 
+  static nonBlankTrimmed64 = Validators.compose([Validators.maxLength(64), YcValidators.nonBlankTrimmed]);
+
   static nonBlankTrimmed128 = Validators.compose([Validators.maxLength(128), YcValidators.nonBlankTrimmed]);
 
   static nonBlankTrimmed255 = Validators.compose([Validators.maxLength(255), YcValidators.nonBlankTrimmed]);

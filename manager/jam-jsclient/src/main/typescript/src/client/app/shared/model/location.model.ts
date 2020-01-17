@@ -27,7 +27,7 @@ export interface LocationVO {
 
 }
 
-export interface CountryVO {
+export interface CountryInfoVO {
 
   countryId : number;
 
@@ -36,6 +36,12 @@ export interface CountryVO {
 
   name  : string;
   displayNames :  Pair<string, string>[];
+
+}
+
+export interface CountryVO extends CountryInfoVO {
+
+  states : StateVO[];
 
 }
 
