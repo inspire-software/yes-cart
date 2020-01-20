@@ -43,7 +43,7 @@
                 </div>
                 <div class="form-group">
                   <label>{{ 'AV_RANK' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="attribute.rank">
+                  <input class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="attribute.rank">
                   <div [hidden]="attributeForm.controls['rank'].valid || attributeForm.controls['rank'].pristine" class="alert alert-danger">
                     {{ 'NUM_REQUIRED' | translate }}
                   </div>

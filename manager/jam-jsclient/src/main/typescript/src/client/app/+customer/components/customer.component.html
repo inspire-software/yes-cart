@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group">
                   <label>{{ 'CUSTOMER_EMAIL' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_EMAIL' | translate }}" formControlName="email" name="email" type="text" [(ngModel)]="customer.email">
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_EMAIL' | translate }}" formControlName="email" name="email" type="text" [(ngModel)]="customer.email">
                   <div [hidden]="customerForm.controls['email'].valid || customerForm.controls['email'].pristine" class="alert alert-danger">
                     {{ 'EMAIL_REQUIRED' | translate }}
                   </div>

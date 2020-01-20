@@ -42,7 +42,7 @@
                   <div class="form-group">
                     <label>{{ 'PANEL_SYSTEM_INDEX' | translate }}</label>
                     <div class="input-group">
-                      <input autofocus class="form-control" placeholder="{{ 'MODAL_BUTTON_INDEXALL' | translate }}" name="selectedShopCode" type="text" [ngModel]="selectedShopCode"  [readonly]="true">
+                      <input class="form-control" placeholder="{{ 'MODAL_BUTTON_INDEXALL' | translate }}" name="selectedShopCode" type="text" [ngModel]="selectedShopCode"  [readonly]="true">
                       <span class="input-group-btn">
                         <button type="button" (click)="onShopSelect()" class="btn btn-default" [disabled]="jobRunning">
                           <i class="fa fa-home"></i>

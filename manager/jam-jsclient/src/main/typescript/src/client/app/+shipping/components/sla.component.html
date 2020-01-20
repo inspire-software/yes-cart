@@ -278,7 +278,7 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'CARRIERSLA_REF' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'CARRIERSLA_REF' | translate }}" formControlName="externalRef" name="externalRef" type="text" [(ngModel)]="sla.externalRef">
+                  <input class="form-control" placeholder="{{ 'CARRIERSLA_REF' | translate }}" formControlName="externalRef" name="externalRef" type="text" [(ngModel)]="sla.externalRef">
                   <div [hidden]="slaForm.controls['externalRef'].valid || slaForm.controls['externalRef'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>

@@ -13,10 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { FulfilmentCentreVO, FulfilmentCentreShopLinkVO, ShopVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { CountrySelectComponent, CountryStateSelectComponent } from './../../shared/shipping/index';
+import {
+  FulfilmentCentreVO, FulfilmentCentreShopLinkVO, ShopVO, Pair, ValidationRequestVO,
+  CountryInfoVO, StateVO
+} from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
@@ -41,6 +45,13 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
   private delayedChange:Future;
 
   private centreForm:any;
+
+  @ViewChild('selectCountryModalDialog')
+  private selectCountryModalDialog:CountrySelectComponent;
+
+  @ViewChild('selectStateModalDialog')
+  private selectStateModalDialog:CountryStateSelectComponent;
+
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('FulfilmentCentreComponent constructed');
@@ -170,6 +181,41 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
   tabSelected(tab:any) {
     LogUtil.debug('FulfilmentCentreComponent tabSelected', tab);
   }
+
+
+
+  protected onCountryExact() {
+    this.selectCountryModalDialog.showDialog();
+  }
+
+  protected onCountrySelected(event:FormValidationEvent<CountryInfoVO>) {
+    LogUtil.debug('FulfilmentCentreComponent onCountrySelected');
+    if (event.valid) {
+      if (this._centre.stateCode != null && this._centre.stateCode != '') {
+        this._centre.stateCode = null;
+        this.formMarkDirty('stateCode');
+      }
+      this._centre.countryCode = event.source.countryCode;
+      this.formMarkDirty('countryCode');
+      this.formChange();
+    }
+  }
+
+  protected onStateExact() {
+    this.selectStateModalDialog.showDialog();
+  }
+
+  protected onStateSelected(event:FormValidationEvent<StateVO>) {
+    LogUtil.debug('FulfilmentCentreComponent onCountrySelected');
+    if (event.valid) {
+      this._centre.stateCode = event.source.stateCode;
+      this._centre.countryCode = event.source.countryCode;
+      this.formMarkDirty('stateCode');
+      this.formMarkDirty('countryCode');
+      this.formChange();
+    }
+  }
+
 
 
   private recalculateShops():void {

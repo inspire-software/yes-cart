@@ -12,7 +12,7 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'GUID' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'GUID' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="sku.guid">
+                  <input class="form-control" placeholder="{{ 'GUID' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="sku.guid">
                   <div [hidden]="skuForm.controls['guid'].valid || skuForm.controls['guid'].pristine" class="alert alert-danger">
                     <div [hidden]="!skuForm.controls['guid'].hasError('checking')">
                       {{ 'REMOTE_CHECK' | translate }}

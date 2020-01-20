@@ -33,7 +33,7 @@
               </div>
               <div class="form-group">
                 <label>{{ 'CUSTOMER_FIRSTNAME' | translate }}</label>
-                <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_FIRSTNAME' | translate }}" formControlName="firstName" name="firstName" type="text" [(ngModel)]="manager.firstName">
+                <input class="form-control" placeholder="{{ 'CUSTOMER_FIRSTNAME' | translate }}" formControlName="firstName" name="firstName" type="text" [(ngModel)]="manager.firstName">
                 <div [hidden]="managerForm.controls['firstName'].valid || managerForm.controls['firstName'].pristine" class="alert alert-danger">
                   <div [hidden]="!managerForm.controls['firstName'].hasError('maxlength')">
                     {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
@@ -43,7 +43,7 @@
               </div>
               <div class="form-group">
                 <label>{{ 'CUSTOMER_LASTNAME' | translate }}</label>
-                <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_LASTNAME' | translate }}" formControlName="lastName" name="lastName" type="text" [(ngModel)]="manager.lastName">
+                <input class="form-control" placeholder="{{ 'CUSTOMER_LASTNAME' | translate }}" formControlName="lastName" name="lastName" type="text" [(ngModel)]="manager.lastName">
                 <div [hidden]="managerForm.controls['lastName'].valid || managerForm.controls['lastName'].pristine" class="alert alert-danger">
                   <div [hidden]="!managerForm.controls['lastName'].hasError('maxlength')">
                     {{ 'MAXLENGTH_REQUIRED' | translate:{value: 128} }}
@@ -53,7 +53,7 @@
               </div>
               <div class="form-group">
                 <label>{{ 'CUSTOMER_COMPANY1' | translate }}</label>
-                <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_COMPANY1' | translate }}" formControlName="companyName1" name="companyName1" type="text" [(ngModel)]="manager.companyName1">
+                <input class="form-control" placeholder="{{ 'CUSTOMER_COMPANY1' | translate }}" formControlName="companyName1" name="companyName1" type="text" [(ngModel)]="manager.companyName1">
                 <div [hidden]="managerForm.controls['companyName1'].valid || managerForm.controls['companyName1'].pristine" class="alert alert-danger">
                   <div [hidden]="!managerForm.controls['companyName1'].hasError('maxlength')">
                     {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
@@ -63,7 +63,7 @@
               </div>
               <div class="form-group">
                 <label>{{ 'CUSTOMER_COMPANY2' | translate }}</label>
-                <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_COMPANY2' | translate }}" formControlName="companyName2" name="companyName2" type="text" [(ngModel)]="manager.companyName2">
+                <input class="form-control" placeholder="{{ 'CUSTOMER_COMPANY2' | translate }}" formControlName="companyName2" name="companyName2" type="text" [(ngModel)]="manager.companyName2">
                 <div [hidden]="managerForm.controls['companyName2'].valid || managerForm.controls['companyName2'].pristine" class="alert alert-danger">
                   <div [hidden]="!managerForm.controls['companyName2'].hasError('maxlength')">
                     {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
@@ -73,7 +73,7 @@
               </div>
               <div class="form-group">
                 <label>{{ 'CUSTOMER_DEPARTMENT' | translate }}</label>
-                <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_DEPARTMENT' | translate }}" formControlName="companyDepartment" name="companyDepartment" type="text" [(ngModel)]="manager.companyDepartment">
+                <input class="form-control" placeholder="{{ 'CUSTOMER_DEPARTMENT' | translate }}" formControlName="companyDepartment" name="companyDepartment" type="text" [(ngModel)]="manager.companyDepartment">
                 <div [hidden]="managerForm.controls['companyDepartment'].valid || managerForm.controls['companyDepartment'].pristine" class="alert alert-danger">
                   <div [hidden]="!managerForm.controls['companyDepartment'].hasError('maxlength')">
                     {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}

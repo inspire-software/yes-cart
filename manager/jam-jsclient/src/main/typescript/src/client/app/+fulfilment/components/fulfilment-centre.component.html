@@ -31,28 +31,42 @@
                 </div>
                 <div class="form-group">
                   <label>{{ 'LOCATION_COUNTRY' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_COUNTRY_CODE' | translate }}" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="centre.countryCode">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="{{ 'LOCATION_COUNTRY_CODE' | translate }}" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="centre.countryCode">
+                    <span class="input-group-btn">
+                      <button type="button" (click)="onCountryExact()" class="btn btn-default">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </span>
+                  </div>
                   <div [hidden]="centreForm.controls['countryCode'].valid || centreForm.controls['countryCode'].pristine" class="alert alert-danger">
                     {{ 'COUNTRY_CODE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'LOCATION_STATE_CODE' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_STATE_CODE' | translate }}" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="centre.stateCode">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="{{ 'LOCATION_STATE_CODE' | translate }}" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="centre.stateCode">
+                    <span class="input-group-btn">
+                      <button type="button" (click)="onStateExact()" class="btn btn-default">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </span>
+                  </div>
                   <div [hidden]="centreForm.controls['stateCode'].valid || centreForm.controls['stateCode'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'LOCATION_CITY' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_CITY' | translate }}" formControlName="city" name="city" type="text" [(ngModel)]="centre.city">
+                  <input class="form-control" placeholder="{{ 'LOCATION_CITY' | translate }}" formControlName="city" name="city" type="text" [(ngModel)]="centre.city">
                   <div [hidden]="centreForm.controls['city'].valid || centreForm.controls['city'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'LOCATION_POST_CODE' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_POST_CODE' | translate }}" formControlName="postcode" name="postcode" type="text" [(ngModel)]="centre.postcode">
+                  <input class="form-control" placeholder="{{ 'LOCATION_POST_CODE' | translate }}" formControlName="postcode" name="postcode" type="text" [(ngModel)]="centre.postcode">
                   <div [hidden]="centreForm.controls['postcode'].valid || centreForm.controls['postcode'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
@@ -152,5 +166,9 @@
 
     </tabset>
   </form>
+
+  <yc-country-select #selectCountryModalDialog (dataSelected)="onCountrySelected($event)"></yc-country-select>
+
+  <yc-country-state-select #selectStateModalDialog (dataSelected)="onStateSelected($event)"></yc-country-state-select>
 
 </ng-template>

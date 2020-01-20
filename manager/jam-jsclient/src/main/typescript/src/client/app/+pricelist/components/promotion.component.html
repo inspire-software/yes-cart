@@ -51,7 +51,7 @@
 
                 <div class="form-group">
                   <label>{{ 'PROMOTION_TAG' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'PROMOTION_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="promotion.tag">
+                  <input class="form-control" placeholder="{{ 'PROMOTION_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="promotion.tag">
                   <div [hidden]="promotionForm.controls['tag'].valid || promotionForm.controls['tag'].pristine" class="alert alert-danger">
                     {{ 'TAGS_REQUIRED' | translate }}
                   </div>
