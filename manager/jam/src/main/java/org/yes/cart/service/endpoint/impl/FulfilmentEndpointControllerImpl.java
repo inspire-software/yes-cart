@@ -47,7 +47,7 @@ public class FulfilmentEndpointControllerImpl implements FulfilmentEndpointContr
 
     @Override
     public @ResponseBody
-    VoSearchResult<VoFulfilmentCentre> getFilteredFulfilmentCentres(@RequestBody final VoSearchContext filter) throws Exception {
+    VoSearchResult<VoFulfilmentCentreInfo> getFilteredFulfilmentCentres(@RequestBody final VoSearchContext filter) throws Exception {
         return voFulfilmentService.getFilteredFulfilmentCentres(filter);
     }
 

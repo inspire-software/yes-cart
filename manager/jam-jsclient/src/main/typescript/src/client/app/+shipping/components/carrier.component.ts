@@ -15,7 +15,8 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { CarrierVO, CarrierShopLinkVO, ShopVO, Pair } from './../../shared/model/index';
+import { YcValidators } from './../../shared/validation/validators';
+import { CarrierVO, CarrierSlaInfoVO, CarrierShopLinkVO, ShopVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, Pair, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
@@ -30,8 +31,18 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<CarrierVO>> = new EventEmitter<FormValidationEvent<CarrierVO>>();
 
+  @Output() slaSelected: EventEmitter<CarrierSlaInfoVO> = new EventEmitter<CarrierSlaInfoVO>();
+
+  @Output() slaAddClick: EventEmitter<CarrierSlaInfoVO> = new EventEmitter<CarrierSlaInfoVO>();
+
+  @Output() slaEditClick: EventEmitter<CarrierSlaInfoVO> = new EventEmitter<CarrierSlaInfoVO>();
+
+  @Output() slaDeleteClick: EventEmitter<CarrierSlaInfoVO> = new EventEmitter<CarrierSlaInfoVO>();
+
   private _carrier:CarrierVO;
 
+  private _paymentGateways:Array<PaymentGatewayInfoVO>;
+  private _fulfilmentCentres:Array<FulfilmentCentreInfoVO>;
   private _shops:any = {};
 
   private availableShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
@@ -41,16 +52,38 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
   private carrierForm:any;
 
+  private slaFilter:string;
+
+  private selectedSla:CarrierSlaInfoVO = null;
+
   constructor(fb: FormBuilder) {
     LogUtil.debug('CarrierComponent constructed');
 
+    let that = this;
+
+    let validCode = function(control:any):any {
+
+      let basic = YcValidators.requiredValidCode255(control);
+      if (basic == null) {
+
+        let code = control.value;
+        if (that._carrier == null || !that.carrierForm || (!that.carrierForm.dirty && that._carrier.carrierId > 0)) {
+          return null;
+        }
+
+        let req:ValidationRequestVO = { subject: 'carrier', subjectId: that._carrier.carrierId, field: 'guid', value: code };
+        return YcValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
     this.carrierForm = fb.group({
+      'code': ['', validCode],
       'name': [''],
       'description': [''],
       'carrierShops': ['']
     });
 
-    let that = this;
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);
@@ -83,6 +116,25 @@ export class CarrierComponent implements OnInit, OnDestroy {
       });
     }
     LogUtil.debug('CarrierComponent mapped shops', this._shops);
+  }
+
+  @Input()
+  set paymentGateways(pgs:Array<PaymentGatewayInfoVO>) {
+    this._paymentGateways = pgs;
+  }
+
+  get paymentGateways():Array<PaymentGatewayInfoVO> {
+    return this._paymentGateways;
+  }
+
+
+  @Input()
+  set fulfilmentCentres(fcs:Array<FulfilmentCentreInfoVO>) {
+    this._fulfilmentCentres = fcs;
+  }
+
+  get fulfilmentCentres():Array<FulfilmentCentreInfoVO> {
+    return this._fulfilmentCentres;
   }
 
   @Input()
@@ -139,6 +191,38 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
   tabSelected(tab:any) {
     LogUtil.debug('CarrierComponent tabSelected', tab);
+  }
+
+
+  protected onClearSlaFilter() {
+
+    this.slaFilter = '';
+
+  }
+
+  protected onSlaSelected(data:CarrierSlaInfoVO) {
+    LogUtil.debug('CarrierComponent onSlaSelected', data);
+    this.selectedSla = data;
+    this.slaSelected.emit(data);
+  }
+
+  protected onRowAddSLA() {
+    LogUtil.debug('CarrierComponent onRowAddSLA', this.selectedSla);
+    this.slaAddClick.emit(this.selectedSla);
+  }
+
+  protected onRowEditSelectedSLA() {
+    LogUtil.debug('CarrierComponent onRowEditSelectedSLA', this.selectedSla);
+    if (this.selectedSla != null) {
+      this.slaEditClick.emit(this.selectedSla);
+    }
+  }
+
+  protected onRowDeleteSelectedSLA() {
+    LogUtil.debug('CarrierComponent onRowDeleteSelectedSLA', this.selectedSla);
+    if (this.selectedSla != null) {
+      this.slaDeleteClick.emit(this.selectedSla);
+    }
   }
 
 

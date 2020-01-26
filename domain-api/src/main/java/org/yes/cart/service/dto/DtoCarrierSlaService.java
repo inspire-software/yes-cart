@@ -17,6 +17,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CarrierSlaDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -28,6 +30,20 @@ import java.util.List;
  * Time: 11:13:01
  */
 public interface DtoCarrierSlaService extends GenericDTOService<CarrierSlaDTO> {
+
+
+    /**
+     * Get carrier SLA list by criteria.
+     *
+     * @param filter filter
+     *
+     * @return list
+     *
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
+     */
+    SearchResult<CarrierSlaDTO> findCarrierSlas(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
     /**
      * Get shipping SLA by carrier Id.

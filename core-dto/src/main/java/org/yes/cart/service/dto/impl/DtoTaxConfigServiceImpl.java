@@ -72,9 +72,11 @@ public class DtoTaxConfigServiceImpl
 
     private final static char[] LOCATION = new char[] { '@' };
     private final static char[] SKU = new char[] { '#', '!' };
+    private final static char[] TAX = new char[] { '^' };
     static {
         Arrays.sort(LOCATION);
         Arrays.sort(SKU);
+        Arrays.sort(TAX);
     }
 
     @Override
@@ -97,7 +99,8 @@ public class DtoTaxConfigServiceImpl
             if (StringUtils.isNotBlank(textFilter)) {
 
                 final Pair<String, String> locationSearch = ComplexSearchUtils.checkSpecialSearch(textFilter, LOCATION);
-                final Pair<String, String> skuSearch = locationSearch != null ? null : ComplexSearchUtils.checkSpecialSearch(textFilter, SKU);
+                final Pair<String, String> taxSearch = locationSearch != null ? null : ComplexSearchUtils.checkSpecialSearch(textFilter, TAX);
+                final Pair<String, String> skuSearch = taxSearch != null ? null : ComplexSearchUtils.checkSpecialSearch(textFilter, SKU);
 
                 if (locationSearch != null) {
 
@@ -106,6 +109,12 @@ public class DtoTaxConfigServiceImpl
                     SearchContext.JoinMode.OR.setMode(currentFilter);
                     currentFilter.put("countryCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(location)));
                     currentFilter.put("stateCode", Collections.singletonList(location));
+
+                } else if (taxSearch != null) {
+
+                    final String tax = taxSearch.getSecond();
+
+                    currentFilter.put("tax.code", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tax)));
 
                 } else if (skuSearch != null) {
 

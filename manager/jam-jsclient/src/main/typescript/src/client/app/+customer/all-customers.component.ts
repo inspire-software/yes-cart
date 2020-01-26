@@ -301,7 +301,6 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
                   this.getFilteredCustomers();
                 });
               } else {
-                this.customerFilter = '#' + rez.email;
                 this.getFilteredCustomers();
               }
           }

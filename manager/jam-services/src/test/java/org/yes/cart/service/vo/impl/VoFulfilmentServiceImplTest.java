@@ -20,10 +20,7 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoFulfilmentCentre;
-import org.yes.cart.domain.vo.VoInventory;
-import org.yes.cart.domain.vo.VoSearchContext;
-import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.vo.VoFulfilmentService;
 
 import java.math.BigDecimal;
@@ -54,7 +51,7 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
         ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("warehouse")));
         ctxFind.setSize(10);
 
-        final List<VoFulfilmentCentre> fcs = voFulfilmentService.getFilteredFulfilmentCentres(ctxFind).getItems();
+        final List<VoFulfilmentCentreInfo> fcs = voFulfilmentService.getFilteredFulfilmentCentres(ctxFind).getItems();
         assertNotNull(fcs);
         assertFalse(fcs.isEmpty());
 

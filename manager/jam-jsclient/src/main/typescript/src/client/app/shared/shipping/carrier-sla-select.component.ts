@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
-import { CarrierSlaVO } from './../model/index';
+import { CarrierSlaInfoVO, SearchContextVO } from './../model/index';
 import { ShippingService } from './../services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { Futures, Future, FormValidationEvent } from './../event/index';
@@ -29,7 +29,7 @@ import { LogUtil } from './../log/index';
 
 export class CarrierSlaSelectComponent implements OnInit, OnDestroy {
 
-  @Output() dataSelected: EventEmitter<FormValidationEvent<CarrierSlaVO>> = new EventEmitter<FormValidationEvent<CarrierSlaVO>>();
+  @Output() dataSelected: EventEmitter<FormValidationEvent<CarrierSlaInfoVO>> = new EventEmitter<FormValidationEvent<CarrierSlaInfoVO>>();
 
   private changed:boolean = false;
 
@@ -38,10 +38,10 @@ export class CarrierSlaSelectComponent implements OnInit, OnDestroy {
 
   private validForSelect:boolean = false;
 
-  private filteredCarrierSlas : CarrierSlaVO[] = [];
+  private filteredCarrierSlas : CarrierSlaInfoVO[] = [];
   private carrierSlaFilter : string;
 
-  private selectedCarrierSla : CarrierSlaVO = null;
+  private selectedCarrierSla : CarrierSlaInfoVO = null;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
@@ -54,6 +54,10 @@ export class CarrierSlaSelectComponent implements OnInit, OnDestroy {
 
   constructor (private _shippingService : ShippingService) {
     LogUtil.debug('CarrierSlaSelectComponent constructed');
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.getAllCarrierSlas();
+    }, this.delayedFilteringMs);
   }
 
   ngOnDestroy() {
@@ -62,14 +66,9 @@ export class CarrierSlaSelectComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('CarrierSlaSelectComponent ngOnInit');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.getAllCarrierSlas();
-    }, this.delayedFilteringMs);
-
   }
 
-  onSelectClick(carrierSla: CarrierSlaVO) {
+  onSelectClick(carrierSla: CarrierSlaInfoVO) {
     LogUtil.debug('CarrierSlaSelectComponent onSelectClick', carrierSla);
     this.selectedCarrierSla = carrierSla;
     this.validForSelect = true;
@@ -106,13 +105,22 @@ export class CarrierSlaSelectComponent implements OnInit, OnDestroy {
 
     if (!this.carrierSlaFilterRequired) {
       this.loading = true;
-      let _sub:any = this._shippingService.getFilteredCarrierSlas(this.carrierSlaFilter, this.filterCap).subscribe(allproducts => {
+      let _ctx:SearchContextVO = {
+        parameters : {
+          filter: [ this.carrierSlaFilter ]
+        },
+        start : 0,
+        size : this.filterCap,
+        sortBy : 'guid',
+        sortDesc : false
+      };
+      let _sub:any = this._shippingService.getFilteredCarrierSlas(_ctx).subscribe(allproducts => {
         LogUtil.debug('CarrierSlaSelectComponent getAllCarrierSlas', allproducts);
         this.selectedCarrierSla = null;
         this.changed = false;
         this.validForSelect = false;
-        this.filteredCarrierSlas = allproducts;
-        this.carrierSlaFilterCapped = this.filteredCarrierSlas.length >= this.filterCap;
+        this.filteredCarrierSlas = allproducts != null ? allproducts.items : [];
+        this.carrierSlaFilterCapped = allproducts != null && allproducts.total > this.filterCap;
         this.loading = false;
         _sub.unsubscribe();
       });

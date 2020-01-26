@@ -183,7 +183,6 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
                 }
               } else {
                 this.managers.push(rez);
-                this.managerFilter = rez.email;
                 LogUtil.debug('OrganisationManagerComponent manager added', rez);
               }
               this.changed = false;

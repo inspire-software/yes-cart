@@ -52,7 +52,7 @@ public interface TaxConfigService extends GenericService<TaxConfig> {
      * @param sortDescending    optional sort property direction
      * @param filter            optional filters (e.g. name, guid)
      *
-     * @return list of coupons.
+     * @return list.
      */
     List<TaxConfig> findTaxConfigs(int start,
                                    int offset,

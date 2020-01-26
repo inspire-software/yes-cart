@@ -55,7 +55,7 @@ export class FulfilmentService {
 
     return this.http.post(this._serviceBaseUrl + '/centre/filtered', body,
       Util.requestOptions())
-      .map(res => <SearchResultVO<FulfilmentCentreVO>> this.json(res))
+      .map(res => <SearchResultVO<FulfilmentCentreInfoVO>> this.json(res))
       .catch(this.handleError);
   }
 

@@ -1,6 +1,14 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_MARKETING_TAX_CFG' | translate }} {{ selectedShop != null ? (' / ' + selectedShop.name) : '' }} {{ selectedCurrency != null ? ('(' + selectedCurrency + ')') : ''}}</h1>
+    <h1 class="page-header">{{ 'PANEL_MARKETING_TAX_CFG' | translate }} /
+      <button type="button" (click)="onShopSelect()" [disabled]="viewMode !== 'taxconfigs'" class="btn {{ selectedShop != null ? 'btn-default' : 'btn-danger' }} btn-circle" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
+        <i class="fa fa-home"></i>
+      </button>
+      {{ selectedShop != null ? selectedShop.name : '' }} /
+      <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null || viewMode !== 'taxconfigs'" class="btn {{ selectedCurrency != null ? 'btn-default' : 'btn-danger' }} btn-circle" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
+        <i class="fa fa-dollar"></i>
+      </button>
+       {{ selectedCurrency != null ? selectedCurrency : ''}} {{ selectedTaxconfig ? (' / ' + selectedTaxconfig.tax.description) : '' }}</h1>
   </div>
 
 
@@ -35,31 +43,19 @@
         <i class="fa fa-chevron-left"></i>
       </button>
 
-      <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'taxconfigs'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
-        <i class="fa fa-home"></i>
-      </button>
-
-      <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'taxconfigs'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
-        <i class="fa fa-dollar"></i>
-      </button>
-
       <button type="button" (click)="onTestRules()" [disabled]="selectedShop == null" class="btn  {{ viewMode === 'pricelisttest' ? 'btn-success' : 'btn-default' }} btn-circle btn-xl" title="{{ 'TEST' | translate }}">
         <i class="fa fa-play"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null || viewMode !== 'taxconfigs'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedTaxconfig == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
+      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedTaxconfig == null || viewMode !== 'taxconfigs'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
         <i class="fa fa-copy"></i>
       </button>
 
-      <!--<button type="button" (click)="onRowEditSelected()" [disabled]="selectedTaxconfig == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">-->
-        <!--<i class="fa fa-edit"></i>-->
-      <!--</button>-->
-
-      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedTaxconfig == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedTaxconfig == null || (taxconfigEdit != null && taxconfigEdit.taxConfigId === 0)" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
         <i class="fa fa-remove"></i>
       </button>
 
@@ -72,8 +68,9 @@
   <div *ngIf="searchHelpTaxConfigShow">
     <div class="bg-info text-padding block-margin-spacer">
       <p>{{ 'SEARCH_HELP_TAXCFG_LOCATION' | translate }} <span><button type="button" (click)="onCountryExact()" class="btn btn-default btn-circle"><i class="fa fa-globe"></i></button></span>  <span><button type="button" (click)="onStateExact()" class="btn btn-default btn-circle"><i class="fa fa-home"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_TAXCFG_SKU' | translate }} <span><button type="button" (click)="onSearchSKU()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_TAXCFG_SKU_EXACT' | translate }} <span><button type="button" (click)="onSearchSKUExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_TAXCFG_TAX' | translate }} <span><button type="button" (click)="onTaxExact()" class="btn btn-default btn-circle"><i class="fa fa-percent"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_TAXCFG_SKU_EXACT' | translate }} <span><button type="button" (click)="onSearchSKUExact()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span> <span><button type="button" (click)="onSearchSLAExact()" class="btn btn-default btn-circle"><i class="fa fa-truck"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_TAXCFG_SKU' | translate }} <span><button type="button" (click)="onSearchSKU()" class="btn btn-default btn-circle"><i class="fa fa-tag text-danger"></i></button></span></p>
     </div>
   </div>
 
@@ -100,7 +97,10 @@
   </div>
 
   <div [hidden]="viewMode !== 'taxconfigs'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-tax-configs [taxconfigs]="taxconfigs" [selectedShopCode]="selectedShopCode" (dataSelected)="onTaxconfigSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-tax-configs>
+    <yc-tax-configs [taxconfigs]="taxconfigs" [selectedShopCode]="selectedShopCode"
+                    (dataSelected)="onTaxconfigSelected($event)"
+                    (pageSelected)="onPageSelected($event)"
+                    (sortSelected)="onSortSelected($event)"></yc-tax-configs>
   </div>
 
   <div [hidden]="viewMode !== 'pricelisttest'"  class="{{ loading ? 'loading-data' : '' }}">
@@ -150,7 +150,10 @@
                 <input class="form-control" formControlName="productCode" name="productCode" type="text" [(ngModel)]="taxconfigEdit.productCode">
                 <span class="input-group-btn">
                   <button type="button" (click)="onSearchSKUExact()" class="btn btn-default">
-                    <i class="fa fa-edit"></i>
+                    <i class="fa fa-tag"></i>
+                  </button>
+                  <button type="button" (click)="onSearchSLAExact()" class="btn btn-default">
+                    <i class="fa fa-truck"></i>
                   </button>
                 </span>
               </div>
@@ -224,6 +227,8 @@
   <yc-promotion-test-config #runTestModalDialog (dataConfigured)="onRunTestResult($event)"></yc-promotion-test-config>
 
   <yc-product-sku-select #selectProductModalSkuDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
+
+  <yc-carrier-sla-select #carrierSlaSelectDialog (dataSelected)="onCarrierSlaSelected($event)"></yc-carrier-sla-select>
 
   <yc-country-select #selectCountryModalDialog (dataSelected)="onCountrySelected($event)"></yc-country-select>
 

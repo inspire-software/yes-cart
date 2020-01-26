@@ -566,76 +566,138 @@
     <bean id="dtoInterfaceToClassFactoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
-                <entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO" value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.SkuPriceDTO" value="org.yes.cart.domain.dto.impl.SkuPriceDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.PriceListDTO" value="org.yes.cart.domain.dto.impl.PriceListDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ManagerDTO" value="org.yes.cart.domain.dto.impl.ManagerDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.RoleDTO" value="org.yes.cart.domain.dto.impl.RoleDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttributeGroupDTO" value="org.yes.cart.domain.dto.impl.AttributeGroupDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttributeDTO" value="org.yes.cart.domain.dto.impl.AttributeDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.EtypeDTO" value="org.yes.cart.domain.dto.impl.EtypeDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ShopDTO" value="org.yes.cart.domain.dto.impl.ShopDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ShopUrlDTO" value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ShopAliasDTO" value="org.yes.cart.domain.dto.impl.ShopAliasDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CategoryDTO" value="org.yes.cart.domain.dto.impl.CategoryDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ContentDTO" value="org.yes.cart.domain.dto.impl.ContentDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.BrandDTO" value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ProductTypeDTO" value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO" value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ProductCategoryDTO" value="org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ProductDTO" value="org.yes.cart.domain.dto.impl.ProductDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ProductSearchResultDTO" value="org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttrValueDTO" value="org.yes.cart.domain.dto.impl.AttrValueDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttrValueCategoryDTO" value="org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttrValueContentDTO" value="org.yes.cart.domain.dto.impl.AttrValueContentDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttrValueCustomerDTO" value="org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CustomerDTO" value="org.yes.cart.domain.dto.impl.CustomerDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CustomerCardDTO" value="org.yes.cart.domain.dto.impl.CustomerCardDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CustomerWishListDTO" value="org.yes.cart.domain.dto.impl.CustomerWishListDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttrValueProductDTO" value="org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO"
+                       value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductSkuDTO"
+                       value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.SkuPriceDTO"
+                       value="org.yes.cart.domain.dto.impl.SkuPriceDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.PriceListDTO"
+                       value="org.yes.cart.domain.dto.impl.PriceListDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ManagerDTO"
+                       value="org.yes.cart.domain.dto.impl.ManagerDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.RoleDTO"
+                       value="org.yes.cart.domain.dto.impl.RoleDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttributeGroupDTO"
+                       value="org.yes.cart.domain.dto.impl.AttributeGroupDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttributeDTO"
+                       value="org.yes.cart.domain.dto.impl.AttributeDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.EtypeDTO"
+                       value="org.yes.cart.domain.dto.impl.EtypeDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopDTO"
+                       value="org.yes.cart.domain.dto.impl.ShopDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopUrlDTO"
+                       value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopAliasDTO"
+                       value="org.yes.cart.domain.dto.impl.ShopAliasDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CategoryDTO"
+                       value="org.yes.cart.domain.dto.impl.CategoryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ContentDTO"
+                       value="org.yes.cart.domain.dto.impl.ContentDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.BrandDTO"
+                       value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductTypeDTO"
+                       value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO"
+                       value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductCategoryDTO"
+                       value="org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductDTO"
+                       value="org.yes.cart.domain.dto.impl.ProductDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductSearchResultDTO"
+                       value="org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductSkuDTO"
+                       value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueDTO"
+                       value="org.yes.cart.domain.dto.impl.AttrValueDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueCategoryDTO"
+                       value="org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueContentDTO"
+                       value="org.yes.cart.domain.dto.impl.AttrValueContentDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueCustomerDTO"
+                       value="org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerDTO"
+                       value="org.yes.cart.domain.dto.impl.CustomerDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerCardDTO"
+                       value="org.yes.cart.domain.dto.impl.CustomerCardDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerWishListDTO"
+                       value="org.yes.cart.domain.dto.impl.CustomerWishListDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueProductDTO"
+                       value="org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.AttrValueProductSkuDTO"
                        value="org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttrValueBrandDTO" value="org.yes.cart.domain.dto.impl.AttrValueBrandDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttrValueShopDTO" value="org.yes.cart.domain.dto.impl.AttrValueShopDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.AttrValueSystemDTO" value="org.yes.cart.domain.dto.impl.AttrValueSystemDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.WarehouseDTO" value="org.yes.cart.domain.dto.impl.WarehouseDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ShopWarehouseDTO" value="org.yes.cart.domain.dto.impl.ShopWarehouseDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ShopCategoryDTO" value="org.yes.cart.domain.dto.impl.ShopCategoryDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.SkuWarehouseDTO" value="org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.InventoryDTO" value="org.yes.cart.domain.dto.impl.InventoryDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.SeoImageDTO" value="org.yes.cart.domain.dto.impl.SeoImageDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueBrandDTO"
+                       value="org.yes.cart.domain.dto.impl.AttrValueBrandDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueShopDTO"
+                       value="org.yes.cart.domain.dto.impl.AttrValueShopDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AttrValueSystemDTO"
+                       value="org.yes.cart.domain.dto.impl.AttrValueSystemDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.WarehouseDTO"
+                       value="org.yes.cart.domain.dto.impl.WarehouseDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopCarrierDTO"
+                       value="org.yes.cart.domain.dto.impl.ShopCarrierDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopWarehouseDTO"
+                       value="org.yes.cart.domain.dto.impl.ShopWarehouseDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopCategoryDTO"
+                       value="org.yes.cart.domain.dto.impl.ShopCategoryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.SkuWarehouseDTO"
+                       value="org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.InventoryDTO"
+                       value="org.yes.cart.domain.dto.impl.InventoryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.SeoImageDTO"
+                       value="org.yes.cart.domain.dto.impl.SeoImageDTOImpl"/>
 
-                <entry key="org.yes.cart.domain.dto.AssociationDTO" value="org.yes.cart.domain.dto.impl.AssociationDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ProductAssociationDTO"  value="org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AssociationDTO"
+                       value="org.yes.cart.domain.dto.impl.AssociationDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductAssociationDTO"
+                       value="org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl"/>
 
-                <entry key="org.yes.cart.domain.dto.AddressDTO"  value="org.yes.cart.domain.dto.impl.AddressDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CarrierDTO"  value="org.yes.cart.domain.dto.impl.CarrierDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CarrierSlaDTO"  value="org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.AddressDTO"
+                       value="org.yes.cart.domain.dto.impl.AddressDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CarrierDTO"
+                       value="org.yes.cart.domain.dto.impl.CarrierDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CarrierSlaDTO"
+                       value="org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl"/>
 
-                <entry key="org.yes.cart.domain.dto.CountryDTO"  value="org.yes.cart.domain.dto.impl.CountryDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.StateDTO"  value="org.yes.cart.domain.dto.impl.StateDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CountryDTO"
+                       value="org.yes.cart.domain.dto.impl.CountryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.StateDTO"
+                       value="org.yes.cart.domain.dto.impl.StateDTOImpl"/>
 
-                <entry key="org.yes.cart.domain.entity.Seo"  value="org.yes.cart.domain.entity.impl.SeoEntity"/>
+                <entry key="org.yes.cart.domain.entity.Seo"
+                       value="org.yes.cart.domain.entity.impl.SeoEntity"/>
 
-                <entry key="org.yes.cart.domain.dto.CustomerOrderDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CustomerOrderDetailDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDetailDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDTO"
+                       value="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"
+                       value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDetailDTO"
+                       value="org.yes.cart.domain.dto.impl.CustomerOrderDetailDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDTO"
+                       value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"
+                       value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
 
-                <entry key="org.yes.cart.domain.dto.PromotionDTO"        value="org.yes.cart.domain.dto.impl.PromotionDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.PromotionCouponDTO"  value="org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.PromotionDTO"
+                       value="org.yes.cart.domain.dto.impl.PromotionDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.PromotionCouponDTO"
+                       value="org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl"/>
 
-                <entry key="org.yes.cart.domain.dto.TaxDTO"              value="org.yes.cart.domain.dto.impl.TaxDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.TaxConfigDTO"        value="org.yes.cart.domain.dto.impl.TaxConfigDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.TaxDTO"
+                       value="org.yes.cart.domain.dto.impl.TaxDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.TaxConfigDTO"
+                       value="org.yes.cart.domain.dto.impl.TaxConfigDTOImpl"/>
 
-                <entry key="org.yes.cart.shoppingcart.ShoppingCart"      value="org.yes.cart.domain.dto.impl.CartDTOImpl"/>
-                <entry key="org.yes.cart.shoppingcart.CartItem"          value="org.yes.cart.domain.dto.impl.CartItemDTOImpl"/>
-                <entry key="org.yes.cart.shoppingcart.ShoppingContext"   value="org.yes.cart.domain.dto.impl.CartShoppingContextDTOImpl"/>
-                <entry key="org.yes.cart.shoppingcart.OrderInfo"         value="org.yes.cart.domain.dto.impl.CartOrderInfoDTOImpl"/>
-                <entry key="org.yes.cart.shoppingcart.Total"             value="org.yes.cart.domain.dto.impl.CartTotalDTOImpl"/>
+                <entry key="org.yes.cart.shoppingcart.ShoppingCart"
+                       value="org.yes.cart.domain.dto.impl.CartDTOImpl"/>
+                <entry key="org.yes.cart.shoppingcart.CartItem"
+                       value="org.yes.cart.domain.dto.impl.CartItemDTOImpl"/>
+                <entry key="org.yes.cart.shoppingcart.ShoppingContext"
+                       value="org.yes.cart.domain.dto.impl.CartShoppingContextDTOImpl"/>
+                <entry key="org.yes.cart.shoppingcart.OrderInfo"
+                       value="org.yes.cart.domain.dto.impl.CartOrderInfoDTOImpl"/>
+                <entry key="org.yes.cart.shoppingcart.Total"
+                       value="org.yes.cart.domain.dto.impl.CartTotalDTOImpl"/>
 
             </map>
         </constructor-arg>

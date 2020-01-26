@@ -149,7 +149,6 @@ export class ImpexDataDescriptorsComponent implements OnInit, OnDestroy {
               }
             } else {
               this.datadescriptors.push(rez);
-              this.datadescriptorFilter = rez.name;
               LogUtil.debug('ImpexDataDescriptorsComponent datadescriptor added', rez);
             }
             this.changed = false;

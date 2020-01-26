@@ -149,7 +149,6 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
               }
             } else {
               this.datagroups.push(rez);
-              this.datagroupFilter = rez.name;
               LogUtil.debug('ImpexDataGroupsComponent datagroup added', rez);
             }
             this.changed = false;

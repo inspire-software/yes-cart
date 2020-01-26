@@ -33,12 +33,10 @@ export class LocationsComponent implements OnInit, OnDestroy {
   private static COUNTRY:string = 'country';
   private static STATE:string = 'state';
 
-  private forceShowAll:boolean = false;
   private viewMode:string = LocationsComponent.COUNTRIES;
 
   private countries:SearchResultVO<CountryInfoVO>;
   private countryFilter:string;
-  private countryFilterRequired:boolean = true;
 
   private delayedFilteringCountry:Future;
   private delayedFilteringCountryMs:number = Config.UI_INPUT_DELAY;
@@ -165,16 +163,27 @@ export class LocationsComponent implements OnInit, OnDestroy {
     this.selectedState = data;
   }
 
+  protected onStateAdd(data:StateVO) {
+    LogUtil.debug('LocationsComponent onStateAdd', data);
+    this.onRowNew();
+  }
+
+  protected onStateEdit(data:StateVO) {
+    LogUtil.debug('LocationsComponent onStateEdit', data);
+    this.onRowEditState(data);
+  }
+
+  protected onStateDelete(data:StateVO) {
+    LogUtil.debug('LocationsComponent onStateDelete', data);
+    this.selectedState = data;
+    this.onRowDelete(data);
+  }
+
   protected onStateChanged(event:FormValidationEvent<StateVO>) {
     LogUtil.debug('LocationsComponent onStateChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.stateEdit = event.source;
-  }
-
-  protected onForceShowAll() {
-    this.forceShowAll = !this.forceShowAll;
-    this.getFilteredCountires();
   }
 
   protected onBackToList() {
@@ -220,7 +229,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onRowEditCountry(row:CountryVO) {
+  protected onRowEditCountry(row:CountryInfoVO) {
     LogUtil.debug('LocationsComponent onRowEditCountry handler', row);
     this.loading = true;
     let _sub:any = this._locationService.getCountryById(row.countryId).subscribe(res => {
@@ -266,7 +275,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
               if (pk > 0) {
                 LogUtil.debug('LocationsComponent state edit', rez);
                 if (this.countryEdit != null) {
-                  let idx = this.countryEdit.states.findIndex(rez => rez.stateId == this.stateEdit.stateId);
+                  let idx = this.countryEdit.states.findIndex(rez => rez.stateId == pk);
                   if (idx !== -1) {
                     this.countryEdit.states[idx] = rez;
                     this.countryEdit.states = this.countryEdit.states.slice(0, this.countryEdit.states.length); // reset to propagate changes
@@ -294,17 +303,12 @@ export class LocationsComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._locationService.saveCountry(this.countryEdit).subscribe(
             rez => {
-              let pk = this.countryEdit.countryId;
-              if (pk > 0) {
-                LogUtil.debug('LocationsComponent country changed', rez);
-              } else {
-                this.countryFilter = rez.name;
-                LogUtil.debug('LocationsComponent country added', rez);
-              }
+              LogUtil.debug('LocationsComponent country changed', rez);
               this.changed = false;
               this.selectedCountry = rez;
+              this.selectedState = null;
               this.countryEdit = null;
-                this.loading = false;
+              this.loading = false;
               _sub.unsubscribe();
               this.getFilteredCountires();
           }
@@ -319,14 +323,14 @@ export class LocationsComponent implements OnInit, OnDestroy {
     LogUtil.debug('LocationsComponent discard handler');
     if (this.viewMode === LocationsComponent.STATE) {
       if (this.selectedState != null) {
-        this.onRowEditSelected();
+        this.onRowEditState(this.selectedState);
       } else {
         this.onRowNew();
       }
     }
     if (this.viewMode === LocationsComponent.COUNTRY) {
       if (this.selectedCountry != null) {
-        this.onRowEditSelected();
+        this.onRowEditCountry(this.selectedCountry);
       } else {
         this.onRowNew();
       }
@@ -382,35 +386,25 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   private getFilteredCountires() {
-    this.countryFilterRequired = !this.forceShowAll && (this.countryFilter == null || this.countryFilter.length < 2);
 
-    LogUtil.debug('LocationsComponent getFilteredCountires' + (this.forceShowAll ? ' forcefully': ''));
+    LogUtil.debug('LocationsComponent getFilteredCountires');
 
-    if (!this.countryFilterRequired) {
-      this.loading = true;
+    this.loading = true;
 
-      this.countries.searchContext.parameters.filter = [ this.countryFilter ];
-      this.countries.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+    this.countries.searchContext.parameters.filter = [ this.countryFilter ];
+    this.countries.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
 
-      let _sub:any = this._locationService.getFilteredCountries(this.countries.searchContext).subscribe( allcountries => {
-        LogUtil.debug('LocationsComponent getAllCountries', allcountries);
-        this.countries = allcountries;
-        this.selectedCountry = null;
-        this.countryEdit = null;
-        this.viewMode = LocationsComponent.COUNTRIES;
-        this.changed = false;
-        this.validForSave = false;
-        this.loading = false;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.countries = this.newSearchResultCountryInstance();
+    let _sub:any = this._locationService.getFilteredCountries(this.countries.searchContext).subscribe( allcountries => {
+      LogUtil.debug('LocationsComponent getAllCountries', allcountries);
+      this.countries = allcountries;
       this.selectedCountry = null;
       this.countryEdit = null;
       this.viewMode = LocationsComponent.COUNTRIES;
       this.changed = false;
       this.validForSave = false;
-    }
+      this.loading = false;
+      _sub.unsubscribe();
+    });
   }
 
 }

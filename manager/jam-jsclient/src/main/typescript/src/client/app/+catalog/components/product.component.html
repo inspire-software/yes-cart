@@ -149,9 +149,46 @@
         <ng-template [ngIf]="product.productId > 0">
 
           <div class="panel-body">
+            <div class="row">
+              <div class="row data-control">
+
+                <div class="col-xs-12 col-md-5 padding-lr-0">
+
+                  <form class="width-100">
+                    <div class="input-group">
+                      <input class="form-control filter-input" type="text" name="skuFilter" [(ngModel)]="skuFilter" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearSkuFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+
+                </div>
+
+
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onRowAddSKU()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowEditSelectedSKU()" [disabled]="selectedSku == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowDeleteSelectedSLA()" [disabled]="selectedSku == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
 
             <div class="row">
-              <yc-skus [skus]="product.sku" (dataSelected)="onSkuSelected($event)"></yc-skus>
+              <yc-skus [skus]="product.sku" [filter]="skuFilter" (dataSelected)="onSkuSelected($event)"></yc-skus>
             </div>
           </div>
         </ng-template>

@@ -48,11 +48,15 @@ public class VoShippingServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetCarriers() throws Exception {
 
-        final List<VoCarrier> carriers = voShippingService.getAllCarriers();
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("carrier")));
+        ctxFind.setSize(10);
+
+        final List<VoCarrierInfo> carriers = voShippingService.getFilteredCarriers(ctxFind).getItems();
         assertNotNull(carriers);
         assertFalse(carriers.isEmpty());
 
-        final VoCarrier carrier = carriers.get(0);
+        final VoCarrierInfo carrier = carriers.get(0);
 
         final List<VoShopCarrier> shopCarriers = voShippingService.getShopCarriers(carrier.getCarrierShops().get(0).getShopId());
         assertNotNull(shopCarriers);
@@ -91,12 +95,15 @@ public class VoShippingServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("Test", updated.getDescription());
         assertEquals(10L, updated.getCarrierShops().get(0).getShopId());
 
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList(carrier.getCode())));
+        ctxFind.setSize(10);
 
-        assertTrue(voShippingService.getAllCarriers().stream().anyMatch(ca -> ca.getCarrierId() == created.getCarrierId()));
+        assertTrue(voShippingService.getFilteredCarriers(ctxFind).getItems().stream().anyMatch(ca -> ca.getCarrierId() == created.getCarrierId()));
 
         voShippingService.removeCarrier(updated.getCarrierId());
 
-        assertFalse(voShippingService.getAllCarriers().stream().anyMatch(ca -> ca.getCarrierId() == created.getCarrierId()));
+        assertFalse(voShippingService.getFilteredCarriers(ctxFind).getItems().stream().anyMatch(ca -> ca.getCarrierId() == created.getCarrierId()));
 
     }
 
@@ -104,7 +111,10 @@ public class VoShippingServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testCarrierSlaCRUD() throws Exception {
 
-        final VoCarrier carrier = voShippingService.getAllCarriers().get(0);
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setSize(10);
+
+        final VoCarrierInfo carrier = voShippingService.getFilteredCarriers(ctxFind).getItems().get(0);
 
         final VoCarrierSla carrierSla = new VoCarrierSla();
         carrierSla.setCarrierId(carrier.getCarrierId());

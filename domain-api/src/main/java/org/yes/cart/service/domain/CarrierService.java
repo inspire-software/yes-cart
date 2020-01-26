@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.Carrier;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Carrier service to work with carriers and his SLAs.
@@ -29,12 +30,41 @@ import java.util.List;
  */
 public interface CarrierService extends GenericService<Carrier> {
 
+
+    /**
+     * Find carrier by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. firstname, lastname)
+     *
+     * @return list of warehouses, that match search criteria or empty list if nobody found or null if no search criteria provided.
+     */
+    List<Carrier> findCarriers(int start,
+                               int offset,
+                               String sort,
+                               boolean sortDescending,
+                               Map<String, List> filter);
+
+    /**
+     * Find carrier by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. firstname, lastname)
+     *
+     * @return count
+     */
+    int findCarrierCount(Map<String, List> filter);
+
+
     /**
      * Find carriers, that are applicable for given shop in all currencies available.
      *
      * <p/>
      * @param shopId shop PK
      * @param includeDisabled include disabled
+     *
      * @return list of carries with filtered SLA, that satisfy to given search criteria.
      */
     List<Carrier> findCarriersByShopId(long shopId, final boolean includeDisabled);
@@ -50,5 +80,8 @@ public interface CarrierService extends GenericService<Carrier> {
      * @return list of carries with filtered SLA, that satisfy to given search criteria.
      */
     List<Carrier> getCarriersByShopId(long shopId);
+
+
+
 
 }

@@ -3,6 +3,35 @@
   <form role="form" [formGroup]="carrierForm">
     <tabset>
 
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+
+        <div>
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="carrier.code">
+                  <div [hidden]="carrierForm.controls['code'].valid || carrierForm.controls['code'].pristine" class="alert alert-danger">
+                    <div [hidden]="!carrierForm.controls['code'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!carrierForm.controls['code'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    <div [hidden]="!carrierForm.controls['code'].hasError('maxlength')">
+                      {{ 'MAXLENGTH_REQUIRED' | translate:{value: 255} }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
       <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
 
         <div class="panel-body">
@@ -63,6 +92,69 @@
             </div>
           </div>
         </div>
+      </tab>
+
+      <tab heading="{{ 'CARRIER_SLA' | translate }}"  (select)="tabSelected('SLA')">
+
+        <ng-template [ngIf]="!(carrier.carrierId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </ng-template>
+
+        <ng-template [ngIf]="carrier.carrierId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="row data-control">
+
+                <div class="col-xs-12 col-md-5 padding-lr-0">
+
+                  <form class="width-100">
+                    <div class="input-group">
+                      <input class="form-control filter-input" type="text" name="slaFilter" [(ngModel)]="slaFilter" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearSlaFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+
+                </div>
+
+
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onRowAddSLA()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowEditSelectedSLA()" [disabled]="selectedSla == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowDeleteSelectedSLA()" [disabled]="selectedSla == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <yc-slas [slas]="carrier.slas" [paymentGateways]="paymentGateways" [fulfilmentCentres]="fulfilmentCentres" [filter]="slaFilter" (dataSelected)="onSlaSelected($event)"></yc-slas>
+            </div>
+          </div>
+        </ng-template>
+
       </tab>
 
     </tabset>

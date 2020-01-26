@@ -36,7 +36,7 @@ public interface FulfilmentEndpointController {
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/centre/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoSearchResult<VoFulfilmentCentre> getFilteredFulfilmentCentres(@RequestBody VoSearchContext filter) throws Exception;
+    VoSearchResult<VoFulfilmentCentreInfo> getFilteredFulfilmentCentres(@RequestBody VoSearchContext filter) throws Exception;
 
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/centre/shop/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

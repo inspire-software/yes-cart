@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,6 +43,20 @@ public interface CarrierDTO extends Identifiable {
      * @param carrierId pk value.
      */
     void setCarrierId(long carrierId);
+
+    /**
+     * Get warehouse code.
+     *
+     * @return warehouse code.
+     */
+    String getCode();
+
+    /**
+     * Set warehouse code.
+     *
+     * @param code warehouse code.
+     */
+    void setCode(String code);
 
     /**
      * Get carrier name.
@@ -160,5 +175,18 @@ public interface CarrierDTO extends Identifiable {
      */
     void setLocal(boolean local);
 
+    /**
+     * Get shop carrier relation.
+     *
+     * @return  shop carrier relation.
+     */
+    List<ShopCarrierDTO> getCarrierShop();
+
+    /**
+     * Set shop carrier relation.
+     *
+     * @param carrierShop  shop carrier relation.
+     */
+    void setCarrierShop(List<ShopCarrierDTO> carrierShop);
 
 }

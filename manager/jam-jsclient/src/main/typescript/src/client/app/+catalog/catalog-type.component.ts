@@ -256,7 +256,6 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
                   this.getFilteredTypes();
                 });
               } else {
-                this.typeFilter = rez.name;
                 this.getFilteredTypes();
               }
           }

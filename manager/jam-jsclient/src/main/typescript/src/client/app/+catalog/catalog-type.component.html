@@ -35,15 +35,15 @@
         <i class="fa fa-chevron-left"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="viewMode !== 'types'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedType == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedType == null || viewMode !== 'types'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 
-      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedType == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedType == null || (typeEdit != null && typeEdit.producttypeId === 0)" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
         <i class="fa fa-remove"></i>
       </button>
 
@@ -71,7 +71,10 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-product-types [productTypes]="types" (dataSelected)="onTypeSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-product-types>
+    <yc-product-types [productTypes]="types"
+                      (dataSelected)="onTypeSelected($event)"
+                      (pageSelected)="onPageSelected($event)"
+                      (sortSelected)="onSortSelected($event)"></yc-product-types>
   </div>
 
   <div [hidden]="viewMode !== 'type'" class="{{ loading ? 'loading-data' : '' }}">

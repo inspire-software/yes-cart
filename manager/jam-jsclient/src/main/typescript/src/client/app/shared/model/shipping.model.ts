@@ -29,17 +29,21 @@ export interface CarrierInfoVO {
 
   carrierId : number;
 
+  code  : string;
+
   name  : string;
   description : string;
 
   displayNames : Pair<string, string>[];
   displayDescriptions : Pair<string, string>[];
 
+  carrierShops : Array<CarrierShopLinkVO>;
+
 }
 
 export interface CarrierVO extends CarrierInfoVO {
 
-  carrierShops : Array<CarrierShopLinkVO>;
+  slas : CarrierSlaInfoVO[]
 
 }
 
@@ -55,7 +59,12 @@ export interface CarrierSlaInfoVO {
   carrierId : number;
 
   code  : string;
+
   name  : string;
+  displayNames : Pair<string, string>[];
+
+  description : string;
+  displayDescriptions : Pair<string, string>[];
 
   maxDays : number;
   minDays : number;
@@ -65,6 +74,19 @@ export interface CarrierSlaInfoVO {
   slaType : string;
 
   externalRef : string;
+
+  excludeWeekDays : string[];
+  excludeDates : Pair<Date, Date>[];
+  excludeCustomerTypes : string;
+
+  script : string;
+
+  billingAddressNotRequired : boolean;
+  deliveryAddressNotRequired : boolean;
+
+  supportedPaymentGateways : string[];
+  supportedFulfilmentCentres : string[];
+
 
 }
 
@@ -76,23 +98,6 @@ export interface ShopCarrierSlaVO extends CarrierSlaInfoVO {
 }
 
 export interface CarrierSlaVO extends CarrierSlaInfoVO {
-
-  description : string;
-
-  displayNames : Pair<string, string>[];
-  displayDescriptions : Pair<string, string>[];
-
-  excludeWeekDays : string[];
-  excludeDates : Pair<Date, Date>[];
-  excludeCustomerTypes : string;
-
-  script : string;
-
-  billingAddressNotRequired : boolean;
-  deliveryAddressNotRequired : boolean;
-
-  supportedPaymentGateways : Array<string>;
-  supportedFulfilmentCentres : Array<string>;
 
 }
 

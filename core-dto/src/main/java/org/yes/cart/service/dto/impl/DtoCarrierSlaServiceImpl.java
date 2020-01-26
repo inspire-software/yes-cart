@@ -18,11 +18,14 @@ package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CarrierSlaService;
@@ -30,10 +33,8 @@ import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCarrierSlaService;
 import org.yes.cart.utils.HQLUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -59,6 +60,7 @@ public class DtoCarrierSlaServiceImpl
 
 
 
+
     /**
      * {@inheritDoc}
      */
@@ -74,6 +76,68 @@ public class DtoCarrierSlaServiceImpl
         Arrays.sort(CODE);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SearchResult<CarrierSlaDTO> findCarrierSlas(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, List> params = filter.reduceParameters("filter", "carrierIds");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final List carrierIds = params.containsKey("carrierIds") ? (List) params.get("carrierIds").stream().map(id -> NumberUtils.toLong(String.valueOf(id))).collect(Collectors.toList()) : null;
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final CarrierSlaService carrierSlaService = (CarrierSlaService) service;
+
+        if (carrierIds != null) {
+
+            final Map<String, List> currentFilter = new HashMap<>();
+            if (StringUtils.isNotBlank(textFilter)) {
+
+                final Pair<String, String> code = ComplexSearchUtils.checkSpecialSearch(textFilter, CODE);
+
+                if (code != null) {
+
+                    if ("!".equals(code.getFirst())) {
+
+                        currentFilter.put("guid", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(code.getSecond())));
+
+                    }
+
+                } else {
+
+                    SearchContext.JoinMode.OR.setMode(currentFilter);
+                    currentFilter.put("guid", Collections.singletonList(textFilter));
+                    currentFilter.put("name", Collections.singletonList(textFilter));
+                    currentFilter.put("description", Collections.singletonList(textFilter));
+                    currentFilter.put("carrier.guid", Collections.singletonList(textFilter));
+                    currentFilter.put("carrier.name", Collections.singletonList(textFilter));
+
+                }
+
+            }
+
+            currentFilter.put("carrierIds", carrierIds);
+
+            final int count = carrierSlaService.findCarrierSlaCount(currentFilter);
+            if (count > startIndex) {
+
+                final List<CarrierSlaDTO> entities = new ArrayList<>();
+                final List<CarrierSla> carrierSlas = carrierSlaService.findCarrierSlas(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+                fillDTOs(carrierSlas, entities);
+
+                return new SearchResult<>(filter, entities, count);
+
+            }
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), 0);
+
+    }
 
     /**
      * {@inheritDoc}

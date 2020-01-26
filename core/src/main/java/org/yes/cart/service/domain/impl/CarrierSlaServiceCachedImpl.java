@@ -24,6 +24,7 @@ import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierSlaService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -49,6 +50,18 @@ public class CarrierSlaServiceCachedImpl implements CarrierSlaService {
     @Override
     public List<CarrierSla> findByCarrier(final long carrierId) {
         return carrierSlaService.findByCarrier(carrierId);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<CarrierSla> findCarrierSlas(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return carrierSlaService.findCarrierSlas(start, offset, sort, sortDescending, filter);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int findCarrierSlaCount(final Map<String, List> filter) {
+        return carrierSlaService.findCarrierSlaCount(filter);
     }
 
     /** {@inheritDoc} */

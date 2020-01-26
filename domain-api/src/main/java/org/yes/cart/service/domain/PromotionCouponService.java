@@ -94,7 +94,7 @@ public interface PromotionCouponService extends GenericService<PromotionCoupon> 
      * @param sortDescending    optional sort property direction
      * @param filter            optional filters (e.g. name, guid)
      *
-     * @return list of coupons.
+     * @return list.
      */
     List<PromotionCoupon> findPromotionCoupons(int start,
                                                int offset,

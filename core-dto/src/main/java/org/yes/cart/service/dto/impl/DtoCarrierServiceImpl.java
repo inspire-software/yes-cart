@@ -19,6 +19,8 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.CarrierDTO;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -28,6 +30,8 @@ import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierShop;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CarrierService;
@@ -66,6 +70,52 @@ public class DtoCarrierServiceImpl
         this.shopDao = shopDao;
 
         shopAssembler = DTOAssembler.newAssembler(ShopDTOImpl.class, Shop.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SearchResult<CarrierDTO> findCarriers(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, List> params = filter.reduceParameters("filter", "shopIds");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final List shopIds = params.get("shopIds");
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+
+        if (StringUtils.isNotBlank(textFilter)) {
+
+            final String basic = textFilter;
+
+            SearchContext.JoinMode.OR.setMode(currentFilter);
+            currentFilter.put("name", Collections.singletonList(basic));
+            currentFilter.put("description", Collections.singletonList(basic));
+            currentFilter.put("guid", Collections.singletonList(basic));
+
+        }
+        final CarrierService carrierService = (CarrierService) service;
+
+        if (CollectionUtils.isNotEmpty(shopIds)) {
+            currentFilter.put("shopIds", shopIds);
+        }
+
+        final int count = carrierService.findCarrierCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<CarrierDTO> entities = new ArrayList<>();
+            final List<Carrier> carriers = carrierService.findCarriers(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(carriers, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
+
     }
 
     /**

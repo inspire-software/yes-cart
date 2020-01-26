@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { CarrierInfoVO, CarrierVO, CarrierSlaVO, ShopCarrierAndSlaVO } from '../model/index';
+import { CarrierInfoVO, CarrierVO, CarrierSlaVO, CarrierSlaInfoVO, ShopCarrierAndSlaVO, SearchContextVO, SearchResultVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -45,9 +45,22 @@ export class ShippingService {
    * Get list of all carriers, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getAllCarriers() {
-    return this.http.get(this._serviceBaseUrl + '/carrier/all', Util.requestOptions())
-      .map(res => <CarrierVO[]> this.json(res))
+  getFilteredCarriers(filter:SearchContextVO) {
+
+    let body = JSON.stringify(filter);
+
+    return this.http.post(this._serviceBaseUrl + '/carrier/filtered', body, Util.requestOptions())
+      .map(res => <SearchResultVO<CarrierInfoVO>> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get carrier, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getCarrierById(carrierId:number) {
+    return this.http.get(this._serviceBaseUrl + '/carrier/' + carrierId, Util.requestOptions())
+      .map(res => <CarrierVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -128,7 +141,7 @@ export class ShippingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getCarrierSlas(carrierId:number) {
-    return this.http.get(this._serviceBaseUrl + '/carriersla/all/' + carrierId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/carrier/sla/' + carrierId, Util.requestOptions())
       .map(res => <CarrierSlaVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -137,13 +150,13 @@ export class ShippingService {
    * Get list of all carriers SLA, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredCarrierSlas(filter:string, max:number) {
+  getFilteredCarrierSlas(filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/carriersla/filtered/' + max, body,
-        Util.requestOptions({ type:'text/plain; charset=utf-8' }))
-      .map(res => <CarrierSlaVO[]> this.json(res))
+    return this.http.post(this._serviceBaseUrl + '/carriersla/filtered/', body,
+        Util.requestOptions())
+      .map(res => <SearchResultVO<CarrierSlaInfoVO>> this.json(res))
       .catch(this.handleError);
   }
 

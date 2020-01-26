@@ -18,6 +18,8 @@ package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CarrierDTO;
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -30,6 +32,19 @@ import java.util.Map;
  * Time: 11:13:01
  */
 public interface DtoCarrierService extends GenericDTOService<CarrierDTO> {
+
+
+    /**
+     * Get carrier list by criteria.
+     *
+     * @param filter filter
+     *
+     * @return list
+     *
+     * @throws UnmappedInterfaceException error
+     * @throws UnableToCreateInstanceException error
+     */
+    SearchResult<CarrierDTO> findCarriers(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**

@@ -151,7 +151,6 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     private Pair<String, Object[]> findWarehouseQuery(final boolean count,
                                                       final String sort,
                                                       final boolean sortDescending,
-                                                      final Set<Long> shops,
                                                       final Map<String, List> filter) {
 
         final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
@@ -165,6 +164,7 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
             hqlCriteria.append("select distinct w from WarehouseEntity w left join fetch w.warehouseShop wse ");
         }
 
+        final List shops = currentFilter != null ? currentFilter.remove("shopIds") : null;
         if (CollectionUtils.isNotEmpty(shops)) {
             hqlCriteria.append(" where (wse.shop.shopId in (?1)) ");
             params.add(shops);
@@ -191,9 +191,9 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
      * {@inheritDoc}
      */
     @Override
-    public List<Warehouse> findWarehouses(final int start, final int offset, final String sort, final boolean sortDescending, final Set<Long> shops, final Map<String, List> filter) {
+    public List<Warehouse> findWarehouses(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
 
-        final Pair<String, Object[]> query = findWarehouseQuery(false, sort, sortDescending, shops, filter);
+        final Pair<String, Object[]> query = findWarehouseQuery(false, sort, sortDescending, filter);
 
         return getGenericDao().findRangeByQuery(
                 query.getFirst(),
@@ -206,9 +206,9 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
      * {@inheritDoc}
      */
     @Override
-    public int findWarehouseCount(final Set<Long> shops, final Map<String, List> filter) {
+    public int findWarehouseCount(final Map<String, List> filter) {
 
-        final Pair<String, Object[]> query = findWarehouseQuery(true, null, false, shops, filter);
+        final Pair<String, Object[]> query = findWarehouseQuery(true, null, false, filter);
 
         return getGenericDao().findCountByQuery(
                 query.getFirst(),

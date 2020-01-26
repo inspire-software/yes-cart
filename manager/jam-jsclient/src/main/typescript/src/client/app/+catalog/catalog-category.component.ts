@@ -291,9 +291,6 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
                   this.getFilteredCategories();
                 });
               } else {
-                if (this.categoryFilter == null || this.categoryFilter == '') {
-                  this.categoryFilter = rez.guid;
-                }
                 this.getFilteredCategories();
               }
           }

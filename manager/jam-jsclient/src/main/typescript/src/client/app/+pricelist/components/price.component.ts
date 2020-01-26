@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { ProductSkuVO, PriceListVO, CarrierSlaVO, FulfilmentCentreInfoVO } from './../../shared/model/index';
+import { ProductSkuVO, PriceListVO, CarrierSlaInfoVO, FulfilmentCentreInfoVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { ProductSkuSelectComponent } from './../../shared/catalog/index';
 import { CarrierSlaSelectComponent } from './../../shared/shipping/index';
@@ -159,7 +159,7 @@ export class PriceComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onCarrierSlaSelected(event:FormValidationEvent<CarrierSlaVO>) {
+  protected onCarrierSlaSelected(event:FormValidationEvent<CarrierSlaInfoVO>) {
     LogUtil.debug('PriceComponent onCarrierSlaSelected');
     if (event.valid && this.pricelist != null && this.pricelist.skuPriceId <= 0) {
       this.pricelist.skuCode = event.source.code;

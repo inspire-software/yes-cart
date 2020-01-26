@@ -200,12 +200,6 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     this.searchHelpShow = !this.searchHelpShow;
   }
 
-
-  protected onSearchParent() {
-    this.contentFilter = '^';
-    this.searchHelpShow = false;
-  }
-
   protected onSearchURI() {
     this.contentFilter = '@';
     this.searchHelpShow = false;
@@ -317,9 +311,6 @@ export class ShopContentComponent implements OnInit, OnDestroy {
                   this.getFilteredContents();
                 });
               } else {
-                if (this.contentFilter == null || this.contentFilter == '') {
-                  this.contentFilter = rez.guid;
-                }
                 this.getFilteredContents();
               }
           }

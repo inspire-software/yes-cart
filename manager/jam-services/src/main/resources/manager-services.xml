@@ -560,11 +560,30 @@
                         </entry>
                     </map>
                 </entry>
+                <entry key="carrier">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCarrierGUIDImpl">
+                                <constructor-arg index="0" ref="carrierService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
                 <entry key="carriersla">
                     <map>
                         <entry key="guid">
-                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCarrierSlaGUIDImpl">
-                                <constructor-arg index="0" ref="carrierSlaService"/>
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCompositeCheckImpl">
+                                <constructor-arg>
+                                    <list>
+                                        <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCarrierSlaGUIDImpl">
+                                            <constructor-arg index="0" ref="carrierSlaService"/>
+                                        </bean>
+                                        <bean class="org.yes.cart.service.vo.impl.VoValidationServiceSKUCodeImpl">
+                                            <constructor-arg index="0" ref="productService"/>
+                                            <property name="ignoreCurrentId" value="true"/>
+                                        </bean>
+                                    </list>
+                                </constructor-arg>
                             </bean>
                         </entry>
                     </map>
@@ -614,8 +633,18 @@
                             </bean>
                         </entry>
                         <entry key="code">
-                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceSKUCodeImpl">
-                                <constructor-arg index="0" ref="productService"/>
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCompositeCheckImpl">
+                                <constructor-arg>
+                                    <list>
+                                        <bean class="org.yes.cart.service.vo.impl.VoValidationServiceSKUCodeImpl">
+                                            <constructor-arg index="0" ref="productService"/>
+                                        </bean>
+                                        <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCarrierSlaGUIDImpl">
+                                            <constructor-arg index="0" ref="carrierSlaService"/>
+                                            <property name="ignoreCurrentId" value="true"/>
+                                        </bean>
+                                    </list>
+                                </constructor-arg>
                             </bean>
                         </entry>
                         <entry key="uri">
@@ -653,6 +682,15 @@
                         <entry key="code">
                             <bean class="org.yes.cart.service.vo.impl.VoValidationServicePromotionCodeImpl">
                                 <constructor-arg index="0" ref="promotionService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="tax">
+                    <map>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceTaxCodeImpl">
+                                <constructor-arg index="0" ref="taxService"/>
                             </bean>
                         </entry>
                     </map>

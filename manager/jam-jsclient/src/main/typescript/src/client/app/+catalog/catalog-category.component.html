@@ -39,19 +39,19 @@
         <i class="fa fa-sitemap"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="viewMode !== 'categories'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowLinkSelected()" [disabled]="selectedCategory == null || selectedCategory.linkToId > 0" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATECATLINK' | translate }}">
+      <button type="button" (click)="onRowLinkSelected()" [disabled]="selectedCategory == null || viewMode !== 'categories' || selectedCategory.linkToId > 0" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATECATLINK' | translate }}">
         <i class="fa fa-link"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCategory == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCategory == null || viewMode !== 'categories'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 
-      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCategory == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCategory == null || (categoryEdit != null && categoryEdit.categoryId === 0)" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
         <i class="fa fa-remove"></i>
       </button>
 
@@ -79,7 +79,10 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-categories [categories]="categories" (dataSelected)="onCategorySelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-categories>
+    <yc-categories [categories]="categories"
+                   (dataSelected)="onCategorySelected($event)"
+                   (pageSelected)="onPageSelected($event)"
+                   (sortSelected)="onSortSelected($event)"></yc-categories>
   </div>
 
   <div [hidden]="viewMode !== 'category'" class="{{ loading ? 'loading-data' : '' }}">

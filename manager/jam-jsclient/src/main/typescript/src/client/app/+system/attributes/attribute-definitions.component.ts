@@ -266,7 +266,6 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
                 this.attributeEdit = null;
                 this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
               } else {
-                this.attributeFilter = rez.name;
                 LogUtil.debug('AttributeDefinitionsComponent attribute added', rez);
                 this.getAllAttributes();
               }

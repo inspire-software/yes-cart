@@ -18,7 +18,7 @@ package org.yes.cart.report.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.domain.vo.VoFulfilmentCentre;
+import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
 import org.yes.cart.domain.vo.VoSearchContext;
 import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
@@ -48,9 +48,9 @@ public class VoInventoryListReportWorker implements ReportWorker {
             try {
                 final VoSearchContext context = new VoSearchContext();
                 context.setSize(100);
-                final List<VoFulfilmentCentre> warehouses = fulfilmentService.getFilteredFulfilmentCentres(context).getItems();
+                final List<VoFulfilmentCentreInfo> warehouses = fulfilmentService.getFilteredFulfilmentCentres(context).getItems();
                 final List<ReportPair> select = new ArrayList<>();
-                for (final VoFulfilmentCentre warehouse : warehouses) {
+                for (final VoFulfilmentCentreInfo warehouse : warehouses) {
                     select.add(new ReportPair(warehouse.getCode() + ": " + warehouse.getName(), String.valueOf(warehouse.getWarehouseId())));
                 }
                 select.sort((a, b) -> a.getLabel().compareToIgnoreCase(b.getLabel()));

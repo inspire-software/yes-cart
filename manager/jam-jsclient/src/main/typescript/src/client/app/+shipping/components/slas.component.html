@@ -4,9 +4,9 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CARRIERSLA_CODE' | translate }} / {{ 'CARRIERSLA_REF' | translate}}</th>
+        <th><a class="js-click" (click)="onSortClick('code')">{{ 'CARRIERSLA_CODE' | translate }} / {{ 'CARRIERSLA_REF' | translate}} <span [hidden]="sortColumn != 'code'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'CARRIERSLA_SLATYPE' | translate }}</th>
-        <th>{{ 'NAME' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'NAME' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'CARRIERSLA_BILL' | translate }}</th>
         <th>{{ 'CARRIERSLA_SHIP' | translate }}</th>
         <th>{{ 'CARRIERSLA_PG' | translate }}</th>

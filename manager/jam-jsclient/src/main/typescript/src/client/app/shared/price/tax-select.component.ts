@@ -120,7 +120,7 @@ export class TaxSelectComponent implements OnInit, OnDestroy {
       sortDesc : false
     };
     let _sub:any = this._taxService.getFilteredTax(_ctx).subscribe(alltaxes => {
-      LogUtil.debug('BrandSelectComponent getAllTaxes', alltaxes);
+      LogUtil.debug('TaxSelectComponent getAllTaxes', alltaxes);
       this.selectedTax = null;
       this.changed = false;
       this.validForSelect = false;

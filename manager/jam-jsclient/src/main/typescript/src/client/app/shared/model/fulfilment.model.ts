@@ -33,6 +33,8 @@ export interface FulfilmentCentreInfoVO {
 
   displayNames : Pair<string, string>[];
 
+  fulfilmentShops : FulfilmentCentreShopLinkVO[];
+
 }
 
 export interface FulfilmentCentreShopLinkVO {
@@ -44,8 +46,6 @@ export interface FulfilmentCentreShopLinkVO {
 }
 
 export interface FulfilmentCentreVO extends FulfilmentCentreInfoVO {
-
-  fulfilmentShops : Array<FulfilmentCentreShopLinkVO>;
 
 }
 

@@ -152,7 +152,6 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
               }
             } else {
               this.roles.push(rez);
-              this.roleFilter = rez.code;
               LogUtil.debug('OrganisationRoleComponent role added', rez);
             }
             this.changed = false;

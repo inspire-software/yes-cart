@@ -17,13 +17,14 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Carrier;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierService;
+import org.yes.cart.utils.HQLUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
 * User: Igor Azarny iazarny@yahoo.com
@@ -64,4 +65,73 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
         return new ArrayList<>(rez);
     }
 
+
+
+    private Pair<String, Object[]> findCarrierQuery(final boolean count,
+                                                    final String sort,
+                                                    final boolean sortDescending,
+                                                    final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(distinct c.carrierId) from CarrierEntity c left join c.shops cse ");
+        } else {
+            hqlCriteria.append("select distinct c from CarrierEntity c left join fetch c.shops cse ");
+        }
+
+        final List shops = currentFilter != null ? currentFilter.remove("shopIds") : null;
+        if (CollectionUtils.isNotEmpty(shops)) {
+            hqlCriteria.append(" where (cse.shop.shopId in (?1)) ");
+            params.add(shops);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by c." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Carrier> findCarriers(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findCarrierQuery(false, sort, sortDescending, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCarrierCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findCarrierQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
+    }
 }

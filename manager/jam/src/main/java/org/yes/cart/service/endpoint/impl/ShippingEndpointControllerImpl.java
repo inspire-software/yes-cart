@@ -42,72 +42,86 @@ public class ShippingEndpointControllerImpl implements ShippingEndpointControlle
     }
 
     @Override
-    public @ResponseBody List<VoCarrier> getAllCarriers() throws Exception {
-        return voShippingService.getAllCarriers();
+    public @ResponseBody
+    VoSearchResult<VoCarrierInfo> getFilteredCarriers(@RequestBody final VoSearchContext filter) throws Exception {
+        return voShippingService.getFilteredCarriers(filter);
     }
 
     @Override
-    public @ResponseBody List<VoShopCarrierAndSla> getShopCarriers(@PathVariable("id") final long shopId) throws Exception {
+    public @ResponseBody
+    List<VoShopCarrierAndSla> getShopCarriers(@PathVariable("id") final long shopId) throws Exception {
         return voShippingService.getShopCarriersAndSla(shopId);
     }
 
     @Override
-    public @ResponseBody VoCarrier getCarrierById(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    VoCarrier getCarrierById(@PathVariable("id") final long id) throws Exception {
         return voShippingService.getCarrierById(id);
     }
 
     @Override
-    public @ResponseBody VoCarrier createCarrier(@RequestBody final VoCarrier vo) throws Exception {
+    public @ResponseBody
+    VoCarrier createCarrier(@RequestBody final VoCarrier vo) throws Exception {
         return voShippingService.createCarrier(vo);
     }
 
     @Override
-    public @ResponseBody VoCarrier createShopCarrier(@RequestBody final VoCarrierInfo vo, @PathVariable("id") final long shopId) throws Exception {
+    public @ResponseBody
+    VoCarrier createShopCarrier(@RequestBody final VoCarrierInfo vo, @PathVariable("id") final long shopId) throws Exception {
         return voShippingService.createShopCarrier(vo, shopId);
     }
 
     @Override
-    public @ResponseBody VoCarrier updateCarrier(@RequestBody final VoCarrier vo) throws Exception {
+    public @ResponseBody
+    VoCarrier updateCarrier(@RequestBody final VoCarrier vo) throws Exception {
         return voShippingService.updateCarrier(vo);
     }
 
     @Override
-    public @ResponseBody List<VoShopCarrierAndSla> updateShopCarriers(@RequestBody final List<VoShopCarrierAndSla> vo) throws Exception {
+    public @ResponseBody
+    List<VoShopCarrierAndSla> updateShopCarriers(@RequestBody final List<VoShopCarrierAndSla> vo) throws Exception {
         return voShippingService.updateShopCarriersAndSla(vo);
     }
 
     @Override
-    public @ResponseBody void removeCarrier(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    void removeCarrier(@PathVariable("id") final long id) throws Exception {
         voShippingService.removeCarrier(id);
     }
 
     @Override
-    public @ResponseBody List<VoCarrierSla> getCarrierSlas(@PathVariable("id") final long carrierId) throws Exception {
+    public @ResponseBody
+    List<VoCarrierSla> getCarrierSlaAll(@PathVariable("id") final long carrierId) throws Exception {
         return voShippingService.getCarrierSlas(carrierId);
     }
 
     @Override
-    public @ResponseBody List<VoCarrierSla> getFilteredCarrierSlas(@RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voShippingService.getFilteredCarrierSlas(filter, max);
+    public @ResponseBody
+    VoSearchResult<VoCarrierSlaInfo> getFilteredCarrierSlas(@RequestBody final VoSearchContext filter) throws Exception {
+        return voShippingService.getFilteredCarrierSlas(filter);
     }
 
     @Override
-    public @ResponseBody VoCarrierSla getCarrierSlaById(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    VoCarrierSla getCarrierSlaById(@PathVariable("id") final long id) throws Exception {
         return voShippingService.getCarrierSlaById(id);
     }
 
     @Override
-    public @ResponseBody VoCarrierSla createCarrierSla(@RequestBody final VoCarrierSla vo) throws Exception {
+    public @ResponseBody
+    VoCarrierSla createCarrierSla(@RequestBody final VoCarrierSla vo) throws Exception {
         return voShippingService.createCarrierSla(vo);
     }
 
     @Override
-    public @ResponseBody VoCarrierSla updateCarrierSla(@RequestBody final VoCarrierSla vo) throws Exception {
+    public @ResponseBody
+    VoCarrierSla updateCarrierSla(@RequestBody final VoCarrierSla vo) throws Exception {
         return voShippingService.updateCarrierSla(vo);
     }
 
     @Override
-    public @ResponseBody void removeCarrierSla(@PathVariable("id") final long id) throws Exception {
+    public @ResponseBody
+    void removeCarrierSla(@PathVariable("id") final long id) throws Exception {
         voShippingService.removeCarrierSla(id);
     }
 }

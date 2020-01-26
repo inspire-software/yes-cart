@@ -460,10 +460,6 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
               this.selectedPromotion = rez;
               this.promotionEdit = null;
               this.viewMode = ShopPromotionsComponent.PROMOTIONS;
-
-              if (pk == 0) {
-                this.promotionFilter = rez.name;
-              }
               this.loading = false;
               this.getFilteredPromotions();
             }

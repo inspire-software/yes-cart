@@ -39,15 +39,15 @@
         <i class="fa fa-sitemap"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" [disabled]="shop == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="shop == null || viewMode !== 'contents'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedContent == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedContent == null || viewMode !== 'contents'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 
-      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedContent == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedContent == null || (contentEdit != null && contentEdit.contentId === 0)" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
         <i class="fa fa-remove"></i>
       </button>
 
@@ -66,7 +66,7 @@
     <div *ngIf="searchHelpShow">
       <div class="bg-info text-padding block-margin-spacer">
         <p>{{ 'SEARCH_HELP_CONTENT_DEFAULT' | translate }}</p>
-        <p>{{ 'SEARCH_HELP_CONTENT_PARENT' | translate }} <span><button type="button" (click)="onSearchParent()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CONTENT_PARENT' | translate }} <span><button type="button" (click)="onViewTree()" class="btn btn-default btn-circle"><i class="fa fa-sitemap"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_CONTENT_URI' | translate }} <span><button type="button" (click)="onSearchURI()" class="btn btn-default btn-circle"><i class="fa fa-globe"></i></button></span></p>
       </div>
     </div>
@@ -75,7 +75,10 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-contents [contents]="contents" (dataSelected)="onContentSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-contents>
+    <yc-contents [contents]="contents"
+                 (dataSelected)="onContentSelected($event)"
+                 (pageSelected)="onPageSelected($event)"
+                 (sortSelected)="onSortSelected($event)"></yc-contents>
   </div>
 
   <div [hidden]="viewMode !== 'content'" class="{{ loading ? 'loading-data' : '' }}">

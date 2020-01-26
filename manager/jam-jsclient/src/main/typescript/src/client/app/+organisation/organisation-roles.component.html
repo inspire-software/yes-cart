@@ -29,7 +29,7 @@
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="viewMode !== 'roles' || selectedRole == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRole == null || viewMode !== 'roles'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 

@@ -17,9 +17,13 @@
 package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.vo.matcher.NoopMatcher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,6 +69,16 @@ public class VoFulfilmentCentreInfo {
 
     @DtoField(value = "displayNames", converter = "DisplayValues")
     private List<MutablePair<String, String>> displayNames;
+
+    @DtoCollection(
+            value = "warehouseShop",
+            dtoBeanKey = "VoFulfilmentCentreShopLink",
+            entityGenericType = ShopWarehouseDTO.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = NoopMatcher.class,
+            readOnly = true
+    )
+    private List<VoFulfilmentCentreShopLink> fulfilmentShops = new ArrayList<>();
 
     public long getWarehouseId() {
         return warehouseId;
@@ -160,6 +174,14 @@ public class VoFulfilmentCentreInfo {
 
     public void setDisplayNames(final List<MutablePair<String, String>> displayNames) {
         this.displayNames = displayNames;
+    }
+
+    public List<VoFulfilmentCentreShopLink> getFulfilmentShops() {
+        return fulfilmentShops;
+    }
+
+    public void setFulfilmentShops(final List<VoFulfilmentCentreShopLink> fulfilmentShops) {
+        this.fulfilmentShops = fulfilmentShops;
     }
 
 }

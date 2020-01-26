@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.CarrierSla;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -27,14 +28,54 @@ import java.util.List;
  */
 public interface CarrierSlaService extends GenericService<CarrierSla> {
 
+    /**
+     * Get by ID.
+     *
+     * @param carrierSlaId carrier SLA ID
+     *
+     * @return carrier SLA
+     */
     CarrierSla getById(long carrierSlaId);
 
     /**
      * Get shipping SLA by carrier Id.
      *
      * @param carrierId given carrier id
+     *
      * @return list of SLA, that belongs to given carrier id
      */
     List<CarrierSla> findByCarrier(long carrierId);
+
+
+
+    /**
+     * Find carrier SLAs by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return list.
+     */
+    List<CarrierSla> findCarrierSlas(int start,
+                                     int offset,
+                                     String sort,
+                                     boolean sortDescending,
+                                     Map<String, List> filter);
+
+    /**
+     * Find carrier SLAs by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findCarrierSlaCount(Map<String, List> filter);
+
+
+
+
 
 }

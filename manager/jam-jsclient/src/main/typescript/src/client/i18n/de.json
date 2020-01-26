@@ -313,6 +313,7 @@
   "LOCATION_CITY": "Ort",
   "LOCATION_POST_CODE": "PLZ",
 
+  "CARRIER_SLA": "Versandarten",
   "CARRIERSLA_CODE": "SLA SKU",
   "CARRIERSLA_REF": "Ref",
   "CARRIERSLA_GUARANTEED": "Garantierte Lieferung (Min-Tage)",
@@ -855,7 +856,8 @@
   "SEARCH_HELP_TAX_DEFAULT": "Standard MwSt-Suche geht über Code oder Beschreibung",
   "SEARCH_HELP_TAX_RATE": "Um nur nach Steuersatz zu suchen. Format: '%rate' z.B. '%20'",
   "SEARCH_HELP_TAX_TYPE": "Um nur nach Brutto- / Netto-Steuer zu suchen. Format: '+bruttoSchlüsselwort' oder -nettoSchlüsselwort', '++' oder '-' für alle verwenden. Kann mit einem Steuersatz kombiniert werden, z.B. Bruttobesteuerung von 20%: '+%20'",
-  "SEARCH_HELP_TAXCFG_LOCATION": "Nur nach Ort/Land suchen (Ländercode exakt, Statuscode teilweise). Format: '@Schlüsselwort'",
+  "SEARCH_HELP_TAXCFG_LOCATION": "Nur nach Ort/Land suchen (Ländercode exakt, Statuscode teilweise). Format: '@code'",
+  "SEARCH_HELP_TAXCFG_TAX": "Nur nach Steuerkennzeichen suchen (Steuerkennzeichen exakt). Format: '^code'",
   "SEARCH_HELP_TAXCFG_SKU": "Nur nach SKU suchen. Format: '#SKU'. Benutzen von '#!' um alle Nicht-SKU-Konfigurationen auszuwählen",
   "SEARCH_HELP_TAXCFG_SKU_EXACT": "Zur Suche nach exakter SKU (Code, PIM Code, Barcode oder Herstellercode): Format:!SKU",
 

@@ -313,6 +313,7 @@
   "LOCATION_CITY": "City",
   "LOCATION_POST_CODE": "Post code",
 
+  "CARRIER_SLA": "Shipping methods",
   "CARRIERSLA_CODE": "SLA SKU",
   "CARRIERSLA_REF": "Ref",
   "CARRIERSLA_GUARANTEED": "Guaranteed delivery (Min days)",
@@ -855,7 +856,8 @@
   "SEARCH_HELP_TAX_DEFAULT": "Default tax search is by code or description",
   "SEARCH_HELP_TAX_RATE": "To search only rate. Format: '%rate' e.g. '%20'",
   "SEARCH_HELP_TAX_TYPE": "To search only Gross/Net tax. Format: '+grosskeyword' or '-netkeyword', use '++' or '--' for all. Can be combined with rate e.g. Gross taxation of 20%: '+%20'",
-  "SEARCH_HELP_TAXCFG_LOCATION": "To search only by location (country code exact, state code partial). Format: '@keyword'",
+  "SEARCH_HELP_TAXCFG_LOCATION": "To search only by location (country code exact, state code partial). Format: '@code'",
+  "SEARCH_HELP_TAXCFG_TAX": "To search only by tax code (tax code exact). Format: '^code'",
   "SEARCH_HELP_TAXCFG_SKU": "To search only by SKU. Format: '#SKU'. Use '#!' to select all non-SKU configurations",
   "SEARCH_HELP_TAXCFG_SKU_EXACT": "To search for exact SKU (code, PIM code, barcode or manufacturer code): Format: !SKU",
 

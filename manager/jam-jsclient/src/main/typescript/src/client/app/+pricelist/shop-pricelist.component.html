@@ -1,6 +1,14 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_MARKETING_PRICE' | translate }} {{ selectedShop != null ? (' / ' + selectedShop.name) : '' }} {{ selectedCurrency != null ? ('(' + selectedCurrency + ')') : ''}} {{ selectedPricelist ? (' / ' + selectedPricelist.skuCode) : '' }}</h1>
+    <h1 class="page-header">{{ 'PANEL_MARKETING_PRICE' | translate }} /
+      <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'pricelist'" class="btn {{ selectedShop != null ? 'btn-default' : 'btn-danger' }} btn-circle" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
+        <i class="fa fa-home"></i>
+      </button>
+      {{ selectedShop != null ? selectedShop.name : '' }} /
+      <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null || viewMode !== 'pricelist'" class="btn {{ selectedCurrency != null ? 'btn-default' : 'btn-danger' }} btn-circle" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
+        <i class="fa fa-dollar"></i>
+      </button>
+      {{ selectedCurrency != null ? selectedCurrency : ''}} {{ selectedPricelist ? (' / ' + selectedPricelist.skuCode) : '' }}</h1>
   </div>
 
 
@@ -35,27 +43,19 @@
         <i class="fa fa-chevron-left"></i>
       </button>
 
-      <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'pricelist'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
-        <i class="fa fa-home"></i>
-      </button>
-
-      <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'pricelist'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
-        <i class="fa fa-dollar"></i>
-      </button>
-
-      <button type="button" (click)="onTestRules()" [disabled]="selectedShop == null" class="btn  {{ viewMode === 'pricelisttest' ? 'btn-success' : 'btn-default' }} btn-circle btn-xl" title="{{ 'TEST' | translate }}">
+      <button type="button" (click)="onTestRules()" [disabled]="selectedShop == null" [hidden]="viewMode === 'price'" class="btn  {{ viewMode === 'pricelisttest' ? 'btn-success' : 'btn-default' }} btn-circle btn-xl" title="{{ 'TEST' | translate }}">
         <i class="fa fa-play"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null || pricelistEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null || viewMode !== 'pricelist'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedPricelist == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
+      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedPricelist == null || viewMode !== 'pricelist'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
         <i class="fa fa-copy"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedPricelist == null || pricelistEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedPricelist == null || viewMode !== 'pricelist'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 
@@ -107,11 +107,15 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-pricelist [pricelist]="pricelist" (dataSelected)="onPricelistSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-pricelist>
+    <yc-pricelist [pricelist]="pricelist"
+                  (dataSelected)="onPricelistSelected($event)"
+                  (pageSelected)="onPageSelected($event)"
+                  (sortSelected)="onSortSelected($event)"></yc-pricelist>
   </div>
 
   <div [hidden]="viewMode !== 'price'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-price [pricelist]="pricelistEdit" (dataChanged)="onPriceChanged($event)"></yc-price>
+    <yc-price [pricelist]="pricelistEdit"
+              (dataChanged)="onPriceChanged($event)"></yc-price>
   </div>
 
   <div [hidden]="viewMode !== 'pricelisttest'"  class="{{ loading ? 'loading-data' : '' }}">

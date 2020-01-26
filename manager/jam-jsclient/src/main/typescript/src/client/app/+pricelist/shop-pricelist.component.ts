@@ -414,10 +414,6 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
               this.pricelistEdit = null;
               this.loading = false;
               this.viewMode = ShopPriceListComponent.PRICELIST;
-
-              if (pk == 0) {
-                this.pricelistFilter = '!' + rez.skuCode;
-              }
               this.getFilteredPricelist();
           }
         );

@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
     private final Pattern validPattern;
+    private boolean ignoreCurrentId = false;
 
     public AbstractVoValidationServiceSubjectCodeFieldImpl() {
         this(Pattern.compile("^[A-Za-z0-9\\-_]+$"));
@@ -52,7 +53,7 @@ public abstract class AbstractVoValidationServiceSubjectCodeFieldImpl implements
 
         if (validPattern.matcher(valueToCheck).matches()) {
 
-            final Long duplicate = getDuplicateId(request.getSubjectId(), valueToCheck);
+            final Long duplicate = getDuplicateId(ignoreCurrentId ? 0L : request.getSubjectId(), valueToCheck);
             if (duplicate == null) {
                 return new VoValidationResult(request);
             }
@@ -72,4 +73,13 @@ public abstract class AbstractVoValidationServiceSubjectCodeFieldImpl implements
      * @return PK of object that uses this value already
      */
     protected abstract Long getDuplicateId(long currentId, String valueToCheck);
+
+    /**
+     * Ignore current ID request parameter of validation request. Default is false.
+     *
+     * @param ignoreCurrentId flag to ignore current ID
+     */
+    public void setIgnoreCurrentId(final boolean ignoreCurrentId) {
+        this.ignoreCurrentId = ignoreCurrentId;
+    }
 }

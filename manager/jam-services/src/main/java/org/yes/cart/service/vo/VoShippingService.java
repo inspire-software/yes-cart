@@ -35,7 +35,7 @@ public interface VoShippingService {
      *
      * @throws Exception errors
      */
-    List<VoCarrier> getAllCarriers() throws Exception;
+    VoSearchResult<VoCarrierInfo> getFilteredCarriers(VoSearchContext filter) throws Exception;
 
     /**
      * Get all vo in the system, filtered according to rights
@@ -171,7 +171,7 @@ public interface VoShippingService {
      *
      * @throws Exception errors
      */
-    List<VoCarrierSla> getFilteredCarrierSlas(String filter, int max) throws Exception;
+    VoSearchResult<VoCarrierSlaInfo> getFilteredCarrierSlas(VoSearchContext filter) throws Exception;
 
     /**
      * Get vo by id.

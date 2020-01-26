@@ -201,6 +201,22 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     this.selectedSku = data;
   }
 
+  protected onSkuAdd(data:ProductSkuVO) {
+    LogUtil.debug('CatalogProductsComponent onSkuAdd', data);
+    this.onRowNew();
+  }
+
+  protected onSkuEdit(data:ProductSkuVO) {
+    LogUtil.debug('CatalogProductsComponent onSkuEdit', data);
+    this.onRowEditSku(data);
+  }
+
+  protected onSkuDelete(data:ProductSkuVO) {
+    LogUtil.debug('CatalogProductsComponent onSkuDelete', data);
+    this.selectedSku = data;
+    this.onRowDelete(data);
+  }
+
   protected onSkuChanged(event:FormValidationEvent<Pair<ProductSkuVO, Array<Pair<AttrValueProductSkuVO, boolean>>>>) {
     LogUtil.debug('CatalogProductsComponent onSkuChanged', event);
     this.changed = true;
@@ -421,12 +437,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         let _sub:any = this._pimService.saveProduct(this.productEdit).subscribe(
             rez => {
               let pk = this.productEdit.productId;
-              if (pk > 0) {
-                LogUtil.debug('CatalogProductsComponent product changed', rez);
-              } else {
-                this.productFilter = '!' + rez.code;
-                LogUtil.debug('CatalogProductsComponent product added', rez);
-              }
+              LogUtil.debug('CatalogProductsComponent product changed', rez);
               this.changed = false;
               this.selectedProduct = rez;
               this.productEdit = null;

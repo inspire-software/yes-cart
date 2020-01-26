@@ -35,11 +35,11 @@
         <i class="fa fa-chevron-left"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" [disabled]="(productEdit != null && changed) || skuEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="viewMode !== 'products'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="(productEdit != null && selectedSku == null) || skuEdit != null || (selectedProduct == null && selectedSku == null)" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedProduct == null || viewMode !== 'products'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 
@@ -74,17 +74,24 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-products [products]="products" (dataSelected)="onProductSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-products>
+    <yc-products [products]="products"
+                 (dataSelected)="onProductSelected($event)"
+                 (pageSelected)="onPageSelected($event)"
+                 (sortSelected)="onSortSelected($event)"></yc-products>
   </div>
 
   <div [hidden]="viewMode !== 'product'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-product [product]="productEdit" [attributes]="productEditAttributes"
                 (dataChanged)="onProductChanged($event)"
-                (dataSelected)="onSkuSelected($event)"></yc-product>
+                (skuSelected)="onSkuSelected($event)"
+                (skuAddClick)="onSkuAdd($event)"
+                (skuEditClick)="onSkuEdit($event)"
+                (skuDeleteClick)="onSkuDelete($event)"></yc-product>
   </div>
 
   <div [hidden]="viewMode !== 'sku'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-sku [sku]="skuEdit" [attributes]="skuEditAttributes" (dataChanged)="onSkuChanged($event)"></yc-sku>
+    <yc-sku [sku]="skuEdit" [attributes]="skuEditAttributes"
+            (dataChanged)="onSkuChanged($event)"></yc-sku>
   </div>
 
   <yc-modal #deleteConfirmationModalDialog

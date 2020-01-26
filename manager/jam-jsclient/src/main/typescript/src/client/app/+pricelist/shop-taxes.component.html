@@ -1,6 +1,15 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_MARKETING_TAX' | translate }} {{ selectedShop != null ? (' / ' + selectedShop.name) : '' }} {{ selectedCurrency != null ? ('(' + selectedCurrency + ')') : ''}} {{ selectedTax ? (' / ' + selectedTax.description) : '' }}</h1>
+    <h1 class="page-header">{{ 'PANEL_MARKETING_TAX' | translate }} /
+      <button type="button" (click)="onShopSelect()" [disabled]="viewMode !== 'taxes'" class="btn {{ selectedShop != null ? 'btn-default' : 'btn-danger' }} btn-circle" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
+        <i class="fa fa-home"></i>
+      </button>
+      {{ selectedShop != null ? selectedShop.name : '' }} /
+      <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null || viewMode !== 'taxes'" class="btn {{ selectedCurrency != null ? 'btn-default' : 'btn-danger' }} btn-circle" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
+        <i class="fa fa-dollar"></i>
+      </button>
+      {{ selectedCurrency != null ? selectedCurrency : ''}} {{ selectedTax ? (' / ' + selectedTax.description) : '' }}
+    </h1>
   </div>
 
 
@@ -30,31 +39,23 @@
         <i class="fa fa-chevron-left"></i>
       </button>
 
-      <button type="button" (click)="onShopSelect()" [hidden]="viewMode !== 'taxes'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTSHOP' | translate }}">
-        <i class="fa fa-home"></i>
-      </button>
-
-      <button type="button" (click)="onCurrencySelect()" [disabled]="selectedShop == null" [hidden]="viewMode !== 'taxes'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCURRENCY' | translate }}">
-        <i class="fa fa-dollar"></i>
-      </button>
-
       <button type="button" (click)="onTestRules()" [disabled]="selectedShop == null" class="btn  {{ viewMode === 'pricelisttest' ? 'btn-success' : 'btn-default' }} btn-circle btn-xl" title="{{ 'TEST' | translate }}">
         <i class="fa fa-play"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="selectedShop == null || viewMode !== 'taxes'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedTax == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
+      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedTax == null || viewMode !== 'taxes'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
         <i class="fa fa-copy"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedTax == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedTax == null || viewMode !== 'taxes'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 
-      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedTax == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedTax == null || (taxEdit != null && taxEdit.taxId === 0)" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
         <i class="fa fa-remove"></i>
       </button>
 
@@ -91,7 +92,10 @@
   </div>
 
   <div [hidden]="viewMode !== 'taxes'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-taxes [taxes]="taxes" [selectedShopCode]="selectedShopCode" (dataSelected)="onTaxSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-taxes>
+    <yc-taxes [taxes]="taxes" [selectedShopCode]="selectedShopCode"
+              (dataSelected)="onTaxSelected($event)"
+              (pageSelected)="onPageSelected($event)"
+              (sortSelected)="onSortSelected($event)"></yc-taxes>
   </div>
 
   <div [hidden]="viewMode !== 'pricelisttest'"  class="{{ loading ? 'loading-data' : '' }}">
@@ -121,8 +125,17 @@
           <div class="row">
             <div class="col-xs-3">{{ 'CODE' | translate }}</div>
             <div class="col-xs-9">
-              <input class="form-control" formControlName="code" name="code" type="text" [(ngModel)]="taxEdit.code" [disabled]="taxEdit.taxId > 0">
+              <input class="form-control" formControlName="code" name="code" type="text" [(ngModel)]="taxEdit.code">
               <div [hidden]="taxEditForm.controls['code'].valid || taxEditForm.controls['code'].pristine" class="alert alert-danger">
+                <div [hidden]="!taxEditForm.controls['code'].hasError('checking')">
+                  {{ 'REMOTE_CHECK' | translate }}
+                </div>
+                <div [hidden]="!taxEditForm.controls['code'].hasError('DUPLICATE')">
+                  {{ 'UNIQUE_REQUIRED' | translate }}
+                </div>
+                <div [hidden]="!taxEditForm.controls['code'].hasError('maxlength')">
+                  {{ 'MAXLENGTH_REQUIRED' | translate:{value: 36} }}
+                </div>
                 {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>
             </div>

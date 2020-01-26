@@ -19,7 +19,6 @@ import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
-
 @Component({
   selector: 'yc-slas',
   moduleId: module.id,
@@ -41,6 +40,10 @@ export class SlasComponent implements OnInit, OnDestroy {
   private _fcs:any = {};
 
   private filteredSlas:Array<CarrierSlaVO>;
+
+  //sorting
+  private sortColumn:string = 'name';
+  private sortDesc:boolean = false;
 
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
@@ -117,6 +120,22 @@ export class SlasComponent implements OnInit, OnDestroy {
     }
   }
 
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'name';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterSlas();
+  }
+
   protected onSelectRow(row:CarrierSlaVO) {
     LogUtil.debug('SlasComponent onSelectRow handler', row);
     if (row == this.selectedSla) {
@@ -169,7 +188,7 @@ export class SlasComponent implements OnInit, OnDestroy {
           countryCode: null, stateCode: null, city: null, postcode: null,
           defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0,
           multipleShippingSupported: false,
-          displayNames: []
+          displayNames: [], fulfilmentShops: []
         });
       }
     });
@@ -186,7 +205,10 @@ export class SlasComponent implements OnInit, OnDestroy {
       this.filteredSlas = this._slas.filter(sla =>
         sla.code.toLowerCase().indexOf(this._filter) !== -1 ||
         sla.name.toLowerCase().indexOf(this._filter) !== -1 ||
-        sla.description && sla.description.toLowerCase().indexOf(this._filter) !== -1
+        sla.description && sla.description.toLowerCase().indexOf(this._filter) !== -1 ||
+        sla.displayNames && sla.displayNames.findIndex(st =>
+          st.second.toLowerCase() === this._filter
+        ) !== -1
       );
     } else {
       this.filteredSlas = this._slas;
@@ -195,6 +217,15 @@ export class SlasComponent implements OnInit, OnDestroy {
     if (this.filteredSlas === null) {
       this.filteredSlas = [];
     }
+
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    let _sort = function(a:any, b:any):number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
+
+    this.filteredSlas.sort(_sort);
 
     let _total = this.filteredSlas.length;
     this.totalItems = _total;

@@ -17,9 +17,15 @@
 package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.CarrierDTO;
+import org.yes.cart.domain.dto.ShopCarrierDTO;
+import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
+import org.yes.cart.domain.entity.CarrierShop;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +38,9 @@ public class CarrierDTOImpl implements CarrierDTO {
 
     @DtoField(value = "carrierId", readOnly = true)
     private long carrierId;
+
+    @DtoField(value = "guid")
+    private String code;
 
     @DtoField(value = "name")
     private String name;
@@ -57,6 +66,17 @@ public class CarrierDTOImpl implements CarrierDTO {
     @DtoField(value = "displayDescription", converter = "i18nModelConverter")
     private Map<String, String> displayDescriptions;
 
+    @DtoCollection(
+            value = "shops",
+            dtoBeanKey = "org.yes.cart.domain.dto.ShopCarrierDTO",
+            entityGenericType = CarrierShop.class,
+            entityCollectionClass = ArrayList.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
+            readOnly = true
+    )
+    private List<ShopCarrierDTO> carrierShop;
+
     /** {@inheritDoc} */
     @Override
     public long getCarrierId() {
@@ -75,6 +95,18 @@ public class CarrierDTOImpl implements CarrierDTO {
     @Override
     public void setCarrierId(final long carrierId) {
         this.carrierId = carrierId;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    /** {@inheritDoc}*/
+    @Override
+    public void setCode(final String code) {
+        this.code = code;
     }
 
     /** {@inheritDoc} */
@@ -174,6 +206,18 @@ public class CarrierDTOImpl implements CarrierDTO {
     @Override
     public void setLocal(final boolean local) {
         this.local = local;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<ShopCarrierDTO> getCarrierShop() {
+        return carrierShop;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCarrierShop(final List<ShopCarrierDTO> carrierShop) {
+        this.carrierShop = carrierShop;
     }
 
     @Override

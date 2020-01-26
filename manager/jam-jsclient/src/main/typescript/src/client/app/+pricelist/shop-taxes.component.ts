@@ -19,7 +19,7 @@ import { YcValidators } from './../shared/validation/validators';
 import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/services/index';
 import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { TaxVO, ShopVO, PromotionTestVO, CartVO, Pair, SearchResultVO } from './../shared/model/index';
+import { TaxVO, ShopVO, PromotionTestVO, CartVO, Pair, SearchResultVO, ValidationRequestVO } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -88,8 +88,27 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
               fb: FormBuilder) {
     LogUtil.debug('ShopTaxesComponent constructed');
 
+    let that = this;
+
+
+    let validCode = function(control:any):any {
+
+      let basic = YcValidators.requiredValidCode(control);
+      if (basic == null) {
+
+        let code = control.value;
+        if (that.taxEdit == null || !that.taxEditForm || (!that.taxEditForm.dirty && that.taxEdit.taxId > 0)) {
+          return null;
+        }
+
+        let req:ValidationRequestVO = { subject: 'tax', subjectId: that.taxEdit.taxId, field: 'code', value: code };
+        return YcValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
     this.taxEditForm = fb.group({
-      'code': ['', YcValidators.requiredValidCode],
+      'code': ['', validCode],
       'description': ['', YcValidators.requiredNonBlankTrimmed],
       'exclusiveOfPrice': [''],
       'taxRate': ['', YcValidators.requiredPositiveNumber],
@@ -398,9 +417,6 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
               let pk = this.taxEdit.taxId;
               LogUtil.debug('ShopTaxesComponent tax changed', rez);
               this.selectedTax = rez;
-              if (pk == 0) {
-                this.taxesFilter = rez.code;
-              }
               this.loading = false;
               this.getFilteredTax();
           }

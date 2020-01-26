@@ -24,6 +24,7 @@ import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.service.domain.CarrierService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -36,6 +37,23 @@ public class CarrierServiceCachedImpl implements CarrierService {
 
     public CarrierServiceCachedImpl(final CarrierService carrierService) {
         this.carrierService = carrierService;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Carrier> findCarriers(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return carrierService.findCarriers(start, offset, sort, sortDescending, filter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findCarrierCount(final Map<String, List> filter) {
+        return carrierService.findCarrierCount(filter);
     }
 
     /**

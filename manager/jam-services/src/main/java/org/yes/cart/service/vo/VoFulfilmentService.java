@@ -36,7 +36,7 @@ public interface VoFulfilmentService {
      *
      * @throws Exception errors
      */
-    VoSearchResult<VoFulfilmentCentre> getFilteredFulfilmentCentres(VoSearchContext filter) throws Exception;
+    VoSearchResult<VoFulfilmentCentreInfo> getFilteredFulfilmentCentres(VoSearchContext filter) throws Exception;
 
     /**
      * Get all vo in the system, filtered according to rights

@@ -38,6 +38,10 @@ export class SKUsComponent implements OnInit, OnDestroy {
 
   private filteredSkus:Array<ProductSkuVO>;
 
+  //sorting
+  private sortColumn:string = 'rank';
+  private sortDesc:boolean = false;
+
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
@@ -62,6 +66,7 @@ export class SKUsComponent implements OnInit, OnDestroy {
 
   @Input()
   set skus(skus:Array<ProductSkuVO>) {
+    LogUtil.debug('SKUsComponent skus', skus);
     this._skus = skus;
     this.filterSkus();
   }
@@ -97,6 +102,22 @@ export class SKUsComponent implements OnInit, OnDestroy {
     }
   }
 
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'rank';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterSkus();
+  }
+
   protected onSelectRow(row:ProductSkuVO) {
     LogUtil.debug('SKUsComponent onSelectRow handler', row);
     if (row == this.selectedSku) {
@@ -118,26 +139,29 @@ export class SKUsComponent implements OnInit, OnDestroy {
 
   private filterSkus() {
 
-    if (this._filter) {
-      this.filteredSkus = this._skus.filter(sku =>
-        sku.guid.toLowerCase().indexOf(this._filter) !== -1 ||
-        sku.code.toLowerCase().indexOf(this._filter) !== -1 ||
-        sku.name.toLowerCase().indexOf(this._filter) !== -1 ||
-        sku.manufacturerCode && sku.manufacturerCode.toLowerCase().indexOf(this._filter) !== -1 ||
-        sku.barCode && sku.barCode.toLowerCase().indexOf(this._filter) !== -1
-      );
-      LogUtil.debug('SKUsComponent filterSkus', this._filter);
-    } else {
-      this.filteredSkus = this._skus;
-      LogUtil.debug('SKUsComponent filterSkus no filter');
+    if (this._skus) {
+      if (this._filter) {
+        this.filteredSkus = this._skus.filter(sku =>
+          sku.guid.toLowerCase().indexOf(this._filter) !== -1 ||
+          sku.code.toLowerCase().indexOf(this._filter) !== -1 ||
+          sku.name.toLowerCase().indexOf(this._filter) !== -1 ||
+          sku.manufacturerCode && sku.manufacturerCode.toLowerCase().indexOf(this._filter) !== -1 ||
+          sku.barCode && sku.barCode.toLowerCase().indexOf(this._filter) !== -1
+        );
+      } else {
+        this.filteredSkus = this._skus.slice(0, this._skus.length);
+      }
     }
 
     if (this.filteredSkus === null) {
       this.filteredSkus = [];
     }
 
-    let _sort = function(a:ProductSkuVO, b:ProductSkuVO):number {
-      return a.rank - b.rank;
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    let _sort = function(a:any, b:any):number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
     };
 
     this.filteredSkus.sort(_sort);

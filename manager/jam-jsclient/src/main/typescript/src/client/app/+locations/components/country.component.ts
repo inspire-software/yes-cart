@@ -30,7 +30,14 @@ import { LogUtil } from './../../shared/log/index';
 export class CountryComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<CountryVO>> = new EventEmitter<FormValidationEvent<CountryVO>>();
-  @Output() dataSelected: EventEmitter<StateVO> = new EventEmitter<StateVO>();
+
+  @Output() stateSelected: EventEmitter<StateVO> = new EventEmitter<StateVO>();
+
+  @Output() stateAddClick: EventEmitter<StateVO> = new EventEmitter<StateVO>();
+
+  @Output() stateEditClick: EventEmitter<StateVO> = new EventEmitter<StateVO>();
+
+  @Output() stateDeleteClick: EventEmitter<StateVO> = new EventEmitter<StateVO>();
 
   private _country:CountryVO;
 
@@ -39,6 +46,8 @@ export class CountryComponent implements OnInit, OnDestroy {
   private countryForm:any;
 
   private stateFilter:string;
+
+  private selectedState:StateVO = null;
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('CountryComponent constructed');
@@ -99,7 +108,7 @@ export class CountryComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onClearFilterState() {
+  protected onClearStateFilter() {
 
     this.stateFilter = '';
 
@@ -107,7 +116,27 @@ export class CountryComponent implements OnInit, OnDestroy {
 
   protected onStateSelected(data:StateVO) {
     LogUtil.debug('CountryComponent onStateSelected', data);
-    this.dataSelected.emit(data);
+    this.selectedState = data;
+    this.stateSelected.emit(data);
+  }
+
+  protected onRowAddState() {
+    LogUtil.debug('CountryComponent onRowAddState', this.selectedState);
+    this.stateAddClick.emit(this.selectedState);
+  }
+
+  protected onRowEditSelectedState() {
+    LogUtil.debug('CountryComponent onRowEditSelectedState', this.selectedState);
+    if (this.selectedState != null) {
+      this.stateEditClick.emit(this.selectedState);
+    }
+  }
+
+  protected onRowDeleteSelectedState() {
+    LogUtil.debug('CountryComponent onRowDeleteSelectedState', this.selectedState);
+    if (this.selectedState != null) {
+      this.stateDeleteClick.emit(this.selectedState);
+    }
   }
 
 }

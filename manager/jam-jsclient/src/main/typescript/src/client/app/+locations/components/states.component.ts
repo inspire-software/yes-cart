@@ -40,7 +40,7 @@ export class StatesComponent implements OnInit, OnDestroy {
   private filteredStates:Array<StateVO>;
 
   //sorting
-  private sortColumn:string = null;
+  private sortColumn:string = 'stateCode';
   private sortDesc:boolean = false;
 
   //paging
@@ -105,7 +105,8 @@ export class StatesComponent implements OnInit, OnDestroy {
   onSortClick(event:any) {
     if (event == this.sortColumn) {
       if (this.sortDesc) {  // same column already desc, remove sort
-        this.sortColumn = null;
+        this.sortColumn = 'stateCode';
+        this.sortDesc = false;
       } else {  // same column asc, change to desc
         this.sortColumn = event;
         this.sortDesc = true;
@@ -146,7 +147,7 @@ export class StatesComponent implements OnInit, OnDestroy {
       this.filteredStates = [];
     }
 
-    let _sortProp = this.sortColumn ? this.sortColumn : 'stateCode';
+    let _sortProp = this.sortColumn;
     let _sortOrder = this.sortDesc ? -1 : 1;
 
     let _sort = function(a:any, b:any):number {

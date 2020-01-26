@@ -17,7 +17,6 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,13 +27,14 @@ import java.util.List;
 @Dto
 public class VoCarrier extends VoCarrierInfo {
 
-    private List<VoCarrierShopLink> carrierShops = new ArrayList<>();
+    private List<VoCarrierSlaInfo> slas;
 
-    public List<VoCarrierShopLink> getCarrierShops() {
-        return carrierShops;
+    public List<VoCarrierSlaInfo> getSlas() {
+        return slas;
     }
 
-    public void setCarrierShops(final List<VoCarrierShopLink> carrierShops) {
-        this.carrierShops = carrierShops;
+    public void setSlas(final List<VoCarrierSlaInfo> slas) {
+        this.slas = slas;
     }
+
 }

@@ -16,9 +16,13 @@
 package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.dto.ShopCarrierDTO;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.vo.matcher.NoopMatcher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +36,9 @@ public class VoCarrierInfo {
 
     @DtoField(value = "carrierId", readOnly = true)
     private long carrierId;
+
+    @DtoField(value = "code")
+    private String code;
 
     @DtoField(value = "name")
     private String name;
@@ -57,12 +64,30 @@ public class VoCarrierInfo {
     @DtoField(value = "displayDescriptions", converter = "DisplayValues")
     private List<MutablePair<String, String>> displayDescriptions;
 
+    @DtoCollection(
+            value = "carrierShop",
+            dtoBeanKey = "VoCarrierShopLink",
+            entityGenericType = ShopCarrierDTO.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = NoopMatcher.class,
+            readOnly = true
+    )
+    private List<VoCarrierShopLink> carrierShops = new ArrayList<>();
+
     public long getCarrierId() {
         return carrierId;
     }
 
     public void setCarrierId(final long carrierId) {
         this.carrierId = carrierId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(final String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -128,4 +153,13 @@ public class VoCarrierInfo {
     public void setDisplayDescriptions(final List<MutablePair<String, String>> displayDescriptions) {
         this.displayDescriptions = displayDescriptions;
     }
+
+    public List<VoCarrierShopLink> getCarrierShops() {
+        return carrierShops;
+    }
+
+    public void setCarrierShops(final List<VoCarrierShopLink> carrierShops) {
+        this.carrierShops = carrierShops;
+    }
+
 }

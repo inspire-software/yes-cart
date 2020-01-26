@@ -25,6 +25,8 @@ import org.yes.cart.domain.dto.CarrierDTO;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoCarrierService;
 import org.yes.cart.service.dto.DtoCarrierSlaService;
@@ -35,6 +37,7 @@ import org.yes.cart.service.vo.VoShippingService;
 
 import java.io.StringReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -63,24 +66,36 @@ public class VoShippingServiceImpl implements VoShippingService {
     }
 
     @Override
-    public List<VoCarrier> getAllCarriers() throws Exception {
-        final Map<CarrierDTO, Map<ShopDTO, Boolean>> all = dtoCarrierService.getAllWithShops();
-        federationFacade.applyFederationFilter(all.keySet(), CarrierDTO.class);
-        final VoAssemblySupport.VoAssembler<VoCarrier, CarrierDTO> asmC =
-                voAssemblySupport.with(VoCarrier.class, CarrierDTO.class);
-        final List<VoCarrier> vos = new ArrayList<>(all.size());
-        for (final Map.Entry<CarrierDTO, Map<ShopDTO, Boolean>> dto : all.entrySet()) {
-            final VoCarrier vo = asmC.assembleVo(new VoCarrier(), dto.getKey());
-            for (final Map.Entry<ShopDTO, Boolean> assign : dto.getValue().entrySet()) {
-                final VoCarrierShopLink link = new VoCarrierShopLink();
-                link.setCarrierId(vo.getCarrierId());
-                link.setShopId(assign.getKey().getShopId());
-                link.setDisabled(assign.getValue());
-                vo.getCarrierShops().add(link);
+    public VoSearchResult<VoCarrierInfo> getFilteredCarriers(final VoSearchContext filter) throws Exception {
+
+        final VoSearchResult<VoCarrierInfo> result = new VoSearchResult<>();
+        final List<VoCarrierInfo> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
+
+        final Map<String, List> all = filter.getParameters() != null ? new HashMap<>(filter.getParameters()) : new HashMap<>();
+        if (!federationFacade.isCurrentUserSystemAdmin()) {
+            final Set<Long> shopIds = federationFacade.getAccessibleShopIdsByCurrentManager();
+            if (CollectionUtils.isEmpty(shopIds)) {
+                return result;
             }
-            vos.add(vo);
+            all.put("shopIds", new ArrayList(shopIds));
         }
-        return vos;
+
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "shopIds"
+        );
+
+        final SearchResult<CarrierDTO> batch = dtoCarrierService.findCarriers(searchContext);
+        results.addAll(voAssemblySupport.assembleVos(VoCarrierInfo.class, CarrierDTO.class, batch.getItems()));
+        result.setTotal(batch.getTotal());
+
+        return result;
     }
 
     @Override
@@ -208,14 +223,8 @@ public class VoShippingServiceImpl implements VoShippingService {
 
             final CarrierDTO dto = dtoCarrierService.getById(id);
             final VoCarrier vo = voAssemblySupport.assembleVo(VoCarrier.class, CarrierDTO.class, new VoCarrier(), dto);
-            final Map<ShopDTO, Boolean> links = dtoCarrierService.getAssignedCarrierShops(id);
-            for (final Map.Entry<ShopDTO, Boolean> assign : links.entrySet()) {
-                final VoCarrierShopLink link = new VoCarrierShopLink();
-                link.setCarrierId(vo.getCarrierId());
-                link.setShopId(assign.getKey().getShopId());
-                link.setDisabled(assign.getValue());
-                vo.getCarrierShops().add(link);
-            }
+            final List<CarrierSlaDTO> slas = dtoCarrierSlaService.findByCarrier(id);
+            vo.setSlas(voAssemblySupport.assembleVos(VoCarrierSlaInfo.class, CarrierSlaDTO.class, slas));
             return vo;
 
         } else {
@@ -400,21 +409,42 @@ public class VoShippingServiceImpl implements VoShippingService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoCarrierSla> getFilteredCarrierSlas(final String filter, final int max) throws Exception {
+    public VoSearchResult<VoCarrierSlaInfo> getFilteredCarrierSlas(final VoSearchContext filter) throws Exception {
 
-        final List<VoCarrierSla> results = new ArrayList<>();
+        final VoSearchResult<VoCarrierSlaInfo> result = new VoSearchResult<>();
+        final List<VoCarrierSlaInfo> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
 
-        int start = 0;
-        do {
-            final List<CarrierSlaDTO> batch = dtoCarrierSlaService.findBy(filter, start, max);
-            if (batch.isEmpty()) {
-                break;
+        final VoSearchContext allShopCarriersCtx = new VoSearchContext();
+        allShopCarriersCtx.setSize(1000);
+        final VoSearchResult<VoCarrierInfo> carriers = getFilteredCarriers(allShopCarriersCtx);
+        if (carriers.getTotal() > 0) {
+
+            final List<Long> carrierIds = carriers.getItems().stream().map(VoCarrierInfo::getCarrierId).collect(Collectors.toList());
+
+            final Map<String, List> all = filter.getParameters() != null ? new HashMap<>(filter.getParameters()) : new HashMap<>();
+            all.put("carrierIds", carrierIds);
+
+            final SearchContext searchContext = new SearchContext(
+                    all,
+                    filter.getStart(),
+                    filter.getSize(),
+                    filter.getSortBy(),
+                    filter.isSortDesc(),
+                    "filter", "carrierIds"
+            );
+
+            final SearchResult<CarrierSlaDTO> batch = dtoCarrierSlaService.findCarrierSlas(searchContext);
+            if (!batch.getItems().isEmpty()) {
+                results.addAll(voAssemblySupport.assembleVos(VoCarrierSlaInfo.class, CarrierSlaDTO.class, batch.getItems()));
             }
-            batch.removeIf(carrierSlaDTO -> !federationFacade.isManageable(carrierSlaDTO.getCarrierId(), CarrierDTO.class));
-            results.addAll(voAssemblySupport.assembleVos(VoCarrierSla.class, CarrierSlaDTO.class, batch));
-            start++;
-        } while (results.size() < max && max != Integer.MAX_VALUE);
-        return results.size() > max ? results.subList(0, max) : results;
+
+            result.setTotal(batch.getTotal());
+
+        }
+
+        return result;
     }
 
     @Override

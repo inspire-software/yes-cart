@@ -33,7 +33,14 @@ import { LogUtil } from './../../shared/log/index';
 export class ProductComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<ProductWithLinksVO, Array<Pair<AttrValueProductVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<ProductWithLinksVO, Array<Pair<AttrValueProductVO, boolean>>>>>();
-  @Output() dataSelected: EventEmitter<ProductSkuVO> = new EventEmitter<ProductSkuVO>();
+
+  @Output() skuSelected: EventEmitter<ProductSkuVO> = new EventEmitter<ProductSkuVO>();
+
+  @Output() skuAddClick: EventEmitter<ProductSkuVO> = new EventEmitter<ProductSkuVO>();
+
+  @Output() skuEditClick: EventEmitter<ProductSkuVO> = new EventEmitter<ProductSkuVO>();
+
+  @Output() skuDeleteClick: EventEmitter<ProductSkuVO> = new EventEmitter<ProductSkuVO>();
 
   private _product:ProductWithLinksVO;
   private avPrototype:AttrValueProductVO;
@@ -49,6 +56,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   private delayedChange:Future;
 
   private productForm:any;
+
+  private skuFilter:string;
+
+  private selectedSku:ProductSkuVO = null;
 
   @ViewChild('attributeValuesComponent')
   private attributeValuesComponent:AttributeValuesComponent;
@@ -251,6 +262,37 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
 
+  protected onClearSkuFilter() {
+
+    this.skuFilter = '';
+
+  }
+
+  protected onSkuSelected(data:ProductSkuVO) {
+    LogUtil.debug('ProductComponent onSkuSelected', data);
+    this.selectedSku = data;
+    this.skuSelected.emit(data);
+  }
+
+  protected onRowAddSKU() {
+    LogUtil.debug('ProductComponent onRowAddSKU', this.selectedSku);
+    this.skuAddClick.emit(this.selectedSku);
+  }
+
+  protected onRowEditSelectedSKU() {
+    LogUtil.debug('ProductComponent onRowEditSelectedSKU', this.selectedSku);
+    if (this.selectedSku != null) {
+      this.skuEditClick.emit(this.selectedSku);
+    }
+  }
+
+  protected onRowDeleteSelectedSKU() {
+    LogUtil.debug('ProductComponent onRowDeleteSelectedSKU', this.selectedSku);
+    if (this.selectedSku != null) {
+      this.skuDeleteClick.emit(this.selectedSku);
+    }
+  }
+
   protected onRowDeleteSelectedAttribute() {
     if (this.selectedRowAttribute != null) {
       this.attributeValuesComponent.onRowDeleteSelected();
@@ -370,11 +412,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   protected onSearchAssociation() {
     this.searchHelpShowAssociation = false;
     this.associationFilter = '#cross';
-  }
-
-  protected onSkuSelected(data:ProductSkuVO) {
-    LogUtil.debug('ProductComponent onSkuSelected', data);
-    this.dataSelected.emit(data);
   }
 
 }

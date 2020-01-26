@@ -14,11 +14,10 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { CarrierVO, ShopVO } from './../../shared/model/index';
+import { CarrierInfoVO, ShopVO, Pair, SearchResultVO } from './../../shared/model/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
-
 
 @Component({
   selector: 'yc-carriers',
@@ -28,36 +27,32 @@ import { LogUtil } from './../../shared/log/index';
 
 export class CarriersComponent implements OnInit, OnDestroy {
 
-  @Input() selectedCarrier:CarrierVO;
+  @Input() selectedCarrier:CarrierInfoVO;
 
-  @Output() dataSelected: EventEmitter<CarrierVO> = new EventEmitter<CarrierVO>();
+  @Output() dataSelected: EventEmitter<CarrierInfoVO> = new EventEmitter<CarrierInfoVO>();
 
-  private _carriers:Array<CarrierVO> = [];
-  private _filter:string;
-  private delayedFiltering:Future;
-  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
+
+  private _carriers:SearchResultVO<CarrierInfoVO> = null;
 
   private _shops:any = {};
 
-  private filteredCarriers:Array<CarrierVO>;
+  private filteredCarriers:Array<CarrierInfoVO>;
+
+  //sorting
+  private sortColumn:string = null;
+  private sortDesc:boolean = false;
 
   //paging
-  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS;
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
   private totalItems:number = 0;
-  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
-  // Must use separate variables (not currentPage) for table since that causes
-  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  private pageStart:number = 0;
-  private pageEnd:number = this.itemsPerPage;
+  private currentPage:number = 1;
 
   constructor() {
     LogUtil.debug('CarriersComponent constructed');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.filterCarriers();
-    }, this.delayedFilteringMs);
-
   }
 
   ngOnInit() {
@@ -75,15 +70,9 @@ export class CarriersComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set carriers(carriers:Array<CarrierVO>) {
+  set carriers(carriers:SearchResultVO<CarrierInfoVO>) {
     this._carriers = carriers;
     this.filterCarriers();
-  }
-
-  @Input()
-  set filter(filter:string) {
-    this._filter = filter ? filter.toLowerCase() : null;
-    this.delayedFiltering.delay();
   }
 
   ngOnDestroy() {
@@ -92,26 +81,25 @@ export class CarriersComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(null);
   }
 
-  resetLastPageEnd() {
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
-    }
-  }
-
   onPageChanged(event:any) {
-    this.pageStart = (event.page - 1) * this.itemsPerPage;
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
     }
   }
 
-  protected onSelectRow(row:CarrierVO) {
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortSelected.emit(null);
+      } else {  // same column asc, change to desc
+        this.sortSelected.emit({ first: event, second: true });
+      }
+    } else { // different column, start asc sort
+      this.sortSelected.emit({ first: event, second: false });
+    }
+  }
+
+  protected onSelectRow(row:CarrierInfoVO) {
     LogUtil.debug('CarriersComponent onSelectRow handler', row);
     if (row == this.selectedCarrier) {
       this.selectedCarrier = null;
@@ -121,7 +109,8 @@ export class CarriersComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(this.selectedCarrier);
   }
 
-  protected getShopNames(row:CarrierVO):CarrierShop[] {
+
+  protected getShopNames(row:CarrierInfoVO):CarrierShop[] {
     let shops:CarrierShop[] = [];
     if (row.carrierShops != null && row.carrierShops.length > 0) {
       row.carrierShops.forEach( carrierShop => {
@@ -141,26 +130,28 @@ export class CarriersComponent implements OnInit, OnDestroy {
   }
 
   private filterCarriers() {
-    if (this._filter) {
-      this.filteredCarriers = this._carriers.filter(carrier =>
-        carrier.name.toLowerCase().indexOf(this._filter) !== -1 ||
-        carrier.description && carrier.description.toLowerCase().indexOf(this._filter) !== -1
-      );
-      LogUtil.debug('CarriersComponent filterCarriers', this._filter);
+
+    LogUtil.debug('CarriersComponent filterProducts', this.filteredCarriers);
+
+    if (this._carriers != null) {
+
+      this.filteredCarriers = this._carriers.items != null ? this._carriers.items : [];
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = this._carriers.searchContext.size;
+      this.totalItems = this._carriers.total;
+      this.currentPage = this._carriers.searchContext.start + 1;
+      this.sortColumn = this._carriers.searchContext.sortBy;
+      this.sortDesc = this._carriers.searchContext.sortDesc;
     } else {
-      this.filteredCarriers = this._carriers;
-      LogUtil.debug('CarriersComponent filterCarriers no filter');
-    }
-
-    if (this.filteredCarriers === null) {
       this.filteredCarriers = [];
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = Config.UI_TABLE_PAGE_SIZE;
+      this.totalItems = 0;
+      this.currentPage = 1;
+      this.sortColumn = null;
+      this.sortDesc = false;
     }
 
-    let _total = this.filteredCarriers.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
   }
 
 }

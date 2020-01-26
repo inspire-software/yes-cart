@@ -16,8 +16,13 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { I18nEventBus, ShopEventBus, ShippingService, FulfilmentService, PaymentService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { CarrierVO, CarrierSlaVO, ShopVO, PaymentGatewayInfoVO, FulfilmentCentreVO, SearchContextVO } from './../shared/model/index';
-import { FormValidationEvent } from './../shared/event/index';
+import {
+  CarrierVO, CarrierInfoVO, CarrierSlaVO, CarrierSlaInfoVO,
+  ShopVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO,
+  Pair, SearchContextVO, SearchResultVO
+} from './../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
@@ -30,13 +35,15 @@ export class ShippingComponent implements OnInit, OnDestroy {
 
   private static CARRIERS:string = 'carriers';
   private static CARRIER:string = 'carrier';
-  private static SLAS:string = 'slas';
   private static SLA:string = 'sla';
 
   private viewMode:string = ShippingComponent.CARRIERS;
 
-  private carriers:Array<CarrierVO> = [];
+  private carriers:SearchResultVO<CarrierInfoVO>;
   private carrierFilter:string;
+
+  private delayedFilteringCarrier:Future;
+  private delayedFilteringCarrierMs:number = Config.UI_INPUT_DELAY;
 
   private selectedCarrier:CarrierVO;
 
@@ -45,13 +52,11 @@ export class ShippingComponent implements OnInit, OnDestroy {
   @ViewChild('deleteConfirmationModalDialog')
   private deleteConfirmationModalDialog:ModalComponent;
 
-  private slas:Array<CarrierSlaVO> = [];
-  private slaFilter:string;
   private pgs:Array<PaymentGatewayInfoVO> = [];
-  private fcs:Array<FulfilmentCentreVO> = [];
+  private fcs:Array<FulfilmentCentreInfoVO> = [];
   private shops:Array<ShopVO> = [];
 
-  private selectedSla:CarrierSlaVO;
+  private selectedSla:CarrierSlaInfoVO;
 
   private slaEdit:CarrierSlaVO;
 
@@ -71,10 +76,36 @@ export class ShippingComponent implements OnInit, OnDestroy {
     this.shopAllSub = ShopEventBus.getShopEventBus().shopsUpdated$.subscribe(shopsevt => {
       this.shops = shopsevt;
     });
+    this.carriers = this.newSearchResultCarrierInstance();
   }
 
   newCarrierInstance():CarrierVO {
-    return { carrierId: 0, name: '', description: '', displayNames: [], displayDescriptions: [], carrierShops: [] };
+    return {
+      carrierId: 0,
+      code: null,
+      name: '',
+      description: '',
+      displayNames: [],
+      displayDescriptions: [],
+      carrierShops: [],
+      slas: []
+    };
+  }
+
+  newSearchResultCarrierInstance():SearchResultVO<CarrierInfoVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    };
   }
 
   newSlaInstance():CarrierSlaVO {
@@ -92,6 +123,10 @@ export class ShippingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     LogUtil.debug('ShippingComponent ngOnInit');
     this.onRefreshHandler();
+    let that = this;
+    this.delayedFilteringCarrier = Futures.perpetual(function() {
+      that.getFilteredCarriers();
+    }, this.delayedFilteringCarrierMs);
   }
 
   ngOnDestroy() {
@@ -101,23 +136,40 @@ export class ShippingComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  protected onCarrierFilterChange(event:any) {
+    this.carriers.searchContext.start = 0; // changing filter means we need to start from first page
+    this.delayedFilteringCarrier.delay();
+  }
+
   protected onRefreshHandler() {
     LogUtil.debug('ShippingComponent refresh handler');
     if (UserEventBus.getUserEventBus().current() != null) {
-      if (this.viewMode === ShippingComponent.CARRIERS ||
-          this.viewMode === ShippingComponent.CARRIER ||
-          this.selectedCarrier == null) {
-        this.getAllCarriers();
-      } else {
-        this.getAllSlas();
-      }
+      this.getFilteredCarriers();
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('ShippingComponent onPageSelected', page);
+    this.carriers.searchContext.start = page;
+    this.delayedFilteringCarrier.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('ShippingComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.carriers.searchContext.sortBy = null;
+      this.carriers.searchContext.sortDesc = false;
+    } else {
+      this.carriers.searchContext.sortBy = sort.first;
+      this.carriers.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFilteringCarrier.delay();
   }
 
   protected onCarrierSelected(data:CarrierVO) {
     LogUtil.debug('ShippingComponent onCarrierSelected', data);
     this.selectedCarrier = data;
-    this.slaFilter = '';
   }
 
   protected onCarrierChanged(event:FormValidationEvent<CarrierVO>) {
@@ -127,9 +179,25 @@ export class ShippingComponent implements OnInit, OnDestroy {
     this.carrierEdit = event.source;
   }
 
-  protected onSlaSelected(data:CarrierSlaVO) {
+  protected onSlaSelected(data:CarrierSlaInfoVO) {
     LogUtil.debug('ShippingComponent onSlaSelected', data);
     this.selectedSla = data;
+  }
+
+  protected onSlaAdd(data:CarrierSlaInfoVO) {
+    LogUtil.debug('ShippingComponent onSlaAdd', data);
+    this.onRowNew();
+  }
+
+  protected onSlaEdit(data:CarrierSlaInfoVO) {
+    LogUtil.debug('ShippingComponent onSlaEdit', data);
+    this.onRowEditSla(data);
+  }
+
+  protected onSlaDelete(data:CarrierSlaInfoVO) {
+    LogUtil.debug('ShippingComponent onSlaDelete', data);
+    this.selectedSla = data;
+    this.onRowDelete(data);
   }
 
   protected onSlaChanged(event:FormValidationEvent<CarrierSlaVO>) {
@@ -143,11 +211,9 @@ export class ShippingComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShippingComponent onBackToList handler');
     if (this.viewMode === ShippingComponent.SLA) {
       this.slaEdit = null;
-      this.viewMode = ShippingComponent.SLAS;
-    } else if (this.viewMode === ShippingComponent.SLAS) {
-      this.slaEdit = null;
-      this.selectedSla = null;
-      this.viewMode = ShippingComponent.CARRIERS;
+      if (this.carrierEdit != null) {
+        this.viewMode = ShippingComponent.CARRIER;
+      }
     } else if (this.viewMode === ShippingComponent.CARRIER) {
       this.carrierEdit = null;
       this.slaEdit = null;
@@ -163,7 +229,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
     if (this.viewMode === ShippingComponent.CARRIERS) {
       this.carrierEdit = this.newCarrierInstance();
       this.viewMode = ShippingComponent.CARRIER;
-    } else if (this.viewMode === ShippingComponent.SLAS) {
+    } else if (this.viewMode === ShippingComponent.CARRIER) {
       this.slaEdit = this.newSlaInstance();
       this.viewMode = ShippingComponent.SLA;
     }
@@ -184,15 +250,21 @@ export class ShippingComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onRowEditCarrier(row:CarrierVO) {
+  protected onRowEditCarrier(row:CarrierInfoVO) {
     LogUtil.debug('ShippingComponent onRowEditCarrier handler', row);
-    this.carrierEdit = Util.clone(row);
-    this.changed = false;
-    this.validForSave = false;
-    this.viewMode = ShippingComponent.CARRIER;
+    this.loading = true;
+    let _sub:any = this._shippingService.getCarrierById(row.carrierId).subscribe(res => {
+      LogUtil.debug('ShippingComponent getCarrierById', res);
+      this.carrierEdit = res;
+      this.changed = false;
+      this.validForSave = false;
+      this.viewMode = ShippingComponent.CARRIER;
+      this.loading = false;
+      _sub.unsubscribe();
+    });
   }
 
-  protected onRowEditSla(row:CarrierSlaVO) {
+  protected onRowEditSla(row:CarrierSlaInfoVO) {
     LogUtil.debug('ShippingComponent onRowEditSla handler', row);
     this.slaEdit = Util.clone(row);
     this.changed = false;
@@ -209,18 +281,6 @@ export class ShippingComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onRowList(row:CarrierVO) {
-    LogUtil.debug('ShippingComponent onRowList handler', row);
-    this.getAllSlas();
-  }
-
-
-  protected onRowListSelected() {
-    if (this.selectedCarrier != null) {
-      this.onRowList(this.selectedCarrier);
-    }
-  }
-
   protected onSaveHandler() {
 
     if (this.validForSave && this.changed) {
@@ -232,24 +292,29 @@ export class ShippingComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._shippingService.saveCarrierSla(this.slaEdit).subscribe(
             rez => {
-            if (this.slaEdit.carrierslaId > 0) {
-              let idx = this.slas.findIndex(rez => rez.carrierslaId == this.slaEdit.carrierslaId);
-              if (idx !== -1) {
-                this.slas[idx] = rez;
-                this.slas = this.slas.slice(0, this.slas.length); // reset to propagate changes
-                LogUtil.debug('ShippingComponent sla changed', rez);
+              let pk = this.slaEdit.carrierslaId;
+              if (pk > 0) {
+                LogUtil.debug('ShippingComponent sla edit', rez);
+                if (this.carrierEdit != null) {
+                  let idx = this.carrierEdit.slas.findIndex(rez => rez.carrierslaId == pk);
+                  if (idx !== -1) {
+                    this.carrierEdit.slas[idx] = rez;
+                    this.carrierEdit.slas = this.carrierEdit.slas.slice(0, this.carrierEdit.slas.length); // reset to propagate changes
+                  }
+                }
+              } else {
+                if (this.carrierEdit != null) {
+                  this.carrierEdit.slas.push(rez);
+                  this.carrierEdit.slas = this.carrierEdit.slas.slice(0, this.carrierEdit.slas.length); // reset to propagate changes
+                }
+                LogUtil.debug('ShippingComponent sla added', rez);
               }
-            } else {
-              this.slas.push(rez);
-              this.slaFilter = rez.name;
-              LogUtil.debug('ShippingComponent sla added', rez);
-            }
-            this.changed = false;
-            this.selectedSla = rez;
-            this.slaEdit = null;
+              this.changed = false;
+              this.selectedSla = rez;
+              this.slaEdit = null;
               this.loading = false;
-            this.viewMode = ShippingComponent.SLAS;
-            _sub.unsubscribe();
+              this.viewMode = ShippingComponent.CARRIER;
+              _sub.unsubscribe();
           }
         );
       } else if (this.carrierEdit != null) {
@@ -259,24 +324,14 @@ export class ShippingComponent implements OnInit, OnDestroy {
        this.loading = true;
         let _sub:any = this._shippingService.saveCarrier(this.carrierEdit).subscribe(
             rez => {
-            if (this.carrierEdit.carrierId > 0) {
-              let idx = this.carriers.findIndex(rez => rez.carrierId == this.carrierEdit.carrierId);
-              if (idx !== -1) {
-                this.carriers[idx] = rez;
-                this.carriers = this.carriers.slice(0, this.carriers.length); // reset to propagate changes
-                LogUtil.debug('ShippingComponent carrier changed', rez);
-              }
-            } else {
-              this.carriers.push(rez);
-              this.carrierFilter = rez.name;
-              LogUtil.debug('ShippingComponent carrier added', rez);
-            }
-            this.changed = false;
-            this.selectedCarrier = rez;
-            this.carrierEdit = null;
+              LogUtil.debug('ShippingComponent country changed', rez);
+              this.changed = false;
+              this.selectedCarrier = rez;
+              this.selectedSla = null;
+              this.carrierEdit = null;
               this.loading = false;
-            this.viewMode = ShippingComponent.CARRIERS;
-            _sub.unsubscribe();
+              _sub.unsubscribe();
+              this.getFilteredCarriers();
           }
         );
       }
@@ -289,14 +344,14 @@ export class ShippingComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShippingComponent discard handler');
     if (this.viewMode === ShippingComponent.SLA) {
       if (this.selectedSla != null) {
-        this.onRowEditSelected();
+        this.onRowEditSla(this.selectedSla);
       } else {
         this.onRowNew();
       }
     }
     if (this.viewMode === ShippingComponent.CARRIER) {
       if (this.selectedCarrier != null) {
-        this.onRowEditSelected();
+        this.onRowEditCarrier(this.selectedCarrier);
       } else {
         this.onRowNew();
       }
@@ -313,13 +368,19 @@ export class ShippingComponent implements OnInit, OnDestroy {
        this.loading = true;
         let _sub:any = this._shippingService.removeCarrierSla(this.selectedSla).subscribe(res => {
           LogUtil.debug('ShippingComponent removeSla', this.selectedSla);
-          let idx = this.slas.indexOf(this.selectedSla);
-          this.slas.splice(idx, 1);
-          this.slas = this.slas.slice(0, this.slas.length); // reset to propagate changes
-          this.selectedSla = null;
+          let pk = this.selectedSla.carrierslaId;
           this.slaEdit = null;
+          if (this.carrierEdit != null) {
+            let idx2 = this.carrierEdit.slas.findIndex(rez => rez.carrierslaId == pk);
+            if (idx2 !== -1) {
+              this.carrierEdit.slas.splice(idx2, 1);
+              this.carrierEdit.slas = this.carrierEdit.slas.slice(0, this.carrierEdit.slas.length); // reset to propagate changes
+            }
+          }
+          this.selectedSla = null;
           this.loading = false;
           _sub.unsubscribe();
+          this.viewMode = ShippingComponent.CARRIER;
         });
 
       } else if (this.selectedCarrier != null) {
@@ -328,13 +389,11 @@ export class ShippingComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._shippingService.removeCarrier(this.selectedCarrier).subscribe(res => {
           LogUtil.debug('ShippingComponent removeCarrier', this.selectedCarrier);
-          let idx = this.carriers.indexOf(this.selectedCarrier);
-          this.carriers.splice(idx, 1);
-          this.carriers = this.carriers.slice(0, this.carriers.length); // reset to propagate changes
           this.selectedCarrier = null;
           this.carrierEdit = null;
           this.loading = false;
           _sub.unsubscribe();
+          this.getFilteredCarriers();
         });
       }
     }
@@ -343,21 +402,21 @@ export class ShippingComponent implements OnInit, OnDestroy {
   protected onClearFilterCarrier() {
 
     this.carrierFilter = '';
+    this.getFilteredCarriers();
 
   }
 
-  protected onClearFilterSla() {
+  private getFilteredCarriers() {
 
-    this.slaFilter = '';
+    LogUtil.debug('ShippingComponent getFilteredCarriers');
 
-  }
-
-
-
-  private getAllCarriers() {
     this.loading = true;
-    let _sub:any = this._shippingService.getAllCarriers().subscribe( allcarriers => {
-      LogUtil.debug('ShippingComponent getAllCarriers', allcarriers);
+
+    this.carriers.searchContext.parameters.filter = [ this.carrierFilter ];
+    this.carriers.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+    let _sub:any = this._shippingService.getFilteredCarriers(this.carriers.searchContext).subscribe( allcarriers => {
+      LogUtil.debug('ShippingComponent getFilteredCarriers', allcarriers);
       this.carriers = allcarriers;
       this.selectedCarrier = null;
       this.carrierEdit = null;
@@ -367,47 +426,31 @@ export class ShippingComponent implements OnInit, OnDestroy {
       this.loading = false;
       _sub.unsubscribe();
 
-      let lang = I18nEventBus.getI18nEventBus().current();
-      let _sub2:any = this._paymentService.getPaymentGateways(lang).subscribe(allpgs => {
-        LogUtil.debug('ShippingComponent getPaymentGateways', allpgs);
-        this.pgs = allpgs;
-        _sub2.unsubscribe();
-      });
-      let _ctx:SearchContextVO = {
-        parameters : {
-          filter: [ ]
-        },
-        start : 0,
-        size : 1000,
-        sortBy : null,
-        sortDesc : false
-      };
-      let _sub3:any = this._fulfilmentService.getFilteredFulfilmentCentres(_ctx).subscribe(allfcs => {
-        LogUtil.debug('ShippingComponent getAllFulfilmentCentres', allfcs);
-        this.fcs = allfcs != null ? allfcs.items : [];
-        _sub3.unsubscribe();
-      });
-
+      if (this.pgs == null || this.pgs.length == 0) {
+        let lang = I18nEventBus.getI18nEventBus().current();
+        let _sub2: any = this._paymentService.getPaymentGateways(lang).subscribe(allpgs => {
+          LogUtil.debug('ShippingComponent getPaymentGateways', allpgs);
+          this.pgs = allpgs;
+          _sub2.unsubscribe();
+        });
+      }
+      if (this.fcs.length == 0) {
+        let _ctx: SearchContextVO = {
+          parameters: {
+            filter: []
+          },
+          start: 0,
+          size: 1000,
+          sortBy: null,
+          sortDesc: false
+        };
+        let _sub3: any = this._fulfilmentService.getFilteredFulfilmentCentres(_ctx).subscribe(allfcs => {
+          LogUtil.debug('ShippingComponent getAllFulfilmentCentres', allfcs);
+          this.fcs = allfcs != null ? allfcs.items : [];
+          _sub3.unsubscribe();
+        });
+      }
     });
   }
-
-  private getAllSlas() {
-    if (this.selectedCarrier != null) {
-      this.loading = true;
-      let _sub:any = this._shippingService.getCarrierSlas(this.selectedCarrier.carrierId).subscribe(allslas => {
-        LogUtil.debug('ShippingComponent getCarrierSlas', allslas);
-        this.slas = allslas;
-        this.selectedSla = null;
-        this.slaEdit = null;
-        this.carrierEdit = null;
-        this.viewMode = ShippingComponent.SLAS;
-        this.changed = false;
-        this.validForSave = false;
-        this.loading = false;
-        _sub.unsubscribe();
-      });
-    }
-  }
-
 
 }

@@ -30,15 +30,15 @@
         <i class="fa fa-chevron-left"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="viewMode !== 'brands'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedBrand == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedBrand == null || viewMode !== 'brands'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 
-      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedBrand == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+      <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedBrand == null || (brandEdit != null && brandEdit.brandId === 0)" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
         <i class="fa fa-remove"></i>
       </button>
 
@@ -58,7 +58,10 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-brands [brands]="brands" (dataSelected)="onBrandSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-brands>
+    <yc-brands [brands]="brands"
+               (dataSelected)="onBrandSelected($event)"
+               (pageSelected)="onPageSelected($event)"
+               (sortSelected)="onSortSelected($event)"></yc-brands>
   </div>
 
   <div [hidden]="viewMode !== 'brand'" class="{{ loading ? 'loading-data' : '' }}">

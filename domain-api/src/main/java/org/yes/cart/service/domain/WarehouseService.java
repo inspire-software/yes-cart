@@ -21,7 +21,6 @@ import org.yes.cart.domain.entity.Warehouse;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -38,7 +37,6 @@ public interface WarehouseService extends GenericService<Warehouse> {
      * @param offset            page size
      * @param sort              optional sort property
      * @param sortDescending    optional sort property direction
-     * @param shops             optional shops to search in
      * @param filter            optional filters (e.g. firstname, lastname)
      *
      * @return list of warehouses, that match search criteria or empty list if nobody found or null if no search criteria provided.
@@ -47,19 +45,16 @@ public interface WarehouseService extends GenericService<Warehouse> {
                                    int offset,
                                    String sort,
                                    boolean sortDescending,
-                                   Set<Long> shops,
                                    Map<String, List> filter);
 
     /**
      * Find warehouses by given search criteria. Search will be performed using like operation.
      *
-     * @param shops             optional shops to search in
      * @param filter            optional filters (e.g. firstname, lastname)
      *
      * @return count
      */
-    int findWarehouseCount(Set<Long> shops,
-                           Map<String, List> filter);
+    int findWarehouseCount(Map<String, List> filter);
 
 
     /**

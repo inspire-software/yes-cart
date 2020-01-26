@@ -81,6 +81,23 @@
 
                 </div>
 
+
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onRowAddState()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowEditSelectedState()" [disabled]="selectedState == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowDeleteSelectedState()" [disabled]="selectedState == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
+
               </div>
             </div>
 
@@ -93,7 +110,6 @@
       </tab>
 
     </tabset>
-
   </form>
 
 </ng-template>

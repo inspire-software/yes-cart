@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ShopEventBus, FulfilmentService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { FulfilmentCentreVO, ShopVO, Pair, SearchResultVO } from './../shared/model/index';
+import { FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopVO, Pair, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -34,13 +34,13 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
 
   private viewMode:string = FulfilmentComponent.CENTRES;
 
-  private centres:SearchResultVO<FulfilmentCentreVO>;
+  private centres:SearchResultVO<FulfilmentCentreInfoVO>;
   private centreFilter:string;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
-  private selectedCentre:FulfilmentCentreVO;
+  private selectedCentre:FulfilmentCentreInfoVO;
 
   private centreEdit:FulfilmentCentreVO;
 
@@ -75,7 +75,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
     };
   }
 
-  newSearchResultInstance():SearchResultVO<FulfilmentCentreVO> {
+  newSearchResultInstance():SearchResultVO<FulfilmentCentreInfoVO> {
     return {
       searchContext: {
         parameters: {
@@ -139,7 +139,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  protected onCentreSelected(data:FulfilmentCentreVO) {
+  protected onCentreSelected(data:FulfilmentCentreInfoVO) {
     LogUtil.debug('FulfilmentComponent onCentreSelected', data);
     this.selectedCentre = data;
   }
@@ -182,12 +182,18 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onRowEditCentre(row:FulfilmentCentreVO) {
+  protected onRowEditCentre(row:FulfilmentCentreInfoVO) {
     LogUtil.debug('FulfilmentComponent onRowEditCentre handler', row);
-    this.centreEdit = Util.clone(row);
-    this.changed = false;
-    this.validForSave = false;
-    this.viewMode = FulfilmentComponent.CENTRE;
+    this.loading = true;
+    let _sub:any = this._fulfilmentService.getFulfilmentCentreById(row.warehouseId).subscribe(res => {
+      LogUtil.debug('FulfilmentComponent getFulfilmentCentreById', res);
+      this.centreEdit = res;
+      this.changed = false;
+      this.validForSave = false;
+      this.viewMode = FulfilmentComponent.CENTRE;
+      this.loading = false;
+      _sub.unsubscribe();
+    });
   }
 
   protected onRowEditSelected() {
@@ -212,10 +218,6 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
               this.centreEdit = null;
               this.loading = false;
               this.viewMode = FulfilmentComponent.CENTRES;
-
-              if (this.centreFilter == null || this.centreFilter == '') {
-                this.centreFilter = rez.name;
-              }
               this.getFilteredCentres();
           }
         );

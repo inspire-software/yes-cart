@@ -746,7 +746,7 @@
 
     <TSKU VERSION="0" SKU_ID="10001" PRODUCT_ID="10000" GUID="SOBOT-PINK" CODE="SOBOT-PINK" NAME="I-Sobot Girls Edition"
           DESCRIPTION="Special I-Sobot edition, that can play poker, open beer and smoke" RANK="3"
-          URI="i-sobot=pink"
+          URI="i-sobot-pink"
           TITLE="I-Sobot pink robot"
           METAKEYWORDS="Sobot, Robotics, Mechanical toy, Vibrator"
           METADESCRIPTION="Buy i-Sobot - the worlds smallest humanoid robot, 200 phrases, built-in vibrator with voice recognition and easy to use remote control; available at gadget.yescart.org"/>
@@ -1533,6 +1533,7 @@
 
     <TCARRIER VERSION="0" CARRIER_ID="1" GUID="1_CARRIER" NAME="Test carrier 1" WORLDWIDE="1" COUNTRY="1" STATE="1" LOCAL="1"/>
     <TCARRIER VERSION="0" CARRIER_ID="2" GUID="2_CARRIER" NAME="Test carrier 2" WORLDWIDE="1" COUNTRY="1" STATE="1" LOCAL="1"/>
+    <TCARRIER VERSION="0" CARRIER_ID="3" GUID="3_CARRIER" NAME="Test carrier 3" WORLDWIDE="1" COUNTRY="1" STATE="1" LOCAL="1"/>
 
     <TCARRIERSLA VERSION="0" CARRIERSLA_ID="1" GUID="1_CARRIERSLA" CARRIER_ID="1" NAME="11" SLA_TYPE="F" BILLING_ADDRESS_NOT_REQUIRED="0" DELIVERY_ADDRESS_NOT_REQUIRED="0" SUPPORTED_PGS="testPaymentGatewayLabel,courierPaymentGatewayLabel,prePaymentGatewayLabel,authInvoicePaymentGatewayLabel" SUPPORTED_FCS="WAREHOUSE_1,WAREHOUSE_2,WAREHOUSE_3" GUARANTEED="0" NAMEDDAY="0"/>
     <TSKUPRICE VERSION="0" SKUPRICE_ID="101" GUID="1_CARRIERSLA" SKU_CODE="1_CARRIERSLA" SHOP_ID="10" CURRENCY="USD" QTY="1" REGULAR_PRICE="16.77" SALE_PRICE="16.77" MINIMAL_PRICE="16.77" PRICINGPOLICY="" PRICE_UPON_REQUEST="0" PRICE_ON_OFFER="0" AUTO_GENERATED="0"/>

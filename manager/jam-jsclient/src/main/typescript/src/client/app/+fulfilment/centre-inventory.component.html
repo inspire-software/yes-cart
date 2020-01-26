@@ -1,6 +1,12 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_INVENTORY_STOCK' | translate }} {{ selectedCentre != null ? (' / ' + selectedCentre.name) : '' }} {{ selectedInventory ? (' / ' + selectedInventory.skuCode) : '' }}</h1>
+    <h1 class="page-header">
+      {{ 'PANEL_INVENTORY_STOCK' | translate }} /
+      <button type="button" [disabled]="viewMode !== 'offers'" (click)="onFulfilmentCentreSelect()" class="btn {{ selectedCentre != null ? 'btn-default' : 'btn-danger' }} btn-circle" title="{{ 'MODAL_BUTTON_SELECTCENTRE' | translate }}">
+        <i class="fa fa-industry"></i>
+      </button>
+      {{ selectedCentre != null ? selectedCentre.name : '' }} {{ selectedInventory ? (' / ' + selectedInventory.skuCode) : '' }}
+    </h1>
   </div>
 
 
@@ -35,19 +41,15 @@
         <i class="fa fa-chevron-left"></i>
       </button>
 
-      <button type="button" (click)="onFulfilmentCentreSelect()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCENTRE' | translate }}">
-        <i class="fa fa-industry"></i>
-      </button>
-
       <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedInventory == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
         <i class="fa fa-info"></i>
       </button>
 
-      <button type="button" (click)="onRowNew()" [disabled]="selectedCentre == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <button type="button" (click)="onRowNew()" [disabled]="selectedCentre == null || viewMode !== 'offers'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedInventory == null || inventoryEdit != null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedInventory == null || viewMode !== 'offers'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
 
@@ -89,7 +91,10 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-inventory [inventory]="inventory" (dataSelected)="onInventorySelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-inventory>
+    <yc-inventory [inventory]="inventory"
+                  (dataSelected)="onInventorySelected($event)"
+                  (pageSelected)="onPageSelected($event)"
+                  (sortSelected)="onSortSelected($event)"></yc-inventory>
 
   </div>
 

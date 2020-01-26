@@ -116,19 +116,20 @@ public class DtoWarehouseServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public SearchResult<WarehouseDTO> findWarehouses(final Set<Long> shopIds, final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<WarehouseDTO> findWarehouses(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, List> params = filter.reduceParameters("filter");
-        final List filterParam = params.get("filter");
+        final Map<String, List> params = filter.reduceParameters("filter", "shopIds");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final List shopIds = params.get("shopIds");
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
 
         final Map<String, List> currentFilter = new HashMap<>();
 
-        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+        if (StringUtils.isNotBlank(textFilter)) {
 
-            final String basic = ((String) filterParam.get(0)).trim();
+            final String basic = textFilter;
 
             SearchContext.JoinMode.OR.setMode(currentFilter);
             currentFilter.put("code", Collections.singletonList(basic));
@@ -139,11 +140,15 @@ public class DtoWarehouseServiceImpl
         }
         final WarehouseService warehouseService = (WarehouseService) service;
 
-        final int count = warehouseService.findWarehouseCount(shopIds, currentFilter);
+        if (CollectionUtils.isNotEmpty(shopIds)) {
+            currentFilter.put("shopIds", shopIds);
+        }
+
+        final int count = warehouseService.findWarehouseCount(currentFilter);
         if (count > startIndex) {
 
             final List<WarehouseDTO> entities = new ArrayList<>();
-            final List<Warehouse> warehouses = warehouseService.findWarehouses(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), shopIds, currentFilter);
+            final List<Warehouse> warehouses = warehouseService.findWarehouses(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
 
             fillDTOs(warehouses, entities);
 

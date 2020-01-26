@@ -105,11 +105,43 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   }
 
   newCarrierInstance():CarrierInfoVO {
-    return { carrierId: 0, name: '', description: null, displayNames: [], displayDescriptions: [] };
+    return {
+      carrierId: 0,
+      code: null,
+      name: '',
+      description: null,
+      displayNames: [],
+      displayDescriptions: [],
+      carrierShops: []
+    };
   }
 
   newCarrierSlaInstance():ShopCarrierSlaVO {
-    return { carrierslaId: 0, carrierId: 0, code: '', name: '', maxDays: 0, minDays: 0, guaranteed: false, namedDay: false, slaType: 'F', externalRef: '', disabled: false, rank: 0 };
+    return {
+      carrierslaId: 0,
+      carrierId: 0,
+      code: '',
+      name: '',
+      displayNames: [],
+      description: null,
+      displayDescriptions: [],
+      maxDays: 0,
+      minDays: 0,
+      guaranteed: false,
+      namedDay: false,
+      slaType: 'F',
+      externalRef: '',
+      excludeWeekDays: [],
+      excludeDates: [],
+      excludeCustomerTypes: null,
+      script: null,
+      billingAddressNotRequired: false,
+      deliveryAddressNotRequired: false,
+      supportedPaymentGateways: [],
+      supportedFulfilmentCentres: [],
+      disabled: false,
+      rank: 0
+    };
   }
 
   formBind():void {

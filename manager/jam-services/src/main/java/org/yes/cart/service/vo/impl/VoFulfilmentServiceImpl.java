@@ -35,10 +35,7 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoFulfilmentService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -64,19 +61,20 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
     }
 
     @Override
-    public VoSearchResult<VoFulfilmentCentre> getFilteredFulfilmentCentres(final VoSearchContext filter) throws Exception {
+    public VoSearchResult<VoFulfilmentCentreInfo> getFilteredFulfilmentCentres(final VoSearchContext filter) throws Exception {
 
-        final VoSearchResult<VoFulfilmentCentre> result = new VoSearchResult<>();
-        final List<VoFulfilmentCentre> results = new ArrayList<>();
+        final VoSearchResult<VoFulfilmentCentreInfo> result = new VoSearchResult<>();
+        final List<VoFulfilmentCentreInfo> results = new ArrayList<>();
         result.setSearchContext(filter);
         result.setItems(results);
 
-        Set<Long> shopIds = null;
+        final Map<String, List> all = filter.getParameters() != null ? new HashMap<>(filter.getParameters()) : new HashMap<>();
         if (!federationFacade.isCurrentUserSystemAdmin()) {
-            shopIds = federationFacade.getAccessibleShopIdsByCurrentManager();
+            final Set<Long> shopIds = federationFacade.getAccessibleShopIdsByCurrentManager();
             if (CollectionUtils.isEmpty(shopIds)) {
                 return result;
             }
+            all.put("shopIds", new ArrayList(shopIds));
         }
 
         final SearchContext searchContext = new SearchContext(
@@ -85,11 +83,11 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
                 filter.getSize(),
                 filter.getSortBy(),
                 filter.isSortDesc(),
-                "filter"
+                "filter", "shopIds"
         );
 
-        final SearchResult<WarehouseDTO> batch = dtoWarehouseService.findWarehouses(shopIds, searchContext);
-        results.addAll(voAssemblySupport.assembleVos(VoFulfilmentCentre.class, WarehouseDTO.class, batch.getItems()));
+        final SearchResult<WarehouseDTO> batch = dtoWarehouseService.findWarehouses(searchContext);
+        results.addAll(voAssemblySupport.assembleVos(VoFulfilmentCentreInfo.class, WarehouseDTO.class, batch.getItems()));
         result.setTotal(batch.getTotal());
 
         return result;

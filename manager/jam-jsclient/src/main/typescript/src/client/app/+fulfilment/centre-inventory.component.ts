@@ -333,17 +333,12 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
         let _sub:any = this._fulfilmentService.saveInventory(this.inventoryEdit).subscribe(
             rez => {
               _sub.unsubscribe();
-              let pk = this.inventoryEdit.skuWarehouseId;
               LogUtil.debug('CentreInventoryComponent inventory changed', rez);
               this.selectedInventory = rez;
               this.validForSave = false;
               this.inventoryEdit = null;
               this.loading = false;
               this.viewMode = CentreInventoryComponent.OFFERS;
-
-              if (pk == 0) {
-                this.inventoryFilter = '!' + rez.skuCode;
-              }
               this.getFilteredInventory();
           }
         );

@@ -20,11 +20,12 @@ import { ShopEventBus, PricingService, UserEventBus, Util } from './../shared/se
 import { PromotionTestConfigComponent } from './components/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ProductSkuSelectComponent } from './../shared/catalog/index';
+import { CarrierSlaSelectComponent } from './../shared/shipping/index';
 import { CountrySelectComponent, CountryStateSelectComponent } from './../shared/shipping/index';
 import { TaxSelectComponent } from './../shared/price/index';
 import {
   TaxVO, ShopVO, TaxConfigVO, PromotionTestVO, CartVO,
-  ProductSkuVO, CountryInfoVO, StateVO,
+  ProductSkuVO, CarrierSlaInfoVO, CountryInfoVO, StateVO,
   Pair, SearchResultVO
 } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
@@ -82,6 +83,9 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
 
   @ViewChild('selectProductModalSkuDialog')
   private selectProductModalSkuDialog:ProductSkuSelectComponent;
+
+  @ViewChild('carrierSlaSelectDialog')
+  private carrierSlaSelectDialog:CarrierSlaSelectComponent;
 
   @ViewChild('selectCountryModalDialog')
   private selectCountryModalDialog:CountrySelectComponent;
@@ -352,7 +356,7 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
   }
 
   protected onProductSkuSelected(event:FormValidationEvent<ProductSkuVO>) {
-    LogUtil.debug('ShopTaxConfigsComponent onProductSkuSelected');
+    LogUtil.debug('ShopTaxConfigsComponent onProductSkuSelected', event);
     if (event.valid) {
       if (this.taxconfigEdit != null) {
         this.taxconfigEdit.productCode = event.source.code;
@@ -365,12 +369,30 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
   }
 
 
+
+  protected onSearchSLAExact() {
+    this.carrierSlaSelectDialog.showDialog();
+  }
+
+
+  protected onCarrierSlaSelected(event:FormValidationEvent<CarrierSlaInfoVO>) {
+    LogUtil.debug('ShopTaxConfigsComponent onCarrierSlaSelected', event);
+    if (this.taxconfigEdit != null) {
+      this.taxconfigEdit.productCode = event.source.code;
+    } else {
+      this.taxconfigsFilter = '!' + event.source.code;
+      this.searchHelpTaxConfigShow = false;
+      this.getFilteredTaxConfig();
+    }
+  }
+
+
   protected onCountryExact() {
     this.selectCountryModalDialog.showDialog();
   }
 
   protected onCountrySelected(event:FormValidationEvent<CountryInfoVO>) {
-    LogUtil.debug('ShopTaxConfigsComponent onCountrySelected');
+    LogUtil.debug('ShopTaxConfigsComponent onCountrySelected', event);
     if (event.valid) {
       if (this.taxconfigEdit != null) {
         this.taxconfigEdit.stateCode = null;
@@ -388,7 +410,7 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
   }
 
   protected onStateSelected(event:FormValidationEvent<StateVO>) {
-    LogUtil.debug('ShopTaxConfigsComponent onCountrySelected');
+    LogUtil.debug('ShopTaxConfigsComponent onCountrySelected', event);
     if (event.valid) {
       if (this.taxconfigEdit != null) {
         this.taxconfigEdit.stateCode = event.source.stateCode;
@@ -407,10 +429,14 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
   }
 
   protected onTaxSelected(event:FormValidationEvent<TaxVO>) {
-    LogUtil.debug('ShopTaxConfigsComponent onTaxSelected');
+    LogUtil.debug('ShopTaxConfigsComponent onTaxSelected', event);
     if (event.valid) {
       if (this.taxconfigEdit != null) {
         this.taxconfigEdit.tax = event.source;
+      } else {
+        this.taxconfigsFilter = '^' + event.source.code;
+        this.searchHelpTaxConfigShow = false;
+        this.getFilteredTaxConfig();
       }
     }
   }
@@ -477,18 +503,8 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
         let _sub:any = this._taxService.createTaxConfig(this.taxconfigEdit).subscribe(
             rez => {
               _sub.unsubscribe();
-              let pk = this.taxconfigEdit.taxConfigId;
               LogUtil.debug('ShopTaxConfigsComponent config changed', rez);
               this.selectedTaxconfig = rez;
-              if (pk == 0) {
-                if (rez.productCode != null) {
-                  this.taxconfigsFilter = '!' + rez.productCode;
-                } else if (rez.stateCode != null) {
-                  this.taxconfigsFilter = '@' + rez.stateCode;
-                } else if (rez.countryCode != null) {
-                  this.taxconfigsFilter = '@' + rez.countryCode;
-                }
-              }
               this.loading = false;
               this.getFilteredTaxConfig();
           }

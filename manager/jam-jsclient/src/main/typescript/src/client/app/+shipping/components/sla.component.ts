@@ -431,7 +431,7 @@ export class SlaComponent implements OnInit, OnDestroy {
           countryCode: null, stateCode: null, city: null, postcode: null,
           defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0,
           multipleShippingSupported: false,
-          displayNames: []
+          displayNames: [], fulfilmentShops: []
         });
       }
     });

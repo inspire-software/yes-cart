@@ -26,9 +26,9 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 @Dto
 public class VoCarrierShopLink {
 
-    @DtoField(value = "carrier.carrierId", readOnly = true)
+    @DtoField(value = "carrierId", readOnly = true)
     private long carrierId;
-    @DtoField(value = "shop.shopId", readOnly = true)
+    @DtoField(value = "shopId", readOnly = true)
     private long shopId;
     @DtoField(value = "disabled")
     private boolean disabled;

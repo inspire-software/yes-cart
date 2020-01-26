@@ -60,6 +60,7 @@ public class DtoTaxConfigServiceImplTezt extends BaseCoreDBTestCase {
         TaxDTO taxDTO = getDto();
         taxDTO = dtoTaxService.create(taxDTO);
 
+        final long taxId = taxDTO.getTaxId();
         final String shopCode = taxDTO.getShopCode();
         final String currency = taxDTO.getCurrency();
 
@@ -91,6 +92,19 @@ public class DtoTaxConfigServiceImplTezt extends BaseCoreDBTestCase {
         assertNotNull(taxCfgs);
         assertEquals(1, taxCfgs.size());
         assertTrue(taxCfgs.toString(), taxCfgs.stream().allMatch(tc -> "CC_TEST1".equals(tc.getProductCode())));
+
+        // retrieve all by tax code
+        final SearchContext filterAllByTaxCode = createSearchContext("productCode", false, 0, 20,
+                "filter", "^" + taxDTO.getCode(),
+                "shopCode", shopCode,
+                "currency", currency
+        );
+        taxCfgs = dtoTaxConfigService.findTaxConfigs(filterAllByTaxCode).getItems();
+
+        assertNotNull(taxCfgs);
+        assertFalse(taxCfgs.isEmpty());
+        assertTrue(taxCfgs.toString(), taxCfgs.stream().allMatch(tc -> tc.getTaxId() == taxId));
+
 
         // retrieve all
         final SearchContext filterAllCodes = createSearchContext("productCode", false, 0, 20,

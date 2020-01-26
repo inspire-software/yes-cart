@@ -4,11 +4,11 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CODE' | translate }}</th>
-        <th>{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}</th>
-        <th>{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}</th>
-        <th>{{ 'PRODUCT_BAR_CODE' | translate }}</th>
-        <th>{{ 'AV_RANK' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('code')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'code'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('manufacturerCode')">{{ 'PRODUCT_MANUFACTURER_CODE' | translate }} <span [hidden]="sortColumn != 'manufacturerCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('barCode')">{{ 'PRODUCT_BAR_CODE' | translate }} <span [hidden]="sortColumn != 'barCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('rank')">{{ 'AV_RANK' | translate }} <span [hidden]="sortColumn != 'rank'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>
