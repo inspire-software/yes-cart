@@ -407,7 +407,6 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
         let _sub:any = this._priceService.savePriceList(this.pricelistEdit).subscribe(
             rez => {
               _sub.unsubscribe();
-              let pk = this.pricelistEdit.skuPriceId;
               LogUtil.debug('ShopPriceListComponent pricelist changed', rez);
               this.selectedPricelist = rez;
               this.validForSave = false;

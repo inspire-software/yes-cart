@@ -414,7 +414,6 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
         let _sub:any = this._taxService.saveTax(this.taxEdit).subscribe(
             rez => {
               _sub.unsubscribe();
-              let pk = this.taxEdit.taxId;
               LogUtil.debug('ShopTaxesComponent tax changed', rez);
               this.selectedTax = rez;
               this.loading = false;

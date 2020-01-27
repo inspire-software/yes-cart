@@ -454,7 +454,6 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
         let _sub:any = this._promotionService.savePromotion(this.promotionEdit).subscribe(
             rez => {
               _sub.unsubscribe();
-              let pk = this.promotionEdit.promotionId;
               LogUtil.debug('ShopPromotionsComponent promotion changed', rez);
               this.changed = false;
               this.selectedPromotion = rez;

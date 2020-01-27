@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ShopEventBus, FulfilmentService, UserEventBus, Util } from './../shared/services/index';
+import { ShopEventBus, FulfilmentService, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopVO, Pair, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';

@@ -43,7 +43,7 @@ export interface CarrierInfoVO {
 
 export interface CarrierVO extends CarrierInfoVO {
 
-  slas : CarrierSlaInfoVO[]
+  slas : CarrierSlaInfoVO[];
 
 }
 

@@ -15,7 +15,6 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { CarrierInfoVO, ShopVO, Pair, SearchResultVO } from './../../shared/model/index';
-import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
