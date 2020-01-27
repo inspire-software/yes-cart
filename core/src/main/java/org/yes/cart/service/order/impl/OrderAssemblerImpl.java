@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.config.ConfigurationRegistry;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
@@ -38,17 +39,14 @@ import org.yes.cart.utils.TimeContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class OrderAssemblerImpl implements OrderAssembler {
+public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry<String, OrderAssemblerPostProcessor> {
 
     private final Logger LOG = LoggerFactory.getLogger(OrderAssemblerImpl.class);
 
@@ -64,6 +62,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
     private final CustomerService customerService;
     private final AttributeService attributeService;
     private final WarehouseService warehouseService;
+
+    private final Map<String, OrderAssemblerPostProcessor> customPostProcessor = new HashMap<>();
 
     /**
      * Create order assembler.
@@ -171,6 +171,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setOrdernum(orderNumber);
 
         fillCoupons(customerOrder, shoppingCart, temp);
+
+        postProcess(customerOrder, shoppingCart, orderNumber, temp);
 
         return customerOrder;
     }
@@ -751,4 +753,33 @@ public class OrderAssemblerImpl implements OrderAssembler {
         return new StringI18NModel(Collections.singletonMap(I18NModel.DEFAULT, value));
     }
 
+    private void postProcess(final CustomerOrder customerOrder,
+                             final ShoppingCart shoppingCart,
+                             final String orderNumber,
+                             final boolean temp) throws OrderAssemblyException {
+        final OrderAssemblerPostProcessor postProcessor = customPostProcessor.get(customerOrder.getShop().getCode());
+        if (postProcessor != null) {
+            postProcessor.postProcess(customerOrder, shoppingCart, orderNumber, temp);
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean supports(final String cfgProperty, final Object configuration) {
+        return configuration instanceof OrderAssemblerPostProcessor ||
+                (configuration instanceof Class && OrderAssemblerPostProcessor.class.isAssignableFrom((Class<?>) configuration));
+    }
+
+    @Override
+    public void register(final String shopCode, final OrderAssemblerPostProcessor processor) {
+
+        if (processor != null) {
+            LOG.debug("Custom shop settings for {} registering order post processor {}", shopCode, processor.getClass());
+            customPostProcessor.put(shopCode, processor);
+        } else {
+            LOG.debug("Custom shop settings for {} registering order post processor DEFAULT", shopCode);
+            customPostProcessor.remove(shopCode);
+        }
+
+    }
 }

@@ -79,12 +79,13 @@
           title="{{ selectedRow != null ? (selectedRow.cfgInterface + ':' + selectedRow.name) : '' }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+          [disableCancel]="true"
           [valid]="true">
 
   <ng-template [ngIf]="selectedRow">
     <div class="item-list-overflow">
       <ul class="nav nav-second-level item-list">
-        <pre [innerHTML]="getProperties(selectedRow)"></pre>
+        <li><pre [innerHTML]="getProperties(selectedRow)"></pre></li>
       </ul>
     </div>
   </ng-template>

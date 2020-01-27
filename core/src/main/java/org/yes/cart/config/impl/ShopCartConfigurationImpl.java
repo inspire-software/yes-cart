@@ -16,9 +16,11 @@
 
 package org.yes.cart.config.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.order.OrderAssemblerPostProcessor;
 import org.yes.cart.shoppingcart.CartContentsValidator;
 
 import java.util.List;
@@ -43,10 +45,23 @@ public class ShopCartConfigurationImpl extends AbstractShopConfigurationImpl {
         customise(shop.getCode(), shop.getCode(), "cartContentsValidator", CartContentsValidator.class, validator);
     }
 
+    void registerCustomOrderAssemblerPostProcessor(final Shop shop, final List<Shop> subs, final Properties properties) {
+
+        final OrderAssemblerPostProcessor postProcessor = determineConfiguration(properties, shop.getCode() + ".orderAssemblerPostProcessor", OrderAssemblerPostProcessor.class);
+
+        customise(shop.getCode(), shop.getCode(), "orderAssemblerPostProcessor", OrderAssemblerPostProcessor.class, postProcessor);
+        if (CollectionUtils.isNotEmpty(subs)) {
+            for (final Shop sub : subs) {
+                customise(shop.getCode(), sub.getCode(), "orderAssemblerPostProcessor", OrderAssemblerPostProcessor.class, postProcessor);
+            }
+        }
+    }
+
     /** {@inheritDoc} */
     @Override
     protected void doConfigurations(final Shop shop, final List<Shop> subs, final Properties properties) {
         this.registerCustomCartContentsValidator(shop, subs, properties);
+        this.registerCustomOrderAssemblerPostProcessor(shop, subs, properties);
     }
 
 }

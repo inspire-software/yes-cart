@@ -1717,6 +1717,24 @@
         <constructor-arg index="0" value="{{firstname}} {{middlename}} {{lastname}}"/>
     </bean>
 
+    <bean id="noopOrderAssemblerPostProcessor" class="org.yes.cart.service.order.impl.NoopOrderAssemblerPostProcessorImpl">
+        <property name="cfgContext">
+            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
+                <property name="functionalArea" value="checkout"/>
+                <property name="name" value="noopOrderAssemblerPostProcessor"/>
+                <property name="cfgInterface" value="OrderAssemblerPostProcessor"/>
+                <property name="cfgDefault" value="true"/>
+                <property name="properties">
+                    <props>
+                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
+                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
+                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">SHOPCODE.orderAssemblerPostProcessor=configurationBeanName, where SHOPCODE is the code of the shop and configurationBeanName is custom implementation</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="orderAssembler" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.service.order.impl.OrderAssemblerImpl">
