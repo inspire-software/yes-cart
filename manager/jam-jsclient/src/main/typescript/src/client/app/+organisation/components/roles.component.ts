@@ -39,6 +39,10 @@ export class RolesComponent implements OnInit, OnDestroy {
 
   private filteredRoles:Array<RoleVO>;
 
+  //sorting
+  private sortColumn:string = 'description';
+  private sortDesc:boolean = false;
+
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
@@ -98,6 +102,22 @@ export class RolesComponent implements OnInit, OnDestroy {
     }
   }
 
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'description';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterRoles();
+  }
+
   protected onSelectRow(row:RoleVO) {
     LogUtil.debug('RolesComponent onSelectRow handler', row);
     if (row == this.selectedRole) {
@@ -109,20 +129,30 @@ export class RolesComponent implements OnInit, OnDestroy {
   }
 
   private filterRoles() {
-    if (this._filter) {
-      this.filteredRoles = this._roles.filter(role =>
-        role.code.toLowerCase().indexOf(this._filter) !== -1 ||
-        role.description !== null && role.description.toLowerCase().indexOf(this._filter) !== -1
-      );
-      LogUtil.debug('RolesComponent filterRoles', this._filter);
-    } else {
-      this.filteredRoles = this._roles;
-      LogUtil.debug('RolesComponent filterRoles no filter');
+
+    if (this._roles) {
+      if (this._filter) {
+        this.filteredRoles = this._roles.filter(role =>
+          role.code.toLowerCase().indexOf(this._filter) !== -1 ||
+          role.description !== null && role.description.toLowerCase().indexOf(this._filter) !== -1
+        );
+      } else {
+        this.filteredRoles = this._roles.slice(0, this._roles.length);
+      }
     }
 
     if (this.filteredRoles === null) {
       this.filteredRoles = [];
     }
+
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    let _sort = function(a:any, b:any):number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
+
+    this.filteredRoles.sort(_sort);
 
     let _total = this.filteredRoles.length;
     this.totalItems = _total;

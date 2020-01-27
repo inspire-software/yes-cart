@@ -201,17 +201,20 @@ export class SlasComponent implements OnInit, OnDestroy {
   }
 
   private filterSlas() {
-    if (this._filter) {
-      this.filteredSlas = this._slas.filter(sla =>
-        sla.code.toLowerCase().indexOf(this._filter) !== -1 ||
-        sla.name.toLowerCase().indexOf(this._filter) !== -1 ||
-        sla.description && sla.description.toLowerCase().indexOf(this._filter) !== -1 ||
-        sla.displayNames && sla.displayNames.findIndex(st =>
-          st.second.toLowerCase() === this._filter
-        ) !== -1
-      );
-    } else {
-      this.filteredSlas = this._slas;
+
+    if (this._slas) {
+      if (this._filter) {
+        this.filteredSlas = this._slas.filter(sla =>
+          sla.code.toLowerCase().indexOf(this._filter) !== -1 ||
+          sla.name.toLowerCase().indexOf(this._filter) !== -1 ||
+          sla.description && sla.description.toLowerCase().indexOf(this._filter) !== -1 ||
+          sla.displayNames && sla.displayNames.findIndex(st =>
+            st.second.toLowerCase() === this._filter
+          ) !== -1
+        );
+      } else {
+        this.filteredSlas = this._slas.slice(0, this._slas.length);
+      }
     }
 
     if (this.filteredSlas === null) {

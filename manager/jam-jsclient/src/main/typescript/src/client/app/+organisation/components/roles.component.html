@@ -4,8 +4,8 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CODE' | translate }}</th>
-        <th>{{ 'DESCRIPTION' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('code')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'code'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('description')">{{ 'DESCRIPTION' | translate }} <span [hidden]="sortColumn != 'description'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>
