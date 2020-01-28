@@ -50,28 +50,32 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testAddUser() throws Exception {
-        int numberOfAllManagers = managementService.getManagers(null, null, null).size();
+        int numberOfAllManagers = managementService.findManagers(createSearchContext(0, 1)).getTotal();
         managementService.addUser("bender@futurama.com", "Bender", "Rodríguez", null, null, null, "SHOIP1");
         managementService.addUser("optimus.prime@transformers.com", "Optimus", "Prime", null, null, null, "SHOIP1");
         managementService.addUser("megatron.beast@transformers.com", "Megatron", "Beast", null, null, null, "SHOIP1");
-        assertEquals(3, managementService.getManagers(null, null, null).size() - numberOfAllManagers);
+        assertEquals(3, managementService.findManagers(createSearchContext(0, 1)).getTotal() - numberOfAllManagers);
     }
 
     @Test
     public void testDeleteUser() throws Exception {
-        int numberOfAllManagers = managementService.getManagers(null, null, null).size();
+        int numberOfAllManagers = managementService.findManagers(createSearchContext(0, 1)).getTotal();
         managementService.addUser("bender2@futurama.com", "Bender2", "Rodriguez2", null, null, null, "SHOIP1");
-        assertEquals(1, managementService.getManagers(null, null, null).size() - numberOfAllManagers);
+        assertEquals(1, managementService.findManagers(createSearchContext(0, 1)).getTotal() - numberOfAllManagers);
         managementService.deleteUser("bender2@futurama.com");
-        assertEquals(0, managementService.getManagers(null, null, null).size() - numberOfAllManagers);
+        assertEquals(0, managementService.findManagers(createSearchContext(0, 1)).getTotal() - numberOfAllManagers);
     }
 
     @Test
     public void testUpdateUser() throws Exception {
         managementService.addUser("bender3@futurama.com", "Bender3", "Rodriguez3", null, null, null, "SHOIP1");
-        assertEquals(1, managementService.getManagers("bender3@futurama.com", null, null).size());
+        assertEquals(1, managementService.findManagers(createSearchContext(0, 1,
+                "filter", "bender3@futurama.com"
+            )).getTotal());
         managementService.updateUser("bender3@futurama.com", "Bender3", "Rodríguez3", null, null, null);
-        assertEquals("Rodríguez3", managementService.getManagers("bender3@futurama.com", null, null).get(0).getLastName());
+        assertEquals("Rodríguez3", managementService.findManagers(createSearchContext(0, 1,
+                "filter", "bender3@futurama.com"
+        )).getItems().get(0).getLastName());
     }
 
     @Test
@@ -94,15 +98,21 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
         managementService.addUser("bender5@futurama.com", "Bender5", "Rodríguez", null, null, null, "SHOIP1");
         managementService.addUser("optimus.prime5@transformers.com", "Optimus", "Prime5", null, null, null, "SHOIP1");
         managementService.addUser("megatron.beast5@transformers.com", "Megatron", "Beast", null, null, null, "SHOIP1");
-        assertEquals(3, managementService.getManagers("5", null, null).size());
+        assertEquals(3, managementService.findManagers(createSearchContext(0, 1,
+                "filter", "5"
+        )).getTotal());
         List<ManagerDTO> rez;
-        rez = managementService.getManagers("asd", null, "");
+        rez = managementService.findManagers(createSearchContext(0, 10,
+                "filter", "asd"
+        )).getItems();
         assertEquals(0, rez.size());
-        rez = managementService.getManagers(null, "Bender5", null);
+        rez = managementService.findManagers(createSearchContext(0, 10,
+                "filter", "Bender5"
+        )).getItems();
         assertEquals(1, rez.size());
-        rez = managementService.getManagers(null, null, "Prime5");
-        assertEquals(1, rez.size());
-        rez = managementService.getManagers(null, "us", "me5");
+        rez = managementService.findManagers(createSearchContext(0, 10,
+                "filter", "Prime5"
+        )).getItems();
         assertEquals(1, rez.size());
     }
 

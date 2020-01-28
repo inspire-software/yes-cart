@@ -20,6 +20,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.RoleDTO;
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -65,21 +67,45 @@ public interface ManagementService {
             throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     /**
-     * Get the list of managers by given filtering criteria.
+     * Get manager by given filtering criteria.
      *
-     * @param emailFilter     optional email filter
-     * @param firstNameFilter optional first name filter
-     * @param lastNameFilter  optional last name filter
+     * @param email     email
+     *
      * @return list of managers dto that match given criteria
+     *
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case if some problems with reflection
      */
-    List<ManagerDTO> getManagers(final String emailFilter,
-                                 final String firstNameFilter,
-                                 final String lastNameFilter)
+    ManagerDTO getManagerByEmail(final String email)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get manager by given PK.
+     *
+     * @param id     PK
+     *
+     * @return list of managers dto that match given criteria
+     *
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration error
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case if some problems with reflection
+     */
+    ManagerDTO getManagerById(final long id)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
+     * Find managers by filter.
+     *
+     * @param filter    filter for partial match.
+     *
+     * @return list
+     */
+    SearchResult<ManagerDTO> findManagers(SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
     /**
      * Get the roles assigned to manager.

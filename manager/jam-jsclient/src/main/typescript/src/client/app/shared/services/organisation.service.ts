@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { RoleVO, ManagerInfoVO, ManagerVO } from '../model/index';
+import { RoleVO, ManagerInfoVO, ManagerVO, SearchContextVO, SearchResultVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -45,9 +45,13 @@ export class OrganisationService {
    * Get list of all managers,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getAllManagers() {
-    return this.http.get(this._serviceBaseUrl + '/managers/all', Util.requestOptions())
-      .map(res => <ManagerInfoVO[]> this.json(res))
+  getFilteredManagers(filter:SearchContextVO) {
+
+    let body = JSON.stringify(filter);
+
+    return this.http.post(this._serviceBaseUrl + '/managers/filtered', body,
+      Util.requestOptions())
+      .map(res => <SearchResultVO<ManagerInfoVO>> this.json(res))
       .catch(this.handleError);
   }
 
@@ -55,8 +59,8 @@ export class OrganisationService {
    * Get manager by email
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getManagerByEmail(email:string) {
-    return this.http.get(this._serviceBaseUrl + '/manager/' + email + '/', Util.requestOptions())
+  getManagerById(id:number) {
+    return this.http.get(this._serviceBaseUrl + '/manager/' + id + '/', Util.requestOptions())
       .map(res => <ManagerVO> this.json(res))
       .catch(this.handleError);
   }
@@ -86,9 +90,9 @@ export class OrganisationService {
    * @param email manager email
    * @returns {Observable<R>}
    */
-  removeManager(email:string) {
+  removeManager(id:number) {
 
-    return this.http.delete(this._serviceBaseUrl + '/manager/' + email + '/', Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/manager/' + id + '/', Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -97,9 +101,9 @@ export class OrganisationService {
    * @param email manager email
    * @returns {Observable<R>}
    */
-  resetPassword(email:string) {
+  resetPassword(id:number) {
 
-    return this.http.post(this._serviceBaseUrl + '/manager/reset/' + email + '/', null, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/manager/reset/' + id + '/', null, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -109,10 +113,10 @@ export class OrganisationService {
    * @param state manager state
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  updateDisabledFlag(manager:string, state:boolean) {
-    LogUtil.debug('ManagementService change manager state for ' + manager + ' to ' + state ? 'online' : 'offline');
+  updateDisabledFlag(id:number, state:boolean) {
+    LogUtil.debug('ManagementService change manager state for ' + id + ' to ' + state ? 'online' : 'offline');
 
-    return this.http.post(this._serviceBaseUrl +  '/manager/offline/' + manager + '/' + state, null, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl +  '/manager/offline/' + id + '/' + state, null, Util.requestOptions())
       .catch(this.handleError);
   }
 

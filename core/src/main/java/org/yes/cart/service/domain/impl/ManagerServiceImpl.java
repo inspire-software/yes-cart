@@ -16,13 +16,15 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ManagerService;
+import org.yes.cart.utils.HQLUtils;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -104,4 +106,68 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
 
     }
 
+
+    private Pair<String, Object[]> findManagerQuery(final boolean count,
+                                                    final String sort,
+                                                    final boolean sortDescending,
+                                                    final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(distinct m.managerId) from ManagerEntity m left join m.shops mse ");
+        } else {
+            hqlCriteria.append("select distinct m from ManagerEntity m left join fetch m.shops mse ");
+        }
+
+        final List shops = currentFilter != null ? currentFilter.remove("shopIds") : null;
+        if (CollectionUtils.isNotEmpty(shops)) {
+            hqlCriteria.append(" where (mse.shop.shopId in (?1) or mse.shop.master.shopId in (?1)) ");
+            params.add(shops);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "m", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by m." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+    /** {@inheritDoc } */
+    @Override
+    public List<Manager> findManagers(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findManagerQuery(false, sort, sortDescending, filter);
+
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /** {@inheritDoc } */
+    @Override
+    public int findManagerCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findManagerQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
+    }
 }

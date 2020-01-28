@@ -78,7 +78,7 @@ public class VoDashboardWidgetServiceImpl implements VoDashboardWidgetService {
     public void updateDashboardSelection(final String dashboard) throws Exception {
         final VoManager manager = this.managementService.getMyself();
         if (manager != null) {
-            this.managementService.updateDashboard(manager.getEmail(), dashboard);
+            this.managementService.updateDashboard(manager.getManagerId(), dashboard);
         }
     }
 

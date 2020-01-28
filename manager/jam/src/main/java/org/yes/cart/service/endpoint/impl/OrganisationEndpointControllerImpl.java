@@ -5,9 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.vo.VoManager;
-import org.yes.cart.domain.vo.VoManagerInfo;
-import org.yes.cart.domain.vo.VoRole;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.OrganisationEndpointController;
 import org.yes.cart.service.vo.VoManagementService;
 import org.yes.cart.service.vo.VoRoleService;
@@ -33,14 +31,14 @@ public class OrganisationEndpointControllerImpl implements OrganisationEndpointC
 
     @Override
     public @ResponseBody
-    List<VoManagerInfo> getManagers() throws Exception {
-        return voManagementService.getManagers();
+    VoSearchResult<VoManagerInfo> getFilteredManagers(@RequestBody final VoSearchContext filter) throws Exception {
+        return voManagementService.getFilteredManagers(filter);
     }
 
     @Override
     public @ResponseBody
-    VoManager getManagerByEmail(@PathVariable("email") final String email) throws Exception {
-        return voManagementService.getManagerByEmail(email);
+    VoManager getManagerByEmail(@PathVariable("id") final long id) throws Exception {
+        return voManagementService.getManagerById(id);
     }
 
     @Override
@@ -57,20 +55,20 @@ public class OrganisationEndpointControllerImpl implements OrganisationEndpointC
 
     @Override
     public @ResponseBody
-    void removeManager(@PathVariable("email") String email) throws Exception {
-        voManagementService.deleteManager(email);
+    void removeManager(@PathVariable("id") final long id) throws Exception {
+        voManagementService.deleteManager(id);
     }
 
     @Override
     public @ResponseBody
-    void resetPassword(@PathVariable("email") String email) throws Exception {
-        voManagementService.resetPassword(email);
+    void resetPassword(@PathVariable("id") final long id) throws Exception {
+        voManagementService.resetPassword(id);
     }
 
     @Override
     public @ResponseBody
-    void updateDisabledFlag(@PathVariable("manager") String manager, @PathVariable("state") boolean disabled) throws Exception {
-        voManagementService.updateDisabledFlag(manager, disabled);
+    void updateDisabledFlag(@PathVariable("id") final long id, @PathVariable("state") boolean disabled) throws Exception {
+        voManagementService.updateDisabledFlag(id, disabled);
     }
 
     @Override

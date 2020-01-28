@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.entity.Shop;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -70,6 +71,34 @@ public interface ManagerService extends GenericService<Manager> {
      * @return list of found managers
      */
     List<Manager> findByEmailPartial(String email);
+
+
+
+    /**
+     * Find managers by given search criteria. Search will be performed using like operation.
+     *
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. firstname, lastname)
+     *
+     * @return list of warehouses, that match search criteria or empty list if nobody found or null if no search criteria provided.
+     */
+    List<Manager> findManagers(int start,
+                               int offset,
+                               String sort,
+                               boolean sortDescending,
+                               Map<String, List> filter);
+
+    /**
+     * Find managers by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. firstname, lastname)
+     *
+     * @return count
+     */
+    int findManagerCount(Map<String, List> filter);
 
 
 }

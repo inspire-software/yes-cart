@@ -16,9 +16,7 @@
 
 package org.yes.cart.service.vo;
 
-import org.yes.cart.domain.vo.VoLicenseAgreement;
-import org.yes.cart.domain.vo.VoManager;
-import org.yes.cart.domain.vo.VoManagerInfo;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -63,18 +61,18 @@ public interface VoManagementService {
      *
      * @throws Exception errors
      */
-    List<VoManagerInfo> getManagers() throws Exception;
+    VoSearchResult<VoManagerInfo> getFilteredManagers(VoSearchContext filter) throws Exception;
 
     /**
-     * Get vo by email.
+     * Get vo by id.
      *
-     * @param email email
+     * @param id ID
      *
      * @return vo
      *
      * @throws Exception errors
      */
-    VoManager getManagerByEmail(String email) throws Exception;
+    VoManager getManagerById(long id) throws Exception;
 
     /**
      * Create new vo
@@ -101,39 +99,39 @@ public interface VoManagementService {
     /**
      * Remove vo.
      *
-     * @param managerEmail manager email
+     * @param id manager ID
      *
      * @throws Exception errors
      */
-    void deleteManager(String managerEmail) throws Exception;
+    void deleteManager(long id) throws Exception;
 
     /**
      * Update dashboard to given vo.
      *
-     * @param email manager email
+     * @param id manager ID
      * @param dashboardWidgets dashboard
      *
      * @throws Exception errors
      */
-    void updateDashboard(String email, String dashboardWidgets) throws Exception;
+    void updateDashboard(long id, String dashboardWidgets) throws Exception;
 
     /**
      * Reset password to given vo.
      *
-     * @param email manager email
+     * @param id manager ID
      *
      * @throws Exception errors
      */
-    void resetPassword(String email) throws Exception;
+    void resetPassword(long id) throws Exception;
 
     /**
      * Update the manager disabled flag.
      *
-     * @param manager manager user name
+     * @param id manager ID
      * @param disabled true if manager account is disabled
      *
      * @throws Exception errors
      */
-    void updateDisabledFlag(String manager, boolean disabled) throws Exception;
+    void updateDisabledFlag(long id, boolean disabled) throws Exception;
 
 }

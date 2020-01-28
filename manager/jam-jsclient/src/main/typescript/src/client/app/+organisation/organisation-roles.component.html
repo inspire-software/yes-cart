@@ -49,7 +49,8 @@
 
 
   <div [hidden]="viewMode !== 'roles'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-roles [roles]="roles" [filter]="roleFilter" (dataSelected)="onRoleSelected($event)"></yc-roles>
+    <yc-roles [roles]="roles" [filter]="roleFilter"
+              (dataSelected)="onRoleSelected($event)"></yc-roles>
   </div>
 
   <div [hidden]="viewMode !== 'role'" class="{{ loading ? 'loading-data' : '' }}">

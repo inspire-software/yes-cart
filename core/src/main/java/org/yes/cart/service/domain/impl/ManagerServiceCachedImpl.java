@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ManagerService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -64,6 +65,16 @@ public class ManagerServiceCachedImpl implements ManagerService {
     @Override
     public List<Manager> findByEmailPartial(final String email) {
         return managerService.findByEmailPartial(email);
+    }
+
+    @Override
+    public List<Manager> findManagers(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return managerService.findManagers(start, offset, sort, sortDescending, filter);
+    }
+
+    @Override
+    public int findManagerCount(final Map<String, List> filter) {
+        return managerService.findManagerCount(filter);
     }
 
     @Override

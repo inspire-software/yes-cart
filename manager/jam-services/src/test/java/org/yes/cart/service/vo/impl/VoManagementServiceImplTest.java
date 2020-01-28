@@ -45,9 +45,20 @@ public class VoManagementServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetManagers() throws Exception {
 
-        final List<VoManagerInfo> managers = voManagementService.getManagers();
+        VoSearchContext ctxNoFilter = new VoSearchContext();
+        ctxNoFilter.setSize(10);
+        List<VoManagerInfo> managers = voManagementService.getFilteredManagers(ctxNoFilter).getItems();
         assertNotNull(managers);
         assertFalse(managers.isEmpty());
+
+
+        VoSearchContext ctxFind = new VoSearchContext();
+        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("test@test.com")));
+        ctxFind.setSize(10);
+        managers = voManagementService.getFilteredManagers(ctxFind).getItems();
+        assertNotNull(managers);
+        assertFalse(managers.isEmpty());
+        assertEquals("test@test.com", managers.get(0).getEmail());
 
     }
 
@@ -70,7 +81,7 @@ public class VoManagementServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(created.getManagerId() > 0L);
         assertFalse(created.getEnabled());
 
-        VoManager afterCreated = voManagementService.getManagerByEmail(created.getEmail());
+        VoManager afterCreated = voManagementService.getManagerById(created.getManagerId());
         assertNotNull(afterCreated);
         assertEquals("FN", afterCreated.getFirstName());
         assertNotNull(afterCreated.getManagerRoles());
@@ -103,9 +114,11 @@ public class VoManagementServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(updated.getManagerCategoryCatalogs());
         assertEquals("102", updated.getManagerCategoryCatalogs().get(0).getCode());
 
-        assertTrue(voManagementService.getManagers().stream().anyMatch(mng -> mng.getManagerId() == updated.getManagerId()));
+        final VoSearchContext ctx = new VoSearchContext();
+        ctx.setSize(100);
+        assertTrue(voManagementService.getFilteredManagers(ctx).getItems().stream().anyMatch(mng -> mng.getManagerId() == updated.getManagerId()));
 
-        voManagementService.updateDisabledFlag(updated.getEmail(), true);
+        voManagementService.updateDisabledFlag(updated.getManagerId(), true);
 
         final VoManager disabled = voManagementService.updateManager(created);
         assertFalse(disabled.getEnabled());

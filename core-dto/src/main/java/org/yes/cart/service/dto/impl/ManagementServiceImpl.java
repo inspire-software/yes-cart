@@ -34,6 +34,8 @@ import org.yes.cart.domain.dto.impl.RoleDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
@@ -124,39 +126,94 @@ public class ManagementServiceImpl implements ManagementService {
     }
 
     /**
-     * Get the list of managers by given filtering criteria.
-     *
-     * @param emailFilter     optional email filter
-     * @param firstNameFilter optional first name filter
-     * @param lastNameFilter  optional last name filter
-     * @return list of managers dto that match given criteria
-     * @throws UnmappedInterfaceException errors
-     * @throws UnableToCreateInstanceException errors
-     *
+     * {@inheritDoc}
      */
     @Override
-    public List<ManagerDTO> getManagers(final String emailFilter,
-                                        final String firstNameFilter,
-                                        final String lastNameFilter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public ManagerDTO getManagerById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Manager> managers = managerService.findByCriteria(
-                " where (?1 is null or lower(e.email) like ?1) and (?2 is null or lower(e.firstname) like ?2) and (?3 is null or lower(e.lastname) like ?3) order by e.email",
-                StringUtils.isNotBlank(emailFilter) ? HQLUtils.criteriaIlikeAnywhere(emailFilter) : null,
-                StringUtils.isNotBlank(firstNameFilter) ? HQLUtils.criteriaIlikeAnywhere(firstNameFilter) : null,
-                StringUtils.isNotBlank(lastNameFilter) ? HQLUtils.criteriaIlikeAnywhere(lastNameFilter) : null
+        final Manager manager = managerService.findById(id);
+
+        return convertManager(manager);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ManagerDTO getManagerByEmail(final String email) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Manager manager = managerService.findSingleByCriteria(
+                " where lower(e.email) like ?1",
+                StringUtils.isNotBlank(email) ? HQLUtils.criteriaIeq(email) : null
         );
 
-        final List<ManagerDTO> managersDTO = new ArrayList<>(managers.size());
+        return convertManager(manager);
+    }
 
+    ManagerDTO convertManager(final Manager manager) {
+        if (manager != null) {
 
+            final ManagerDTO managerDTO = dtoFactory.getByIface(ManagerDTO.class);
+            managerAssembler.assembleDto(managerDTO, manager, adaptersRepository.getAll(), dtoFactory);
+            return managerDTO;
 
+        }
+
+        return null;
+    }
+
+    void fillDTOs(final List<Manager> managers, final List<ManagerDTO> managersDTO) {
         for (Manager manager : managers) {
             final ManagerDTO managerDTO = dtoFactory.getByIface(ManagerDTO.class);
             managerAssembler.assembleDto(managerDTO, manager, adaptersRepository.getAll(), dtoFactory);
             managersDTO.add(managerDTO);
         }
+    }
 
-        return managersDTO;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SearchResult<ManagerDTO> findManagers(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, List> params = filter.reduceParameters("filter", "shopIds");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final List shopIds = params.get("shopIds");
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+
+        if (StringUtils.isNotBlank(textFilter)) {
+
+            final String basic = textFilter;
+
+            SearchContext.JoinMode.OR.setMode(currentFilter);
+            currentFilter.put("email", Collections.singletonList(basic));
+            currentFilter.put("firstname", Collections.singletonList(basic));
+            currentFilter.put("lastname", Collections.singletonList(basic));
+
+        }
+
+        if (CollectionUtils.isNotEmpty(shopIds)) {
+            currentFilter.put("shopIds", shopIds);
+        }
+
+        final int count = managerService.findManagerCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<ManagerDTO> entities = new ArrayList<>();
+            final List<Manager> managers = managerService.findManagers(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(managers, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
+
+
     }
 
     /**

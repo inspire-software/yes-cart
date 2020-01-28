@@ -14,11 +14,9 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ManagerInfoVO } from './../../shared/model/index';
-import { Futures, Future } from './../../shared/event/index';
+import { ManagerInfoVO, Pair, SearchResultVO } from './../../shared/model/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
-
 
 @Component({
   selector: 'yc-managers',
@@ -32,29 +30,26 @@ export class ManagersComponent implements OnInit, OnDestroy {
 
   @Output() dataSelected: EventEmitter<ManagerInfoVO> = new EventEmitter<ManagerInfoVO>();
 
-  private _managers:Array<ManagerInfoVO> = [];
-  private _filter:string;
-  private delayedFiltering:Future;
-  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
+
+  private _managers:SearchResultVO<ManagerInfoVO> = null;
 
   private filteredManagers:Array<ManagerInfoVO>;
 
+  //sorting
+  private sortColumn:string = null;
+  private sortDesc:boolean = false;
+
   //paging
-  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS;
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
   private totalItems:number = 0;
-  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
-  // Must use separate variables (not currentPage) for table since that causes
-  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  private pageStart:number = 0;
-  private pageEnd:number = this.itemsPerPage;
+  private currentPage:number = 1;
 
   constructor() {
     LogUtil.debug('ManagersComponent constructed');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.filterManagers();
-    }, this.delayedFilteringMs);
   }
 
   ngOnInit() {
@@ -62,15 +57,9 @@ export class ManagersComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set managers(managers:Array<ManagerInfoVO>) {
+  set managers(managers:SearchResultVO<ManagerInfoVO>) {
     this._managers = managers;
     this.filterManagers();
-  }
-
-  @Input()
-  set filter(filter:string) {
-    this._filter = filter ? filter.toLowerCase() : null;
-    this.delayedFiltering.delay();
   }
 
   ngOnDestroy() {
@@ -79,22 +68,21 @@ export class ManagersComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(null);
   }
 
-  resetLastPageEnd() {
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
+  onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
     }
   }
 
-  onPageChanged(event:any) {
-    this.pageStart = (event.page - 1) * this.itemsPerPage;
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortSelected.emit(null);
+      } else {  // same column asc, change to desc
+        this.sortSelected.emit({ first: event, second: true });
+      }
+    } else { // different column, start asc sort
+      this.sortSelected.emit({ first: event, second: false });
     }
   }
 
@@ -109,30 +97,28 @@ export class ManagersComponent implements OnInit, OnDestroy {
   }
 
   private filterManagers() {
-    if (this._filter) {
-      this.filteredManagers = this._managers.filter(manager =>
-        manager.email.toLowerCase().indexOf(this._filter) !== -1 ||
-        manager.firstName !== null && manager.firstName.toLowerCase().indexOf(this._filter) !== -1 ||
-        manager.lastName !== null && manager.lastName.toLowerCase().indexOf(this._filter) !== -1 ||
-        manager.companyName1 !== null && manager.companyName1.toLowerCase().indexOf(this._filter) !== -1 ||
-        manager.companyName2 !== null && manager.companyName2.toLowerCase().indexOf(this._filter) !== -1 ||
-        manager.companyDepartment !== null && manager.companyDepartment.toLowerCase().indexOf(this._filter) !== -1
-      );
-      LogUtil.debug('ManagersComponent filterManagers', this._filter);
+
+    LogUtil.debug('ManagersComponent filterManagers', this.filteredManagers);
+
+    if (this._managers != null) {
+
+      this.filteredManagers = this._managers.items != null ? this._managers.items : [];
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = this._managers.searchContext.size;
+      this.totalItems = this._managers.total;
+      this.currentPage = this._managers.searchContext.start + 1;
+      this.sortColumn = this._managers.searchContext.sortBy;
+      this.sortDesc = this._managers.searchContext.sortDesc;
     } else {
-      this.filteredManagers = this._managers;
-      LogUtil.debug('ManagersComponent filterManagers no filter');
-    }
-
-    if (this.filteredManagers === null) {
       this.filteredManagers = [];
+      this.maxSize = Config.UI_TABLE_PAGE_NUMS;
+      this.itemsPerPage = Config.UI_TABLE_PAGE_SIZE;
+      this.totalItems = 0;
+      this.currentPage = 1;
+      this.sortColumn = null;
+      this.sortDesc = false;
     }
 
-    let _total = this.filteredManagers.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
   }
 
 }

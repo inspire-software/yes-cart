@@ -16,8 +16,9 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { OrganisationService, CatalogService, ShopEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ManagerInfoVO, ManagerVO, ShopVO, RoleVO, ProductSupplierCatalogVO } from './../shared/model/index';
-import { FormValidationEvent } from './../shared/event/index';
+import { ManagerInfoVO, ManagerVO, ShopVO, RoleVO, ProductSupplierCatalogVO, Pair, SearchResultVO } from './../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
 
 @Component({
@@ -33,8 +34,11 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
   private viewMode:string = OrganisationManagerComponent.MANAGERS;
 
-  private managers:Array<ManagerInfoVO> = [];
+  private managers:SearchResultVO<ManagerInfoVO>;
   private managerFilter:string;
+
+  private delayedFilteringManager:Future;
+  private delayedFilteringManagerMs:number = Config.UI_INPUT_DELAY;
 
   private selectedManager:ManagerInfoVO;
   private managerEdit:ManagerVO;
@@ -66,6 +70,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
     this.shopAllSub = ShopEventBus.getShopEventBus().shopsUpdated$.subscribe(shopsevt => {
       this.shops = shopsevt;
     });
+    this.managers = this.newSearchResultInstance();
   }
 
   newManagerInstance():ManagerVO {
@@ -77,9 +82,29 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
     };
   }
 
+  newSearchResultInstance():SearchResultVO<ManagerInfoVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: null,
+        sortDesc: false
+      },
+      items: [],
+      total: 0
+    };
+  }
+
   ngOnInit() {
     LogUtil.debug('OrganisationManagerComponent ngOnInit');
     this.onRefreshHandler();
+    let that = this;
+    this.delayedFilteringManager = Futures.perpetual(function() {
+      that.getAllManagers();
+    }, this.delayedFilteringManagerMs);
   }
 
   ngOnDestroy() {
@@ -87,6 +112,12 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
     if (this.shopAllSub) {
       this.shopAllSub.unsubscribe();
     }
+  }
+
+
+  protected onManagerFilterChange(event:any) {
+    this.managers.searchContext.start = 0; // changing filter means we need to start from first page
+    this.delayedFilteringManager.delay();
   }
 
   protected onRefreshHandler() {
@@ -98,6 +129,24 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
         this.getAllManagers();
       }
     }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('LocationsComponent onPageSelected', page);
+    this.managers.searchContext.start = page;
+    this.delayedFilteringManager.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('LocationsComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.managers.searchContext.sortBy = null;
+      this.managers.searchContext.sortDesc = false;
+    } else {
+      this.managers.searchContext.sortBy = sort.first;
+      this.managers.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFilteringManager.delay();
   }
 
   protected onManagerSelected(data:ManagerVO) {
@@ -145,13 +194,13 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   protected onRowEditManager(row:ManagerInfoVO) {
     LogUtil.debug('OrganisationManagerComponent onRowEditManager handler', row);
     this.loading = true;
-    let _sub:any = this._organisationService.getManagerByEmail(row.email).subscribe( manager => {
+    let _sub:any = this._organisationService.getManagerById(row.managerId).subscribe( manager => {
       LogUtil.debug('OrganisationManagerComponent get manager by email', manager);
       this.managerEdit = manager;
       this.changed = false;
       this.validForSave = false;
-      this.loading = false;
       this.viewMode = OrganisationManagerComponent.MANAGER;
+      this.loading = false;
       _sub.unsubscribe();
     });
   }
@@ -173,24 +222,13 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
         this.loading = true;
         let _sub:any = this._organisationService.saveManager(this.managerEdit).subscribe(
             rez => {
-              this.selectedManager = rez;
-              if (this.managerEdit.managerId > 0) {
-                let idx = this.managers.findIndex(rez => rez.managerId == this.managerEdit.managerId);
-                if (idx !== -1) {
-                  this.managers[idx] = rez;
-                  this.managers = this.managers.slice(0, this.managers.length); // reset to propagate changes
-                  LogUtil.debug('OrganisationManagerComponent manager changed', rez);
-                }
-              } else {
-                this.managers.push(rez);
-                LogUtil.debug('OrganisationManagerComponent manager added', rez);
-              }
               this.changed = false;
+              this.selectedManager = rez;
               this.validForSave = false;
-              this.managerEdit = rez;
+              this.managerEdit = null;
               this.loading = false;
-              this.viewMode = OrganisationManagerComponent.MANAGERS;
               _sub.unsubscribe();
+              this.getAllManagers();
           }
         );
       }
@@ -218,16 +256,14 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
         LogUtil.debug('OrganisationManagerComponent onDeleteConfirmationResult', this.selectedManager);
 
         this.loading = true;
-        let _sub:any = this._organisationService.removeManager(this.selectedManager.email).subscribe(res => {
+        let _sub:any = this._organisationService.removeManager(this.selectedManager.managerId).subscribe(res => {
           _sub.unsubscribe();
           LogUtil.debug('OrganisationManagerComponent removeManager', this.selectedManager);
-          let idx = this.managers.indexOf(this.selectedManager);
-          this.managers.splice(idx, 1);
-          this.managers = this.managers.slice(0, this.managers.length); // reset to propagate changes
           this.selectedManager = null;
           this.managerEdit = null;
           this.loading = false;
           this.viewMode = OrganisationManagerComponent.MANAGERS;
+          this.getAllManagers();
         });
       }
     }
@@ -247,7 +283,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
       if (this.selectedManager != null) {
         this.loading = true;
-        let _sub:any = this._organisationService.updateDisabledFlag(this.selectedManager.email, this.selectedManager.enabled).subscribe( done => {
+        let _sub:any = this._organisationService.updateDisabledFlag(this.selectedManager.managerId, this.selectedManager.enabled).subscribe( done => {
           LogUtil.debug('OrganisationManagerComponent updateDisabledFlag', done);
           this.selectedManager.enabled = !this.selectedManager.enabled;
           this.changed = false;
@@ -274,7 +310,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
       if (this.selectedManager != null) {
         this.loading = true;
-        let _sub:any = this._organisationService.resetPassword(this.selectedManager.email).subscribe( done => {
+        let _sub:any = this._organisationService.resetPassword(this.selectedManager.managerId).subscribe( done => {
           LogUtil.debug('OrganisationManagerComponent resetPassword', done);
           this.changed = false;
           this.validForSave = false;
@@ -289,12 +325,20 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   protected onClearFilter() {
 
     this.managerFilter = '';
+    this.getAllManagers();
 
   }
 
   private getAllManagers() {
+
+    LogUtil.debug('OrganisationManagerComponent getAllManagers');
+
     this.loading = true;
-    let _sub:any = this._organisationService.getAllManagers().subscribe( allmanagers => {
+
+    this.managers.searchContext.parameters.filter = [ this.managerFilter ];
+    this.managers.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+    let _sub:any = this._organisationService.getFilteredManagers(this.managers.searchContext).subscribe( allmanagers => {
       LogUtil.debug('OrganisationManagerComponent getAllManagers', allmanagers);
       this.managers = allmanagers;
       this.selectedManager = null;

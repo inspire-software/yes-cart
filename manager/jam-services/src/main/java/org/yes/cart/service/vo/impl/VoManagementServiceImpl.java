@@ -125,28 +125,62 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoManagerInfo> getManagers() throws Exception {
-        final List<ManagerDTO> all = managementService.getManagers(null, null, null);
-        federationFacade.applyFederationFilter(all, ManagerDTO.class);
-        return voAssemblySupport.assembleVos(VoManagerInfo.class, ManagerDTO.class, all);
+    public VoSearchResult<VoManagerInfo> getFilteredManagers(final VoSearchContext filter) throws Exception {
+
+        final VoSearchResult<VoManagerInfo> result = new VoSearchResult<>();
+        final List<VoManagerInfo> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
+
+        final Map<String, List> params = new HashMap<>();
+        if (filter.getParameters() != null) {
+            params.putAll(filter.getParameters());
+        }
+        final Map<String, List> all = filter.getParameters() != null ? new HashMap<>(filter.getParameters()) : new HashMap<>();
+        if (!federationFacade.isCurrentUserSystemAdmin()) {
+            final Set<Long> shopIds = federationFacade.getAccessibleShopIdsByCurrentManager();
+            if (CollectionUtils.isEmpty(shopIds)) {
+                return result;
+            }
+            all.put("shopIds", new ArrayList(shopIds));
+        }
+
+        final SearchContext searchContext = new SearchContext(
+                params,
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "shopIds"
+        );
+
+        final SearchResult<ManagerDTO> batch = managementService.findManagers(searchContext);
+        results.addAll(voAssemblySupport.assembleVos(VoManagerInfo.class, ManagerDTO.class, batch.getItems()));
+        result.setTotal(batch.getTotal());
+
+        return result;
     }
 
     /** {@inheritDoc} */
     @Override
-    public VoManager getManagerByEmail(String email) throws Exception {
-        if (federationFacade.isManageable(email, ManagerDTO.class)) {
-            final VoManager voManager = getByEmailInternal(email);
-            if (voManager != null) {
-                return voManager;
-            }
+    public VoManager getManagerById(final long id) throws Exception {
+        final VoManager voManager = getByIdInternal(id);
+        if (voManager != null && federationFacade.isManageable(voManager.getEmail(), ManagerDTO.class)) {
+            return voManager;
         }
         throw new AccessDeniedException("Access is denied");
     }
 
     protected VoManager getByEmailInternal(final String email) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<ManagerDTO> all = managementService.getManagers(email, null, null);
-        if (CollectionUtils.isNotEmpty(all)) {
-            final ManagerDTO managerDTO = all.get(0);
+        return convertInternal(managementService.getManagerByEmail(email));
+    }
+
+    protected VoManager getByIdInternal(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return convertInternal(managementService.getManagerById(id));
+    }
+
+    protected VoManager convertInternal(final ManagerDTO managerDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (managerDTO != null) {
             final VoManager voManager = voAssemblySupport.assembleVo(
                     VoManager.class, ManagerDTO.class, new VoManager(), managerDTO);
             final List<VoManagerShop> voManagerShops = new ArrayList<>();
@@ -420,7 +454,7 @@ public class VoManagementServiceImpl implements VoManagementService {
                 managementService.revokeCategoryCatalog(voManager.getEmail(), supplierToRevoke);
             }
 
-            return getByEmailInternal(voManager.getEmail());
+            return getByIdInternal(voManager.getManagerId());
             
         } else {
             throw new AccessDeniedException("Access is denied");
@@ -430,9 +464,10 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     /** {@inheritDoc} */
     @Override
-    public void deleteManager(String email) throws Exception {
-        if (federationFacade.isManageable(email, ManagerDTO.class)) {
-            managementService.deleteUser(email);
+    public void deleteManager(long id) throws Exception {
+        final ManagerDTO managerDTO = managementService.getManagerById(id);
+        if (managerDTO != null && federationFacade.isManageable(managerDTO.getEmail(), ManagerDTO.class)) {
+            managementService.deleteUser(managerDTO.getEmail());
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -440,14 +475,15 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     /** {@inheritDoc} */
     @Override
-    public void updateDashboard(final String email, final String dashboardWidgets) throws Exception {
-        if (federationFacade.isManageable(email, ManagerDTO.class)) {
-            managementService.updateDashboard(email, dashboardWidgets);
+    public void updateDashboard(final long id, final String dashboardWidgets) throws Exception {
+        final ManagerDTO managerDTO = managementService.getManagerById(id);
+        if (managerDTO != null && federationFacade.isManageable(managerDTO.getEmail(), ManagerDTO.class)) {
+            managementService.updateDashboard(managerDTO.getEmail(), dashboardWidgets);
         } else {
 
             final VoManager myself = getMyselfInternal();
-            if (myself != null && email != null && email.equals(myself.getEmail())) {
-                managementService.updateDashboard(email, dashboardWidgets);
+            if (myself != null && id == myself.getManagerId()) {
+                managementService.updateDashboard(myself.getEmail(), dashboardWidgets);
             } else {
                 throw new AccessDeniedException("Access is denied");
             }
@@ -457,14 +493,15 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     /** {@inheritDoc} */
     @Override
-    public void resetPassword(String email) throws Exception {
-        if (federationFacade.isManageable(email, ManagerDTO.class)) {
-            managementService.resetPassword(email);
+    public void resetPassword(long id) throws Exception {
+        final ManagerDTO managerDTO = managementService.getManagerById(id);
+        if (managerDTO != null && federationFacade.isManageable(managerDTO.getEmail(), ManagerDTO.class)) {
+            managementService.resetPassword(managerDTO.getEmail());
         } else {
 
             final VoManager myself = getMyselfInternal();
-            if (myself != null && email != null && email.equals(myself.getEmail())) {
-                managementService.resetPassword(email);
+            if (myself != null && id == myself.getManagerId()) {
+                managementService.resetPassword(myself.getEmail());
             } else {
                 throw new AccessDeniedException("Access is denied");
             }
@@ -474,17 +511,21 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     /** {@inheritDoc} */
     @Override
-    public void updateDisabledFlag(String manager, boolean disabled) throws Exception {
-        allowUpdateOnlyBySysAdmin(manager);
-        if (federationFacade.isManageable(manager, ManagerDTO.class)) {
-            if (disabled) {
-                managementService.disableAccount(manager);
-            } else {
-                managementService.enableAccount(manager);
+    public void updateDisabledFlag(long id, boolean disabled) throws Exception {
+        final ManagerDTO managerDTO = managementService.getManagerById(id);
+        if (managerDTO != null) {
+            final String manager = managerDTO.getEmail();
+            allowUpdateOnlyBySysAdmin(manager);
+            if (federationFacade.isManageable(manager, ManagerDTO.class)) {
+                if (disabled) {
+                    managementService.disableAccount(manager);
+                } else {
+                    managementService.enableAccount(manager);
+                }
             }
-        } else {
-            throw new AccessDeniedException("Access is denied");
+            return;
         }
+        throw new AccessDeniedException("Access is denied");
     }
 
     private void allowUpdateOnlyBySysAdmin(String manager) throws UnmappedInterfaceException, UnableToCreateInstanceException {
