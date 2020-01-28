@@ -110,10 +110,11 @@ public interface CustomerService extends GenericService<Customer> {
      *
      * @param email email to check
      * @param shop shop
+     * @param includeDisabled include disabled
      *
      * @return true in case if email unique.
      */
-    boolean isCustomerExists(String email, Shop shop);
+    boolean isCustomerExists(String email, Shop shop, boolean includeDisabled);
 
     /**
      * Check is provided password for customer valid.

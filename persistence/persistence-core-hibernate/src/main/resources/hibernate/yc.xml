@@ -3832,6 +3832,12 @@
         ]]>
     </query>
 
+    <query name="EMAIL.CHECK.ENABLED">
+        <![CDATA[
+            select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.disabled = ?3
+        ]]>
+    </query>
+
     <query name="PASS.CHECK">
         <![CDATA[
             select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.customer.password = ?3 and cse.disabled = ?4

@@ -15,6 +15,7 @@
  */
 package org.yes.cart.service.mail.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -73,7 +74,7 @@ public class TestManagerRegistrationAspect {
 
     private void setPassword(final Manager manager) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
-        final String generatedPassword  = phrazeGenerator.getNextPassPhrase();
+        final String generatedPassword = StringUtils.isBlank(manager.getPassword()) ? phrazeGenerator.getNextPassPhrase() : manager.getPassword();
 
         final String passwordHash = passwordHashHelper.getHash(generatedPassword);
 

@@ -69,7 +69,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     /** {@inheritDoc} */
     @Override
     public boolean isCustomerRegistered(final Shop shop, final String email) {
-        return customerService.isCustomerExists(email, shop);
+        return customerService.isCustomerExists(email, shop, true);
     }
 
     /** {@inheritDoc} */

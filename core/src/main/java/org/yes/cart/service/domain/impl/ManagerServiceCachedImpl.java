@@ -47,6 +47,7 @@ public class ManagerServiceCachedImpl implements ManagerService {
     }
 
     @Override
+    @CacheEvict(value = { "managerService-managerByEmail" }, allEntries = true)
     public Manager create(final Manager manager, final Shop shop, final String ... roles) {
         return managerService.create(manager, shop, roles);
     }

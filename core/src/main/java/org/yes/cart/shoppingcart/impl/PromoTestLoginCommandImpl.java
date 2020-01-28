@@ -75,6 +75,6 @@ public class PromoTestLoginCommandImpl extends LoginCommandImpl {
      */
     @Override
     protected boolean authenticate(final String username, final Shop shop, final String password) {
-        return customerService.isCustomerExists(username, shop);
+        return customerService.isCustomerExists(username, shop, false);
     }
 }

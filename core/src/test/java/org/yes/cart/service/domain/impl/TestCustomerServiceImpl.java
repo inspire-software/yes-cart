@@ -206,12 +206,12 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         Customer customer = getCustomer(getTestName() + "_1");
         customer.setEmail("user1@passvalid.com");
 
-        assertFalse(customerService.isCustomerExists(customer.getEmail(), shop));
+        assertFalse(customerService.isCustomerExists(customer.getEmail(), shop, true));
         assertFalse(customerService.isPasswordValid(customer.getEmail(), shop, "rawpassword"));
 
         customerService.create(customer, shop);
 
-        assertTrue(customerService.isCustomerExists(customer.getEmail(), shop));
+        assertTrue(customerService.isCustomerExists(customer.getEmail(), shop, true));
         assertTrue(customerService.isPasswordValid(customer.getEmail(), shop, "rawpassword"));
 
         getTx().execute(new TransactionCallbackWithoutResult() {
@@ -227,7 +227,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
             }
         });
 
-        assertTrue(customerService.isCustomerExists(customer.getEmail(), shop));
+        assertTrue(customerService.isCustomerExists(customer.getEmail(), shop, true));
         assertFalse("Cannot determine shop with multiple assignments",
                 customerService.isPasswordValid(customer.getEmail(), shop, "rawpassword"));
 

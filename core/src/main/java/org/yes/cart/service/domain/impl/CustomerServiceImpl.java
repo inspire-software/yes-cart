@@ -254,9 +254,14 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     @Override
-    public boolean isCustomerExists(final String email, final Shop shop) {
+    public boolean isCustomerExists(final String email, final Shop shop, final boolean includeDisabled) {
         if (StringUtils.isNotBlank(email)) {
-            final int counts = getGenericDao().findCountByNamedQuery("EMAIL.CHECK", email.toLowerCase(), shop.getShopId());
+            final int counts;
+            if (includeDisabled) {
+                counts = getGenericDao().findCountByNamedQuery("EMAIL.CHECK", email.toLowerCase(), shop.getShopId());
+            } else {
+                counts = getGenericDao().findCountByNamedQuery("EMAIL.CHECK.ENABLED", email.toLowerCase(), shop.getShopId(), Boolean.FALSE);
+            }
             return counts > 0;
         }
         return false;

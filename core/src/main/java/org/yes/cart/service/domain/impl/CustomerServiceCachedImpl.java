@@ -108,8 +108,8 @@ public class CustomerServiceCachedImpl implements CustomerService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isCustomerExists(final String email, final Shop shop) {
-        return customerService.isCustomerExists(email, shop);
+    public boolean isCustomerExists(final String email, final Shop shop, final boolean includeDisabled) {
+        return customerService.isCustomerExists(email, shop, includeDisabled);
     }
 
     /**

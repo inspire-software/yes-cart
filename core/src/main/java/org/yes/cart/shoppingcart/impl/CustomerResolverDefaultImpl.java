@@ -90,7 +90,7 @@ public class CustomerResolverDefaultImpl implements CustomerResolver {
     @Override
     public boolean authenticate(final String email, final Shop shop, final String password) {
 
-        final boolean customerInShop = customerService.isCustomerExists(email, shop);
+        final boolean customerInShop = customerService.isCustomerExists(email, shop, false);
 
         return (customerInShop && customerService.isPasswordValid(email, shop, password)) ||
                 (!customerInShop && customerManagerService.isManagerExists(email, shop) &&
