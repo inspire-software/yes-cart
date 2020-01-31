@@ -3,4 +3,5 @@
  */
 export * from './datetime.component';
 export * from './i18n.component';
+export * from './sort-select.component';
 

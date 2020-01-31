@@ -71,6 +71,8 @@
   "MODAL_BUTTON_ALLFILTERON": "Показать все",
   "MODAL_BUTTON_ALLFILTEROFF": "Отключить показать все",
   "MODAL_BUTTON_HELPFILTER": "Помощь по фильтру",
+  "MODAL_BUTTON_SORT": "Варианты сортировки",
+  "MODAL_BUTTON_HELPSORT": "Для сортировки используйте ссылки заголовков таблицы или нажмите эту кнопку для модального окна с опциями сортировки",
   "MODAL_BUTTON_BACK": "Обратно к списку",
   "MODAL_BUTTON_DETAILS": "Просмотреть сведения о выбранном элементе",
   "MODAL_BUTTON_ENABLE": "Отключено, нажмите, чтобы включить",

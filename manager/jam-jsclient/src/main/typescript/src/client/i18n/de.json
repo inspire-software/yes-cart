@@ -71,6 +71,8 @@
   "MODAL_BUTTON_ALLFILTERON": "Alle anzeigen",
   "MODAL_BUTTON_ALLFILTEROFF": "Alle Anzeigen rückgängig",
   "MODAL_BUTTON_HELPFILTER": "Filter Hilfe",
+  "MODAL_BUTTON_SORT": "Sortieroptionen",
+  "MODAL_BUTTON_HELPSORT": "Verwenden Sie zum Sortieren Tabellenkopf-Links oder klicken Sie auf diese Schaltfläche für ein modales Fenster mit Sortieroptionen",
   "MODAL_BUTTON_BACK": "Zurück zur Liste",
   "MODAL_BUTTON_DETAILS": "Details anzeigen",
   "MODAL_BUTTON_ENABLE": "Deaktiviert, mit Klick aktivieren",

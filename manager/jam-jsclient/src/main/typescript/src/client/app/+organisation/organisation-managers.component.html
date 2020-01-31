@@ -8,6 +8,11 @@
     <div class="col-xs-12 col-md-5 padding-lr-0" [hidden]="viewMode !== 'managers'">
       <form class="width-100">
         <div class="input-group">
+          <span class="input-group-btn">
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ managers.searchContext.sortBy ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
+          </span>
           <input class="form-control filter-input" type="text" name="managerFilter" [(ngModel)]="managerFilter" (ngModelChange)="onManagerFilterChange($event)" autocomplete="off"/>
           <span class="input-group-btn">
             <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
@@ -94,4 +99,14 @@
     {{ 'MODAL_CONFIRM_MSG_PWD_RESET' | translate:{value: deleteValue } }}
   </yc-modal>
 
+  <yc-sort-select #sortSelectModal
+                  [sortColumn]="managers.searchContext.sortBy"
+                  [sortDesc]="managers.searchContext.sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'managerId', messageKey: 'CODE' },
+                      { key: 'email', messageKey: 'CUSTOMER_EMAIL' },
+                      { key: 'firstname', messageKey: 'CUSTOMER_FIRSTNAME' },
+                      { key: 'lastname', messageKey: 'CUSTOMER_LASTNAME' }
+                  ]) "
+                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
 </div>

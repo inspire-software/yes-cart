@@ -71,6 +71,8 @@
   "MODAL_BUTTON_ALLFILTERON": "Show all",
   "MODAL_BUTTON_ALLFILTEROFF": "Disable show all",
   "MODAL_BUTTON_HELPFILTER": "Filter help",
+  "MODAL_BUTTON_SORT": "Sorting options",
+  "MODAL_BUTTON_HELPSORT": "For sorting use table header links or click this button for modal window with sort options",
   "MODAL_BUTTON_BACK": "Back to list",
   "MODAL_BUTTON_DETAILS": "View selected item's details",
   "MODAL_BUTTON_ENABLE": "Disabled, click to enable",

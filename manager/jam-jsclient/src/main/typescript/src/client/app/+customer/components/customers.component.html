@@ -18,7 +18,7 @@
         <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.customerId}}</a></td>
         <td title="{{ 'CUSTOMER_EMAIL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.email}}</a></td>
         <td title="{{ 'CUSTOMER_FULLNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.salutation}} {{row.firstname}}  {{row.middlename}}  {{row.lastname}}</a></td>
-        <td title="{{ 'CUSTOMER_FULLCOMPANY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.companyName1}} {{row.companyName2}}  {{row.companyDepartment}}</a></td>
+        <td title="{{ 'CUSTOMER_FULLCOMPANY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.companyName1}} {{row.companyName2}}  {{row.companyDepartment}}</a>&nbsp;</td>
         <td title="{{ 'TAB_SHOPS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
             <span *ngFor="let customerShop of getShopNames(row)">
               <span class="label {{ customerShop.active ? 'label-info' : 'label-default'}}" title="{{customerShop.name}}">{{customerShop.code}}</span>&nbsp;

@@ -13,8 +13,9 @@
             <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
               <i class="fa fa-question-circle-o"></i>
             </button>
-          </span>
-          <span class="input-group-btn">
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ payments.searchContext.sortBy ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
             <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-square btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
               <i class="fa fa-filter"></i>
             </button>
@@ -68,7 +69,10 @@
       <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
     </div>
 
-    <yc-payments [payments]="payments" (dataSelected)="onPaymentSelected($event)" (pageSelected)="onPageSelected($event)" (sortSelected)="onSortSelected($event)"></yc-payments>
+    <yc-payments [payments]="payments"
+                 (dataSelected)="onPaymentSelected($event)"
+                 (pageSelected)="onPageSelected($event)"
+                 (sortSelected)="onSortSelected($event)"></yc-payments>
   </div>
 
   <yc-modal #transactionDetailsModalDialog
@@ -140,4 +144,16 @@
 
   </yc-modal>
 
+  <yc-sort-select #sortSelectModal
+                  [sortColumn]="payments.searchContext.sortBy"
+                  [sortDesc]="payments.searchContext.sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'createdTimestamp', messageKey: 'PAYMENT_DATE' },
+                      { key: 'orderNumber', messageKey: 'PAYMENT_ORDER' },
+                      { key: 'orderShipment', messageKey: 'PAYMENT_DELIVERY' },
+                      { key: 'transactionOperation', messageKey: 'PAYMENT_OPERATION' },
+                      { key: 'paymentProcessorResult', messageKey: 'PAYMENT_RESULT_CODE' },
+                      { key: 'paymentAmount', messageKey: 'PAYMENT_AMOUNT' }
+                  ]) "
+                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
 </div>

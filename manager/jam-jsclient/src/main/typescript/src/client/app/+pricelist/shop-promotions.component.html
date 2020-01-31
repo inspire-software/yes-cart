@@ -21,8 +21,9 @@
             <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
               <i class="fa fa-question-circle-o"></i>
             </button>
-          </span>
-          <span class="input-group-btn">
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ promotions.searchContext.sortBy ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
             <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-square btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
               <i class="fa fa-filter"></i>
             </button>
@@ -173,4 +174,14 @@
 
   <yc-promotion-test-config #runTestModalDialog (dataConfigured)="onRunTestResult($event)"></yc-promotion-test-config>
 
+  <yc-sort-select #sortSelectModal
+                  [sortColumn]="promotions.searchContext.sortBy"
+                  [sortDesc]="promotions.searchContext.sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'code', messageKey: 'CODE' },
+                      { key: 'name', messageKey: 'NAME' },
+                      { key: 'enabledFrom', messageKey: 'PROMOTION_ENABLED_FROM' },
+                      { key: 'enabledTo', messageKey: 'PROMOTION_ENABLED_TO' }
+                  ]) "
+                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
 </div>

@@ -14,7 +14,7 @@ import { PaginationModule, AccordionModule, TabsModule, BsDatepickerModule } fro
 
 import { ModalComponent } from './modal/index';
 
-import { I18nComponent, DateTimeComponent } from './common/index';
+import { I18nComponent, DateTimeComponent, SortSelectComponent } from './common/index';
 
 import { BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent } from './catalog/index';
 
@@ -55,7 +55,7 @@ import { CurrencySelectComponent, TaxSelectComponent } from './price/index';
   declarations: [
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,
     ModalComponent,
-    I18nComponent, DateTimeComponent,
+    I18nComponent, DateTimeComponent, SortSelectComponent,
     BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
     ContentSelectComponent, ContentMinSelectComponent, MailPreviewComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
@@ -74,7 +74,7 @@ import { CurrencySelectComponent, TaxSelectComponent } from './price/index';
   exports: [
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,
     ModalComponent,
-    I18nComponent, DateTimeComponent,
+    I18nComponent, DateTimeComponent, SortSelectComponent,
     BrandSelectComponent, CategorySelectComponent, CategoryMinSelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
     ContentSelectComponent, ContentMinSelectComponent, MailPreviewComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,

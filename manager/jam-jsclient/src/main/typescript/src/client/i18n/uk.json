@@ -71,6 +71,8 @@
   "MODAL_BUTTON_ALLFILTERON": "Показати все",
   "MODAL_BUTTON_ALLFILTEROFF": "Відключити показати все",
   "MODAL_BUTTON_HELPFILTER": "Допомога для фільтру",
+  "MODAL_BUTTON_SORT": "Опції сортування",
+  "MODAL_BUTTON_HELPSORT": "Для сортування використовуйте посилання заголовків таблиці або натисніть цю кнопку для модального вікна з опціями сортування",
   "MODAL_BUTTON_BACK": "Назад до списку",
   "MODAL_BUTTON_DETAILS": "Переглянути інформацію про вибраний елемент",
   "MODAL_BUTTON_ENABLE": "Відключено, натисніть, щоб включити",

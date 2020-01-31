@@ -13,8 +13,9 @@
             <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
               <i class="fa fa-question-circle-o"></i>
             </button>
-          </span>
-          <span class="input-group-btn">
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ products.searchContext.sortBy ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
             <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-square btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
               <i class="fa fa-filter"></i>
             </button>
@@ -112,4 +113,13 @@
   <yc-product-type-select #productTypeSelectComponent
                           (dataSelected)="onProductTypeSelected($event)"></yc-product-type-select>
 
+  <yc-sort-select #sortSelectModal
+                  [sortColumn]="products.searchContext.sortBy"
+                  [sortDesc]="products.searchContext.sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'code', messageKey: 'CODE' },
+                      { key: 'manufacturerCode', messageKey: 'PRODUCT_MANUFACTURER_CODE' },
+                      { key: 'name', messageKey: 'NAME' }
+                  ]) "
+                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
 </div>

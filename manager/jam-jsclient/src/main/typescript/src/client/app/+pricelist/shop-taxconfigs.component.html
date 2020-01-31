@@ -21,8 +21,9 @@
             <button type="button" (click)="onSearchHelpToggleTaxConfig()" class="btn {{ searchHelpTaxConfigShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
               <i class="fa fa-question-circle-o"></i>
             </button>
-          </span>
-          <span class="input-group-btn">
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ taxconfigs.searchContext.sortBy ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
             <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : 'btn-default' }} btn-square btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
               <i class="fa fa-filter"></i>
             </button>
@@ -239,4 +240,13 @@
                  [selectedCurrency]="selectedCurrency"
                  (dataSelected)="onTaxSelected($event)"></yc-tax-select>
 
+  <yc-sort-select #sortSelectModal
+                  [sortColumn]="taxconfigs.searchContext.sortBy"
+                  [sortDesc]="taxconfigs.searchContext.sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'countryCode', messageKey: 'LOCATION_COUNTRY' },
+                      { key: 'stateCode', messageKey: 'LOCATION_STATE_CODE' },
+                      { key: 'productCode', messageKey: 'SKU' }
+                  ]) "
+                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
 </div>

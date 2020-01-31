@@ -22,6 +22,9 @@
             <button type="button" (click)="onSearchHelpToggleTax()" class="btn {{ searchHelpTaxShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
               <i class="fa fa-question-circle-o"></i>
             </button>
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ taxes.searchContext.sortBy ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
           </span>
           <input class="form-control filter-input" type="text" name="taxesFilter" [(ngModel)]="taxesFilter" (ngModelChange)="onTaxFilterChange($event)" autocomplete="off"/>
           <span class="input-group-btn">
@@ -211,4 +214,13 @@
 
   <yc-promotion-test-config #runTestModalDialog (dataConfigured)="onRunTestResult($event)"></yc-promotion-test-config>
 
+  <yc-sort-select #sortSelectModal
+                  [sortColumn]="taxes.searchContext.sortBy"
+                  [sortDesc]="taxes.searchContext.sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'code', messageKey: 'CODE' },
+                      { key: 'taxRate', messageKey: 'TAX_RATE' },
+                      { key: 'exclusiveOfPrice', messageKey: 'TAX_TYPE' }
+                  ]) "
+                  (sortSelected)="onSortSelected($event)"></yc-sort-select>
 </div>
