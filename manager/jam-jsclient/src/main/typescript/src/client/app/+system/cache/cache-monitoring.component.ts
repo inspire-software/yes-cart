@@ -320,10 +320,12 @@ export class CacheMonitoringComponent implements OnInit {
   }
 
   private filterCaches() {
+
+    let _sorted = false;
+
     if (this.cacheFilter) {
 
       let _filter = this.cacheFilter.toLowerCase();
-      let _sorted = false;
 
       if (_filter.indexOf('#') == 0) {
 
