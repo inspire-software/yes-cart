@@ -46,8 +46,8 @@
         <table class="table-bordered table-striped table-condensed cf">
           <thead class="cf">
           <tr>
-            <th>{{ 'CLUSTER_ID' | translate }}</th>
-            <th>{{ 'CLUSTER_TYPE' | translate }}</th>
+            <th><a class="js-click" (click)="onSortClick('id')">{{ 'CLUSTER_ID' | translate }} <span [hidden]="sortColumn != 'id'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th><a class="js-click" (click)="onSortClick('nodeType')">{{ 'CLUSTER_TYPE' | translate }} <span [hidden]="sortColumn != 'nodeType'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
           </tr>
           </thead>
           <tbody>

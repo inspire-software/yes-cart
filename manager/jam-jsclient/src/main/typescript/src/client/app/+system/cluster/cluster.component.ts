@@ -48,6 +48,10 @@ export class ClusterComponent implements OnInit {
   private delayedModuleFiltering:Future;
   private delayedModuleFilteringMs:number = Config.UI_INPUT_DELAY;
 
+  //sorting
+  private sortColumn:string = 'id';
+  private sortDesc:boolean = false;
+
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
@@ -178,6 +182,22 @@ export class ClusterComponent implements OnInit {
     }
   }
 
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'id';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterCluster();
+  }
+
   private getClusterInfo() {
     LogUtil.debug('ClusterComponent get cluster');
 
@@ -256,6 +276,15 @@ export class ClusterComponent implements OnInit {
     if (this.filteredCluster === null) {
       this.filteredCluster = [];
     }
+
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    let _sort = function(a:any, b:any):number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
+
+    this.filteredCluster.sort(_sort);
 
     let _total = this.filteredCluster.length;
     this.totalItems = _total;

@@ -64,20 +64,18 @@
         <table class="table-bordered table-striped table-condensed cf">
           <thead class="cf">
           <tr>
-            <th>{{ 'CACHE_NODE' | translate }}</th>
-            <th>{{ 'CACHE_NAME' | translate }}</th>
+            <th><a class="js-click" (click)="onSortClick('cacheName')">{{ 'CACHE_NAME' | translate }} <span [hidden]="sortColumn != 'cacheName'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
             <th>{{ 'CACHE_SPEC' | translate }}</th>
-            <th>{{ 'CACHE_SIZE' | translate }}</th>
-            <th>{{ 'CACHE_HITS' | translate }}</th>
-            <th>{{ 'CACHE_SIZE_MEM' | translate }}</th>
-            <th>{{ 'CACHE_SIZE_DISK' | translate }}</th>
+            <th><a class="js-click" (click)="onSortClick('cacheSize')">{{ 'CACHE_SIZE' | translate }} <span [hidden]="sortColumn != 'cacheSize'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th><a class="js-click" (click)="onSortClick('hits')">{{ 'CACHE_HITS' | translate }} <span [hidden]="sortColumn != 'hits'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th><a class="js-click" (click)="onSortClick('inMemorySize')">{{ 'CACHE_SIZE_MEM' | translate }} <span [hidden]="sortColumn != 'inMemorySize'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th><a class="js-click" (click)="onSortClick('diskStoreSize')">{{ 'CACHE_SIZE_DISK' | translate }} <span [hidden]="sortColumn != 'diskStoreSize'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let row of filteredCaches; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
             <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-              <td title="{{ 'CACHE_NODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)" title="{{row.nodeUri ? row.nodeUri : row.nodeId}}">{{row.nodeId}} <i class="fa fa-info-circle"></i></a></td>
-              <td title="{{ 'CACHE_NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.cacheName}}</a></td>
+              <td title="{{ 'CACHE_NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span class="label label-info" title="{{row.nodeUri ? row.nodeUri : row.nodeId}}">{{row.nodeId}}</span> {{row.cacheName}}</a></td>
               <td title="{{ 'CACHE_SPEC' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.memoryStoreEvictionPolicy}} {{row.eternal ? ('CACHE_ETERNAL' | translate) : getTTL(row) }}</a></td>
               <td title="{{ 'CACHE_SIZE' | translate }}" class="{{ row.cacheSize < row.inMemorySizeMax ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.cacheSize}}/{{row.inMemorySizeMax}}</a></td>
               <td title="{{ 'CACHE_HITS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getHitsAndMissed(row)}}</a></td>

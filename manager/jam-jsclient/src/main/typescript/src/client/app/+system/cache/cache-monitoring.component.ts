@@ -39,6 +39,11 @@ export class CacheMonitoringComponent implements OnInit {
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
+
+  //sorting
+  private sortColumn:string = 'cacheName';
+  private sortDesc:boolean = false;
+
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
@@ -190,6 +195,22 @@ export class CacheMonitoringComponent implements OnInit {
     }
   }
 
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'cacheName';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterCaches();
+  }
+
   protected getHitsAndMissed(row:CacheInfoVO):string {
     if (!row.disabled) {
       if (row.hits <= 0) {
@@ -302,6 +323,7 @@ export class CacheMonitoringComponent implements OnInit {
     if (this.cacheFilter) {
 
       let _filter = this.cacheFilter.toLowerCase();
+      let _sorted = false;
 
       if (_filter.indexOf('#') == 0) {
 
@@ -322,6 +344,7 @@ export class CacheMonitoringComponent implements OnInit {
         }
 
         this.filteredCaches = this.caches.sort((n1,n2) => n2.cacheSize - n1.cacheSize).slice(0, _top);
+        _sorted = true;
 
       } else if (_filter.indexOf('!') == 0) {
 
@@ -331,6 +354,7 @@ export class CacheMonitoringComponent implements OnInit {
         }
 
         this.filteredCaches = this.caches.sort((n1,n2) => (n2.cacheSize / n2.inMemorySizeMax) - (n1.cacheSize / n1.inMemorySizeMax)).slice(0, _hot);
+        _sorted = true;
 
       } else if (_filter.indexOf('$') == 0) {
 
@@ -340,6 +364,7 @@ export class CacheMonitoringComponent implements OnInit {
         }
 
         this.filteredCaches = this.caches.sort((n1,n2) => (n2.calculateInMemorySize - n1.calculateInMemorySize)).slice(0, _heavy);
+        _sorted = true;
 
       } else {
         this.filteredCaches = this.caches.filter(cache =>
@@ -355,6 +380,17 @@ export class CacheMonitoringComponent implements OnInit {
 
     if (this.filteredCaches === null) {
       this.filteredCaches = [];
+    }
+
+    if (!_sorted) {
+      let _sortProp = this.sortColumn;
+      let _sortOrder = this.sortDesc ? -1 : 1;
+
+      let _sort = function (a: any, b: any): number {
+        return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+      };
+
+      this.filteredCaches.sort(_sort);
     }
 
     let _total = this.filteredCaches.length;
