@@ -612,6 +612,11 @@ table.dataTable thead .sorting:after {
   min-height: 110px;
 }
 
+pre.line-breaks {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 /* **************** LOADING SCREEN ********************************************** */
 
 
