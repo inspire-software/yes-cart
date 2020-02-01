@@ -1717,7 +1717,10 @@
         <constructor-arg index="0" value="{{firstname}} {{middlename}} {{lastname}}"/>
     </bean>
 
-    <bean id="noopOrderAssemblerPostProcessor" class="org.yes.cart.service.order.impl.NoopOrderAssemblerPostProcessorImpl">
+    <bean id="noopOrderAssemblerPostProcessor" class="org.yes.cart.service.order.impl.ConfiguredOrderAssemblerPostProcessor">
+        <property name="processor">
+            <bean class="org.yes.cart.service.order.impl.NoopOrderAssemblerPostProcessorImpl"/>
+        </property>
         <property name="cfgContext">
             <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
                 <property name="functionalArea" value="checkout"/>

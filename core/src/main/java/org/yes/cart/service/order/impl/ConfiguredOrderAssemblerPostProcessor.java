@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.yes.cart.config.Configuration;
+import org.yes.cart.config.ConfigurationContext;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.order.OrderAssemblerPostProcessor;
 import org.yes.cart.service.order.OrderAssemblyException;
@@ -23,18 +25,32 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 
 /**
  * User: denispavlov
- * Date: 26/01/2020
- * Time: 22:37
+ * Date: 01/02/2020
+ * Time: 16:38
  */
-public class NoopOrderAssemblerPostProcessorImpl implements OrderAssemblerPostProcessor {
+public class ConfiguredOrderAssemblerPostProcessor implements OrderAssemblerPostProcessor, Configuration {
+
+    private OrderAssemblerPostProcessor processor;
+
+    private ConfigurationContext cfgContext;
 
     /** {@inheritDoc} */
     @Override
-    public void postProcess(final CustomerOrder customerOrder,
-                            final ShoppingCart shoppingCart,
-                            final String orderNumber,
-                            final boolean temp) throws OrderAssemblyException {
-        // DO NOTHING
+    public void postProcess(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final String orderNumber, final boolean temp) throws OrderAssemblyException {
+        processor.postProcess(customerOrder, shoppingCart, orderNumber, temp);
     }
 
+    public void setProcessor(final OrderAssemblerPostProcessor processor) {
+        this.processor = processor;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ConfigurationContext getCfgContext() {
+        return cfgContext;
+    }
+
+    public void setCfgContext(final ConfigurationContext cfgContext) {
+        this.cfgContext = cfgContext;
+    }
 }
