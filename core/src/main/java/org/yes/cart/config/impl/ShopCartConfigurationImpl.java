@@ -52,7 +52,7 @@ public class ShopCartConfigurationImpl extends AbstractShopConfigurationImpl {
         customise(shop.getCode(), shop.getCode(), "orderAssemblerPostProcessor", OrderAssemblerPostProcessor.class, postProcessor);
         if (CollectionUtils.isNotEmpty(subs)) {
             for (final Shop sub : subs) {
-                customise(shop.getCode(), sub.getCode(), "orderAssemblerPostProcessor", OrderAssemblerPostProcessor.class, postProcessor);
+                customise(sub.getCode(), sub.getCode(), "orderAssemblerPostProcessor", OrderAssemblerPostProcessor.class, postProcessor);
             }
         }
     }
