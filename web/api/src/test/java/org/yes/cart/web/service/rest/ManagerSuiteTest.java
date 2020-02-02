@@ -35,6 +35,7 @@ import org.yes.cart.domain.ro.SearchRO;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.UUID;
@@ -141,16 +142,33 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final SearchRO search = new SearchRO();
-        search.setParameters(Collections.singletonMap("any", Collections.singletonList("reg@test.com")));
+        final SearchRO searchByEmail = new SearchRO();
+        searchByEmail.setParameters(Collections.singletonMap("any", Collections.singletonList("reg@test.com")));
 
-        final byte[] body = toJsonBytes(search);
+        final byte[] bodyByEmail = toJsonBytes(searchByEmail);
 
         mockMvc.perform(post("/management/customers/search")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .content(body)
+                .content(bodyByEmail)
+                .header("yc", uuid))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("reg@test.com")))
+            .andExpect(content().string(StringContains.containsString("John")))
+            .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+        final SearchRO searchByFullName = new SearchRO();
+        searchByFullName.setParameters(Collections.singletonMap("any", Arrays.asList("john", "doe")));
+
+        final byte[] bodyFullName = toJsonBytes(searchByFullName);
+
+        mockMvc.perform(post("/management/customers/search")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .content(bodyFullName)
                 .header("yc", uuid))
             .andDo(print())
             .andExpect(status().isOk())
