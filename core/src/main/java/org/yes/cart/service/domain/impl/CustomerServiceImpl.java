@@ -202,6 +202,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             params.add(disabled);
         }
 
+        final List blacklist = currentFilter != null ? currentFilter.remove("blacklist") : null;
+        HQLUtils.appendBlacklistCriteria(hqlCriteria, params, "c", blacklist);
+
         HQLUtils.appendFilterCriteria(hqlCriteria, params, "c", currentFilter);
 
         if (StringUtils.isNotBlank(sort)) {

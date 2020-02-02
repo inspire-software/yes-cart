@@ -187,6 +187,7 @@ public class HQLUtilsTest {
 
     }
 
+
     private void assertWithFilter(final Map<String, List> filter,
                                   final String expected,
                                   final Object ... expectedParams) {
@@ -211,4 +212,74 @@ public class HQLUtilsTest {
 
 
     }
+
+
+    @Test
+    public void testAppendBlacklistCriteria() throws Exception {
+
+        final List<Pair<String, List>> blacklist = new ArrayList<>();
+
+        assertWithBlacklist(null, null, "select from XEntity e ");
+
+        blacklist.add(new Pair<>("prop1", Collections.singletonList("Val1")));
+        blacklist.add(new Pair<>("prop2", null));
+        blacklist.add(new Pair<>("prop3", Collections.singletonList("")));
+
+        assertWithBlacklist(blacklist, null,
+                "select from XEntity e  where (\n ( lower(e.prop1)  not like ?1) \n)",
+                "%val1%");
+
+        blacklist.clear();
+
+        blacklist.add(new Pair<>("prop1", Arrays.asList("Val1", "Val2")));
+
+        assertWithBlacklist(blacklist, null,
+                "select from XEntity e  where (\n ( lower(e.prop1)  not like ?1) \n and  ( lower(e.prop1)  not like ?2) \n)",
+                "%val1%", "%val2%");
+
+        final Map<String, List> filter = new LinkedHashMap<>();
+
+        assertWithFilter(null, "select from XEntity e ");
+
+        filter.put("prop1", Collections.singletonList("Val1"));
+        filter.put("prop2", null);
+        filter.put("prop3", Collections.singletonList(""));
+
+        assertWithBlacklist(blacklist, filter,
+                "select from XEntity e  where (\n ( lower(e.prop1)  like ?1) \n) and (\n ( lower(e.prop1)  not like ?2) \n and  ( lower(e.prop1)  not like ?3) \n)",
+                "%val1%", "%val1%", "%val2%");
+
+
+    }
+
+
+    private void assertWithBlacklist(final List<Pair<String, List>> blacklist,
+                                     final Map<String, List> filter,
+                                     final String expected,
+                                     final Object ... expectedParams) {
+
+        final StringBuilder criteria = new StringBuilder("select from XEntity e ");
+        final List<Object> params = new ArrayList<>();
+
+        if (filter != null) {
+            HQLUtils.appendFilterCriteria(criteria, params, "e", filter);
+        }
+        HQLUtils.appendBlacklistCriteria(criteria, params, "e", blacklist);
+
+        assertEquals(expected, criteria.toString());
+
+        final int expectedParamCount = expectedParams != null ? expectedParams.length : 0;
+
+        for (int i = 0; i < expectedParamCount; i++) {
+
+            assertTrue("Unexpected param at index " + i, params.size() - 1 >= i);
+            assertEquals("Parameters does not match at index " + i, params.get(i), expectedParams[i]);
+
+        }
+
+        assertEquals(expectedParamCount, params.size());
+
+
+    }
+
 }

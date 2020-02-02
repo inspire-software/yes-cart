@@ -132,9 +132,84 @@ public final class HQLUtils {
     }
 
     /**
+     * Helper method for generic dynamic appending of "not contains" using blacklisting filter.
+     *
+     * @param toAppendTo    query to 'and' criteria to
+     * @param params        parameter value for criteria
+     * @param selector      property selector (e.g. 'cse.customer')
+     * @param blacklist     filter selection for this criteria clause
+     */
+    public static void appendBlacklistCriteria(final StringBuilder toAppendTo,
+                                               final List<Object> params,
+                                               final String selector,
+                                               final List<Pair<String, List>> blacklist) {
+
+        if (blacklist != null) {
+
+            final String join = " and ";
+
+            boolean hasOneCriteria = false;
+
+            for (final Pair<String, List> props : blacklist) {
+
+                final List prop = props.getSecond();
+
+                if (CollectionUtils.isNotEmpty(prop)) {
+
+                    for (final Object val : prop) {
+
+                        String matchProp;
+                        String matchMode = " not like ";
+                        Object matchValue;
+                        if (val instanceof String) {
+
+                            if (StringUtils.isBlank((String) val)) {
+                                continue; // skip empty values
+                            }
+                            matchProp = " lower(" + selector + "." + props.getFirst() + ") ";
+                            matchValue = HQLUtils.criteriaIlikeAnywhere((String) val);
+
+                        } else {
+
+                            matchProp = " " + selector + "." + props.getFirst() + " ";
+                            matchValue = val;
+
+                        }
+
+                        final int pIdx = params.size() + 1;
+
+                        if (hasOneCriteria) {
+                            toAppendTo.append(join);
+                        } else {
+                            if (pIdx == 1) {
+                                toAppendTo.append(" where (\n");
+                            } else {
+                                toAppendTo.append(" and (\n");
+                            }
+                        }
+
+                        toAppendTo.append(" (" + matchProp + matchMode + "?" + pIdx + ") \n");
+                        params.add(matchValue);
+
+                        hasOneCriteria = true;
+
+                    }
+                }
+            }
+
+            if (hasOneCriteria) {
+                toAppendTo.append(")");
+            }
+
+        }
+
+    }
+
+    /**
      * Helper method for generic dynamic appending of criteria using filter object.
      *
      * @param toAppendTo    query to 'and' criteria to
+     * @param params        parameter value for criteria
      * @param selector      property selector (e.g. 'cse.customer')
      * @param filter        filter selection for this criteria clause
      */

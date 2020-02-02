@@ -18,6 +18,8 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Customer;
@@ -30,10 +32,9 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.support.service.ManagerServiceFacade;
 import org.yes.cart.web.support.utils.HttpUtil;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -41,6 +42,8 @@ import java.util.Map;
  * Time: 11:03
  */
 public class ManagerServiceFacadeImpl implements ManagerServiceFacade {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ManagerServiceFacadeImpl.class);
 
     private final CustomerService customerService;
     private final ShopService shopService;
@@ -119,14 +122,45 @@ public class ManagerServiceFacadeImpl implements ManagerServiceFacade {
         final int pageSize = Math.min(searchContext.getSize(), 50);
         final int startIndex = searchContext.getStart() * pageSize;
 
-        final int count = customerService.findCustomerCount(filter);
-        if (count > startIndex) {
+        final Shop shop = shopService.getById(shopId);
+        if (shop != null) {
 
-            final List<Customer> customer = customerService.findCustomers(startIndex, pageSize, searchContext.getSortBy(), searchContext.isSortDesc(), filter);
-            return new SearchResult<>(searchContext, customer, count);
+            applyBlacklistingFilter(shop, filter);
 
+            final int count = customerService.findCustomerCount(filter);
+            if (count > startIndex) {
+
+                final List<Customer> customer = customerService.findCustomers(startIndex, pageSize, searchContext.getSortBy(), searchContext.isSortDesc(), filter);
+                return new SearchResult<>(searchContext, customer, count);
+
+            }
         }
-        return new SearchResult<>(searchContext, Collections.emptyList(), count);
+        return new SearchResult<>(searchContext, Collections.emptyList(), 0);
+    }
+
+    private void applyBlacklistingFilter(final Shop shop, final Map<String, List> filter) {
+
+        final String blacklist = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_LOGIN_MANAGER_CUSTOMER_BLACKLIST);
+        Properties properties = new Properties();
+        if (StringUtils.isNotBlank(blacklist)) {
+            try {
+                properties.load(new StringReader(blacklist));
+            } catch (IOException e) {
+                LOG.error("Error loading SHOP_SF_LOGIN_MANAGER_CUSTOMER_BLACKLIST for {}", shop.getCode());
+            }
+        }
+        if (properties.isEmpty()) {
+            filter.put("blacklist", Collections.singletonList(new Pair<String, List>("email", Collections.singletonList("#"))));
+        } else {
+            final List<Pair<String, List>> all = new ArrayList<>();
+            for (final Object keyItem : properties.keySet()) {
+                final String key = (String) keyItem;
+                final String value = properties.getProperty(key);
+                final String[] notContains = StringUtils.split(StringUtils.trim(value), ',');
+                all.add(new Pair<>(key, Arrays.asList(notContains)));
+            }
+            filter.put("blacklist", all);
+        }
     }
 
 

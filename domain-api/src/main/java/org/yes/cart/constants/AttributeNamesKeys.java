@@ -777,6 +777,11 @@ public interface AttributeNamesKeys {
          */
         String SHOP_SF_LOGIN_MANAGER = "SHOP_SF_LOGIN_MANAGER";
 
+        /**
+         * Blacklist customer accounts for login on behalf.
+         */
+        String SHOP_SF_LOGIN_MANAGER_CUSTOMER_BLACKLIST = "SHOP_SF_LOGIN_MANAGER_CUSTOMER_BLACKLIST";
+
     }
 
     interface Brand {

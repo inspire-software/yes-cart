@@ -25,6 +25,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
@@ -115,6 +116,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         customerService.create(customer, shopService.getById(10L));
 
         final List<Long> shop10 = Collections.singletonList(10L);
+        final List<Pair<String, List>> blacklist = Collections.singletonList(new Pair<>("email", Collections.singletonList("@findpaginateddomain.com")));
 
 
         List<Customer> list;
@@ -143,6 +145,13 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         assertEquals(1, list.size());
         list = customerService.findCustomers(1, 1, "firstname", false, filterAny);
         assertEquals(1, list.size());
+
+        final Map<String, List> filterAnyWithBlacklist = new HashMap<>(filterAny);
+        filterAnyWithBlacklist.put("blacklist", blacklist);
+        count = customerService.findCustomerCount(filterAnyWithBlacklist);
+        assertEquals(0, count);
+        list = customerService.findCustomers(0, 1, "firstname", false, filterAnyWithBlacklist);
+        assertEquals(0, list.size());
 
 
         final Map<String, List> filterSpecific = new HashMap<>();
