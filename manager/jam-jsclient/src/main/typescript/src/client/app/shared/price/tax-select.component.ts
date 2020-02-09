@@ -29,11 +29,11 @@ import { LogUtil } from './../log/index';
 
 export class TaxSelectComponent implements OnInit, OnDestroy {
 
+  @Output() dataSelected: EventEmitter<FormValidationEvent<TaxVO>> = new EventEmitter<FormValidationEvent<TaxVO>>();
+
   private _selectedShopCode: string;
 
   private _selectedCurrency: string;
-
-  @Output() dataSelected: EventEmitter<FormValidationEvent<TaxVO>> = new EventEmitter<FormValidationEvent<TaxVO>>();
 
   private changed:boolean = false;
 
