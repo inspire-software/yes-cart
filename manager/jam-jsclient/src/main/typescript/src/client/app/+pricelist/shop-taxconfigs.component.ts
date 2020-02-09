@@ -505,6 +505,8 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
               _sub.unsubscribe();
               LogUtil.debug('ShopTaxConfigsComponent config changed', rez);
               this.selectedTaxconfig = rez;
+              this.taxconfigEdit = null;
+              this.validForSaveTaxconfig = false;
               this.loading = false;
               this.getFilteredTaxConfig();
           }
@@ -580,6 +582,7 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
         LogUtil.debug('ShopTaxConfigsComponent getFilteredTaxConfig', alltaxes);
         this.taxconfigs = alltaxes;
         this.selectedTaxconfig = null;
+        this.taxconfigEdit = null;
         this.validForSaveTaxconfig = true;
         this.viewMode = ShopTaxConfigsComponent.CONFIGS;
         _sub.unsubscribe();
@@ -588,6 +591,7 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
     } else {
       this.taxconfigs = this.newSearchResultInstance();
       this.selectedTaxconfig = null;
+      this.taxconfigEdit = null;
       this.validForSaveTaxconfig = true;
       this.viewMode = ShopTaxConfigsComponent.CONFIGS;
     }

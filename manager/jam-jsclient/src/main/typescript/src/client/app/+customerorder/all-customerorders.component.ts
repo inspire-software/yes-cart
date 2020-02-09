@@ -136,8 +136,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         },
         start: 0,
         size: Config.UI_TABLE_PAGE_SIZE,
-        sortBy: null,
-        sortDesc: false
+        sortBy: 'orderTimestamp',
+        sortDesc: true
       },
       items: [],
       total: 0
@@ -443,7 +443,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
       this.customerorderEdit = customerorder;
-      this.selectedCustomerorder = customerorder;
+      // this.selectedCustomerorder = customerorder;
+      this.onCustomerorderSelected(customerorder);
 
       this.changed = false;
       this.validForSave = false;
@@ -563,9 +564,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
                   return order.customerorderId === customerorder.customerorderId;
                 });
 
-                this.selectedCustomerorder = this.customerorders.items[idx != -1 ? idx : 0];
+                if (idx != -1) {
+                  this.customerorders.items[idx] = customerorder;
+                }
                 this.customerorders = this.customerorders; // hack to retrigger change
-                this.onCustomerorderSelected(this.selectedCustomerorder);
+                this.onCustomerorderSelected(customerorder);
 
                 this.changed = false;
                 this.validForSave = false;
@@ -601,9 +604,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
                   return order.customerorderId === customerorder.customerorderId;
                 });
 
-                this.selectedCustomerorder = this.customerorders.items[idx != -1 ? idx : 0];
+                if (idx != -1) {
+                  this.customerorders.items[idx] = customerorder;
+                }
                 this.customerorders = this.customerorders; // hack to retrigger change
-                this.onCustomerorderSelected(this.selectedCustomerorder);
+                this.onCustomerorderSelected(customerorder);
 
                 let delivery:CustomerOrderDeliveryInfoVO = null;
                 if (this.selectedCustomerorder != null && this.selectedCustomerdelivery != null) {
@@ -764,9 +769,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
           this.customerorders.items.splice(0, 0, exportedOrder);
           idx = 0;
         }
-        this.selectedCustomerorder = this.customerorders.items[idx];
         this.customerorders = this.customerorders; // hack to retrigger change
-        this.onCustomerorderSelected(this.selectedCustomerorder);
+        this.onCustomerorderSelected(exportedOrder);
 
         _sub.unsubscribe();
         this.loading = false;

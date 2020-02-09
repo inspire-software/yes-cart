@@ -846,6 +846,21 @@ public interface AttributeNamesKeys {
         String CUSTOMER_PHONE = "CUSTOMER_PHONE";
 
         /**
+         * Customer date of birth year.
+         */
+        String CUSTOMER_DOB_YEAR = "CUSTOMER_DOB_YEAR";
+
+        /**
+         * Customer date of birth year.
+         */
+        String CUSTOMER_DOB_MONTH = "CUSTOMER_DOB_MONTH";
+
+        /**
+         * Customer date of birth year.
+         */
+        String CUSTOMER_DOB_DAY = "CUSTOMER_DOB_DAY";
+
+        /**
          * Customer has opted in for marketing contact.
          */
         String MARKETING_OPT_IN = "MARKETING_OPT_IN";

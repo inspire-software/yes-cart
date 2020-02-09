@@ -101,8 +101,8 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
         },
         start: 0,
         size: Config.UI_TABLE_PAGE_SIZE,
-        sortBy: null,
-        sortDesc: false
+        sortBy: 'createdTimestamp',
+        sortDesc: true
       },
       items: [],
       total: 0

@@ -29,9 +29,9 @@ import { LogUtil } from './../log/index';
 
 export class TaxSelectComponent implements OnInit, OnDestroy {
 
-  @Input() selectedShopCode: string;
+  private _selectedShopCode: string;
 
-  @Input() selectedCurrency: string;
+  private _selectedCurrency: string;
 
   @Output() dataSelected: EventEmitter<FormValidationEvent<TaxVO>> = new EventEmitter<FormValidationEvent<TaxVO>>();
 
@@ -61,6 +61,27 @@ export class TaxSelectComponent implements OnInit, OnDestroy {
     this.delayedFiltering = Futures.perpetual(function() {
       that.getAllTaxes();
     }, this.delayedFilteringMs);
+  }
+
+
+  @Input()
+  set selectedShopCode(value: string) {
+    this._selectedShopCode = value;
+    this.filteredTaxes = [];
+  }
+
+  get selectedShopCode(): string {
+    return this._selectedShopCode;
+  }
+
+  @Input()
+  set selectedCurrency(value: string) {
+    this._selectedCurrency = value;
+    this.filteredTaxes = [];
+  }
+
+  get selectedCurrency(): string {
+    return this._selectedCurrency;
   }
 
   ngOnDestroy() {

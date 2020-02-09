@@ -948,6 +948,21 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   'en#~#E-mail#~#uk#~#E-mail#~#ru#~#E-mail#~#de#~#E-mail',
   'en#~#''${input}'' is not a valid email address#~#uk#~#''${input}'' не є коректною електронною поштою#~#ru#~#''${input}'' не является корректной электронной почтой#~#de#~#''${input}'' ist keine gültige E-Mail Adresse');
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
+VALUES (  11620,  'CUSTOMER_DOB_YEAR', 'CUSTOMER_DOB_YEAR',  1,  NULL,  'Date of Birth (Year)',  'Date of Birth (Year)', 1006,  1006, 0, 0, 0, 0,
+          '^(19[0-9]{2}|20[0-9]{2})$',
+          'de#~#Geburtsdatum (Jahr)#~#en#~#Date of Birth (Year)#~#ru#~#Дата рождения (год)#~#uk#~#Дата народження (рік)#~#',
+          'en#~#''${input}'' is not a valid year (e.g. 1990)#~#uk#~#''${input}'' недійсний рік (наприклад, 1990)#~#ru#~#''${input}'' недействительный год (например, 1990)#~#de#~#''${input}'' ist kein gültiges Jahr (z. B. 1990)');
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, CHOICES, DISPLAYNAME)
+VALUES (  11621,  'CUSTOMER_DOB_MONTH', 'CUSTOMER_DOB_MONTH',  1,  NULL,  'Date of Birth (Month)',  'Date of Birth (Month)', 1004,  1006, 0, 0, 0, 0,
+          'de#~#1-Jan,2-Feb,3-Mär,4-Apr,5-Mai,6-Jun,7-Jul,8-Aug,9-Sep,10-Okt,11-Nov,12-Dez#~#en#~#1-Jan,2-Feb,3-Mar,4-Apr,5-May,6-Jun,7-Jul,8-Aug,9-Sep,10-Oct,11-Nov,12-Dec#~#ru#~#1-янв,2-фев,3-мар,4-апр,5-май,6-июн,7-июл,8-авг,9-сен,10-окт,11-ноя,12-дек#~#uk#~#1-січ,2-лют,3-бер,4-кві,5-тра,6-чер,7-лип,8-сер,9-вер,10-жов,11-лис,12-гру#~#',
+          'de#~#Geburtsdatum (Monat)#~#en#~#Date of Birth (Month)#~#ru#~#Дата рождения (Месяц)#~#uk#~#Дата народження (Місяць)#~#');
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
+VALUES (  11622,  'CUSTOMER_DOB_DAY', 'CUSTOMER_DOB_DAY',  1,  NULL,  'Date of Birth (Day)',  'Date of Birth (Day)', 1006,  1006, 0, 0, 0, 0,
+          '^([1-9]{1}|1[0-9]|2[0-9]{1}|30|31)$',
+          'de#~#Geburtsdatum (Tag)#~#en#~#Date of Birth (Day)#~#ru#~#Дата рождения (День)#~#uk#~#Дата народження (День)#~#',
+          'en#~#''${input}'' is not a valid day (1 to 31)#~#uk#~#''${input}'' недійсний день (1-31)#~#ru#~#''${input}'' недействительный день (1-31)#~#de#~#''${input}'' ist kein gültiges Tag (1-31)');
+
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11169,  'companyname1', 'companyname1',  1,  NULL,  'Company Name 1',  'Company Name 1', 1000,  1006, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)

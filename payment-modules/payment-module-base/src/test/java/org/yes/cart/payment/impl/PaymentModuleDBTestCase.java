@@ -36,6 +36,10 @@ import java.util.UUID;
  */
 public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCase {
 
+    protected enum Location {
+        US, UK, CH
+    }
+
     protected String testContextName() {
         return "classpath:test-payment-module-base.xml";
     }
@@ -111,15 +115,18 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
     }
 
     protected CustomerOrder createCustomerOrder(String orderNum) {
+        return createCustomerOrder(orderNum, "USD", Location.US);
+    }
+
+
+    protected CustomerOrder createCustomerOrder(String orderNum, String currency, Location location) {
         CustomerOrder customerOrder = new CustomerOrderEntity();
         customerOrder.setOrderTimestamp(TimeContext.getLocalDateTime());
-        customerOrder.setCurrency("USD");
+        customerOrder.setCurrency(currency);
         customerOrder.setOrdernum(orderNum);
         customerOrder.setCartGuid(UUID.randomUUID().toString());
-        customerOrder.setCustomer(createCustomer());
+        customerOrder.setCustomer(createCustomer(location));
         customerOrder.setShop(createShop());
-        customerOrder.setBillingAddress("2684 Lacy Street Suite 208, Los Angeles, 90031,  CA");
-        customerOrder.setShippingAddress("713 Happy Street Suite 101, Los Angeles, 90555,  CA");
         customerOrder.getDelivery().add(createDelivery0(orderNum));
         customerOrder.getDelivery().add(createDelivery1(orderNum));
 
@@ -139,8 +146,12 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
         // During checkout we always have Customer object (for gues accounts a temporary entry is created Customer.isGuest())
         // Addresses are copied in OrderAssembler if CarrierSla requires billing/shipping addresses
         // Basic information is also copied in the OrderAssembler
-        customerOrder.setBillingAddressDetails(customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING));
-        customerOrder.setShippingAddressDetails(customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPPING));
+        final Address billing = customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING);
+        customerOrder.setBillingAddressDetails(billing);
+        customerOrder.setBillingAddress(addressToString(billing));
+        final Address shipping = customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
+        customerOrder.setShippingAddressDetails(shipping);
+        customerOrder.setShippingAddress(addressToString(shipping));
         customerOrder.setEmail(customerOrder.getCustomer().getEmail());
         customerOrder.setSalutation(customerOrder.getCustomer().getSalutation());
         customerOrder.setFirstname(customerOrder.getCustomer().getFirstname());
@@ -158,42 +169,87 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
     }
 
     protected Customer createCustomer() {
+        return createCustomer(Location.US);
+    }
+
+    protected String addressToString(Address address) {
+        // "2684 Lacy Street Suite 208, Los Angeles, 90031,  CA"
+        return address.getAddrline1() + ", " + address.getCity() + ", " + address.getPostcode() + ",  " + address.getCountryCode();
+    }
+
+    protected Customer createCustomer(Location location) {
         Customer customer = new CustomerEntity();
-        customer.setEmail("john.dou@domain.com");
+        customer.setGuid(UUID.randomUUID().toString());
+        customer.setEmail("john.dou-" + customer.getGuid() + "@domain.com");
         customer.setFirstname("John");
         customer.setLastname("Dou");
         customer.setPassword("rawpassword");
-        Address address = createAddress1();
+        Address address = createAddress1(location);
         customer.getAddress().add(address);
-        address = createAddress2();
+        address = createAddress2(location);
         customer.getAddress().add(address);
         return customer;
     }
 
-    private Address createAddress2() {
+    private Address createAddress2(Location location) {
         Address address;
         address = new AddressEntity();
         address.setFirstname("Jane");
         address.setLastname("Dou");
-        address.setCity("Los Angeles");
-        address.setAddrline1("713 Happy Street Suite 101");
-        address.setCountryCode("US");
-        address.setStateCode("CA");
-        address.setPostcode("90555");
+        switch (location) {
+            case CH:
+                address.setCity("Le Lignon");
+                address.setAddrline1("713 Avenue du Lignon");
+                address.setCountryCode("CH");
+                address.setPostcode("1219");
+                address.setPhone1("1223456677");
+                break;
+            case UK:
+                address.setCity("London");
+                address.setAddrline1("221B Baker Street");
+                address.setCountryCode("GB");
+                address.setPostcode("NW1 6XE");
+                break;
+            case US:
+            default:
+                address.setCity("Los Angeles");
+                address.setAddrline1("713 Happy Street Suite 101");
+                address.setCountryCode("US");
+                address.setStateCode("CA");
+                address.setPostcode("90555");
+                break;
+        }
         address.setAddressType(Address.ADDR_TYPE_SHIPPING);
         address.setDefaultAddress(true);
         return address;
     }
 
-    private Address createAddress1() {
+    private Address createAddress1(Location location) {
         Address address = new AddressEntity();
         address.setFirstname("John");
         address.setLastname("Dou");
-        address.setCity("Los Angeles");
-        address.setAddrline1("2684 Lacy Street Suite 208");
-        address.setCountryCode("US");
-        address.setStateCode("CA");
-        address.setPostcode("90031");
+        switch (location) {
+            case CH:
+                address.setCity("Le Lignon");
+                address.setAddrline1("713 Avenue du Lignon");
+                address.setCountryCode("CH");
+                address.setPostcode("1219");
+                break;
+            case UK:
+                address.setCity("London");
+                address.setAddrline1("221B Baker Street");
+                address.setCountryCode("GB");
+                address.setPostcode("NW1 6XE");
+                break;
+            case US:
+            default:
+                address.setCity("Los Angeles");
+                address.setAddrline1("2684 Lacy Street Suite 208");
+                address.setCountryCode("US");
+                address.setStateCode("CA");
+                address.setPostcode("90031");
+                break;
+        }
         address.setAddressType(Address.ADDR_TYPE_BILLING);
         address.setDefaultAddress(true);
         return address;
