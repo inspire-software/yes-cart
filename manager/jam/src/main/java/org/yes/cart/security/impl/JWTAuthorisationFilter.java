@@ -70,8 +70,8 @@ public class JWTAuthorisationFilter extends OncePerRequestFilter {
         if (header == null || !header.toLowerCase().startsWith(JWTUtil.TOKEN_PREFIX_LOWER)) {
 
             // Fallback on Cookie to allow simple GET links to work from browser.
-            final Optional<Cookie> xAuth = Arrays.stream(request.getCookies())
-                    .filter(cookie -> JWTUtil.COOKIE_HEADER.equalsIgnoreCase(cookie.getName())).findFirst();
+            final Optional<Cookie> xAuth = request.getCookies() != null ? Arrays.stream(request.getCookies())
+                    .filter(cookie -> JWTUtil.COOKIE_HEADER.equalsIgnoreCase(cookie.getName())).findFirst() : Optional.empty();
             if (xAuth.isPresent()) {
                 header = xAuth.get().getValue();
             }

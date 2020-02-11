@@ -98,8 +98,8 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
             if (StringUtils.isBlank(creds.getUsername())) {
 
-                final Optional<Cookie> xAuth = Arrays.stream(req.getCookies())
-                        .filter(cookie -> JWTUtil.COOKIE_HEADER.equalsIgnoreCase(cookie.getName())).findFirst();
+                final Optional<Cookie> xAuth = req.getCookies() != null ? Arrays.stream(req.getCookies())
+                        .filter(cookie -> JWTUtil.COOKIE_HEADER.equalsIgnoreCase(cookie.getName())).findFirst() : Optional.empty();
                 if (xAuth.isPresent()) {
 
                     final Jws<Claims> token = extractAndDecodeHeader(xAuth.get().getValue(), req);
