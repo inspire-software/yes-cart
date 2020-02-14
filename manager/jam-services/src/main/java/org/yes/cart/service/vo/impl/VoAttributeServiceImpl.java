@@ -120,8 +120,6 @@ public class VoAttributeServiceImpl implements VoAttributeService {
     public VoAttribute createAttribute(final VoAttribute vo) throws Exception {
         if (vo != null && federationFacade.isCurrentUserSystemAdmin()) {
             AttributeDTO attr = dtoAttributeService.getNew();
-            attr.setAttributegroupId(vo.getAttributegroupId());
-            attr.setEtypeId(vo.getEtypeId());
             attr = dtoAttributeService.create(
                     voAssemblySupport.assembleDto(AttributeDTO.class, VoAttribute.class, attr, vo)
             );
@@ -135,7 +133,6 @@ public class VoAttributeServiceImpl implements VoAttributeService {
     public VoAttribute updateAttribute(final VoAttribute vo) throws Exception {
         final AttributeDTO attr = dtoAttributeService.getById(vo.getAttributeId());
         if (attr != null && federationFacade.isCurrentUserSystemAdmin()) {
-            attr.setEtypeId(vo.getEtypeId());
             dtoAttributeService.update(
                     voAssemblySupport.assembleDto(AttributeDTO.class, VoAttribute.class, attr, vo)
             );

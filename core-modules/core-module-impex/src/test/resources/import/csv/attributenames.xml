@@ -33,10 +33,8 @@
 
         <column-descriptor>
             <column-index>0</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.AttributeGroup</entity-type>
+            <field-type>FIELD</field-type>
             <name>attributeGroup</name>
-            <lookup-query>select b from AttributeGroupEntity b where b.code = {attributeGroup}</lookup-query>
         </column-descriptor>
 
         <column-descriptor> <!-- primary key -->
@@ -147,10 +145,9 @@
 
         <column-descriptor>
             <column-index>-1</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Etype</entity-type>
+            <field-type>FIELD</field-type>
             <name>etype</name>
-            <lookup-query>select b from EtypeEntity b where b.businesstype = 'String'</lookup-query>
+            <value-constant>String</value-constant>
         </column-descriptor>
 
     </import-columns>

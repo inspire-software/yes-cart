@@ -162,9 +162,7 @@
                 </entry>
                 <entry key="ATTRIBUTE">
                     <bean class="org.yes.cart.bulkimport.xml.impl.AttributeXmlEntityHandler">
-                        <property name="attributeGroupService" ref="attributeGroupService"/>
                         <property name="attributeService" ref="attributeService"/>
-                        <property name="etypeService" ref="etypeService"/>
                     </bean>
                 </entry>
                 <entry key="PRODUCTTYPE">

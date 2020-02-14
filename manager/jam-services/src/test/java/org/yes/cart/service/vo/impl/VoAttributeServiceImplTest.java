@@ -18,6 +18,8 @@ package org.yes.cart.service.vo.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.AttributeGroupNames;
+import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttribute;
 import org.yes.cart.domain.vo.VoAttributeGroup;
@@ -94,9 +96,9 @@ public class VoAttributeServiceImplTest extends BaseCoreDBTestCase {
     public void testAttributeCRUD() throws Exception {
 
         final VoAttribute attribute = new VoAttribute();
-        attribute.setEtypeId(1000L);
+        attribute.setEtype(Etype.STRING_BUSINESS_TYPE);
         attribute.setCode("TESTCRUD");
-        attribute.setAttributegroupId(1000L);
+        attribute.setAttributegroup(AttributeGroupNames.SYSTEM);
         attribute.setName("TEST CRUD");
         attribute.setDisplayNames(Collections.singletonList(MutablePair.of("en", "Test")));
         attribute.setChoiceData(Collections.singletonList(MutablePair.of("en", "Test,Test1,Test2")));

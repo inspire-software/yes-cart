@@ -480,16 +480,13 @@ public class DtoProductServiceImpl
                 displayNames.put(lang, attrName);
             }
 
-            final AttributeGroupDTO groupDTO = dtoAttributeGroupService.getAttributeGroupByCode(AttributeGroupNames.PRODUCT);
-            final Etype etype = (Etype) dtoEtypeService.getService().findSingleByCriteria(" where e.businesstype = ?1", Etype.STRING_BUSINESS_TYPE);
-
             attrDto = dtoFactory.getByIface(AttributeDTO.class);
             attrDto.setName(attrName);
             attrDto.setCode(attrName.replaceAll(" ", "-"));
             attrDto.setDisplayNames(displayNames);
             attrDto.setAllowfailover(true);
-            attrDto.setAttributegroupId(groupDTO.getAttributegroupId());
-            attrDto.setEtypeId(etype.getEtypeId());
+            attrDto.setAttributegroup(AttributeGroupNames.PRODUCT);
+            attrDto.setEtype(Etype.STRING_BUSINESS_TYPE);
 
             attrDto = dtoAttributeService.create(attrDto);
 
@@ -587,10 +584,10 @@ public class DtoProductServiceImpl
             throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueProduct attrValue = attrValueEntityProductDao.findById(attributeValuePk);
         final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(attrValue.getAttributeCode());
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
+        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
             imageService.deleteImage(attrValue.getVal(),
                     Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
             fileService.deleteFile(attrValue.getVal(),
                     Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }

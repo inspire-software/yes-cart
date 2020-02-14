@@ -52,15 +52,11 @@ public class AttributeRO implements Serializable {
     @DtoField(value = "description")
     private String description;
 
-    @DtoField(value = "etype.etypeId", readOnly=true)
-    private long etypeId;
+    @DtoField(value = "etype", readOnly=true)
+    private String etype;
 
-    @DtoField(value = "etype.businesstype", readOnly=true)
-    private String etypeName;
-
-
-    @DtoField(value = "attributeGroup.attributegroupId", readOnly=true)
-    private long attributegroupId;
+    @DtoField(value = "attributeGroup", readOnly=true)
+    private String attributegroup;
 
     @DtoField(value = "allowduplicate", readOnly=true)
     private boolean allowduplicate;
@@ -112,13 +108,12 @@ public class AttributeRO implements Serializable {
         this.validationFailedMessage = validationFailedMessage;
     }
 
-    @XmlAttribute(name = "attributegroup-id")
-    public long getAttributegroupId() {
-        return attributegroupId;
+    public String getAttributegroup() {
+        return attributegroup;
     }
 
-    public void setAttributegroupId(final long attributegroupId) {
-        this.attributegroupId = attributegroupId;
+    public void setAttributegroup(final String attributegroup) {
+        this.attributegroup = attributegroup;
     }
 
     @XmlAttribute(name = "attribute-id")
@@ -180,22 +175,12 @@ public class AttributeRO implements Serializable {
         this.description = description;
     }
 
-    @XmlElement(name = "etype-id")
-    public long getEtypeId() {
-        return etypeId;
+    public String getEtype() {
+        return etype;
     }
 
-    public void setEtypeId(final long etypeId) {
-        this.etypeId = etypeId;
-    }
-
-    @XmlElement(name = "etype-name")
-    public String getEtypeName() {
-        return etypeName;
-    }
-
-    public void setEtypeName(final String etypeName) {
-        this.etypeName = etypeName;
+    public void setEtype(final String etype) {
+        this.etype = etype;
     }
 
     public boolean isAllowduplicate() {
@@ -231,9 +216,8 @@ public class AttributeRO implements Serializable {
                 ", val='" + val + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", etypeId=" + etypeId +
-                ", etypeName='" + etypeName + '\'' +
-                ", attributegroupId=" + attributegroupId +
+                ", etype='" + etype + '\'' +
+                ", attributegroupId=" + attributegroup +
                 ", allowduplicate=" + allowduplicate +
                 ", allowfailover=" + allowfailover +
                 ", regexp='" + regexp + '\'' +

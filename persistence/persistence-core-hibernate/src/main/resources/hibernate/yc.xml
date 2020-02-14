@@ -266,13 +266,9 @@
         <property name="name" column="NAME" not-null="true" type="string" length="255"/>
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
-        <many-to-one name="etype" class="org.yes.cart.domain.entity.impl.EtypeEntity" foreign-key="FK_ATTRIBUTE_ETYPE" lazy="proxy">
-            <column name="ETYPE_ID" not-null="true"/>
-        </many-to-one>
-        <many-to-one name="attributeGroup" class="org.yes.cart.domain.entity.impl.AttributeGroupEntity"
-                     foreign-key="FK_ATTRIBUTE_ATTRIBUTEGROUP" lazy="proxy">
-            <column name="ATTRIBUTEGROUP_ID" not-null="true"/>
-        </many-to-one>
+
+        <property name="etype" column="ETYPE" type="string" length="255" index="ATTR_ETYPE" not-null="true"/>
+        <property name="attributeGroup" column="ATTRIBUTEGROUP" type="string" length="255" index="ATTR_GROUP" not-null="true"/>
 
         <property name="store" type="boolean">
             <column name="STORE">
@@ -3241,7 +3237,7 @@
           <![CDATA[
        select attr
        from  AttributeEntity attr
-            where attr.attributeGroup.code = ?1 and attr.etype.businesstype = 'Image'
+            where attr.attributeGroup = ?1 and attr.etype = 'Image'
             order by attr.code
        ]]>
     </query>
@@ -3250,7 +3246,7 @@
           <![CDATA[
        select attr
        from  AttributeEntity attr
-            where attr.attributeGroup.code = ?1 and attr.code like ?2
+            where attr.attributeGroup = ?1 and attr.code like ?2
             order by attr.code
        ]]>
     </query>
@@ -3343,33 +3339,33 @@
 
     <query name="ATTRIBUTES.BY.GROUPCODE">
         <![CDATA[
-       select a from AttributeEntity a where a.attributeGroup.code = ?1 order by a.code
+       select a from AttributeEntity a where a.attributeGroup = ?1 order by a.code
        ]]>
     </query>
 
     <query name="ATTRIBUTES.BY.GROUPCODE.CODE.NAME.DESCRIPTION">
         <![CDATA[
        select a from AttributeEntity a
-       where a.attributeGroup.code = ?1 and
+       where a.attributeGroup = ?1 and
         ((lower(a.code) like ?2 or ?2 is null) OR (lower(a.name) like ?3 or ?3 is null) OR (lower(a.description) like ?4 or ?4 is null))
        ]]>
     </query>
 
     <query name="ATTRIBUTES.WITH.MULTIPLE.VALUES.BY.GROUPCODE">
         <![CDATA[
-       select a from AttributeEntity a where a.allowduplicate = ?2 and a.attributeGroup.code = ?1
+       select a from AttributeEntity a where a.allowduplicate = ?2 and a.attributeGroup = ?1
        ]]>
     </query>
 
     <query name="ATTRIBUTES.BY.GROUPCODE.NOT.IN.LIST">
         <![CDATA[
-       select a from AttributeEntity a where a.attributeGroup.code = ?1 and a.code not in (?2)
+       select a from AttributeEntity a where a.attributeGroup = ?1 and a.code not in (?2)
        ]]>
     </query>
 
     <query name="ATTRIBUTES.BY.GROUPCODE.IN.LIST">
         <![CDATA[
-       select a from AttributeEntity a where a.attributeGroup.code = ?1 and a.code in (?2)
+       select a from AttributeEntity a where a.attributeGroup = ?1 and a.code in (?2)
        ]]>
     </query>
 

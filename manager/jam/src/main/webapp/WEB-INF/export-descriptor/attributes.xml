@@ -34,7 +34,7 @@
         <column-descriptor>
             <column-header>Group</column-header>
             <field-type>FIELD</field-type>
-            <name>attributeGroup.code</name>
+            <name>attributeGroup</name>
         </column-descriptor>
 
         <column-descriptor>
@@ -64,7 +64,7 @@
         <column-descriptor>
             <column-header>Type</column-header>
             <field-type>FIELD</field-type>
-            <name>etype.businesstype</name>
+            <name>etype</name>
         </column-descriptor>
 
         <column-descriptor>

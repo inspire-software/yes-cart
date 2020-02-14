@@ -17,8 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.yes.cart.domain.entity.AttributeGroup;
-import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
@@ -55,8 +53,8 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     private String displayNameInternal;
     private I18NModel displayName;
     private String description;
-    private Etype etype;
-    private AttributeGroup attributeGroup;
+    private String etype;
+    private String attributeGroup;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
@@ -218,22 +216,22 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
     @Override
-    public Etype getEtype() {
+    public String getEtype() {
         return this.etype;
     }
 
     @Override
-    public void setEtype(final Etype etype) {
+    public void setEtype(final String etype) {
         this.etype = etype;
     }
 
     @Override
-    public AttributeGroup getAttributeGroup() {
+    public String getAttributeGroup() {
         return this.attributeGroup;
     }
 
     @Override
-    public void setAttributeGroup(final AttributeGroup attributeGroup) {
+    public void setAttributeGroup(final String attributeGroup) {
         this.attributeGroup = attributeGroup;
     }
 
@@ -423,8 +421,8 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
                            final String name,
                            final String displayName,
                            final String description,
-                           final Etype etype,
-                           final AttributeGroup attributeGroup,
+                           final String etype,
+                           final String attributeGroup,
                            final Instant createdTimestamp,
                            final Instant updatedTimestamp,
                            final String createdBy,

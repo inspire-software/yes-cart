@@ -41,49 +41,49 @@ INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) V
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1006, 'CUSTOMER', 'CUSTOMER', 'Customer settings.', '');
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1007, 'ADDRESS', 'ADDRESS', 'Customer address settings.', '');
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  10999,  'CURRENCY', 'CURRENCY',  0,  NULL,  'Currencies',  'Supported currencies by shop. First one is the default',  1004, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10999,  'CURRENCY', 'CURRENCY',  0,  NULL,  'Currencies',  'Supported currencies by shop. First one is the default',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  10995,  'SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL', 'SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL',  0,  NULL,  'Active payment modules',  'Active payment modules',  1004, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10995,  'SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL', 'SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL',  0,  NULL,  'Active payment modules',  'Active payment modules',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10966,  'SHOP_PG_ALLOWED_IPS_REGEX', 'SHOP_PAYMENT_GATEWAYS_ALLOWED_IPS_REGEX',  0,  NULL,  'Payment Gateway: Allowed IPs regular expression',
 'Regular expression to determine if PG callback is allowed from IP.
 Blank means that all IPs are allowed.
 If not blank allowed IP should match "regex.matcher(ip).matches()"
 E.g. "^((192.168.0.)([0-9]){1,3})$" will match all IPs starting with "192.168.0."
-WARNING: be careful with IPv4 vs IPv6',  1000, 1001, 0, 0, 0, 0);
+WARNING: be careful with IPv4 vs IPv6',  'String', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  10997,  'COUNTRY_SHIP', 'COUNTRY_SHIP',  0,  NULL,  'Countries (Shipping)',  'Supported shipping countries by shop.',  1004, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10997,  'COUNTRY_SHIP', 'COUNTRY_SHIP',  0,  NULL,  'Countries (Shipping)',  'Supported shipping countries by shop.',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  10996,  'COUNTRY_BILL', 'COUNTRY_BILL',  0,  NULL,  'Countries (Billing)',  'Supported billing countries by shop.',  1004, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10996,  'COUNTRY_BILL', 'COUNTRY_BILL',  0,  NULL,  'Countries (Billing)',  'Supported billing countries by shop.',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  10994,  'SUPPORTED_LANGUAGES', 'SUPPORTED_LANGUAGES',  0,  NULL,  'Languages',  'Supported shop languages',  1004, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10994,  'SUPPORTED_LANGUAGES', 'SUPPORTED_LANGUAGES',  0,  NULL,  'Languages',  'Supported shop languages',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  10993,  'CART_ADD_ENABLE_QTY_PICKER', 'CART_ADD_ENABLE_QTY_PICKER',  0,  NULL,  'Checkout: enable quantity picker for products',  'Enables quantity picker component on product pages',  1008, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10993,  'CART_ADD_ENABLE_QTY_PICKER', 'CART_ADD_ENABLE_QTY_PICKER',  0,  NULL,  'Checkout: enable quantity picker for products',  'Enables quantity picker component on product pages',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10992,  'INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP', 'INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP',  0,  NULL,  'Search: include sub categories',
-    'Allow search to be performed including sub categories. If set to false product are searched only in the immediate category',  1008, 1001, 0, 0, 0, 0);
+    'Allow search to be performed including sub categories. If set to false product are searched only in the immediate category',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10990,  'SHOP_NEW_ARRIVAL_DAYS_OFFSET', 'SHOP_NEW_ARRIVAL_DAYS_OFFSET',  0,  NULL,  'Search: newarrival tag days offset',
-   'Dynamic newarrival tag setting. New products are products with date befor "now() - days offset"',  1006, 1001, 0, 0, 0, 0);
+   'Dynamic newarrival tag setting. New products are products with date befor "now() - days offset"',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10988,  'SHOP_CHECKOUT_ENABLE_ORDER_MSG', 'SHOP_CHECKOUT_ENABLE_ORDER_MSG',  0,  NULL,  'Checkout: enable order message',
-   'Enable order message capture. This can be used for many different things. e.g. allow gift messaging, delivery instructions',  1008, 1001, 0, 0, 0, 0);
+   'Enable order message capture. This can be used for many different things. e.g. allow gift messaging, delivery instructions',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10987,  'SHOP_CHECKOUT_ENABLE_COUPONS', 'SHOP_CHECKOUT_ENABLE_COUPONS',  0,  NULL,  'Checkout: enable coupons',
-   'Enable "Add coupon" section on the shopping cart page',  1008, 1001, 0, 0, 0, 0);
+   'Enable "Add coupon" section on the shopping cart page',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10986,  'SHOP_ADDRESS_FORMATTER', 'SHOP_ADDRESS_FORMATTER',  0,  NULL,  'Address: address format (default)',
 'Placeholders:
 {{salutation}} {{firstname}} {{middlename}} {{lastname}}
@@ -92,282 +92,282 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 {{company1}} {{company2}} {{department}}
 {{custom0}} {{custom1}} {{custom2}} {{custom3}} {{custom4}}
 {{custom5}} {{custom6}} {{custom7}} {{custom8}} {{custom9}}
-For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]',  1011, 1001, 0, 0, 0, 0);
+For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]',  'HTML', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10985,  'SHOP_CUSTOMER_FORMATTER', 'SHOP_CUSTOMER_FORMATTER',  0,  NULL,  'Customer: name format',
-   'Placeholders: {{salutation}} {{firstname}} {{middlename}} {{lastname}}',  1011, 1001, 0, 0, 0, 0);
+   'Placeholders: {{salutation}} {{firstname}} {{middlename}} {{lastname}}',  'HTML', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10984,  'PRODUCT_DISPLAY_MAN_CODE_SHOP', 'PRODUCT_DISPLAY_MANUFACTURER_CODE_SHOP',  0,  NULL,  'Product: show manufacturer code',
-    'Flag whether to use manufacturer code or seller code as primary UI property',  1008, 1001, 0, 0, 0, 0);
+    'Flag whether to use manufacturer code or seller code as primary UI property',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10880,  'SHOP_CREGATTRS_B2C', 'SHOP_CREGATTRS_B2C',  0,  NULL,  'Customer (B2C): registration form attributes (CSV)',
-    'List of customer attributes separated by comma to be shown on registration form',  1004, 1001, 0, 0, 0, 0);
+    'List of customer attributes separated by comma to be shown on registration form',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10780,  'SHOP_CREGATTRS_B2G', 'SHOP_CREGATTRS_B2G',  0,  NULL,  'Customer (B2G): registration form attributes (CSV)',
-    'List of customer attributes separated by comma to be shown on registration form',  1004, 1001, 0, 0, 0, 0);
+    'List of customer attributes separated by comma to be shown on registration form',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10888,  'SHOP_CREGATTRS_EMAIL', 'SHOP_CREGATTRS_EMAIL',  0,  NULL,  'Customer (Email validation): login, contact, newsletter etc',
-    'Customer attribute used to validate the emails',  1000, 1001, 0, 0, 0, 0);
+    'Customer attribute used to validate the emails',  'String', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10881,  'SHOP_CPROFATTRS_VISIBLE_B2C', 'SHOP_CPROFATTRS_VISIBLE_B2C',  0,  NULL,  'Customer (B2C): profile form attributes (CSV)',
-    'List of customer attributes separated by comma to be shown on profile form',  1004, 1001, 0, 0, 0, 0);
+    'List of customer attributes separated by comma to be shown on profile form',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10882,  'SHOP_CPROFATTRS_READONLY_B2C', 'SHOP_CPROFATTRS_READONLY_B2C',  0,  NULL,  'Customer (B2C): profile form attributes - read only (CSV)',
-    'List of customer attributes separated by comma to be shown on profile form but not editable',  1004, 1001, 0, 0, 0, 0);
+    'List of customer attributes separated by comma to be shown on profile form but not editable',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10883,  'SHOP_B2B_ADDRESSBOOK', 'SHOP_B2B_ADDRESSBOOK',  0,  NULL,  'Shop: B2B addressbook mode enable',
-    'Disables customer addressbook access, all customers can only use B2B shop addressbook',  1008, 1001, 0, 0, 0, 0);
+    'Disables customer addressbook access, all customers can only use B2B shop addressbook',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10884,  'SHOP_B2B_STRICT_PRICE', 'SHOP_B2B_STRICT_PRICE',  0,  NULL,  'Shop: B2B strict price mode enable',
-    'Disables main shop look up. Only sub shop prices are considered',  1008, 1001, 0, 0, 0, 0);
+    'Disables main shop look up. Only sub shop prices are considered',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10886,  'SHOP_B2B_STRICT_PRICE_RULES', 'SHOP_B2B_STRICT_PRICE_RULES',  0,  NULL,  'Shop: B2B strict price rules mode enable',
-   'Disable master shop price rules and use only sub shop rules',  1008, 1001, 0, 0, 0, 0);
+   'Disable master shop price rules and use only sub shop rules',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10887,  'SHOP_B2B_STRICT_PROMOTIONS', 'SHOP_B2B_STRICT_PROMOTIONS',  0,  NULL,  'Shop: B2B strict promotions mode enable',
-   'Disable master shop promotions and use only sub shop promotions',  1008, 1001, 0, 0, 0, 0);
+   'Disable master shop promotions and use only sub shop promotions',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10980,  'CART_SESSION_EXPIRY_SECONDS', 'CART_SESSION_EXPIRY_SECONDS',  0,  NULL,  'Customer: session expiry in seconds',
-    'Cart session expiry in seconds. Invalidates login when session expires. Default: 21600s (6h)',  1006, 1001, 0, 0, 0, 0);
+    'Cart session expiry in seconds. Invalidates login when session expires. Default: 21600s (6h)',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10979,  'SHOP_COOKIE_POLICY_ENABLE', 'SHOP_COOKIE_POLICY_ENABLE',  0,  NULL,  'Shop: Cookie policy enable',
-    'Enables notification for use of cookie on this site (search the Internet for ''The EU cookie law (e-Privacy Directive)'').',  1008, 1001, 0, 0, 0, 0);
+    'Enables notification for use of cookie on this site (search the Internet for ''The EU cookie law (e-Privacy Directive)'').',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
   VALUES (  10978,  'SHOP_CUSTOMER_PASSWORD_RESET_CC', 'SHOP_CUSTOMER_PASSWORD_RESET_CC',  0,  NULL,  'Customer: Password reset token',
-    'Authorisation token to reset password immediately by call center operative.',  1000, 1001, 0, 0, 0, 0, 1);
+    'Authorisation token to reset password immediately by call center operative.',  'String', 'SHOP', 0, 0, 0, 0, 1);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10977,  'SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS', 'SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS',  0,  NULL,  'Customer: Password reset token validity (s)',
-    'Authorisation token validity if reset is requested by customer in second. Default is 86400s (1 day)',  1006, 1001, 0, 0, 0, 0);
+    'Authorisation token validity if reset is requested by customer in second. Default is 86400s (1 day)',  'Integer', 'SHOP', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
   VALUES (  10976,  'SHOP_MAIL_SERVER_CUSTOM_ENABLE', 'SHOP_MAIL_SERVER_CUSTOM_ENABLE',  0,  NULL,  'Mail: use custom mail server settings',
-    'Enable custom mail server settings for this shop',  1008, 1001, 0, 0, 0, 0, 1);
+    'Enable custom mail server settings for this shop',  'Boolean', 'SHOP', 0, 0, 0, 0, 1);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
   VALUES (  10975,  'SHOP_MAIL_SERVER_HOST', 'SHOP_MAIL_SERVER_HOST',  0,  NULL,  'Mail: custom mail server host',
-    'Custom mail server host e.g. mail.somedomain.com',  1000, 1001, 0, 0, 0, 0, 1);
+    'Custom mail server host e.g. mail.somedomain.com',  'String', 'SHOP', 0, 0, 0, 0, 1);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
   VALUES (  10974,  'SHOP_MAIL_SERVER_PORT', 'SHOP_MAIL_SERVER_PORT',  0,  NULL,  'Mail: custom mail server port',
-    'Custom mail server port e.g. 587',  1006, 1001, 0, 0, 0, 0, 1);
+    'Custom mail server port e.g. 587',  'Integer', 'SHOP', 0, 0, 0, 0, 1);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
   VALUES (  10973,  'SHOP_MAIL_SERVER_USERNAME', 'SHOP_MAIL_SERVER_USERNAME',  0,  NULL,  'Mail: custom mail server username',
-    'Custom mail server username. Required if SMTP-AUTH is enabled',  1000, 1001, 0, 0, 0, 0, 1);
+    'Custom mail server username. Required if SMTP-AUTH is enabled',  'String', 'SHOP', 0, 0, 0, 0, 1);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
   VALUES (  10972,  'SHOP_MAIL_SERVER_PASSWORD', 'SHOP_MAIL_SERVER_PASSWORD',  0,  NULL,  'Mail: custom mail server password',
-    'Custom mail server password. Required if SMTP-AUTH is enabled',  1017, 1001, 0, 0, 0, 0, 1);
+    'Custom mail server password. Required if SMTP-AUTH is enabled',  'SecureString', 'SHOP', 0, 0, 0, 0, 1);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
   VALUES (  10971,  'SHOP_MAIL_SERVER_SMTPAUTH_ENABLE', 'SHOP_MAIL_SERVER_SMTPAUTH_ENABLE',  0,  NULL,  'Mail: use custom mail server SMTP-AUTH enable',
-    'Enable SMTP authentication on custom mail server (Require username and password)',  1008, 1001, 0, 0, 0, 0, 1);
+    'Enable SMTP authentication on custom mail server (Require username and password)',  'Boolean', 'SHOP', 0, 0, 0, 0, 1);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
   VALUES (  10970,  'SHOP_MAIL_SERVER_STARTTLS_ENABLE', 'SHOP_MAIL_SERVER_STARTTLS_ENABLE',  0,  NULL,  'Mail: use custom mail server TLS encryption enable',
-    'Enable TLS encryption on custom mail server (Must be supported)',  1008, 1001, 0, 0, 0, 0, 1);
+    'Enable TLS encryption on custom mail server (Must be supported)',  'Boolean', 'SHOP', 0, 0, 0, 0, 1);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10969,  'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO', 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO',  0,  NULL,  'Tax: Enable price tax information for customer types (CSV)',
-  'Enables price tax information on search results and product pages',  1004, 1001, 0, 0, 0, 0);
+  'Enables price tax information on search results and product pages',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10968,  'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_N', 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET',  0,  NULL,  'Tax: Show net prices for customer types (CSV)',
-  'Additional configuration to configure showing net prices (without tax) if tax information is enabled, otherwise gross prices are shown',  1004, 1001, 0, 0, 0, 0);
+  'Additional configuration to configure showing net prices (without tax) if tax information is enabled, otherwise gross prices are shown',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10967,  'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_A', 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT',  0,  NULL,  'Tax: Show tax amount for customer types (CSV)',
-  'Additional configuration to configure showing tax amount if tax information is enabled, otherwise percentage is shown',  1004, 1001, 0, 0, 0, 0);
+  'Additional configuration to configure showing tax amount if tax information is enabled, otherwise percentage is shown',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10964,  'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_C', 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE',  0,  NULL,  'Customer: Allow changing price tax information view for customer types',
-  'Allow changing price tax information view for customer types. Blank value is treated as no customer can change tax information view. To reference guests use B2G, blank types are treated as B2C.',  1004, 1001, 0, 0, 0, 0);
+  'Allow changing price tax information view for customer types. Blank value is treated as no customer can change tax information view. To reference guests use B2G, blank types are treated as B2C.',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10963,  'SHOP_DELIVERY_ONE_ADDRESS_DISABLE', 'SHOP_DELIVERY_ONE_ADDRESS_DISABLE',  0,  NULL,  'Customer: Disable same address for billing',
-  'Disable use of same address feature for customer types. Blank value is treated as enabled. To reference guests use B2G, blank types are treated as B2C.',  1004, 1001, 0, 0, 0, 0);
+  'Disable use of same address feature for customer types. Blank value is treated as enabled. To reference guests use B2G, blank types are treated as B2C.',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10981,  'SHOP_DELETE_ACCOUNT_DISABLE', 'SHOP_DELETE_ACCOUNT_DISABLE',  0,  NULL,  'Customer: Disable account deletion',
-  'Disable account deletion feature for customer types. Blank value is treated as enabled.',  1004, 1001, 0, 0, 0, 0);
+  'Disable account deletion feature for customer types. Blank value is treated as enabled.',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10962,  'SHOP_PRODUCT_HIDE_PRICES', 'SHOP_PRODUCT_HIDE_PRICES',  0,  NULL,  'Customer: hide prices',
   'Hide prices for customer types. Blank value is treated as show prices. To reference guests use B2G, blank types are treated as B2C.
-This setting must be used together with Block checkout feature to prevent going through checkout for customer types that cannot see prices',  1004, 1001, 0, 0, 0, 0);
+This setting must be used together with Block checkout feature to prevent going through checkout for customer types that cannot see prices',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11040,  'SHOP_B2B', 'SHOP_B2B',  1,  NULL,  'Shop: B2B profile enable',  'B2B profile flag for this shop',  1008, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11040,  'SHOP_B2B', 'SHOP_B2B',  1,  NULL,  'Shop: B2B profile enable',  'B2B profile flag for this shop',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11041, 'SHOP_ADMIN_EMAIL',  'SHOP_ADMIN_EMAIL',  1,  NULL,  'Shop: primary shop admin email',  'Email used for all CC messages (e.g. order updates)',  1010, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11041, 'SHOP_ADMIN_EMAIL',  'SHOP_ADMIN_EMAIL',  1,  NULL,  'Shop: primary shop admin email',  'Email used for all CC messages (e.g. order updates)',  'Email', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8001,  'SHOP_CUSTOMER_TYPES', 'SHOP_CUSTOMER_TYPES',  0,  NULL,  'Customer: supported customer types',  'Supported shop customer types CSV
-  E.g. value=B2B,B2C, display value=Private,Company',  1000, 1001, 0, 0, 0, 0);
+  E.g. value=B2B,B2C, display value=Private,Company',  'String', 'SHOP', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8002,  'SHOP_CHECKOUT_ENABLE_GUEST', 'SHOP_CHECKOUT_ENABLE_GUEST',  0,  NULL,  'Checkout: enable guest checkout',
-  'Enables guest checkout customerType=B2G',  1008, 1001, 0, 0, 0, 0);
+  'Enables guest checkout customerType=B2G',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8014,  'SHOP_CHECKOUT_PRESELECT_SHIPPING', 'SHOP_CHECKOUT_PRESELECT_SHIPPING',  0,  NULL,  'Checkout: pre-select shipping method',
-  'If enabled will forcefully pre-select shipping method during checkout',  1008, 1001, 0, 0, 0, 0);
+  'If enabled will forcefully pre-select shipping method during checkout',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8016,  'SHOP_CHECKOUT_PRESELECT_PAYMENT', 'SHOP_CHECKOUT_PRESELECT_PAYMENT',  0,  NULL,  'Checkout: pre-select payment method',
-  'If enabled will forcefully pre-select payment method during checkout',  1008, 1001, 0, 0, 0, 0);
+  'If enabled will forcefully pre-select payment method during checkout',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5000,  'SHOP_SEARCH_ENABLE_COMPOUND', 'SHOP_SEARCH_ENABLE_COMPOUND',  0,  NULL,  'Search: compound search enable',
-  'Enable compound search. If set to true preserved previously searched phrases until they are explicitly removed',  1008, 1001, 0, 0, 0, 0);
+  'Enable compound search. If set to true preserved previously searched phrases until they are explicitly removed',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8003,  'SHOP_CATEGORY_FILTERNAV_LIMIT', 'SHOP_CATEGORY_FILTERNAV_LIMIT',  0,  NULL,  'Shop: filter navigation records limit',
-  'Filter navigation records limit per group. Default is 25',  1006, 1001, 0, 0, 0, 0);
+  'Filter navigation records limit per group. Default is 25',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5001,  'SHOP_CATEGORY_REMOVE_EMPTY', 'SHOP_CATEGORY_REMOVE_EMPTY',  0,  NULL,  'Shop: remove empty categories from menu',
-  'Remove empty categories from menus. Default is false',  1008, 1001, 0, 0, 0, 0);
+  'Remove empty categories from menus. Default is false',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  8004,  'SHOP_SF_REQUIRE_LOGIN', 'SHOP_SF_REQUIRE_LOGIN',  1,  NULL,  'Customer: login required',  'Anonymous browsing for this shop is prohibited',  1008, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8004,  'SHOP_SF_REQUIRE_LOGIN', 'SHOP_SF_REQUIRE_LOGIN',  1,  NULL,  'Customer: login required',  'Anonymous browsing for this shop is prohibited',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8005,  'SHOP_SF_REQUIRE_REG_AT', 'SHOP_SF_REQUIRE_REG_APPROVE_TYPES',  0,  NULL,  'Customer: registration types that require approval email (CSV)',  'CSV of customer types that must be approved by shop admin
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8006,  'SHOP_SF_REQUIRE_REG_NT', 'SHOP_SF_REQUIRE_REG_NOTIFY_TYPES',  0,  NULL,  'Customer: registration types that require notification email (CSV)',  'CSV of customer types for which shop admin is notified
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8010,  'SHOP_SF_REPEAT_ORDER_T', 'SHOP_SF_REPEAT_ORDER_TYPES',  0,  NULL,  'Customer: repeat order feature enabled (CSV)',  'CSV of customer types which can repeat order
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8011,  'SHOP_SF_SHOPLIST_T', 'SHOP_SF_SHOPPING_LIST_TYPES',  0,  NULL,  'Customer: shopping list feature enabled (CSV)',  'CSV of customer types which can create shopping lists
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8012,  'SHOP_SF_B2B_LINEREMARK_T', 'SHOP_SF_B2B_LINE_REMARKS_TYPES',  0,  NULL,  'Customer: line remarks feature enabled (CSV)',  'CSV of customer types which can leave remarks per line
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8013,  'SHOP_SF_B2B_ORDFORM_T', 'SHOP_SF_B2B_ORDER_FORM_TYPES',  0,  NULL,  'Customer: B2B form feature enabled (CSV)',  'CSV of customer types which can add B2B information on the order
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8015,  'SHOP_SF_MAX_LV_SKU', 'SHOP_SF_MAX_LAST_VIEWED_SKU',  0,  NULL,  'Customer: Max last viewed SKU',  'Maximum number of last viewed SKU to track (default is 10)',
-    1006, 1001, 0, 0, 0, 0);
+    'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8017,  'SHOP_SF_MNGLIST_T', 'SHOP_SF_MANAGED_LIST_TYPES',  0,  NULL,  'Customer: managed list feature enabled (CSV)',  'CSV of customer types which can use managed lists
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8018,  'SHOP_SF_LOGIN_MGR_ROLES', 'SHOP_SF_LOGIN_MANAGER',  0,  NULL,  'Manager: allowed to login in SF',  'Allow managers with ROLE_SMCALLCENTERLOGINSF to login to SF',
-  1008, 1001, 0, 0, 0, 0);
+  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8019,  'SHOP_SF_LOGIN_MGR_C_BLST', 'SHOP_SF_LOGIN_MANAGER_CUSTOMER_BLACKLIST',  0,  NULL,  'Manager: customer blacklisting',  'Allows to hide some accounts from managers that login to SF',
-  1012, 1001, 0, 0, 0, 0);
+  'Properties', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5010,  'SHOP_SEARCH_ENABLE_SUGGEST', 'SHOP_SEARCH_ENABLE_SUGGEST',  0,  NULL,  'Search: search suggest enable',
-  'Enable search suggest. If set to true will perform "as you type" product look up under search box',  1008, 1001, 0, 0, 0, 0);
+  'Enable search suggest. If set to true will perform "as you type" product look up under search box',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5011,  'SHOP_SEARCH_SUGGEST_MIN_CHARS', 'SHOP_SEARCH_SUGGEST_MIN_CHARS',  0,  NULL,  'Search: search suggest min chars',
-  'Minimum number of characters in search box that trigger search suggest (default is 3)',  1006, 1001, 0, 0, 0, 0);
+  'Minimum number of characters in search box that trigger search suggest (default is 3)',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5012,  'SHOP_SEARCH_SUGGEST_MAX_ITEMS', 'SHOP_SEARCH_SUGGEST_MAX_ITEMS',  0,  NULL,  'Search: search suggest max items',
-  'Maximum number of suggested products (default is 10)',  1006, 1001, 0, 0, 0, 0);
+  'Maximum number of suggested products (default is 10)',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5017,  'SHOP_SEARCH_SUGGEST_FADE_OUT', 'SHOP_SEARCH_SUGGEST_FADE_OUT',  0,  NULL,  'Search: search suggest fade out (ms)',
-  'Milliseconds after which result pop up should fade out (default is 3000)',  1006, 1001, 0, 0, 0, 0);
+  'Milliseconds after which result pop up should fade out (default is 3000)',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5020,  'SHOP_DEF_NAV_CAT', 'SHOP_DEFAULT_NAVIGATION_CATEGORY',  0,  NULL,  'Search: default shop navigation category (GUID)',
-    'GUID of category which contains default navigation settings',  1000, 1001, 0, 0, 0, 0);
+    'GUID of category which contains default navigation settings',  'String', 'SHOP', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5013,  'SHOP_RFQ_CUSTOMER_TYPES', 'SHOP_RFQ_CUSTOMER_TYPES',  0,  NULL,  'Customer: types that eligible to send RFQ',
   'CSV of customer types eligible for request for quote
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5014,  'SHOP_SF_REQORDERAPPROVE_TYPES', 'SHOP_SF_REQUIRE_ORDER_APPROVE_TYPES',  0,  NULL,  'Customer: types that require order approval',
   'CSV of customer types that require order approval (e.g. B2B setup with supervisor approval)
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5015,  'SHOP_SF_CANNOTCHECKOUT_TYPES', 'SHOP_SF_CANNOT_PLACE_ORDER_TYPES',  0,  NULL,  'Customer: types that cannot place orders',
   'CSV of customer types that cannot place orders (e.g. B2B setup with browse catalog only)
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5016,  'SHOP_ADRDIS_CUSTOMER_TYPES', 'SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES',  0,  NULL,  'Customer: types that cannot modify address book',
   'CSV of customer types that cannot modify address book (e.g. B2B setup with admin authorised addresses only)
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  5018,  'SHOP_ADRDISBILL_CUSTOMER_TYPES', 'SHOP_ADDRESSBOOK_BILL_DISABLED_CUSTOMER_TYPES',  0,  NULL,  'Customer: types that cannot modify billing address',
   'CSV of customer types that cannot modify billing address in address book (e.g. B2B setup with admin authorised addresses only)
-  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+  E.g. B2B,B2E',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8007,  'SHOP_SF_PAGE_TRACE', 'SHOP_SF_PAGE_TRACE',  0,  NULL,  'Maintenance: enable page render trace',
-  'If this is enabled html rendered will contain information about how this page was constructed (CMS includes, resources and cache info)',  1008, 1001, 0, 0, 0, 0);
+  'If this is enabled html rendered will contain information about how this page was constructed (CMS includes, resources and cache info)',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8008,  'SHOP_PRODUCT_STORED_ATTRIBUTES', 'SHOP_PRODUCT_STORED_ATTRIBUTES',  0,  NULL,  'Product: stored attributes to copy to order',
-  'Attributes that should be copied to order lines',  1004, 1001, 0, 0, 0, 0);
+  'Attributes that should be copied to order lines',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8009,  'ORDER_EXP_MAIL_SUP', 'ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS',  0,  NULL,  'Export Orders\\Auto mail notification',
     'Property mapping for supplier codes and corresponding emails (CSV). This is email notification export to suppliers upon successful/authorised payment of the order.
 E.g. MAIN.INITPAID=sales@warehouse.com,admin@warehouse.com
-SECOND.INITPAID=sales@wahouse2.com',  1012, 1001, 0, 0, 0, 0);
+SECOND.INITPAID=sales@wahouse2.com',  'Properties', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8020,  'ORDER_EXPORTER_MANUAL_STATE_PROXY', 'ORDER_EXPORTER_MANUAL_STATE_PROXY',  0,  NULL,  'Export Orders\\Manual state transition',
     'Property mapping for supplier codes and corresponding transition states. Use NOBLOCK or BLOCK after next eligibility to denote if this is a blocking change to enable manual mode.
 E.g. INITPAID=MANUALXML,BLOCK
-DELIVERY=EMAILNOTIFY,NOBLOCK',  1012, 1001, 0, 0, 0, 0);
+DELIVERY=EMAILNOTIFY,NOBLOCK',  'Properties', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  4050,  'SHOP_CARRIER_SLA_DISABLED', 'SHOP_CARRIER_SLA_DISABLED',  0,  NULL,  'Disabled shop carrier SLA',  'Disabled shop carrier SLA (CSV of PKs)',  1004, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  4050,  'SHOP_CARRIER_SLA_DISABLED', 'SHOP_CARRIER_SLA_DISABLED',  0,  NULL,  'Disabled shop carrier SLA',  'Disabled shop carrier SLA (CSV of PKs)',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  4051,  'SHOP_CARRIER_SLA_RANKS', 'SHOP_CARRIER_SLA_RANKS',  0,  NULL,  'Properties config of carrier SLA ranks',  'Properties config of carrier SLA ranks (PK=rank)',  1012, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  4051,  'SHOP_CARRIER_SLA_RANKS', 'SHOP_CARRIER_SLA_RANKS',  0,  NULL,  'Properties config of carrier SLA ranks',  'Properties config of carrier SLA ranks (PK=rank)',  'Properties', 'SHOP', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8025,  'SYSTEM_EXTENSION_CFG_PROPERTIES', 'SYSTEM_EXTENSION_CFG_PROPERTIES',  0,  NULL,  'System\\Customisations',
     'Property mapping for system customisations. E.g.
 SHOP10.pricingPolicyProvider=[bean name]
@@ -375,639 +375,639 @@ SHOP10.priceResolver=[bean name]
 SHOP10.taxProvider=[bean name]
 SHOP10.productAvailabilityStrategy=[bean name]
 SHOP10.cartContentsValidator=[bean name]
-Main.inventoryResolver=[bean name]',  1012, 1000, 0, 0, 0, 0);
+Main.inventoryResolver=[bean name]',  'Properties', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8026,  'SYSTEM_EXTENSION_CFG_SECURITY', 'SYSTEM_EXTENSION_CFG_SECURITY',  0,  NULL,  'System\\Customisations\\Security Control',
     'Property mapping for system security control service. E.g.
 [NodeType].HTTP.maxRequestsPerMinute=1000
 [NodeType].HTTP.maxRequestsPerMinutePerIP=60
 [NodeType].HTTP.blockIPCSV=192.0.0.18,192.10
 [NodeType].HTTP.allowIPCSV=192.0.0.18,192.10
-After changing these settings configurations need to be reloaded (use cluster panel)',  1012, 1000, 0, 0, 0, 0);
+After changing these settings configurations need to be reloaded (use cluster panel)',  'Properties', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11000,  'SYSTEM_DEFAULT_SHOP', 'SYSTEM_DEFAULT_SHOP',  1,  NULL,  'SF\\Behaviour Default shop URL',
-  'This value will be used for redirects when shop can not be resolved by http request', 1002,  1000, 0, 0, 0, 0);
+  'This value will be used for redirects when shop can not be resolved by http request', 'URL', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11017,  'SYSTEM_PREVIEW_URL_TEMPLATE', 'SYSTEM_PREVIEW_URL_TEMPLATE',  1,  NULL,  'Admin\\CMS preview URL template',
   'This template is used to adjust URLs in content (<img src=""/> and <a href=""/>). For example:
 DEV: http://{primaryShopURL}:8080/ where {primaryShopURL} is a placeholder for shop primary domain
-PROD: http://{primaryShopURL}/ where {primaryShopURL} is a placeholder for shop primary domain', 1000,  1000, 0, 0, 0, 0);
+PROD: http://{primaryShopURL}/ where {primaryShopURL} is a placeholder for shop primary domain', 'String', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11018,  'SYSTEM_PREVIEW_URI_CSS', 'SYSTEM_PREVIEW_URI_CSS',  1,  NULL,  'Admin\\CMS preview CSS URI',
   'This URI points to preview CSS. For example:
 SFW: "wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css"
-SFG: "resources/style/yc-preview.css"', 1000,  1000, 0, 0, 0, 0);
+SFG: "resources/style/yc-preview.css"', 'String', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11029,  'SYSTEM_PANEL_HELP_DOCS', 'SYSTEM_PANEL_HELP_DOCS',  1,  NULL,  'Admin\\Help doc link',
-  'Help doc link in Admin help section', 1002,  1000, 0, 0, 0, 0);
+  'Help doc link in Admin help section', 'URL', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11030,  'SYSTEM_PANEL_HELP_COPYRIGHT', 'SYSTEM_PANEL_HELP_COPYRIGHT',  1,  NULL,  'Admin\\Copyright note',
-  'Copyright note in Admin help section', 1011,  1000, 0, 0, 0, 0);
+  'Copyright note in Admin help section', 'HTML', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, SECURE_ATTRIBUTE, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, SECURE_ATTRIBUTE, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11031,  'MANAGER_JWT_SECRET', 'MANAGER_JWT_SECRET',  1, 1,  NULL,  'Admin\\Authentication\\JWT Secret',
-  'Secret to sign JWT. If not specified random secret is generated.', 1017,  1000, 0, 0, 0, 0);
+  'Secret to sign JWT. If not specified random secret is generated.', 'SecureString', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11032,  'MANAGER_JWT_EXPIRY_MIN', 'MANAGER_JWT_EXPIRY_MIN',  1, NULL,  'Admin\\Authentication\\JWT Expiry (min)',
-  'Admin session expiry in minutes. Default is 15 minutes', 1006,  1000, 0, 0, 0, 0);
+  'Admin session expiry in minutes. Default is 15 minutes', 'Integer', 'SYSTEM', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11042,  'IMPORT_JOB_LOG_SIZE', 'IMPORT_JOB_LOG_SIZE',  1,  NULL,  'Admin\\Import Import log file size',
-  'Size in characters of tail of actual log file to display in Admin during import', 1006,  1000, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  'Size in characters of tail of actual log file to display in Admin during import', 'Integer', 'SYSTEM', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11043,  'IMPORT_JOB_TIMEOUT_MS', 'IMPORT_JOB_TIMEOUT_MS',  1,  NULL,  'Admin\\Import job timeout',
-  'Timeout in ms during which no ping action performed by import', 1006,  1000, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  'Timeout in ms during which no ping action performed by import', 'Integer', 'SYSTEM', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11044,  'SYSTEM_CONN_TIMEOUT_MS', 'SYSTEM_CONNECTOR_TIMEOUT_MS',  1,  NULL,  'Admin\\Communication timeout',
-  'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  'Timeout in ms for cluster calls', 'Integer', 'SYSTEM', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11045,  'SYSTEM_CONN_PRODB_IDX_TIMEOUT_MS', 'SYSTEM_CONNECTOR_PRODB_IDX_TIMEOUT_MS',  1,  NULL,
-  'Admin\\Indexing Bulk product index timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  'Admin\\Indexing Bulk product index timeout', 'Timeout in ms for cluster calls', 'Integer', 'SYSTEM', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11046,  'SYSTEM_CONN_PRODS_IDX_TIMEOUT_MS', 'SYSTEM_CONNECTOR_PRODS_IDX_TIMEOUT_MS',  1,  NULL,
-  'Admin\\Indexing Single product index timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  'Admin\\Indexing Single product index timeout', 'Timeout in ms for cluster calls', 'Integer', 'SYSTEM', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11047,  'SYSTEM_CONN_QUERY_TIMEOUT_MS', 'SYSTEM_CONNECTOR_QUERY_TIMEOUT_MS',  1,  NULL,
-  'Admin\\System SQL, HSQL, FTQL timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  'Admin\\System SQL, HSQL, FTQL timeout', 'Timeout in ms for cluster calls', 'Integer', 'SYSTEM', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11048,  'SYSTEM_CONN_CACHE_TIMEOUT_MS', 'SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS',  1,  NULL,
-  'Admin\\System Clear cache timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  'Admin\\System Clear cache timeout', 'Timeout in ms for cluster calls', 'Integer', 'SYSTEM', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11049,  'SYSTEM_CONN_IMAGE_TIMEOUT_MS', 'SYSTEM_CONNECTOR_IMAGE_TIMEOUT_MS',  1,  NULL,
-  'Admin\\Import Image operation timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  'Admin\\Import Image operation timeout', 'Timeout in ms for cluster calls', 'Integer', 'SYSTEM', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10099,  'SYSTEM_ALLOWED_IMAGE_SIZES', 'SYSTEM_ALLOWED_IMAGE_SIZES',  1,  NULL,
   'SF\\Image service: allowed image sizes', 'Image resolutions allowed to be processed by shop
-  E.g. 40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120,280x280,240x240 ', 1004,  1000, 0, 0, 0, 0);
+  E.g. 40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120,280x280,240x240 ', 'CommaSeparatedList', 'SYSTEM', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11098,  'SYSTEM_ETAG_CACHE_IMAGES_TIME', 'SYSTEM_ETAG_CACHE_IMAGES_TIME',  0,  NULL,  'SF\\Behaviour Expiration value for images in minutes',
-  'Expiration value for images in minutes. ETag', 1000,  1000, 0, 0, 0, 0);
+  'Expiration value for images in minutes. ETag', 'String', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11099,  'SYSTEM_IMAGE_VAULT', 'SYSTEM_IMAGE_VAULT',  1,  NULL,  'System\\Image Root directory for image repository',
   'Root directory for image repository.
-Recommended: file:///home/yc/server/share/imagevault/', 1001,  1000, 0, 0, 0, 0);
+Recommended: file:///home/yc/server/share/imagevault/', 'URI', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11120,  'SYSTEM_FILE_VAULT', 'SYSTEM_FILE_VAULT',  1,  NULL,  'System\\File Root directory for image repository',
   'Root directory for file repository.
-Recommended: file:///home/yc/server/share/filevault/', 1001,  1000, 0, 0, 0, 0);
+Recommended: file:///home/yc/server/share/filevault/', 'URI', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11121,  'SYSTEM_SYSFILE_VAULT', 'SYSTEM_SYSFILE_VAULT',  1,  NULL,  'System\\System File Root directory for image repository',
   'Root directory for secure file repository (no storefront access)
-Recommended: file:///home/yc/server/share/sysfilevault/', 1001,  1000, 0, 0, 0, 0);
+Recommended: file:///home/yc/server/share/sysfilevault/', 'URI', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11100,  'SEARCH_ITEMS_PER_PAGE', 'SEARCH_ITEMS_PER_PAGE',  1,  NULL,  'SF\\Behaviour Search items per page ',
-  'Search items per page (e.g. "10,20,40")', 1004,  1000, 0, 0, 0, 0);
+  'Search items per page (e.g. "10,20,40")', 'CommaSeparatedList', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11102,  'SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL', 'SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL',  1,  NULL,  'System\\Payment Active payment modules ',
-  'Active payment modules', 1004,  1000, 0, 0, 0, 0);
+  'Active payment modules', 'CommaSeparatedList', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11103,  'CART_ABANDONED_TIMEOUT_SECONDS', 'CART_ABANDONED_TIMEOUT_SECONDS',  0,  NULL,  'SF\\Behaviour Cart: abandonment in seconds',
-    'Cart abandonment seconds. All abandoned carts are deleted by bulk job. Default: 2592000s (30 days)',  1006, 1000, 0, 0, 0, 0);
+    'Cart abandonment seconds. All abandoned carts are deleted by bulk job. Default: 2592000s (30 days)',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11104,  'JOB_SEND_MAIL_PAUSE', 'JOB_SEND_MAIL_PAUSE',  0,  NULL,  'Job\\Mail: pause mail processing',
-    'Pause email sending job',  1008, 1000, 0, 0, 0, 0);
+    'Pause email sending job',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11106,  'JOB_LOCAL_FILE_IMPORT_PAUSE', 'JOB_LOCAL_FILE_IMPORT_PAUSE',  0,  NULL,  'Job\\Auto Import: pause import listener',
-    'Pause local file system import listener',  1008, 1000, 0, 0, 0, 0);
+    'Pause local file system import listener',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11206,  'JOB_EXPIRE_GUESTS_PAUSE', 'JOB_EXPIRE_GUESTS_PAUSE',  0,  NULL,  'Job\\Expired Guest Accounts Clean Up: pause clean up',
-    'Pause guest accounts deletion (guest checkouts)',  1008, 1000, 0, 0, 0, 0);
+    'Pause guest accounts deletion (guest checkouts)',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11230,  'JOB_EXPIRE_GUESTS_BATCH_SIZE', 'JOB_EXPIRE_GUESTS_BATCH_SIZE',  0,  NULL,  'Job\\Expired Guest Accounts Clean Up: batch size',
-    'Guest accounts deletion batch size (default is 500)',  1006, 1000, 0, 0, 0, 0);
+    'Guest accounts deletion batch size (default is 500)',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11207,  'JOB_CUSTOMER_TAG_PAUSE', 'JOB_CUSTOMER_TAG_PAUSE',  0,  NULL,  'Job\\Customer Tagging: pause tagging',
-    'Pause customer tagging (batch processing of tagging promotions)',  1008, 1000, 0, 0, 0, 0);
+    'Pause customer tagging (batch processing of tagging promotions)',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11231,  'JOB_CUSTOMER_TAG_BATCH_SIZE', 'JOB_CUSTOMER_TAG_BATCH_SIZE',  0,  NULL,  'Job\\Customer Tagging: batch size',
-    'Customer tagging batch size (default is 500)',  1006, 1000, 0, 0, 0, 0);
+    'Customer tagging batch size (default is 500)',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11208,  'JOB_ABANDONED_CARTS_PAUSE', 'JOB_ABANDONED_CARTS_PAUSE',  0,  NULL,  'Job\\Abandoned Shopping Cart State Clean Up: pause clean up',
-    'Pause abandoned cart clean up (batch removal of old carts)',  1008, 1000, 0, 0, 0, 0);
+    'Pause abandoned cart clean up (batch removal of old carts)',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11232,  'JOB_ABANDONED_CARTS_BATCH_SIZE', 'JOB_ABANDONED_CARTS_BATCH_SIZE',  0,  NULL,  'Job\\Abandoned Shopping Cart State Clean Up: batch size',
-    'Abandoned cart clean up batch size (default is 500)',  1006, 1000, 0, 0, 0, 0);
+    'Abandoned cart clean up batch size (default is 500)',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11209,  'JOB_EMPTY_CARTS_PAUSE', 'JOB_EMPTY_CARTS_PAUSE',  0,  NULL,  'Job\\Empty Anonymous Shopping Cart State Clean Up: pause clean up',
-    'Pause empty cart clean up (batch removal of empty carts)',  1008, 1000, 0, 0, 0, 0);
+    'Pause empty cart clean up (batch removal of empty carts)',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11233,  'JOB_EMPTY_CARTS_BATCH_SIZE', 'JOB_EMPTY_CARTS_BATCH_SIZE',  0,  NULL,  'Job\\Empty Anonymous Shopping Cart State Clean Up: batch size',
-    'Empty cart clean up batch size (default is 500)',  1006, 1000, 0, 0, 0, 0);
+    'Empty cart clean up batch size (default is 500)',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11210,  'JOB_PRODINVUP_PAUSE', 'JOB_PRODINVUP_PAUSE',  0,  NULL,  'Job\\Inventory Change Detection: pause reindex',
-    'Pause product change detection job (stops re-indexing of changed inventory)',  1008, 1000, 0, 0, 0, 0);
+    'Pause product change detection job (stops re-indexing of changed inventory)',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11211,  'JOB_GLOBALREINDEX_PAUSE', 'JOB_GLOBALREINDEX_PAUSE',  0,  NULL,  'Job\\Reindex All Products: pause reindex',
-    'Pause full products reindex job',  1008, 1000, 0, 0, 0, 0);
+    'Pause full products reindex job',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11212,  'JOB_EXPIREREINDEX_PAUSE', 'JOB_EXPIREREINDEX_PAUSE',  0,  NULL,  'Job\\Reindex Discontinued Products: pause reindex',
-    'Pause discontinued products reindex job',  1008, 1000, 0, 0, 0, 0);
+    'Pause discontinued products reindex job',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11213,  'JOB_DELWAITINV_PAUSE', 'JOB_DELIVERY_WAIT_INVENTORY_PAUSE',  0,  NULL,  'Job\\Inventory Awaiting Delivery Processing: pause',
-    'Pause inventory awaiting delivery processing job',  1008, 1000, 0, 0, 0, 0);
+    'Pause inventory awaiting delivery processing job',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11214,  'JOB_DELINFOUPDT_PAUSE', 'JOB_DELIVERY_INFO_UPDATE_PAUSE',  0,  NULL,  'Job\\Order Delivery Information Update Processing: pause',
-    'Pause order delivery information update processing job',  1008, 1000, 0, 0, 0, 0);
+    'Pause order delivery information update processing job',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11215,  'JOB_ORDERAUTOEXP_PAUSE', 'JOB_ORDER_AUTO_EXPORT_PAUSE',  0,  NULL,  'Job\\Order Auto Export Processing: pause',
-    'Pause order auto export processing job',  1008, 1000, 0, 0, 0, 0);
+    'Pause order auto export processing job',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11218,  'JOB_PROD_OBS_PAUSE', 'JOB_PROD_OBS_PAUSE',  0,  NULL,  'Job\\Obsolete product removal: pause',
-    'Pause removing obsolete products job',  1008, 1000, 0, 0, 0, 0);
+    'Pause removing obsolete products job',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11219,  'JOB_PROD_OBS_MAX', 'JOB_PROD_OBS_MAX',  0,  NULL,  'Job\\Obsolete product removal: maximum offset for available to (days)',
-    'Number of days after available to date which denotes obsolete products. Default: 365 (1yr)',  1006, 1000, 0, 0, 0, 0);
+    'Number of days after available to date which denotes obsolete products. Default: 365 (1yr)',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11220,  'JOB_PROD_OBS_BATCH_SIZE', 'JOB_PROD_OBS_BATCH_SIZE',  0,  NULL,  'Job\\Obsolete product removal: batch size',
-    'Maximum products to remove per each run. Default: 500',  1006, 1000, 0, 0, 0, 0);
+    'Maximum products to remove per each run. Default: 500',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11107,  'JOB_LOCAL_FILE_IMPORT_FS_ROOT', 'JOB_LOCAL_FILE_IMPORT_FS_ROOT',  0,  NULL,  'Job\\Auto Import: listener directory root',
-    'Directory root for listener to check for updates',  1001, 1000, 0, 0, 0, 0);
+    'Directory root for listener to check for updates',  'URI', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11109,  'CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS', 'CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS',  0,  NULL,  'SF\\Behaviour Cart: empty anonymous in seconds',
-    'Cart empty anonymous seconds. All empty anonymous carts are deleted by bulk job. Default: 86400s (1 days)',  1006, 1000, 0, 0, 0, 0);
+    'Cart empty anonymous seconds. All empty anonymous carts are deleted by bulk job. Default: 86400s (1 days)',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11110,  'SHOP_CATEGORY_ITEMS_FEATURED', 'SHOP_CATEGORY_ITEMS_FEATURED',  0,  NULL,  'Category: Quantity of featured items to show on category page',
-   'How many featured items need to show',  1006, 1001, 0, 0, 0, 0);
+   'How many featured items need to show',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11111,  'SHOP_CATEGORY_ITEMS_NEW_ARRIVAL', 'SHOP_CATEGORY_ITEMS_NEW_ARRIVAL',  0,  NULL,  'Category: Quantity of new arrival items to show on category page',
-   'Quantity of new arrival items to show on category page',  1006, 1001, 0, 0, 0, 0);
+   'Quantity of new arrival items to show on category page',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11112,  'SHOP_CATEGORY_PRODUCTS_COLUMNS', 'SHOP_CATEGORY_PRODUCTS_COLUMNS',  0,  NULL,  'Category: Quantity of product pods in one row on category page',
-   'Quantity of product pods in one row to show on category page',  1006, 1001, 0, 0, 0, 0);
+   'Quantity of product pods in one row to show on category page',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11113,  'SHOP_CATEGORY_SUBCATEGORIES_COLUMNS', 'SHOP_CATEGORY_SUBCATEGORIES_COLUMNS',  0,  NULL,  'Category: Quantity of category pods in one row on category page',
-   'Quantity of product pods in one row to show on category page',  1006, 1001, 0, 0, 0, 0);
+   'Quantity of product pods in one row to show on category page',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11234,  'SHOP_COUPON_CODE_LENGTH', 'SHOP_COUPON_CODE_LENGTH',  0,  NULL,  'Promotion: size of the coupon code',
-   'Size of the auto generated coupon code (min is 5 char not including shop code prefix)',  1006, 1001, 0, 0, 0, 0);
+   'Size of the auto generated coupon code (min is 5 char not including shop code prefix)',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11114,  'JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE', 'JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE',  0,  NULL,  'Job\\Image vault scan: pause image vault scanning',
-    'Pause local file system image vault scanner',  1008, 1000, 0, 0, 0, 0);
+    'Pause local file system image vault scanner',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11115,  'GUESTS_EXPIRY_TIMEOUT_SECONDS', 'GUESTS_EXPIRY_TIMEOUT_SECONDS',  0,  NULL,  'SF\\Behaviour Cart: guests expiry in seconds',
-    'Guest account expiry seconds. All expired guest accounts are deleted by bulk job. Default: 86400s (1 day)',  1006, 1000, 0, 0, 0, 0);
+    'Guest account expiry seconds. All expired guest accounts are deleted by bulk job. Default: 86400s (1 day)',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11116,  'JOB_REINDEX_PRODUCT_BATCH_SIZE', 'JOB_REINDEX_PRODUCT_BATCH_SIZE',  0,  NULL,  'Job\\Product re-index: batch size',
-    'Number of products to reindex in single batch.',  1006, 1000, 0, 0, 0, 0);
+    'Number of products to reindex in single batch.',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11117,  'JOB_PRODINVUP_DELTA', 'JOB_PRODINVUP_DELTA',  0,  NULL,  'Job\\Inventory Change Detection: max delta after delay',
-    'Number of inventory records that had changed after a second the job started (default is 100). If changes exceed this number then re-indexing is postponed.',  1006, 1000, 0, 0, 0, 0);
+    'Number of inventory records that had changed after a second the job started (default is 100). If changes exceed this number then re-indexing is postponed.',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11118,  'JOB_PRODINVUP_FULL', 'JOB_PRODINVUP_FULL',  0,  NULL,  'Job\\Inventory Change Detection: changes for full reindex',
-    'Number of inventory records that should trigger full re-index rather than partial. Default is 1000',  1006, 1000, 0, 0, 0, 0);
+    'Number of inventory records that should trigger full re-index rather than partial. Default is 1000',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11119,  'JOB_PRODINVUP_DELTA_S', 'JOB_PRODINVUP_DELTA_S',  0,  NULL,  'Job\\Inventory Change Detection: delta delay in seconds',
-    'Delay for delta check. Default 15s.',  1006, 1000, 0, 0, 0, 0);
+    'Delay for delta check. Default 15s.',  'Integer', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11124,  'JOB_LOCAL_PRODIMAGECLEAN_SCAN_PAUSE', 'JOB_LOCAL_PRODIMAGECLEAN_SCAN_PAUSE',  0,  NULL,  'Job\\Product image vault clean up: pause product image vault clean up',
-    'Pause local file system product image vault clean up',  1008, 1000, 0, 0, 0, 0);
+    'Pause local file system product image vault clean up',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11125,  'JOB_LOCAL_PRODIMAGEVAULT_CLEAN_MODE', 'JOB_LOCAL_PRODIMAGEVAULT_CLEAN_MODE',  0,  NULL,  'Job\\Product image vault clean up: mode',
-    'Mode can be SCAN (logging only) or DELETE (removes the orphan image files)',  1000, 1000, 0, 0, 0, 0);
+    'Mode can be SCAN (logging only) or DELETE (removes the orphan image files)',  'String', 'SYSTEM', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, V_FAILED_MSG)
-  VALUES (  11166,  'MANAGER_PASSWORD_REGEX', 'MANAGER_PASSWORD_REGEX',  1,  NULL,  'Manager Password RegEx',  'Manager Password RegEx', 1017,  1000, 0, 0, 0, 0, 1,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, V_FAILED_MSG)
+  VALUES (  11166,  'MANAGER_PASSWORD_REGEX', 'MANAGER_PASSWORD_REGEX',  1,  NULL,  'Manager Password RegEx',  'Manager Password RegEx', 'SecureString', 'SYSTEM', 0, 0, 0, 0, 1,
   'xx#~#Password must have at least 8 symbols: 1 upper case letter (A-Z), 1 lower case letter (a-z), 1 digit (0-9) and 1 special character (@#$%^&+=)#~#en#~#Password must have at least 8 symbols: 1 upper case letter (A-Z), 1 lower case letter (a-z), 1 digit (0-9) and 1 special character (@#$%^&+=)#~#uk#~#Пароль має містити принаймні 8 символів: 1 велику літеру (A-Z), 1 маленьку літеру (a-z), 1 цифру (0-9) та 1 спеціальний символ (@#$%^&+=)#~#ru#~#Пароль должен содержать 8 символов: 1 большую букву (A-Z), 1 маленькую букву (a-z), 1 цифру (0-9) и 1 специальный символ (@#$%^&+=)#~#de#~#Das Passwort muss mindestens 8 Symbole enthalten: 1 Großbuchstabe (A-Z), 1 Kleinbuchstabe (a-z), 1 Ziffer (0-9) und 1 Sonderzeichen (@#$%^&+=)');
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11167,  'JOB_CACHE_EVICT_PAUSE', 'JOB_CACHE_EVICT_PAUSE',  0,  NULL,  'Job\\Evict frontend cache: pause evict cache',
-    'Pause frontend cache eviction (if paused updates in admin will not take effect unless manual cache evict is triggered)',  1008, 1000, 0, 0, 0, 0);
+    'Pause frontend cache eviction (if paused updates in admin will not take effect unless manual cache evict is triggered)',  'Boolean', 'SYSTEM', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11301,  'SHOP_IMAGE0',  'SHOP_IMAGE0',  1,  NULL,  'Shop: Shop image default',  null,  1003, 1001, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11302,  'SHOP_IMAGE0_ru',  'SHOP_IMAGE0_ru',  1,  NULL,  'Shop: Картинка магазина по умолчанию (RU)',  null,  1003, 1001, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11303,  'SHOP_IMAGE0_en',  'SHOP_IMAGE0_en',  1,  NULL,  'Shop: Shop image default (EN)',  null,  1003, 1001, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11304,  'SHOP_IMAGE0_uk',  'SHOP_IMAGE0_uk',  1,  NULL,  'Shop: Картинка магазину за замовчуванням  (UK)',  null,  1003, 1001, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11305,  'SHOP_IMAGE0_de',  'SHOP_IMAGE0_de',  1,  NULL,  'Shop: Shop standard image  (DE)',  null,  1003, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11301,  'SHOP_IMAGE0',  'SHOP_IMAGE0',  1,  NULL,  'Shop: Shop image default',  null,  'Image', 'SHOP', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11302,  'SHOP_IMAGE0_ru',  'SHOP_IMAGE0_ru',  1,  NULL,  'Shop: Картинка магазина по умолчанию (RU)',  null,  'Image', 'SHOP', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11303,  'SHOP_IMAGE0_en',  'SHOP_IMAGE0_en',  1,  NULL,  'Shop: Shop image default (EN)',  null,  'Image', 'SHOP', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11304,  'SHOP_IMAGE0_uk',  'SHOP_IMAGE0_uk',  1,  NULL,  'Shop: Картинка магазину за замовчуванням  (UK)',  null,  'Image', 'SHOP', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11305,  'SHOP_IMAGE0_de',  'SHOP_IMAGE0_de',  1,  NULL,  'Shop: Shop standard image  (DE)',  null,  'Image', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11306,  'SHOP_FILE0',  'SHOP_FILE0',  1,  NULL,  'Shop: Shop file',  null,  1013, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11306,  'SHOP_FILE0',  'SHOP_FILE0',  1,  NULL,  'Shop: Shop file',  null,  'File', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
-  VALUES (  11307,  'SHOP_SYSFILE0',  'SHOP_SYSFILE0',  1,  NULL,  'Shop: Shop system file',  null,  1014, 1001, 0, 0, 0, 0, 1);
-
-
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11001,  'BRAND_IMAGE0', 'BRAND_IMAGE0',  1,  NULL,  'Brand image',  null,  1003, 1005, 0, 0, 0, 0);
-
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11311,  'BRAND_IMAGE0_ru',  'BRAND_IMAGE0_ru',  1,  NULL,  'Картинка ТМ по умолчанию (RU)',  null,  1003, 1005, 0, 0, 0, 0);
-
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11312,  'BRAND_IMAGE0_en',  'BRAND_IMAGE0_en',  1,  NULL,  'Brand image default (EN)',  null,  1003, 1005, 0, 0, 0, 0);
-
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11313,  'BRAND_IMAGE0_uk',  'BRAND_IMAGE0_uk',  1,  NULL,  'Картинка ТМ за замовчуванням  (UK)',  null,  1003, 1005, 0, 0, 0, 0);
-
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11310,  'BRAND_IMAGE0_de',  'BRAND_IMAGE0_de',  1,  NULL,  'Marke standard image  (DE)',  null,  1003, 1005, 0, 0, 0, 0);
-
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11309,  'BRAND_FILE0', 'BRAND_FILE0',  1,  NULL,  'Brand file',  null,  1013, 1005, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE)
+  VALUES (  11307,  'SHOP_SYSFILE0',  'SHOP_SYSFILE0',  1,  NULL,  'Shop: Shop system file',  null,  'SystemFile', 'SHOP', 0, 0, 0, 0, 1);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11001,  'BRAND_IMAGE0', 'BRAND_IMAGE0',  1,  NULL,  'Brand image',  null,  'Image', 'BRAND', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11311,  'BRAND_IMAGE0_ru',  'BRAND_IMAGE0_ru',  1,  NULL,  'Картинка ТМ по умолчанию (RU)',  null,  'Image', 'BRAND', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11312,  'BRAND_IMAGE0_en',  'BRAND_IMAGE0_en',  1,  NULL,  'Brand image default (EN)',  null,  'Image', 'BRAND', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11313,  'BRAND_IMAGE0_uk',  'BRAND_IMAGE0_uk',  1,  NULL,  'Картинка ТМ за замовчуванням  (UK)',  null,  'Image', 'BRAND', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11310,  'BRAND_IMAGE0_de',  'BRAND_IMAGE0_de',  1,  NULL,  'Marke standard image  (DE)',  null,  'Image', 'BRAND', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11309,  'BRAND_FILE0', 'BRAND_FILE0',  1,  NULL,  'Brand file',  null,  'File', 'BRAND', 0, 0, 0, 0);
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11002,  'CATEGORY_ITEMS_PER_PAGE', 'CATEGORY_ITEMS_PER_PAGE',  0,  NULL,  'Category: item per page settings (CSV)',
-   'Category item per page settings with fail over. Default is: 10,20,30',  1004, 1002, 0, 0, 0, 0);
+   'Category item per page settings with fail over. Default is: 10,20,30',  'CommaSeparatedList', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11003,  'SHOP_CATEGORY_ITEMS_PER_PAGE',  'SHOP_CATEGORY_ITEMS_PER_PAGE',  0,  NULL,  'Category: item per page settings (CSV)',
-   'Category item per page settings with fail over. Default is: 10,20,30',  1004, 1001, 0, 0, 0, 0);
+   'Category item per page settings with fail over. Default is: 10,20,30',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11004,  'CATEGORY_IMAGE0', 'CATEGORY_IMAGE0',  0,  NULL,  'Category image',   'Category image',  1003, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11004,  'CATEGORY_IMAGE0', 'CATEGORY_IMAGE0',  0,  NULL,  'Category image',   'Category image',  'Image', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11314,  'CATEGORY_IMAGE0_ru',  'CATEGORY_IMAGE0_ru',  0,  NULL,  'Картинка категории по умолчанию (RU)',   null,  1003, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11314,  'CATEGORY_IMAGE0_ru',  'CATEGORY_IMAGE0_ru',  0,  NULL,  'Картинка категории по умолчанию (RU)',   null,  'Image', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11315,  'CATEGORY_IMAGE0_en',  'CATEGORY_IMAGE0_en',  0,  NULL,  'Category image default (EN)',   null,  1003, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11315,  'CATEGORY_IMAGE0_en',  'CATEGORY_IMAGE0_en',  0,  NULL,  'Category image default (EN)',   null,  'Image', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11316,  'CATEGORY_IMAGE0_uk',  'CATEGORY_IMAGE0_uk',  0,  NULL,  'Картинка категорії за замовчуванням  (UK)',   null,  1003, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11316,  'CATEGORY_IMAGE0_uk',  'CATEGORY_IMAGE0_uk',  0,  NULL,  'Картинка категорії за замовчуванням  (UK)',   null,  'Image', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11105,  'CATEGORY_IMAGE0_de',  'CATEGORY_IMAGE0_de',  0,  NULL,  'Kategorie standard image  (DE)',   null,  1003, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11105,  'CATEGORY_IMAGE0_de',  'CATEGORY_IMAGE0_de',  0,  NULL,  'Kategorie standard image  (DE)',   null,  'Image', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11320,  'CATEGORY_FILE0', 'CATEGORY_FILE0',  0,  NULL,  'Category file',   'Category file',  1003, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11320,  'CATEGORY_FILE0', 'CATEGORY_FILE0',  0,  NULL,  'Category file',   'Category file',  'Image', 'CATEGORY', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11317,  'CATEGORY_SORT_OPTIONS', 'CATEGORY_SORT_OPTIONS',  0,  NULL,  'Category: sortable fields (CSV)',
-    'List of sort fields separated by comma with fail over. Default is: displayName,sku,basePrice. All supported: name,displayName,basePrice,productCode,manufacturerCode,sku,brand,availability,created,inStock',  1004, 1002, 0, 0, 0, 0);
+    'List of sort fields separated by comma with fail over. Default is: displayName,sku,basePrice. All supported: name,displayName,basePrice,productCode,manufacturerCode,sku,brand,availability,created,inStock',  'CommaSeparatedList', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11318,  'SHOP_CATEGORY_SORT_OPTIONS', 'SHOP_CATEGORY_SORT_OPTIONS',  0,  NULL,  'Category: sortable fields (CSV)',
-    'List of sort fields separated by comma with fail over. Default is: displayName,sku,basePrice. All supported: name,displayName,basePrice,productCode,manufacturerCode,sku,brand,availability,created,inStock',  1004, 1001, 0, 0, 0, 0);
+    'List of sort fields separated by comma with fail over. Default is: displayName,sku,basePrice. All supported: name,displayName,basePrice,productCode,manufacturerCode,sku,brand,availability,created,inStock',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11319,  'CATEGORY_FILTERNAV_LIMIT', 'CATEGORY_FILTERNAV_LIMIT',  0,  NULL,  'Filter navigation records limit',
-  'Filter navigation records limit per group. Default is 25',  1006, 1002, 0, 0, 0, 0);
+  'Filter navigation records limit per group. Default is 25',  'Integer', 'CATEGORY', 0, 0, 0, 0);
 
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11322,  'SHOP_CUSTOMER_SORT_OPTIONS', 'SHOP_CUSTOMER_SORT_OPTIONS',  0,  NULL,  'Manager: sortable fields (CSV)',
-    'List of sort fields separated by comma with fail over. Default is: lastname,companyName1,createdTimestamp.',  1004, 1001, 0, 0, 0, 0);
+    'List of sort fields separated by comma with fail over. Default is: lastname,companyName1,createdTimestamp.',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11323,  'SHOP_CUSTOMER_IMAGE_WIDTH',  'SHOP_CUSTOMER_IMAGE_WIDTH',  0,  NULL,  'Manager: Customer image width in list',   'Customer image width in list',  1006, 1001, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11324,  'SHOP_CUSTOMER_IMAGE_HEIGHT',  'SHOP_CUSTOMER_IMAGE_HEIGHT',  0,  NULL,  'Manager: Customer image height in list',   'Customer image height in list',  1006, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11323,  'SHOP_CUSTOMER_IMAGE_WIDTH',  'SHOP_CUSTOMER_IMAGE_WIDTH',  0,  NULL,  'Manager: Customer image width in list',   'Customer image width in list',  'Integer', 'SHOP', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11324,  'SHOP_CUSTOMER_IMAGE_HEIGHT',  'SHOP_CUSTOMER_IMAGE_HEIGHT',  0,  NULL,  'Manager: Customer image height in list',   'Customer image height in list',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11325,  'SHOP_CUSTOMER_RECORDS_COLUMNS', 'SHOP_CUSTOMER_RECORDS_COLUMNS',  0,  NULL,  'Manager: Quantity of customer pods in one row in list',
-   'Quantity of product pods in one row to show on category page',  1006, 1001, 0, 0, 0, 0);
+   'Quantity of product pods in one row to show on category page',  'Integer', 'SHOP', 0, 0, 0, 0);
 
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11005,  'CATEGORY_IMAGE_RETRIEVE_STRATEGY', 'CATEGORY_IMAGE_RETRIEVE_STRATEGY',  0,  NULL,  'Strategy to retrieve image',
-  'Strategy to retrieve images. Allowed values: [ATTRIBUTE] i.e. use CATEGORY_IMAGE attribute or [RANDOM_PRODUCT] i.e. random product image will be used',  1000, 1002, 0, 0, 0, 0);
+  'Strategy to retrieve images. Allowed values: [ATTRIBUTE] i.e. use CATEGORY_IMAGE attribute or [RANDOM_PRODUCT] i.e. random product image will be used',  'String', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11006,  'CATEGORY_DESCRIPTION_en', 'CATEGORY_DESCRIPTION_en',  0,  NULL,  'Category Description (en)',
-  'Category Description in English (en)',  1011, 1002, 0, 0, 0, 0);
+  'Category Description in English (en)',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11007,  'CATEGORY_DESCRIPTION_ru', 'CATEGORY_DESCRIPTION_ru',  0,  NULL,  'Описание Категории (ru)',
-  'Описание Категории на Русском (ru)',  1011, 1002, 0, 0, 0, 0);
+  'Описание Категории на Русском (ru)',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11014,  'CATEGORY_DESCRIPTION_uk', 'CATEGORY_DESCRIPTION_uk',  0,  NULL,  'Опис Категорії (uk)',
-  'Опис Категорії Українською (uk)',  1011, 1002, 0, 0, 0, 0);
+  'Опис Категорії Українською (uk)',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11015,  'CATEGORY_DESCRIPTION_de', 'CATEGORY_DESCRIPTION_de',  0,  NULL,  'Kategorie beschreibung (de)',
-  'Kategorie Beschreibung in Deutsch (de)',  1011, 1002, 0, 0, 0, 0);
+  'Kategorie Beschreibung in Deutsch (de)',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11058,  'CATEGORY_ITEMS_FEATURED', 'CATEGORY_ITEMS_FEATURED',  0,  NULL,  'Quantity of featured items to show on category page',
-   'How many featured items need to show',  1006, 1002, 0, 0, 0, 0);
+   'How many featured items need to show',  'Integer', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11059,  'CATEGORY_ITEMS_NEW_ARRIVAL', 'CATEGORY_ITEMS_NEW_ARRIVAL',  0,  NULL,  'Quantity of new arrival items to show on category page',
-   'Quantity of new arrival items to show on category page',  1006, 1002, 0, 0, 0, 0);
+   'Quantity of new arrival items to show on category page',  'Integer', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11056,  'CATEGORY_SUBCATEGORIES_COLUMNS', 'CATEGORY_SUBCATEGORIES_COLUMNS',  0,  NULL,  'Quantity of category pods in one row on category page',
-   'Quantity of category pods in one row to show on category page',  1006, 1002, 0, 0, 0, 0);
+   'Quantity of category pods in one row to show on category page',  'Integer', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11057,  'CATEGORY_PRODUCTS_COLUMNS', 'CATEGORY_PRODUCTS_COLUMNS',  0,  NULL,  'Quantity of product pods in one row on category page',
-   'Quantity of product pods in one row to show on category page',  1006, 1002, 0, 0, 0, 0);
+   'Quantity of product pods in one row to show on category page',  'Integer', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  10991,  'INCLUDE_SUBCATEGORIES_IN_SEARCH_CAT', 'INCLUDE_SUBCATEGORIES_IN_SEARCH_CAT',  0,  NULL,  'Search: include sub categories',  'Search: include sub categories',  1008, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10991,  'INCLUDE_SUBCATEGORIES_IN_SEARCH_CAT', 'INCLUDE_SUBCATEGORIES_IN_SEARCH_CAT',  0,  NULL,  'Search: include sub categories',  'Search: include sub categories',  'Boolean', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10989,  'CATEGORY_NEW_ARRIVAL_DAYS_OFFSET', 'CATEGORY_NEW_ARRIVAL_DAYS_OFFSET',  0,  NULL,  'Search: newarrival tag days offset',
-   'Search: newarrival tag days offset',  1006, 1002, 0, 0, 0, 0);
+   'Search: newarrival tag days offset',  'Integer', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11060,  'CONTENT_BODY_en_1', 'CONTENT_BODY_en_1',  0,  NULL,  'Content body (en)',
-  'Content body in English (en). 1st 4000 characters',  1011, 1002, 0, 0, 0, 0);
+  'Content body in English (en). 1st 4000 characters',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11061,  'CONTENT_BODY_en_2', 'CONTENT_BODY_en_2',  0,  NULL,  'Content body (en)',
-  'Content body in English (en). 2nd 4000 characters',  1011, 1002, 0, 0, 0, 0);
+  'Content body in English (en). 2nd 4000 characters',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11070,  'CONTENT_BODY_ru_1', 'CONTENT_BODY_ru_1',  0,  NULL,  'Текст контента (ru)',
-  'Текст контента на Русском (ru). 1-е 4000 символов.',  1011, 1002, 0, 0, 0, 0);
+  'Текст контента на Русском (ru). 1-е 4000 символов.',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11071,  'CONTENT_BODY_ru_2', 'CONTENT_BODY_ru_2',  0,  NULL,  'Текст контента (ru)',
-  'Текст контента на Русском (ru). 2-е 4000 символов.',  1011, 1002, 0, 0, 0, 0);
+  'Текст контента на Русском (ru). 2-е 4000 символов.',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11080,  'CONTENT_BODY_uk_1', 'CONTENT_BODY_uk_1',  0,  NULL,  'Текст контенту (uk)',
-  'Текст контенту Українською (uk). 1-ші 4000 символів.',  1011, 1002, 0, 0, 0, 0);
+  'Текст контенту Українською (uk). 1-ші 4000 символів.',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11081,  'CONTENT_BODY_uk_2', 'CONTENT_BODY_uk_2',  0,  NULL,  'Текст контенту (uk)',
-  'Текст контенту Українською (uk). 2-гі 4000 символів.',  1011, 1002, 0, 0, 0, 0);
+  'Текст контенту Українською (uk). 2-гі 4000 символів.',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11090,  'CONTENT_BODY_de_1', 'CONTENT_BODY_de_1',  0,  NULL,  'Inhalt (de)',
-  'Inhalt in Deutsch (de). erste 4000 Zeichen',  1011, 1002, 0, 0, 0, 0);
+  'Inhalt in Deutsch (de). erste 4000 Zeichen',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11091,  'CONTENT_BODY_de_2', 'CONTENT_BODY_de_2',  0,  NULL,  'Inhalt (de)',
-  'Inhalt in Deutsch (de). zweite 4000 Zeichen',  1011, 1002, 0, 0, 0, 0);
+  'Inhalt in Deutsch (de). zweite 4000 Zeichen',  'HTML', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12000,  'PRODUCT_IMAGE_WIDTH', 'PRODUCT_IMAGE_WIDTH',  0,  NULL,  'Product image width in category',   'Product image width in category',  1006, 1002, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12001,  'PRODUCT_IMAGE_HEIGHT', 'PRODUCT_IMAGE_HEIGHT',  0,  NULL,  'Product image height in category',   'Product image height in category',  1006, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12000,  'PRODUCT_IMAGE_WIDTH', 'PRODUCT_IMAGE_WIDTH',  0,  NULL,  'Product image width in category',   'Product image width in category',  'Integer', 'CATEGORY', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12001,  'PRODUCT_IMAGE_HEIGHT', 'PRODUCT_IMAGE_HEIGHT',  0,  NULL,  'Product image height in category',   'Product image height in category',  'Integer', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12004,  'SHOP_PRODUCT_IMAGE_WIDTH',  'SHOP_PRODUCT_IMAGE_WIDTH',  0,  NULL,  'Category: Product image width in category',   'Product image width in category',  1006, 1001, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12005,  'SHOP_PRODUCT_IMAGE_HEIGHT',  'SHOP_PRODUCT_IMAGE_HEIGHT',  0,  NULL,  'Category: Product image height in category',   'Product image height in category',  1006, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12004,  'SHOP_PRODUCT_IMAGE_WIDTH',  'SHOP_PRODUCT_IMAGE_WIDTH',  0,  NULL,  'Category: Product image width in category',   'Product image width in category',  'Integer', 'SHOP', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12005,  'SHOP_PRODUCT_IMAGE_HEIGHT',  'SHOP_PRODUCT_IMAGE_HEIGHT',  0,  NULL,  'Category: Product image height in category',   'Product image height in category',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12050,  'PRODUCT_IMAGE_THUMB_WIDTH', 'PRODUCT_IMAGE_THUMB_WIDTH',  0,  NULL,  'Product thumbnail image width',   'Product thumbnail image width',  1006, 1002, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12051,  'PRODUCT_IMAGE_THUMB_HEIGHT', 'PRODUCT_IMAGE_THUMB_HEIGHT',  0,  NULL,  'Product thumbnail image height',   'Product thumbnail image height',  1006, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12050,  'PRODUCT_IMAGE_THUMB_WIDTH', 'PRODUCT_IMAGE_THUMB_WIDTH',  0,  NULL,  'Product thumbnail image width',   'Product thumbnail image width',  'Integer', 'CATEGORY', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12051,  'PRODUCT_IMAGE_THUMB_HEIGHT', 'PRODUCT_IMAGE_THUMB_HEIGHT',  0,  NULL,  'Product thumbnail image height',   'Product thumbnail image height',  'Integer', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12006,  'SHOP_PRODUCT_IMAGE_THUMB_WIDTH',  'SHOP_PRODUCT_IMAGE_THUMB_WIDTH',  0,  NULL,  'Category: Product thumbnail image width',   'Product thumbnail image width',  1006, 1001, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12007,  'SHOP_PRODUCT_IMAGE_THUMB_HEIGHT',  'SHOP_PRODUCT_IMAGE_THUMB_HEIGHT',  0,  NULL,  'Category: Product thumbnail image height',   'Product thumbnail image height',  1006, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12006,  'SHOP_PRODUCT_IMAGE_THUMB_WIDTH',  'SHOP_PRODUCT_IMAGE_THUMB_WIDTH',  0,  NULL,  'Category: Product thumbnail image width',   'Product thumbnail image width',  'Integer', 'SHOP', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12007,  'SHOP_PRODUCT_IMAGE_THUMB_HEIGHT',  'SHOP_PRODUCT_IMAGE_THUMB_HEIGHT',  0,  NULL,  'Category: Product thumbnail image height',   'Product thumbnail image height',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11998,  'CATEGORY_IMAGE_WIDTH', 'CATEGORY_IMAGE_WIDTH',  0,  NULL,  'Category image  width ',   'Category image width thumbnail ',  1006, 1002, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11999,  'CATEGORY_IMAGE_HEIGHT', 'CATEGORY_IMAGE_HEIGHT',  0,  NULL,  'Category image   height',   'Category image height thumbnail ',  1006, 1002, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11998,  'CATEGORY_IMAGE_WIDTH', 'CATEGORY_IMAGE_WIDTH',  0,  NULL,  'Category image  width ',   'Category image width thumbnail ',  'Integer', 'CATEGORY', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11999,  'CATEGORY_IMAGE_HEIGHT', 'CATEGORY_IMAGE_HEIGHT',  0,  NULL,  'Category image   height',   'Category image height thumbnail ',  'Integer', 'CATEGORY', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12002,  'SHOP_CATEGORY_IMAGE_WIDTH',  'SHOP_CATEGORY_IMAGE_WIDTH',  0,  NULL,  'Category: Category image  width ',   'Category image width thumbnail ',  1006, 1001, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  12003,  'SHOP_CATEGORY_IMAGE_HEIGHT',  'SHOP_CATEGORY_IMAGE_HEIGHT',  0,  NULL,  'Category: Category image   height',   'Category image height thumbnail ',  1006, 1001, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12002,  'SHOP_CATEGORY_IMAGE_WIDTH',  'SHOP_CATEGORY_IMAGE_WIDTH',  0,  NULL,  'Category: Category image  width ',   'Category image width thumbnail ',  'Integer', 'SHOP', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  12003,  'SHOP_CATEGORY_IMAGE_HEIGHT',  'SHOP_CATEGORY_IMAGE_HEIGHT',  0,  NULL,  'Category: Category image   height',   'Category image height thumbnail ',  'Integer', 'SHOP', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11008,  'IMAGE0', 'IMAGE0',  1,  NULL,  'Product default image',  'Product default image',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11009,  'IMAGE1', 'IMAGE1',  0,  NULL,  'Product alternative image 1',  'Product alternative image 1',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11010,  'IMAGE2', 'IMAGE2',  0,  NULL,  'Product alternative image 2',  'Product alternative image 2',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11011,  'IMAGE3', 'IMAGE3',  0,  NULL,  'Product alternative image 3',  'Product alternative image 3',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11012,  'IMAGE4', 'IMAGE4',  0,  NULL,  'Product alternative image 4',  'Product alternative image 4',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11013,  'IMAGE5', 'IMAGE5',  0,  NULL,  'Product alternative image 5',  'Product alternative image 5',  1003, 1003, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11008,  'IMAGE0', 'IMAGE0',  1,  NULL,  'Product default image',  'Product default image',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11009,  'IMAGE1', 'IMAGE1',  0,  NULL,  'Product alternative image 1',  'Product alternative image 1',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11010,  'IMAGE2', 'IMAGE2',  0,  NULL,  'Product alternative image 2',  'Product alternative image 2',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11011,  'IMAGE3', 'IMAGE3',  0,  NULL,  'Product alternative image 3',  'Product alternative image 3',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11012,  'IMAGE4', 'IMAGE4',  0,  NULL,  'Product alternative image 4',  'Product alternative image 4',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11013,  'IMAGE5', 'IMAGE5',  0,  NULL,  'Product alternative image 5',  'Product alternative image 5',  'Image', 'PRODUCT', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11350,  'IMAGE0_ru',  'IMAGE0_ru',  1,  NULL,  'Картинка товара по умолчанию (RU)',  'Картинка товара по умолчанию (RU)',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11351,  'IMAGE1_ru',  'IMAGE1_ru',  0,  NULL,  'Альтернативная картинка товара 1',  'Альтернативная картинка товара 1',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11352,  'IMAGE2_ru',  'IMAGE2_ru',  0,  NULL,  'Альтернативная картинка товара 2',  'Альтернативная картинка товара 2',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11353,  'IMAGE3_ru',  'IMAGE3_ru',  0,  NULL,  'Альтернативная картинка товара 3',  'Альтернативная картинка товара 3',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11354,  'IMAGE4_ru',  'IMAGE4_ru',  0,  NULL,  'Альтернативная картинка товара 4',  'Альтернативная картинка товара 4',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11355,  'IMAGE5_ru',  'IMAGE5_ru',  0,  NULL,  'Альтернативная картинка товара 5',  'Альтернативная картинка товара 5',  1003, 1003, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11350,  'IMAGE0_ru',  'IMAGE0_ru',  1,  NULL,  'Картинка товара по умолчанию (RU)',  'Картинка товара по умолчанию (RU)',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11351,  'IMAGE1_ru',  'IMAGE1_ru',  0,  NULL,  'Альтернативная картинка товара 1',  'Альтернативная картинка товара 1',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11352,  'IMAGE2_ru',  'IMAGE2_ru',  0,  NULL,  'Альтернативная картинка товара 2',  'Альтернативная картинка товара 2',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11353,  'IMAGE3_ru',  'IMAGE3_ru',  0,  NULL,  'Альтернативная картинка товара 3',  'Альтернативная картинка товара 3',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11354,  'IMAGE4_ru',  'IMAGE4_ru',  0,  NULL,  'Альтернативная картинка товара 4',  'Альтернативная картинка товара 4',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11355,  'IMAGE5_ru',  'IMAGE5_ru',  0,  NULL,  'Альтернативная картинка товара 5',  'Альтернативная картинка товара 5',  'Image', 'PRODUCT', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11356,  'IMAGE0_en',  'IMAGE0_en',  1,  NULL,  'Product default image (EN)',  'Product default image (EN)',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11357,  'IMAGE1_en',  'IMAGE1_en',  0,  NULL,  'Product alternative image 1 (EN)',  'Product alternative image 1 (EN)',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11358,  'IMAGE2_en',  'IMAGE2_en',  0,  NULL,  'Product alternative image 2 (EN)',  'Product alternative image 2 (EN)',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11359,  'IMAGE3_en',  'IMAGE3_en',  0,  NULL,  'Product alternative image 3 (EN)',  'Product alternative image 3 (EN)',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11360,  'IMAGE4_en',  'IMAGE4_en',  0,  NULL,  'Product alternative image 4 (EN)',  'Product alternative image 4 (EN)',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11361,  'IMAGE5_en',  'IMAGE5_en',  0,  NULL,  'Product alternative image 5 (EN)',  'Product alternative image 5 (EN)',  1003, 1003, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11356,  'IMAGE0_en',  'IMAGE0_en',  1,  NULL,  'Product default image (EN)',  'Product default image (EN)',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11357,  'IMAGE1_en',  'IMAGE1_en',  0,  NULL,  'Product alternative image 1 (EN)',  'Product alternative image 1 (EN)',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11358,  'IMAGE2_en',  'IMAGE2_en',  0,  NULL,  'Product alternative image 2 (EN)',  'Product alternative image 2 (EN)',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11359,  'IMAGE3_en',  'IMAGE3_en',  0,  NULL,  'Product alternative image 3 (EN)',  'Product alternative image 3 (EN)',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11360,  'IMAGE4_en',  'IMAGE4_en',  0,  NULL,  'Product alternative image 4 (EN)',  'Product alternative image 4 (EN)',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11361,  'IMAGE5_en',  'IMAGE5_en',  0,  NULL,  'Product alternative image 5 (EN)',  'Product alternative image 5 (EN)',  'Image', 'PRODUCT', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11362,  'IMAGE0_uk',  'IMAGE0_uk',  1,  NULL,  'Картинка товару за замовчуванням  (UK)',  'Картинка товару за замовчуванням  (UK)',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11363,  'IMAGE1_uk',  'IMAGE1_uk',  0,  NULL,  'Альтернативна картинка товару 1',  'Альтернативна картинка товару 1',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11364,  'IMAGE2_uk',  'IMAGE2_uk',  0,  NULL,  'Альтернативна картинка товару 2',  'Альтернативна картинка товару 2',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11365,  'IMAGE3_uk',  'IMAGE3_uk',  0,  NULL,  'Альтернативна картинка товару 3',  'Альтернативна картинка товару 3',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11366,  'IMAGE4_uk',  'IMAGE4_uk',  0,  NULL,  'Альтернативна картинка товару 4',  'Альтернативна картинка товару 4',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11367,  'IMAGE5_uk',  'IMAGE5_uk',  0,  NULL,  'Альтернативна картинка товару 5',  'Альтернативна картинка товару 5',  1003, 1003, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11362,  'IMAGE0_uk',  'IMAGE0_uk',  1,  NULL,  'Картинка товару за замовчуванням  (UK)',  'Картинка товару за замовчуванням  (UK)',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11363,  'IMAGE1_uk',  'IMAGE1_uk',  0,  NULL,  'Альтернативна картинка товару 1',  'Альтернативна картинка товару 1',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11364,  'IMAGE2_uk',  'IMAGE2_uk',  0,  NULL,  'Альтернативна картинка товару 2',  'Альтернативна картинка товару 2',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11365,  'IMAGE3_uk',  'IMAGE3_uk',  0,  NULL,  'Альтернативна картинка товару 3',  'Альтернативна картинка товару 3',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11366,  'IMAGE4_uk',  'IMAGE4_uk',  0,  NULL,  'Альтернативна картинка товару 4',  'Альтернативна картинка товару 4',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11367,  'IMAGE5_uk',  'IMAGE5_uk',  0,  NULL,  'Альтернативна картинка товару 5',  'Альтернативна картинка товару 5',  'Image', 'PRODUCT', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11368,  'IMAGE0_de',  'IMAGE0_de',  1,  NULL,  'Produkt standard image  (DE)',  'Produkt standard image  (DE)',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11369,  'IMAGE1_de',  'IMAGE1_de',  0,  NULL,  'Produkt alternative image 1',  'Produkt alternative image 1',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11370,  'IMAGE2_de',  'IMAGE2_de',  0,  NULL,  'Produkt alternative image 2',  'Produkt alternative image 2',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11371,  'IMAGE3_de',  'IMAGE3_de',  0,  NULL,  'Produkt alternative image 3',  'Produkt alternative image 3',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11372,  'IMAGE4_de',  'IMAGE4_de',  0,  NULL,  'Produkt alternative image 4',  'Produkt alternative image 4',  1003, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11373,  'IMAGE5_de',  'IMAGE5_de',  0,  NULL,  'Produkt alternative image 5',  'Produkt alternative image 5',  1003, 1003, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11368,  'IMAGE0_de',  'IMAGE0_de',  1,  NULL,  'Produkt standard image  (DE)',  'Produkt standard image  (DE)',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11369,  'IMAGE1_de',  'IMAGE1_de',  0,  NULL,  'Produkt alternative image 1',  'Produkt alternative image 1',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11370,  'IMAGE2_de',  'IMAGE2_de',  0,  NULL,  'Produkt alternative image 2',  'Produkt alternative image 2',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11371,  'IMAGE3_de',  'IMAGE3_de',  0,  NULL,  'Produkt alternative image 3',  'Produkt alternative image 3',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11372,  'IMAGE4_de',  'IMAGE4_de',  0,  NULL,  'Produkt alternative image 4',  'Produkt alternative image 4',  'Image', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11373,  'IMAGE5_de',  'IMAGE5_de',  0,  NULL,  'Produkt alternative image 5',  'Produkt alternative image 5',  'Image', 'PRODUCT', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11020,  'PRODUCT_DESCRIPTION_en', 'PRODUCT_DESCRIPTION_en',  0,  NULL,  'Product Description (en)',  'Product Description in English (en)',  1011, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11021,  'PRODUCT_DESCRIPTION_ru', 'PRODUCT_DESCRIPTION_ru',  0,  NULL,  'Описание Продукта (ru)',  'Описание Продукта на Русском (ru)',  1011, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11022,  'PRODUCT_DESCRIPTION_uk', 'PRODUCT_DESCRIPTION_uk',  0,  NULL,  'Опис Продукту (uk)',  'Опис Продукту Українською (uk)',  1011, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11023,  'PRODUCT_DESCRIPTION_de', 'PRODUCT_DESCRIPTION_de',  0,  NULL,  'Produkt beschreibung (de)',  'Produkt beschreibung in Deutsch (de)',  1011, 1003, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11020,  'PRODUCT_DESCRIPTION_en', 'PRODUCT_DESCRIPTION_en',  0,  NULL,  'Product Description (en)',  'Product Description in English (en)',  'HTML', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11021,  'PRODUCT_DESCRIPTION_ru', 'PRODUCT_DESCRIPTION_ru',  0,  NULL,  'Описание Продукта (ru)',  'Описание Продукта на Русском (ru)',  'HTML', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11022,  'PRODUCT_DESCRIPTION_uk', 'PRODUCT_DESCRIPTION_uk',  0,  NULL,  'Опис Продукту (uk)',  'Опис Продукту Українською (uk)',  'HTML', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11023,  'PRODUCT_DESCRIPTION_de', 'PRODUCT_DESCRIPTION_de',  0,  NULL,  'Produkt beschreibung (de)',  'Produkt beschreibung in Deutsch (de)',  'HTML', 'PRODUCT', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11024,  'PRODUCT_WEIGHT_KG', 'PRODUCT_WEIGHT_KG',  0,  NULL,  'Product weight KG',  'Product weight KG',  1005, 1003, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11025,  'PRODUCT_VOLUME_M3', 'PRODUCT_VOLUME_M3',  0,  NULL,  'Product volume m3',  'Product volume m3',  1005, 1003, 0, 0, 0, 0);
-
-
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11026,  'productType', 'productType',  0,  NULL,  'Product type',  'Product type (used for product type navigation)',  1099, 1003, 0, 0, 0, 1);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11027,  'brand', 'brand',  0,  NULL,  'Product brand',  'Product brand (used for product type navigation)',  1099, 1003, 0, 0, 0, 1);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11028,  'tag', 'tag',  0,  NULL,  'Product tag',  'Product tag (used for product type navigation)',  1099, 1003, 0, 0, 0, 1);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11024,  'PRODUCT_WEIGHT_KG', 'PRODUCT_WEIGHT_KG',  0,  NULL,  'Product weight KG',  'Product weight KG',  'Float', 'PRODUCT', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11025,  'PRODUCT_VOLUME_M3', 'PRODUCT_VOLUME_M3',  0,  NULL,  'Product volume m3',  'Product volume m3',  'Float', 'PRODUCT', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11050,  'CUSTOMER_PHONE', 'CUSTOMER_PHONE',  1,  NULL,  'Phone',  'Phone', 1007,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11026,  'productType', 'productType',  0,  NULL,  'Product type',  'Product type (used for product type navigation)',  'Locked', 'PRODUCT', 0, 0, 0, 1);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11027,  'brand', 'brand',  0,  NULL,  'Product brand',  'Product brand (used for product type navigation)',  'Locked', 'PRODUCT', 0, 0, 0, 1);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11028,  'tag', 'tag',  0,  NULL,  'Product tag',  'Product tag (used for product type navigation)',  'Locked', 'PRODUCT', 0, 0, 0, 1);
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11050,  'CUSTOMER_PHONE', 'CUSTOMER_PHONE',  1,  NULL,  'Phone',  'Phone', 'Phone', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Telefon#~#en#~#Phone#~#ru#~#Телефон#~#uk#~#Телефон#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11051,  'MARKETING_OPT_IN', 'MARKETING_OPT_IN',  0,  NULL,  'Marketing Opt in',  'If true then customer opted in for marketing contact', 1008,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11051,  'MARKETING_OPT_IN', 'MARKETING_OPT_IN',  0,  NULL,  'Marketing Opt in',  'If true then customer opted in for marketing contact', 'Boolean', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Marketing Newsletter#~#en#~#Marketing newsletter#~#ru#~#Новостная рассылка#~#uk#~#Розсилка новин#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
   VALUES (  11052,  'salutation', 'salutation',  0, NULL, 'Salutation',  'Salutation CSV options
-e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'de#~#Frau-Frau,Herr-Herr#~#en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#ru#~#Господин-Господин,Госпожа-Госпожа#~#uk#~#Пані-Пані,Пан-Пан#~#', 1004,  1006, 0, 0, 0, 0,
+e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'de#~#Frau-Frau,Herr-Herr#~#en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#ru#~#Господин-Господин,Госпожа-Госпожа#~#uk#~#Пані-Пані,Пан-Пан#~#', 'CommaSeparatedList', 'CUSTOMER', 0, 0, 0, 0,
 'de#~#Anrede#~#en#~#Slautation#~#ru#~#Приветствие#~#uk#~#Привітання#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11053,  'firstname', 'firstname',  1,  NULL,  'First name',  'First name', 1000,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11053,  'firstname', 'firstname',  1,  NULL,  'First name',  'First name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Vorname#~#en#~#First name#~#ru#~#Имя#~#uk#~#Ім''я#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11054,  'lastname', 'lastname',  1,  NULL,  'Last name',  'Last name', 1000,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11054,  'lastname', 'lastname',  1,  NULL,  'Last name',  'Last name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Nachname#~#en#~#Last name#~#ru#~#Фамилия#~#uk#~#Прізвище#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11055,  'middlename', 'middlename',  0,  NULL,  'Middle name',  'Middle name', 1000,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11055,  'middlename', 'middlename',  0,  NULL,  'Middle name',  'Middle name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'de#~#Zweiter Vorname#~#en#~#Middle name#~#ru#~#Oтчество#~#uk#~#По батькові#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11062,  'customertype', 'customertype',  1,  NULL,  'Customer Type',  'Customer Type', 1000,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11063,  'pricingpolicy', 'pricingpolicy',  1,  NULL,  'Customer Pricing Policy',  'Customer Pricing Policy', 1000,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, REXP, DISPLAYNAME, V_FAILED_MSG)
-  VALUES (  11163,  'password', 'password',  1,  'password',  'Password',  'Password', 1017,  1006, 0, 0, 0, 0, 1,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11062,  'customertype', 'customertype',  1,  NULL,  'Customer Type',  'Customer Type', 'String', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11063,  'pricingpolicy', 'pricingpolicy',  1,  NULL,  'Customer Pricing Policy',  'Customer Pricing Policy', 'String', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, REXP, DISPLAYNAME, V_FAILED_MSG)
+  VALUES (  11163,  'password', 'password',  1,  'password',  'Password',  'Password', 'SecureString', 'CUSTOMER', 0, 0, 0, 0, 1,
   '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$',
   'en#~#Password#~#uk#~#Пароль#~#ru#~#Пароль#~#de#~#Passwort',
   'en#~#Password must have at least 8 symbols: 1 upper case letter (A-Z), 1 lower case letter (a-z), 1 digit (0-9) and 1 special character (@#$%^&+=)#~#uk#~#Пароль має містити принаймні 8 символів: 1 велику літеру (A-Z), 1 маленьку літеру (a-z), 1 цифру (0-9) та 1 спеціальний символ (@#$%^&+=)#~#ru#~#Пароль должен содержать 8 символов: 1 большую букву (A-Z), 1 маленькую букву (a-z), 1 цифру (0-9) и 1 специальный символ (@#$%^&+=)#~#de#~#Das Passwort muss mindestens 8 Symbole enthalten: 1 Großbuchstabe (A-Z), 1 Kleinbuchstabe (a-z), 1 Ziffer (0-9) und 1 Sonderzeichen (@#$%^&+=)');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, DISPLAYNAME)
-  VALUES (  11164,  'confirmPassword', 'confirmPassword',  1,  'confirmPassword',  'Confirm Password',  'Confirm Password', 1017,  1006, 0, 0, 0, 0, 1,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, SECURE_ATTRIBUTE, DISPLAYNAME)
+  VALUES (  11164,  'confirmPassword', 'confirmPassword',  1,  'confirmPassword',  'Confirm Password',  'Confirm Password', 'SecureString', 'CUSTOMER', 0, 0, 0, 0, 1,
   'en#~#Confirm Password#~#uk#~#Підтвердження пароля#~#ru#~#Подтверждения пароля#~#de#~#Bestätigungspasswort');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
-  VALUES (  11165,  'email', 'email',  1,  'email',  'Customer Email',  'Email', 1010,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
+  VALUES (  11165,  'email', 'email',  1,  'email',  'Customer Email',  'Email', 'Email', 'CUSTOMER', 0, 0, 0, 0,
   '^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)',
   'en#~#E-mail#~#uk#~#E-mail#~#ru#~#E-mail#~#de#~#E-mail',
   'en#~#''${input}'' is not a valid email address#~#uk#~#''${input}'' не є коректною електронною поштою#~#ru#~#''${input}'' не является корректной электронной почтой#~#de#~#''${input}'' ist keine gültige E-Mail Adresse');
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
-VALUES (  11620,  'CUSTOMER_DOB_YEAR', 'CUSTOMER_DOB_YEAR',  1,  NULL,  'Date of Birth (Year)',  'Date of Birth (Year)', 1006,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
+VALUES (  11620,  'CUSTOMER_DOB_YEAR', 'CUSTOMER_DOB_YEAR',  1,  NULL,  'Date of Birth (Year)',  'Date of Birth (Year)', 'Integer', 'CUSTOMER', 0, 0, 0, 0,
           '^(19[0-9]{2}|20[0-9]{2})$',
           'de#~#Geburtsdatum (Jahr)#~#en#~#Date of Birth (Year)#~#ru#~#Дата рождения (год)#~#uk#~#Дата народження (рік)#~#',
           'en#~#''${input}'' is not a valid year (e.g. 1990)#~#uk#~#''${input}'' недійсний рік (наприклад, 1990)#~#ru#~#''${input}'' недействительный год (например, 1990)#~#de#~#''${input}'' ist kein gültiges Jahr (z. B. 1990)');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, CHOICES, DISPLAYNAME)
-VALUES (  11621,  'CUSTOMER_DOB_MONTH', 'CUSTOMER_DOB_MONTH',  1,  NULL,  'Date of Birth (Month)',  'Date of Birth (Month)', 1004,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, CHOICES, DISPLAYNAME)
+VALUES (  11621,  'CUSTOMER_DOB_MONTH', 'CUSTOMER_DOB_MONTH',  1,  NULL,  'Date of Birth (Month)',  'Date of Birth (Month)', 'CommaSeparatedList', 'CUSTOMER', 0, 0, 0, 0,
           'de#~#1-Jan,2-Feb,3-Mär,4-Apr,5-Mai,6-Jun,7-Jul,8-Aug,9-Sep,10-Okt,11-Nov,12-Dez#~#en#~#1-Jan,2-Feb,3-Mar,4-Apr,5-May,6-Jun,7-Jul,8-Aug,9-Sep,10-Oct,11-Nov,12-Dec#~#ru#~#1-янв,2-фев,3-мар,4-апр,5-май,6-июн,7-июл,8-авг,9-сен,10-окт,11-ноя,12-дек#~#uk#~#1-січ,2-лют,3-бер,4-кві,5-тра,6-чер,7-лип,8-сер,9-вер,10-жов,11-лис,12-гру#~#',
           'de#~#Geburtsdatum (Monat)#~#en#~#Date of Birth (Month)#~#ru#~#Дата рождения (Месяц)#~#uk#~#Дата народження (Місяць)#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
-VALUES (  11622,  'CUSTOMER_DOB_DAY', 'CUSTOMER_DOB_DAY',  1,  NULL,  'Date of Birth (Day)',  'Date of Birth (Day)', 1006,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
+VALUES (  11622,  'CUSTOMER_DOB_DAY', 'CUSTOMER_DOB_DAY',  1,  NULL,  'Date of Birth (Day)',  'Date of Birth (Day)', 'Integer', 'CUSTOMER', 0, 0, 0, 0,
           '^([1-9]{1}|1[0-9]|2[0-9]{1}|30|31)$',
           'de#~#Geburtsdatum (Tag)#~#en#~#Date of Birth (Day)#~#ru#~#Дата рождения (День)#~#uk#~#Дата народження (День)#~#',
           'en#~#''${input}'' is not a valid day (1 to 31)#~#uk#~#''${input}'' недійсний день (1-31)#~#ru#~#''${input}'' недействительный день (1-31)#~#de#~#''${input}'' ist kein gültiges Tag (1-31)');
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11169,  'companyname1', 'companyname1',  1,  NULL,  'Company Name 1',  'Company Name 1', 1000,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11170,  'companyname2', 'companyname2',  1,  NULL,  'Company Name 2',  'Company Name 2', 1000,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11171,  'companydepartment', 'companydepartment',  1,  NULL,  'Company Department',  'Company Department', 1000,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11169,  'companyname1', 'companyname1',  1,  NULL,  'Company Name 1',  'Company Name 1', 'String', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11170,  'companyname2', 'companyname2',  1,  NULL,  'Company Name 2',  'Company Name 2', 'String', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11171,  'companydepartment', 'companydepartment',  1,  NULL,  'Company Department',  'Company Department', 'String', 'CUSTOMER', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11168,  'regAddressForm', 'regAddressForm',  1,  'regAddressForm',  'Address form',  'Address form for registration marker', 1000,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11168,  'regAddressForm', 'regAddressForm',  1,  'regAddressForm',  'Address form',  'Address form for registration marker', 'String', 'CUSTOMER', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11064,  'CUSTOMER_B2B_REF', 'CUSTOMER_B2B_REF',  1,  NULL,  'B2B Ref',  'Default customer reference on placed orders', 1000,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11065,  'CUSTOMER_B2B_EMPID', 'CUSTOMER_B2B_EMPLOYEE_ID',  1,  NULL,  'B2B Employee ID',  'B2B Employee ID, used when placing order', 1000,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11066,  'CUSTOMER_B2B_CHRGID', 'CUSTOMER_B2B_CHARGE_ID',  1,  NULL,  'B2B Charge to ID',  'B2B Charge to ID, used when placing order', 1000,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11067,  'CUSTOMER_B2B_REQAPPR', 'CUSTOMER_B2B_REQUIRE_APPROVE',  1,  NULL,  'B2B Require order approval',  'If set to true orders of this customer will need to be approved by supervisor', 1008,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11068,  'CUSTOMER_BLOCK_CHKOUT', 'CUSTOMER_BLOCK_CHECKOUT',  1,  NULL,  'Block checkout',  'If set to true customer cannot proceed with checkout', 1008,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11150,  'CUSTOMER_B2B_REQAPPR_X', 'CUSTOMER_B2B_REQUIRE_APPROVE_X',  1,  NULL,  'B2B Require order approval over X',  'Order amount that will trigger approval flag on this order. e.g. 1000', 1006,  1006, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11151,  'CUSTOMER_BLOCK_CHKOUT_X', 'CUSTOMER_BLOCK_CHECKOUT_X',  1,  NULL,  'Block checkout over X',  'Order amount that blocks checkou. e.g. 10000t', 1006,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11064,  'CUSTOMER_B2B_REF', 'CUSTOMER_B2B_REF',  1,  NULL,  'B2B Ref',  'Default customer reference on placed orders', 'String', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11065,  'CUSTOMER_B2B_EMPID', 'CUSTOMER_B2B_EMPLOYEE_ID',  1,  NULL,  'B2B Employee ID',  'B2B Employee ID, used when placing order', 'String', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11066,  'CUSTOMER_B2B_CHRGID', 'CUSTOMER_B2B_CHARGE_ID',  1,  NULL,  'B2B Charge to ID',  'B2B Charge to ID, used when placing order', 'String', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11067,  'CUSTOMER_B2B_REQAPPR', 'CUSTOMER_B2B_REQUIRE_APPROVE',  1,  NULL,  'B2B Require order approval',  'If set to true orders of this customer will need to be approved by supervisor', 'Boolean', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11068,  'CUSTOMER_BLOCK_CHKOUT', 'CUSTOMER_BLOCK_CHECKOUT',  1,  NULL,  'Block checkout',  'If set to true customer cannot proceed with checkout', 'Boolean', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11150,  'CUSTOMER_B2B_REQAPPR_X', 'CUSTOMER_B2B_REQUIRE_APPROVE_X',  1,  NULL,  'B2B Require order approval over X',  'Order amount that will trigger approval flag on this order. e.g. 1000', 'Integer', 'CUSTOMER', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11151,  'CUSTOMER_BLOCK_CHKOUT_X', 'CUSTOMER_BLOCK_CHECKOUT_X',  1,  NULL,  'Block checkout over X',  'Order amount that blocks checkou. e.g. 10000t', 'Integer', 'CUSTOMER', 0, 0, 0, 0);
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11153,  'ORDER_MANAGER_NAME', 'ORDER_MANAGER_NAME',  0,  NULL,  'Order Manager Name',  'Order Manager Name', 1000,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11153,  'ORDER_MANAGER_NAME', 'ORDER_MANAGER_NAME',  0,  NULL,  'Order Manager Name',  'Order Manager Name', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'en#~#Order Manager Name#~#uk#~#Менеджер замовлення#~#ru#~#Менеджер заказа#~#de#~#Auftragsmanager');
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11154,  'ORDER_MANAGER_EMAIL', 'ORDER_MANAGER_EMAIL',  0,  NULL,  'Order Manager Email',  'Order Manager Email', 1000,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11154,  'ORDER_MANAGER_EMAIL', 'ORDER_MANAGER_EMAIL',  0,  NULL,  'Order Manager Email',  'Order Manager Email', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'en#~#Order Manager Email#~#uk#~#Email Менеджера замовлення#~#ru#~#Email Менеджера заказа#~#de#~#E-Mail des Auftragsmanagers');
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11155,  'managedListLine', 'managedListLine',  0,  NULL,  'List',  'List', 1000,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11155,  'managedListLine', 'managedListLine',  0,  NULL,  'List',  'List', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'en#~#List#~#uk#~#Список#~#ru#~#Список#~#de#~#Liste');
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11156,  'ItemCostPrice', 'ItemCostPrice',  0,  NULL,  'Cost',  'Cost', 1000,  1006, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11156,  'ItemCostPrice', 'ItemCostPrice',  0,  NULL,  'Cost',  'Cost', 'String', 'CUSTOMER', 0, 0, 0, 0,
   'en#~#Procurement#~#uk#~#Закупівля#~#ru#~#Закупка#~#de#~#Beschaffung');
 
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11200,  'default_addressform', 'default_addressform',  0,
   'default_salutation,default_firstname,default_lastname,default_addressline2,default_addressline1,default_city,default_postcode,default_stateCode,default_countryCode',
   'Customer: "default_" address form (CSV)',
@@ -1020,68 +1020,68 @@ phone1, phone2, mobile1, mobile2
 email1, email2,
 companyName1, companyName2, companyDepartment
 custom0, custom1, custom2, custom3, custom4
-custom5, custom6, custom7, custom8, custom9',  1004, 1007, 0, 0, 0, 0);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+custom5, custom6, custom7, custom8, custom9',  'CommaSeparatedList', 'ADDRESS', 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
   VALUES (  11201,  'default_salutation', 'default_salutation',  0,  'salutation',  'Salutation',  'Salutation CSV options
-e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'de#~#Frau-Frau,Herr-Herr#~#en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#ru#~#Господин-Господин,Госпожа-Госпожа#~#uk#~#Пані-Пані,Пан-Пан#~#', 1004,  1007, 0, 0, 0, 0,
+e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'de#~#Frau-Frau,Herr-Herr#~#en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#ru#~#Господин-Господин,Госпожа-Госпожа#~#uk#~#Пані-Пані,Пан-Пан#~#', 'CommaSeparatedList', 'ADDRESS', 0, 0, 0, 0,
 'de#~#Anrede#~#en#~#Salutation#~#ru#~#Приветствие#~#uk#~#Привітання#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11202,  'default_firstname', 'default_firstname',  1,  'firstname',  'First name',  'First name', 1000,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11202,  'default_firstname', 'default_firstname',  1,  'firstname',  'First name',  'First name', 'String', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Vorname#~#en#~#First name#~#ru#~#Имя#~#uk#~#Ім''я#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11203,  'default_lastname', 'default_lastname',  1,  'lastname',  'Last name',  'Last name', 1000,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11203,  'default_lastname', 'default_lastname',  1,  'lastname',  'Last name',  'Last name', 'String', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Nachname#~#en#~#Last name#~#ru#~#Фамилия#~#uk#~#Прізвище#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11204,  'default_middlename', 'default_middlename',  0,  'middlename',  'Middle name',  'Middle name', 1000,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11204,  'default_middlename', 'default_middlename',  0,  'middlename',  'Middle name',  'Middle name', 'String', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Zweiter Vorname#~#en#~#Middle Name#~#ru#~#Отчество#~#uk#~#По батькові#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11500,  'default_addressline1', 'default_addressline1',  0,  'addrline1',  'Street',  'Address line 1', 1000,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11500,  'default_addressline1', 'default_addressline1',  0,  'addrline1',  'Street',  'Address line 1', 'String', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Straße#~#en#~#Street#~#ru#~#Улица#~#uk#~#Вулиця#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11501,  'default_addressline2', 'default_addressline2',  0,  'addrline2',  'House/Appt',  'Address line 2', 1000,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11501,  'default_addressline2', 'default_addressline2',  0,  'addrline2',  'House/Appt',  'Address line 2', 'String', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Straße#~#en#~#House/Appt#~#ru#~#Дом/квартира#~#uk#~#Будинок/квартира#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11502,  'default_city', 'default_city',  0,  'city',  'City',  'City', 1000,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11502,  'default_city', 'default_city',  0,  'city',  'City',  'City', 'String', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Stadt#~#en#~#City#~#ru#~#Город#~#uk#~#Місто#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11503,  'default_postcode', 'default_postcode',  0,  'postcode',  'Post code',  'Post code / Zip code', 1000,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11503,  'default_postcode', 'default_postcode',  0,  'postcode',  'Post code',  'Post code / Zip code', 'String', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Postleitzahl#~#en#~#Post code#~#ru#~#Почтовый индекс#~#uk#~#Поштовий індекс#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11504,  'default_countryCode', 'default_countryCode',  0,  'countryCode',  'Country',  'Special field which automatically lists countries available for this type of address in a select box', 1000,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11504,  'default_countryCode', 'default_countryCode',  0,  'countryCode',  'Country',  'Special field which automatically lists countries available for this type of address in a select box', 'String', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Land#~#en#~#Country#~#ru#~#Страна#~#uk#~#Країна#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11505,  'default_stateCode', 'default_stateCode',  0,  'stateCode',  'State',  'Special field used when states are defined for countries in locations section of admin', 1000,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11505,  'default_stateCode', 'default_stateCode',  0,  'stateCode',  'State',  'Special field used when states are defined for countries in locations section of admin', 'String', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Region#~#en#~#State#~#ru#~#Область#~#uk#~#Область#~#');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
-  VALUES (  11506,  'default_email1', 'default_email1',  0,  'email1',  'Email 1',  'Address Email 1', 1010,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, REXP, DISPLAYNAME, V_FAILED_MSG)
+  VALUES (  11506,  'default_email1', 'default_email1',  0,  'email1',  'Email 1',  'Address Email 1', 'Email', 'ADDRESS', 0, 0, 0, 0,
   '^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)',
   'en#~#E-mail#~#uk#~#E-mail#~#ru#~#E-mail#~#de#~#E-mail',
   'en#~#''${input}'' is not a valid email address#~#uk#~#''${input}'' не є коректною електронною поштою#~#ru#~#''${input}'' не является корректной электронной почтой#~#de#~#''${input}'' ist keine gültige E-Mail Adresse');
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
-  VALUES (  11507,  'default_phone1', 'default_phone1',  0,  'phone1',  'Phone 1',  'Address Phone 1', 1007,  1007, 0, 0, 0, 0,
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+  VALUES (  11507,  'default_phone1', 'default_phone1',  0,  'phone1',  'Phone 1',  'Address Phone 1', 'Phone', 'ADDRESS', 0, 0, 0, 0,
   'de#~#Telefon#~#en#~#Phone#~#ru#~#Телефон#~#uk#~#Телефон#~#');
 
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  6200,  'WIDGET_Alerts', 'WIDGET_Alerts',  0,  NULL,  'Alerts',  'Alerts: displays system messages', 1000,  1010, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6200,  'WIDGET_Alerts', 'WIDGET_Alerts',  0,  NULL,  'Alerts',  'Alerts: displays system messages', 'String', 'WIDGET', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  6201,  'WIDGET_OrdersInShop', 'WIDGET_OrdersInShop',  0,  NULL,  'Orders Overview',  'Orders Overview: count of orders for today, this week and this month', 1000,  1010, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6201,  'WIDGET_OrdersInShop', 'WIDGET_OrdersInShop',  0,  NULL,  'Orders Overview',  'Orders Overview: count of orders for today, this week and this month', 'String', 'WIDGET', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  6202,  'WIDGET_UnprocessedPgCallbacks', 'WIDGET_UnprocessedPgCallbacks',  0,  NULL,  'Unprocessed Callbacks (YCE)',  'Unprocessed Callbacks: count of failed payment callbacks', 1000,  1010, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6202,  'WIDGET_UnprocessedPgCallbacks', 'WIDGET_UnprocessedPgCallbacks',  0,  NULL,  'Unprocessed Callbacks (YCE)',  'Unprocessed Callbacks: count of failed payment callbacks', 'String', 'WIDGET', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  6203,  'WIDGET_CustomersInShop', 'WIDGET_CustomersInShop',  0,  NULL,  'Customers Overview',  'Customers Overview: count of customers for today, this week and this month', 1000,  1010, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6203,  'WIDGET_CustomersInShop', 'WIDGET_CustomersInShop',  0,  NULL,  'Customers Overview',  'Customers Overview: count of customers for today, this week and this month', 'String', 'WIDGET', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  6204,  'WIDGET_CacheOverview', 'WIDGET_CacheOverview',  0,  NULL,  'Cache Alerts',  'Cache Alerts: count of full of nearly full caches', 1000,  1010, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6204,  'WIDGET_CacheOverview', 'WIDGET_CacheOverview',  0,  NULL,  'Cache Alerts',  'Cache Alerts: count of full of nearly full caches', 'String', 'WIDGET', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  6205,  'WIDGET_ReindexOverview', 'WIDGET_ReindexOverview',  0,  NULL,  'Search Index',  'Search Index: count of products in FT, DB', 1000,  1010, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6205,  'WIDGET_ReindexOverview', 'WIDGET_ReindexOverview',  0,  NULL,  'Search Index',  'Search Index: count of products in FT, DB', 'String', 'WIDGET', 0, 0, 0, 0);
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  6206,  'WIDGET_UiSettings', 'WIDGET_UiSettings',  0,  NULL,  'UI Settings',  'UI Settings: Admin UI preferences', 1000,  1010, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  6206,  'WIDGET_UiSettings', 'WIDGET_UiSettings',  0,  NULL,  'UI Settings',  'UI Settings: Admin UI preferences', 'String', 'WIDGET', 0, 0, 0, 0);
 
 
 

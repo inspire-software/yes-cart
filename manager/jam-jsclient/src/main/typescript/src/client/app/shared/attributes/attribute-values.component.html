@@ -13,7 +13,7 @@
       <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{getAttributeName(row.attribute)}}  <i class="fa fa-lock" [hidden]="!row.attribute.secure"></i></a></td>
-          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{row.attribute.etypeName}} <span [innerHTML]="getSearchFlags(row.attribute)"></span></a></td>
+          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click" [title]="row.attribute.code">{{row.attribute.etype}} <span [innerHTML]="getSearchFlags(row.attribute)"></span></a></td>
           <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', 'text-muted', '') }} js-click text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
         </ng-template>
       </tr>
@@ -200,8 +200,8 @@
               <p class="bg-danger">{{ 'MODAL_UPLOAD_DISABLED' | translate }}</p>
             </div>
             <div class="col-xs-12">{{ getAttributeName(attributeToEdit.attribute) }}</div>
-            <div class="col-xs-12 av-file-upload"><a target="_dfile" href="../service/filevault/{{ attributeToEdit.attribute.etypeName === 'SystemFile' ? 'sysfile' : 'file' }}/{{masterObjectType}}?fileName={{attributeToEdit.val}}"  [hidden]="attributeToEdit.val == null">{{ attributeToEdit.val }}</a> <button class="btn btn-default" type="button" (click)="onFileClickRelay()" [hidden]="isFileUploadDisabled()">{{ 'MODAL_BUTTON_UPLOAD' | translate }}</button></div>
-            <div class="col-xs-12 av-file-upload" [hidden]="attributeToEdit.val == null || attributeToEdit.attribute.etypeName === 'SystemFile'"><input name="fileUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/filevault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}"></div>
+            <div class="col-xs-12 av-file-upload"><a target="_dfile" href="../service/filevault/{{ attributeToEdit.attribute.etype === 'SystemFile' ? 'sysfile' : 'file' }}/{{masterObjectType}}?fileName={{attributeToEdit.val}}"  [hidden]="attributeToEdit.val == null">{{ attributeToEdit.val }}</a> <button class="btn btn-default" type="button" (click)="onFileClickRelay()" [hidden]="isFileUploadDisabled()">{{ 'MODAL_BUTTON_UPLOAD' | translate }}</button></div>
+            <div class="col-xs-12 av-file-upload" [hidden]="attributeToEdit.val == null || attributeToEdit.attribute.etype === 'SystemFile'"><input name="fileUrlCopy" class="form-control" type="text" readonly value="{{ attributeToEdit.val != null ? ('http://[domain]/filevault/' + masterObjectType + '/' + attributeToEdit.val) : '' }}"></div>
           </div>
           <div class="row">
             <div class="col-xs-12 hidden-xs hidden-sm hidden-xs">

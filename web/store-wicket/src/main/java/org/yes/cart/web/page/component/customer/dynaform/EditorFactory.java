@@ -85,7 +85,7 @@ public class EditorFactory implements Serializable {
                 return null;
             }
         };
-        final String bType = attrValue.getAttribute().getEtype().getBusinesstype();
+        final String bType = attrValue.getAttribute().getEtype();
 
         if ("CommaSeparatedList".equals(bType)) {
 

@@ -17,9 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.yes.cart.domain.entity.Attribute;
-import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.EtypeService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 
 import java.util.Set;
@@ -32,16 +30,9 @@ import java.util.Set;
 public class RuntimeAttributeServiceImpl implements RuntimeAttributeService {
 
     private final AttributeService attributeService;
-    private final EtypeService etypeService;
-    private final AttributeGroupService attributeGroupService;
 
-
-    public RuntimeAttributeServiceImpl(final AttributeService attributeService,
-                                       final EtypeService etypeService,
-                                       final AttributeGroupService attributeGroupService) {
+    public RuntimeAttributeServiceImpl(final AttributeService attributeService) {
         this.attributeService = attributeService;
-        this.etypeService = etypeService;
-        this.attributeGroupService = attributeGroupService;
     }
 
     /** {@inheritDoc} */
@@ -52,8 +43,8 @@ public class RuntimeAttributeServiceImpl implements RuntimeAttributeService {
             final Attribute attribute = attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
             attribute.setCode(attributeCode);
             attribute.setName(attributeCode);
-            attribute.setAttributeGroup(attributeGroupService.getAttributeGroupByCode(attributeGroup));
-            attribute.setEtype(etypeService.findSingleByCriteria(" where e.businesstype = ?1", eType));
+            attribute.setAttributeGroup(attributeGroup);
+            attribute.setEtype(eType);
             attribute.setGuid(attributeCode);
             attributeService.create(attribute);
             return attribute;

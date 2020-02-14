@@ -203,7 +203,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   protected onDataChange(event:any) {
 
     let val = this.attributeToEdit.val;
-    let typ = this.attributeToEdit.attribute.etypeName;
+    let typ = this.attributeToEdit.attribute.etype;
     let customRegEx = this.attributeToEdit.attribute.regexp;
 
     if (customRegEx) {
@@ -373,18 +373,18 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   protected getDisplayValue(row:AttrValueVO):string {
     if (row.val != null) {
-      if (row.attribute.etypeName === 'SecureString') {
+      if (row.attribute.etype === 'SecureString') {
         return '*****';
       }
-      if (row.attribute.etypeName === 'Boolean') {
+      if (row.attribute.etype === 'Boolean') {
         if (('' + row.val)  === 'true') {
           return '<i class="fa fa-check-circle"></i>';
         } else {
           return '<i class="fa fa-times-circle"></i>';
         }
-      } else if (row.attribute.etypeName === 'HTML' || row.attribute.etypeName === 'Properties') {
+      } else if (row.attribute.etype === 'HTML' || row.attribute.etype === 'Properties') {
         return '<pre>' + row.val + '</pre>';
-      } else if (row.attribute.etypeName === 'Image' && row.valBase64Data) {
+      } else if (row.attribute.etype === 'Image' && row.valBase64Data) {
         return '<img class="av-image-thumb" src="' + row.valBase64Data + '" alt="' + row.val + '"/>';
       }
       return row.val;
@@ -405,7 +405,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
     if (av != null) {
 
-      switch (av.attribute.etypeName) {
+      switch (av.attribute.etype) {
         case 'String':
         case 'SecureString':
           this.localisableEditor = true;
@@ -444,7 +444,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   }
 
   processImageView(av:AttrValueVO) {
-    if (av.attribute.etypeName === 'Image') {
+    if (av.attribute.etype === 'Image') {
       if (av.val != null) {
         this.attributeToEditImagePreviewAvailable = av.valBase64Data != null;
         if (this.attributeToEditImagePreviewAvailable) {

@@ -50,15 +50,11 @@ public class VoAttribute {
     @DtoField(value = "description")
     private String description;
 
-    @DtoField(value = "etypeId", readOnly=true)
-    private long etypeId;
+    @DtoField(value = "etype")
+    private String etype;
 
-    @DtoField(value = "etypeName", readOnly=true)
-    private String etypeName;
-
-
-    @DtoField(value = "attributegroupId", readOnly=true)
-    private long attributegroupId;
+    @DtoField(value = "attributegroup")
+    private String attributegroup;
 
     @DtoField(value = "allowduplicate")
     private boolean allowduplicate;
@@ -119,12 +115,12 @@ public class VoAttribute {
         this.validationFailedMessage = validationFailedMessage;
     }
 
-    public long getAttributegroupId() {
-        return attributegroupId;
+    public String getAttributegroup() {
+        return attributegroup;
     }
 
-    public void setAttributegroupId(final long attributegroupId) {
-        this.attributegroupId = attributegroupId;
+    public void setAttributegroup(final String attributegroup) {
+        this.attributegroup = attributegroup;
     }
 
     public long getAttributeId() {
@@ -195,20 +191,12 @@ public class VoAttribute {
         this.description = description;
     }
 
-    public long getEtypeId() {
-        return etypeId;
+    public String getEtype() {
+        return etype;
     }
 
-    public void setEtypeId(final long etypeId) {
-        this.etypeId = etypeId;
-    }
-
-    public String getEtypeName() {
-        return etypeName;
-    }
-
-    public void setEtypeName(final String etypeName) {
-        this.etypeName = etypeName;
+    public void setEtype(final String etype) {
+        this.etype = etype;
     }
 
     public boolean isAllowduplicate() {

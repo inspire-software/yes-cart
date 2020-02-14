@@ -426,8 +426,8 @@ public class DtoContentCMS3ServiceImpl
                         global.setName(attributeDTO.getName());
                         global.setDisplayNames(attributeDTO.getDisplayNames());
                         global.setDescription(attributeDTO.getDescription());
-                        global.setEtypeId(attributeDTO.getEtypeId());
-                        global.setEtypeName(attributeDTO.getEtypeName());
+                        global.setEtype(attributeDTO.getEtype());
+                        global.setAttributegroup(attributeDTO.getAttributegroup());
                         contentAttrsDTOs.put(key, global);
                     }
                 }
@@ -565,10 +565,10 @@ public class DtoContentCMS3ServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityContent valueEntityContent = attrValueEntityContentDao.findById(attributeValuePk);
         final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityContent.getAttributeCode());
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
+        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
             imageService.deleteImage(valueEntityContent.getVal(),
                     Constants.CONTENT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
             fileService.deleteFile(valueEntityContent.getVal(),
                     Constants.CONTENT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }

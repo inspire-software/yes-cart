@@ -27,15 +27,14 @@
         <text-qualifier>&quot;</text-qualifier>
     </export-file-descriptor>
 
-    <select-sql>select b from AttributeEntity b where b.attributeGroup.code = 'PRODUCT'</select-sql>
+    <select-sql>select b from AttributeEntity b where b.attributeGroup = 'PRODUCT'</select-sql>
 
     <export-columns>
 
         <column-descriptor>
             <column-header>Group</column-header>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.AttributeGroup</entity-type>
-            <name>attributeGroup.code</name>
+            <field-type>FIELD</field-type>
+            <name>attributeGroup</name>
         </column-descriptor>
 
         <column-descriptor> <!-- primary key -->
@@ -113,10 +112,9 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-header>Java Type</column-header>
+            <column-header>Data Type</column-header>
             <field-type>FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Etype</entity-type>
-            <name>etype.javatype</name>
+            <name>etype</name>
         </column-descriptor>
 
     </export-columns>

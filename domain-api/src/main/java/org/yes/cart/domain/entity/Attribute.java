@@ -148,30 +148,30 @@ public interface Attribute extends Auditable, Rankable, Codable, Nameable, Clone
     /**
      * Get the system type.
      *
-     * @return {@link Etype} type of attribute.
+     * @return eType type of attribute.
      */
-    Etype getEtype();
+    String getEtype();
 
     /**
      * Set type.
      *
      * @param etype type.
      */
-    void setEtype(Etype etype);
+    void setEtype(String etype);
 
     /**
      * Get attribute group.
      *
      * @return {@link AttributeGroup}
      */
-    AttributeGroup getAttributeGroup();
+    String getAttributeGroup();
 
     /**
      * Set {@link AttributeGroup}.
      *
      * @param attributeGroup attribute group.
      */
-    void setAttributeGroup(AttributeGroup attributeGroup);
+    void setAttributeGroup(String attributeGroup);
 
     /**
      * Is attribute duplicates allowed. Attribute can have several values. Example color - black and red.

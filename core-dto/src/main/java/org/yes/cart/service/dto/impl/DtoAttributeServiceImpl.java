@@ -26,9 +26,7 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.EtypeService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.utils.HQLUtils;
 
@@ -48,40 +46,17 @@ public class DtoAttributeServiceImpl
         extends AbstractDtoServiceImpl<AttributeDTO, AttributeDTOImpl, Attribute>
         implements DtoAttributeService {
 
-    private final EtypeService etypeService;
-
-    private final AttributeGroupService attributeGroupService;
-
 
     /**
      * Construct remote service.
      * @param attributeService {@link AttributeService}
      * @param dtoFactory {@link DtoFactory}
-     * @param etypeService {@link org.yes.cart.service.domain.EtypeService}
-     * @param attributeGroupService {@link AttributeGroupService}
      */
     public DtoAttributeServiceImpl(
             final AttributeService attributeService,
-            final EtypeService etypeService,
-            final AttributeGroupService attributeGroupService,
             final DtoFactory dtoFactory,
             final AdaptersRepository adapters) {
         super(dtoFactory, attributeService, adapters);
-        this.etypeService = etypeService;
-        this.attributeGroupService = attributeGroupService;
-
-    }
-
-    @Override
-    protected void createPostProcess(final AttributeDTO dto, final Attribute entity) {
-        entity.setEtype(etypeService.findById(dto.getEtypeId()));
-        entity.setAttributeGroup(attributeGroupService.findById(dto.getAttributegroupId()));
-    }
-
-    @Override
-    protected void updatePostProcess(final AttributeDTO dto, final Attribute entity) {
-        entity.setEtype(etypeService.findById(dto.getEtypeId()));
-        entity.setAttributeGroup(attributeGroupService.findById(dto.getAttributegroupId()));
     }
 
     /** {@inheritDoc}  */
@@ -182,7 +157,7 @@ public class DtoAttributeServiceImpl
                 );
             } else {
                 attrs = service.getGenericDao().findRangeByCriteria(
-                        " where e.attributeGroup.code = ?1 and (lower(e.code) like ?2 or lower(e.name) like ?2 or lower(e.displayNameInternal) like ?2 or lower(e.description) like ?2) order by e.name",
+                        " where e.attributeGroup = ?1 and (lower(e.code) like ?2 or lower(e.name) like ?2 or lower(e.displayNameInternal) like ?2 or lower(e.description) like ?2) order by e.name",
                         page * pageSize, pageSize,
                         attributeGroupCode,
                         HQLUtils.criteriaIlikeAnywhere(filter)
@@ -190,7 +165,7 @@ public class DtoAttributeServiceImpl
             }
         } else {
             attrs = service.getGenericDao().findRangeByCriteria(
-                    " where e.attributeGroup.code = ?1 order by e.name",
+                    " where e.attributeGroup = ?1 order by e.name",
                     page * pageSize, pageSize,
                     attributeGroupCode
             );

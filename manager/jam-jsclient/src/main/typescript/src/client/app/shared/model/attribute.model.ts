@@ -38,7 +38,7 @@ export interface AttributeVO {
 
   attributeId : number;
 
-  attributegroupId : number;
+  attributegroup : string;
 
   code : string;
   name : string;
@@ -46,8 +46,7 @@ export interface AttributeVO {
 
   displayNames :  Pair<string, string>[];
 
-  etypeId : number;
-  etypeName : string;
+  etype : string;
 
   val : string;
 

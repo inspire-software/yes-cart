@@ -342,3 +342,26 @@ VALUES (  11622,  'CUSTOMER_DOB_DAY', 'CUSTOMER_DOB_DAY',  1,  NULL,  'Date of B
           '^([1-9]{1}|1[0-9]|2[0-9]{1}|30|31)$',
           'de#~#Geburtsdatum (Tag)#~#en#~#Date of Birth (Day)#~#ru#~#Дата рождения (День)#~#uk#~#Дата народження (День)#~#',
           'en#~#''${input}'' is not a valid day (1 to 31)#~#uk#~#''${input}'' недійсний день (1-31)#~#ru#~#''${input}'' недействительный день (1-31)#~#de#~#''${input}'' ist kein gültiges Tag (1-31)');
+
+--
+-- YC-978 Remove Etype entity and create type property on attribute
+-- YC-979 Remove AttributeGroup entity and create group property on attribute
+--
+
+alter table TATTRIBUTE add column ATTRIBUTEGROUP varchar(255);
+alter table TATTRIBUTE add column ETYPE varchar(255);
+
+alter table TATTRIBUTE drop foreign key FK_ATTRIBUTE_ATTRIBUTEGROUP;
+alter table TATTRIBUTE drop index FK_ATTRIBUTE_ATTRIBUTEGROUP;
+
+alter table TATTRIBUTE drop foreign key FK_ATTRIBUTE_ETYPE;
+alter table TATTRIBUTE drop index FK_ATTRIBUTE_ETYPE;
+
+create index ATTR_GROUP on TATTRIBUTE (ATTRIBUTEGROUP);
+create index ATTR_ETYPE on TATTRIBUTE (ETYPE);
+
+update TATTRIBUTE set ATTRIBUTEGROUP = (select CODE from TATTRIBUTEGROUP where TATTRIBUTE.ATTRIBUTEGROUP_ID = TATTRIBUTEGROUP.ATTRIBUTEGROUP_ID);
+update TATTRIBUTE set ETYPE = (select BUSINESSTYPE from TETYPE where TETYPE.ETYPE_ID = TATTRIBUTE.ETYPE_ID);
+
+alter table TATTRIBUTE drop column ATTRIBUTEGROUP_ID;
+alter table TATTRIBUTE drop column ETYPE_ID;

@@ -24,7 +24,7 @@
         <file-name>target/attributes_export-{timestamp}.xml</file-name>
     </export-file-descriptor>
 
-    <select-cmd>select b from AttributeEntity b where b.attributeGroup.code = 'PRODUCT'</select-cmd>
+    <select-cmd>select b from AttributeEntity b where b.attributeGroup = 'PRODUCT'</select-cmd>
 
     <xml-handler>ATTRIBUTE_PRETTY</xml-handler>
 

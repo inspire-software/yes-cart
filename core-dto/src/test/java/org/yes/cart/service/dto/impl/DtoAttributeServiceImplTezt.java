@@ -23,6 +23,7 @@ import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.DtoServiceSpringKeys;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.service.dto.DtoAttributeService;
 
 import java.util.Collections;
@@ -145,8 +146,8 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
         dto.setVal("string value");
         dto.setName("test attr");
         dto.setDescription("test attr description");
-        dto.setEtypeId(1000L); //string
-        dto.setAttributegroupId(1003L); //customer
+        dto.setEtype(Etype.STRING_BUSINESS_TYPE);
+        dto.setAttributegroup(AttributeGroupNames.PRODUCT);
         dto.setAllowduplicate(true);
         dto.setAllowfailover(false);
         dto.setRegexp("[a-zA-Z]");

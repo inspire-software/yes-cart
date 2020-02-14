@@ -110,7 +110,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 allIt.remove();
             } else if (skipSecure(next, next.getAttribute(), includeSecure)) {
                 allIt.remove();
-            } else if (next.getAttrvalueId() > 0L && Etype.IMAGE_BUSINESS_TYPE.equals(next.getAttribute().getEtypeName())) {
+            } else if (next.getAttrvalueId() > 0L && Etype.IMAGE_BUSINESS_TYPE.equals(next.getAttribute().getEtype())) {
                 if (StringUtils.isNotBlank(next.getVal())) {
                     next.setValBase64Data(
                             voIOSupport.getImageAsBase64(next.getVal(), imageObjectCode, this.genericAttrValueService.getImageRepositoryUrlPattern())
@@ -222,7 +222,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                     }
 
                     boolean shouldIndex = false;
-                    if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                    if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtype())) {
                         final String existingImage = voIOSupport.
                                 getImageAsBase64(dto.getVal(), objectCode, this.genericAttrValueService.getImageRepositoryUrlPattern());
                         if (existingImage == null || !existingImage.equals(item.getFirst().getValBase64Data())) {
@@ -239,7 +239,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                             shouldIndex = true;
                             // TODO Image SEO
                         }
-                    } else if (Etype.FILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                    } else if (Etype.FILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtype())) {
                         String formattedFilename = item.getFirst().getVal();
                         formattedFilename = voIOSupport.
                                 addFileToRepository(
@@ -251,7 +251,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                                 );
                         item.getFirst().setVal(formattedFilename);
                         shouldIndex = true;
-                    } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                    } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtype())) {
                         String formattedFilename = item.getFirst().getVal();
                         formattedFilename = voIOSupport.
                                 addSystemFileToRepository(
@@ -287,7 +287,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 }
 
                 boolean shouldIndex = false;
-                if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                if (Etype.IMAGE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtype())) {
                     String formattedFilename = item.getFirst().getVal();
                     formattedFilename = voIOSupport.
                             addImageToRepository(
@@ -300,7 +300,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                     item.getFirst().setVal(formattedFilename);
                     shouldIndex = true;
                     // TODO Image SEO
-                } else if (Etype.FILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                } else if (Etype.FILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtype())) {
                     String formattedFilename = item.getFirst().getVal();
                     formattedFilename = voIOSupport.
                             addFileToRepository(
@@ -312,7 +312,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                             );
                     item.getFirst().setVal(formattedFilename);
                     shouldIndex = true;
-                } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtypeName())) {
+                } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(dto.getAttributeDTO().getEtype())) {
                     String formattedFilename = item.getFirst().getVal();
                     formattedFilename = voIOSupport.
                             addSystemFileToRepository(

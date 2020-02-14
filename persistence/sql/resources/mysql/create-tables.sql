@@ -72,8 +72,8 @@
         NAME varchar(255) not null,
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
-        ETYPE_ID bigint not null,
-        ATTRIBUTEGROUP_ID bigint not null,
+        ETYPE varchar(255) not null,
+        ATTRIBUTEGROUP varchar(255) not null,
         STORE bit,
         SEARCH bit,
         SEARCHPRIMARY bit,
@@ -1340,18 +1340,8 @@
         on delete cascade;
 
 
-    alter table TATTRIBUTE 
-        add index FK_ATTRIBUTE_ETYPE (ETYPE_ID), 
-        add constraint FK_ATTRIBUTE_ETYPE 
-        foreign key (ETYPE_ID) 
-        references TETYPE (ETYPE_ID);
-
-
-    alter table TATTRIBUTE 
-        add index FK_ATTRIBUTE_ATTRIBUTEGROUP (ATTRIBUTEGROUP_ID), 
-        add constraint FK_ATTRIBUTE_ATTRIBUTEGROUP 
-        foreign key (ATTRIBUTEGROUP_ID) 
-        references TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID);
+    create index ATTR_GROUP on TATTRIBUTE (ATTRIBUTEGROUP);
+    create index ATTR_ETYPE on TATTRIBUTE (ETYPE);
 
 
     alter table TBRANDATTRVALUE

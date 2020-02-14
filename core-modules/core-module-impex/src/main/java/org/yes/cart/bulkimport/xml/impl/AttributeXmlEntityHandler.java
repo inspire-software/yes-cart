@@ -21,9 +21,7 @@ import org.yes.cart.bulkimport.xml.internal.AttributeType;
 import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.EtypeService;
 
 import java.util.Map;
 
@@ -35,8 +33,6 @@ import java.util.Map;
 public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<AttributeType, Attribute> implements XmlEntityImportHandler<AttributeType, Attribute> {
 
     private AttributeService attributeService;
-    private AttributeGroupService attributeGroupService;
-    private EtypeService etypeService;
 
     public AttributeXmlEntityHandler() {
         super("attribute");
@@ -86,8 +82,8 @@ public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<Attribut
         attribute = this.attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
         attribute.setGuid(xmlType.getCode());
         attribute.setCode(xmlType.getCode());
-        attribute.setAttributeGroup(this.attributeGroupService.getAttributeGroupByCode(xmlType.getGroup()));
-        attribute.setEtype(this.etypeService.findSingleByCriteria(" where e.businesstype = ?1", xmlType.getEtype()));
+        attribute.setAttributeGroup(xmlType.getGroup());
+        attribute.setEtype(xmlType.getEtype());
         return attribute;
     }
 
@@ -108,23 +104,5 @@ public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<Attribut
      */
     public void setAttributeService(final AttributeService attributeService) {
         this.attributeService = attributeService;
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param attributeGroupService group service
-     */
-    public void setAttributeGroupService(final AttributeGroupService attributeGroupService) {
-        this.attributeGroupService = attributeGroupService;
-    }
-
-    /**
-     * Spring IoC.
-     *
-     * @param etypeService etype service
-     */
-    public void setEtypeService(final EtypeService etypeService) {
-        this.etypeService = etypeService;
     }
 }

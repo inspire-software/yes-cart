@@ -161,7 +161,7 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select count(a.ATTRIBUTE_ID) as cnt from TATTRIBUTE a, TATTRIBUTEGROUP g where a.ATTRIBUTEGROUP_ID = g.ATTRIBUTEGROUP_ID and g.CODE = 'PRODUCT'");
+                    "select count(a.ATTRIBUTE_ID) as cnt from TATTRIBUTE a where a.ATTRIBUTEGROUP = 'PRODUCT'");
             rs.next();
             long cntBeforeProductAttr = rs.getLong("cnt");
             rs.close();
@@ -171,7 +171,7 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             final long attrs = System.currentTimeMillis() - dt;
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select count(a.ATTRIBUTE_ID) as cnt from TATTRIBUTE a, TATTRIBUTEGROUP g where a.ATTRIBUTEGROUP_ID = g.ATTRIBUTEGROUP_ID and g.CODE = 'PRODUCT'");
+                    "select count(a.ATTRIBUTE_ID) as cnt from TATTRIBUTE a where a.ATTRIBUTEGROUP = 'PRODUCT'");
             rs.next();
             long cntProductAttr = rs.getLong("cnt");
             rs.close();
@@ -181,11 +181,11 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             System.out.println(String.format("%5d", change) + " attributes in " + attrs + "millis (~" + (attrs / change) + " per item)");
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select ATTRIBUTEGROUP_ID, NAME, DISPLAYNAME, DESCRIPTION, MANDATORY, ALLOWDUPLICATE, ALLOWFAILOVER, RANK, ETYPE_ID from TATTRIBUTE where CODE = 'XML_8419'");
+                    "select ATTRIBUTEGROUP, NAME, DISPLAYNAME, DESCRIPTION, MANDATORY, ALLOWDUPLICATE, ALLOWFAILOVER, RANK, ETYPE from TATTRIBUTE where CODE = 'XML_8419'");
             rs.next();
             assertFalse(rs.isAfterLast());
-            long attrGroupCodeFK = rs.getLong("ATTRIBUTEGROUP_ID");
-            long attrEtypeFK = rs.getLong("ETYPE_ID");
+            String attrGroupCodeFK = rs.getString("ATTRIBUTEGROUP");
+            String attrEtypeFK = rs.getString("ETYPE");
             String attrName = rs.getString("NAME");
             String attrDName = rs.getString("DISPLAYNAME");
             String attrDesc = rs.getString("DESCRIPTION");
@@ -194,8 +194,8 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             boolean attrAllowFailover = rs.getBoolean("ALLOWFAILOVER");
             int attrRank = rs.getInt("RANK");
             rs.close();
-            assertEquals(1003L, attrGroupCodeFK);  // PRODUCT
-            assertEquals(1000L, attrEtypeFK);      // String
+            assertEquals("PRODUCT", attrGroupCodeFK);
+            assertEquals("String", attrEtypeFK);
             assertEquals("Trackball", attrName);
             assertTrue(attrDName.contains("en#~#Trackball#~#"));
             assertTrue(attrDName.contains("ru#~#Трэкбол#~#"));

@@ -113,7 +113,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select count(a.ATTRIBUTE_ID) as cnt from TATTRIBUTE a, TATTRIBUTEGROUP g where a.ATTRIBUTEGROUP_ID = g.ATTRIBUTEGROUP_ID and g.CODE = 'PRODUCT'");
+                    "select count(a.ATTRIBUTE_ID) as cnt from TATTRIBUTE a where a.ATTRIBUTEGROUP = 'PRODUCT'");
             rs.next();
             long cntProductAttr = rs.getLong("cnt");
             rs.close();
@@ -125,7 +125,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
             System.out.println(String.format("%5d", cntProductAttr) + " attributes  in " + attrs + "millis (~" + (attrs / cntProductAttr) + " per item)");
 
             String content = FileUtils.readFileToString(new File(fileToExport), "UTF-8");
-            assertTrue(content.contains("\"PRODUCT\";\"COLOR\";\"Color\";;;;\"false\";\"false\";\"Failover is: false\";\"500\";\"java.lang.String\""));
+            assertTrue(content.contains("\"PRODUCT\";\"COLOR\";\"Color\";;;;\"false\";\"false\";\"Failover is: false\";\"500\";\"String\""));
 
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCT  ");

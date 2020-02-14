@@ -34,14 +34,14 @@ public interface AttributeDTO extends Identifiable {
      *
      * @return group id
      */
-    long getAttributegroupId();
+    String getAttributegroup();
 
     /**
      * Set group id.
      *
-     * @param attributegroupId group id
+     * @param attributegroup group id
      */
-    void setAttributegroupId(long attributegroupId);
+    void setAttributegroup(String attributegroup);
 
     /**
      * Get primary key.
@@ -163,28 +163,14 @@ public interface AttributeDTO extends Identifiable {
      *
      * @return Etype primary key.
      */
-    long getEtypeId();
+    String getEtype();
 
     /**
      * Set type.
      *
-     * @param EtypeId id.
+     * @param Etype id.
      */
-    void setEtypeId(long EtypeId);
-
-    /**
-     * Get the system type name.
-     *
-     * @return Etype name.
-     */
-    String getEtypeName();
-
-    /**
-     * Set type.
-     *
-     * @param etypeName etype name.
-     */
-    void setEtypeName(String etypeName);
+    void setEtype(String Etype);
 
     /**
      * Is attributes duplicates allowed. Attribute can have several values. Example color - black and red.

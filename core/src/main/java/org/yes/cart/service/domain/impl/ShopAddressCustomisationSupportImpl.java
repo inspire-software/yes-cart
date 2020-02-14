@@ -105,16 +105,12 @@ public class ShopAddressCustomisationSupportImpl implements AddressCustomisation
 
     private List<Attribute> createDefaultFormFieldConfig() {
 
-        final Etype etype = attributeService.getGenericDao().getEntityFactory().getByIface(Etype.class);
-        etype.setBusinesstype("String");
-        etype.setJavatype("java.lang.String");
-
         final List<Attribute> attributes = new ArrayList<>();
         for (final String addressFormAttribute : DEFAULT_FIELDS) {
             final Attribute attr = attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
             attr.setVal(addressFormAttribute);
             attr.setCode(addressFormAttribute);
-            attr.setEtype(etype);
+            attr.setEtype(Etype.STRING_BUSINESS_TYPE);
             attr.setMandatory(!OPTIONAL_FIELDS.contains(addressFormAttribute));
             attributes.add(attr);
         }

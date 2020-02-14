@@ -546,10 +546,10 @@ public class DtoProductSkuServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueProductSku attrValue = attrValueEntityProductSkuDao.findById(attributeValuePk);
         final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(attrValue.getAttributeCode());
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
+        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
             imageService.deleteImage(attrValue.getVal(),
                     Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtypeName())) {
+        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
             fileService.deleteFile(attrValue.getVal(),
                     Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
         }

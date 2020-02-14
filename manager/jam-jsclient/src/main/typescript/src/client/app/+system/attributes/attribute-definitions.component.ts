@@ -80,12 +80,12 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   newAttributeInstance():AttributeVO {
-    let groupId = this.selectedGroup != null ? this.selectedGroup.attributegroupId : 0;
-    let etype = this.etypes.length > 0 ? this.etypes[0] : { etypeId: 0, javatype: '', businesstype: ''};
+    let groupId = this.selectedGroup != null ? this.selectedGroup.code : 'PRODUCT';
+    let etype = this.etypes.length > 0 ? this.etypes[0].businesstype : '';
     return {
-      attributeId: 0, attributegroupId: groupId,
+      attributeId: 0, attributegroup: groupId,
       code: '', name: '', description:null, displayNames: [],
-      etypeId: etype.etypeId, etypeName:etype.businesstype,
+      etype: etype,
       val:null, secure: false, mandatory:false, allowduplicate:false, allowfailover:false,
       regexp:null, validationFailedMessage:[],
       rank:500,

@@ -54,15 +54,12 @@ public class AttributeDTOImpl implements AttributeDTO {
     @DtoField(value = "description")
     private String description;
 
-    @DtoField(value = "etype.etypeId", readOnly=true)
-    private long etypeId;
-
-    @DtoField(value = "etype.businesstype", readOnly=true)
-    private String etypeName;
+    @DtoField(value = "etype")
+    private String etype;
 
 
-    @DtoField(value = "attributeGroup.attributegroupId", readOnly=true)
-    private long attributegroupId;
+    @DtoField(value = "attributeGroup")
+    private String attributegroup;
 
     @DtoField(value = "allowduplicate")
     private boolean allowduplicate;
@@ -137,14 +134,14 @@ public class AttributeDTOImpl implements AttributeDTO {
 
     /** {@inheritDoc} */
     @Override
-    public long getAttributegroupId() {
-        return attributegroupId;
+    public String getAttributegroup() {
+        return attributegroup;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void setAttributegroupId(final long attributegroupId) {
-        this.attributegroupId = attributegroupId;
+    public void setAttributegroup(final String attributegroup) {
+        this.attributegroup = attributegroup;
     }
 
     /** {@inheritDoc} */
@@ -252,26 +249,13 @@ public class AttributeDTOImpl implements AttributeDTO {
     }
 
     @Override
-    public long getEtypeId() {
-        return etypeId;
+    public String getEtype() {
+        return etype;
     }
 
     /** {@inheritDoc} */
-    @Override
-    public void setEtypeId(final long etypeId) {
-        this.etypeId = etypeId;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public String getEtypeName() {
-        return etypeName;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setEtypeName(final String etypeName) {
-        this.etypeName = etypeName;
+    public void setEtype(final String etype) {
+        this.etype = etype;
     }
 
     /** {@inheritDoc} */
@@ -366,9 +350,8 @@ public class AttributeDTOImpl implements AttributeDTO {
                 ", val='" + val + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", etypeId=" + etypeId +
-                ", etypeName='" + etypeName + '\'' +
-                ", attributegroupId=" + attributegroupId +
+                ", etype=" + etype +
+                ", attributegroup=" + attributegroup +
                 ", allowduplicate=" + allowduplicate +
                 ", allowfailover=" + allowfailover +
                 ", regexp='" + regexp + '\'' +

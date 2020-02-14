@@ -157,7 +157,7 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select count(a.ATTRIBUTE_ID) as cnt from TATTRIBUTE a, TATTRIBUTEGROUP g where a.ATTRIBUTEGROUP_ID = g.ATTRIBUTEGROUP_ID and g.CODE = 'PRODUCT'");
+                    "select count(a.ATTRIBUTE_ID) as cnt from TATTRIBUTE a where a.ATTRIBUTEGROUP = 'PRODUCT'");
             rs.next();
             long cntProductAttr = rs.getLong("cnt");
             rs.close();
