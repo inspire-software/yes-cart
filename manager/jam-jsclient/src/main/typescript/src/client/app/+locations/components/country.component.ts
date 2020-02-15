@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { CountryVO, StateVO } from './../../shared/model/index';
+import { CountryVO, StateVO, Pair } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
@@ -46,6 +46,7 @@ export class CountryComponent implements OnInit, OnDestroy {
   private countryForm:any;
 
   private stateFilter:string;
+  private stateSort:Pair<string, boolean> = { first: 'stateCode', second: false };
 
   private selectedState:StateVO = null;
 
@@ -123,6 +124,19 @@ export class CountryComponent implements OnInit, OnDestroy {
   protected onRowAddState() {
     LogUtil.debug('CountryComponent onRowAddState', this.selectedState);
     this.stateAddClick.emit(this.selectedState);
+  }
+
+  protected onPageSelectedState(page:number) {
+    LogUtil.debug('CountryComponent onPageSelectedState', page);
+  }
+
+  protected onSortSelectedState(sort:Pair<string, boolean>) {
+    LogUtil.debug('CountryComponent onSortSelectedState', sort);
+    if (sort == null) {
+      this.stateSort = { first: 'stateCode', second: false };
+    } else {
+      this.stateSort = sort;
+    }
   }
 
   protected onRowEditSelectedState() {

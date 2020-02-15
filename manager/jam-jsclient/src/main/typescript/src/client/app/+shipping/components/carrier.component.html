@@ -118,6 +118,11 @@
 
                   <form class="width-100">
                     <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="sortSelectSlaModal.showDialog()" class="btn {{ slaSort.first ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                          <i class="fa fa-sort-amount-asc"></i>
+                        </button>
+                      </span>
                       <input class="form-control filter-input" type="text" name="slaFilter" [(ngModel)]="slaFilter" autocomplete="off"/>
                       <span class="input-group-btn">
                         <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearSlaFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
@@ -128,7 +133,6 @@
                   </form>
 
                 </div>
-
 
                 <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
 
@@ -150,9 +154,26 @@
             </div>
 
             <div class="row">
-              <yc-slas [slas]="carrier.slas" [paymentGateways]="paymentGateways" [fulfilmentCentres]="fulfilmentCentres" [filter]="slaFilter" (dataSelected)="onSlaSelected($event)"></yc-slas>
+              <yc-slas [slas]="carrier.slas"
+                       [paymentGateways]="paymentGateways"
+                       [fulfilmentCentres]="fulfilmentCentres"
+                       [filter]="slaFilter"
+                       [sortorder]="slaSort"
+                       (dataSelected)="onSlaSelected($event)"
+                       (pageSelected)="onPageSelectedSla($event)"
+                       (sortSelected)="onSortSelectedSla($event)"></yc-slas>
             </div>
           </div>
+
+          <yc-sort-select #sortSelectSlaModal
+                          [sortColumn]="slaSort.first"
+                          [sortDesc]="slaSort.second"
+                          [availableOptions]=" ([
+                              { key: 'code', messageKey: 'CARRIERSLA_CODE' },
+                              { key: 'name', messageKey: 'NAME' }
+                          ]) "
+                          (sortSelected)="onSortSelectedSla($event)"></yc-sort-select>
+
         </ng-template>
 
       </tab>

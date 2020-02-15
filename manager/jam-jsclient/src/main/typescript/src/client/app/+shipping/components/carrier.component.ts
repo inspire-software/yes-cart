@@ -53,6 +53,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
   private carrierForm:any;
 
   private slaFilter:string;
+  private slaSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private selectedSla:CarrierSlaInfoVO = null;
 
@@ -209,6 +210,19 @@ export class CarrierComponent implements OnInit, OnDestroy {
   protected onRowAddSLA() {
     LogUtil.debug('CarrierComponent onRowAddSLA', this.selectedSla);
     this.slaAddClick.emit(this.selectedSla);
+  }
+
+  protected onPageSelectedSla(page:number) {
+    LogUtil.debug('CarrierComponent onPageSelectedSla', page);
+  }
+
+  protected onSortSelectedSla(sort:Pair<string, boolean>) {
+    LogUtil.debug('CarrierComponent onSortSelectedSla', sort);
+    if (sort == null) {
+      this.slaSort = { first: 'name', second: false };
+    } else {
+      this.slaSort = sort;
+    }
   }
 
   protected onRowEditSelectedSLA() {

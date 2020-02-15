@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO } from './../../shared/model/index';
+import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, Pair } from './../../shared/model/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -30,6 +30,10 @@ export class SlasComponent implements OnInit, OnDestroy {
   @Input() selectedSla:CarrierSlaVO;
 
   @Output() dataSelected: EventEmitter<CarrierSlaVO> = new EventEmitter<CarrierSlaVO>();
+
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
 
   private _slas:Array<CarrierSlaVO> = [];
   private _filter:string;
@@ -95,6 +99,15 @@ export class SlasComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
+  @Input()
+  set sortorder(sort:Pair<string, boolean>) {
+    if (sort != null && (sort.first !== this.sortColumn || sort.second !== this.sortDesc)) {
+      this.sortColumn = sort.first;
+      this.sortDesc = sort.second;
+      this.delayedFiltering.delay();
+    }
+  }
+
   ngOnDestroy() {
     LogUtil.debug('SlasComponent ngOnDestroy');
     this.selectedSla = null;
@@ -111,6 +124,9 @@ export class SlasComponent implements OnInit, OnDestroy {
   }
 
   onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
+    }
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -134,6 +150,7 @@ export class SlasComponent implements OnInit, OnDestroy {
       this.sortDesc = false;
     }
     this.filterSlas();
+    this.sortSelected.emit({ first: this.sortColumn, second: this.sortDesc });
   }
 
   protected onSelectRow(row:CarrierSlaVO) {

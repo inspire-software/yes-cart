@@ -70,6 +70,11 @@
 
                   <form class="width-100">
                     <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="sortSelectStateModal.showDialog()" class="btn {{ stateSort.first ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                          <i class="fa fa-sort-amount-asc"></i>
+                        </button>
+                      </span>
                       <input class="form-control filter-input" type="text" name="stateFilter" [(ngModel)]="stateFilter" autocomplete="off"/>
                       <span class="input-group-btn">
                         <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearStateFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
@@ -80,7 +85,6 @@
                   </form>
 
                 </div>
-
 
                 <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
 
@@ -102,9 +106,24 @@
             </div>
 
             <div class="row">
-              <yc-states [states]="country.states" [filter]="stateFilter" (dataSelected)="onStateSelected($event)"></yc-states>
+              <yc-states [states]="country.states"
+                         [filter]="stateFilter"
+                         [sortorder]="stateSort"
+                         (dataSelected)="onStateSelected($event)"
+                         (pageSelected)="onPageSelectedState($event)"
+                         (sortSelected)="onSortSelectedState($event)"></yc-states>
             </div>
           </div>
+
+          <yc-sort-select #sortSelectStateModal
+                          [sortColumn]="stateSort.first"
+                          [sortDesc]="stateSort.second"
+                          [availableOptions]=" ([
+                              { key: 'stateCode', messageKey: 'LOCATION_STATE_CODE' },
+                              { key: 'name', messageKey: 'NAME' }
+                          ]) "
+                          (sortSelected)="onSortSelectedState($event)"></yc-sort-select>
+
         </ng-template>
 
       </tab>
