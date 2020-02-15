@@ -41,6 +41,10 @@ export class SystemConfigurationComponent implements OnInit {
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
+  //sorting
+  private sortColumn:string = 'nodeId';
+  private sortDesc:boolean = false;
+
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
@@ -148,6 +152,22 @@ export class SystemConfigurationComponent implements OnInit {
     }
   }
 
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'nodeId';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterConfigurations();
+  }
+
   protected getProperties(row:ConfigurationVO):string {
     if (row.properties != null) {
       let out:string = '';
@@ -201,28 +221,40 @@ export class SystemConfigurationComponent implements OnInit {
   }
 
   private filterConfigurations() {
-    if (this.configurationFilter) {
 
-      let _filter = this.configurationFilter.toLowerCase();
+    if (this.configurations) {
+      if (this.configurationFilter) {
 
-      this.filteredConfigurations = this.configurations.filter(configuration =>
-        configuration.functionalArea.toLowerCase().indexOf(_filter) !== -1 ||
-        configuration.name.toLowerCase().indexOf(_filter) !== -1 ||
-        configuration.cfgInterface.toLowerCase().indexOf(_filter) !== -1 ||
-        configuration.nodeId.toLowerCase().indexOf(_filter) !== -1 ||
-        (configuration.targets != null && configuration.targets.findIndex(el => el.toLowerCase().indexOf(_filter) !== -1) !== -1)  ||
-        (configuration.properties != null && configuration.properties.findIndex(el => el.first.toLowerCase().indexOf(_filter) !== -1 || el.second.toLowerCase().indexOf(_filter) !== -1) !== -1)
-      );
-      LogUtil.debug('SystemConfigurationComponent filterConfigurations text', this.configurationFilter, this.filteredConfigurations);
+        let _filter = this.configurationFilter.toLowerCase();
 
-    } else {
-      this.filteredConfigurations = this.configurations;
-      LogUtil.debug('SystemConfigurationComponent filterConfigurations no filter', this.filteredConfigurations);
+        this.filteredConfigurations = this.configurations.filter(configuration =>
+          configuration.functionalArea.toLowerCase().indexOf(_filter) !== -1 ||
+          configuration.name.toLowerCase().indexOf(_filter) !== -1 ||
+          configuration.cfgInterface.toLowerCase().indexOf(_filter) !== -1 ||
+          configuration.nodeId.toLowerCase().indexOf(_filter) !== -1 ||
+          (configuration.targets != null && configuration.targets.findIndex(el => el.toLowerCase().indexOf(_filter) !== -1) !== -1) ||
+          (configuration.properties != null && configuration.properties.findIndex(el => el.first.toLowerCase().indexOf(_filter) !== -1 || el.second.toLowerCase().indexOf(_filter) !== -1) !== -1)
+        );
+        LogUtil.debug('SystemConfigurationComponent filterConfigurations text', this.configurationFilter, this.filteredConfigurations);
+
+      } else {
+        this.filteredConfigurations = this.configurations.slice(0, this.configurations.length);
+        LogUtil.debug('SystemConfigurationComponent filterConfigurations no filter', this.filteredConfigurations);
+      }
     }
 
     if (this.filteredConfigurations === null) {
       this.filteredConfigurations = [];
     }
+
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    let _sort = function(a:any, b:any):number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
+
+    this.filteredConfigurations.sort(_sort);
 
     let _total = this.filteredConfigurations.length;
     this.totalItems = _total;

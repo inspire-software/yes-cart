@@ -254,23 +254,26 @@ export class ClusterComponent implements OnInit {
 
 
   private filterCluster() {
-    if (this.clusterFilter) {
 
-      let _filter = this.clusterFilter.toLowerCase();
+    if (this.cluster) {
+      if (this.clusterFilter) {
 
-      this.filteredCluster = this.cluster.filter(cluster =>
-        cluster.id.toLowerCase().indexOf(_filter) !== -1 ||
-        cluster.nodeId.toLowerCase().indexOf(_filter) !== -1 ||
-        cluster.nodeType.toLowerCase().indexOf(_filter) !== -1 ||
-        cluster.nodeConfig.toLowerCase().indexOf(_filter) !== -1 ||
-        cluster.clusterId.toLowerCase().indexOf(_filter) !== -1 ||
-        cluster.channel.toLowerCase().indexOf(_filter) !== -1
-      );
-      LogUtil.debug('ClusterComponent filterCluster text', this.clusterFilter);
+        let _filter = this.clusterFilter.toLowerCase();
 
-    } else {
-      this.filteredCluster = this.cluster;
-      LogUtil.debug('ClusterComponent filterCluster no filter');
+        this.filteredCluster = this.cluster.filter(cluster =>
+          cluster.id.toLowerCase().indexOf(_filter) !== -1 ||
+          cluster.nodeId.toLowerCase().indexOf(_filter) !== -1 ||
+          cluster.nodeType.toLowerCase().indexOf(_filter) !== -1 ||
+          cluster.nodeConfig.toLowerCase().indexOf(_filter) !== -1 ||
+          cluster.clusterId.toLowerCase().indexOf(_filter) !== -1 ||
+          cluster.channel.toLowerCase().indexOf(_filter) !== -1
+        );
+        LogUtil.debug('ClusterComponent filterCluster text', this.clusterFilter);
+
+      } else {
+        this.filteredCluster = this.cluster.slice(0, this.cluster.length);
+        LogUtil.debug('ClusterComponent filterCluster no filter');
+      }
     }
 
     if (this.filteredCluster === null) {

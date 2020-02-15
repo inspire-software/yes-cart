@@ -90,6 +90,7 @@
           title="{{ selectedRow != null ? selectedRow.id : '' }}"
           disableCancel="true"
           positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+          [disableCancel]="true"
           [valid]="true">
 
   <ng-template [ngIf]="selectedRow">

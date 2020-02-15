@@ -323,61 +323,63 @@ export class CacheMonitoringComponent implements OnInit {
 
     let _sorted = false;
 
-    if (this.cacheFilter) {
+    if (this.caches) {
+      if (this.cacheFilter) {
 
-      let _filter = this.cacheFilter.toLowerCase();
+        let _filter = this.cacheFilter.toLowerCase();
 
-      if (_filter.indexOf('#') == 0) {
+        if (_filter.indexOf('#') == 0) {
 
-        let _size = parseInt(_filter.substr(1));
-        if (isNaN(_size)) {
-          _size = 100;
+          let _size = parseInt(_filter.substr(1));
+          if (isNaN(_size)) {
+            _size = 100;
+          }
+
+          this.filteredCaches = this.caches.filter(cache =>
+            cache.cacheSize >= _size
+          );
+          LogUtil.debug('CacheMonitoringComponent filterCaches size', this.cacheFilter);
+        } else if (_filter.indexOf('^') == 0) {
+
+          let _top = parseInt(_filter.substr(1));
+          if (isNaN(_top)) {
+            _top = 5;
+          }
+
+          this.filteredCaches = this.caches.sort((n1, n2) => n2.cacheSize - n1.cacheSize).slice(0, _top);
+          _sorted = true;
+
+        } else if (_filter.indexOf('!') == 0) {
+
+          let _hot = parseInt(_filter.substr(1));
+          if (isNaN(_hot)) {
+            _hot = 5;
+          }
+
+          this.filteredCaches = this.caches.sort((n1, n2) => (n2.cacheSize / n2.inMemorySizeMax) - (n1.cacheSize / n1.inMemorySizeMax)).slice(0, _hot);
+          _sorted = true;
+
+        } else if (_filter.indexOf('$') == 0) {
+
+          let _heavy = parseInt(_filter.substr(1));
+          if (isNaN(_heavy)) {
+            _heavy = 5;
+          }
+
+          this.filteredCaches = this.caches.sort((n1, n2) => (n2.calculateInMemorySize - n1.calculateInMemorySize)).slice(0, _heavy);
+          _sorted = true;
+
+        } else {
+          this.filteredCaches = this.caches.filter(cache =>
+            cache.cacheName.toLowerCase().indexOf(_filter) !== -1 ||
+            cache.nodeId.toLowerCase().indexOf(_filter) !== -1
+          );
+          LogUtil.debug('CacheMonitoringComponent filterCaches text', this.cacheFilter);
         }
-
-        this.filteredCaches = this.caches.filter(cache =>
-          cache.cacheSize >= _size
-        );
-        LogUtil.debug('CacheMonitoringComponent filterCaches size', this.cacheFilter);
-      } else if (_filter.indexOf('^') == 0) {
-
-        let _top = parseInt(_filter.substr(1));
-        if (isNaN(_top)) {
-          _top = 5;
-        }
-
-        this.filteredCaches = this.caches.sort((n1,n2) => n2.cacheSize - n1.cacheSize).slice(0, _top);
-        _sorted = true;
-
-      } else if (_filter.indexOf('!') == 0) {
-
-        let _hot = parseInt(_filter.substr(1));
-        if (isNaN(_hot)) {
-          _hot = 5;
-        }
-
-        this.filteredCaches = this.caches.sort((n1,n2) => (n2.cacheSize / n2.inMemorySizeMax) - (n1.cacheSize / n1.inMemorySizeMax)).slice(0, _hot);
-        _sorted = true;
-
-      } else if (_filter.indexOf('$') == 0) {
-
-        let _heavy = parseInt(_filter.substr(1));
-        if (isNaN(_heavy)) {
-          _heavy = 5;
-        }
-
-        this.filteredCaches = this.caches.sort((n1,n2) => (n2.calculateInMemorySize - n1.calculateInMemorySize)).slice(0, _heavy);
-        _sorted = true;
-
       } else {
-        this.filteredCaches = this.caches.filter(cache =>
-          cache.cacheName.toLowerCase().indexOf(_filter) !== -1 ||
-          cache.nodeId.toLowerCase().indexOf(_filter) !== -1
-        );
-        LogUtil.debug('CacheMonitoringComponent filterCaches text', this.cacheFilter);
+        this.filteredCaches = this.caches.slice(0, this.caches.length);
+        LogUtil.debug('CacheMonitoringComponent filterCaches no filter');
       }
-    } else {
-      this.filteredCaches = this.caches;
-      LogUtil.debug('CacheMonitoringComponent filterCaches no filter');
     }
 
     if (this.filteredCaches === null) {

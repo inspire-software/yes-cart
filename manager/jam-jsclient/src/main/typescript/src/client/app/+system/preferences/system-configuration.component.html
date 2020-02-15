@@ -6,9 +6,16 @@
 
     <div class="row data-control">
 
+
       <div class="col-xs-12 col-md-5 padding-lr-0">
+
         <form class="width-100">
           <div class="input-group">
+            <span class="input-group-btn">
+              <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ sortColumn ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                <i class="fa fa-sort-amount-asc"></i>
+              </button>
+            </span>
             <input class="form-control filter-input" type="text" name="configurationFilter" [(ngModel)]="configurationFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
             <span class="input-group-btn">
             <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
@@ -17,6 +24,7 @@
           </span>
           </div>
         </form>
+
       </div>
 
       <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
@@ -47,8 +55,8 @@
         <table class="table-bordered table-striped table-condensed cf">
           <thead class="cf">
           <tr>
-            <th>{{ 'CONFIG_NODE' | translate }}</th>
-            <th>{{ 'CONFIG_NAME' | translate }}</th>
+            <th><a class="js-click" (click)="onSortClick('nodeId')">{{ 'CONFIG_NODE' | translate }} <span [hidden]="sortColumn != 'nodeId'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+            <th><a class="js-click" (click)="onSortClick('functionalArea')">{{ 'CONFIG_NAME' | translate }} <span [hidden]="sortColumn != 'functionalArea'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
             <th>{{ 'CONFIG_TARGET' | translate }}</th>
           </tr>
           </thead>
@@ -72,6 +80,15 @@
     </div>
 
   </div>
+
+  <yc-sort-select #sortSelectModal
+                  [sortColumn]="sortColumn"
+                  [sortDesc]="sortDesc"
+                  [availableOptions]=" ([
+                      { key: 'nodeId', messageKey: 'CONFIG_NODE' },
+                      { key: 'functionalArea', messageKey: 'CONFIG_NAME' }
+                  ]) "
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></yc-sort-select>
 </ng-template>
 
 
