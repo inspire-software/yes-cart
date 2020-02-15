@@ -35,6 +35,10 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
+  //sorting
+  private sortColumn:string = 'name';
+  private sortDesc:boolean = false;
+
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
@@ -191,7 +195,7 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
   }
 
 
-  resetLastPageEnd() {
+  protected resetLastPageEnd() {
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
       this.pageEnd = this.totalItems;
@@ -200,7 +204,7 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPageChanged(event:any) {
+  protected onPageChanged(event:any) {
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -210,6 +214,21 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'name';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterSubs();
+  }
 
   protected onClearFilter() {
 
@@ -248,26 +267,32 @@ export class ShopSubsComponent implements OnInit, OnDestroy {
   private filterSubs() {
     let _filter = this.subFilter ? this.subFilter.toLowerCase() : null;
     let _subs:ShopVO[] = [];
-    if (_filter) {
-      _subs = this.shopSubs.filter(sub =>
-        sub.code.toLowerCase().indexOf(_filter) !== -1 ||
-        sub.name.toLowerCase().indexOf(_filter) !== -1
-      );
-      LogUtil.debug('ShopSubsComponent filterSubs', _filter);
-    } else {
-      _subs = this.shopSubs;
-      LogUtil.debug('ShopSubsComponent filterSubs no filter');
+
+    if (this.shopSubs) {
+      if (_filter) {
+        _subs = this.shopSubs.filter(sub =>
+          sub.code.toLowerCase().indexOf(_filter) !== -1 ||
+          sub.name.toLowerCase().indexOf(_filter) !== -1
+        );
+        LogUtil.debug('ShopSubsComponent filterSubs', _filter);
+      } else {
+        _subs = this.shopSubs;
+        LogUtil.debug('ShopSubsComponent filterSubs no filter');
+      }
     }
 
     if (_subs === null) {
       _subs = [];
     }
 
-    _subs.sort(function(a:ShopVO, b:ShopVO) {
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
 
-      return a.name > b.name ? 1 : -1;
+    let _sort = function (a: any, b: any): number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
 
-    });
+    _subs.sort(_sort);
 
     this.filteredShopSub = _subs;
 

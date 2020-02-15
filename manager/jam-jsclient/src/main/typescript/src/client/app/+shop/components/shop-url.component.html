@@ -18,6 +18,11 @@
 
       <form class="width-100">
         <div class="input-group">
+          <span class="input-group-btn">
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ sortColumn ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
+          </span>
           <input class="form-control filter-input" type="text" name="urlFilter" [(ngModel)]="urlFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
           <span class="input-group-btn">
             <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
@@ -61,9 +66,9 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'SHOP_URL' | translate }}</th>
-        <th>{{ 'SHOP_THEME_CHAIN' | translate }}</th>
-        <th>{{ 'SHOP_URL_PRIMARY' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('url')">{{ 'SHOP_URL' | translate }} <span [hidden]="sortColumn != 'url'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('theme')">{{ 'SHOP_THEME_CHAIN' | translate }} <span [hidden]="sortColumn != 'theme'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('primary')">{{ 'SHOP_URL_PRIMARY' | translate }} <span [hidden]="sortColumn != 'primary'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>
@@ -83,7 +88,15 @@
                 previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
   </div>
 
-
+  <yc-sort-select #sortSelectModal
+                  [sortColumn]="sortColumn"
+                  [sortDesc]="sortDesc"
+                  [availableOptions]=" ([
+                              { key: 'url', messageKey: 'SHOP_URL' },
+                              { key: 'theme', messageKey: 'SHOP_THEME_CHAIN' },
+                              { key: 'primary', messageKey: 'SHOP_URL_PRIMARY' }
+                          ]) "
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></yc-sort-select>
 
   <yc-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"

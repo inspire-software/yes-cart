@@ -35,6 +35,10 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
+  //sorting
+  private sortColumn:string = 'url';
+  private sortDesc:boolean = false;
+
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
@@ -271,7 +275,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
 
-  resetLastPageEnd() {
+  protected resetLastPageEnd() {
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
       this.pageEnd = this.totalItems;
@@ -280,7 +284,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPageChanged(event:any) {
+  protected onPageChanged(event:any) {
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -290,6 +294,21 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'url';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterUrls();
+  }
 
   protected onClearFilter() {
 
@@ -335,26 +354,32 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   private filterUrls() {
     let _filter = this.urlFilter ? this.urlFilter.toLowerCase() : null;
     let _urls:UrlVO[] = [];
-    if (_filter) {
-      _urls = this.shopUrl.urls.filter(url =>
-        url.url.toLowerCase().indexOf(_filter) !== -1 ||
-        url.theme && url.theme.toLowerCase().indexOf(_filter) !== -1
-      );
-      LogUtil.debug('ShopUrlComponent filterUrls', _filter);
-    } else {
-      _urls = this.shopUrl.urls;
-      LogUtil.debug('ShopUrlComponent filterUrls no filter');
+
+    if (this.shopUrl.urls) {
+      if (_filter) {
+        _urls = this.shopUrl.urls.filter(url =>
+          url.url.toLowerCase().indexOf(_filter) !== -1 ||
+          url.theme && url.theme.toLowerCase().indexOf(_filter) !== -1
+        );
+        LogUtil.debug('ShopUrlComponent filterUrls', _filter);
+      } else {
+        _urls = this.shopUrl.urls;
+        LogUtil.debug('ShopUrlComponent filterUrls no filter');
+      }
     }
 
     if (_urls === null) {
       _urls = [];
     }
 
-    _urls.sort(function(a:UrlVO, b:UrlVO) {
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
 
-      return a.url > b.url ? 1 : -1;
+    let _sort = function (a: any, b: any): number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
 
-    });
+    _urls.sort(_sort);
 
     this.filteredShopUrl = _urls;
 

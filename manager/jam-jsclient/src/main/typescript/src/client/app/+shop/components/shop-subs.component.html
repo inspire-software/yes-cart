@@ -18,6 +18,11 @@
 
       <form class="width-100">
         <div class="input-group">
+          <span class="input-group-btn">
+            <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ sortColumn ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+              <i class="fa fa-sort-amount-asc"></i>
+            </button>
+          </span>
           <input class="form-control filter-input" type="text" name="subFilter" [(ngModel)]="subFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
           <span class="input-group-btn">
             <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
@@ -49,8 +54,8 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'NAME' | translate }}</th>
-        <th>{{ 'DESCRIPTION' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'NAME' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('description')">{{ 'DESCRIPTION' | translate }} <span [hidden]="sortColumn != 'description'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>
@@ -68,6 +73,15 @@
     <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
                 previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
   </div>
+
+  <yc-sort-select #sortSelectModal
+                  [sortColumn]="sortColumn"
+                  [sortDesc]="sortDesc"
+                  [availableOptions]=" ([
+                              { key: 'name', messageKey: 'NAME' },
+                              { key: 'description', messageKey: 'DESCRIPTION' }
+                          ]) "
+                  (sortSelected)="onSortClick($event != null ? $event.first : null)"></yc-sort-select>
 
   <yc-modal #editModalDialog
             title="{{ 'SHOP_TAB_B2B' | translate }}"

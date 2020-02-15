@@ -35,6 +35,10 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
+  //sorting
+  private sortColumn:string = 'alias';
+  private sortDesc:boolean = false;
+
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
   private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
@@ -267,7 +271,7 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
   }
 
 
-  resetLastPageEnd() {
+  protected resetLastPageEnd() {
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
       this.pageEnd = this.totalItems;
@@ -276,7 +280,7 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPageChanged(event:any) {
+  protected onPageChanged(event:any) {
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -286,6 +290,21 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'alias';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterAliases();
+  }
 
   protected onClearFilter() {
 
@@ -324,25 +343,31 @@ export class ShopAliasComponent implements OnInit, OnDestroy {
   private filterAliases() {
     let _filter = this.aliasFilter ? this.aliasFilter.toLowerCase() : null;
     let _aliases:AliasVO[] = [];
-    if (_filter) {
-      _aliases = this.shopAlias.aliases.filter(alias =>
-        alias.alias.toLowerCase().indexOf(_filter) !== -1
-      );
-      LogUtil.debug('ShopAliasComponent filterAliases', _filter);
-    } else {
-      _aliases = this.shopAlias.aliases;
-      LogUtil.debug('ShopAliasComponent filterAliases no filter');
+
+    if (this.shopAlias.aliases) {
+      if (_filter) {
+        _aliases = this.shopAlias.aliases.filter(alias =>
+          alias.alias.toLowerCase().indexOf(_filter) !== -1
+        );
+        LogUtil.debug('ShopAliasComponent filterAliases', _filter);
+      } else {
+        _aliases = this.shopAlias.aliases.slice(0, this.shopAlias.aliases.length);
+        LogUtil.debug('ShopAliasComponent filterAliases no filter');
+      }
     }
 
     if (_aliases === null) {
       _aliases = [];
     }
 
-    _aliases.sort(function(a:AliasVO, b:AliasVO) {
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
 
-      return a.alias > b.alias ? 1 : -1;
+    let _sort = function (a: any, b: any): number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
 
-    });
+    _aliases.sort(_sort);
 
     this.filteredShopAlias = _aliases;
 
