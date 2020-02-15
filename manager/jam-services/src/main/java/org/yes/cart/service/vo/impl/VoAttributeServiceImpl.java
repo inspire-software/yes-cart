@@ -22,9 +22,9 @@ import org.yes.cart.domain.dto.AttributeGroupDTO;
 import org.yes.cart.domain.dto.EtypeDTO;
 import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttribute;
-import org.yes.cart.domain.vo.VoAttributeGroup;
-import org.yes.cart.domain.vo.VoEtype;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoAttributeGroupService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoEtypeService;
@@ -89,9 +89,31 @@ public class VoAttributeServiceImpl implements VoAttributeService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoAttribute> getFilteredAttributes(final String group, final String filter, final int max) throws Exception {
-        final List<AttributeDTO> attributeDTOs = dtoAttributeService.findAttributesBy(group, filter, 0, max);
-        return voAssemblySupport.assembleVos(VoAttribute.class, AttributeDTO.class, attributeDTOs);
+    public VoSearchResult<VoAttribute> getFilteredAttributes(final VoSearchContext filter) throws Exception {
+
+        final VoSearchResult<VoAttribute> result = new VoSearchResult<>();
+        final List<VoAttribute> results = new ArrayList<>();
+        result.setSearchContext(filter);
+        result.setItems(results);
+
+        final SearchContext searchContext = new SearchContext(
+                filter.getParameters(),
+                filter.getStart(),
+                filter.getSize(),
+                filter.getSortBy(),
+                filter.isSortDesc(),
+                "filter", "groups"
+        );
+
+
+        final SearchResult<AttributeDTO> batch = dtoAttributeService.findAttributes(searchContext);
+        if (!batch.getItems().isEmpty()) {
+            results.addAll(voAssemblySupport.assembleVos(VoAttribute.class, AttributeDTO.class, batch.getItems()));
+        }
+
+        result.setTotal(batch.getTotal());
+
+        return result;
     }
 
     /** {@inheritDoc} */

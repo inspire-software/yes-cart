@@ -268,6 +268,7 @@
   "ATTRIBUTE_SI_RANGE_TIP_READ": "Відключення редагування діапазонів навігації",
 
   "AV_ATTRIBUTE": "Атрибут",
+  "AV_GROUP": "Група",
   "AV_TYPE": "Тип",
   "AV_VALUE": "Значення",
   "AV_SECURE": "Безпека",
@@ -888,6 +889,7 @@
 
   "SEARCH_HELP_ASSOCIATION_TYPE": "Для пошуку за типом асоціації. Формат: '#фраза'",
 
+  "SEARCH_HELP_ATTRIBUTE_GROUPS_ALL": "Виберіть/відмініть всі групи: ",
   "SEARCH_HELP_ATTRIBUTE_CODE": "Для пошуку атрибута за кодом (точний). Формат: '#X'",
 
   "SEARCH_HELP_AV_VALUES": "Для того, щоб відобразити всі існуючі значення використовуйте '###'",

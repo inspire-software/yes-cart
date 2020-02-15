@@ -74,13 +74,20 @@ public class AttributeServiceCachedImpl implements AttributeService {
         return attributeService.findAttributesWithMultipleValues(attributeGroupCode);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Attribute> findAttributes(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
+        return attributeService.findAttributes(start, offset, sort, sortDescending, filter);
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Attribute> findAttributesBy(final String attributeGroupCode, final String code, final String name, final String description, final int page, final int pageSize) {
-        return attributeService.findAttributesBy(attributeGroupCode, code, name, description, page, pageSize);
+    public int findAttributeCount(final Map<String, List> filter) {
+        return attributeService.findAttributeCount(filter);
     }
 
     /**

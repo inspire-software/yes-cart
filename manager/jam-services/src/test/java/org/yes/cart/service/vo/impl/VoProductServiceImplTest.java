@@ -70,7 +70,7 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(productsNoFilter.getItems().isEmpty());
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("CC_TEST")));
+        ctxFind.setParameters(createSearchContextParams("filter", "CC_TEST"));
         ctxFind.setSize(10);
         final VoSearchResult<VoProduct> productsFind = voProductService.getFilteredProducts(ctxFind);
         assertNotNull(productsFind);
@@ -78,7 +78,7 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(productsFind.getItems().get(0).getCode().contains("CC_TEST"));
 
         VoSearchContext ctxByPk = new VoSearchContext();
-        ctxByPk.setParameters(Collections.singletonMap("filter", Collections.singletonList("* 9998")));
+        ctxByPk.setParameters(createSearchContextParams("filter", "* 9998"));
         ctxByPk.setSize(10);
         final VoSearchResult<VoProduct> productsById = voProductService.getFilteredProducts(ctxByPk);
         assertNotNull(productsById);
@@ -86,7 +86,7 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(9998L, productsById.getItems().get(0).getProductId());
 
         VoSearchContext ctxByCodeExact = new VoSearchContext();
-        ctxByCodeExact.setParameters(Collections.singletonMap("filter", Collections.singletonList("! BENDER-ua")));
+        ctxByCodeExact.setParameters(createSearchContextParams("filter", "! BENDER-ua"));
         ctxByCodeExact.setSize(10);
         final VoSearchResult<VoProduct> productsByCodeExact = voProductService.getFilteredProducts(ctxByCodeExact);
         assertNotNull(productsByCodeExact);
@@ -94,7 +94,7 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("BENDER-ua", productsByCodeExact.getItems().get(0).getCode());
 
         VoSearchContext ctxByCode = new VoSearchContext();
-        ctxByCode.setParameters(Collections.singletonMap("filter", Collections.singletonList("#BENDER")));
+        ctxByCode.setParameters(createSearchContextParams("filter", "#BENDER"));
         ctxByCode.setSize(10);
         final VoSearchResult<VoProduct> productsByCode = voProductService.getFilteredProducts(ctxByCode);
         assertNotNull(productsByCode);
@@ -102,7 +102,7 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(productsByCode.getItems().get(0).getCode().contains("BENDER"));
 
         VoSearchContext ctxByBrandOrType = new VoSearchContext();
-        ctxByBrandOrType.setParameters(Collections.singletonMap("filter", Collections.singletonList("?Robots")));
+        ctxByBrandOrType.setParameters(createSearchContextParams("filter", "?Robots"));
         ctxByBrandOrType.setSize(10);
         final VoSearchResult<VoProduct> productsByBrandOrType = voProductService.getFilteredProducts(ctxByBrandOrType);
         assertNotNull(productsByBrandOrType);
@@ -110,7 +110,7 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("Robots", productsByBrandOrType.getItems().get(0).getProductType().getName());
 
         VoSearchContext ctxByCategory = new VoSearchContext();
-        ctxByCategory.setParameters(Collections.singletonMap("filter", Collections.singletonList("^101")));
+        ctxByCategory.setParameters(createSearchContextParams("filter", "^101"));
         ctxByCategory.setSize(10);
         final VoSearchResult<VoProduct> productsInCat = voProductService.getFilteredProducts(ctxByCategory);
         assertNotNull(productsInCat);
@@ -149,7 +149,7 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
         VoSearchContext ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setParameters(createSearchContextParams("filter", "TEST CRUD UPDATE"));
         ctx.setSize(10);
 
         assertTrue(voProductService.getFilteredProducts(ctx).getTotal() > 0);
@@ -204,7 +204,7 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
         VoSearchContext ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setParameters(createSearchContextParams("filter", "TEST CRUD UPDATE"));
         ctx.setSize(10);
 
         assertTrue(voProductService.getFilteredProductSkus(ctx).getTotal() > 0);

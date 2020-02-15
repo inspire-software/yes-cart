@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  * Date: 22/08/2014
  * Time: 14:02
  */
-public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
+public class ShoppingCartStateServiceImplTest extends BaseCoreDBTestCase {
 
     private ShoppingCartStateService shoppingCartStateService;
 

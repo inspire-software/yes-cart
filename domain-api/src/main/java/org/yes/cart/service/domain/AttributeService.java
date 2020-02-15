@@ -180,19 +180,32 @@ public interface AttributeService extends GenericService<Attribute> {
     List<Attribute> findAttributesWithMultipleValues(String attributeGroupCode);
 
 
+
     /**
-     * Get attributes by criteria.
+     * Find attributes by given search criteria. Search will be performed using like operation.
      *
-     * @param attributeGroupCode group code
-     * @param code code (GUID)
-     * @param name base name
-     * @param description description
-     * @param page page number starting from 0
-     * @param pageSize size of page
+     * @param start             start
+     * @param offset            page size
+     * @param sort              optional sort property
+     * @param sortDescending    optional sort property direction
+     * @param filter            optional filters (e.g. name, guid)
      *
-     * @return one page of results
+     * @return list of attributes.
      */
-    List<Attribute> findAttributesBy(String attributeGroupCode, String code, String name, String description, int page, int pageSize);
+    List<Attribute> findAttributes(int start,
+                                   int offset,
+                                   String sort,
+                                   boolean sortDescending,
+                                   Map<String, List> filter);
+
+    /**
+     * Find attributes by given search criteria. Search will be performed using like operation.
+     *
+     * @param filter            optional filters (e.g. name, guid)
+     *
+     * @return count
+     */
+    int findAttributeCount(Map<String, List> filter);
 
 
 }

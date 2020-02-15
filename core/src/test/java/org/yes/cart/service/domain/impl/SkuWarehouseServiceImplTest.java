@@ -38,7 +38,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
+public class SkuWarehouseServiceImplTest extends BaseCoreDBTestCase {
 
     private WarehouseService warehouseService;
     private SkuWarehouseService skuWarehouseService;

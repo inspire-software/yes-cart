@@ -37,7 +37,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestAddressServiceImpl extends BaseCoreDBTestCase {
+public class AddressServiceImplTest extends BaseCoreDBTestCase {
 
     private AddressService addressService;
     private CustomerService customerService;

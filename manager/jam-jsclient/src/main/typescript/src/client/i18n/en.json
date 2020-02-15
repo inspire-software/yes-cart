@@ -268,6 +268,7 @@
   "ATTRIBUTE_SI_RANGE_TIP_READ": "Disable navigation ranges editing",
 
   "AV_ATTRIBUTE": "Attribute",
+  "AV_GROUP": "Group",
   "AV_TYPE": "Type",
   "AV_VALUE": "Value",
   "AV_SECURE": "Secure",
@@ -888,6 +889,7 @@
 
   "SEARCH_HELP_ASSOCIATION_TYPE": "To search by association type. Format: '#keyword'",
 
+  "SEARCH_HELP_ATTRIBUTE_GROUPS_ALL": "Select/unselect all groups: ",
   "SEARCH_HELP_ATTRIBUTE_CODE": "To search attribute by code with exact matching. Format: '#X'",
 
   "SEARCH_HELP_AV_VALUES": "To display all existing values use '###'",

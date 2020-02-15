@@ -57,7 +57,7 @@ public class VoProductTypeServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(ptNoFilter.getItems().isEmpty());
 
         ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("Laser")));
+        ctx.setParameters(createSearchContextParams("filter", "Laser"));
         ctx.setStart(0);
         ctx.setSize(10);
         VoSearchResult<VoProductTypeInfo> ptFind = voProductTypeService.getFilteredTypes(ctx);
@@ -69,7 +69,7 @@ public class VoProductTypeServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("Blaster", pt6.getName());
 
         ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("!MP3 Player")));
+        ctx.setParameters(createSearchContextParams("filter", "!MP3 Player"));
         ctx.setStart(0);
         ctx.setSize(10);
         VoSearchResult<VoProductTypeInfo> ptExact = voProductTypeService.getFilteredTypes(ctx);
@@ -78,7 +78,7 @@ public class VoProductTypeServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("2", ptExact.getItems().get(0).getGuid());
 
         ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("#POWERSUPPLY")));
+        ctx.setParameters(createSearchContextParams("filter", "#POWERSUPPLY"));
         ctx.setStart(0);
         ctx.setSize(10);
         VoSearchResult<VoProductTypeInfo> ptByAttrCode = voProductTypeService.getFilteredTypes(ctx);
@@ -117,7 +117,7 @@ public class VoProductTypeServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(1, afterCreated.getViewGroups().size());
 
         VoSearchContext ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("!TEST CRUD UPDATE")));
+        ctx.setParameters(createSearchContextParams("filter", "!TEST CRUD UPDATE"));
         ctx.setSize(10);
 
         assertTrue(voProductTypeService.getFilteredTypes(ctx).getTotal() > 0);

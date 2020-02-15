@@ -4,22 +4,20 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CODE' | translate }}</th>
-        <th>{{ 'NAME' | translate }}</th>
-        <th>{{ 'AV_TYPE' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('code')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'code'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'NAME' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('etype')">{{ 'AV_TYPE' | translate }} <span [hidden]="sortColumn != 'etype'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'AV_REGEX' | translate }}</th>
-        <th>{{ 'AV_RANK' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('rank')">{{ 'AV_RANK' | translate }} <span [hidden]="sortColumn != 'rank'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredAttributes; let i = index" class="{{row == selectedAttribute ? 'active' : ''}}">
-        <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span class="label label-info">{{row.attributegroup}}</span> {{row.code}} <i class="fa fa-lock" [hidden]="!row.secure"></i></a></td>
-          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getAttributeName(row)}}</a></td>
-          <td title="{{ 'AV_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.etype}} <span [innerHTML]="getSearchFlags(row)"></span></a></td>
-          <td title="{{ 'AV_REGEX' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.mandatory ? 'fa-check-circle' : 'fa-times-circle' }}"></i> {{row.regexp}}&nbsp;</a></td>
-          <td title="{{ 'AV_RANK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.rank}}</a></td>
-        </ng-template>
+        <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span class="label label-info">{{row.attributegroup}}</span> {{row.code}} <i class="fa fa-lock" [hidden]="!row.secure"></i></a></td>
+        <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getAttributeName(row)}}</a></td>
+        <td title="{{ 'AV_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.etype}} <span [innerHTML]="getSearchFlags(row)"></span></a></td>
+        <td title="{{ 'AV_REGEX' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.mandatory ? 'fa-check-circle' : 'fa-times-circle' }}"></i> {{row.regexp}}&nbsp;</a></td>
+        <td title="{{ 'AV_RANK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.rank}}</a></td>
       </tr>
       </tbody>
     </table>

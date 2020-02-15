@@ -24,6 +24,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.service.domain.AttributeService;
 
 import java.util.*;
@@ -35,7 +36,7 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
+public class AttributeServiceImplTest extends BaseCoreDBTestCase {
 
     private AttributeService attributeService;
 
@@ -167,4 +168,47 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(map);
     }
 
+
+    @Test
+    public void testFindAttribute() throws Exception {
+
+        List<Attribute> list;
+        int count;
+
+        final Map<String, List> filterNone = null;
+        count = attributeService.findAttributeCount(filterNone);
+        assertTrue(count > 0);
+        list = attributeService.findAttributes(0, 1, "code", false, filterNone);
+        assertFalse(list.isEmpty());
+
+        final Map<String, List> filterGroupProduct = Collections.singletonMap("groups", Collections.singletonList("PRODUCT"));
+        count = attributeService.findAttributeCount(filterGroupProduct);
+        assertTrue(count > 0);
+        list = attributeService.findAttributes(0, 1, "code", false, filterGroupProduct);
+        assertFalse(list.isEmpty());
+        assertTrue(list.stream().allMatch(attr -> "PRODUCT".equals(attr.getAttributeGroup())));
+
+
+        final Map<String, List> filterWrongGroup = new HashMap<>();
+        SearchContext.JoinMode.OR.setMode(filterWrongGroup);
+        filterWrongGroup.put("groups", Collections.singletonList("PRODUCT"));
+        filterWrongGroup.put("code", Collections.singletonList("IMPORT_JOB_LOG_SIZE"));
+
+        count = attributeService.findAttributeCount(filterWrongGroup);
+        assertEquals(0, count);
+        list = attributeService.findAttributes(0, 1, "code", false, filterWrongGroup);
+        assertTrue(list.isEmpty());
+
+
+        final Map<String, List> filterSimpleMatch = new HashMap<>();
+        SearchContext.JoinMode.OR.setMode(filterSimpleMatch);
+        filterSimpleMatch.put("groups", Collections.singletonList("SYSTEM"));
+        filterSimpleMatch.put("code", Collections.singletonList("IMPORT_JOB_LOG_SIZE"));
+        count = attributeService.findAttributeCount(filterSimpleMatch);
+        assertEquals(1, count);
+        list = attributeService.findAttributes(0, 1, "code", false, filterSimpleMatch);
+        assertEquals(1, list.size());
+
+
+    }
 }

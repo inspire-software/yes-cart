@@ -49,7 +49,7 @@ public class VoShippingServiceImplTest extends BaseCoreDBTestCase {
     public void testGetCarriers() throws Exception {
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("carrier")));
+        ctxFind.setParameters(createSearchContextParams("filter", "carrier"));
         ctxFind.setSize(10);
 
         final List<VoCarrierInfo> carriers = voShippingService.getFilteredCarriers(ctxFind).getItems();
@@ -96,7 +96,7 @@ public class VoShippingServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(10L, updated.getCarrierShops().get(0).getShopId());
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList(carrier.getCode())));
+        ctxFind.setParameters(createSearchContextParams("filter", carrier.getCode()));
         ctxFind.setSize(10);
 
         assertTrue(voShippingService.getFilteredCarriers(ctxFind).getItems().stream().anyMatch(ca -> ca.getCarrierId() == created.getCarrierId()));

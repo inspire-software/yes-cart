@@ -97,16 +97,39 @@ public class DtoAttributeServiceImplTezt extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testFindAttributesBy() throws Exception {
+    public void testFindAttributes() throws Exception {
         // by code
-        List<AttributeDTO> dtos = dtoAttributeService.findAttributesBy("CATEGORY", "#image0", 0, 10);
+        List<AttributeDTO> dtos = dtoAttributeService.findAttributes(createSearchContext("code", false, 0, 10,
+                "filter", "#image0",
+                "groups", "CATEGORY"
+        )).getItems();
         assertNotNull(dtos);
         assertEquals(1, dtos.size());
         // invalid code
-        dtos = dtoAttributeService.findAttributesBy("CATEGORY", "#image", 0, 10);
+        dtos = dtoAttributeService.findAttributes(createSearchContext("code", false, 0, 10,
+                "filter", "!image",
+                "groups", "CATEGORY"
+        )).getItems();
         assertNotNull(dtos);
         assertEquals(0, dtos.size());
-        dtos = dtoAttributeService.findAttributesBy("CATEGORY", "category description", 0, 10);
+        // valid exact code
+        dtos = dtoAttributeService.findAttributes(createSearchContext("code", false, 0, 10,
+                "filter", "!category_image0",
+                "groups", "CATEGORY"
+        )).getItems();
+        assertNotNull(dtos);
+        assertEquals(1, dtos.size());
+        // partial code
+        dtos = dtoAttributeService.findAttributes(createSearchContext("code", false, 0, 10,
+                "filter", "#image",
+                "groups", "CATEGORY"
+        )).getItems();
+        assertNotNull(dtos);
+        assertEquals(2, dtos.size());
+        dtos = dtoAttributeService.findAttributes(createSearchContext("code", false, 0, 10,
+                "filter", "category description",
+                "groups", "CATEGORY"
+        )).getItems();
         assertNotNull(dtos);
         assertEquals(1, dtos.size());
     }

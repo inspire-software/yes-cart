@@ -26,7 +26,6 @@ import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.service.dto.DtoBrandService;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -53,13 +52,13 @@ public class DtoBrandServiceImplTezt extends BaseCoreDBTestCase {
     public void testFindBrand() throws Exception {
 
         // full name
-        final SearchContext filterSony = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("Sony")), 0, 10, "name", false, "filter");
+        final SearchContext filterSony = createSearchContext("name", false, 0, 10, "filter", "Sony");
         SearchResult<BrandDTO> dto = dtoService.findBrands(filterSony);
         assertFalse(dto.getItems().isEmpty());
         assertEquals("Sony", dto.getItems().get(0).getName());
 
         // partial
-        final SearchContext filterFuture = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("future")), 0, 10, "name", false, "filter");
+        final SearchContext filterFuture = createSearchContext("name", false, 0, 10, "filter", "future");
         dto = dtoService.findBrands(filterFuture);
         assertFalse(dto.getItems().isEmpty());
         assertEquals("FutureRobots", dto.getItems().get(0).getName());

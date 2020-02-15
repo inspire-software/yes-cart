@@ -53,7 +53,7 @@ public class VoManagementServiceImplTest extends BaseCoreDBTestCase {
 
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("test@test.com")));
+        ctxFind.setParameters(createSearchContextParams("filter", "test@test.com"));
         ctxFind.setSize(10);
         managers = voManagementService.getFilteredManagers(ctxFind).getItems();
         assertNotNull(managers);

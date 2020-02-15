@@ -320,7 +320,7 @@ public class DtoCategoryServiceImpl
     public SearchResult<CategoryDTO> findCategories(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final Map<String, List> params = filter.reduceParameters("filter", "categoryIds", "GUIDs");
-        final List filterParam = params.get("filter");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
         final List categoriesParam = params.get("categoryIds");
         final List guidsParam = params.get("GUIDs");
 
@@ -330,9 +330,7 @@ public class DtoCategoryServiceImpl
         final CategoryService categoryService = (CategoryService) service;
 
         final Map<String, List> currentFilter = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
-
-            final String textFilter = ((String) filterParam.get(0)).trim();
+        if (textFilter != null) {
 
             final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(textFilter, PARENT_OR_URI);
 

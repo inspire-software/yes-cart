@@ -55,7 +55,7 @@ public class VoBrandServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(brandNoFilter.getItems().isEmpty());
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("FutureRobots")));
+        ctxFind.setParameters(createSearchContextParams("filter", "FutureRobots"));
         ctxFind.setSize(10);
         VoSearchResult<VoBrand> brandFind = voBrandService.getFilteredBrands(ctxFind);
         assertNotNull(brandFind);
@@ -86,7 +86,7 @@ public class VoBrandServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
         VoSearchContext ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setParameters(createSearchContextParams("filter", "TEST CRUD UPDATE"));
         ctx.setSize(10);
 
         assertTrue(voBrandService.getFilteredBrands(ctx).getTotal() > 0);

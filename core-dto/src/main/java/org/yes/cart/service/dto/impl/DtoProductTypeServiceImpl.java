@@ -17,7 +17,6 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -122,16 +121,14 @@ public class DtoProductTypeServiceImpl
     public SearchResult<ProductTypeDTO> findProductTypes(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final Map<String, List> params = filter.reduceParameters("filter");
-        final List filterParam = params.get("filter");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
 
         final Map<String, List> currentFilter = new HashMap<>();
 
-        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
-
-            final String textFilter = ((String) filterParam.get(0)).trim();
+        if (textFilter != null) {
 
             final Pair<String, String> exactOrCode = ComplexSearchUtils.checkSpecialSearch(textFilter, EXACT_OR_CODE);
 

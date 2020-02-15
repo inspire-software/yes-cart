@@ -57,7 +57,7 @@ public class VoContentServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(contentNoFilter.getItems().isEmpty());
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("SHOIP2 Content 0021")));
+        ctxFind.setParameters(createSearchContextParams("filter", "SHOIP2 Content 0021"));
         ctxFind.setSize(10);
 
         VoSearchResult<VoContent> contentFind = voContentService.getFilteredContent(20L, ctxFind);
@@ -87,7 +87,7 @@ public class VoContentServiceImplTest extends BaseCoreDBTestCase {
         }
 
         VoSearchContext ctxFindUri = new VoSearchContext();
-        ctxFindUri.setParameters(Collections.singletonMap("filter", Collections.singletonList("@SHOIP1_menu_item_1_1")));
+        ctxFindUri.setParameters(createSearchContextParams("filter", "@SHOIP1_menu_item_1_1"));
         ctxFindUri.setSize(10);
         VoSearchResult<VoContent> contentByURI = voContentService.getFilteredContent(10L, ctxFindUri);
         assertNotNull(contentByURI);
@@ -95,7 +95,7 @@ public class VoContentServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("SHOIP1_menu_item_1_1", contentByURI.getItems().get(0).getUri());
 
         VoSearchContext ctxFindByParent = new VoSearchContext();
-        ctxFindByParent.setParameters(Collections.singletonMap("filter", Collections.singletonList("^SHOIP1_menu_item_1")));
+        ctxFindByParent.setParameters(createSearchContextParams("filter", "^SHOIP1_menu_item_1"));
         ctxFindByParent.setSize(10);
         VoSearchResult<VoContent> contentSubTree = voContentService.getFilteredContent(10L, ctxFindByParent);
         assertNotNull(contentSubTree);
@@ -126,7 +126,7 @@ public class VoContentServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
         VoSearchContext ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setParameters(createSearchContextParams("filter", "TEST CRUD UPDATE"));
         ctx.setSize(10);
 
         assertTrue(voContentService.getFilteredContent(20L, ctx).getTotal() > 0);

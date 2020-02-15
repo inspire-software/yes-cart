@@ -53,7 +53,7 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(customerNoFilter.getTotal() > 0);
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("reg@test.com")));
+        ctxFind.setParameters(createSearchContextParams("filter", "reg@test.com"));
         ctxFind.setSize(10);
         VoSearchResult<VoCustomerInfo> customerFind = voCustomerService.getFilteredCustomers(ctxFind);
         assertNotNull(customerFind);
@@ -63,7 +63,7 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(customerFind.getItems().get(0).getCustomerShops().isEmpty());
 
         VoSearchContext ctxByEmailTagOrCompany = new VoSearchContext();
-        ctxByEmailTagOrCompany.setParameters(Collections.singletonMap("filter", Collections.singletonList("#JJ")));
+        ctxByEmailTagOrCompany.setParameters(createSearchContextParams("filter", "#JJ"));
         ctxByEmailTagOrCompany.setSize(10);
         VoSearchResult<VoCustomerInfo> customerByEmailTagOrCompany = voCustomerService.getFilteredCustomers(ctxByEmailTagOrCompany);
         assertNotNull(customerByEmailTagOrCompany);
@@ -71,7 +71,7 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("reg@test.com", customerByEmailTagOrCompany.getItems().get(0).getEmail());
 
         VoSearchContext ctxByName = new VoSearchContext();
-        ctxByName.setParameters(Collections.singletonMap("filter", Collections.singletonList("?John")));
+        ctxByName.setParameters(createSearchContextParams("filter", "?John"));
         ctxByName.setSize(10);
         VoSearchResult<VoCustomerInfo> customerByName = voCustomerService.getFilteredCustomers(ctxByName);
         assertNotNull(customerByName);
@@ -79,7 +79,7 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("reg@test.com", customerByName.getItems().get(0).getEmail());
 
         VoSearchContext ctxByAddress = new VoSearchContext();
-        ctxByAddress.setParameters(Collections.singletonMap("filter", Collections.singletonList("@NW1 6XE")));
+        ctxByAddress.setParameters(createSearchContextParams("filter", "@NW1 6XE"));
         ctxByAddress.setSize(10);
         VoSearchResult<VoCustomerInfo> customerByAddress = voCustomerService.getFilteredCustomers(ctxByAddress);
         assertNotNull(customerByAddress);
@@ -87,7 +87,7 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("reg@test.com", customerByAddress.getItems().get(0).getEmail());
 
         VoSearchContext ctxByTypeOrPolicy = new VoSearchContext();
-        ctxByTypeOrPolicy.setParameters(Collections.singletonMap("filter", Collections.singletonList("$TEST")));
+        ctxByTypeOrPolicy.setParameters(createSearchContextParams("filter", "$TEST"));
         ctxByTypeOrPolicy.setSize(10);
         VoSearchResult<VoCustomerInfo> customerByTypeOrPolicy = voCustomerService.getFilteredCustomers(ctxByTypeOrPolicy);
         assertNotNull(customerByTypeOrPolicy);
@@ -95,7 +95,7 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("reg@test.com", customerByTypeOrPolicy.getItems().get(0).getEmail());
 
         VoSearchContext ctxByByDate = new VoSearchContext();
-        ctxByByDate.setParameters(Collections.singletonMap("filter", Collections.singletonList("2008-12<2009-01")));
+        ctxByByDate.setParameters(createSearchContextParams("filter", "2008-12<2009-01"));
         ctxByByDate.setSize(10);
         VoSearchResult<VoCustomerInfo> customerByDate = voCustomerService.getFilteredCustomers(ctxByByDate);
         assertNotNull(customerByDate);
@@ -133,7 +133,7 @@ public class VoCustomerServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("TEST CRUD UPDATE", updated.getFirstname());
 
         VoSearchContext ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setParameters(createSearchContextParams("filter", "TEST CRUD UPDATE"));
         ctx.setSize(10);
         assertTrue(voCustomerService.getFilteredCustomers(ctx).getTotal() > 0);
 

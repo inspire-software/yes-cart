@@ -31,7 +31,6 @@ import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCategoryService;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -60,21 +59,21 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testFindCategories() throws Exception {
 
-        final SearchContext filterParentBigBoyGadgets = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("^101")), 0, 10, "name", false, "filter");
+        final SearchContext filterParentBigBoyGadgets = createSearchContext("name", false, 0, 10, "filter", "^101");
         SearchResult<CategoryDTO> list = dtoService.findCategories(filterParentBigBoyGadgets);
         assertTrue(list.getTotal() > 1);
         assertEquals("Big Boys Gadgets", list.getItems().get(0).getName());
 
-        final SearchContext filterBigBoyGadgets = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("big boys gadgets")), 0, 10, "name", false, "filter");
+        final SearchContext filterBigBoyGadgets = createSearchContext("name", false, 0, 10, "filter", "big boys gadgets");
         list = dtoService.findCategories(filterBigBoyGadgets);
         assertEquals(1, list.getTotal());
         assertEquals("Big Boys Gadgets", list.getItems().get(0).getName());
 
-        final SearchContext filterNone = new SearchContext(Collections.emptyMap(), 0, 10, "name", false, "filter");
+        final SearchContext filterNone = createSearchContext("name", false,  0, 10);
         list = dtoService.findCategories(filterNone);
         assertTrue(list.getTotal() > 1);
 
-        final SearchContext filterNotFound = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("nonexistentcategoryname_abc_def")), 0, 10, "name", false, "filter");
+        final SearchContext filterNotFound = createSearchContext("name", false, 0, 10, "filter", "nonexistentcategoryname_abc_def");
         list = dtoService.findCategories(filterNotFound);
         assertTrue(list.getTotal() == 0);
 

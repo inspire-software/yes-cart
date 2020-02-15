@@ -24,6 +24,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttribute;
 import org.yes.cart.domain.vo.VoAttributeGroup;
 import org.yes.cart.domain.vo.VoEtype;
+import org.yes.cart.domain.vo.VoSearchContext;
 import org.yes.cart.service.vo.VoAttributeService;
 
 import java.util.Collections;
@@ -72,15 +73,30 @@ public class VoAttributeServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(systemAttrs);
         assertFalse(systemAttrs.isEmpty());
 
-        final List<VoAttribute> systemAttrsNoFilter = voAttributeService.getFilteredAttributes("SYSTEM", null, 10);
+        VoSearchContext ctxNoFilter = new VoSearchContext();
+        ctxNoFilter.setSize(10);
+        ctxNoFilter.setParameters(createSearchContextParams("groups", "SYSTEM"));
+        final List<VoAttribute> systemAttrsNoFilter = voAttributeService.getFilteredAttributes(ctxNoFilter).getItems();
         assertNotNull(systemAttrsNoFilter);
         assertFalse(systemAttrsNoFilter.isEmpty());
 
-        final List<VoAttribute> systemAttrsPayment = voAttributeService.getFilteredAttributes("SYSTEM", "PAYMENT", 10);
+        VoSearchContext ctxFilter = new VoSearchContext();
+        ctxFilter.setSize(10);
+        ctxFilter.setParameters(createSearchContextParams(
+                "groups", "SYSTEM",
+                "filter", "PAYMENT"
+        ));
+        final List<VoAttribute> systemAttrsPayment = voAttributeService.getFilteredAttributes(ctxFilter).getItems();
         assertNotNull(systemAttrsPayment);
         assertFalse(systemAttrsPayment.isEmpty());
 
-        final List<VoAttribute> systemAttrsExact = voAttributeService.getFilteredAttributes("SYSTEM", "#SYSTEM_DEFAULT_SHOP", 10);
+        VoSearchContext ctxByCodeFilter = new VoSearchContext();
+        ctxByCodeFilter.setSize(10);
+        ctxByCodeFilter.setParameters(createSearchContextParams(
+                "groups", "SYSTEM",
+                "filter", "#SYSTEM_DEFAULT_SHOP"
+        ));
+        final List<VoAttribute> systemAttrsExact = voAttributeService.getFilteredAttributes(ctxByCodeFilter).getItems();
         assertNotNull(systemAttrsExact);
         assertEquals(1, systemAttrsExact.size());
         assertEquals("SYSTEM_DEFAULT_SHOP", systemAttrsExact.get(0).getCode());
@@ -115,11 +131,18 @@ public class VoAttributeServiceImplTest extends BaseCoreDBTestCase {
         final VoAttribute updated = voAttributeService.updateAttribute(created);
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
-        assertFalse(voAttributeService.getFilteredAttributes("SYSTEM","TEST CRUD UPDATE", 10).isEmpty());
+        VoSearchContext ctxByCodeFilter = new VoSearchContext();
+        ctxByCodeFilter.setSize(10);
+        ctxByCodeFilter.setParameters(createSearchContextParams(
+                "groups", "SYSTEM",
+                "filter", "TEST CRUD UPDATE"
+        ));
+
+        assertFalse(voAttributeService.getFilteredAttributes(ctxByCodeFilter).getItems().isEmpty());
 
         voAttributeService.removeAttribute(updated.getAttributeId());
 
-        assertTrue(voAttributeService.getFilteredAttributes("SYSTEM","TEST CRUD UPDATE", 10).isEmpty());
+        assertTrue(voAttributeService.getFilteredAttributes(ctxByCodeFilter).getItems().isEmpty());
 
     }
 }

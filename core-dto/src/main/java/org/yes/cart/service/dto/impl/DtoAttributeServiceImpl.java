@@ -18,21 +18,19 @@ package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AttributeDTOImpl;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SearchContext;
+import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.dto.DtoAttributeService;
-import org.yes.cart.utils.HQLUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -141,42 +139,65 @@ public class DtoAttributeServiceImpl
         return null;
     }
 
-    private final char[] CODE = new char[] { '#' };
+    private final static char[] CODE = new char[] { '#', '!' };
+    static {
+        Arrays.sort(CODE);
+    }
 
     /** {@inheritDoc}  */
     @Override
-    public List<AttributeDTO> findAttributesBy(final String attributeGroupCode, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public SearchResult<AttributeDTO> findAttributes(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        List<Attribute> attrs;
-        if (StringUtils.isNotBlank(filter)) {
-            final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
+        final Map<String, List> params = filter.reduceParameters("filter", "groups");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
+        final List groupsParam = params.get("groups");
+
+        final int pageSize = filter.getSize();
+        final int startIndex = filter.getStart() * pageSize;
+
+        final Map<String, List> currentFilter = new HashMap<>();
+        if (textFilter != null) {
+
+            final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(textFilter, CODE);
             if (byCode != null) {
-                attrs = service.getGenericDao().findByCriteria(
-                        " where lower(e.code) like ?1 order by e.name",
-                        HQLUtils.criteriaIeq(byCode.getSecond())
-                );
+
+                if ("!".equals(byCode.getFirst())) {
+                    currentFilter.put("code", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(byCode.getSecond())));
+                } else {
+                    currentFilter.put("code", Collections.singletonList(byCode.getSecond()));
+                }
+
             } else {
-                attrs = service.getGenericDao().findRangeByCriteria(
-                        " where e.attributeGroup = ?1 and (lower(e.code) like ?2 or lower(e.name) like ?2 or lower(e.displayNameInternal) like ?2 or lower(e.description) like ?2) order by e.name",
-                        page * pageSize, pageSize,
-                        attributeGroupCode,
-                        HQLUtils.criteriaIlikeAnywhere(filter)
-                );
+
+                SearchContext.JoinMode.OR.setMode(currentFilter);
+                currentFilter.put("code", Collections.singletonList(textFilter));
+                currentFilter.put("name", Collections.singletonList(textFilter));
+                currentFilter.put("displayNameInternal", Collections.singletonList(textFilter));
+                currentFilter.put("description", Collections.singletonList(textFilter));
+
             }
-        } else {
-            attrs = service.getGenericDao().findRangeByCriteria(
-                    " where e.attributeGroup = ?1 order by e.name",
-                    page * pageSize, pageSize,
-                    attributeGroupCode
-            );
-        }
-        if (CollectionUtils.isNotEmpty(attrs)) {
-            final List<AttributeDTO> attributesDTO = new ArrayList<>(attrs.size());
-            fillDTOs(attrs, attributesDTO);
-            return attributesDTO;
 
         }
-        return Collections.emptyList();
+
+        if (CollectionUtils.isNotEmpty(groupsParam)) {
+            currentFilter.put("groups", groupsParam);
+        }
+
+
+        final AttributeService attributeService = (AttributeService) service;
+
+        final int count = attributeService.findAttributeCount(currentFilter);
+        if (count > startIndex) {
+
+            final List<AttributeDTO> entities = new ArrayList<>();
+            final List<Attribute> attributes = attributeService.findAttributes(startIndex, pageSize, filter.getSortBy(), filter.isSortDesc(), currentFilter);
+
+            fillDTOs(attributes, entities);
+
+            return new SearchResult<>(filter, entities, count);
+
+        }
+        return new SearchResult<>(filter, Collections.emptyList(), count);
     }
 
     /** {@inheritDoc}  */

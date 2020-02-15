@@ -68,7 +68,7 @@ public class VoCategoryServiceImplTest extends BaseCoreDBTestCase {
             }
 
             VoSearchContext ctxFind = new VoSearchContext();
-            ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("Flying Machines")));
+            ctxFind.setParameters(createSearchContextParams("filter", "Flying Machines"));
             ctxFind.setSize(10);
             VoSearchResult<VoCategory> categoryFind = voCategoryService.getFilteredCategories(ctxFind);
             assertNotNull(categoryFind);
@@ -97,7 +97,7 @@ public class VoCategoryServiceImplTest extends BaseCoreDBTestCase {
             }
 
             VoSearchContext ctxFindUri = new VoSearchContext();
-            ctxFindUri.setParameters(Collections.singletonMap("filter", Collections.singletonList("@big-boys-Gadgets")));
+            ctxFindUri.setParameters(createSearchContextParams("filter", "@big-boys-Gadgets"));
             ctxFindUri.setSize(10);
             VoSearchResult<VoCategory> categoryByURI = voCategoryService.getFilteredCategories(ctxFindUri);
             assertNotNull(categoryByURI);
@@ -105,7 +105,7 @@ public class VoCategoryServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("101", categoryByURI.getItems().get(0).getGuid());
 
             VoSearchContext ctxFindByParent = new VoSearchContext();
-            ctxFindByParent.setParameters(Collections.singletonMap("filter", Collections.singletonList("^101")));
+            ctxFindByParent.setParameters(createSearchContextParams("filter", "^101"));
             ctxFindByParent.setSize(10);
             VoSearchResult<VoCategory> categorySubTree = voCategoryService.getFilteredCategories(ctxFindByParent);
             assertNotNull(categorySubTree);
@@ -138,7 +138,7 @@ public class VoCategoryServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
         VoSearchContext ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("TEST CRUD UPDATE")));
+        ctx.setParameters(createSearchContextParams("filter", "TEST CRUD UPDATE"));
         ctx.setSize(10);
 
         assertTrue(voCategoryService.getFilteredCategories(ctx).getTotal() > 0);

@@ -17,7 +17,6 @@
 package org.yes.cart.service.dto.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
@@ -56,7 +55,7 @@ public class DtoCustomerOrderPaymentServiceImpl implements DtoCustomerOrderPayme
     public SearchResult<CustomerOrderPayment> findPayments(final Set<String> shopCodes, final SearchContext filter) {
 
         final Map<String, List> params = filter.reduceParameters("filter", "statuses", "operations");
-        final List filterParam = params.get("filter");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
         final List statusesParam = params.get("statuses");
         final List opsParam = params.get("operations");
 
@@ -66,9 +65,8 @@ public class DtoCustomerOrderPaymentServiceImpl implements DtoCustomerOrderPayme
         final Map<String, List> currentFilter = new HashMap<>();
 
 
-        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
+        if (textFilter != null) {
 
-            final String textFilter = ((String) filterParam.get(0)).trim();
             final Pair<String, String> orderNumberOrCustomerOrDetails =
                     ComplexSearchUtils.checkSpecialSearch(textFilter, ORDER_OR_CUSTOMER_OR_DETAILS);
             final Pair<LocalDateTime, LocalDateTime> dateSearch = orderNumberOrCustomerOrDetails == null ?

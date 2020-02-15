@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component,  OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { AttributeVO } from './../model/index';
+import { AttributeVO, SearchContextVO } from './../model/index';
 import { AttributeService } from './../services/index';
 import { Futures, Future } from './../event/index';
 import { Config } from './../config/env.config';
@@ -102,7 +102,18 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
 
     if (!this.attributeFilterRequired) {
       this.loading = true;
-      let _sub:any = this._attributeService.getFilteredAttributes('PRODUCT', this.attributeFilter, this.filterCap).subscribe(allattributes => {
+
+      let _ctx:SearchContextVO = {
+        parameters : {
+          filter: [ this.attributeFilter ],
+          groups: [ 'PRODUCT' ]
+        },
+        start : 0,
+        size : this.filterCap,
+        sortBy : 'name',
+        sortDesc : false
+      };
+      let _sub:any = this._attributeService.getFilteredAttributes(_ctx).subscribe(allattributes => {
         LogUtil.debug('ProductAttributeSelectComponent getAllAttributes', allattributes);
         this.filteredAttributes = allattributes;
         this.attributeFilterCapped = this.filteredAttributes.length >= this.filterCap;

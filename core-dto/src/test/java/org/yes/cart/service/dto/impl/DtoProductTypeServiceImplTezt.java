@@ -26,7 +26,6 @@ import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.service.dto.DtoProductTypeService;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -86,20 +85,28 @@ public class DtoProductTypeServiceImplTezt extends BaseCoreDBTestCase {
     public void findProductTypes() throws Exception {
 
         // basic
-        final SearchContext filterBasic = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("play")), 0, 10, "name", false, "filter");
+        final SearchContext filterBasic = createSearchContext("name", false, 0, 10,
+                "filter", "play"
+        );
         SearchResult<ProductTypeDTO> list = dtoService.findProductTypes(filterBasic);
         assertFalse(list.getItems().isEmpty());
 
         // exact
-        final SearchContext filterExactNotFound = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!player")), 0, 10, "name", false, "filter");
+        final SearchContext filterExactNotFound = createSearchContext("name", false, 0, 10,
+                "filter", "!player"
+        );
         list = dtoService.findProductTypes(filterExactNotFound);
         assertTrue(list.getItems().isEmpty());
-        final SearchContext filterExact = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("!mp3 player")), 0, 10, "name", false, "filter");
+        final SearchContext filterExact = createSearchContext("name", false, 0, 10,
+                "filter", "!mp3 player"
+        );
         list = dtoService.findProductTypes(filterExact);
         assertFalse(list.getItems().isEmpty());
 
         // by attribute code
-        final SearchContext filterCode = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("#MATERIAL")), 0, 10, "name", false, "filter");
+        final SearchContext filterCode = createSearchContext("name", false, 0, 10,
+                "filter", "#MATERIAL"
+        );
         list = dtoService.findProductTypes(filterCode);
         assertFalse(list.getItems().isEmpty());
 

@@ -268,6 +268,7 @@
   "ATTRIBUTE_SI_RANGE_TIP_READ": "Navigationsbereiche editieren sperren",
 
   "AV_ATTRIBUTE": "Attribute",
+  "AV_GROUP": "Gruppen",
   "AV_TYPE": "Type",
   "AV_VALUE": "Wert",
   "AV_SECURE": "Sichern",
@@ -809,7 +810,7 @@
   "REPORT_SELECT_TIP": "Wählen Sie den Bericht aus und klicken Sie auf die Schaltfläche, um den Bericht zu erstellen",
   "REPORT_RUN_TIP": "Klicken Sie auf die Play-Taste, um diesen Bericht zu generieren",
 
-  "SEARCH_HELP_CUSTOMER_ORDERS_ALL": "Alle Bestellstatis auswählen / deaktivieren:",
+  "SEARCH_HELP_CUSTOMER_ORDERS_ALL": "Alle Bestellstatis auswählen / deaktivieren: ",
   "SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT": "Standartmässig wird nach gesucht: Bestellnummer, E-Mail und Name, nur in offenen Bestellungen",
   "SEARCH_HELP_CUSTOMER_ORDERS_OPEN": "Die Auftragssuche sucht in offenen Bestellungen. Format: '~ Schlüsselwort' oder '~~' für alle offenen Bestellungen",
   "SEARCH_HELP_CUSTOMER_ORDERS_CANCELLED": "Die Suche nach abgebrochenen Bestellungen führt eine Suche in stornierten oder retournierten Bestellungen durch. Format: '-Schlüsselwort' oder '--' für alle stornierten Bestellungen",
@@ -888,6 +889,7 @@
 
   "SEARCH_HELP_ASSOCIATION_TYPE": "Suche nach Assoziation, Format: '#Schlüsselwort'",
 
+  "SEARCH_HELP_ATTRIBUTE_GROUPS_ALL": "Alle Gruppen auswählen / deaktivieren: ",
   "SEARCH_HELP_ATTRIBUTE_CODE": "Um nach Attributen mit exakter Übereinstimmung des Code zu suchen. Format: '#X'",
 
   "SEARCH_HELP_AV_VALUES": "Um alle vorhandenen Attribute anzuzeigen, verwenden Sie '###'",

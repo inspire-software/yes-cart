@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.yes.cart.dao.GenericDAO;
@@ -23,9 +24,11 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.i18n.impl.NonI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
 
@@ -89,20 +92,74 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     }
 
 
+
+    private Pair<String, Object[]> findAttributeQuery(final boolean count,
+                                                      final String sort,
+                                                      final boolean sortDescending,
+                                                      final Map<String, List> filter) {
+
+        final Map<String, List> currentFilter = filter != null ? new HashMap<>(filter) : null;
+
+        final StringBuilder hqlCriteria = new StringBuilder();
+        final List<Object> params = new ArrayList<>();
+
+        if (count) {
+            hqlCriteria.append("select count(a.attributeId) from AttributeEntity a ");
+        } else {
+            hqlCriteria.append("select a from AttributeEntity a ");
+        }
+
+        final List groups = currentFilter != null ? currentFilter.remove("groups") : null;
+        if (CollectionUtils.isNotEmpty(groups)) {
+            hqlCriteria.append(" where (a.attributeGroup in (?1)) ");
+            params.add(groups);
+        }
+
+        HQLUtils.appendFilterCriteria(hqlCriteria, params, "a", currentFilter);
+
+        if (StringUtils.isNotBlank(sort)) {
+
+            hqlCriteria.append(" order by a." + sort + " " + (sortDescending ? "desc" : "asc"));
+
+        }
+
+        return new Pair<>(
+                hqlCriteria.toString(),
+                params.toArray(new Object[params.size()])
+        );
+
+    }
+
+
+
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Attribute> findAttributesBy(final String attributeGroupCode, final String code, final String name, final String description, final int page, final int pageSize) {
+    public List<Attribute> findAttributes(final int start, final int offset, final String sort, final boolean sortDescending, final Map<String, List> filter) {
 
-        final String codeP = StringUtils.isNotBlank(code) ? "%" + code.toLowerCase() + "%" : null;
-        final String nameP = StringUtils.isNotBlank(name) ? "%" + name.toLowerCase() + "%" : null;
-        final String descP = StringUtils.isNotBlank(description) ? "%" + description.toLowerCase() + "%" : null;
+        final Pair<String, Object[]> query = findAttributeQuery(false, sort, sortDescending, filter);
 
-        return attributeDao.findRangeByNamedQuery(
-                "ATTRIBUTES.BY.GROUPCODE.CODE.NAME.DESCRIPTION",
-                page * pageSize, pageSize,
-                attributeGroupCode, codeP, nameP, descP);
+        return getGenericDao().findRangeByQuery(
+                query.getFirst(),
+                start, offset,
+                query.getSecond()
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int findAttributeCount(final Map<String, List> filter) {
+
+        final Pair<String, Object[]> query = findAttributeQuery(true, null, false, filter);
+
+        return getGenericDao().findCountByQuery(
+                query.getFirst(),
+                query.getSecond()
+        );
     }
 
     /**

@@ -3343,14 +3343,6 @@
        ]]>
     </query>
 
-    <query name="ATTRIBUTES.BY.GROUPCODE.CODE.NAME.DESCRIPTION">
-        <![CDATA[
-       select a from AttributeEntity a
-       where a.attributeGroup = ?1 and
-        ((lower(a.code) like ?2 or ?2 is null) OR (lower(a.name) like ?3 or ?3 is null) OR (lower(a.description) like ?4 or ?4 is null))
-       ]]>
-    </query>
-
     <query name="ATTRIBUTES.WITH.MULTIPLE.VALUES.BY.GROUPCODE">
         <![CDATA[
        select a from AttributeEntity a where a.allowduplicate = ?2 and a.attributeGroup = ?1

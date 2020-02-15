@@ -46,7 +46,7 @@ public class VoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
     public void testGetOrders() throws Exception {
 
         final VoSearchContext ctx = new VoSearchContext();
-        ctx.setParameters(Collections.singletonMap("filter", Collections.singletonList("#190323063746-1")));
+        ctx.setParameters(createSearchContextParams("filter", "#190323063746-1"));
         ctx.setSize(10);
         VoSearchResult<VoCustomerOrderInfo> ordersAll = voCustomerOrderService.getFilteredOrders("en", ctx);
         assertNotNull(ordersAll);

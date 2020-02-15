@@ -17,7 +17,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { AttributeService, UserEventBus, Util } from './../../shared/services/index';
 import { ProductAttributeUsageComponent } from './../../shared/attributes/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
-import { EtypeVO, AttributeGroupVO, AttributeVO } from './../../shared/model/index';
+import { EtypeVO, AttributeGroupVO, AttributeVO, Pair, SearchResultVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -30,32 +30,25 @@ import { LogUtil } from './../../shared/log/index';
 
 export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
-  private static GROUPS:string = 'groups';
   private static ATTRIBUTES:string = 'attributes';
   private static ATTRIBUTE:string = 'attribute';
 
+  private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
-  private viewMode:string = AttributeDefinitionsComponent.GROUPS;
+  private viewMode:string = AttributeDefinitionsComponent.ATTRIBUTES;
 
   private etypes:Array<EtypeVO> = [];
 
   private groups:Array<AttributeGroupVO> = [];
-  private groupFilter:string;
 
-  private selectedGroup:AttributeGroupVO;
+  private selectedGroups:Pair<AttributeGroupVO, boolean>[] = [];
 
-  @ViewChild('deleteConfirmationModalDialog')
-  private deleteConfirmationModalDialog:ModalComponent;
-
-  private attributes:Array<AttributeVO> = [];
+  private attributes:SearchResultVO<AttributeVO>;
   private attributeFilter:string;
   private attributeFilterRequired:boolean = true;
-  private attributeFilterCapped:boolean = false;
 
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  private filterCap:number = Config.UI_FILTER_CAP;
-  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedAttribute:AttributeVO;
 
@@ -63,10 +56,11 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   private deleteValue:String;
 
+  @ViewChild('deleteConfirmationModalDialog')
+  private deleteConfirmationModalDialog:ModalComponent;
+
   @ViewChild('productAttributeUsages')
   private productAttributeUsages:ProductAttributeUsageComponent;
-
-  private searchHelpShow:boolean = false;
 
   private productAttributeCode:string;
 
@@ -75,15 +69,17 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   private changed:boolean = false;
   private validForSave:boolean = false;
 
+  private userSub:any;
+
   constructor(private _attributeService:AttributeService) {
     LogUtil.debug('AttributeDefinitionsComponent constructed');
+    this.attributes = this.newSearchResultInstance();
   }
 
   newAttributeInstance():AttributeVO {
-    let groupId = this.selectedGroup != null ? this.selectedGroup.code : 'PRODUCT';
     let etype = this.etypes.length > 0 ? this.etypes[0].businesstype : '';
     return {
-      attributeId: 0, attributegroup: groupId,
+      attributeId: 0, attributegroup: 'PRODUCT',
       code: '', name: '', description:null, displayNames: [],
       etype: etype,
       val:null, secure: false, mandatory:false, allowduplicate:false, allowfailover:false,
@@ -94,10 +90,31 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     };
   }
 
+  newSearchResultInstance():SearchResultVO<AttributeVO> {
+    return {
+      searchContext: {
+        parameters: {
+          filter: [],
+          groups: []
+        },
+        start: 0,
+        size: Config.UI_TABLE_PAGE_SIZE,
+        sortBy: 'code',
+        sortDesc: true
+      },
+      items: [],
+      total: 0
+    };
+  }
+
   ngOnInit() {
     LogUtil.debug('AttributeDefinitionsComponent ngOnInit');
 
     this.onRefreshHandler();
+
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      this.getAllEtypes();
+    });
 
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -108,34 +125,56 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     LogUtil.debug('AttributeDefinitionsComponent ngOnDestroy');
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
   }
 
-  protected onAttributeFilterChange(event:any) {
 
+  protected onFilterChange(event:any) {
+    this.attributes.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
-
   }
 
   protected onRefreshHandler() {
     LogUtil.debug('AttributeDefinitionsComponent refresh handler');
     if (UserEventBus.getUserEventBus().current() != null) {
-      if (this.etypes == null || this.etypes.length == 0) {
+      LogUtil.debug('AttributeDefinitionsComponent refresh handler', this.etypes, this.groups);
+      if (this.etypes == null || this.etypes.length == 0 || this.groups == null || this.groups.length == 0) {
         this.getAllEtypes();
       } else {
-        if (this.viewMode === AttributeDefinitionsComponent.GROUPS ||
-          this.selectedGroup == null) {
-          this.getAllGroups();
-        } else {
-          this.getAllAttributes();
-        }
+        this.getAllAttributes();
       }
     }
   }
 
-  protected onGroupSelected(data:AttributeGroupVO) {
-    LogUtil.debug('AttributeDefinitionsComponent onGroupSelected', data);
-    this.selectedGroup = data;
-    this.attributeFilter = '';
+  protected onPageSelected(page:number) {
+    LogUtil.debug('AttributeDefinitionsComponent onPageSelected', page);
+    this.attributes.searchContext.start = page;
+    this.delayedFiltering.delay();
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('AttributeDefinitionsComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.attributes.searchContext.sortBy = null;
+      this.attributes.searchContext.sortDesc = false;
+    } else {
+      this.attributes.searchContext.sortBy = sort.first;
+      this.attributes.searchContext.sortDesc = sort.second;
+    }
+    this.delayedFiltering.delay();
+  }
+
+  protected onSearchAllGroups() {
+    let _state:boolean = false;
+    this.selectedGroups.forEach((_st:Pair<AttributeGroupVO, boolean>) => {
+      _state = _state || _st.second;
+    });
+    this.selectedGroups.forEach((_st:Pair<AttributeGroupVO, boolean>) => {
+      _st.second = !_state;
+    });
+    this.getAllAttributes();
   }
 
   protected onAttributeSelected(data:AttributeVO) {
@@ -161,11 +200,6 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     if (this.viewMode === AttributeDefinitionsComponent.ATTRIBUTE) {
       this.attributeEdit = null;
       this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
-    } else if (this.viewMode === AttributeDefinitionsComponent.ATTRIBUTES) {
-      this.attributeEdit = null;
-      this.selectedAttribute = null;
-      this.forceShowAll = false;
-      this.viewMode = AttributeDefinitionsComponent.GROUPS;
     }
   }
 
@@ -188,8 +222,6 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   protected onRowDeleteSelected() {
     if (this.selectedAttribute != null) {
       this.onRowDelete(this.selectedAttribute);
-    } else if (this.selectedGroup != null) {
-      this.onRowDelete(this.selectedGroup);
     }
   }
 
@@ -222,19 +254,6 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  protected onRowList(row:AttributeGroupVO) {
-    LogUtil.debug('AttributeDefinitionsComponent onRowList handler', row);
-    this.getAllAttributes();
-  }
-
-
-  protected onRowListSelected() {
-    if (this.selectedGroup != null) {
-      this.onRowList(this.selectedGroup);
-    }
-  }
-
   protected onRowInfoSelected() {
     if (this.selectedAttribute != null) {
       this.productAttributeUsages.showDialog();
@@ -254,21 +273,12 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
             rez => {
               this.loading = false;
               _sub.unsubscribe();
-              if (this.attributeEdit.attributeId > 0) {
-                let idx = this.attributes.findIndex(rez => rez.attributeId == this.attributeEdit.attributeId);
-                if (idx !== -1) {
-                  this.attributes[idx] = rez;
-                  this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
-                  LogUtil.debug('AttributeDefinitionsComponent attribute changed', rez);
-                }
-                this.changed = false;
-                this.selectedAttribute = rez;
-                this.attributeEdit = null;
-                this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
-              } else {
-                LogUtil.debug('AttributeDefinitionsComponent attribute added', rez);
-                this.getAllAttributes();
-              }
+              LogUtil.debug('AttributeDefinitionsComponent attribute added', rez);
+              this.changed = false;
+              this.selectedAttribute = rez;
+              this.attributeEdit = null;
+              this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
+              this.getAllAttributes();
           }
         );
       }
@@ -296,31 +306,22 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
         this.loading = true;
         let _sub:any = this._attributeService.removeAttribute(this.selectedAttribute).subscribe(res => {
+          _sub.unsubscribe();
           LogUtil.debug('AttributeDefinitionsComponent removeAttribute', this.selectedAttribute);
-          let idx = this.attributes.indexOf(this.selectedAttribute);
-          this.attributes.splice(idx, 1);
-          this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
           this.selectedAttribute = null;
           this.attributeEdit = null;
           this.loading = false;
-          this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
-          _sub.unsubscribe();
+          this.getAllAttributes();
         });
 
       }
     }
   }
 
-  protected onClearFilterGrp() {
-
-    this.groupFilter = '';
-
-  }
-
   protected onClearFilterAttr() {
 
     this.attributeFilter = '';
-    this.onAttributeFilterChange({});
+    this.getAllAttributes();
   }
 
   protected onSearchHelpToggle() {
@@ -334,24 +335,34 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
 
   private getAllEtypes() {
+
+    LogUtil.debug('AttributeDefinitionsComponent getAllEtypes', this.etypes);
+
     this.loading = true;
     let _sub:any = this._attributeService.getAllEtypes().subscribe( alletypes => {
       LogUtil.debug('AttributeDefinitionsComponent getAllEtypes', alletypes);
       this.etypes = alletypes;
       this.loading = false;
-      this.onRefreshHandler();
       _sub.unsubscribe();
+      this.getAllGroups();
     });
   }
 
 
   private getAllGroups() {
+
+    LogUtil.debug('AttributeDefinitionsComponent getAllGroups', this.groups);
+
     this.loading = true;
     let _sub:any = this._attributeService.getAllGroups().subscribe( allgroups => {
       LogUtil.debug('AttributeDefinitionsComponent getAllGroups', allgroups);
       this.groups = allgroups;
-      this.selectedGroup = null;
-      this.viewMode = AttributeDefinitionsComponent.GROUPS;
+      let _map:Pair<AttributeGroupVO, boolean>[] = [];
+      this.groups.forEach(group => {
+         _map.push({ first: group, second: true });
+      });
+      this.selectedGroups = _map;
+      this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
       this.changed = false;
       this.validForSave = false;
       this.loading = false;
@@ -363,12 +374,24 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
     this.attributeFilterRequired = !this.forceShowAll && (this.attributeFilter == null || this.attributeFilter.length < 2);
 
-    LogUtil.debug('AttributeDefinitionsComponent getAllAttributes' + (this.forceShowAll ? ' forcefully': ''), this.selectedGroup);
+    LogUtil.debug('AttributeDefinitionsComponent getAllAttributes' + (this.forceShowAll ? ' forcefully': ''));
 
-    if (this.selectedGroup != null && !this.attributeFilterRequired) {
+    if (!this.attributeFilterRequired) {
       this.loading = true;
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      let _sub:any = this._attributeService.getFilteredAttributes(this.selectedGroup.code, this.attributeFilter, max).subscribe(allattributes => {
+
+      let grs:string[] = [];
+      this.selectedGroups.forEach((_gr:Pair<AttributeGroupVO, boolean>) => {
+        if (_gr.second) {
+          grs.push(_gr.first.code);
+        }
+      });
+
+
+      this.attributes.searchContext.parameters.filter = [ this.attributeFilter ];
+      this.attributes.searchContext.parameters.groups = grs;
+      this.attributes.searchContext.size = Config.UI_TABLE_PAGE_SIZE;
+
+      let _sub:any = this._attributeService.getFilteredAttributes(this.attributes.searchContext).subscribe(allattributes => {
         LogUtil.debug('AttributeDefinitionsComponent getAllAttributes', allattributes);
         this.attributes = allattributes;
         this.selectedAttribute = null;
@@ -376,18 +399,16 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
         this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
         this.changed = false;
         this.validForSave = false;
-        this.attributeFilterCapped = this.attributes.length >= max;
         this.loading = false;
         _sub.unsubscribe();
       });
     } else {
-      this.attributes = [];
+      this.attributes = this.newSearchResultInstance();
       this.selectedAttribute = null;
       this.attributeEdit = null;
       this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
       this.changed = false;
       this.validForSave = false;
-      this.attributeFilterCapped = false;
     }
   }
 

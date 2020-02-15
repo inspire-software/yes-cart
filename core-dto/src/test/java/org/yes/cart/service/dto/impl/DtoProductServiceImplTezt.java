@@ -37,7 +37,8 @@ import org.yes.cart.service.dto.DtoProductTypeService;
 import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -246,55 +247,67 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
     public void testFindProduct() throws Exception {
 
         // code exact
-        final SearchContext filterCodeExact = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("! FEATURED-PRODUCT3")), 0, 10, "name", false, "filter");
+        final SearchContext filterCodeExact = createSearchContext("name", false, 0, 10,
+                "filter", "! FEATURED-PRODUCT3"
+        );
         SearchResult<ProductDTO> list = dtoService.findProducts(filterCodeExact);
         assertEquals(1, list.getTotal());
         assertEquals("FEATURED-PRODUCT3", list.getItems().get(0).getCode());
 
         // code partial
-        final SearchContext filterPartial = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("#featured")), 0, 10, "name", false, "filter");
+        final SearchContext filterPartial = createSearchContext("name", false, 0, 10,
+                "filter", "#featured"
+        );
         list = dtoService.findProducts(filterPartial);
         assertEquals(9, list.getTotal());
         assertTrue(list.getItems().get(0).getCode().startsWith("FEATURED-PRODUCT"));
 
         // PK
-        final SearchContext filterByPk = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("* 15053 ")), 0, 10, "name", false, "filter");
+        final SearchContext filterByPk = createSearchContext("name", false, 0, 10,
+                "filter", "* 15053 "
+        );
         list = dtoService.findProducts(filterByPk);
         assertEquals(1, list.getTotal());
         assertEquals("FEATURED-PRODUCT3", list.getItems().get(0).getCode());
 
         // by brand
-        final SearchContext filterByBrand = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("?samsung")), 0, 10, "name", false, "filter");
+        final SearchContext filterByBrand = createSearchContext("name", false, 0, 10,
+                "filter", "?samsung"
+        );
         list = dtoService.findProducts(filterByBrand);
         assertTrue(list.getTotal() > 0);
         assertEquals("Samsung", list.getItems().get(0).getBrandDTO().getName());
 
         // by category
-        final SearchContext filterByCategory = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("^ 211")), 0, 10, "name", false, "filter");
+        final SearchContext filterByCategory = createSearchContext("name", false, 0, 10,
+                "filter", "^ 211"
+        );
         list = dtoService.findProducts(filterByCategory);
         assertTrue(list.getTotal() > 0);
         assertEquals("Featured products", list.getItems().get(0).getProductCategoryDTOs().iterator().next().getCategoryName());
 
         // basic
-        final SearchContext filterBasic = new SearchContext(Collections.singletonMap("filter", Collections.singletonList("bender")), 0, 10, "name", false, "filter");
+        final SearchContext filterBasic = createSearchContext("name", false, 0, 10,
+                "filter", "bender"
+        );
         list = dtoService.findProducts(filterBasic);
         assertTrue(list.getTotal() > 0);
         assertTrue(list.getItems().get(0).getCode().startsWith("BENDER"));
 
         // Federated
-        final Map<String, List> federatedRestricted = new HashMap<>();
-        federatedRestricted.put("filter", Collections.singletonList("001_CAT00"));
-        federatedRestricted.put("supplierCatalogCodes", Arrays.asList("CAT001", "CAT002"));
-        final SearchContext filterFederatedRestricted = new SearchContext(federatedRestricted, 0, 10, "name", false, "filter", "supplierCatalogCodes");
+        final SearchContext filterFederatedRestricted = createSearchContext("name", false, 0, 10,
+                "filter", "001_CAT00",
+                "supplierCatalogCodes", Arrays.asList("CAT001", "CAT002")
+        );
         list = dtoService.findProducts(filterFederatedRestricted);
         assertEquals(2, list.getTotal());
         assertEquals("001_CAT001", list.getItems().get(0).getCode());
         assertEquals("001_CAT002", list.getItems().get(1).getCode());
 
-        final Map<String, List> federatedDefault = new HashMap<>();
-        federatedDefault.put("filter", Collections.singletonList("* 9998 "));
-        federatedDefault.put("supplierCatalogCodes", Arrays.asList("CAT001", "CAT002"));
-        final SearchContext filterFederatedDefault = new SearchContext(federatedDefault, 0, 10, "name", false, "filter", "supplierCatalogCodes");
+        final SearchContext filterFederatedDefault = createSearchContext("name", false, 0, 10,
+                "filter", "* 9998 ",
+                "supplierCatalogCodes", Arrays.asList("CAT001", "CAT002")
+        );
         list = dtoService.findProducts(filterFederatedDefault);
         assertEquals(1, list.getTotal());
         assertEquals("BENDER-ua", list.getItems().get(0).getCode());

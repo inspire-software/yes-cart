@@ -280,7 +280,7 @@ public class DtoContentCMS3ServiceImpl
     public SearchResult<ContentDTO> findContent(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final Map<String, List> params = filter.reduceParameters("filter", "contentIds", "GUIDs");
-        final List filterParam = params.get("filter");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
         final List contentParam = params.get("contentIds");
         final List guidsParam = params.get("GUIDs");
 
@@ -290,9 +290,7 @@ public class DtoContentCMS3ServiceImpl
         final ContentService contentService = (ContentService) service;
 
         final Map<String, List> currentFilter = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
-
-            final String textFilter = ((String) filterParam.get(0)).trim();
+        if (textFilter != null) {
 
             final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(textFilter, PARENT_OR_URI);
 

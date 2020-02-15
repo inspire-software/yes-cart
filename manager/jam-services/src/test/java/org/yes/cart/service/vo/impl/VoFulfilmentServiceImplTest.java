@@ -48,7 +48,7 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
     public void testGetCentres() throws Exception {
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList("warehouse")));
+        ctxFind.setParameters(createSearchContextParams("filter", "warehouse"));
         ctxFind.setSize(10);
 
         final List<VoFulfilmentCentreInfo> fcs = voFulfilmentService.getFilteredFulfilmentCentres(ctxFind).getItems();
@@ -86,7 +86,7 @@ public class VoFulfilmentServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("TEST CRUD UPDATE", updated.getName());
 
         VoSearchContext ctxFind = new VoSearchContext();
-        ctxFind.setParameters(Collections.singletonMap("filter", Collections.singletonList(fulfilmentCentre.getCode())));
+        ctxFind.setParameters(createSearchContextParams("filter", fulfilmentCentre.getCode()));
         ctxFind.setSize(10);
 
         assertTrue(voFulfilmentService.getFilteredFulfilmentCentres(ctxFind).getItems().stream().anyMatch(fc -> fc.getWarehouseId() == updated.getWarehouseId()));

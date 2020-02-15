@@ -40,7 +40,10 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoContentService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -109,25 +112,24 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
 
         final List<Long> contentIds = new ArrayList<>(shopService.getShopContentIds(10L));
 
-        final Map<String, List> filterByParentParams = new HashMap<>();
-        filterByParentParams.put("filter", Collections.singletonList("^ SHOIP1"));
-        filterByParentParams.put("contentIds", contentIds);
-        final SearchContext filterByParent = new SearchContext(filterByParentParams, 0, 10, "guid", false, "filter", "contentIds");
+        final SearchContext filterByParent = createSearchContext("guid", false, 0, 10,
+                "filter", "^ SHOIP1",
+                "contentIds", contentIds
+        );
         SearchResult<ContentDTO> list = dtoService.findContent(filterByParent);
         assertTrue(list.getTotal() > 1);
         assertEquals("SHOIP1", list.getItems().get(0).getName());
 
-        final Map<String, List> filterByUriParams = new HashMap<>();
-        filterByUriParams.put("filter", Collections.singletonList("@SHOIP1_mail_customer-registered.html"));
-        filterByUriParams.put("contentIds", contentIds);
-        final SearchContext filterByUri = new SearchContext(filterByUriParams, 0, 10, "name", false, "filter", "contentIds");
+        final SearchContext filterByUri = createSearchContext("name", false, 0, 10,
+                "filter", "@SHOIP1_mail_customer-registered.html",
+                "contentIds", contentIds
+        );
         list = dtoService.findContent(filterByUri);
         assertEquals(1, list.getTotal());
         assertEquals("SHOIP1_mail_customer-registered.html", list.getItems().get(0).getUri());
 
-        final Map<String, List> filterNoneParams = new HashMap<>();
-        filterNoneParams.put("contentIds", contentIds);
-        final SearchContext filterNone = new SearchContext(filterNoneParams, 0, 10, "name", false, "filter", "contentIds");
+        final SearchContext filterNone = createSearchContext("name", false, 0, 10,
+                "contentIds", contentIds);
         list = dtoService.findContent(filterNone);
         assertTrue(list.getTotal() > 1);
         list.getItems().forEach(content -> {

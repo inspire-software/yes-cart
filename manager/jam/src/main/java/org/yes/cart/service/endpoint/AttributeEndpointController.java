@@ -22,9 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttribute;
-import org.yes.cart.domain.vo.VoAttributeGroup;
-import org.yes.cart.domain.vo.VoEtype;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -48,14 +46,9 @@ public interface AttributeEndpointController {
     List<VoAttributeGroup> getAllGroups() throws Exception;
 
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/attribute/all/{group}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/attribute/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttribute> getAllAttributes(@PathVariable("group") String group) throws Exception;
-
-    @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/attribute/filtered/{group}/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<VoAttribute> getFilteredAttributes(@PathVariable("group") String group, @RequestBody(required = false) String filter, @PathVariable("max") int max) throws Exception;
+    VoSearchResult<VoAttribute> getFilteredAttributes(@RequestBody VoSearchContext filter) throws Exception;
 
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/attribute/producttype/{code}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

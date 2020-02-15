@@ -18,7 +18,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
-import { EtypeVO, AttributeGroupVO, AttributeVO, Pair } from '../model/index';
+import {
+  EtypeVO, AttributeGroupVO, AttributeVO,
+  Pair, SearchContextVO, SearchResultVO
+} from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -63,27 +66,15 @@ export class AttributeService {
 
 
   /**
-   * Get list of all group attributes,
-   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
-   */
-  getAllAttributes(groupCode:string) {
-    return this.http.get(this._serviceBaseUrl + '/attribute/all/' + groupCode + '/', Util.requestOptions())
-      .map(res => <AttributeVO[]> this.json(res))
-      .catch(this.handleError);
-  }
-
-
-
-  /**
    * Get list of all filtered attribute, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredAttributes(groupCode:string, filter:string, max:number) {
+  getFilteredAttributes(filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/attribute/filtered/' + groupCode + '/' + max, body,
-              Util.requestOptions({ type:'text/plain; charset=utf-8' }))
+    return this.http.post(this._serviceBaseUrl + '/attribute/filtered', body,
+              Util.requestOptions())
       .map(res => <AttributeVO[]> this.json(res))
       .catch(this.handleError);
   }

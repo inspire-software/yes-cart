@@ -25,6 +25,15 @@
                   </div>
                 </div>
                 <div class="form-group">
+                  <label>{{ 'AV_GROUP' | translate }}</label>
+                  <select class="form-control" formControlName="attributegroup" name="attributegroup" type="text"  [(ngModel)]="attribute.attributegroup">
+                    <option *ngFor="let gr of groups" value="{{gr.code}}">{{ gr.code }}: {{ gr.name }}</option>
+                  </select>
+                  <div [hidden]="attributeForm.controls['attributegroup'].valid || attributeForm.controls['attributegroup'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
                   <label>{{ 'AV_TYPE' | translate }}</label>
                   <select class="form-control" formControlName="etype" name="etype" type="text"  [(ngModel)]="attribute.etype">
                     <option *ngFor="let et of etypes" value="{{et.businesstype}}">{{ et.businesstype }}</option>

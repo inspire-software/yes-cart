@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../../../shared/validation/validators';
-import { EtypeVO, AttributeVO, ValidationRequestVO } from './../../../shared/model/index';
+import { EtypeVO, AttributeGroupVO, AttributeVO, ValidationRequestVO } from './../../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../../shared/event/index';
 import { UiUtil } from './../../../shared/ui/index';
 import { LogUtil } from './../../../shared/log/index';
@@ -30,6 +30,8 @@ import { LogUtil } from './../../../shared/log/index';
 export class AttributeComponent implements OnInit, OnDestroy {
 
   @Input() etypes:Array<EtypeVO> = [];
+
+  @Input() groups:Array<AttributeGroupVO> = [];
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<AttributeVO>> = new EventEmitter<FormValidationEvent<AttributeVO>>();
 
@@ -72,6 +74,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
     this.attributeForm = fb.group({
       'code': ['', validCode],
       'etype': ['', Validators.required],
+      'attributegroup': ['', Validators.required],
       'rank': ['', YcValidators.requiredRank],
       'description': [''],
       'val': [''],

@@ -218,15 +218,13 @@ public class DtoBrandServiceImpl
     public SearchResult<BrandDTO> findBrands(final SearchContext filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final Map<String, List> params = filter.reduceParameters("filter");
-        final List filterParam = params.get("filter");
+        final String textFilter = FilterSearchUtils.getStringFilter(params.get("filter"));
 
         final int pageSize = filter.getSize();
         final int startIndex = filter.getStart() * pageSize;
 
         final Map<String, List> currentFilter = new HashMap<>();
-        if (CollectionUtils.isNotEmpty(filterParam) && filterParam.get(0) instanceof String && StringUtils.isNotBlank((String) filterParam.get(0))) {
-
-            final String textFilter = ((String) filterParam.get(0)).trim();
+        if (textFilter != null) {
 
             SearchContext.JoinMode.OR.setMode(currentFilter);
             currentFilter.put("guid", Collections.singletonList(textFilter));

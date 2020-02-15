@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttribute;
-import org.yes.cart.domain.vo.VoAttributeGroup;
-import org.yes.cart.domain.vo.VoEtype;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.AttributeEndpointController;
 import org.yes.cart.service.vo.VoAttributeService;
 
@@ -58,14 +56,8 @@ public class AttributeEndpointControllerImpl implements AttributeEndpointControl
 
     @Override
     public @ResponseBody
-    List<VoAttribute> getAllAttributes(@PathVariable("group") final String group) throws Exception {
-        return voAttributeService.getAllAttributes(group);
-    }
-
-    @Override
-    public @ResponseBody
-    List<VoAttribute> getFilteredAttributes(@PathVariable("group") final String group, @RequestBody(required = false) final String filter, @PathVariable("max") final int max) throws Exception {
-        return voAttributeService.getFilteredAttributes(group, filter, max);
+    VoSearchResult<VoAttribute> getFilteredAttributes(@RequestBody final VoSearchContext filter) throws Exception {
+        return voAttributeService.getFilteredAttributes(filter);
     }
 
     @Override

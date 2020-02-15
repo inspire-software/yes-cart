@@ -17,9 +17,7 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttribute;
-import org.yes.cart.domain.vo.VoAttributeGroup;
-import org.yes.cart.domain.vo.VoEtype;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -62,15 +60,13 @@ public interface VoAttributeService {
     /**
      * Get all attributes in group
      *
-     * @param group group
      * @param filter filter
-     * @param max max
      *
      * @return list of attributes
      *
      * @throws Exception errors
      */
-    List<VoAttribute> getFilteredAttributes(String group, String filter, int max) throws Exception;
+    VoSearchResult<VoAttribute> getFilteredAttributes(VoSearchContext filter) throws Exception;
 
     /**
      * Product types that use this attribute.
