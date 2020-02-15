@@ -4,15 +4,15 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'AV_ATTRIBUTE' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('name')">{{ 'AV_ATTRIBUTE' | translate }} <span [hidden]="sortColumn != 'name'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'AV_VALUE' | translate }}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click" [title]="row.label">{{row.name}} <i class="fa fa-lock" [hidden]="!row.secure"></i></a></td>
-          <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click  text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
+          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click"><span class="label label-info">{{row.label}}</span> {{row.name}} <i class="fa fa-lock" [hidden]="!row.secure"></i></a></td>
+          <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click  text-force-break"><div [innerHTML]="getDisplayValue(row) | ychtml "></div></a></td>
         </ng-template>
       </tr>
       </tbody>

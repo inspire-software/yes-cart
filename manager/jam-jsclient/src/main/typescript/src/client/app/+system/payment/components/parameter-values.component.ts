@@ -31,9 +31,18 @@ import { LogUtil } from './../../../shared/log/index';
 export class ParameterValuesComponent implements OnInit, OnChanges {
 
   @Output() dataSelected: EventEmitter<PaymentGatewayParameterVO> = new EventEmitter<PaymentGatewayParameterVO>();
+
   @Output() dataChanged: EventEmitter<FormValidationEvent<Array<Pair<PaymentGatewayParameterVO, boolean>>>> = new EventEmitter<FormValidationEvent<Array<Pair<PaymentGatewayParameterVO, boolean>>>>();
 
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
+
   private _paymentGateway:PaymentGatewayVO;
+
+  //sorting
+  private sortColumn:string = 'name';
+  private sortDesc:boolean = false;
 
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
@@ -101,6 +110,15 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
   set attributeFilter(attributeFilter:string) {
     this._attributeFilter = attributeFilter;
     this.delayedFiltering.delay();
+  }
+
+  @Input()
+  set sortorder(sort:Pair<string, boolean>) {
+    if (sort != null && (sort.first !== this.sortColumn || sort.second !== this.sortDesc)) {
+      this.sortColumn = sort.first;
+      this.sortDesc = sort.second;
+      this.delayedFiltering.delay();
+    }
   }
 
   ngOnInit() {
@@ -286,6 +304,9 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
   }
 
   protected onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
+    }
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -293,6 +314,23 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     } else {
       this.pageEnd = _pageEnd;
     }
+  }
+
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'name';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterAttributes();
+    this.sortSelected.emit({ first: this.sortColumn, second: this.sortDesc });
   }
 
   protected getDisplayValue(row:PaymentGatewayParameterVO):string {
@@ -305,8 +343,8 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
         return '<i class="fa fa-check-circle"></i>';
       } else if (_str  === 'false') {
         return '<i class="fa fa-times-circle"></i>';
-      } else if (_str.indexOf('<') !== -1) {
-        return '<pre>' + _str + '</pre>';
+      } else if (_str.indexOf('</') !== -1) {
+        return '<div class="panel panel-info"><div class="panel-body">' + _str + '</div></div>';
       }
       return row.value;
     }
@@ -339,40 +377,55 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
 
   private filterAttributes() {
     let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
-    if (_filter != null && this._objectAttributes != null) {
-      if (_filter === '###') {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-          val.value != null && val.value != '' && val.paymentGatewayParameterId > 0
-        );
-      } else if (_filter === '##0') {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-          val.value != null && val.value != ''
-        );
-      } else if (_filter === '#00') {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-          val.value != null && val.value != '' && val.paymentGatewayParameterId == 0
-        );
-      } else if (_filter === '#0#') {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-          this.isEditedAttribute(val) || (val.paymentGatewayParameterId == 0 && val.value != null && val.value != '')
-        );
+    let _filteredObjectAttributes:Array<PaymentGatewayParameterVO> = [];
+
+    if (this._objectAttributes) {
+      if (_filter != null) {
+        if (_filter === '###') {
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            val.value != null && val.value != '' && val.paymentGatewayParameterId > 0
+          );
+        } else if (_filter === '##0') {
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            val.value != null && val.value != ''
+          );
+        } else if (_filter === '#00') {
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            val.value != null && val.value != '' && val.paymentGatewayParameterId == 0
+          );
+        } else if (_filter === '#0#') {
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            this.isEditedAttribute(val) || (val.paymentGatewayParameterId == 0 && val.value != null && val.value != '')
+          );
+        } else {
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            val.label.toLowerCase().indexOf(_filter) !== -1 ||
+            val.name && val.name.toLowerCase().indexOf(_filter) !== -1 ||
+            val.description && val.description.toLowerCase().indexOf(_filter) !== -1 ||
+            val.value && val.value.toLowerCase().indexOf(_filter) !== -1
+          );
+        }
+        LogUtil.debug('ParameterValuesComponent filterAttributes ' + _filter, this.filteredObjectAttributes);
       } else {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-          val.label.toLowerCase().indexOf(_filter) !== -1 ||
-          val.name && val.name.toLowerCase().indexOf(_filter) !== -1 ||
-          val.description && val.description.toLowerCase().indexOf(_filter) !== -1 ||
-          val.value && val.value.toLowerCase().indexOf(_filter) !== -1
-        );
+        _filteredObjectAttributes = this._objectAttributes.slice(0, this._objectAttributes.length);
+        LogUtil.debug('ParameterValuesComponent filterAttributes no filter', this.filteredObjectAttributes);
       }
-      LogUtil.debug('ParameterValuesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
-    } else {
-      this.filteredObjectAttributes = this._objectAttributes;
-      LogUtil.debug('ParameterValuesComponent filterAttributes no filter', this.filteredObjectAttributes);
     }
 
-    if (this.filteredObjectAttributes === null) {
-      this.filteredObjectAttributes = [];
+    if (_filteredObjectAttributes === null) {
+      _filteredObjectAttributes = [];
     }
+
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    _filteredObjectAttributes.sort((a, b) => {
+      let _a1:any = a;
+      let _b1:any = b;
+      return (_a1[_sortProp] > _b1[_sortProp] ? 1 : -1) * _sortOrder;
+    });
+
+    this.filteredObjectAttributes = _filteredObjectAttributes;
 
     let _total = this.filteredObjectAttributes.length;
     this.totalItems = _total;

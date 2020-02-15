@@ -39,6 +39,7 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
 
   private gateways:Array<PaymentGatewayVO> = [];
   private gatewayFilter:string;
+  private gatewaySort:Pair<string, boolean> = { first: 'name', second: false };
 
   private selectedGateway:PaymentGatewayVO;
 
@@ -49,6 +50,7 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
   private parameterValuesComponent:ParameterValuesComponent;
 
   private paramFilter:string;
+  private paramSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private selectedParam:PaymentGatewayParameterVO;
 
@@ -100,10 +102,36 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
     this.getAllPgs();
   }
 
+  protected onPageSelectedGateway(page:number) {
+    LogUtil.debug('OrganisationRoleComponent onPageSelectedGateway', page);
+  }
+
+  protected onSortSelectedGateway(sort:Pair<string, boolean>) {
+    LogUtil.debug('OrganisationRoleComponent ononSortSelectedGateway', sort);
+    if (sort == null) {
+      this.gatewaySort = { first: 'name', second: false };
+    } else {
+      this.gatewaySort = sort;
+    }
+  }
+
   protected onGatewaySelected(data:PaymentGatewayVO) {
     LogUtil.debug('PaymentGatewaysComponent onGatewaySelected', data);
     this.selectedGateway = data;
     this.paramFilter = '';
+  }
+
+  protected onPageSelectedParam(page:number) {
+    LogUtil.debug('OrganisationRoleComponent onPageSelectedParam', page);
+  }
+
+  protected onSortSelectedParam(sort:Pair<string, boolean>) {
+    LogUtil.debug('OrganisationRoleComponent ononSortSelectedParam', sort);
+    if (sort == null) {
+      this.paramSort = { first: 'name', second: false };
+    } else {
+      this.paramSort = sort;
+    }
   }
 
   protected onParamSelected(data:PaymentGatewayParameterVO) {

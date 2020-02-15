@@ -3,3 +3,4 @@
  */
 export * from './dateformat.pipes';
 export * from './numberformat.pipes';
+export * from './htmlformat.pipes';
