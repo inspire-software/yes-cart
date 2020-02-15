@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { AttributeGroupVO, AttributeVO, Pair, SearchResultVO } from './../../../shared/model/index';
+import { AttributeVO, Pair, SearchResultVO } from './../../../shared/model/index';
 import { I18nEventBus } from './../../../shared/services/index';
 import { Config } from './../../../shared/config/env.config';
 import { LogUtil } from './../../../shared/log/index';

@@ -75,7 +75,7 @@ export class AttributeService {
 
     return this.http.post(this._serviceBaseUrl + '/attribute/filtered', body,
               Util.requestOptions())
-      .map(res => <AttributeVO[]> this.json(res))
+      .map(res => <SearchResultVO<AttributeVO>> this.json(res))
       .catch(this.handleError);
   }
 

@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DataGroupsService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { DataDescriptorVO } from './../shared/model/index';
+import { DataDescriptorVO, Pair } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
 import { LogUtil } from './../shared/log/index';
 
@@ -35,6 +35,7 @@ export class ImpexDataDescriptorsComponent implements OnInit, OnDestroy {
 
   private datadescriptors:Array<DataDescriptorVO> = [];
   private datadescriptorFilter:string;
+  private datadescriptorSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private selectedDataDescriptor:DataDescriptorVO;
 
@@ -76,6 +77,19 @@ export class ImpexDataDescriptorsComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onPageSelected(page:number) {
+    LogUtil.debug('ImpexDataDescriptorsComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('ImpexDataDescriptorsComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.datadescriptorSort = { first: 'name', second: false };
+    } else {
+      this.datadescriptorSort = sort;
+    }
+  }
+
   protected onDataDescriptorSelected(data:DataDescriptorVO) {
     LogUtil.debug('ImpexDataDescriptorsComponent onDataDescriptorSelected', data);
     this.selectedDataDescriptor = data;
@@ -92,6 +106,8 @@ export class ImpexDataDescriptorsComponent implements OnInit, OnDestroy {
     LogUtil.debug('ImpexDataDescriptorsComponent onBackToList handler');
     if (this.viewMode === ImpexDataDescriptorsComponent.DESCRIPTOR) {
       this.datadescriptorEdit = null;
+      this.changed = false;
+      this.validForSave = false;
       this.viewMode = ImpexDataDescriptorsComponent.DESCRIPTORS;
     }
   }
@@ -113,9 +129,10 @@ export class ImpexDataDescriptorsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDeleteSelected() {
-    this.onRowDelete(this.selectedDataDescriptor);
+    if (this.selectedDataDescriptor != null) {
+      this.onRowDelete(this.selectedDataDescriptor);
+    }
   }
-
 
   protected onRowEditDataDescriptor(row:DataDescriptorVO) {
     LogUtil.debug('ImpexDataDescriptorsComponent onRowEditDataDescriptor handler', row);
@@ -126,7 +143,9 @@ export class ImpexDataDescriptorsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowEditSelected() {
-    this.onRowEditDataDescriptor(this.selectedDataDescriptor);
+    if (this.selectedDataDescriptor != null) {
+      this.onRowEditDataDescriptor(this.selectedDataDescriptor);
+    }
   }
 
   protected onSaveHandler() {
@@ -152,9 +171,10 @@ export class ImpexDataDescriptorsComponent implements OnInit, OnDestroy {
               LogUtil.debug('ImpexDataDescriptorsComponent datadescriptor added', rez);
             }
             this.changed = false;
+            this.validForSave = false;
             this.selectedDataDescriptor = rez;
             this.datadescriptorEdit = null;
-              this.loading = false;
+            this.loading = false;
             this.viewMode = ImpexDataDescriptorsComponent.DESCRIPTORS;
             _sub.unsubscribe();
           }
@@ -185,14 +205,17 @@ export class ImpexDataDescriptorsComponent implements OnInit, OnDestroy {
 
        this.loading = true;
         let _sub:any = this._dataDroupService.removeDataDescriptor(this.selectedDataDescriptor).subscribe(res => {
+          _sub.unsubscribe();
           LogUtil.debug('ImpexDataDescriptorsComponent removeDataDescriptor', this.selectedDataDescriptor);
           let idx = this.datadescriptors.indexOf(this.selectedDataDescriptor);
           this.datadescriptors.splice(idx, 1);
           this.datadescriptors = this.datadescriptors.slice(0, this.datadescriptors.length); // reset to propagate changes
           this.selectedDataDescriptor = null;
+          this.changed = false;
+          this.validForSave = false;
           this.datadescriptorEdit = null;
           this.loading = false;
-          _sub.unsubscribe();
+          this.viewMode = ImpexDataDescriptorsComponent.DESCRIPTORS;
         });
       }
     }

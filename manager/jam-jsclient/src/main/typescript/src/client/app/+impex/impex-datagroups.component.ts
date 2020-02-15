@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { DataGroupsService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { DataGroupVO } from './../shared/model/index';
+import { DataGroupVO, Pair } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
 import { LogUtil } from './../shared/log/index';
 
@@ -35,6 +35,7 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
 
   private datagroups:Array<DataGroupVO> = [];
   private datagroupFilter:string;
+  private datagroupSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private selectedDataGroup:DataGroupVO;
 
@@ -76,6 +77,19 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onPageSelected(page:number) {
+    LogUtil.debug('ImpexDataGroupsComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('ImpexDataGroupsComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.datagroupSort = { first: 'name', second: false };
+    } else {
+      this.datagroupSort = sort;
+    }
+  }
+
   protected onDataGroupSelected(data:DataGroupVO) {
     LogUtil.debug('ImpexDataGroupsComponent onDataGroupSelected', data);
     this.selectedDataGroup = data;
@@ -92,6 +106,8 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
     LogUtil.debug('ImpexDataGroupsComponent onBackToList handler');
     if (this.viewMode === ImpexDataGroupsComponent.GROUP) {
       this.datagroupEdit = null;
+      this.changed = false;
+      this.validForSave = false;
       this.viewMode = ImpexDataGroupsComponent.GROUPS;
     }
   }
@@ -113,9 +129,10 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDeleteSelected() {
-    this.onRowDelete(this.selectedDataGroup);
+    if (this.selectedDataGroup != null) {
+      this.onRowDelete(this.selectedDataGroup);
+    }
   }
-
 
   protected onRowEditDataGroup(row:DataGroupVO) {
     LogUtil.debug('ImpexDataGroupsComponent onRowEditDataGroup handler', row);
@@ -126,7 +143,9 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowEditSelected() {
-    this.onRowEditDataGroup(this.selectedDataGroup);
+    if (this.selectedDataGroup != null) {
+      this.onRowEditDataGroup(this.selectedDataGroup);
+    }
   }
 
   protected onSaveHandler() {
@@ -152,9 +171,10 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
               LogUtil.debug('ImpexDataGroupsComponent datagroup added', rez);
             }
             this.changed = false;
+            this.validForSave = false;
             this.selectedDataGroup = rez;
             this.datagroupEdit = null;
-              this.loading = false;
+            this.loading = false;
             this.viewMode = ImpexDataGroupsComponent.GROUPS;
             _sub.unsubscribe();
           }
@@ -185,14 +205,17 @@ export class ImpexDataGroupsComponent implements OnInit, OnDestroy {
 
        this.loading = true;
         let _sub:any = this._dataDroupService.removeDataGroup(this.selectedDataGroup).subscribe(res => {
+          _sub.unsubscribe();
           LogUtil.debug('ImpexDataGroupsComponent removeDataGroup', this.selectedDataGroup);
           let idx = this.datagroups.indexOf(this.selectedDataGroup);
           this.datagroups.splice(idx, 1);
           this.datagroups = this.datagroups.slice(0, this.datagroups.length); // reset to propagate changes
           this.selectedDataGroup = null;
+          this.changed = false;
+          this.validForSave = false;
           this.datagroupEdit = null;
           this.loading = false;
-          _sub.unsubscribe();
+          this.viewMode = ImpexDataGroupsComponent.GROUPS;
         });
       }
     }

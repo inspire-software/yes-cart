@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { DataDescriptorVO } from './../../shared/model/index';
+import { DataDescriptorVO, Pair } from './../../shared/model/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -32,12 +32,20 @@ export class DataDescriptorsComponent implements OnInit, OnDestroy {
 
   @Output() dataSelected: EventEmitter<DataDescriptorVO> = new EventEmitter<DataDescriptorVO>();
 
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
+
   private _datadescriptors:Array<DataDescriptorVO> = [];
   private _filter:string;
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   private filteredDataDescriptors:Array<DataDescriptorVO>;
+
+  //sorting
+  private sortColumn:string = 'name';
+  private sortDesc:boolean = false;
 
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
@@ -55,7 +63,6 @@ export class DataDescriptorsComponent implements OnInit, OnDestroy {
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterDataDescriptors();
     }, this.delayedFilteringMs);
-
   }
 
   ngOnInit() {
@@ -74,6 +81,15 @@ export class DataDescriptorsComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
+  @Input()
+  set sortorder(sort:Pair<string, boolean>) {
+    if (sort != null && (sort.first !== this.sortColumn || sort.second !== this.sortDesc)) {
+      this.sortColumn = sort.first;
+      this.sortDesc = sort.second;
+      this.delayedFiltering.delay();
+    }
+  }
+
   ngOnDestroy() {
     LogUtil.debug('DataDescriptorsComponent ngOnDestroy');
     this.selectedDataDescriptor = null;
@@ -90,6 +106,9 @@ export class DataDescriptorsComponent implements OnInit, OnDestroy {
   }
 
   onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
+    }
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -97,6 +116,23 @@ export class DataDescriptorsComponent implements OnInit, OnDestroy {
     } else {
       this.pageEnd = _pageEnd;
     }
+  }
+
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'name';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterDataDescriptors();
+    this.sortSelected.emit({ first: this.sortColumn, second: this.sortDesc });
   }
 
   protected onSelectRow(row:DataDescriptorVO) {
@@ -109,23 +145,32 @@ export class DataDescriptorsComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(this.selectedDataDescriptor);
   }
 
-
   private filterDataDescriptors() {
-    if (this._filter) {
-      this.filteredDataDescriptors = this._datadescriptors.filter(descriptor =>
-        descriptor.type.toLowerCase().indexOf(this._filter) !== -1 ||
-        descriptor.name.toLowerCase().indexOf(this._filter) !== -1 ||
-        descriptor.value.toLowerCase().indexOf(this._filter) !== -1
-      );
-      LogUtil.debug('DataDescriptorsComponent filterDataDescriptors', this._filter);
-    } else {
-      this.filteredDataDescriptors = this._datadescriptors;
-      LogUtil.debug('DataDescriptorsComponent filterDataDescriptors no filter');
+
+    if (this._datadescriptors) {
+      if (this._filter) {
+        this.filteredDataDescriptors = this._datadescriptors.filter(descriptor =>
+          descriptor.type.toLowerCase().indexOf(this._filter) !== -1 ||
+          descriptor.name.toLowerCase().indexOf(this._filter) !== -1 ||
+          descriptor.value.toLowerCase().indexOf(this._filter) !== -1
+        );
+      } else {
+        this.filteredDataDescriptors = this._datadescriptors.slice(0, this._datadescriptors.length);
+      }
     }
 
     if (this.filteredDataDescriptors === null) {
       this.filteredDataDescriptors = [];
     }
+
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    let _sort = function(a:any, b:any):number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
+
+    this.filteredDataDescriptors.sort(_sort);
 
     let _total = this.filteredDataDescriptors.length;
     this.totalItems = _total;
@@ -133,6 +178,5 @@ export class DataDescriptorsComponent implements OnInit, OnDestroy {
       this.resetLastPageEnd();
     }
   }
-
 
 }
