@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
-import { ProductVO, ProductWithLinksVO, ProductAssociationVO, AssociationVO } from './../../shared/model/index';
+import { ProductVO, ProductWithLinksVO, ProductAssociationVO, AssociationVO, Pair } from './../../shared/model/index';
 import { PIMService, Util } from './../../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { ProductSelectComponent } from './../../shared/catalog/index';
@@ -35,9 +35,18 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
   @Input() showHelp:boolean = false;
 
   @Output() dataSelected: EventEmitter<ProductAssociationVO> = new EventEmitter<ProductAssociationVO>();
+
   @Output() dataChanged: EventEmitter<FormValidationEvent<Array<ProductAssociationVO>>> = new EventEmitter<FormValidationEvent<Array<ProductAssociationVO>>>();
 
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
+
   private _masterObject:ProductWithLinksVO;
+
+  //sorting
+  private sortColumn:string = 'associationId';
+  private sortDesc:boolean = false;
 
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
@@ -112,6 +121,15 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
   set associationFilter(associationFilter:string) {
     this._associationFilter = associationFilter;
     this.delayedFiltering.delay();
+  }
+
+  @Input()
+  set sortorder(sort:Pair<string, boolean>) {
+    if (sort != null && (sort.first !== this.sortColumn || sort.second !== this.sortDesc)) {
+      this.sortColumn = sort.first;
+      this.sortDesc = sort.second;
+      this.delayedFiltering.delay();
+    }
   }
 
   get masterObject():ProductWithLinksVO {
@@ -277,6 +295,9 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
   }
 
   protected onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
+    }
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -284,6 +305,23 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
     } else {
       this.pageEnd = _pageEnd;
     }
+  }
+
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'associationId';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterAssociations();
+    this.sortSelected.emit({ first: this.sortColumn, second: this.sortDesc });
   }
 
   protected getAssociationType(row:ProductAssociationVO):string {
@@ -324,49 +362,48 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
   private filterAssociations() {
     let _filter = this._associationFilter ? this._associationFilter.toLowerCase() : null;
     let _filteredObjectAssociations:Array<ProductAssociationVO> = [];
-    if (_filter && this._objectAssociations) {
-      if (_filter.indexOf('#') === 0) {
+    if (this._objectAssociations) {
+      if (_filter) {
+        if (_filter.indexOf('#') === 0) {
 
-        let _type = _filter.substr(1);
+          let _type = _filter.substr(1);
 
-        let ids:Array<number> = [];
-        ProductAssociationsComponent.associations.forEach(assoc => {
-          if (assoc.code.toLowerCase().indexOf(_type) !== -1 ||
+          let ids: Array<number> = [];
+          ProductAssociationsComponent.associations.forEach(assoc => {
+            if (assoc.code.toLowerCase().indexOf(_type) !== -1 ||
               assoc.name.toLowerCase().indexOf(_type) !== -1) {
-            ids.push(assoc.associationId);
-          }
-        });
+              ids.push(assoc.associationId);
+            }
+          });
 
-        _filteredObjectAssociations = this._objectAssociations.filter(val =>
-          ids.indexOf(val.associationId) !== -1
-        );
+          _filteredObjectAssociations = this._objectAssociations.filter(val =>
+            ids.indexOf(val.associationId) !== -1
+          );
+        } else {
+          _filteredObjectAssociations = this._objectAssociations.filter(val =>
+            val.associatedCode.toLowerCase().indexOf(_filter) !== -1 ||
+            val.associatedName.toLowerCase().indexOf(_filter) !== -1
+          );
+        }
+        LogUtil.debug('ProductAssociationsComponent filterAssociations ' + _filter, _filteredObjectAssociations);
       } else {
-        _filteredObjectAssociations = this._objectAssociations.filter(val =>
-          val.associatedCode.toLowerCase().indexOf(_filter) !== -1 ||
-          val.associatedName.toLowerCase().indexOf(_filter) !== -1
-        );
+        _filteredObjectAssociations = this._objectAssociations.slice(0, this._objectAssociations.length);
+        LogUtil.debug('ProductAssociationsComponent filterAssociations no filter', _filteredObjectAssociations);
       }
-      LogUtil.debug('ProductAssociationsComponent filterAssociations ' +  _filter, _filteredObjectAssociations);
-    } else {
-      _filteredObjectAssociations = this._objectAssociations;
-      LogUtil.debug('ProductAssociationsComponent filterAssociations no filter', _filteredObjectAssociations);
     }
 
     if (_filteredObjectAssociations === null) {
       _filteredObjectAssociations = [];
     }
 
-    _filteredObjectAssociations.sort(function(a, b) {
-      let assoc:number = a.associationId - b.associationId;
-      if (assoc == 0) {
-        let rank:number = a.rank - b.rank;
-        if (rank == 0) {
-          return a.associatedCode > b.associatedCode ? 1 : -1;
-        }
-        return rank;
-      }
-      return assoc;
-    });
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    let _sort = function(a:any, b:any):number {
+      return (a[_sortProp] > b[_sortProp] ? 1 : -1) * _sortOrder;
+    };
+
+    _filteredObjectAssociations.sort(_sort);
 
     this.filteredObjectAssociations = _filteredObjectAssociations;
 

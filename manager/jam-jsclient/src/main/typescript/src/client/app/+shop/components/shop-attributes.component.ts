@@ -32,6 +32,7 @@ export class ShopAttributesComponent implements OnInit {
 
   private shopAttributes:Array<AttrValueShopVO> = null;
   private attributeFilter:string;
+  private attributeSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private changed:boolean = false;
   private validForSave:boolean = false;
@@ -100,6 +101,19 @@ export class ShopAttributesComponent implements OnInit {
   protected onRowEditSelected() {
     if (this.selectedRow != null) {
       this.attributeValuesComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('ShopAttributeComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('ShopAttributeComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.attributeSort = { first: 'name', second: false };
+    } else {
+      this.attributeSort = sort;
     }
   }
 

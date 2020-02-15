@@ -40,6 +40,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
   private _customer:CustomerVO;
   private _attributes:AttrValueCustomerVO[] = [];
   private attributeFilter:string;
+  private attributeSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private addressShops:ShopVO[] = [];
   private _shops:any = {};
@@ -181,6 +182,19 @@ export class CustomerComponent implements OnInit, OnDestroy {
   protected onRowEditSelected() {
     if (this.selectedRow != null) {
       this.attributeValuesComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('CustomerComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('CustomerComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.attributeSort = { first: 'name', second: false };
+    } else {
+      this.attributeSort = sort;
     }
   }
 

@@ -36,6 +36,7 @@ export class BrandComponent implements OnInit, OnDestroy {
   private _brand:BrandVO;
   private _attributes:AttrValueBrandVO[] = [];
   private attributeFilter:string;
+  private attributeSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private _changes:Array<Pair<AttrValueBrandVO, boolean>>;
 
@@ -130,6 +131,19 @@ export class BrandComponent implements OnInit, OnDestroy {
   protected onRowEditSelected() {
     if (this.selectedRow != null) {
       this.attributeValuesComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('BrandComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('BrandComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.attributeSort = { first: 'name', second: false };
+    } else {
+      this.attributeSort = sort;
     }
   }
 

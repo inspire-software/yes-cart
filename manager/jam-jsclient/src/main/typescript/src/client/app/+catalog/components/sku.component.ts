@@ -37,6 +37,7 @@ export class SKUComponent implements OnInit, OnDestroy {
   private avPrototype:AttrValueProductSkuVO;
   private _attributes:AttrValueProductSkuVO[] = [];
   private attributeFilter:string;
+  private attributeSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private _changes:Array<Pair<AttrValueProductSkuVO, boolean>>;
 
@@ -223,6 +224,19 @@ export class SKUComponent implements OnInit, OnDestroy {
   protected onRowEditSelected() {
     if (this.selectedRow != null) {
       this.attributeValuesComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('SKUComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('SKUComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.attributeSort = { first: 'name', second: false };
+    } else {
+      this.attributeSort = sort;
     }
   }
 

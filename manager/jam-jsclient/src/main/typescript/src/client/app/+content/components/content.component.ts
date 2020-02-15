@@ -51,6 +51,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   private _content:ContentWithBodyVO;
   private _attributes:AttrValueContentVO[] = [];
   private attributeFilter:string;
+  private attributeSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private _changes:Array<Pair<AttrValueContentVO, boolean>>;
 
@@ -268,6 +269,19 @@ export class ContentComponent implements OnInit, OnDestroy {
   protected onRowEditSelected() {
     if (this.selectedRow != null) {
       this.attributeValuesComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('ContentComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('ContentComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.attributeSort = { first: 'name', second: false };
+    } else {
+      this.attributeSort = sort;
     }
   }
 

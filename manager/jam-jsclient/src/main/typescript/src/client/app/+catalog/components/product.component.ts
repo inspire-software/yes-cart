@@ -46,7 +46,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   private avPrototype:AttrValueProductVO;
   private _attributes:AttrValueProductVO[] = [];
   private attributeFilter:string;
+  private attributeSort:Pair<string, boolean> = { first: 'name', second: false };
   private associationFilter:string;
+  private associationSort:Pair<string, boolean> = { first: 'associationId', second: false };
+  private skuSort:Pair<string, boolean> = { first: 'rank', second: false };
 
   private _changes:Array<Pair<AttrValueProductVO, boolean>>;
 
@@ -279,6 +282,20 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.skuAddClick.emit(this.selectedSku);
   }
 
+  protected onPageSelectedSku(page:number) {
+    LogUtil.debug('ProductComponent onPageSelectedSku', page);
+  }
+
+  protected onSortSelectedSku(sort:Pair<string, boolean>) {
+    LogUtil.debug('ProductComponent onSortSelectedSku', sort);
+    if (sort == null) {
+      this.skuSort = { first: 'rank', second: false };
+    } else {
+      this.skuSort = sort;
+    }
+  }
+
+
   protected onRowEditSelectedSKU() {
     LogUtil.debug('ProductComponent onRowEditSelectedSKU', this.selectedSku);
     if (this.selectedSku != null) {
@@ -302,6 +319,19 @@ export class ProductComponent implements OnInit, OnDestroy {
   protected onRowEditSelectedAttribute() {
     if (this.selectedRowAttribute != null) {
       this.attributeValuesComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelectedAttribute(page:number) {
+    LogUtil.debug('ProductComponent onPageSelectedAttribute', page);
+  }
+
+  protected onSortSelectedAttribute(sort:Pair<string, boolean>) {
+    LogUtil.debug('ProductComponent onSortSelectedAttribute', sort);
+    if (sort == null) {
+      this.attributeSort = { first: 'name', second: false };
+    } else {
+      this.attributeSort = sort;
     }
   }
 
@@ -329,6 +359,19 @@ export class ProductComponent implements OnInit, OnDestroy {
   protected onRowEditSelectedAssociation() {
     if (this.selectedRowAssociation != null) {
       this.associationsComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelectedAssociation(page:number) {
+    LogUtil.debug('ProductComponent onPageSelectedAssociation', page);
+  }
+
+  protected onSortSelectedAssociation(sort:Pair<string, boolean>) {
+    LogUtil.debug('ProductComponent onSortSelectedAssociation', sort);
+    if (sort == null) {
+      this.associationSort = { first: 'associationId', second: false };
+    } else {
+      this.associationSort = sort;
     }
   }
 

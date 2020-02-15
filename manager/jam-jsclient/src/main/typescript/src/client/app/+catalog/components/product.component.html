@@ -156,6 +156,11 @@
 
                   <form class="width-100">
                     <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="sortSelectSkuModal.showDialog()" class="btn {{ skuSort.first ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                          <i class="fa fa-sort-amount-asc"></i>
+                        </button>
+                      </span>
                       <input class="form-control filter-input" type="text" name="skuFilter" [(ngModel)]="skuFilter" autocomplete="off"/>
                       <span class="input-group-btn">
                         <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearSkuFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
@@ -188,9 +193,27 @@
             </div>
 
             <div class="row">
-              <yc-skus [skus]="product.sku" [filter]="skuFilter" (dataSelected)="onSkuSelected($event)"></yc-skus>
+              <yc-skus [skus]="product.sku"
+                       [filter]="skuFilter"
+                       [sortorder]="skuSort"
+                       (dataSelected)="onSkuSelected($event)"
+                       (pageSelected)="onPageSelectedSku($event)"
+                       (sortSelected)="onSortSelectedSku($event)"></yc-skus>
             </div>
           </div>
+
+          <yc-sort-select #sortSelectSkuModal
+                          [sortColumn]="skuSort.first"
+                          [sortDesc]="skuSort.second"
+                          [availableOptions]=" ([
+                              { key: 'code', messageKey: 'CODE' },
+                              { key: 'manufacturerCode', messageKey: 'PRODUCT_MANUFACTURER_CODE' },
+                              { key: 'name', messageKey: 'NAME' },
+                              { key: 'barCode', messageKey: 'PRODUCT_BAR_CODE' },
+                              { key: 'rank', messageKey: 'AV_RANK' }
+                          ]) "
+                          (sortSelected)="onSortSelectedSku($event)"></yc-sort-select>
+
         </ng-template>
 
       </tab>
@@ -392,6 +415,9 @@
                         <button type="button" (click)="onSearchHelpAttributeToggle()" class="btn {{ searchHelpShowAttribute ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
                           <i class="fa fa-question-circle-o"></i>
                         </button>
+                        <button type="button" (click)="sortSelectAttributeModal.showDialog()" class="btn {{ attributeSort.first ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                          <i class="fa fa-sort-amount-asc"></i>
+                        </button>
                       </span>
                       <input class="form-control filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
                       <span class="input-group-btn">
@@ -443,10 +469,23 @@
                                    [avPrototype]="avPrototype"
                                    [objectAttributes]="attributes"
                                    [attributeFilter]="attributeFilter"
+                                   [sortorder]="attributeSort"
                                    (dataSelected)="onSelectRowAttribute($event)"
-                                   (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
+                                   (dataChanged)="onAttributeDataChanged($event)"
+                                   (pageSelected)="onPageSelectedAttribute($event)"
+                                   (sortSelected)="onSortSelectedAttribute($event)"></yc-attribute-values>
             </div>
           </div>
+
+          <yc-sort-select #sortSelectAttributeModal
+                          [sortColumn]="attributeSort.first"
+                          [sortDesc]="attributeSort.second"
+                          [availableOptions]=" ([
+                              { key: 'name', messageKey: 'AV_ATTRIBUTE' },
+                              { key: 'etype', messageKey: 'AV_TYPE' }
+                          ]) "
+                          (sortSelected)="onSortSelectedAttribute($event)"></yc-sort-select>
+
         </ng-template>
 
       </tab>
@@ -497,6 +536,9 @@
                         <button type="button" (click)="onSearchHelpAssociationToggle()" class="btn {{ searchHelpShowAssociation ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
                           <i class="fa fa-question-circle-o"></i>
                         </button>
+                        <button type="button" (click)="sortSelectAssociationsModal.showDialog()" class="btn {{ associationSort.first ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                          <i class="fa fa-sort-amount-asc"></i>
+                        </button>
                       </span>
                       <input class="form-control filter-input" type="text" name="associationFilter" [(ngModel)]="associationFilter" autocomplete="off"/>
                       <span class="input-group-btn">
@@ -542,11 +584,27 @@
               <yc-product-associations #associationsComponent
                                        [masterObject]="product"
                                        [associationFilter]="associationFilter"
+                                       [sortorder]="associationSort"
                                        (dataSelected)="onSelectRowAssociation($event)"
-                                       (dataChanged)="onAssociationDataChanged($event)"></yc-product-associations>
+                                       (dataChanged)="onAssociationDataChanged($event)"
+                                       (pageSelected)="onPageSelectedAssociation($event)"
+                                       (sortSelected)="onSortSelectedAssociation($event)"></yc-product-associations>
 
             </div>
           </div>
+
+
+          <yc-sort-select #sortSelectAssociationsModal
+                          [sortColumn]="associationSort.first"
+                          [sortDesc]="associationSort.second"
+                          [availableOptions]=" ([
+                              { key: 'associationId', messageKey: 'AV_TYPE' },
+                              { key: 'rank', messageKey: 'AV_RANK' },
+                              { key: 'associatedCode', messageKey: 'CODE' },
+                              { key: 'associatedName', messageKey: 'NAME' }
+                          ]) "
+                          (sortSelected)="onSortSelectedAssociation($event)"></yc-sort-select>
+
         </ng-template>
 
       </tab>

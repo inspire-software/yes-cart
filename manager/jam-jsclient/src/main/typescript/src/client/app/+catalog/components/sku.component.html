@@ -257,6 +257,9 @@
                         <button type="button" (click)="onSearchHelpToggle()" class="btn {{ searchHelpShow ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
                           <i class="fa fa-question-circle-o"></i>
                         </button>
+                        <button type="button" (click)="sortSelectModal.showDialog()" class="btn {{ attributeSort.first ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                          <i class="fa fa-sort-amount-asc"></i>
+                        </button>
                       </span>
                       <input class="form-control filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
                       <span class="input-group-btn">
@@ -308,10 +311,23 @@
                                    [avPrototype]="avPrototype"
                                    [objectAttributes]="attributes"
                                    [attributeFilter]="attributeFilter"
+                                   [sortorder]="attributeSort"
                                    (dataSelected)="onSelectRow($event)"
-                                   (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
+                                   (dataChanged)="onAttributeDataChanged($event)"
+                                   (pageSelected)="onPageSelected($event)"
+                                   (sortSelected)="onSortSelected($event)"></yc-attribute-values>
             </div>
           </div>
+
+          <yc-sort-select #sortSelectModal
+                          [sortColumn]="attributeSort.first"
+                          [sortDesc]="attributeSort.second"
+                          [availableOptions]=" ([
+                              { key: 'name', messageKey: 'AV_ATTRIBUTE' },
+                              { key: 'etype', messageKey: 'AV_TYPE' }
+                          ]) "
+                          (sortSelected)="onSortSelected($event)"></yc-sort-select>
+
         </ng-template>
 
       </tab>

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { ProductSkuVO } from './../../shared/model/index';
+import { ProductSkuVO, Pair } from './../../shared/model/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -30,6 +30,10 @@ export class SKUsComponent implements OnInit, OnDestroy {
   @Input() selectedSku:ProductSkuVO;
 
   @Output() dataSelected: EventEmitter<ProductSkuVO> = new EventEmitter<ProductSkuVO>();
+
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
 
   private _skus:Array<ProductSkuVO> = [];
   private _filter:string;
@@ -77,6 +81,15 @@ export class SKUsComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
+  @Input()
+  set sortorder(sort:Pair<string, boolean>) {
+    if (sort != null && (sort.first !== this.sortColumn || sort.second !== this.sortDesc)) {
+      this.sortColumn = sort.first;
+      this.sortDesc = sort.second;
+      this.delayedFiltering.delay();
+    }
+  }
+
   ngOnDestroy() {
     LogUtil.debug('SKUsComponent ngOnDestroy');
     this.selectedSku = null;
@@ -93,6 +106,9 @@ export class SKUsComponent implements OnInit, OnDestroy {
   }
 
   onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
+    }
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -116,6 +132,7 @@ export class SKUsComponent implements OnInit, OnDestroy {
       this.sortDesc = false;
     }
     this.filterSkus();
+    this.sortSelected.emit({ first: this.sortColumn, second: this.sortDesc });
   }
 
   protected onSelectRow(row:ProductSkuVO) {

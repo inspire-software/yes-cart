@@ -38,6 +38,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   private _category:CategoryVO;
   private _attributes:AttrValueCategoryVO[] = [];
   private attributeFilter:string;
+  private attributeSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private navigationByPriceTiers:CategoryNavigationPriceTiersVO;
   private navigationByPriceTiersAddCurrency:string;
@@ -220,6 +221,19 @@ export class CategoryComponent implements OnInit, OnDestroy {
   protected onRowEditSelected() {
     if (this.selectedRow != null) {
       this.attributeValuesComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('CategoryComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('CategoryComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.attributeSort = { first: 'name', second: false };
+    } else {
+      this.attributeSort = sort;
     }
   }
 

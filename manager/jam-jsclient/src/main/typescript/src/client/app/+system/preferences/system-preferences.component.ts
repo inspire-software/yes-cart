@@ -31,6 +31,7 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
 
   private systemAttributes:Array<AttrValueSystemVO>;
   private attributeFilter:string;
+  private attributeSort:Pair<string, boolean> = { first: 'name', second: false };
 
   private changed:boolean = false;
   private validForSave:boolean = false;
@@ -86,6 +87,19 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
   protected onRowEditSelected() {
     if (this.selectedRow != null) {
       this.attributeValuesComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('ShopAttributeComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('ShopAttributeComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.attributeSort = { first: 'name', second: false };
+    } else {
+      this.attributeSort = sort;
     }
   }
 

@@ -4,10 +4,10 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'AV_TYPE' | translate }}</th>
-        <th>{{ 'AV_RANK' | translate }}</th>
-        <th>{{ 'CODE' | translate }}</th>
-        <th>{{ 'NAME' | translate }}</th>
+        <th><a class="js-click" (click)="onSortClick('associationId')">{{ 'AV_TYPE' | translate }} <span [hidden]="sortColumn != 'associationId'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('rank')">{{ 'AV_RANK' | translate }} <span [hidden]="sortColumn != 'rank'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('associatedCode')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'associatedCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
+        <th><a class="js-click" (click)="onSortClick('associatedName')">{{ 'NAME' | translate }} <span [hidden]="sortColumn != 'associatedName'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
       </tr>
       </thead>
       <tbody>

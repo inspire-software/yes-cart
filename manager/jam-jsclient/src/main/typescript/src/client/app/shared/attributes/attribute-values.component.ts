@@ -37,7 +37,16 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   @Input() showHelp:boolean = false;
 
   @Output() dataSelected: EventEmitter<AttrValueVO> = new EventEmitter<AttrValueVO>();
+
   @Output() dataChanged: EventEmitter<FormValidationEvent<Array<Pair<AttrValueVO, boolean>>>> = new EventEmitter<FormValidationEvent<Array<Pair<AttrValueVO, boolean>>>>();
+
+  @Output() pageSelected: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() sortSelected: EventEmitter<Pair<string, boolean>> = new EventEmitter<Pair<string, boolean>>();
+
+  //sorting
+  private sortColumn:string = 'name';
+  private sortDesc:boolean = false;
 
   //paging
   private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
@@ -115,6 +124,15 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   set attributeFilter(attributeFilter:string) {
     this._attributeFilter = attributeFilter;
     this.delayedFiltering.delay();
+  }
+
+  @Input()
+  set sortorder(sort:Pair<string, boolean>) {
+    if (sort != null && (sort.first !== this.sortColumn || sort.second !== this.sortDesc)) {
+      this.sortColumn = sort.first;
+      this.sortDesc = sort.second;
+      this.delayedFiltering.delay();
+    }
   }
 
   get attributeToEditBoolean():boolean {
@@ -340,6 +358,9 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   }
 
   protected onPageChanged(event:any) {
+    if (this.currentPage != event.page) {
+      this.pageSelected.emit(event.page - 1);
+    }
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -349,6 +370,22 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     }
   }
 
+  onSortClick(event:any) {
+    if (event == this.sortColumn) {
+      if (this.sortDesc) {  // same column already desc, remove sort
+        this.sortColumn = 'name';
+        this.sortDesc = false;
+      } else {  // same column asc, change to desc
+        this.sortColumn = event;
+        this.sortDesc = true;
+      }
+    } else { // different column, start asc sort
+      this.sortColumn = event;
+      this.sortDesc = false;
+    }
+    this.filterAttributes();
+    this.sortSelected.emit({ first: this.sortColumn, second: this.sortDesc });
+  }
 
   protected getSearchFlags(row:AttributeVO) {
     if (this.masterObjectType === 'product') {
@@ -573,47 +610,64 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
 
   private filterAttributes() {
+
     let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
     let _filteredObjectAttributes:Array<AttrValueVO> = [];
-    if (_filter) {
-      if (_filter === '###') { // all existing values (check for blank is suppressed because sometimes we have empty values from imports)
-        _filteredObjectAttributes = this._objectAttributes.filter(val =>
-          /* val.val != null && val.val != '' && */ val.attrvalueId > 0
-        );
-      } else if (_filter === '##0') { // non-empty values
-        _filteredObjectAttributes = this._objectAttributes.filter(val =>
-          val.val != null && val.val != ''
-        );
-      } else if (_filter === '#00') { // non-empty new values
-        _filteredObjectAttributes = this._objectAttributes.filter(val =>
-          val.val != null && val.val != '' && val.attrvalueId == 0
-        );
-      } else if (_filter === '#0#') { // non-empty inherited
-        _filteredObjectAttributes = this._objectAttributes.filter(val =>
-          this.isEditedAttribute(val) || (val.attrvalueId == 0 && val.val != null && val.val != '' && val.val.indexOf('* ') !== 0)
-        );
+
+    if (this._objectAttributes) {
+      if (_filter) {
+        if (_filter === '###') { // all existing values (check for blank is suppressed because sometimes we have empty values from imports)
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            /* val.val != null && val.val != '' && */ val.attrvalueId > 0
+          );
+        } else if (_filter === '##0') { // non-empty values
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            val.val != null && val.val != ''
+          );
+        } else if (_filter === '#00') { // non-empty new values
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            val.val != null && val.val != '' && val.attrvalueId == 0
+          );
+        } else if (_filter === '#0#') { // non-empty inherited
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            this.isEditedAttribute(val) || (val.attrvalueId == 0 && val.val != null && val.val != '' && val.val.indexOf('* ') !== 0)
+          );
+        } else {
+          _filteredObjectAttributes = this._objectAttributes.filter(val =>
+            val.attribute.code.toLowerCase().indexOf(_filter) !== -1 ||
+            val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
+            val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1 ||
+            val.val && val.val.toLowerCase().indexOf(_filter) !== -1 ||
+            this.getAttributeName(val.attribute).toLowerCase().indexOf(_filter) !== -1
+          );
+        }
+        LogUtil.debug('AttributeValuesComponent filterAttributes ' + _filter, _filteredObjectAttributes);
       } else {
-        _filteredObjectAttributes = this._objectAttributes.filter(val =>
-          val.attribute.code.toLowerCase().indexOf(_filter) !== -1 ||
-          val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
-          val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1 ||
-          val.val && val.val.toLowerCase().indexOf(_filter) !== -1 ||
-          this.getAttributeName(val.attribute).toLowerCase().indexOf(_filter) !== -1
-        );
+        _filteredObjectAttributes = this._objectAttributes.slice(0, this._objectAttributes.length);
+        LogUtil.debug('AttributeValuesComponent filterAttributes no filter', _filteredObjectAttributes);
       }
-      LogUtil.debug('AttributeValuesComponent filterAttributes ' +  _filter, _filteredObjectAttributes);
-    } else {
-      _filteredObjectAttributes = this._objectAttributes;
-      LogUtil.debug('AttributeValuesComponent filterAttributes no filter', _filteredObjectAttributes);
     }
 
     if (_filteredObjectAttributes === null) {
       _filteredObjectAttributes = [];
     }
 
-    _filteredObjectAttributes.sort(function(a, b) {
-      return a.attribute.name > b.attribute.name ? 1 : -1;
-    });
+    let _sortProp = this.sortColumn;
+    let _sortOrder = this.sortDesc ? -1 : 1;
+
+    if (_sortProp === 'name') {
+      _filteredObjectAttributes.sort((a, b) => {
+        let _a1 = this.getAttributeName(a.attribute).toLowerCase();
+        let _b1 = this.getAttributeName(b.attribute).toLowerCase();
+        return (_a1 > _b1 ? 1 : -1) * _sortOrder;
+      });
+    } else {
+      _filteredObjectAttributes.sort((a, b) => {
+        let _a1:any = a.attribute;
+        let _b1:any = b.attribute;
+        return (_a1[_sortProp] > _b1[_sortProp] ? 1 : -1) * _sortOrder;
+      });
+    }
 
     this.filteredObjectAttributes = _filteredObjectAttributes;
 
