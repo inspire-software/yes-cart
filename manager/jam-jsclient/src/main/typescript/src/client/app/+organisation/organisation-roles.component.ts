@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { OrganisationService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { RoleVO } from './../shared/model/index';
+import { RoleVO, Pair } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
 import { LogUtil } from './../shared/log/index';
 
@@ -35,6 +35,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
 
   private roles:Array<RoleVO> = [];
   private roleFilter:string;
+  private roleSort:Pair<string, boolean> = { first: 'description', second: false };
 
   private selectedRole:RoleVO;
 
@@ -71,6 +72,19 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
     LogUtil.debug('OrganisationRoleComponent refresh handler');
     if (UserEventBus.getUserEventBus().current() != null) {
       this.getAllRoles();
+    }
+  }
+
+  protected onPageSelected(page:number) {
+    LogUtil.debug('OrganisationRoleComponent onPageSelected', page);
+  }
+
+  protected onSortSelected(sort:Pair<string, boolean>) {
+    LogUtil.debug('OrganisationRoleComponent ononSortSelected', sort);
+    if (sort == null) {
+      this.roleSort = { first: 'description', second: false };
+    } else {
+      this.roleSort = sort;
     }
   }
 
