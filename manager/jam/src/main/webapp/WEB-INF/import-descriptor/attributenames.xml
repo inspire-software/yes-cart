@@ -130,10 +130,9 @@
 
         <column-descriptor>
             <column-index>-1</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Etype</entity-type>
+            <field-type>FIELD</field-type>
             <name>etype</name>
-            <lookup-query>select b from EtypeEntity b where b.businesstype = 'String'</lookup-query>
+            <value-constant>String</value-constant>
         </column-descriptor>
 
     </import-columns>
