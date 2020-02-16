@@ -26,3 +26,4 @@ attributeGroup.attributegroupId
 attributeGroup.code
 etype.etypeId
 etype.businesstype
+.etypeName
