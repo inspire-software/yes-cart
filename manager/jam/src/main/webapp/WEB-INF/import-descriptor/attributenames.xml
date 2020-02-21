@@ -33,10 +33,10 @@
 
         <column-descriptor>
             <column-index>0</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.AttributeGroup</entity-type>
+            <field-type>FIELD</field-type>
             <name>attributeGroup</name>
-            <lookup-query>select b from AttributeGroupEntity b where b.code = {attributeGroup}</lookup-query>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor> <!-- primary key -->
