@@ -478,6 +478,7 @@
                 <constructor-arg index="7" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
                 <constructor-arg index="8" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="9" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="10" ref="passwordHashHelper"/>
             </bean>
         </property>
     </bean>
@@ -606,6 +607,8 @@
                        value="org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductSkuDTO"
                        value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ProductOptionDTO"
+                       value="org.yes.cart.domain.dto.impl.ProductOptionDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.AttrValueDTO"
                        value="org.yes.cart.domain.dto.impl.AttrValueDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.AttrValueCategoryDTO"
@@ -746,6 +749,10 @@
         <constructor-arg index="0" ref="genericDao"/>
     </bean>
 
+    <bean id="productOptionSkuCodesToSkuCodeNamePair" class="org.yes.cart.domain.dto.adapter.impl.ProductOptionSkuCodesToSkuCodeNamePairConverter">
+        <constructor-arg index="0" ref="genericDao"/>
+    </bean>
+
     <bean id="shopId2Shop" class="org.yes.cart.domain.dto.adapter.impl.ShopIdToEntityConverter">
         <constructor-arg index="0" ref="shopDao"/>
     </bean>
@@ -783,29 +790,30 @@
     <bean id="dtoAssemblerAdaptersRepositoryMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map>
-                <entry key="bigDecimalToFloat"                  value-ref="bigDecimalToFloat"/>
-                <entry key="brandDTO2Brand"                     value-ref="brandDTO2Brand"/>
-                <entry key="productTypeDTO2ProductType"         value-ref="productTypeDTO2ProductType"/>
-                <entry key="productId2Product"                  value-ref="productId2Product"/>
-                <entry key="skuId2Sku"                          value-ref="skuId2Sku"/>
-                <entry key="customerWishListSkuCodeToName"      value-ref="customerWishListSkuCodeToName"/>
-                <entry key="customerShopToMap"                  value-ref="customerShopToMap"/>
-                <entry key="warehouseSkuCodeToName"             value-ref="warehouseSkuCodeToName"/>
-                <entry key="priceSkuCodeToName"                 value-ref="priceSkuCodeToName"/>
-                <entry key="productAssociationSkuCodeToName"    value-ref="productAssociationSkuCodeToName"/>
-                <entry key="shopId2Shop"                        value-ref="shopId2Shop"/>
-                <entry key="warehouseId2Warehouse"              value-ref="warehouseId2Warehouse"/>
-                <entry key="carrierId2Carrier"                  value-ref="carrierId2Carrier"/>
-                <entry key="associationDTO2Association"         value-ref="associationDTO2Association"/>
-                <entry key="producttypeId2ProductType"          value-ref="producttypeId2ProductType"/>
+                <entry key="bigDecimalToFloat"                          value-ref="bigDecimalToFloat"/>
+                <entry key="brandDTO2Brand"                             value-ref="brandDTO2Brand"/>
+                <entry key="productTypeDTO2ProductType"                 value-ref="productTypeDTO2ProductType"/>
+                <entry key="productId2Product"                          value-ref="productId2Product"/>
+                <entry key="skuId2Sku"                                  value-ref="skuId2Sku"/>
+                <entry key="customerWishListSkuCodeToName"              value-ref="customerWishListSkuCodeToName"/>
+                <entry key="customerShopToMap"                          value-ref="customerShopToMap"/>
+                <entry key="warehouseSkuCodeToName"                     value-ref="warehouseSkuCodeToName"/>
+                <entry key="priceSkuCodeToName"                         value-ref="priceSkuCodeToName"/>
+                <entry key="productAssociationSkuCodeToName"            value-ref="productAssociationSkuCodeToName"/>
+                <entry key="productOptionSkuCodesToSkuCodeNamePair"     value-ref="productOptionSkuCodesToSkuCodeNamePair"/>
+                <entry key="shopId2Shop"                                value-ref="shopId2Shop"/>
+                <entry key="warehouseId2Warehouse"                      value-ref="warehouseId2Warehouse"/>
+                <entry key="carrierId2Carrier"                          value-ref="carrierId2Carrier"/>
+                <entry key="associationDTO2Association"                 value-ref="associationDTO2Association"/>
+                <entry key="producttypeId2ProductType"                  value-ref="producttypeId2ProductType"/>
 
-                <entry key="attributeDTO2Attribute"             value-ref="attributeDTO2Attribute"/>
-                <entry key="attributeDTO2Code"                  value-ref="attributeDTO2Code"/>
+                <entry key="attributeDTO2Attribute"                     value-ref="attributeDTO2Attribute"/>
+                <entry key="attributeDTO2Code"                          value-ref="attributeDTO2Code"/>
 
-                <entry key="i18nStringConverter"                value-ref="i18nStringConverter"/>
-                <entry key="i18nModelConverter"                 value-ref="i18nModelConverter"/>
+                <entry key="i18nStringConverter"                        value-ref="i18nStringConverter"/>
+                <entry key="i18nModelConverter"                         value-ref="i18nModelConverter"/>
 
-                <entry key="customValuesMapConverter"           value-ref="customValuesMapConverter"/>
+                <entry key="customValuesMapConverter"                   value-ref="customValuesMapConverter"/>
 
             </map>
         </constructor-arg>
