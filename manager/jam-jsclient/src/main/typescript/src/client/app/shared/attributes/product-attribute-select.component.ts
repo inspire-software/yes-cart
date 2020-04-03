@@ -115,8 +115,8 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
       };
       let _sub:any = this._attributeService.getFilteredAttributes(_ctx).subscribe(allattributes => {
         LogUtil.debug('ProductAttributeSelectComponent getAllAttributes', allattributes);
-        this.filteredAttributes = allattributes;
-        this.attributeFilterCapped = this.filteredAttributes.length >= this.filterCap;
+        this.filteredAttributes = allattributes != null ? allattributes.items : [];
+        this.attributeFilterCapped = allattributes != null && allattributes.total > this.filterCap;
         this.loading = false;
         _sub.unsubscribe();
       });
