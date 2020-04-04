@@ -23,15 +23,16 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 /**
  * User: denispavlov
  * Date: 21/04/2015
- * Time: 10:54
+ * Time: 13:28
  */
-public class ShoppingCartStateSerializerSdkImplTest extends AbstractShoppingCartStateSerializerTest {
+public class ShoppingCartStateSerDesJacksonImplTest extends AbstractShoppingCartStateSerDesTest {
+
 
 
     @Test
     public void testSaveRestore() throws Exception {
 
-        final ShoppingCartStateSerializerSdkImpl serializer = new ShoppingCartStateSerializerSdkImpl();
+        final ShoppingCartStateSerDesJacksonImpl serializer = new ShoppingCartStateSerDesJacksonImpl(amountCalculationStrategy);
 
         final ShoppingCart cart = createFilledCart();
         assertFilledCart(cart, cart.getGuid());
@@ -47,13 +48,13 @@ public class ShoppingCartStateSerializerSdkImplTest extends AbstractShoppingCart
     /**
      * This test produces the following results on Mac OSX 2.4GHz Core 2 Duo:
      *
-     * == Pure Java OOTB Serializable implementation: ======================================
+     * == Jackson JSON Serializable implementation: ======================================
      *
-     * Serializing 10000 carts took ~21848ms (size of cart is ~24.5Kb)
-     * Deserializing 10000 carts took ~11788ms
-     * Total to and back for 10000 carts took ~33636ms (~3.36ms per cart)
+     * Serializing 10000 carts took ~11654ms (size of cart is ~22.2Kb)
+     * Deserializing 10000 carts took ~9047ms
+     * Total to and back for 10000 carts took ~20701ms (~2.07ms per cart)
      *
-     * Conclusion: to and back with 100 items is around ~3.5ms
+     * Conclusion: to and back with 100 items is around ~2ms
      *
      * @throws Exception errors
      */
@@ -61,7 +62,9 @@ public class ShoppingCartStateSerializerSdkImplTest extends AbstractShoppingCart
     @Test
     public void testSerializationPerformance() throws Exception {
 
-        serializationPerformanceRoutine(new ShoppingCartStateSerializerSdkImpl(), 10000, 100, 5, 5);
+        serializationPerformanceRoutine(new ShoppingCartStateSerDesJacksonImpl(amountCalculationStrategy), 10000, 100, 5, 5);
 
     }
+
+
 }

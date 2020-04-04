@@ -16,13 +16,15 @@
 
 package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.order.impl.DeliveryBucketImpl;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
-import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerializer;
+import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerDes;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -37,8 +39,11 @@ import static org.junit.Assert.*;
  * Date: 21/04/2015
  * Time: 10:56
  */
-public abstract class AbstractShoppingCartStateSerializerTest {
+public abstract class AbstractShoppingCartStateSerDesTest {
 
+    private Mockery context = new JUnit4Mockery();
+
+    protected final AmountCalculationStrategy amountCalculationStrategy = this.context.mock(AmountCalculationStrategy.class);
 
     /**
      * Create specific cart so that we can assert all values before and after serialisation.
@@ -209,7 +214,7 @@ public abstract class AbstractShoppingCartStateSerializerTest {
      *
      * @throws Exception errors
      */
-    public void serializationPerformanceRoutine(ShoppingCartStateSerializer serializer,
+    public void serializationPerformanceRoutine(ShoppingCartStateSerDes serializer,
                                                 int sampleSize,
                                                 int skuCount,
                                                 int giftCount,

@@ -22,6 +22,23 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
+
+    <!--
+         Cart state serialiser allows to persists the cart state as bytes.
+         See documenttation and tests for all implementation for guidance.
+         Jackson JSON serialiser seems to be ~30% faster. If any problems will
+         appear we can always switch back to Java SDK serialisation, just swap
+         the commented out bean.
+    -->
+    <bean id="cartStateSerDes" class="org.yes.cart.shoppingcart.support.tokendriven.impl.ShoppingCartStateSerDesJacksonImpl">
+        <constructor-arg ref="amountCalculationStrategy"/>
+    </bean>
+    <!--
+    <bean id="cartStateSerDes" class="org.yes.cart.shoppingcart.support.tokendriven.impl.ShoppingCartStateSerDesSdkImpl">
+        <constructor-arg ref="amountCalculationStrategy"/>
+    </bean>
+    -->
+
     <bean id="cartRepository" class="org.yes.cart.shoppingcart.support.tokendriven.impl.ResilientCartRepositoryImpl">
         <constructor-arg index="0" ref="shoppingCartStateService"/>
         <constructor-arg index="1" ref="shopService"/>
@@ -32,35 +49,28 @@
                         <constructor-arg index="0" ref="shoppingCartStateService"/>
                         <constructor-arg index="1" ref="addressService"/>
                         <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
-                        <constructor-arg index="3">
-                            <!--
-                                 Cart state serialiser allows to persists the cart state as bytes.
-                                 See documenttation and tests for all implementation for guidance.
-                                 Jackson JSON serialiser seems to be ~30% faster. If any problems will
-                                 appear we can always switch back to Java SDK serialisation, just swap
-                                 the commented out bean.
-                            -->
-                            <bean class="org.yes.cart.shoppingcart.support.tokendriven.impl.ShoppingCartStateSerializerJacksonImpl"/>
-                            <!--<bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.ShoppingCartStateSerializerSdkImpl"/>-->
-                        </constructor-arg>
+                        <constructor-arg index="3" ref="cartStateSerDes"/>
                     </bean>
                 </property>
             </bean>
         </constructor-arg>
-        <constructor-arg index="3" value="21600"/>
-        <constructor-arg index="4" ref="cacheManager"/>
-        <!--<constructor-arg index="5">-->
-            <!--<bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
-                <!--<description>-->
-                    <!--Thread pool (1) for cart persistence so that we do not slow down the response.-->
-                    <!--We only need one thread for this as we only anticipate one thread to be-->
-                    <!--performing the updates to cart states.-->
-                <!--</description>-->
-                <!--<property name="corePoolSize" value="1"/>-->
-                <!--<property name="maxPoolSize" value="1"/>-->
-                <!--<property name="threadNamePrefix" value="[dto-cartupdate]-"/>-->
-        <!--</bean>-->
-        <!--</constructor-arg>-->
+        <constructor-arg index="3" ref="cartStateSerDes"/>
+        <constructor-arg index="4" value="21600"/>
+        <constructor-arg index="5" ref="cacheManager"/>
+        <!-- Commented out as we need immediate update on SF (state is shared by multiple requests or internal requests)
+        <constructor-arg index="6">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                <description>
+                    Thread pool (1) for cart persistence so that we do not slow down the response.
+                    We only need one thread for this as we only anticipate one thread to be
+                    performing the updates to cart states.
+                </description>
+                <property name="corePoolSize" value="1"/>
+                <property name="maxPoolSize" value="1"/>
+                <property name="threadNamePrefix" value="[dto-cartupdate]-"/>
+        </bean>
+        </constructor-arg>
+        -->
     </bean>
 
 

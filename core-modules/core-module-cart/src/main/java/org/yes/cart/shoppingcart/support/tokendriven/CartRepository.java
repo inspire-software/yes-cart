@@ -26,6 +26,13 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 public interface CartRepository {
 
     /**
+     * Create shopping cart
+     *
+     * @return create cart
+     */
+    ShoppingCart createCart();
+
+    /**
      * Retrieve shopping cart using token.
      *
      * @param token token

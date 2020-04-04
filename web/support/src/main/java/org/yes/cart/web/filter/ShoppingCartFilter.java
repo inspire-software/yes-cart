@@ -26,6 +26,7 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.shoppingcart.support.CartDetuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
+import org.yes.cart.utils.log.Markers;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import javax.servlet.Filter;
@@ -93,14 +94,15 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                     cart = restored;
                 }
             } catch (CartDetuplizationException e) {
-                LOG.warn("Cart not restored from cookies");
+                LOG.warn("Cart failed to restore", e);
             } catch (Exception e) {
-                LOG.error("Cart not restored from cookies", e);
+                LOG.error("Cart failed to restore", e);
             }
             if (cart == null) {
+                LOG.warn(Markers.alert(), "Tuplizer failed, using default implementation for cart");
                 cart = new ShoppingCartImpl();
+                cart.initialise(calculationStrategy);
             }
-            cart.initialise(calculationStrategy);
             setDefaultValuesIfNecessary(ApplicationDirector.getCurrentShop(), cart);
             ApplicationDirector.setCurrentCustomerShop(getCurrentCustomerShop(ApplicationDirector.getCurrentShop(), cart));
             ApplicationDirector.setShoppingCart(cart);

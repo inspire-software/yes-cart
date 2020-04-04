@@ -18,8 +18,11 @@ package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.shoppingcart.AmountCalculationStrategy;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerializer;
+import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
+import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerDes;
 
 import java.io.*;
 
@@ -28,9 +31,23 @@ import java.io.*;
  * Date: 21/04/2015
  * Time: 10:03
  */
-public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSerializer {
+public class ShoppingCartStateSerDesSdkImpl implements ShoppingCartStateSerDes {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartStateSerializerSdkImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartStateSerDesSdkImpl.class);
+
+    private final AmountCalculationStrategy amountCalculationStrategy;
+
+    public ShoppingCartStateSerDesSdkImpl(final AmountCalculationStrategy amountCalculationStrategy) {
+        this.amountCalculationStrategy = amountCalculationStrategy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ShoppingCart createState() {
+        final MutableShoppingCart cart = new ShoppingCartImpl();
+        cart.initialise(amountCalculationStrategy);
+        return cart;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -41,7 +58,11 @@ public class ShoppingCartStateSerializerSdkImpl implements ShoppingCartStateSeri
         try {
 
             objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            return (ShoppingCart) objectInputStream.readObject();
+            final ShoppingCart cart = (ShoppingCart) objectInputStream.readObject();
+            if (cart instanceof MutableShoppingCart) {
+                ((MutableShoppingCart) cart).initialise(amountCalculationStrategy);
+            }
+            return cart;
 
         } catch (Exception exception) {
             LOG.error("Unable to convert bytes assembled from tuple into object: " + exception.getMessage(), exception);

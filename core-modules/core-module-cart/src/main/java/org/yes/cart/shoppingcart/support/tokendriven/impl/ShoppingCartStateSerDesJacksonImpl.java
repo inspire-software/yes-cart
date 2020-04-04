@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.*;
-import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerializer;
+import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerDes;
 
 import java.io.IOException;
 
@@ -33,13 +33,16 @@ import java.io.IOException;
  * Date: 21/04/2015
  * Time: 10:10
  */
-public class ShoppingCartStateSerializerJacksonImpl implements ShoppingCartStateSerializer {
+public class ShoppingCartStateSerDesJacksonImpl implements ShoppingCartStateSerDes {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartStateSerializerJacksonImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartStateSerDesJacksonImpl.class);
 
     private final ObjectMapper mapper;
 
-    public ShoppingCartStateSerializerJacksonImpl() {
+    private final AmountCalculationStrategy amountCalculationStrategy;
+
+    public ShoppingCartStateSerDesJacksonImpl(final AmountCalculationStrategy amountCalculationStrategy) {
+
         mapper = new ObjectMapper();
 
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -51,6 +54,17 @@ public class ShoppingCartStateSerializerJacksonImpl implements ShoppingCartState
         module.addAbstractTypeMapping(CartItem.class, CartItemImpl.class);
 
         mapper.registerModule(module);
+
+        this.amountCalculationStrategy = amountCalculationStrategy;
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ShoppingCart createState() {
+        final MutableShoppingCart cart = new ShoppingCartImpl();
+        cart.initialise(amountCalculationStrategy);
+        return cart;
     }
 
     /** {@inheritDoc} */
@@ -58,7 +72,9 @@ public class ShoppingCartStateSerializerJacksonImpl implements ShoppingCartState
     public ShoppingCart restoreState(final byte[] bytes) {
 
         try {
-            return mapper.readValue(bytes, ShoppingCartImpl.class);
+            final MutableShoppingCart cart = mapper.readValue(bytes, ShoppingCartImpl.class);
+            cart.initialise(amountCalculationStrategy);
+            return cart;
         } catch (IOException exception) {
             LOG.error("Unable to convert bytes assembled from tuple into object: " + exception.getMessage(), exception);
             return null;

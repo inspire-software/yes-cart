@@ -25,7 +25,7 @@ import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.support.tokendriven.CartUpdateProcessor;
-import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerializer;
+import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerDes;
 
 import java.util.*;
 
@@ -39,16 +39,16 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
     private final ShoppingCartStateService shoppingCartStateService;
     private final AddressService addressService;
     private final ShoppingCartCommandFactory shoppingCartCommandFactory;
-    private final ShoppingCartStateSerializer shoppingCartStateSerializer;
+    private final ShoppingCartStateSerDes shoppingCartStateSerDes;
 
     public CartUpdateProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
                                    final AddressService addressService,
                                    final ShoppingCartCommandFactory shoppingCartCommandFactory,
-                                   final ShoppingCartStateSerializer shoppingCartStateSerializer) {
+                                   final ShoppingCartStateSerDes shoppingCartStateSerDes) {
         this.shoppingCartStateService = shoppingCartStateService;
         this.addressService = addressService;
         this.shoppingCartCommandFactory = shoppingCartCommandFactory;
-        this.shoppingCartStateSerializer = shoppingCartStateSerializer;
+        this.shoppingCartStateSerDes = shoppingCartStateSerDes;
     }
 
     /** {@inheritDoc} */
@@ -284,7 +284,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
     protected ShoppingCart restoreStateInternal(final byte[] bytes) {
 
-        return shoppingCartStateSerializer.restoreState(bytes);
+        return shoppingCartStateSerDes.restoreState(bytes);
 
     }
 
@@ -293,7 +293,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
     @Override
     public byte[] saveState(final ShoppingCart shoppingCart) {
 
-        return shoppingCartStateSerializer.saveState(shoppingCart);
+        return shoppingCartStateSerDes.saveState(shoppingCart);
 
     }
 

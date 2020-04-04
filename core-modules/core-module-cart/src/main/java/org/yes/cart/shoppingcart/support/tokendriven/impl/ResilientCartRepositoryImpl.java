@@ -34,6 +34,7 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 import org.yes.cart.shoppingcart.support.tokendriven.CartUpdateProcessor;
+import org.yes.cart.shoppingcart.support.tokendriven.ShoppingCartStateSerDes;
 import org.yes.cart.utils.ShopCodeContext;
 
 /**
@@ -51,11 +52,13 @@ public class ResilientCartRepositoryImpl implements CartRepository {
     private final ShoppingCartStateService shoppingCartStateService;
     private final ShopService shopService;
     private final CartUpdateProcessor cartUpdateProcessor;
+    private final ShoppingCartStateSerDes shoppingCartStateSerDes;
     private final TaskExecutor taskExecutor;
 
     public ResilientCartRepositoryImpl(final ShoppingCartStateService shoppingCartStateService,
                                        final ShopService shopService,
                                        final CartUpdateProcessor cartUpdateProcessor,
+                                       final ShoppingCartStateSerDes shoppingCartStateSerDes,
                                        final int sessionExpiryInSeconds,
                                        final CacheManager cacheManager,
                                        final TaskExecutor taskExecutor) {
@@ -63,6 +66,7 @@ public class ResilientCartRepositoryImpl implements CartRepository {
         this.shoppingCartStateService = shoppingCartStateService;
         this.shopService = shopService;
         this.cartUpdateProcessor = cartUpdateProcessor;
+        this.shoppingCartStateSerDes = shoppingCartStateSerDes;
         this.sessionExpiryInSeconds = sessionExpiryInSeconds;
         this.taskExecutor = taskExecutor;
         CART_CACHE = cacheManager.getCache("web.shoppingCart");
@@ -72,10 +76,19 @@ public class ResilientCartRepositoryImpl implements CartRepository {
     public ResilientCartRepositoryImpl(final ShoppingCartStateService shoppingCartStateService,
                                        final ShopService shopService,
                                        final CartUpdateProcessor cartUpdateProcessor,
+                                       final ShoppingCartStateSerDes shoppingCartStateSerDes,
                                        final int sessionExpiryInSeconds,
                                        final CacheManager cacheManager) {
 
-        this(shoppingCartStateService, shopService, cartUpdateProcessor, sessionExpiryInSeconds, cacheManager, null);
+        this(shoppingCartStateService, shopService, cartUpdateProcessor, shoppingCartStateSerDes, sessionExpiryInSeconds, cacheManager, null);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ShoppingCart createCart() {
+
+        return shoppingCartStateSerDes.createState();
+
     }
 
     /** {@inheritDoc} */
@@ -87,7 +100,7 @@ public class ResilientCartRepositoryImpl implements CartRepository {
         }
 
         // Try cache
-        final ShoppingCart cachedCart = getFromValueWrapper(CART_CACHE.get(token));
+        final ShoppingCart cachedCart = getFromCache(token);
         if (cachedCart != null) {
 
             final boolean invalidateLogin =
@@ -106,7 +119,7 @@ public class ResilientCartRepositoryImpl implements CartRepository {
                     return cachedCart;
                 } else {
                     // Otherwise if we cannot invalidate - remove from cache and try db
-                    CART_CACHE.evict(token);
+                    evictFromCache(token);
                 }
 
             } else {
@@ -143,13 +156,13 @@ public class ResilientCartRepositoryImpl implements CartRepository {
                         storeAsynchronously(dbCart);
                     } else {
                         // Otherwise if we cannot invalidate - remove the whole cart
-                        CART_CACHE.evict(dbCart.getGuid());
+                        evictFromCache(dbCart.getGuid());
                         return null;
                     }
 
                 }
                 // Update cache
-                CART_CACHE.put(dbCart.getGuid(), dbCart);
+                putToCache(dbCart.getGuid(), dbCart);
                 return dbCart;
 
             }
@@ -192,13 +205,26 @@ public class ResilientCartRepositoryImpl implements CartRepository {
 
     }
 
+    private ShoppingCart getFromCache(final String token) {
 
-    private ShoppingCart getFromValueWrapper(final Cache.ValueWrapper wrapper) {
+        final Cache.ValueWrapper wrapper = CART_CACHE.get(token);
 
         if (wrapper != null) {
-            return (ShoppingCart) wrapper.get();
+            return shoppingCartStateSerDes.restoreState((byte[]) wrapper.get());
         }
         return null;
+
+    }
+
+    private void putToCache(final String token, final ShoppingCart cart) {
+
+        CART_CACHE.put(token, shoppingCartStateSerDes.saveState(cart));
+
+    }
+
+    private void evictFromCache(final String token) {
+
+        CART_CACHE.evict(token);
 
     }
 
@@ -208,7 +234,7 @@ public class ResilientCartRepositoryImpl implements CartRepository {
 
         if (shoppingCart.isModified()) {
 
-            CART_CACHE.put(shoppingCart.getGuid(), shoppingCart);
+            putToCache(shoppingCart.getGuid(), shoppingCart);
 
             storeAsynchronously(shoppingCart);
 
@@ -242,7 +268,7 @@ public class ResilientCartRepositoryImpl implements CartRepository {
                 // Update process potentially can merge the cart with other stored states (e.g. when user logs in)
                 cartUpdateProcessor.updateShoppingCart(shoppingCart);
                 // So we re-save it in cache
-                CART_CACHE.put(shoppingCart.getGuid(), shoppingCart);
+                putToCache(shoppingCart.getGuid(), shoppingCart);
 
             } catch (ConcurrencyFailureException cexp) {
 
@@ -269,7 +295,7 @@ public class ResilientCartRepositoryImpl implements CartRepository {
     @Override
     public void evictShoppingCart(final ShoppingCart shoppingCart) {
 
-        CART_CACHE.evict(shoppingCart.getGuid());
+        evictFromCache(shoppingCart.getGuid());
         final ShoppingCartState state = shoppingCartStateService.findByGuid(shoppingCart.getGuid());
         if (state != null) {
             shoppingCartStateService.delete(state);

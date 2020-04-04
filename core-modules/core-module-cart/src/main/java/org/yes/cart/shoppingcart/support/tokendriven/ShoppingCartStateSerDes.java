@@ -23,7 +23,14 @@ import org.yes.cart.shoppingcart.ShoppingCart;
  * Date: 21/04/2015
  * Time: 10:02
  */
-public interface ShoppingCartStateSerializer {
+public interface ShoppingCartStateSerDes {
+
+    /**
+     * Create new state.
+     *
+     * @return shopping cart
+     */
+    ShoppingCart createState();
 
     /**
      * Restore shopping cart from bytes as is.

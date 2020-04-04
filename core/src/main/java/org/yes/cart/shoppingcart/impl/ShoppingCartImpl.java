@@ -79,10 +79,10 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     private boolean promotionsDisabled = false;
 
     private String ordernum;
-
+    @JsonIgnore
     private transient AmountCalculationStrategy calculationStrategy;
 
-
+    @JsonIgnore
     private AmountCalculationStrategy getCalculationStrategy() {
         if (calculationStrategy == null) {
             LOG.error("Cart amount calculation strategy is not configured. Please configure \"calculationStrategy\" and set it to cart");

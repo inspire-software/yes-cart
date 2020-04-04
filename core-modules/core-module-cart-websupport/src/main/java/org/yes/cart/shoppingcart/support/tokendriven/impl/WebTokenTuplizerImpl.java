@@ -102,10 +102,13 @@ public class WebTokenTuplizerImpl implements CartTuplizer<HttpServletRequest, Ht
 
         if (token != null) {
 
-            return cartRepository.getShoppingCart(token);
+            final ShoppingCart retrieved = cartRepository.getShoppingCart(token);
+            if (retrieved != null) {
+                return retrieved;
+            }
 
         }
-        return null;
+        return cartRepository.createCart();
     }
 
     /** {@inheritDoc} */

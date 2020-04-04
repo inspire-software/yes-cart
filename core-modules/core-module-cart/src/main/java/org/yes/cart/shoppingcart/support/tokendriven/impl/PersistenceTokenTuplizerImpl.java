@@ -73,10 +73,13 @@ public class PersistenceTokenTuplizerImpl implements CartTuplizer<Map, Map> {
         Object token = httpServletRequest.get(tuplizerSetting.key);
         if (token instanceof String) {
 
-            return cartRepository.getShoppingCart((String) token);
+            final ShoppingCart retrieved = cartRepository.getShoppingCart((String) token);
+            if (retrieved != null) {
+                return retrieved;
+            }
 
         }
-        return null;
+        return cartRepository.createCart();
     }
 
     /** {@inheritDoc} */
