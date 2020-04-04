@@ -28,7 +28,7 @@
     <groupId>org.yes</groupId>
     <artifactId>web</artifactId>
     <packaging>pom</packaging>
-    <name>WebApps</name>
+    <name>SFX</name>
 
     <modules>
         <module>support</module>

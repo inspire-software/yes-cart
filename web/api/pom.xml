@@ -25,7 +25,7 @@
     </parent>
     <artifactId>rest-api</artifactId>
     <packaging>war</packaging>
-    <name>WebApps: REST API</name>
+    <name>SFA: REST API</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

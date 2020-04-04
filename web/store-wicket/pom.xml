@@ -26,7 +26,7 @@
     </parent>
     <artifactId>sf-wicket</artifactId>
     <packaging>war</packaging>
-    <name>WebApps: storefront Wicket (SFW)</name>
+    <name>SFW: storefront Wicket</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
