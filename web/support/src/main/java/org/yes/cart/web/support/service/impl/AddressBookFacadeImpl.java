@@ -186,10 +186,10 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
             Address rez = customerService.getGenericDao().getEntityFactory().getByIface(Address.class);
             rez.setCustomer(customer);
-            rez.setAddressType(addressType);
             // customer.getAddress().add(rez); Must do this when we create address only!
 
             copyAddressDetails(original, rez);
+            rez.setAddressType(addressType);
 
             return rez;
 
