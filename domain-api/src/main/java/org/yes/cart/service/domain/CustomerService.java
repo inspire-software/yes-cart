@@ -68,6 +68,16 @@ public interface CustomerService extends GenericService<Customer> {
      */
     Customer getCustomerByEmail(String email, Shop shop);
 
+
+    /**
+     * Get customer by email.
+     *
+     * @param email email
+     *
+     * @return {@link Customer} or null if customer not found
+     */
+    Customer findCustomerByEmail(String email, Shop shop, boolean includeDisabled);
+
     /**
      * Get customer by auth token.
      *

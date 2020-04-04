@@ -56,6 +56,14 @@ public class CustomerServiceCachedImpl implements CustomerService {
      * {@inheritDoc}
      */
     @Override
+    public Customer findCustomerByEmail(final String email, final Shop shop, final boolean includeDisabled) {
+        return customerService.findCustomerByEmail(email, shop, includeDisabled);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Customer getCustomerByToken(final String token) {
         return customerService.getCustomerByToken(token);
     }

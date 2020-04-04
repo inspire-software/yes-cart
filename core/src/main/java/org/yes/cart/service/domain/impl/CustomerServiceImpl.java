@@ -96,6 +96,21 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         return null;
     }
 
+    @Override
+    public Customer findCustomerByEmail(final String email, final Shop shop, final boolean includeDisabled) {
+        if (StringUtils.isNotBlank(email)) {
+            if (!includeDisabled) {
+                return getCustomerByEmail(email, shop);
+            }
+            Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP.INCLUDE.DISABLED", email.toLowerCase(), shop.getShopId());
+            if (customer != null) {
+                Hibernate.initialize(customer.getAttributes());
+            }
+            return customer;
+        }
+        return null;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -383,22 +398,23 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     public Customer updateActivate(final Customer customer, final Shop shop, final boolean soft) {
 
         if (shop != null) {
-            final Collection<CustomerShop> assigned = customer.getShops();
+            final Customer freshRecord = findById(customer.getCustomerId());
+            final Collection<CustomerShop> assigned = freshRecord.getShops();
             for (final CustomerShop customerShop : assigned) {
                 if (customerShop.getShop().getShopId() == shop.getShopId()) {
                     if (customerShop.isDisabled() && !soft) {
                         customerShop.setDisabled(false);
-                        update(customer);
+                        update(freshRecord);
                     }
-                    return customer;
+                    return freshRecord;
                 }
             }
             final CustomerShop customerShop = getGenericDao().getEntityFactory().getByIface(CustomerShop.class);
-            customerShop.setCustomer(customer);
+            customerShop.setCustomer(freshRecord);
             customerShop.setShop(shop);
             customerShop.setDisabled(soft);
             assigned.add(customerShop);
-            update(customer);
+            update(freshRecord);
         }
         return customer;
     }

@@ -80,6 +80,12 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     /** {@inheritDoc} */
     @Override
+    public Customer findCustomerByEmail(final Shop shop, final String email, final boolean includeDisabled) {
+        return customerService.findCustomerByEmail(email, shop, includeDisabled);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Customer getGuestByCart(final Shop shop, final ShoppingCart cart) {
         return customerService.getCustomerByEmail(cart.getGuid(), shop);
     }
@@ -152,6 +158,14 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     public void deleteAccount(final Shop shop, final Customer customer) {
         if (customer != null && !shop.isSfDeleteAccountDisabled(customer.getCustomerType())) {
             customerRemoveService.deleteAccount(customer, shop, null);
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void updateActivate(final Shop shop, final Customer customer) {
+        if (customer != null) {
+            customerService.updateActivate(customer, shop, false);
         }
     }
 

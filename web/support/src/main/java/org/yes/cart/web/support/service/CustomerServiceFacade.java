@@ -134,6 +134,17 @@ public interface CustomerServiceFacade {
      */
     Customer getCustomerByEmail(Shop shop, String email);
 
+
+    /**
+     * Get customer by email.
+     *
+     * @param email email
+     *
+     * @return {@link Customer} or null if customer not found
+     */
+    Customer findCustomerByEmail(Shop shop, String email, boolean includeDisabled);
+
+
     /**
      * Find guest customer by cart.
      *
@@ -182,6 +193,15 @@ public interface CustomerServiceFacade {
      * @param customer customer to create
      */
     void deleteAccount(Shop shop, Customer customer);
+
+    /**
+     * Activate account for a particular shop
+     *
+     * @param shop     shop to assign
+     * @param customer customer to create
+     */
+    void updateActivate(Shop shop, Customer customer);
+
 
     /**
      * List of supported customer types.
