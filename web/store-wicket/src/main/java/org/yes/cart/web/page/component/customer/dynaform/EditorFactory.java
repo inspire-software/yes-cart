@@ -85,23 +85,21 @@ public class EditorFactory implements Serializable {
                 return null;
             }
         };
+
         final String bType = attrValue.getAttribute().getEtype();
+        final I18NModel choices = new StringI18NModel(
+                attrValue.getAttribute().getChoiceData()
+        );
+        final String langChoice = choices.getValue(markupContainer.getLocale().getLanguage());
 
-        if ("CommaSeparatedList".equals(bType)) {
-
-            final I18NModel choices = new StringI18NModel(
-                    attrValue.getAttribute().getChoiceData()
-            );
+        if (StringUtils.isNotBlank(langChoice)) {
 
             final IModel<List<Pair<String, String>>> enumChoices = new IModel<List<Pair<String,String>>>() {
 
-                private final I18NModel m = choices;
-
                 @Override
                 public List<Pair<String, String>> getObject() {
-                    final String lang = markupContainer.getLocale().getLanguage();
                     final List<Pair<String, String>> list = (List<Pair<String, String>>) CONVERSION_SERVICE.convert(
-                            choices.getValue(lang),
+                            langChoice,
                             TypeDescriptor.valueOf(String.class),
                             TypeDescriptor.valueOf(List.class)
                     );
