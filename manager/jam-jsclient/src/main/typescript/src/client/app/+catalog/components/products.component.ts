@@ -104,6 +104,16 @@ export class ProductsComponent implements OnInit, OnDestroy {
     return '';
   }
 
+
+  protected getFlags(row:ProductVO) {
+    let flags = '';
+    if (row.configurable) {
+      flags += '<i class="fa fa-gears"></i>&nbsp;';
+    }
+    return flags;
+  }
+
+
   private filterProducts() {
 
     LogUtil.debug('ProductsComponent filterProducts', this.filteredProducts);

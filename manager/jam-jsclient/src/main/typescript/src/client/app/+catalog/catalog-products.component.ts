@@ -100,7 +100,9 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
       metakeywords: null, displayMetakeywords: [],
       metadescription: null, displayMetadescriptions: [],
       sku: [],
-      associations: []
+      associations: [],
+      configurable: false,
+      configurationOptions: []
     };
   }
 

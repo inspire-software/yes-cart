@@ -321,7 +321,7 @@ public class DtoProductSkuServiceImpl
         ((ProductSkuService)getService()).removeAllInventory(sku);
         ((ProductSkuService)getService()).removeAllPrices(sku);
         ((ProductSkuService)getService()).removeAllWishLists(sku);
-        ((ProductSkuService)getService()).removeAllEnsembleOptions(sku);
+        ((ProductSkuService)getService()).removeAllOptions(sku);
 
         final List<Long> avIds = new ArrayList<>();
         for (final AttrValueProductSku av : sku.getAttributes()) {
@@ -387,6 +387,17 @@ public class DtoProductSkuServiceImpl
     @Override
     public void removeAllInventory(final long productId) {
         ((ProductSkuService) getService()).removeAllInventory(productId);
+
+    }
+
+    /**
+     * Remove from all warehouses.
+     *
+     * @param productId product pk value
+     */
+    @Override
+    public void removeAllOptions(final long productId) {
+        ((ProductSkuService) getService()).removeAllOptions(productId);
 
     }
 

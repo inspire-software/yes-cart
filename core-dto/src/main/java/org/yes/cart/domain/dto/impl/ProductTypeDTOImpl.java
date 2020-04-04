@@ -56,9 +56,6 @@ public class ProductTypeDTOImpl implements ProductTypeDTO {
     @DtoField(value = "service")
     private boolean service;
 
-    @DtoField(value = "ensemble")
-    private boolean ensemble;
-
     @DtoField(value = "shippable")
     private boolean shippable;
 
@@ -199,18 +196,6 @@ public class ProductTypeDTOImpl implements ProductTypeDTO {
 
     /** {@inheritDoc} */
     @Override
-    public boolean isEnsemble() {
-        return ensemble;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setEnsemble(final boolean ensemble) {
-        this.ensemble = ensemble;
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public boolean isShippable() {
         return shippable;
     }
@@ -230,7 +215,6 @@ public class ProductTypeDTOImpl implements ProductTypeDTO {
                 ", uitemplate='" + uitemplate + '\'' +
                 ", uisearchtemplate='" + uisearchtemplate + '\'' +
                 ", service=" + service +
-                ", ensemble=" + ensemble +
                 ", shippable=" + shippable +
                 ", downloadable=" + downloadable +
                 ", digital=" + digital +

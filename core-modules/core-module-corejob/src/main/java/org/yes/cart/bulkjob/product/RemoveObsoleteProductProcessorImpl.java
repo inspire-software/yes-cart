@@ -166,7 +166,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         productSkuService.removeAllInventory(sku);
         productSkuService.removeAllPrices(sku);
         productSkuService.removeAllWishLists(sku);
-        productSkuService.removeAllEnsembleOptions(sku);
+        productSkuService.removeAllOptions(sku);
 
         final List<Long> sAvIds = new ArrayList<>();
         for (final AttrValueProductSku av : sku.getAttributes()) {
@@ -195,6 +195,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
         }
 
         productCategoryService.removeByProductIds(productId);
+        productSkuService.removeAllOptions(productId);
 
         product = productService.findById(productId);
 

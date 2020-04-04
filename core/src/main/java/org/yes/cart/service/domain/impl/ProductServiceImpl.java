@@ -395,6 +395,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final Product prod = productDao.findById(productId); // query with
         if (prod != null && withAttribute) {
             Hibernate.initialize(prod.getAttributes());
+            Hibernate.initialize(prod.getOptions().getConfigurationOption());
         }
         return prod;
     }

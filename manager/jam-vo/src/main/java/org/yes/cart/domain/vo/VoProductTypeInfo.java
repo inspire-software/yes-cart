@@ -52,9 +52,6 @@ public class VoProductTypeInfo {
     @DtoField(value = "service")
     private boolean service;
 
-    @DtoField(value = "ensemble")
-    private boolean ensemble;
-
     @DtoField(value = "shippable")
     private boolean shippable;
 
@@ -126,14 +123,6 @@ public class VoProductTypeInfo {
 
     public void setService(final boolean service) {
         this.service = service;
-    }
-
-    public boolean isEnsemble() {
-        return ensemble;
-    }
-
-    public void setEnsemble(final boolean ensemble) {
-        this.ensemble = ensemble;
     }
 
     public boolean isShippable() {

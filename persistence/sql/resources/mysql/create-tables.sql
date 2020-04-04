@@ -542,18 +542,22 @@
         primary key (CUSTOMERWISHLIST_ID)
     ) ;
 
-    create table TENSEMBLEOPT (
-        ENSEMBLEOPT_ID bigint not null auto_increment,
+    create table TPRODUCTOPT (
+        PRODUCTOPT_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        QTY integer not null,
+        MANDATORY bit not null,
+        RANK integer,
+        QTY numeric(19,2) not null default 1,
         PRODUCT_ID bigint not null,
-        SKU_ID bigint not null,
+        CODE varchar(255) not null,
+        SKU_CODE varchar(255),
+        OPTION_SKU_CODES varchar(255),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
-        primary key (ENSEMBLEOPT_ID)
+        primary key (PRODUCTOPT_ID)
     );
 
     create table TETYPE (
@@ -686,6 +690,7 @@
         TAG varchar(255),
         BRAND_ID bigint not null,
         PRODUCTTYPE_ID bigint not null,
+        CONFIGURABLE bit,
         URI varchar(255) unique,
         TITLE varchar(255),
         METAKEYWORDS varchar(255),
@@ -771,7 +776,6 @@
         UITEMPLATE varchar(255),
         UISEARCHTEMPLATE varchar(255),
         SERVICE bit,
-        ENSEMBLE bit,
         SHIPPABLE bit,
         DIGITAL bit default 0,
         DOWNLOADABLE bit default 0,
@@ -1498,16 +1502,9 @@
         references TCUSTOMER (CUSTOMER_ID);
 
 
-    alter table TENSEMBLEOPT 
-        add index FK_END_SKU (SKU_ID), 
-        add constraint FK_END_SKU 
-        foreign key (SKU_ID) 
-        references TSKU (SKU_ID);
-
-
-    alter table TENSEMBLEOPT 
-        add index FK_ENS_PROD (PRODUCT_ID), 
-        add constraint FK_ENS_PROD 
+    alter table TPRODUCTOPT
+        add index FK_OPT_PROD (PRODUCT_ID),
+        add constraint FK_OPT_PROD
         foreign key (PRODUCT_ID) 
         references TPRODUCT (PRODUCT_ID);
 

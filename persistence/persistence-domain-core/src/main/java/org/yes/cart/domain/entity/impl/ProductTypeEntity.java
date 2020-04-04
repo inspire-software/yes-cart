@@ -45,7 +45,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     private String uitemplate;
     private String uisearchtemplate;
     private boolean service;
-    private boolean ensemble;
     private boolean shippable = true; // New types are shippable by default
     private boolean digital;
     private boolean downloadable;
@@ -148,16 +147,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
     @Override
     public void setService(final boolean service) {
         this.service = service;
-    }
-
-    @Override
-    public boolean isEnsemble() {
-        return this.ensemble;
-    }
-
-    @Override
-    public void setEnsemble(final boolean ensemble) {
-        this.ensemble = ensemble;
     }
 
     @Override

@@ -18,7 +18,7 @@
         <td title="{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.manufacturerCode}}</a>&nbsp;</td>
         <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a> <span [innerHTML]="getUri(row)"></span></td>
         <td title="{{ 'PRODUCT_BRAND' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.brand.name}}</a></td>
-        <td title="{{ 'PRODUCT_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productType.name}}</a></td>
+        <td title="{{ 'PRODUCT_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getFlags(row)"></span> {{row.productType.name}}</a></td>
         <td title="{{ 'PRODUCT_CATEGORIES' | translate }}">
           <a class="js-click" (click)="onSelectRow(row)">
             <span *ngFor="let category of row.productCategories">

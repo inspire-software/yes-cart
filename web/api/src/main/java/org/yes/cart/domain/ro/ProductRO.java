@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.domain.entity.AttrValueProduct;
+import org.yes.cart.domain.entity.ProductOption;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -81,8 +82,6 @@ public class ProductRO implements Serializable {
 
     @DtoField(value = "producttype.service", readOnly = true)
     private boolean service;
-    @DtoField(value = "producttype.ensemble", readOnly = true)
-    private boolean ensemble;
     @DtoField(value = "producttype.shippable", readOnly = true)
     private boolean shippable;
     @DtoField(value = "producttype.digital", readOnly = true)
@@ -132,8 +131,21 @@ public class ProductRO implements Serializable {
     )
     private Collection<AttrValueProductRO> attributes;
 
-    private List<ProductSkuRO> skus;
+    @DtoField(value = "options.configurable", readOnly = true)
+    private boolean configurable;
 
+    @DtoCollection(
+            value = "options.configurationOption",
+            dtoBeanKey = "org.yes.cart.domain.ro.ProductOptionRO",
+            entityGenericType = ProductOption.class,
+            entityCollectionClass = ArrayList.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = NoopMatcher.class,
+            readOnly = true
+    )
+    private Collection<ProductOptionRO> options;
+
+    private List<ProductSkuRO> skus;
 
     @XmlElement(name = "product-id")
     public long getProductId() {
@@ -242,13 +254,13 @@ public class ProductRO implements Serializable {
         this.service = service;
     }
 
-    @XmlAttribute(name = "type-ensemble")
-    public boolean isEnsemble() {
-        return ensemble;
+    @XmlAttribute(name = "type-configurable")
+    public boolean isConfigurable() {
+        return configurable;
     }
 
-    public void setEnsemble(final boolean ensemble) {
-        this.ensemble = ensemble;
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
     }
 
     @XmlAttribute(name = "type-shippable")
@@ -374,6 +386,16 @@ public class ProductRO implements Serializable {
 
     public void setAttributes(final Collection<AttrValueProductRO> attributes) {
         this.attributes = attributes;
+    }
+
+    @XmlElementWrapper(name = "product-options")
+    @XmlElement(name = "product-option")
+    public Collection<ProductOptionRO> getOptions() {
+        return options;
+    }
+
+    public void setOptions(final Collection<ProductOptionRO> options) {
+        this.options = options;
     }
 
     @XmlElement(name = "product-availability")

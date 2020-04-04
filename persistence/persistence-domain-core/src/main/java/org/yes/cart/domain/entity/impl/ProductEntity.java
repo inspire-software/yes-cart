@@ -56,10 +56,11 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private String tag;
     private Brand brand;
     private ProductType producttype;
+
     private Set<AttrValueProduct> attributes = new HashSet<>(0);
     private Set<ProductCategory> productCategory = new HashSet<>(0);
     private Collection<ProductSku> sku = new ArrayList<>(0);
-    private Set<ProductEnsembleOption> ensebleOption = new HashSet<>(0);
+    private ProductOptionsEntity optionsInternal = new ProductOptionsEntity();
     private Set<ProductAssociation> productAssociations = new HashSet<>(0);
     private SeoEntity seoInternal;
     private Instant createdTimestamp;
@@ -289,16 +290,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     @Override
-    public Set<ProductEnsembleOption> getEnsembleOption() {
-        return this.ensebleOption;
-    }
-
-    @Override
-    public void setEnsembleOption(final Set<ProductEnsembleOption> ensembleOption) {
-        this.ensebleOption = ensembleOption;
-    }
-
-    @Override
     public Set<ProductAssociation> getProductAssociations() {
         return this.productAssociations;
     }
@@ -306,6 +297,14 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @Override
     public void setProductAssociations(final Set<ProductAssociation> productAssociations) {
         this.productAssociations = productAssociations;
+    }
+
+    public ProductOptionsEntity getOptionsInternal() {
+        return optionsInternal;
+    }
+
+    public void setOptionsInternal(final ProductOptionsEntity optionsInternal) {
+        this.optionsInternal = optionsInternal;
     }
 
     public SeoEntity getSeoInternal() {
@@ -515,11 +514,22 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return sku.size() > 1;
     }
 
+
     @Override
-    public String toString() {
-        return this.getClass().getName() + this.getProductId();
+    public ProductOptions getOptions() {
+        ProductOptionsEntity options = getOptionsInternal();
+        if (options == null) {
+            options = new ProductOptionsEntity();
+            options.setProduct(this);
+            this.setOptionsInternal(options);
+        }
+        return options;
     }
 
+    @Override
+    public void setOptions(final ProductOptions options) {
+        this.setOptionsInternal((ProductOptionsEntity) options);
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -536,6 +546,12 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @Override
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
+    }
+
+
+    @Override
+    public String toString() {
+        return this.getClass().getName() + this.getProductId();
     }
 
 }

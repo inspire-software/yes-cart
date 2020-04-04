@@ -85,12 +85,6 @@
             <name>downloadable</name>
         </column-descriptor>
 
-        <column-descriptor>
-            <column-header>Ensemble</column-header>
-            <field-type>FIELD</field-type>
-            <name>ensemble</name>
-        </column-descriptor>
-
     </export-columns>
 
 </export-descriptor>

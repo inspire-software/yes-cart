@@ -566,6 +566,7 @@
             <xsd:element type="product-categoriesType" name="product-categories" minOccurs="0"/>
             <xsd:element type="product-skuType" name="product-sku" minOccurs="0"/>
             <xsd:element type="product-linksType" name="product-links" minOccurs="0"/>
+            <xsd:element type="product-optionsType" name="product-options" minOccurs="0"/>
             <xsd:element type="dateTimeType" name="created-timestamp" minOccurs="0"/>
             <xsd:element type="xsd:string" name="created-by" minOccurs="0"/>
             <xsd:element type="dateTimeType" name="updated-timestamp" minOccurs="0"/>
@@ -654,6 +655,60 @@
         <xsd:attribute type="xsd:string" name="product-code"/>
         <xsd:attribute type="collectionImportModeType" name="import-mode"/>
     </xsd:complexType>
+
+
+    <xsd:complexType name="product-optionsType">
+        <xsd:sequence>
+            <xsd:element type="product-optionType" name="product-option" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:boolean" name="configurable"/>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-optionType">
+        <xsd:sequence>
+            <xsd:element type="product-option-valuesType" name="product-option-values"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:boolean" name="mandatory" use="required"/>
+        <xsd:attribute type="xsd:decimal" name="quantity" use="required"/>
+        <xsd:attribute type="xsd:string" name="attribute" use="required"/>
+        <xsd:attribute type="xsd:int" name="rank"/>
+        <xsd:attribute type="xsd:string" name="sku"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-option-valuesType">
+        <xsd:sequence>
+            <xsd:element type="product-option-valueType" name="product-option-value" maxOccurs="unbounded" minOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-option-valueType">
+        <xsd:attribute type="xsd:string" name="sku" use="required"/>
+        <xsd:attribute type="entityImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
+
+
+    <xsd:element name="products-options" type="products-optionsCodeType"/>
+    <xsd:element name="product-options" type="product-optionsCodeType"/>
+
+    <xsd:complexType name="products-optionsCodeType">
+        <xsd:sequence>
+            <xsd:element type="product-optionsCodeType" name="product-options" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="product-optionsCodeType">
+        <xsd:sequence>
+            <xsd:element type="product-optionType" name="product-option" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="product-code"/>
+        <xsd:attribute type="xsd:boolean" name="configurable"/>
+        <xsd:attribute type="collectionImportModeType" name="import-mode"/>
+    </xsd:complexType>
+
 
     <!-- Price -->
 

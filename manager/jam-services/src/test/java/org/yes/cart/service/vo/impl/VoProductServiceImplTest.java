@@ -238,4 +238,15 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+    @Test
+    public void testProductOptions() throws Exception {
+
+        final VoProduct productWithOptions = voProductService.getProductById(15500L);
+
+        assertNotNull(productWithOptions);
+        assertTrue(productWithOptions.isConfigurable());
+        assertNotNull(productWithOptions.getConfigurationOptions());
+        assertEquals(2, productWithOptions.getConfigurationOptions().size());
+
+    }
 }

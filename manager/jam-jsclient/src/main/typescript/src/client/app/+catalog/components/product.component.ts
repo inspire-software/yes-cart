@@ -147,6 +147,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       'tag': ['', YcValidators.nonBlankTrimmed],
       'brandName': ['', YcValidators.requiredNonBlankTrimmed],
       'productTypeName': ['', YcValidators.requiredNonBlankTrimmed],
+      'configurable': [''],
       'description': [''],
       'uri': ['', validUri],
       'uitemplate': [''],

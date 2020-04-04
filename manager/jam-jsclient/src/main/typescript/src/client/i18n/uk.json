@@ -416,6 +416,7 @@
   "PRODUCT_TAG": "Теги",
   "PRODUCT_TEMPLATE": "Шаблон",
   "PRODUCT_SEARCH_TEMPLATE": "Шаблон пошуку",
+  "PRODUCT_CONFIGURABLE": "Збірний",
 
   "PRODUCT_TAB_AVAILABILITY": "Доступність",
   "PRODUCT_TAB_CATALOG": "Каталог",
@@ -477,7 +478,6 @@
   "PRODUCT_TYPE_UISEARCHTEMPLATE": "Шаблон категорії",
   "PRODUCT_TYPE_FLAGS": "Конфігурація",
   "PRODUCT_TYPE_FLAG_SERVICE": "Послуги",
-  "PRODUCT_TYPE_FLAG_ENSEMBLE": "Збірний",
   "PRODUCT_TYPE_FLAG_SHIPPABLE": "Доставляється",
   "PRODUCT_TYPE_FLAG_DOWNLOADABLE": "Завантажуваний",
   "PRODUCT_TYPE_FLAG_DIGITAL": "Цифровий",

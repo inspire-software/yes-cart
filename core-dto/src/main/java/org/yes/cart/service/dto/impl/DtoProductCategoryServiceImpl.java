@@ -121,32 +121,8 @@ public class DtoProductCategoryServiceImpl
 
     /** {@inheritDoc} */
     @Override
-    public void removeByCategoryProductIds(final long categoryId, final long productId) {
-        ((ProductCategoryService)service).removeByCategoryProductIds(categoryId, productId);
-    }
-
-    /**
-     * Check is product already assigned to category
-     *
-     * @param categoryId given category id
-     * @param productId  given product id
-     */
-    @Override
-    public boolean isAssignedCategoryProductIds(final long categoryId, final long productId) {
-        return  (((ProductCategoryService)service).findByCategoryIdProductId(categoryId, productId) != null)  ;
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public void removeByProductIds(final long productId) {
         ((ProductCategoryService)service).removeByProductIds(productId);
-
-    }
-
-    /** {@inheritDoc}*/
-    @Override
-    public int getNextRank(final long categoryId) {
-        return ((ProductCategoryService)service).getNextRank(categoryId);
 
     }
 

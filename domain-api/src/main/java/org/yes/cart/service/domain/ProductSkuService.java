@@ -99,6 +99,13 @@ public interface ProductSkuService extends GenericService<ProductSku> {
     void removeAllInventory(long productId);
 
     /**
+     * Remove all product options.
+     *
+     * @param productId product pk value
+     */
+    void removeAllOptions(long productId);
+
+    /**
      * Remove all prices for given sku.
      *
      * @param sku  given sku.
@@ -120,11 +127,11 @@ public interface ProductSkuService extends GenericService<ProductSku> {
     void removeAllWishLists(final ProductSku sku);
 
     /**
-     * Remove all items for ensemble options for given sku
+     * Remove all items options for given sku
      *
      * @param sku  given sku.
      */
-    void removeAllEnsembleOptions(final ProductSku sku);
+    void removeAllOptions(final ProductSku sku);
 
 
     /**

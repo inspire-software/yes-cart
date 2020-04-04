@@ -40,7 +40,7 @@ public class ProductAssociationSkuCodeToNameConverter implements ValueConverter 
     @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
         final String skuCode = ((ProductAssociation) object).getAssociatedSku();
-        return getName(skuCode, "PRODUCT.NAME.BY.CODE");
+        return getName(skuCode, "SKU.NAME.BY.CODE");
     }
 
     protected String getName(final String skuCode, final String query) {

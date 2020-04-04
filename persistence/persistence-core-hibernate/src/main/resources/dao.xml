@@ -116,8 +116,9 @@
                 <entry key="org.yes.cart.domain.entity.ProdTypeAttributeViewGroup" value="org.yes.cart.domain.entity.impl.ProdTypeAttributeViewGroupEntity"/>
                 <entry key="org.yes.cart.domain.entity.Product" value="org.yes.cart.domain.entity.impl.ProductEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductAssociation" value="org.yes.cart.domain.entity.impl.ProductAssociationEntity"/>
+                <entry key="org.yes.cart.domain.entity.ProductOption" value="org.yes.cart.domain.entity.impl.ProductOptionEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductCategory" value="org.yes.cart.domain.entity.impl.ProductCategoryEntity"/>
-                <entry key="org.yes.cart.domain.entity.ProductEnsembleOption" value="org.yes.cart.domain.entity.impl.ProductEnsembleOptionEntity"/>
+                <entry key="org.yes.cart.domain.entity.ProductOption" value="org.yes.cart.domain.entity.impl.ProductOptionEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductSku" value="org.yes.cart.domain.entity.impl.ProductSkuEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductType" value="org.yes.cart.domain.entity.impl.ProductTypeEntity"/>
                 <entry key="org.yes.cart.domain.entity.ProductTypeAttr" value="org.yes.cart.domain.entity.impl.ProductTypeAttrEntity"/>
@@ -385,6 +386,12 @@
 
     <bean id="productAssociationDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductAssociationEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="productOptionDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductOptionEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

@@ -45,7 +45,6 @@ export interface ProductTypeInfoVO {
   uisearchtemplate : string;
 
   service : boolean;
-  ensemble : boolean;
   shippable : boolean;
   downloadable : boolean;
   digital : boolean;

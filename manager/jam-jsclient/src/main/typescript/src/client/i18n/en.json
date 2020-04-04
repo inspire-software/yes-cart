@@ -416,6 +416,7 @@
   "PRODUCT_TAG": "Tags",
   "PRODUCT_TEMPLATE": "Template",
   "PRODUCT_SEARCH_TEMPLATE": "Search template",
+  "PRODUCT_CONFIGURABLE": "Configurable",
 
   "PRODUCT_TAB_AVAILABILITY": "Availability",
   "PRODUCT_TAB_CATALOG": "Catalog",
@@ -477,7 +478,6 @@
   "PRODUCT_TYPE_UISEARCHTEMPLATE": "Category template",
   "PRODUCT_TYPE_FLAGS": "Configurations",
   "PRODUCT_TYPE_FLAG_SERVICE": "Services",
-  "PRODUCT_TYPE_FLAG_ENSEMBLE": "Collection",
   "PRODUCT_TYPE_FLAG_SHIPPABLE": "Shippable",
   "PRODUCT_TYPE_FLAG_DOWNLOADABLE": "Downloadable",
   "PRODUCT_TYPE_FLAG_DIGITAL": "Digital",

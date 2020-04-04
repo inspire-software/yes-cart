@@ -525,6 +525,7 @@ public class DtoProductServiceImpl
         dtoProductCategoryService.removeByProductIds(id);
         getDtoProductSkuService().removeAllInventory(id);
         getDtoProductSkuService().removeAllPrices(id);
+        getDtoProductSkuService().removeAllOptions(id);
 
         Product product = getService().findById(id);
 

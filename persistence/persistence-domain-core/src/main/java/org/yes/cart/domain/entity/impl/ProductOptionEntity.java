@@ -17,45 +17,60 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductEnsembleOption;
-import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.ProductOption;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.io.Serializable {
+public class ProductOptionEntity implements ProductOption, java.io.Serializable {
 
-    private long ensembleOptId;
+    private long productoptionId;
     private long version;
 
-    private int qty;
+    private BigDecimal quantity = BigDecimal.ONE;
+    private boolean mandatory;
     private Product product;
-    private ProductSku sku;
+    private String skuCode;
+    private int rank;
+    private String attributeCode;
+    private String optionSkuCodesInternal;
     private Instant createdTimestamp;
     private Instant updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
 
-    public ProductEnsembleOptionEntity() {
-    }
-
-
-
-
-    @Override
-    public int getQty() {
-        return this.qty;
+    public ProductOptionEntity() {
     }
 
     @Override
-    public void setQty(final int qty) {
-        this.qty = qty;
+    public boolean isMandatory() {
+        return mandatory;
+    }
+
+    @Override
+    public void setMandatory(final boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
+    @Override
+    public BigDecimal getQuantity() {
+        return this.quantity;
+    }
+
+    @Override
+    public void setQuantity(final BigDecimal quantity) {
+        this.quantity = quantity;
     }
 
     @Override
@@ -69,13 +84,55 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public ProductSku getSku() {
-        return this.sku;
+    public String getSkuCode() {
+        return this.skuCode;
     }
 
     @Override
-    public void setSku(final ProductSku sku) {
-        this.sku = sku;
+    public void setSkuCode(final String skuCode) {
+        this.skuCode = skuCode;
+    }
+
+    @Override
+    public int getRank() {
+        return rank;
+    }
+
+    @Override
+    public void setRank(final int rank) {
+        this.rank = rank;
+    }
+
+    @Override
+    public String getAttributeCode() {
+        return attributeCode;
+    }
+
+    @Override
+    public void setAttributeCode(final String attributeCode) {
+        this.attributeCode = attributeCode;
+    }
+
+    @Override
+    public List<String> getOptionSkuCodes() {
+        return optionSkuCodesInternal != null ? Arrays.asList(StringUtils.split(optionSkuCodesInternal, ',')) : Collections.emptyList();
+    }
+
+    @Override
+    public void setOptionSkuCodes(final List<String> skus) {
+        if (skus == null || skus.isEmpty()) {
+            this.optionSkuCodesInternal = null;
+        } else {
+            this.optionSkuCodesInternal = StringUtils.join(skus, ',');
+        }
+    }
+
+    public String getOptionSkuCodesInternal() {
+        return optionSkuCodesInternal;
+    }
+
+    public void setOptionSkuCodesInternal(final String optionSkuCodesInternal) {
+        this.optionSkuCodesInternal = optionSkuCodesInternal;
     }
 
     @Override
@@ -129,18 +186,18 @@ public class ProductEnsembleOptionEntity implements ProductEnsembleOption, java.
     }
 
     @Override
-    public long getEnsembleOptId() {
-        return this.ensembleOptId;
+    public long getProductoptionId() {
+        return this.productoptionId;
     }
 
     @Override
     public long getId() {
-        return this.ensembleOptId;
+        return this.productoptionId;
     }
 
     @Override
-    public void setEnsembleOptId(final long ensembleOptId) {
-        this.ensembleOptId = ensembleOptId;
+    public void setProductoptionId(final long productoptionId) {
+        this.productoptionId = productoptionId;
     }
 
     @Override

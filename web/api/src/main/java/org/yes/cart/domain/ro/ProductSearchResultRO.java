@@ -76,7 +76,7 @@ public class ProductSearchResultRO implements Serializable {
     @DtoField(readOnly = true)
     private boolean service;
     @DtoField(readOnly = true)
-    private boolean ensemble;
+    private boolean configurable;
     @DtoField(readOnly = true)
     private boolean shippable;
     @DtoField(readOnly = true)
@@ -307,13 +307,13 @@ public class ProductSearchResultRO implements Serializable {
         this.service = service;
     }
 
-    @XmlAttribute(name = "type-ensemble")
-    public boolean isEnsemble() {
-        return ensemble;
+    @XmlAttribute(name = "type-configurable")
+    public boolean isConfigurable() {
+        return configurable;
     }
 
-    public void setEnsemble(final boolean ensemble) {
-        this.ensemble = ensemble;
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
     }
 
     @XmlAttribute(name = "type-shippable")

@@ -501,6 +501,20 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
             System.out.println(String.format("%5d", change) + " product associations in " + prodsLinks2 + "millis (~" + (prodsLinks2 / change) + " per item)");
 
 
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/xml/productsoptions.xml", listener, importedFilesSet));
+            final long prodsOptions2 = System.currentTimeMillis() - dt;
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTOPT where PRODUCT_ID = " + prodId);
+            rs.next();
+            long cntProductOptions2 = rs.getLong(1);
+            rs.close();
+            assertEquals(2, cntProductOptions2);
+
+            change = 2;
+            System.out.println(String.format("%5d", change) + " product options in " + prodsOptions2 + "millis (~" + (prodsOptions2 / change) + " per item)");
+
+
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TSKUWAREHOUSE  ");
             rs.next();
             long cntBeforeInventory = rs.getLong(1);

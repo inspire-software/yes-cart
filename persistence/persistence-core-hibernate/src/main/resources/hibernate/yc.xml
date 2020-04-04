@@ -892,12 +892,6 @@
                 </comment>
             </column>
         </property>
-        <property name="ensemble" type="boolean">
-            <column name="ENSEMBLE">
-                <comment>is this a bundle of products ?
-                </comment>
-            </column>
-        </property>
         <property name="shippable" type="boolean">
             <column name="SHIPPABLE">
                 <comment>is this a physical product ? must have weight and sizes in attributes if yes
@@ -1210,20 +1204,31 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ProductSkuEntity"/>
         </bag>
 
-
-        <set name="ensembleOption" inverse="false" lazy="true" cascade="all">
-            <key>
-                <column name="PRODUCT_ID" not-null="false"/>
-            </key>
-            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ProductEnsembleOptionEntity"/>
-        </set>
-
         <set name="productAssociations" inverse="false" lazy="true" cascade="all">
             <key>
                 <column name="PRODUCT_ID" not-null="false"/>
             </key>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ProductAssociationEntity"/>
         </set>
+
+        <component name="optionsInternal" class="org.yes.cart.domain.entity.impl.ProductOptionsEntity">
+
+            <parent name="product"/>
+
+            <property name="configurable" type="boolean">
+                <column name="CONFIGURABLE">
+                    <comment>can this product have configuration options ?
+                    </comment>
+                </column>
+            </property>
+
+            <set name="configurationOptionInternal" inverse="false" lazy="true" cascade="all">
+                <key>
+                    <column name="PRODUCT_ID" not-null="false"/>
+                </key>
+                <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ProductOptionEntity"/>
+            </set>
+        </component>
 
         <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
             <property name="uri" type="string" column="URI" length="255" not-null="false" unique-key="PRODUCT_URI"/>
@@ -1242,9 +1247,9 @@
         <property name="guid" column="GUID" type="string" length="36" unique-key="PRODUCT_GUID" not-null="true"/>
     </class>
 
-    <class name="org.yes.cart.domain.entity.impl.ProductEnsembleOptionEntity" table="TENSEMBLEOPT">
-        <comment>Ensemble options - how many particular sku in ensemble</comment>
-        <id name="ensembleOptId" column="ENSEMBLEOPT_ID" type="long">
+    <class name="org.yes.cart.domain.entity.impl.ProductOptionEntity" table="TPRODUCTOPT">
+        <comment>Configuration options - additional options</comment>
+        <id name="productoptionId" column="PRODUCTOPT_ID" type="long">
             <generator class="native">
                 <param name="table">HIBERNATE_UNIQUE_KEYS</param>
                 <param name="column">value</param>
@@ -1252,19 +1257,37 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="qty" column="QTY" type="int" not-null="true"/>
-        <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" foreign-key="FK_ENS_PROD">
+        <property name="rank" type="int" not-null="false">
+            <column name="RANK">
+                <comment>
+                    RANK defines order of option selection priority (used by UI)
+                </comment>
+            </column>
+        </property>
+
+        <property name="mandatory" length="1" type="boolean" not-null="true">
+            <column name="MANDATORY" length="1" not-null="true">
+                <comment>An option must be selected if mandatory flag is true</comment>
+            </column>
+        </property>
+
+        <property name="quantity" column="QTY" type="java.math.BigDecimal" not-null="true"/>
+
+        <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" foreign-key="FK_OPT_PROD" lazy="false">
             <column name="PRODUCT_ID" not-null="true"/>
         </many-to-one>
-        <many-to-one name="sku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity" foreign-key="FK_END_SKU">
-            <column name="SKU_ID" not-null="true"/>
-        </many-to-one>
+
+        <property name="attributeCode" column="CODE" type="string" length="255" not-null="true"/>
+
+        <property name="skuCode" column="SKU_CODE" type="string" length="255"/>
+
+        <property name="optionSkuCodesInternal" column="OPTION_SKU_CODES" type="string" length="255" not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="java.time.Instant" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-        <property name="guid" column="GUID" type="string" length="36" unique-key="ENSEMBLE_GUID" not-null="true"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="PRODOPTS_GUID" not-null="true"/>
 
     </class>
 
@@ -2752,7 +2775,7 @@
 
     <query name="SHOP.BY.NAME.AND.MASTER.ID">
         <![CDATA[
-       select o from ShopEntity o fetch all properties  where o.name = ?1 and o.master.shopId = ?2
+       select o from ShopEntity o fetch all properties  where (o.name = ?1 or o.code = ?1) and o.master.shopId = ?2
        ]]>
     </query>
 
@@ -3814,6 +3837,12 @@
         ]]>
     </query>
 
+    <query name="CUSTOMER.BY.EMAIL.SHOP.INCLUDE.DISABLED">
+        <![CDATA[
+            select cse.customer from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2)
+        ]]>
+    </query>
+
     <query name="EMAIL.CHECK">
         <![CDATA[
             select count(customerShopId) from CustomerShopEntity cse where lower(cse.customer.email) = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2)
@@ -3964,9 +3993,15 @@
         ]]>
     </query>
 
-    <query name="REMOVE.ALL.ENSEMBLEOPTS.BY.SKUID">
+    <query name="REMOVE.ALL.CONFIGOPTS.BY.PRODUCTID">
         <![CDATA[
-            delete from ProductEnsembleOptionEntity  eo   where eo.sku.skuId  = ?1
+            delete from ProductOptionEntity  eo   where eo.product.productId = ?1
+        ]]>
+    </query>
+
+    <query name="REMOVE.ALL.CONFIGOPTS.BY.PRODUCTID.AND.SKU">
+        <![CDATA[
+            delete from ProductOptionEntity  eo   where eo.product.productId = ?1 and eo.skuCode  = ?2
         ]]>
     </query>
 

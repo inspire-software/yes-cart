@@ -29,6 +29,7 @@
                 <entry key="VoBrand"                        value="org.yes.cart.domain.vo.VoBrand"/>
                 <entry key="VoProductTypeInfo"              value="org.yes.cart.domain.vo.VoProductTypeInfo"/>
                 <entry key="VoProductCategory"              value="org.yes.cart.domain.vo.VoProductCategory"/>
+                <entry key="VoProductOption"                value="org.yes.cart.domain.vo.VoProductOption"/>
                 <entry key="VoProductSku"                   value="org.yes.cart.domain.vo.VoProductSku"/>
                 <entry key="VoFulfilmentCentreShopLink"     value="org.yes.cart.domain.vo.VoFulfilmentCentreShopLink"/>
                 <entry key="VoCarrierShopLink"              value="org.yes.cart.domain.vo.VoCarrierShopLink"/>
@@ -49,6 +50,7 @@
                 <entry key="DisplayValues"                      value-ref="voDisplayValues"/>
                 <entry key="DisplayValuesI18n"                  value-ref="voDisplayValuesI18n"/>
                 <entry key="MapToListPairs"                     value-ref="voMapToListPairs"/>
+                <entry key="ListPairsToListMPairs"              value-ref="voListPairsToListMPairs"/>
                 <entry key="CSVToList"                          value-ref="voCSVToList"/>
                 <entry key="CSVToListDatesPairs"                value-ref="voCSVToListDatesPairs"/>
                 <entry key="CustomValuesList"                   value-ref="voCustomValuesList"/>
@@ -75,6 +77,7 @@
     <bean id="voDisplayValuesI18n"                  class="org.yes.cart.domain.vo.converter.DisplayValueI18nToListMutablePairConverter"/>
     <bean id="voDisplayValue"                       class="org.yes.cart.domain.vo.converter.DisplayValueToListMutablePairConverter"/>
     <bean id="voMapToListPairs"                     class="org.yes.cart.domain.vo.converter.MapToMutablePairListConverter"/>
+    <bean id="voListPairsToListMPairs"              class="org.yes.cart.domain.vo.converter.PairListToMutablePairListConverter"/>
     <bean id="voCSVToList"                          class="org.yes.cart.domain.vo.converter.CSVToListConverter"/>
     <bean id="voCSVToListDatesPairs"                class="org.yes.cart.domain.vo.converter.CSVToListDatesPairsConverter"/>
     <bean id="voCustomValuesList"                   class="org.yes.cart.domain.vo.converter.CustomValuesListConverter">

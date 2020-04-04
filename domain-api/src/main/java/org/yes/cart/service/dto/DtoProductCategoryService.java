@@ -26,35 +26,10 @@ import org.yes.cart.domain.dto.ProductCategoryDTO;
 public interface DtoProductCategoryService extends GenericDTOService<ProductCategoryDTO> {
 
     /**
-     * Delete product from given category
-     *
-     * @param categoryId given category id
-     * @param productId  given product id
-     */
-    void removeByCategoryProductIds(long categoryId, long productId);
-
-    /**
-     * Check is product already assigned to category
-     *
-     * @param categoryId given category id
-     * @param productId  given product id
-     */
-    boolean isAssignedCategoryProductIds(long categoryId, long productId);
-
-    /**
      * Unlink product from all categories.
      *
      * @param productId  given product id
      */
     void removeByProductIds(long productId);
 
-
-    /**
-     * Get the next rank for product during product assignment.
-     * Default step is 50.
-     *
-     * @param categoryId category id
-     * @return rank.
-     */
-    int getNextRank(long categoryId);
 }

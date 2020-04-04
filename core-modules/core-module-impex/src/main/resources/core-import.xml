@@ -256,6 +256,11 @@
                                 <property name="associationService" ref="associationService"/>
                             </bean>
                         </property>
+                        <property name="productOptionsCodeXmlEntityImportHandler">
+                            <bean class="org.yes.cart.bulkimport.xml.impl.ProductOptionsXmlEntityHandler">
+                                <property name="productService" ref="productService"/>
+                            </bean>
+                        </property>
                     </bean>
                 </entry>
                 <entry key="PRODUCT_CATEGORIES">
@@ -270,6 +275,11 @@
                         <property name="productService" ref="productService"/>
                         <property name="productAssociationService" ref="productAssociationService"/>
                         <property name="associationService" ref="associationService"/>
+                    </bean>
+                </entry>
+                <entry key="PRODUCT_OPTIONS">
+                    <bean class="org.yes.cart.bulkimport.xml.impl.ProductOptionsXmlEntityHandler">
+                        <property name="productService" ref="productService"/>
                     </bean>
                 </entry>
                 <entry key="SYSTEM">

@@ -106,6 +106,23 @@ export interface ProductAssociationVO {
 
 }
 
+export interface ProductOptionVO {
+
+  productoptionId : number;
+
+  productId : number;
+
+  rank : number;
+
+  quantity : number;
+  mandatory : boolean;
+  skuCode : string;
+
+  attributeCode : string;
+  optionSkuCodes : Pair<string, string>[];
+
+}
+
 export interface ProductVO {
 
   productId : number;
@@ -143,6 +160,9 @@ export interface ProductVO {
   displayMetadescriptions : Pair<string, string>[];
 
   sku : ProductSkuVO[];
+
+  configurable : boolean;
+  configurationOptions: ProductOptionVO[];
 
 }
 

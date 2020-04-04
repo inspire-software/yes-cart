@@ -16,13 +16,11 @@
 
 package org.yes.cart.bulkexport.xml.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductAssociation;
-import org.yes.cart.domain.entity.ProductCategory;
-import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.async.JobStatusListener;
 
 import java.io.OutputStreamWriter;
@@ -122,6 +120,33 @@ public class ProductXmlEntityHandler extends AbstractXmlEntityHandler<Product> {
         }
 
         assocTag.end();
+
+        final Tag optionsTag = tag.tag("product-options").attr("configurable", product.getOptions().isConfigurable());
+
+        for (final ProductOption po : product.getOptions().getConfigurationOption()) {
+
+            if (CollectionUtils.isNotEmpty(po.getOptionSkuCodes())) {
+
+                final Tag spo = optionsTag.tag("product-option")
+                        .attr("mandatory", po.isMandatory())
+                        .attr("quantity", po.getQuantity())
+                        .attr("rank", po.getRank())
+                        .attr("sku", po.getSkuCode())
+                        .attr("attribute", po.getAttributeCode());
+
+                final Tag spov = spo.tag("product-option-values");
+
+                for (final String pov : po.getOptionSkuCodes()) {
+                    spov.tag("product-option-value").attr("sku", pov).end();
+                }
+
+                spov.end();
+                spo.end();
+            }
+
+        }
+
+        optionsTag.end();
 
         return tag
                 .tagTime(product)

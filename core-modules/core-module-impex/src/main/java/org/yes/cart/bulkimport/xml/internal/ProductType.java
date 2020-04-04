@@ -70,6 +70,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;element name="product-categories" type="{}product-categoriesType" minOccurs="0"/>
  *         &lt;element name="product-sku" type="{}product-skuType" minOccurs="0"/>
  *         &lt;element name="product-links" type="{}product-linksType" minOccurs="0"/>
+ *         &lt;element name="product-options" type="{}product-optionsType" minOccurs="0"/>
  *         &lt;element name="created-timestamp" type="{}dateTimeType" minOccurs="0"/>
  *         &lt;element name="created-by" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="updated-timestamp" type="{}dateTimeType" minOccurs="0"/>
@@ -102,6 +103,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "productCategories",
     "productSku",
     "productLinks",
+    "productOptions",
     "createdTimestamp",
     "createdBy",
     "updatedTimestamp",
@@ -134,6 +136,8 @@ public class ProductType {
     protected ProductSkuType productSku;
     @XmlElement(name = "product-links")
     protected ProductLinksType productLinks;
+    @XmlElement(name = "product-options")
+    protected ProductOptionsType productOptions;
     @XmlElement(name = "created-timestamp")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "token")
@@ -489,6 +493,30 @@ public class ProductType {
      */
     public void setProductLinks(ProductLinksType value) {
         this.productLinks = value;
+    }
+
+    /**
+     * Gets the value of the productOptions property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ProductOptionsType }
+     *     
+     */
+    public ProductOptionsType getProductOptions() {
+        return productOptions;
+    }
+
+    /**
+     * Sets the value of the productOptions property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ProductOptionsType }
+     *     
+     */
+    public void setProductOptions(ProductOptionsType value) {
+        this.productOptions = value;
     }
 
     /**

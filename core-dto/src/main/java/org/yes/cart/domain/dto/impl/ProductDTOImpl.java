@@ -24,6 +24,7 @@ import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.ProductCategory;
+import org.yes.cart.domain.entity.ProductOption;
 import org.yes.cart.domain.entity.ProductSku;
 
 import java.time.Instant;
@@ -152,6 +153,20 @@ public class ProductDTOImpl implements ProductDTO {
             readOnly = true
     )
     private List<ProductSkuDTO> sku;
+
+    @DtoField(value = "options.configurable")
+    private boolean configurable;
+
+    @DtoCollection(
+            value = "options.configurationOption",
+            dtoBeanKey = "org.yes.cart.domain.dto.ProductOptionDTO",
+            entityGenericType = ProductOption.class,
+            entityCollectionClass = HashSet.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
+            readOnly = true
+    )
+    private List<ProductOptionDTO> configurationOptions;
 
     /**
      * {@inheritDoc}
@@ -444,6 +459,38 @@ public class ProductDTOImpl implements ProductDTO {
     @Override
     public void setAttributes(final Collection<AttrValueProductDTO> attributes) {
         this.attributes = attributes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ProductOptionDTO> getConfigurationOptions() {
+        return configurationOptions;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setConfigurationOptions(final List<ProductOptionDTO> configurationOptions) {
+        this.configurationOptions = configurationOptions;
     }
 
     /**

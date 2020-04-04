@@ -32,14 +32,6 @@ import java.util.Map;
 public interface ProductSearchResultDTO extends Identifiable {
 
     /**
-     * Get product id.
-     *
-     * @return product id.
-     */
-    @Override
-    long getId();
-
-    /**
      * Get product code.
      * @return product code.
      */
@@ -238,11 +230,11 @@ public interface ProductSearchResultDTO extends Identifiable {
     boolean isService();
 
     /**
-     * Is this product type ensemble.
+     * Is this product configurable.
      *
-     * @return true if ensemble
+     * @return true if configurable
      */
-    boolean isEnsemble();
+    boolean isConfigurable();
 
     /**
      * Is this product type can be shipped

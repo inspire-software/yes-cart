@@ -125,20 +125,6 @@ public interface ProductType extends Auditable {
     void setService(boolean service);
 
     /**
-     * Is this product type ensemble.
-     *
-     * @return true if ensemble
-     */
-    boolean isEnsemble();
-
-    /**
-     * Set product type to ensemble
-     *
-     * @param ensemble true is ensemble
-     */
-    void setEnsemble(boolean ensemble);
-
-    /**
      * Is this product type can be shipped
      *
      * @return true if product shippable

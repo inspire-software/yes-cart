@@ -18,9 +18,7 @@ package org.yes.cart.domain.entity;
 
 import org.yes.cart.domain.i18n.I18NModel;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -195,7 +193,6 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      */
     void setProducttype(ProductType producttype);
 
-
     /**
      * Product's SKUs. SKU - Stock keeping unit or product variation. Each product has at least one sku.
      *
@@ -241,18 +238,18 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
     void setProductCategory(Set<ProductCategory> productCategory);
 
     /**
-     * Get {@link ProductEnsembleOption} for product if it has ensemble flag
+     * Get {@link ProductOptions} for product if it has configurable flag
      *
-     * @return Set of {@link ProductEnsembleOption} for product.
+     * @return Set of {@link ProductOptions} for product.
      */
-    Set<ProductEnsembleOption> getEnsembleOption();
+    ProductOptions getOptions();
 
     /**
-     * Set {@link ProductEnsembleOption} for product.
+     * Set {@link ProductOption} for product.
      *
-     * @param ensembleOption {@link ProductEnsembleOption} for product
+     * @param options {@link ProductOption} for product
      */
-    void setEnsembleOption(Set<ProductEnsembleOption> ensembleOption);
+    void setOptions(ProductOptions options);
 
     /**
      * Set the product {@link ProductAssociation}, like up-sell, cross-sell, etc..

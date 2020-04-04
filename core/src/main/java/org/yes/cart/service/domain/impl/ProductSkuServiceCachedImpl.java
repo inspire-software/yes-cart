@@ -153,8 +153,17 @@ public class ProductSkuServiceCachedImpl implements ProductSkuService {
      * {@inheritDoc}
      */
     @Override
-    public void removeAllEnsembleOptions(final ProductSku sku) {
-        productSkuService.removeAllEnsembleOptions(sku);
+    public void removeAllOptions(final long productId) {
+        productSkuService.removeAllOptions(productId);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeAllOptions(final ProductSku sku) {
+        productSkuService.removeAllOptions(sku);
     }
 
     /**

@@ -20,9 +20,7 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -379,6 +377,36 @@ public interface ProductDTO extends Identifiable, Guidable {
      * @param attribute list of attributes
      */
     void setAttributes(Collection<AttrValueProductDTO> attribute);
+
+
+    /**
+     * Is this product type configurable.
+     *
+     * @return true if configurable
+     */
+    boolean isConfigurable();
+
+    /**
+     * Set product type to configurable
+     *
+     * @param configurable true if configurable
+     */
+    void setConfigurable(boolean configurable);
+
+    /**
+     * Get {@link ProductOptionDTO} for product if it has configurable flag
+     *
+     * @return Set of {@link ProductOptionDTO} for product.
+     */
+    List<ProductOptionDTO> getConfigurationOptions();
+
+    /**
+     * Set {@link ProductOptionDTO} for product.
+     *
+     * @param configurationOptions {@link ProductOptionDTO} for product
+     */
+    void setConfigurationOptions(List<ProductOptionDTO> configurationOptions);
+
 
     /**
      * Get product tags.

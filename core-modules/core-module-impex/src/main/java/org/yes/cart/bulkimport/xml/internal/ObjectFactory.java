@@ -35,6 +35,7 @@ public class ObjectFactory {
     private final static QName _ShippingMethods_QNAME = new QName("", "shipping-methods");
     private final static QName _ShopsFulfilmentCentres_QNAME = new QName("", "shops-fulfilment-centres");
     private final static QName _DataGroup_QNAME = new QName("", "data-group");
+    private final static QName _ProductsOptions_QNAME = new QName("", "products-options");
     private final static QName _Price_QNAME = new QName("", "price");
     private final static QName _CustomerOrder_QNAME = new QName("", "customer-order");
     private final static QName _PaymentGatewayCallback_QNAME = new QName("", "payment-gateway-callback");
@@ -56,6 +57,7 @@ public class ObjectFactory {
     private final static QName _ShopAliases_QNAME = new QName("", "shop-aliases");
     private final static QName _ProductLinks_QNAME = new QName("", "product-links");
     private final static QName _Shops_QNAME = new QName("", "shops");
+    private final static QName _ProductOptions_QNAME = new QName("", "product-options");
     private final static QName _ProductTypes_QNAME = new QName("", "product-types");
     private final static QName _PaymentGatewayParameter_QNAME = new QName("", "payment-gateway-parameter");
     private final static QName _Skus_QNAME = new QName("", "skus");
@@ -271,6 +273,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductsOptionsCodeType }
+     * 
+     */
+    public ProductsOptionsCodeType createProductsOptionsCodeType() {
+        return new ProductsOptionsCodeType();
+    }
+
+    /**
      * Create an instance of {@link CustomerOrderType }
      * 
      */
@@ -412,6 +422,14 @@ public class ObjectFactory {
      */
     public ShopsType createShopsType() {
         return new ShopsType();
+    }
+
+    /**
+     * Create an instance of {@link ProductOptionsCodeType }
+     * 
+     */
+    public ProductOptionsCodeType createProductOptionsCodeType() {
+        return new ProductOptionsCodeType();
     }
 
     /**
@@ -839,6 +857,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductOptionValueType }
+     * 
+     */
+    public ProductOptionValueType createProductOptionValueType() {
+        return new ProductOptionValueType();
+    }
+
+    /**
      * Create an instance of {@link OrderDeliveryShippingCostType }
      * 
      */
@@ -951,6 +977,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductOptionsType }
+     * 
+     */
+    public ProductOptionsType createProductOptionsType() {
+        return new ProductOptionsType();
+    }
+
+    /**
      * Create an instance of {@link DeliveryItemFulfilmentType }
      * 
      */
@@ -996,6 +1030,14 @@ public class ObjectFactory {
      */
     public OrderItemType createOrderItemType() {
         return new OrderItemType();
+    }
+
+    /**
+     * Create an instance of {@link ProductOptionValuesType }
+     * 
+     */
+    public ProductOptionValuesType createProductOptionValuesType() {
+        return new ProductOptionValuesType();
     }
 
     /**
@@ -1687,6 +1729,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductOptionType }
+     * 
+     */
+    public ProductOptionType createProductOptionType() {
+        return new ProductOptionType();
+    }
+
+    /**
      * Create an instance of {@link ProductTypeAttributesType }
      * 
      */
@@ -1954,6 +2004,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ProductsOptionsCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "products-options")
+    public JAXBElement<ProductsOptionsCodeType> createProductsOptions(ProductsOptionsCodeType value) {
+        return new JAXBElement<ProductsOptionsCodeType>(_ProductsOptions_QNAME, ProductsOptionsCodeType.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link PriceType }{@code >}}
      * 
      */
@@ -2140,6 +2199,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "", name = "shops")
     public JAXBElement<ShopsType> createShops(ShopsType value) {
         return new JAXBElement<ShopsType>(_Shops_QNAME, ShopsType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ProductOptionsCodeType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "product-options")
+    public JAXBElement<ProductOptionsCodeType> createProductOptions(ProductOptionsCodeType value) {
+        return new JAXBElement<ProductOptionsCodeType>(_ProductOptions_QNAME, ProductOptionsCodeType.class, null, value);
     }
 
     /**

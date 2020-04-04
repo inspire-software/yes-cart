@@ -20,8 +20,10 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.ProductCategoryDTO;
+import org.yes.cart.domain.dto.ProductOptionDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.vo.matcher.NoopMatcher;
 import org.yes.cart.domain.vo.matcher.VoProductCategoryMatcher;
 import org.yes.cart.domain.vo.matcher.VoProductSkuMatcher;
 
@@ -139,6 +141,20 @@ public class VoProduct {
             readOnly = true
     )
     private List<VoProductSku> sku;
+
+    @DtoField(value = "configurable")
+    private boolean configurable;
+
+    @DtoCollection(
+            value = "configurationOptions",
+            dtoBeanKey = "VoProductOption",
+            entityGenericType = ProductOptionDTO.class,
+            entityCollectionClass = ArrayList.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = NoopMatcher.class,
+            readOnly = true
+    )
+    private List<VoProductOption> configurationOptions;
 
 
     public long getProductId() {
@@ -347,5 +363,21 @@ public class VoProduct {
 
     public void setSku(final List<VoProductSku> sku) {
         this.sku = sku;
+    }
+
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
+    }
+
+    public List<VoProductOption> getConfigurationOptions() {
+        return configurationOptions;
+    }
+
+    public void setConfigurationOptions(final List<VoProductOption> configurationOptions) {
+        this.configurationOptions = configurationOptions;
     }
 }

@@ -364,13 +364,13 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     /** {@inheritDoc} */
     @Override
     @JsonIgnore
-    public boolean isEnsemble() {
+    public boolean isConfigurable() {
         return (this.typeMask & 4) != 0;
     }
 
     // JSON accessor
-    public void setEnsemble(final boolean ensemble) {
-        this.typeMask = ensemble ? this.typeMask | 4 : this.typeMask & ~ 4;
+    public void setConfigurable(final boolean configurable) {
+        this.typeMask = configurable ? this.typeMask | 4 : this.typeMask & ~ 4;
     }
 
     /** {@inheritDoc} */

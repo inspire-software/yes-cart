@@ -95,6 +95,10 @@
                     {{ 'SIMPLE_REQUIRED' | translate }}
                   </div>
                 </div>
+                <div>
+                  <input formControlName="configurable" name="configurable" type="checkbox" [(ngModel)]="product.configurable">
+                  <label>{{ 'PRODUCT_CONFIGURABLE' | translate }}</label>
+                </div>
               </fieldset>
             </div>
           </div>

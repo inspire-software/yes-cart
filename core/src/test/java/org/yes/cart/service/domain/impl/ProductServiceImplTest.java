@@ -18,16 +18,14 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductOption;
+import org.yes.cart.domain.entity.ProductOptions;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.BrandService;
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeService;
 
@@ -252,6 +250,37 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
         assertNotNull(idsSku);
         assertEquals(0, idsSku.size());
+
+    }
+
+
+    @Test
+    public void testFindConfigurableProduct() throws Exception {
+
+        final Product product = productService.getProductById(15500L);
+
+        assertNotNull(product);
+        assertTrue(product.getOptions().isConfigurable());
+        assertEquals(3, product.getSku().size());
+
+        final ProductOptions options = product.getOptions();
+        assertNotNull(options);
+
+        final Product pwa = productService.getProductById(11004L);
+        assertNotNull(pwa.getProductAssociations());
+
+        getTx().execute(tx -> {
+
+            final Object obj = productService.getGenericDao().findSingleByQuery(" select poe from ProductOptionEntity poe where poe.product.productId = ?1", 15510L);
+            return false;
+        });
+
+        final List<ProductOption> cfg01opts = options.getConfigurationOptionForSKU("001_CFG01");
+        assertNotNull(cfg01opts);
+        assertEquals(1, cfg01opts.size());
+        assertEquals("MATERIAL", cfg01opts.get(0).getAttributeCode());
+        assertEquals(Arrays.asList("001_CFG_OPT1_A", "001_CFG_OPT1_B"), cfg01opts.get(0).getOptionSkuCodes());
+
 
     }
 }

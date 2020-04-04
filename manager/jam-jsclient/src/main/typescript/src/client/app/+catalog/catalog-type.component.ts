@@ -65,7 +65,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   }
 
   newTypeInstance():ProductTypeVO {
-    return { producttypeId: 0, guid: null, name: '', displayNames: [], description: null, uitemplate: null, uisearchtemplate: null, service: false, ensemble: false, shippable: true, downloadable: false, digital:false, viewGroups: [] };
+    return { producttypeId: 0, guid: null, name: '', displayNames: [], description: null, uitemplate: null, uisearchtemplate: null, service: false, shippable: true, downloadable: false, digital:false, viewGroups: [] };
   }
 
   newSearchResultInstance():SearchResultVO<ProductTypeInfoVO> {

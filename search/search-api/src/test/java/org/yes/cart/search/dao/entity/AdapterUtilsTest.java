@@ -57,7 +57,7 @@ public class AdapterUtilsTest {
         dto.setDisplayName(new StringI18NModel("EN#~#DisplayName"));
         dto.setCode("CODE");
         dto.setShippable(true);
-        dto.setEnsemble(true);
+        dto.setConfigurable(true);
         dto.getAttributes().putValue("attr1", "val1", "en#~#name1");
         dto.setBaseSkus(new HashMap<Long, ProductSkuSearchResultDTO>() {{
             put(dtoSKU.getId(), dtoSKU);
@@ -83,7 +83,7 @@ public class AdapterUtilsTest {
         assertTrue(dtoCopy.isShippable());
         assertFalse(dtoCopy.isDigital());
         assertFalse(dtoCopy.isDownloadable());
-        assertTrue(dtoCopy.isEnsemble());
+        assertTrue(dtoCopy.isConfigurable());
 
         final ProductSkuSearchResultDTO dtoSkuCopy = dtoCopy.getBaseSku(dtoSKU.getId());
         assertNotNull(dtoSkuCopy);

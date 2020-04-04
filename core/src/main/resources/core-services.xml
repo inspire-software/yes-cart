@@ -1068,6 +1068,15 @@
     </bean>
 
 
+    <bean id="productOptionService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ProductOptionServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productOptionDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
     <bean id="customerOrderService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.CustomerOrderServiceImpl">

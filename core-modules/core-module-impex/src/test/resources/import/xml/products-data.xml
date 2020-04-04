@@ -81,6 +81,14 @@
         <product-link association="cross" sku="XML_BENDER"/>
         <product-link association="new-assoc" sku="XML_BENDER"/>
     </product-links>
+    <product-options configurable="true">
+        <product-option mandatory="true" quantity="1" attribute="MATERIAL">
+            <product-option-values>
+                <product-option-value sku="XML_BENDER"/>
+                <product-option-value sku="XML_SOBOT-BEER"/>
+            </product-option-values>
+        </product-option>
+    </product-options>
 </product>
 <product code="XML_BENDER">
     <brand>XML_FutureRobots</brand>

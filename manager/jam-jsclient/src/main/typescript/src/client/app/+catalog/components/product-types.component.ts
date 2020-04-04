@@ -102,9 +102,6 @@ export class ProductTypesComponent implements OnInit, OnDestroy {
     if (row.service) {
       flags += '<i class="fa fa-users"></i>&nbsp;';
     }
-    if (row.ensemble) {
-      flags += '<i class="fa fa-gears"></i>&nbsp;';
-    }
     if (row.shippable) {
       flags += '<i class="fa fa-truck"></i>&nbsp;';
     }

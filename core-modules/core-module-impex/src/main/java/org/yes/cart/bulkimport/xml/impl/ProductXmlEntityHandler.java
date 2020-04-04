@@ -18,11 +18,9 @@ package org.yes.cart.bulkimport.xml.impl;
 
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
-import org.yes.cart.bulkimport.xml.internal.EntityImportModeType;
-import org.yes.cart.bulkimport.xml.internal.ProductCategoriesCodeType;
-import org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType;
-import org.yes.cart.bulkimport.xml.internal.SkuType;
+import org.yes.cart.bulkimport.xml.internal.*;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.service.domain.ProductService;
@@ -44,6 +42,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
     private XmlEntityImportHandler<SkuType, ProductSku> skuXmlEntityImportHandler;
     private XmlEntityImportHandler<ProductCategoriesCodeType, Product> productCategoriesCodeXmlEntityImportHandler;
     private XmlEntityImportHandler<ProductLinksCodeType, Product> productLinksCodeXmlEntityImportHandler;
+    private XmlEntityImportHandler<ProductOptionsCodeType, Product> productOptionsCodeXmlEntityImportHandler;
 
     public ProductXmlEntityHandler() {
         super("product");
@@ -122,6 +121,8 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
             }
         }
 
+        processProductOptions(statusListener, domain, xmlType, entityCount);
+
     }
 
     private void processProductAssociations(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType, final Map<String, Integer> entityCount) {
@@ -134,6 +135,24 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
             subXmlType.getProductLink().addAll(xmlType.getProductLinks().getProductLink());
 
             productLinksCodeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getProductCode(), subXmlType), null, null, entityCount);
+
+
+        }
+
+
+    }
+
+    private void processProductOptions(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType, final Map<String, Integer> entityCount) {
+
+        if (xmlType.getProductOptions() != null) {
+
+            final ProductOptionsCodeType subXmlType = new ProductOptionsCodeType();
+            subXmlType.setProductCode(domain.getCode());
+            subXmlType.setConfigurable(xmlType.getProductOptions().isConfigurable() != null ? xmlType.getProductOptions().isConfigurable() : domain.getOptions().isConfigurable());
+            subXmlType.setImportMode(xmlType.getProductLinks().getImportMode());
+            subXmlType.getProductOption().addAll(xmlType.getProductOptions().getProductOption());
+
+            productOptionsCodeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getProductCode(), subXmlType), null, null, entityCount);
 
 
         }
@@ -236,9 +255,18 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
     /**
      * Spring IoC.
      *
-     * @param productLinksCodeXmlEntityImportHandler links hadler
+     * @param productLinksCodeXmlEntityImportHandler links handler
      */
     public void setProductLinksCodeXmlEntityImportHandler(final XmlEntityImportHandler<ProductLinksCodeType, Product> productLinksCodeXmlEntityImportHandler) {
         this.productLinksCodeXmlEntityImportHandler = productLinksCodeXmlEntityImportHandler;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param productOptionsCodeXmlEntityImportHandler options handler
+     */
+    public void setProductOptionsCodeXmlEntityImportHandler(final XmlEntityImportHandler<ProductOptionsCodeType, Product> productOptionsCodeXmlEntityImportHandler) {
+        this.productOptionsCodeXmlEntityImportHandler = productOptionsCodeXmlEntityImportHandler;
     }
 }

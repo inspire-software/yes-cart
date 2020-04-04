@@ -14,43 +14,15 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity;
+package org.yes.cart.service.domain;
 
+import org.yes.cart.domain.entity.ProductOption;
 
 /**
- * Product ensemble option.
- * <p/>
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 07-May-2011
- * Time: 11:12:54
+ * User: denispavlov
+ * Date: 23/02/2020
+ * Time: 13:39
  */
-
-public interface ProductEnsembleOption extends Auditable {
-
-    /**
-     */
-    long getEnsembleOptId();
-
-    void setEnsembleOptId(long ensembleOptId);
-
-    /**
-     */
-    int getQty();
-
-    void setQty(int qty);
-
-    /**
-     */
-    Product getProduct();
-
-    void setProduct(Product product);
-
-    /**
-     */
-    ProductSku getSku();
-
-    void setSku(ProductSku sku);
+public interface ProductOptionService extends GenericService<ProductOption> {
 
 }
-
-

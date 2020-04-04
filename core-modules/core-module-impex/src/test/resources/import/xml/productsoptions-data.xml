@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<products-options xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="file:../../../../main/resources/META-INF/schema/impex.xsd">
+    <product-options product-code="XML_BENDER-ua" configurable="true">
+        <product-option mandatory="true" quantity="1" attribute="MATERIAL">
+            <product-option-values>
+                <product-option-value sku="XML_BENDER"/>
+                <product-option-value sku="XML_SOBOT-BEER"/>
+            </product-option-values>
+        </product-option>
+        <product-option mandatory="true" quantity="2" attribute="WEIGHT">
+            <product-option-values>
+                <product-option-value sku="XML_BENDER"/>
+                <product-option-value sku="XML_SOBOT-BEER"/>
+            </product-option-values>
+        </product-option>
+    </product-options>
+</products-options>
