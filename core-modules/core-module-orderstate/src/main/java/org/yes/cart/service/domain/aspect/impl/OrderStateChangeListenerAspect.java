@@ -26,7 +26,9 @@ import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
@@ -141,7 +143,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
                 if (mastered) {
                     if (StringUtils.isBlank(subAdminEmail)) {
-                        LOG.error(Markers.alert(), "Can't get sub-admin email address for shop " + orderShop.getCode());
+                        LOG.error(Markers.alert(), "No sub-admin email address for shop " + orderShop.getCode());
                     } else if (StringUtils.isNotBlank(shopperTemplate)) {
                         LOG.debug("Using sub shop admin template {} for event key {}", shopperTemplate, templateKey);
                         sendOrderNotification(pjp, orderEvent, shopperTemplate, subAdminEmail);
@@ -152,7 +154,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
 
                 if (StringUtils.isBlank(adminEmail)) {
-                    LOG.error(Markers.alert(), "Can't get admin email address for shop " + emailShop.getCode());
+                    LOG.error(Markers.alert(), "No admin email address for shop " + emailShop.getCode());
                 } else {
 
                     final String adminTemplate = adminTemplates.get(templateKey);
@@ -169,24 +171,35 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
             return rez;
         } catch (final OrderItemAllocationException th) {
 
-            LOG.warn("Can't allocation quantity for product {}", th.getProductSkuCode());
+            LOG.warn("Insufficient inventory for product {}:{}", orderEvent.getCustomerOrderDelivery().getDeliveryNum(), th.getProductSkuCode());
 
-            if (StringUtils.isBlank(adminEmail)) {
-                LOG.error(Markers.alert(), "Can't get admin email address for shop {}", emailShop.getCode());
+            final String key = "OUT_OF_STOCK_NOTIFICATION:" + orderEvent.getCustomerOrderDelivery().getDeliveryNum();
+
+            final Pair<String, I18NModel> oosn = orderEvent.getCustomerOrder().getValue(key);
+
+            if (oosn != null && StringUtils.isNotBlank(oosn.getFirst())) {
+
+                LOG.debug("Insufficient inventory for product {}:{} ... email already sent {}", orderEvent.getCustomerOrderDelivery().getDeliveryNum(), th.getProductSkuCode(), oosn.getFirst());
+
             } else {
 
-                final ProductSku sku = productSkuService.getProductSkuBySkuCode(th.getProductSkuCode());
+                if (StringUtils.isBlank(adminEmail)) {
+                    LOG.error(Markers.alert(), "No admin email address for shop {}", emailShop.getCode());
+                } else {
 
-                sendOrderNotification(
-                        pjp,
-                        orderEvent,
-                        "adm-cant-allocate-product-qty",
-                        new HashMap<String, Object>() {{
-                            put("sku", sku);
-                        }},
-                        adminEmail);
+                    final ProductSku sku = productSkuService.getProductSkuBySkuCode(th.getProductSkuCode());
+
+                    sendOrderNotification(
+                            pjp,
+                            orderEvent,
+                            "adm-cant-allocate-product-qty",
+                            new HashMap<String, Object>() {{
+                                put("sku", sku);
+                            }},
+                            adminEmail);
+                }
+
             }
-
             throw th;
         } catch (Throwable th) {
             throw th;

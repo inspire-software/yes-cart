@@ -87,18 +87,18 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     }
 
     /**
+     *    final String [][] skuCodeSet = new String [][] {
+     *        {"PREORDER-BACK-TO-FLOW0", "PREORDER-BACK-TO-FLOW1"},
+     *        {"PREORDER-BACK-TO-FLOW2", "PREORDER-BACK-TO-FLOW3"},
+     *        {"PREORDER-BACK-TO-FLOW4", "PREORDER-BACK-TO-FLOW5"},
+     *        {"BACKORDER-BACK-TO-FLOW1", "BACKORDER-BACK-TO-FLOW2"},
+     *    };
+     *
      * @return cart with one digital available product.
      */
-    protected ShoppingCart getShoppingCartWithPreorderItems(final String prefix, final int skuCodeSetIdx, final boolean multi) {
-        final String [][] skuCodeSet = new String [][] {
-                {"PREORDER-BACK-TO-FLOW0", "PREORDER-BACK-TO-FLOW1"},
-                {"PREORDER-BACK-TO-FLOW2", "PREORDER-BACK-TO-FLOW3"},
-                {"PREORDER-BACK-TO-FLOW4", "PREORDER-BACK-TO-FLOW5"},
-                {"BACKORDER-BACK-TO-FLOW1", "BACKORDER-BACK-TO-FLOW2"},
-        };
-        final String firstCode = skuCodeSet[skuCodeSetIdx][0];
-        final String secondCode = skuCodeSet[skuCodeSetIdx][1];
-        ShoppingCart shoppingCart = getEmptyCartByPrefix(prefix);
+    protected ShoppingCart getShoppingCartWithPreorderItems(final String firstCode, final String secondCode, final boolean multi) {
+
+        ShoppingCart shoppingCart = getEmptyCartByPrefix(getTestName());
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         // this digital product available

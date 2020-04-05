@@ -63,7 +63,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
         Customer cust = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 3, true);
+        ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("BACKORDER-BACK-TO-FLOW1", "BACKORDER-BACK-TO-FLOW2", true);
 
         prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
 

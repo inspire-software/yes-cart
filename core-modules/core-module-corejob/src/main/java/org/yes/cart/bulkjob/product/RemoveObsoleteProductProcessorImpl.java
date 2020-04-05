@@ -28,6 +28,7 @@ import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
@@ -119,12 +120,15 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
 
             final SkuWarehouse inventory = allIterator.next();
 
-            if (/* Is not available for a long time */
+            if (/* if we have no reservations AND */
+                !MoneyUtils.isPositive(inventory.getReserved()) &&
+                    (/* if not available for a long time */
                     (inventory.getAvailableto() != null && !inventory.isAvailable(time))
                     ||
-                /* Id diabled and was not updated for a long time */
+                    /* or if disabled and was not updated for a long time */
                     (inventory.getAvailableto() == null && inventory.isDisabled() &&
                         inventory.getUpdatedTimestamp() == null || inventory.getUpdatedTimestamp().isBefore(DateUtils.iFrom(time)))
+                    )
                 ) {
 
                 LOG.warn("Removing obsolete inventory record for {} in fulfilment centre {}", skuCode, inventory.getWarehouse().getWarehouseId());

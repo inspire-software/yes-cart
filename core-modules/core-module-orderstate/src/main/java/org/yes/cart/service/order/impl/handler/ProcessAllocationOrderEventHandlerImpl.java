@@ -131,7 +131,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                     throw new OrderItemAllocationException(
                             skuCode,
                             toAllocate,
-                            "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
+                            "ProcessAllocationOrderEventHandlerImpl. Warehouse not found. Total qty = " + det.getQty()
                                     + " for sku = " + skuCode
                                     + " in delivery " + orderDelivery.getDeliveryNum());
                 }
@@ -145,7 +145,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                     throw new OrderItemAllocationException(
                             skuCode,
                             toAllocate,
-                            "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
+                            "ProcessAllocationOrderEventHandlerImpl. Insufficient total qty = " + det.getQty()
                                     + " for sku = " + skuCode
                                     + " in delivery " + orderDelivery.getDeliveryNum());
                 }

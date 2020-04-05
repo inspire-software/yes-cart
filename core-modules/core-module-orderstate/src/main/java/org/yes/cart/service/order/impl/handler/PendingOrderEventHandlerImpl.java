@@ -151,7 +151,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
                 final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
-                if (selected == null) {
+                if (selected == null) { // Could only happen if warehouse was removed from shop
                     throw new OrderItemAllocationException(
                             "N/A",
                             BigDecimal.ZERO,
@@ -165,11 +165,11 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
                 final SkuWarehouse inventory = inventoryResolver.findByWarehouseSku(selected, skuCode);
 
-                if (inventory == null || !inventory.isAvailable(now)) {
+                if (inventory == null || !inventory.isAvailable(now)) { // check that inventory record is not disabled (not qty)
                     throw new OrderItemAllocationException(
                             skuCode,
                             toReserve,
-                            "PendingOrderEventHandlerImpl. No stock record. Can not allocate total qty = " + det.getQty()
+                            "PendingOrderEventHandlerImpl. No stock record or stock is N/A. Total qty = " + det.getQty()
                                     + " for sku = " + skuCode
                                     + " in delivery " + orderDelivery.getDeliveryNum());
                 }
@@ -185,7 +185,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                     throw new OrderItemAllocationException(
                             skuCode,
                             toReserve,
-                            "PendingOrderEventHandlerImpl. Out of stock. Can not allocate total qty = " + det.getQty()
+                            "PendingOrderEventHandlerImpl. Out of stock. Insufficient total qty = " + det.getQty()
                                     + " for sku = " + skuCode
                                     + " in delivery " + orderDelivery.getDeliveryNum());
                 }

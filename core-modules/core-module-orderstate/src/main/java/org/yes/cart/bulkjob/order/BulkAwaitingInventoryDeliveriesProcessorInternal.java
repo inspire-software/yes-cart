@@ -33,4 +33,11 @@ public interface BulkAwaitingInventoryDeliveriesProcessorInternal extends Runnab
      */
     void processDeliveryEvent(final String event, final long deliveryId) throws OrderException;
 
+    /**
+     * This method allows to isolate transaction to single delivery update.
+     *
+     * @param deliveryId delivery to update
+     */
+    void processDeliveryMarkOutOfStockNotification(final long deliveryId);
+
 }

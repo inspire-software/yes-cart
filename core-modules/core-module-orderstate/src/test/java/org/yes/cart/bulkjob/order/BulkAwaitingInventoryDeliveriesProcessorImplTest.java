@@ -32,6 +32,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Test awaiting orders.
@@ -60,7 +62,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
 
 
     @Test
-    public void testProcessAwaitingOrders() throws Exception {
+    public void testProcessAwaitingOrdersPreorderToBackorderThenReleased() throws Exception {
 
         Warehouse warehouse = warehouseService.findById(1L);
 
@@ -77,7 +79,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         skuWarehouseService.update(inventory);
 
         final Customer customer = createCustomer();
-        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 2, true);
+        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("PREORDER-BACK-TO-FLOW4", "PREORDER-BACK-TO-FLOW5", true);
 
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
@@ -99,6 +101,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery: order.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT, delivery.getDeliveryStatus());
+            assertNull(order.getValue("OUT_OF_STOCK_NOTIFICATION:" + delivery.getDeliveryNum()));
         }
 
         bulkAwaitingInventoryDeliveriesProcessor.run();
@@ -108,6 +111,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery: order.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT, delivery.getDeliveryStatus());
+            assertNull(order.getValue("OUT_OF_STOCK_NOTIFICATION:" + delivery.getDeliveryNum()));
         }
 
         calendar = LocalDateTime.now().minusHours(1);
@@ -122,11 +126,12 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
 
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
-        //wait for inventory
+        //wait for inventory, this is BACKORDER flow, only alerts are raised for this (not emails)
         order = customerOrderService.findByReference(order.getCartGuid());
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery: order.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
+            assertNull(order.getValue("OUT_OF_STOCK_NOTIFICATION:" + delivery.getDeliveryNum()));
         }
 
         //add inventory
@@ -141,11 +146,79 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery: order.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
+            assertNull(order.getValue("OUT_OF_STOCK_NOTIFICATION:" + delivery.getDeliveryNum()));
         }
 
+    }
 
 
+
+    @Test
+    public void testProcessAwaitingOrdersStandardToOutOfStockThenReleased() throws Exception {
+
+        Warehouse warehouse = warehouseService.findById(1L);
+
+        SkuWarehouse inventory;
+
+        final Customer customer = createCustomer();
+        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("CC_TEST4", "CC_TEST5", true);
+
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
+        assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
+        order.setPgLabel("testPaymentGatewayLabel");
+        customerOrderService.update(order);
+
+        orderStateManager.fireTransition(
+                new OrderEventImpl(OrderStateManager.EVT_PENDING,
+                        order,
+                        null,
+                        new HashMap()
+                )
+
+        );
+
+        customerOrderService.update(order);
+
+        order = customerOrderService.findByReference(order.getCartGuid());
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
+        for (CustomerOrderDelivery delivery: order.getDelivery()) {
+            assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT, delivery.getDeliveryStatus());
+            assertNull(order.getValue("OUT_OF_STOCK_NOTIFICATION:" + delivery.getDeliveryNum()));
+        }
+
+        // Exhaust allocation manually
+        BigDecimal oldQuantity = null;
+
+        inventory = skuWarehouseService.findByWarehouseSku(warehouse, "CC_TEST4");
+        oldQuantity = inventory.getQuantity();
+        inventory.setQuantity(BigDecimal.ZERO);
+        skuWarehouseService.update(inventory);
+        
+        bulkAwaitingInventoryDeliveriesProcessor.run();
+
+        //wait for inventory, this is STANDARD flow, email alert will be generated
+        order = customerOrderService.findByReference(order.getCartGuid());
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
+        for (CustomerOrderDelivery delivery: order.getDelivery()) {
+            assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT, delivery.getDeliveryStatus());
+            assertNotNull(order.getValue("OUT_OF_STOCK_NOTIFICATION:" + delivery.getDeliveryNum()));
+        }
+
+        //add inventory
+        //need items to push order back to life cycle
+        skuWarehouseService.credit(warehouse, "CC_TEST4", oldQuantity);
+
+        bulkAwaitingInventoryDeliveriesProcessor.run();
+
+        // inventory allocated
+        order = customerOrderService.findByReference(order.getCartGuid());
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
+        for (CustomerOrderDelivery delivery: order.getDelivery()) {
+            assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
+            assertNotNull(order.getValue("OUT_OF_STOCK_NOTIFICATION:" + delivery.getDeliveryNum()));
+        }
 
     }
+
 
 }

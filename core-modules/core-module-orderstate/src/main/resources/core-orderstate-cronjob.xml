@@ -28,8 +28,7 @@
             <bean class="org.yes.cart.bulkjob.order.BulkAwaitingInventoryDeliveriesProcessorImpl">
                 <constructor-arg index="0" ref="customerOrderService"/>
                 <constructor-arg index="1" ref="orderStateManager"/>
-                <constructor-arg index="2" ref="skuWarehouseService"/>
-                <constructor-arg index="3" ref="systemService"/>
+                <constructor-arg index="2" ref="systemService"/>
                 <lookup-method name="getSelfProxy" bean="bulkAwaitingInventoryDeliveriesProcessorInternal"/>
             </bean>
         </property>
@@ -37,6 +36,7 @@
             <props>
                 <prop key="run">PROPAGATION_NOT_SUPPORTED</prop>
                 <prop key="processDeliveryEvent">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="processDeliveryMarkOutOfStockNotification">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>

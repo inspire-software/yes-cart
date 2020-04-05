@@ -26,9 +26,9 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.utils.DateUtils;
@@ -59,18 +59,15 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
     private final CustomerOrderService customerOrderService;
     private final OrderStateManager orderStateManager;
-    private final SkuWarehouseService skuWarehouseService;
 
     private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
 
     public BulkAwaitingInventoryDeliveriesProcessorImpl(final CustomerOrderService customerOrderService,
                                                         final OrderStateManager orderStateManager,
-                                                        final SkuWarehouseService skuWarehouseService,
                                                         final SystemService systemService) {
         super(systemService);
         this.customerOrderService = customerOrderService;
         this.orderStateManager = orderStateManager;
-        this.skuWarehouseService = skuWarehouseService;
     }
 
     /** {@inheritDoc} */
@@ -108,15 +105,10 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
         LOG.info("Check orders awaiting inventory since {}", DateUtils.formatSDT(lastRun));
 
-        final int inventoryWaiting;
-        final List<String> skuChanged = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
-        if (skuChanged.isEmpty()) {
-            inventoryWaiting = 0;
-        } else {
-            inventoryWaiting = processAwaitingOrders(null,
+        final int inventoryWaiting = processAwaitingOrders(null,
                     CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                     OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
-        }
+
         LOG.info("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
 
         LOG.info("Check orders awaiting preorder start date ... completed");
@@ -132,7 +124,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
      *
      * @param productSkus          SKU's for which inventory changes since the last run
      * @param status               status of delivery
-     * @param event                what event to look for
+     * @param event                transition event
      *
      * @return quantity of processed deliveries
      */
@@ -158,6 +150,10 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
                     proxy().processDeliveryEvent(event, deliveryId);
                     cnt++;
                     listener.notifyPing("Processed " + cnt + " of " + total + " awaiting deliveries for " + status + " using event " + event);
+
+                } catch (final OrderItemAllocationException oiaexp) {
+                    // Ensure that long-term OOS items do not trigger notification on every cycle
+                    proxy().processDeliveryMarkOutOfStockNotification(deliveryId);
 
                 } catch (OrderException oexp) {
 
@@ -190,6 +186,23 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
             LOG.info("Updated customer order {} delivery {}", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
 
         }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void processDeliveryMarkOutOfStockNotification(final long deliveryId) {
+
+        final CustomerOrderDelivery delivery = customerOrderService.findDelivery(deliveryId);
+        if (delivery != null) {
+
+            final String key = "OUT_OF_STOCK_NOTIFICATION:" + delivery.getDeliveryNum();
+
+            delivery.getCustomerOrder().putValue(key, DateUtils.formatSDT(), null);
+            customerOrderService.update(delivery.getCustomerOrder());
+            LOG.warn("Marked customer order {} delivery {} ... OOS notification sent", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
+
+        }
+
     }
 
     private BulkAwaitingInventoryDeliveriesProcessorInternal proxy;
