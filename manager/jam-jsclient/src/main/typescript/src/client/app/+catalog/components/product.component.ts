@@ -280,7 +280,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   protected onRowAddSKU() {
     LogUtil.debug('ProductComponent onRowAddSKU', this.selectedSku);
-    this.skuAddClick.emit(this.selectedSku);
+    this.skuAddClick.emit(null);
   }
 
   protected onPageSelectedSku(page:number) {
@@ -303,6 +303,19 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.skuEditClick.emit(this.selectedSku);
     }
   }
+
+
+  protected onRowCopyAttributeSKU(row:ProductSkuVO) {
+    LogUtil.debug('ProductComponent onRowCopyAttributeSKU handler', row);
+    this.skuAddClick.emit(row);
+  }
+
+  protected onRowCopySelectedSKU() {
+    if (this.selectedSku != null) {
+      this.onRowCopyAttributeSKU(this.selectedSku);
+    }
+  }
+
 
   protected onRowDeleteSelectedSKU() {
     LogUtil.debug('ProductComponent onRowDeleteSelectedSKU', this.selectedSku);

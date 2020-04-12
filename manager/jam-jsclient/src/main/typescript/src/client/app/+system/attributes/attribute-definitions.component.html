@@ -40,7 +40,7 @@
         <i class="fa fa-info"></i>
       </button>
 
-      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.attributeId === 0)" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
+      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedAttribute == null || viewMode !== 'attributes'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
         <i class="fa fa-copy"></i>
       </button>
 

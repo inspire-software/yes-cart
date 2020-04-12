@@ -205,7 +205,13 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   protected onSkuAdd(data:ProductSkuVO) {
     LogUtil.debug('CatalogProductsComponent onSkuAdd', data);
-    this.onRowNew();
+    if (data != null) {
+      let _sku = Util.clone(data);
+      _sku.skuId = 0;
+      this.onRowEditSku(_sku);
+    } else {
+      this.onRowNew();
+    }
   }
 
   protected onSkuEdit(data:ProductSkuVO) {
@@ -377,6 +383,32 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
       this.onRowEditSku(this.selectedSku);
     } else if (this.selectedProduct != null) {
       this.onRowEditProduct(this.selectedProduct);
+    }
+  }
+
+  protected onRowCopyProduct(row:ProductVO) {
+    LogUtil.debug('CatalogProductsComponent onRowCopyProduct handler', row);
+    let _edit = this.newProductInstance();
+    Util.copyValues(row, _edit);
+    _edit.productId = 0;
+    _edit.sku = [];
+    _edit.configurationOptions = [];
+    if (_edit.productCategories != null) {
+      _edit.productCategories.forEach(_pcat => {
+        _pcat.productCategoryId = 0;
+        _pcat.productId = 0;
+      });
+    }
+
+    this.productEdit = _edit;
+    this.changed = false;
+    this.validForSave = false;
+    this.viewMode = CatalogProductsComponent.PRODUCT;
+  }
+
+  protected onRowCopySelected() {
+    if (this.selectedProduct != null) {
+      this.onRowCopyProduct(this.selectedProduct);
     }
   }
 
