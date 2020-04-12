@@ -1027,6 +1027,7 @@
         PRICINGPOLICY varchar(255),
         REF varchar(255),
         AUTO_GENERATED smallint not null default 0,
+        SUPPLIER varchar(255),
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),
@@ -1639,7 +1640,6 @@
     create index PRODUCT_PCODE on TPRODUCT (PIM_CODE);
     create index PRODUCT_PDISABLED on TPRODUCT (PIM_DISABLED);
     create index PRODUCT_POUTDATED on TPRODUCT (PIM_OUTDATED);
-    create index PRODUCT_DISABLED on TPRODUCT (DISABLED);
     create index SKU_MCODE on TSKU (MANUFACTURER_CODE);
     create index SKU_MPCODE on TSKU (MANUFACTURER_PART_CODE);
     create index SKU_SCODE on TSKU (SUPPLIER_CODE);
