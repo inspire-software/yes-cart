@@ -229,12 +229,22 @@ public class DtoProductServiceImpl
 
                 } else if ("^".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
-                    final Long categoryId = categoryService.findCategoryIdByGUID(tagOrCodeOrBrandOrType.getSecond());
+                    boolean exact = false;
+                    String guid = tagOrCodeOrBrandOrType.getSecond();
+                    if (guid.startsWith("!")) {
+                        guid = guid.substring(1);
+                        exact = true;
+                    }
+                    final Long categoryId = categoryService.findCategoryIdByGUID(guid);
                     if (categoryId == null) {
                         return new SearchResult<>(filter, Collections.emptyList(), 0);
                     }
 
-                    currentFilter.put("categoryIds", Collections.singletonList(categoryId));
+                    if (exact) {
+                        currentFilter.put("categoryIds", Collections.singletonList(categoryId));
+                    } else {
+                        currentFilter.put("categoryIds", categoryService.getChildCategoriesRecursiveIdsAndLinkIds(categoryId));
+                    }
 
                 }
 

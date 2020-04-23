@@ -109,13 +109,21 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(productsByBrandOrType.getTotal() > 0);
         assertEquals("Robots", productsByBrandOrType.getItems().get(0).getProductType().getName());
 
-        VoSearchContext ctxByCategory = new VoSearchContext();
-        ctxByCategory.setParameters(createSearchContextParams("filter", "^101"));
-        ctxByCategory.setSize(10);
-        final VoSearchResult<VoProduct> productsInCat = voProductService.getFilteredProducts(ctxByCategory);
+        VoSearchContext ctxByCategoryExact = new VoSearchContext();
+        ctxByCategoryExact.setParameters(createSearchContextParams("filter", "^!101"));
+        ctxByCategoryExact.setSize(10);
+        final VoSearchResult<VoProduct> productsInCat = voProductService.getFilteredProducts(ctxByCategoryExact);
         assertNotNull(productsInCat);
         assertTrue(productsInCat.getTotal() > 0);
         assertEquals("Big Boys Gadgets", productsInCat.getItems().get(0).getProductCategories().iterator().next().getCategoryName());
+
+        VoSearchContext ctxByCategory = new VoSearchContext();
+        ctxByCategory.setParameters(createSearchContextParams("filter", "^101"));
+        ctxByCategory.setSize(100);
+        final VoSearchResult<VoProduct> productsInCatAll = voProductService.getFilteredProducts(ctxByCategory);
+        assertNotNull(productsInCatAll);
+        assertTrue(productsInCatAll.getTotal() > 0);
+        assertTrue(productsInCatAll.getItems().stream().anyMatch(item -> "Robotics".equals(item.getProductCategories().iterator().next().getCategoryName())));
 
     }
 

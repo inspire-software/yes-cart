@@ -286,6 +286,22 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         assertTrue(list.getTotal() > 0);
         assertEquals("Featured products", list.getItems().get(0).getProductCategoryDTOs().iterator().next().getCategoryName());
 
+        // by category (including subs)
+        final SearchContext filterByCategoryWithSubs = createSearchContext("name", false, 0, 10,
+                "filter", "^ 101"
+        );
+        list = dtoService.findProducts(filterByCategoryWithSubs);
+        assertTrue(list.getTotal() > 0);
+        assertTrue(Arrays.asList(
+                "Big Boys Gadgets",
+                    "Flying Machines",
+                        "Helicopters", "Aircraft",
+                    "Paintballing",
+                    "Robotics",
+                    "Ultimate Gadgets"
+        ).contains(list.getItems().get(0).getProductCategoryDTOs().iterator().next().getCategoryName()));
+
+
         // basic
         final SearchContext filterBasic = createSearchContext("name", false, 0, 10,
                 "filter", "bender"

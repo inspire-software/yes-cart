@@ -222,7 +222,12 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (cats.isEmpty()) {
             return Collections.emptyList();
         }
-        return Collections.unmodifiableList(transformToId(cats));
+
+        final Set<Long> result = new LinkedHashSet<>(cats.size());
+        for (Category category : cats) {
+            result.add(category.getCategoryId());
+        }
+        return Collections.unmodifiableList(new ArrayList<>(result));
     }
 
     /**
@@ -234,7 +239,15 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (cats.isEmpty()) {
             return Collections.emptyList();
         }
-        return Collections.unmodifiableList(transformToIdAndLinkId(cats));
+
+        final Set<Long> result = new LinkedHashSet<>(cats.size());
+        for (Category category : cats) {
+            result.add(category.getCategoryId());
+            if (category.getLinkToId() != null) {
+                result.addAll(getChildCategoriesRecursiveIdsAndLinkIds(category.getLinkToId()));
+            }
+        }
+        return Collections.unmodifiableList(new ArrayList<>(result));
     }
 
     private void loadChildCategoriesRecursiveInternal(final Set<Category> result, final Category category) {
@@ -373,25 +386,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         final Category cat = getGenericDao().findById(pk);
         Hibernate.initialize(cat);
         return cat;
-    }
-
-    private List<Long> transformToId(final Collection<Category> categories) {
-        final Set<Long> result = new LinkedHashSet<>(categories.size());
-        for (Category category : categories) {
-            result.add(category.getCategoryId());
-        }
-        return new ArrayList<>(result);
-    }
-
-    private List<Long> transformToIdAndLinkId(final Collection<Category> categories) {
-        final Set<Long> result = new LinkedHashSet<>(categories.size());
-        for (Category category : categories) {
-            result.add(category.getCategoryId());
-            if (category.getLinkToId() != null) {
-                result.add(category.getLinkToId());
-            }
-        }
-        return new ArrayList<>(result);
     }
 
     /**
