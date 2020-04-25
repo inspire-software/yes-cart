@@ -45,6 +45,9 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoveObsoleteProductProcessorImpl.class);
 
+    private static final String UNAVAILABLE_COUNTER = "Obsolete products";
+    private static final String REMOVED_COUNTER = "Removed products";
+
     private final ProductService productService;
     private final ProductCategoryService productCategoryService;
     private final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
@@ -54,7 +57,7 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
     private final SkuWarehouseService skuWarehouseService;
     private final SystemService systemService;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Remove obsolete product", true);
 
     public RemoveObsoleteProductProcessorImpl(final ProductService productService,
                                               final ProductCategoryService productCategoryService,
@@ -89,24 +92,26 @@ public class RemoveObsoleteProductProcessorImpl implements RemoveObsoleteProduct
 
         final int batchSize = getObsoleteBatchSize();
 
-        LOG.info("Remove obsolete products unavailable before {} (min days {}), batch: {}",
+        listener.notifyMessage("Remove obsolete products unavailable before {} (min days {}), batch: {}",
                 time, minDays, batchSize);
 
         final List<String> potentialObsoleteSku = skuWarehouseService.findProductSkuByUnavailableBefore(time);
 
         LOG.info("Potentially obsolete SKU count: {}", potentialObsoleteSku.size());
 
-        int count = 0;
+        listener.count(UNAVAILABLE_COUNTER, potentialObsoleteSku.size());
+
         for (final String skuCode : potentialObsoleteSku) {
             if (self().removeProductSkuIfInventoryDisabledSince(skuCode, time)) {
-                count++;
+                int count = listener.count(REMOVED_COUNTER);
                 if (count >= batchSize) {
                     break; // Do not remove more than necessary
                 }
             }
         }
 
-        listener.notifyPing("Removed " + count + " obsolete product SKU in last run");
+        listener.notifyCompleted();
+        listener.reset();
 
     }
 

@@ -60,7 +60,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
     private final CustomerOrderService customerOrderService;
     private final OrderStateManager orderStateManager;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Inventory allocation", true);
 
     public BulkAwaitingInventoryDeliveriesProcessorImpl(final CustomerOrderService customerOrderService,
                                                         final OrderStateManager orderStateManager,
@@ -86,34 +86,36 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
     @Override
     protected boolean doRun(final Instant lastRun) {
 
-        LOG.info("Check orders awaiting allocation start date");
+        listener.notifyMessage("Check orders awaiting allocation start date");
 
         final int allocWaiting = processAwaitingOrders(null,
                 CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT,
                 OrderStateManager.EVT_PROCESS_ALLOCATION);
 
-        LOG.info("Transitioned {} deliveries awaiting allocation", allocWaiting);
+        listener.count("Allocated", allocWaiting);
+        listener.notifyMessage("Transitioned {} deliveries awaiting allocation", allocWaiting);
 
-        LOG.info("Check orders awaiting preorder start date");
+        listener.notifyMessage("Check orders awaiting preorder start date");
 
         final int dateWaiting = processAwaitingOrders(null,
                 CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT);
 
 
-        LOG.info("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
+        listener.count("Released", dateWaiting);
+        listener.notifyMessage("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
 
-        LOG.info("Check orders awaiting inventory since {}", DateUtils.formatSDT(lastRun));
+        listener.notifyMessage("Check orders awaiting inventory since {}", DateUtils.formatSDT(lastRun));
 
         final int inventoryWaiting = processAwaitingOrders(null,
                     CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                     OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
 
-        LOG.info("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
+        listener.count("Reserved", dateWaiting);
+        listener.notifyMessage("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
 
-        LOG.info("Check orders awaiting preorder start date ... completed");
-
-        listener.notifyPing(null); // unset last message
+        listener.notifyCompleted();
+        listener.reset();
 
         return true;
     }

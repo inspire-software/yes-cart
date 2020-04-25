@@ -26,8 +26,6 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.CustomerService;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 16/03/2019
@@ -43,13 +41,13 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressTyp
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Address address, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final Address address) {
         this.addressService.delete(address);
         this.addressService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Address domain, final AddressType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Address domain, final AddressType xmlType, final EntityImportModeType mode) {
 
         domain.setName(xmlType.getAddressName());
         domain.setSalutation(xmlType.getSalutation());
@@ -92,7 +90,7 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<AddressTyp
     }
 
     @Override
-    protected Address getOrCreate(final JobStatusListener statusListener, final AddressType xmlType, final Map<String, Integer> entityCount) {
+    protected Address getOrCreate(final JobStatusListener statusListener, final AddressType xmlType) {
         Address address = this.addressService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (address != null) {
             return address;

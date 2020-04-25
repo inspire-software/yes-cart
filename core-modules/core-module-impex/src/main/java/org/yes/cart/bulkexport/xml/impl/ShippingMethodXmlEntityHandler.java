@@ -49,10 +49,9 @@ public class ShippingMethodXmlEntityHandler extends AbstractXmlEntityHandler<Car
                        final ImpExTuple<String, CarrierSla> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagShippingMethod(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagShippingMethod(null, tuple.getData()), writer, statusListener);
 
     }
 

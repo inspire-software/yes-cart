@@ -51,6 +51,9 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkCustomerTagProcessorImpl.class);
 
+    private static final String PROCESS_COUNTER = "Customers";
+    private static final String UPDATED_COUNTER = "Updated";
+
     private final ShopService shopService;
     private final CustomerService customerService;
     private final SystemService systemService;
@@ -58,7 +61,7 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
 
     private int batchSize = 500;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Customer tagging", true);
 
     public BulkCustomerTagProcessorImpl(final ShopService shopService,
                                         final CustomerService customerService,
@@ -80,12 +83,7 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
     @Override
     public void run() {
 
-        LOG.info("Processing tagging for customer");
-
         try {
-
-            int count[] = new int[] { 0 };
-            int updated[] = new int[] { 0 };
 
             final int batchSize = determineBatchSize();
             final List<Pair<Customer, String>> batch = new ArrayList<>();
@@ -117,7 +115,7 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
                         if (batch.size() + 1 >= batchSize) {
                             // Save batch
                             self().updateCustomers(batch);
-                            updated[0] += batch.size();
+                            listener.count(UPDATED_COUNTER, batch.size());
                             batch.clear();
                             // release memory from HS
                             customerService.getGenericDao().clear();
@@ -126,9 +124,11 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
                         
                     }
 
-                }
+                    listener.count(PROCESS_COUNTER);
 
-                listener.notifyPing("Processed " + count[0] + ", updated: " + updated[0]);
+                    listener.notifyPing("Processed {}, updated: {}", listener.getCount(PROCESS_COUNTER), listener.getCount(UPDATED_COUNTER));
+
+                }
 
                 return true; // all
             });
@@ -136,17 +136,16 @@ public class BulkCustomerTagProcessorImpl implements BulkCustomerTagProcessorInt
             if (batch.size() > 0) {
                 // Save last batch
                 self().updateCustomers(batch);
-                updated[0] += batch.size();
+                listener.count(UPDATED_COUNTER, batch.size());
             }
-
-            LOG.info("Processed tagging for {} customers, updated {}", count, updated);
 
         } catch (Exception exp){
             LOG.error(Markers.alert(), "Processing tagging for customer error: " + exp.getMessage(), exp);
             throw new RuntimeException(exp);  // exception will make the transaction rollback anyway
         }
 
-        LOG.info("Processing tagging for customer ... completed");
+        listener.notifyCompleted();
+        listener.reset();
 
     }
 

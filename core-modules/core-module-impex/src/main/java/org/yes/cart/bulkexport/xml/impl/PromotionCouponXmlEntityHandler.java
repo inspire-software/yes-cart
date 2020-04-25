@@ -23,7 +23,6 @@ import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.service.async.JobStatusListener;
 
 import java.io.OutputStreamWriter;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -42,10 +41,9 @@ public class PromotionCouponXmlEntityHandler extends AbstractXmlEntityHandler<Pr
                        final ImpExTuple<String, PromotionCoupon> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagPromotionCoupon(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagPromotionCoupon(null, tuple.getData()), writer, statusListener);
 
     }
 

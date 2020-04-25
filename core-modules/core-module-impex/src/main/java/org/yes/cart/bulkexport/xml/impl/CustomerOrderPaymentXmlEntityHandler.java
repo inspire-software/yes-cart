@@ -23,7 +23,6 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.service.async.JobStatusListener;
 
 import java.io.OutputStreamWriter;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -42,10 +41,9 @@ public class CustomerOrderPaymentXmlEntityHandler extends AbstractXmlEntityHandl
                        final ImpExTuple<String, CustomerOrderPayment> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagPayment(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagPayment(null, tuple.getData()), writer, statusListener);
 
     }
 

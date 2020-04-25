@@ -18,6 +18,8 @@ package org.yes.cart.service.async;
 
 import org.yes.cart.service.async.model.JobStatus;
 
+import java.util.Map;
+
 /**
  * Listener should be created per job instance and should not be shared by
  * several threads.
@@ -106,5 +108,40 @@ public interface JobStatusListener {
      * @return true if listeners last message timestamp exceed timeout
      */
     boolean isTimedOut();
+
+    /**
+     * Count +1 for given name.
+     *
+     * @param name name
+     */
+    int count(String name);
+
+    /**
+     * Count +add for given name.
+     *
+     * @param name name
+     */
+    int count(String name, int add);
+
+    /**
+     * Get all counters values.
+     *
+     * @return counts
+     */
+    Map<String, Integer> getCounts();
+
+    /**
+     * Get counter value.
+     *
+     * @param name name
+     *
+     * @return count
+     */
+    int getCount(String name);
+
+    /**
+     * Clear counters and state.
+     */
+    void reset();
 
 }

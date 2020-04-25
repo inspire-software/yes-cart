@@ -27,8 +27,6 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.utils.DateUtils;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 24/03/2019
@@ -49,13 +47,13 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final CustomerOrder customerOrder, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final CustomerOrder customerOrder) {
         this.customerOrderService.delete(customerOrder);
         this.customerOrderService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final CustomerOrder domain, final CustomerOrderType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final CustomerOrder domain, final CustomerOrderType xmlType, final EntityImportModeType mode) {
 
         // Order state is updatable
         processOrderState(domain, xmlType);
@@ -84,7 +82,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
     }
 
     @Override
-    protected CustomerOrder getOrCreate(final JobStatusListener statusListener, final CustomerOrderType xmlType, final Map<String, Integer> entityCount) {
+    protected CustomerOrder getOrCreate(final JobStatusListener statusListener, final CustomerOrderType xmlType) {
         CustomerOrder customerOrder = this.customerOrderService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (customerOrder != null) {
             return customerOrder;
@@ -101,7 +99,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         customerOrder.setLocale(xmlType.getConfiguration().getLocale());
         customerOrder.setOrderIp(xmlType.getConfiguration().getIp());
 
-        processContactDetails(statusListener, xmlType, customerOrder, entityCount);
+        processContactDetails(statusListener, xmlType, customerOrder);
 
         processOrderAmount(xmlType, customerOrder);
 
@@ -390,7 +388,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         }
     }
 
-    private void processContactDetails(final JobStatusListener statusListener, final CustomerOrderType xmlType, final CustomerOrder customerOrder, final Map<String, Integer>entityCount) {
+    private void processContactDetails(final JobStatusListener statusListener, final CustomerOrderType xmlType, final CustomerOrder customerOrder) {
 
         if (xmlType.getContactDetails() == null) {
             return;
@@ -406,11 +404,11 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         customerOrder.setLastname(xmlType.getContactDetails().getLastname());
         if (xmlType.getContactDetails().getShippingAddress() != null) {
             customerOrder.setShippingAddress(xmlType.getContactDetails().getShippingAddress().getFormatted());
-            customerOrder.setShippingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getShippingAddress().getAddress(), entityCount));
+            customerOrder.setShippingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getShippingAddress().getAddress()));
         }
         if (xmlType.getContactDetails().getBillingAddress() != null) {
             customerOrder.setBillingAddress(xmlType.getContactDetails().getBillingAddress().getFormatted());
-            customerOrder.setBillingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getBillingAddress().getAddress(), entityCount));
+            customerOrder.setBillingAddressDetails(importStaticAddress(statusListener, xmlType.getContactDetails().getBillingAddress().getAddress()));
         }
         customerOrder.setOrderMessage(xmlType.getContactDetails().getRemarks());
     }
@@ -424,11 +422,11 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
         return null;
     }
 
-    private Address importStaticAddress(final JobStatusListener statusListener, final AddressType xmlAddressType, final Map<String, Integer>entityCount) {
+    private Address importStaticAddress(final JobStatusListener statusListener, final AddressType xmlAddressType) {
         if (xmlAddressType == null) {
             return null;
         }
-        return addressXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlAddressType.getGuid(), xmlAddressType), null, null, entityCount);
+        return addressXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlAddressType.getGuid(), xmlAddressType), null, null);
     }
 
     @Override

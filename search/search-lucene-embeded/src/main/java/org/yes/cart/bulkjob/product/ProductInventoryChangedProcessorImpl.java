@@ -58,7 +58,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
     private final NodeService nodeService;
     private final CacheBundleHelper productCacheHelper;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Inventory changed processor", true);
 
     public ProductInventoryChangedProcessorImpl(final SkuWarehouseService skuWarehouseService,
                                                 final ProductService productService,
@@ -88,21 +88,24 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
     @Override
     protected boolean doRun(final Instant lastRun) {
 
+        listener.reset();
+
         final String nodeId = getNodeId();
 
         if (isLuceneIndexDisabled()) {
-            LOG.info("Reindexing products inventory updates on {} ... disabled", nodeId);
+            listener.notifyMessage("Reindexing products inventory updates on {} ... disabled", nodeId);
             return false;
         }
 
         if (isFullIndexInProgress()) {
-            LOG.info("Reindexing inventory updates on {}, reindexed ALL is already in progress", nodeId);
+            listener.notifyMessage("Reindexing inventory updates on {}, reindex ALL is already in progress", nodeId);
+            listener.notifyPing("Reindexing inventory updates on {}, reindex ALL is already in progress", nodeId);
             return true;
         }
 
         int batchSize = getBatchSize();
 
-        LOG.info("Check changed orders products to be reindexed on {}, batch {}", nodeId, batchSize);
+        listener.notifyMessage("Check changed orders products to be reindexed on {}, batch {}", nodeId, batchSize);
 
         List<String> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
 
@@ -124,7 +127,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
                 int delta = productSkus.size() - count;
                 int maxDelta = getDeltaCheckSize();
                 if (delta > maxDelta) {
-                    LOG.info("Detected bulking operation ... {} inventory records changed in past {} seconds (max: {}). Postponing check until next run.",
+                    listener.notifyMessage("Detected bulking operation ... {} inventory records changed in past {} seconds (max: {}). Postponing check until next run.",
                             delta, getDeltaCheckDelay() / 1000, maxDelta);
                     return false;
                 }
@@ -134,9 +137,9 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
             count = productSkus.size();
             runBatch = count < full;
 
-            listener.notifyPing("Last change detected " + count + ", indexing will run " + (runBatch ? "batch" : "full"));
+            listener.notifyMessage("Last change detected {}, indexing will run {}", count, (runBatch ? "batch" : "full"));
 
-            LOG.info("Inventory changed for {} since {}", productSkus.size(), DateUtils.formatSDT(lastRun));
+            listener.notifyMessage("Inventory changed for {} since {}", count, DateUtils.formatSDT(lastRun));
 
             if (runBatch) {
                 int fromIndex = 0;
@@ -144,35 +147,35 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
                 while (fromIndex < productSkus.size()) {
 
                     if (isFullIndexInProgress()) {
-                        LOG.info("Reindexing inventory updates on {}, reindexed ALL is already in progress", nodeId);
+                        listener.notifyMessage("Reindexing inventory updates on {}, reindex ALL is already in progress", nodeId);
                         return true;
                     }
 
                     toIndex = fromIndex + batchSize > productSkus.size() ? productSkus.size() : fromIndex + batchSize;
                     final List<String> skuBatch = productSkus.subList(fromIndex, toIndex);
-                    LOG.info("Reindexing SKU {}  ... so far reindexed {}", skuBatch, fromIndex);
+                    LOG.debug("Reindexing SKU {}  ... so far reindexed {}", skuBatch, fromIndex);
 
                     self().reindexBatch(skuBatch);
 
                     fromIndex = toIndex;
 
                 }
-                LOG.info("Reindexing inventory updates on {}, reindexed {}", nodeId, count);
+                listener.count("Reindexed on " + nodeId, count);
             } else {
 
                 if (isFullIndexInProgress()) {
-                    LOG.info("Reindexing inventory updates on {}, reindexed ALL is already in progress", nodeId);
+                    listener.notifyMessage("Reindexing inventory updates on {}, reindex ALL is already in progress", nodeId);
                     return true;
                 }
 
                 self().reindexBatch(null);
-                LOG.info("Reindexing inventory updates on {}, reindexed ALL", nodeId);
+                listener.notifyMessage("Reindexing inventory updates on {}, reindexed ALL", nodeId);
             }
 
             flushCaches();
         }
 
-        LOG.info("Reindexing inventory updates on {} ... completed", nodeId);
+        listener.notifyCompleted();
 
         return true;
     }

@@ -38,7 +38,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -138,8 +137,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
                        final ImpExTuple<String, Shop> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
         final Shop shop = tuple.getData();
 
@@ -160,7 +158,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "etypedata.xml", entityCount,
+                    zos, prefix + "etypedata.xml",
                     eTypeXmlEntityHandler, etypeService,
                     "", null
             );
@@ -169,7 +167,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "attributegroupsdata.xml", entityCount,
+                    zos, prefix + "attributegroupsdata.xml",
                     attributeGroupXmlEntityHandler, attributeGroupService,
                     "", null
             );
@@ -178,7 +176,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "attributedata.xml", entityCount,
+                    zos, prefix + "attributedata.xml",
                     attributeXmlEntityHandler, attributeService,
                     "", null
             );
@@ -187,7 +185,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "branddata.xml", entityCount,
+                    zos, prefix + "branddata.xml",
                     brandXmlEntityHandler, brandService,
                     "", null
             );
@@ -201,14 +199,14 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
             if (!assignedCountries.isEmpty()) {
                 addZipEntry(
                         statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                        zos, prefix + "countrydata.xml", entityCount,
+                        zos, prefix + "countrydata.xml",
                         countryXmlEntityHandler, countryService,
                         " where e.countryCode in ?1", null, assignedCountries
                 );
 
                 addZipEntry(
                         statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                        zos, prefix + "countrystatedata.xml", entityCount,
+                        zos, prefix + "countrystatedata.xml",
                         countryStateXmlEntityHandler, stateService,
                         " where e.countryCode in ?1", null, assignedCountries
                 );
@@ -218,7 +216,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "shopdata.xml", entityCount,
+                    zos, prefix + "shopdata.xml",
                     shopXmlEntityHandler, shopService,
                     " where e.shopId = ?1", null, tuple.getData().getShopId()
             );
@@ -232,7 +230,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
                 addZipEntry(
                         statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                        zos, prefix + "catalogdata.xml", entityCount,
+                        zos, prefix + "catalogdata.xml",
                         categoryTreeXmlEntityHandler, categoryService,
                         " where e.categoryId in ?1", null, ids
                 );
@@ -248,14 +246,14 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
                 addZipEntry(
                         statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                        zos, prefix + "fulfilmentcentredata.xml", entityCount,
+                        zos, prefix + "fulfilmentcentredata.xml",
                         fulfilmentCentreXmlEntityHandler, warehouseService,
                         " where e.warehouseId in ?1", null, ids
                 );
 
                 addZipEntry(
                         statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                        zos, prefix + "inventorydata.xml", entityCount,
+                        zos, prefix + "inventorydata.xml",
                         inventoryXmlEntityHandler, skuWarehouseService,
                         " where e.warehouse.warehouseId in ?1", null, ids
                 );
@@ -271,7 +269,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
                 addZipEntry(
                         statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                        zos, prefix + "shippingprovidersdata.xml", entityCount,
+                        zos, prefix + "shippingprovidersdata.xml",
                         shippingProviderXmlEntityHandler, carrierService,
                         " where e.carrierId in ?1", null, ids
                 );
@@ -282,7 +280,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "promotionsdata.xml", entityCount,
+                    zos, prefix + "promotionsdata.xml",
                     promotionXmlEntityHandler, promotionService,
                     " where e.shopCode = ?1", null, shop.getCode()
             );
@@ -291,7 +289,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "pricesdata.xml", entityCount,
+                    zos, prefix + "pricesdata.xml",
                     skuPriceXmlEntityHandler, priceService,
                     " where e.shop.shopId = ?1", null, shop.getShopId()
             );
@@ -300,14 +298,14 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "taxdata.xml", entityCount,
+                    zos, prefix + "taxdata.xml",
                     taxXmlEntityHandler, taxService,
                     " where e.shopCode = ?1", null, shop.getCode()
             );
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "taxconfigdata.xml", entityCount,
+                    zos, prefix + "taxconfigdata.xml",
                     taxConfigXmlEntityHandler, taxConfigService,
                     " where e.tax.shopCode = ?1", null, shop.getCode()
             );
@@ -316,7 +314,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "customerdata.xml", entityCount,
+                    zos, prefix + "customerdata.xml",
                     customerXmlEntityHandler, customerService,
                     " ", entity -> {
                         final Customer customer = (Customer) entity;
@@ -335,7 +333,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "customerorderdata.xml", entityCount,
+                    zos, prefix + "customerorderdata.xml",
                     customerOrderXmlEntityHandler, customerOrderService,
                     " where e.shop.shopId = ?1", null, shop.getShopId()
             );
@@ -344,7 +342,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "customerorderpaymentdata.xml", entityCount,
+                    zos, prefix + "customerorderpaymentdata.xml",
                     customerOrderPaymentXmlEntityHandler, customerOrderPaymentService,
                     " where e.shopCode = ?1", null, shop.getCode()
             );
@@ -353,7 +351,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "paymentgatewaycallbackdata.xml", entityCount,
+                    zos, prefix + "paymentgatewaycallbackdata.xml",
                     paymentGatewayCallbackXmlEntityHandler, paymentGatewayCallbackService,
                     " where e.shopCode = ?1", null, shop.getCode()
             );
@@ -362,7 +360,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "paymentgatewayparameterdata.xml", entityCount,
+                    zos, prefix + "paymentgatewayparameterdata.xml",
                     paymentGatewayParameterXmlEntityHandler, paymentGatewayParameterService,
                     " ", entity -> {
                         final PaymentGatewayParameter parameter = (PaymentGatewayParameter) entity;
@@ -376,7 +374,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
 
             addZipEntry(
                     statusListener, xmlExportDescriptor, xmlValueAdapter, fileToExport,
-                    zos, prefix + "organisationuserdata.xml", entityCount,
+                    zos, prefix + "organisationuserdata.xml",
                     organisationUserXmlEntityHandler, managerService,
                     " ", entity -> {
                         final Manager manager = (Manager) entity;
@@ -401,7 +399,6 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
                              final String fileToExport,
                              final ZipOutputStream zos,
                              final String entryName,
-                             final Map<String, Integer> entityCount,
                              final XmlEntityExportHandler handler,
                              final GenericService genericService,
                              final String entitiesToExportCmd,
@@ -419,7 +416,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
             if (exclusionFilter == null || !exclusionFilter.exclude(entity)) {
                 final XmlExportTuple tuple = new XmlExportTupleImpl(entity);
                 try {
-                    handler.handle(statusListener, xmlExportDescriptor, tuple, xmlValueAdapter, fileToExport, subWriter, entityCount);
+                    handler.handle(statusListener, xmlExportDescriptor, tuple, xmlValueAdapter, fileToExport, subWriter);
                 } catch (Exception e) {
                     statusListener.notifyError("Error during export of : {}, {}",
                             e,
@@ -439,7 +436,6 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
                              final String fileToExport,
                              final ZipOutputStream zos,
                              final String entryName,
-                             final Map<String, Integer> entityCount,
                              final XmlEntityExportHandler handler,
                              final PaymentModuleGenericService genericService,
                              final String entitiesToExportCmd,
@@ -457,7 +453,7 @@ public class SiteXmlHandler implements XmlEntityExportHandler<Shop> {
             if (exclusionFilter == null || !exclusionFilter.exclude(entity)) {
                 final XmlExportTuple tuple = new XmlExportTupleImpl(entity);
                 try {
-                    handler.handle(statusListener, xmlExportDescriptor, tuple, xmlValueAdapter, fileToExport, subWriter, entityCount);
+                    handler.handle(statusListener, xmlExportDescriptor, tuple, xmlValueAdapter, fileToExport, subWriter);
                 } catch (Exception e) {
                     statusListener.notifyError("Error during export of : {}, {}",
                             e,

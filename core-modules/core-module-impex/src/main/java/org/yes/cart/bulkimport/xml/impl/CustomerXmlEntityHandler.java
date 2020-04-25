@@ -29,7 +29,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.DateUtils;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -51,13 +50,13 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Customer customer, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final Customer customer) {
         this.customerService.delete(customer);
         this.customerService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Customer domain, final CustomerType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Customer domain, final CustomerType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getCredentials() != null) {
 
@@ -128,7 +127,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
                     xmlAddressType.setCustomerCode(domain.getGuid());
                     xmlAddressType.setCustomerEmail(domain.getEmail());
                 }
-                addressXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlAddressType.getGuid(), xmlAddressType), null, null, entityCount);
+                addressXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlAddressType.getGuid(), xmlAddressType), null, null);
 
             }
         }
@@ -246,7 +245,7 @@ public class CustomerXmlEntityHandler extends AbstractAttributableXmlEntityHandl
 
 
     @Override
-    protected Customer getOrCreate(final JobStatusListener statusListener, final CustomerType xmlType, final Map<String, Integer> entityCount) {
+    protected Customer getOrCreate(final JobStatusListener statusListener, final CustomerType xmlType) {
         Customer customer = this.customerService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (customer != null) {
             return customer;

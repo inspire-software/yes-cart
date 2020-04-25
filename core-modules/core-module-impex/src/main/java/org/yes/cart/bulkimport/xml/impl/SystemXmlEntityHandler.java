@@ -24,8 +24,6 @@ import org.yes.cart.domain.entity.System;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.SystemService;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -40,12 +38,12 @@ public class SystemXmlEntityHandler extends AbstractXmlEntityHandler<SystemType,
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final System system, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final System system) {
         throw new UnsupportedOperationException("Deleting the system entry in not supported");
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final System domain, final SystemType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final System domain, final SystemType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getCustomAttributes() != null) {
 
@@ -60,7 +58,7 @@ public class SystemXmlEntityHandler extends AbstractXmlEntityHandler<SystemType,
     }
 
     @Override
-    protected System getOrCreate(final JobStatusListener statusListener, final SystemType xmlType, final Map<String, Integer> entityCount) {
+    protected System getOrCreate(final JobStatusListener statusListener, final SystemType xmlType) {
         return this.systemService.getSystem();
     }
 

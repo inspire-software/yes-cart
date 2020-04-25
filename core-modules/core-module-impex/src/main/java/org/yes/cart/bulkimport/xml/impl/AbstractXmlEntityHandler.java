@@ -32,7 +32,6 @@ import org.yes.cart.utils.DateUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -71,12 +70,11 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
                     final XmlImportDescriptor xmlImportDescriptor,
                     final ImpExTuple<String, T> tuple,
                     final XmlValueAdapter xmlValueAdapter,
-                    final String fileToExport,
-                    final Map<String, Integer> entityCount) {
+                    final String fileToExport) {
 
         final T xmlType = tuple.getData();
 
-        final E domain = getOrCreate(statusListener, xmlType, entityCount);
+        final E domain = getOrCreate(statusListener, xmlType);
 
         if (domain == null) {
             statusListener.notifyWarning("Unable to resolve domain object for {}:{}", xmlType.getClass().getSimpleName(), tuple.getSourceId());
@@ -90,26 +88,26 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
         switch (mode) {
             case DELETE:
                 if (!isNew) {
-                    delete(statusListener, domain, entityCount);
-                    count(entityCount, mode.name(), this.elementName);
+                    delete(statusListener, domain);
+                    count(statusListener, mode.name(), this.elementName);
                 }
                 return null; // delete mode should not resolve domain object
             case INSERT_ONLY:
                 if (!isNew) {
                     statusListener.notifyPing("Skipping tuple (insert restricted): " + tuple);
-                    count(entityCount, "SKIP", this.elementName);
+                    count(statusListener, "SKIP", this.elementName);
                     return domain; // no insert, return existing
                 }
             case UPDATE_ONLY:
                 if (isNew) {
                     statusListener.notifyPing("Skipping tuple (update restricted): " + tuple);
-                    count(entityCount, "SKIP", this.elementName);
+                    count(statusListener, "SKIP", this.elementName);
                     return null; // no update, return nothing
                 }
             case MERGE:
             default:
-                saveOrUpdate(statusListener, domain, xmlType, mode, entityCount);
-                count(entityCount, isNew ? "INSERT" : "UPDATE", this.elementName);
+                saveOrUpdate(statusListener, domain, xmlType, mode);
+                count(statusListener, isNew ? "INSERT" : "UPDATE", this.elementName);
                 return domain; // return updated
 
         }
@@ -130,11 +128,9 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
      *
      * @param statusListener status listener
      * @param domain         domain object
-     * @param entityCount    count of entities that have been imported
      */
     protected abstract void delete(final JobStatusListener statusListener,
-                                   final E domain,
-                                   final Map<String, Integer> entityCount);
+                                   final E domain);
 
     /**
      * Perform save or update operation.
@@ -143,13 +139,11 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
      * @param domain         domain object
      * @param xmlType        XML object
      * @param mode           desired mode
-     * @param entityCount    count of entities that have been imported
      */
     protected abstract void saveOrUpdate(final JobStatusListener statusListener,
                                          final E domain,
                                          final T xmlType,
-                                         final EntityImportModeType mode,
-                                         final Map<String, Integer> entityCount);
+                                         final EntityImportModeType mode);
 
     /**
      * Process I18n XML chunk.
@@ -298,13 +292,11 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
      *
      * @param statusListener status listener
      * @param xmlType        XML object
-     * @param entityCount    count of entities that have been imported
      *
      * @return domain object
      */
     protected abstract E getOrCreate(final JobStatusListener statusListener,
-                                     final T xmlType,
-                                     final Map<String, Integer> entityCount);
+                                     final T xmlType);
 
     /**
      * Determine if domain object is new
@@ -320,16 +312,11 @@ public abstract class AbstractXmlEntityHandler<T, E> implements XmlEntityImportH
     /**
      * Convenience method to count entities.
      *
-     * @param entityCount count map
-     * @param entity      entity to count
+     * @param statusListener status listener
+     * @param entity         entity to count
      */
-    protected void count(final Map<String, Integer> entityCount, final String mode, final String entity) {
-        final String key = entity + " " + mode;
-        if (entityCount.containsKey(key)) {
-            entityCount.put(key, entityCount.get(key) + 1);
-        } else {
-            entityCount.put(key, 1);
-        }
+    protected void count(final JobStatusListener statusListener, final String mode, final String entity) {
+        statusListener.count(entity + " " + mode);
     }
 
 }

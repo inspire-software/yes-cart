@@ -57,6 +57,7 @@ public class ProductSkuImageImportDomainObjectStrategyImplTest extends BaseCoreD
 
         mockery.checking(new Expectations() {{
             allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+            allowing(listener).count(with(any(String.class)));
         }});
 
 

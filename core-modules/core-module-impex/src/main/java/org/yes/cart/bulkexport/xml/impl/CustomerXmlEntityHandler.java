@@ -27,7 +27,6 @@ import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.service.async.JobStatusListener;
 
 import java.io.OutputStreamWriter;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -48,10 +47,9 @@ public class CustomerXmlEntityHandler extends AbstractXmlEntityHandler<Customer>
                        final ImpExTuple<String, Customer> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagCustomer(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagCustomer(null, tuple.getData()), writer, statusListener);
 
     }
 

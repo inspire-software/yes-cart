@@ -29,7 +29,6 @@ import org.yes.cart.service.domain.PromotionCouponService;
 
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -52,10 +51,9 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
                        final ImpExTuple<String, CustomerOrder> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagCustomerOrder(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagCustomerOrder(null, tuple.getData()), writer, statusListener);
 
     }
 

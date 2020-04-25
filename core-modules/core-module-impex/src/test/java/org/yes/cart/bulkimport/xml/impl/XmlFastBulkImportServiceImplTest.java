@@ -101,6 +101,7 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
                 allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
                 allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
                 allowing(listener).notifyWarning(with(any(String.class)), with(any(Object[].class)));
+                allowing(listener).count(with(any(String.class)));
             }});
 
             Set<String> importedFilesSet = new HashSet<>();

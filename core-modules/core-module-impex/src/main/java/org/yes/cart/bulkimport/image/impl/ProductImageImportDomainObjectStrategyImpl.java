@@ -39,6 +39,9 @@ import java.util.List;
  */
 public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
+    private static final String MERGE_COUNTER = "Images upserted";
+    private static final String SKIP_COUNTER = "Images skipped";
+
     private final ProductService productService;
     private final AttributeService attributeService;
 
@@ -76,6 +79,7 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
             }
 
             statusListener.notifyWarning("product with code {} not found.", code);
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
 
@@ -95,6 +99,7 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
             }
             if (attribute == null) {
                 statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
+                statusListener.count(SKIP_COUNTER);
                 return false;
             }
             imageAttributeValue = productService.getGenericDao().getEntityFactory().getByIface(AttrValueProduct.class);
@@ -102,6 +107,7 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
             imageAttributeValue.setAttributeCode(attribute.getCode());
             productWithAttrs.getAttributes().add(imageAttributeValue);
         } else if (isInsertOnly()) {
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
         imageAttributeValue.setVal(fileName);
@@ -110,10 +116,12 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
 
         try {
             productService.update(productWithAttrs);
+            statusListener.count(MERGE_COUNTER);
             return true;
 
         } catch (DataIntegrityViolationException e) {
             statusListener.notifyError("image {} for product with code {} could not be added (db error).", e, fileName, product.getCode());
+            statusListener.count(SKIP_COUNTER);
             return false;
 
         }

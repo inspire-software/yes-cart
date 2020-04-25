@@ -62,6 +62,10 @@ import java.util.*;
  */
 public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDescriptor> implements ImportService {
 
+    private static final String DELETE_COUNTER = "Records deleted";
+    private static final String MERGE_COUNTER = "Records upserted";
+    private static final String SKIP_COUNTER = "Records skipped";
+
     private GenericDAO<Object, Long> genericDAO;
 
     private GenericConversionService extendedConversionService;
@@ -146,6 +150,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
 
                 executeNativeQuery(descriptor, null, tuple, descriptor.getDeleteCmd());
 
+                statusListener.count(DELETE_COUNTER);
 
             } else {
 
@@ -167,6 +172,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
                         genericDAO.delete(object);
 
                         genericDAO.flushClear();
+
+                        statusListener.count(DELETE_COUNTER);
                     }
 
                 }
@@ -229,6 +236,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
                     }
                     executeNativeQuery(descriptor, masterObject, tuple, descriptor.getInsertCmd());
 
+                    statusListener.count(MERGE_COUNTER);
+
                 } else {
 
                     throw new IllegalArgumentException("Insert SQL can only be specified in INSERT_ONLY mode (Current mode: "
@@ -249,9 +258,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
 
                     statusListener.notifyPing("Skipping tuple (insert restricted): " + tuple);
 
+                    statusListener.count(SKIP_COUNTER);
+
                 } else if (!insert && restrictUpdate) {
 
                     statusListener.notifyPing("Skipping tuple (update restricted): " + tuple);
+
+                    statusListener.count(SKIP_COUNTER);
 
                 } else {
 
@@ -261,6 +274,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
                     if (fkChanged == null) {
 
                         statusListener.notifyPing("Skipping tuple (unresolved foreign key): " + tuple);
+
+                        statusListener.count(SKIP_COUNTER);
 
                     } else {
 
@@ -277,9 +292,17 @@ public class CsvBulkImportServiceImpl extends AbstractImportService<CsvImportDes
                         }
 
                         if (valueChanged || fkChanged) {
+
                             genericDAO.saveOrUpdate(object); // If no changed are made then we do not need to save
+
+                            statusListener.count(MERGE_COUNTER);
+
                         } else {
+
                             statusListener.notifyPing("Skipping tuple (no change): " + tuple.getSourceId());
+
+                            statusListener.count(SKIP_COUNTER);
+
                         }
 
                         performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,

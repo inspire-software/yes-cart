@@ -52,6 +52,9 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(LocalFileShareImageVaultProcessorImpl.class);
 
+    private static final String SKIP_COUNTER = "Skip";
+    private static final String REATTACHED_COUNTER = "Reattached";
+
     private static final long INDEX_GET_READY_TIMEOUT = 5000L;
     private static final long INDEX_PING_INTERVAL = 15000L;
     private static final long WARMUP_GET_READY_TIMEOUT = 15000L;
@@ -195,16 +198,15 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
     private int scanRootDirectory(final File dir, final MediaFileNameStrategy strategy) {
 
-        final JobStatusListener statusListener = new JobStatusListenerLoggerWrapperImpl(LOG);
+        final JobStatusListener statusListener = new JobStatusListenerLoggerWrapperImpl(LOG, "Imagevault scan", true);
 
-        LOG.info("Scanning imagevault directory {}", dir.getAbsolutePath());
+        statusListener.notifyMessage("Scanning imagevault directory {}", dir.getAbsolutePath());
 
         final File[] letters = dir.listFiles();
         if (letters == null) {
             return 0;
         }
 
-        int count = 0;
         int lettersCount = 0;
         int totalLetters = letters.length;
 
@@ -215,7 +217,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
             // Only look at single letter directories at top level
             if (letter.getName().length() == 1) {
 
-                LOG.info("Scanning imagevault directory {}% {}", letterProgress, letter.getAbsolutePath());
+                statusListener.notifyMessage("Scanning imagevault directory {}% {}", letterProgress, letter.getAbsolutePath());
 
                 final File[] codes = letter.listFiles();
                 if (codes == null) {
@@ -224,7 +226,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
                 for (final File code : codes) {
 
-                    LOG.info("Scanning imagevault directory {}% {}", letterProgress, code.getAbsolutePath());
+                    statusListener.notifyMessage("Scanning imagevault directory {}% {}", letterProgress, code.getAbsolutePath());
 
                     final File[] images = code.listFiles();
                     if (images == null) {
@@ -233,7 +235,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
                     for (final File image : images) {
 
-                        LOG.info("Evaluating file {}% {}", letterProgress, image.getAbsolutePath());
+                        statusListener.notifyMessage("Evaluating file {}% {}", letterProgress, image.getAbsolutePath());
 
                         final String fileName = image.getName();
                         final String objectCode = code.getName();
@@ -248,10 +250,11 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
                         }
 
                         if (!success) {
+                            statusListener.count(SKIP_COUNTER);
                             LOG.debug("Skipped file {}", image.getAbsolutePath());
                         } else {
+                            statusListener.count(REATTACHED_COUNTER);
                             LOG.info("Reattached file {}", image.getAbsolutePath());
-                            count++;
                         }
                     }
 
@@ -261,13 +264,9 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
         }
 
-        if (count > 0) {
-            LOG.info("Scanning imagevault directory 100% {} ... reattached {} images", dir.getAbsolutePath(), count);
-        } else {
-            LOG.info("Scanning imagevault directory 100% {} ... all images were attached", dir.getAbsolutePath());
-        }
+        statusListener.notifyCompleted();
 
-        return count;
+        return statusListener.getCount(REATTACHED_COUNTER);
     }
 
     private AsyncContext createCtx(final String cacheTimeOutKey) {

@@ -105,6 +105,7 @@ public class CsvBulkExportServiceImplTest extends BaseCoreDBTestCase {
                 allowing(listener).notifyPing();
                 allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
                 allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+                allowing(listener).count(with(any(String.class)), with(any(Integer.class)));
             }});
 
             Set<String> importedFilesSet = new HashSet<>();

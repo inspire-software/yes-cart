@@ -28,7 +28,6 @@ import org.yes.cart.service.domain.GenericService;
 
 import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -49,10 +48,9 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<M
                        final ImpExTuple<String, Manager> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagManager(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagManager(null, tuple.getData()), writer, statusListener);
 
     }
 

@@ -24,8 +24,6 @@ import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntit
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 import org.yes.cart.service.async.JobStatusListener;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -40,12 +38,12 @@ public class PaymentGatewayParameterXmlEntityHandler extends AbstractXmlEntityHa
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final PaymentGatewayParameter param, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final PaymentGatewayParameter param) {
         this.paymentGatewayParameterService.delete(param);
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final PaymentGatewayParameter domain, final PaymentGatewayParameterType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final PaymentGatewayParameter domain, final PaymentGatewayParameterType xmlType, final EntityImportModeType mode) {
 
         domain.setValue(xmlType.getValue());
         domain.setBusinesstype(xmlType.getBusinessType());
@@ -60,7 +58,7 @@ public class PaymentGatewayParameterXmlEntityHandler extends AbstractXmlEntityHa
     }
 
     @Override
-    protected PaymentGatewayParameter getOrCreate(final JobStatusListener statusListener, final PaymentGatewayParameterType xmlType, final Map<String, Integer> entityCount) {
+    protected PaymentGatewayParameter getOrCreate(final JobStatusListener statusListener, final PaymentGatewayParameterType xmlType) {
         PaymentGatewayParameter payment = this.paymentGatewayParameterService.findSingleByCriteria(" where e.pgLabel = ?1 and e.name = ?2", xmlType.getPaymentGateway(), xmlType.getCode());
         if (payment != null) {
             return payment;

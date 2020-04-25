@@ -26,8 +26,6 @@ import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeService;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -49,13 +47,13 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Product product, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final Product product) {
         this.productService.delete(product);
         this.productService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getManufacturer() != null) {
             domain.setManufacturerCode(xmlType.getManufacturer().getManufacturerCode());
@@ -109,23 +107,23 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
         this.productService.getGenericDao().flush();
         this.productService.getGenericDao().evict(domain);
 
-        processCategories(statusListener, domain, xmlType, entityCount);
-        processProductAssociations(statusListener, domain, xmlType, entityCount);
+        processCategories(statusListener, domain, xmlType);
+        processProductAssociations(statusListener, domain, xmlType);
 
         if (xmlType.getProductSku() != null) {
             for (final SkuType xmlSkuType : xmlType.getProductSku().getSku()) {
 
                 xmlSkuType.setProductCode(domain.getCode());
-                skuXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlSkuType.getCode(), xmlSkuType), null, null, entityCount);
+                skuXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlSkuType.getCode(), xmlSkuType), null, null);
 
             }
         }
 
-        processProductOptions(statusListener, domain, xmlType, entityCount);
+        processProductOptions(statusListener, domain, xmlType);
 
     }
 
-    private void processProductAssociations(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType, final Map<String, Integer> entityCount) {
+    private void processProductAssociations(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType) {
 
         if (xmlType.getProductLinks() != null) {
 
@@ -134,7 +132,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
             subXmlType.setImportMode(xmlType.getProductLinks().getImportMode());
             subXmlType.getProductLink().addAll(xmlType.getProductLinks().getProductLink());
 
-            productLinksCodeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getProductCode(), subXmlType), null, null, entityCount);
+            productLinksCodeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getProductCode(), subXmlType), null, null);
 
 
         }
@@ -142,7 +140,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
 
     }
 
-    private void processProductOptions(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType, final Map<String, Integer> entityCount) {
+    private void processProductOptions(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType) {
 
         if (xmlType.getProductOptions() != null) {
 
@@ -152,7 +150,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
             subXmlType.setImportMode(xmlType.getProductLinks().getImportMode());
             subXmlType.getProductOption().addAll(xmlType.getProductOptions().getProductOption());
 
-            productOptionsCodeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getProductCode(), subXmlType), null, null, entityCount);
+            productOptionsCodeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getProductCode(), subXmlType), null, null);
 
 
         }
@@ -160,7 +158,7 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
 
     }
 
-    private void processCategories(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType, final Map<String, Integer> entityCount) {
+    private void processCategories(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType) {
 
         if (xmlType.getProductCategories() != null) {
 
@@ -169,14 +167,14 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
             subXmlType.setImportMode(xmlType.getProductCategories().getImportMode());
             subXmlType.getProductCategory().addAll(xmlType.getProductCategories().getProductCategory());
 
-            productCategoriesCodeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getProductCode(), subXmlType), null, null, entityCount);
+            productCategoriesCodeXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(subXmlType.getProductCode(), subXmlType), null, null);
 
         }
 
     }
 
     @Override
-    protected Product getOrCreate(final JobStatusListener statusListener, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType, final Map<String, Integer> entityCount) {
+    protected Product getOrCreate(final JobStatusListener statusListener, final org.yes.cart.bulkimport.xml.internal.ProductType xmlType) {
         Product product = this.productService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (product != null) {
             return product;

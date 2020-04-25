@@ -39,6 +39,9 @@ import java.util.List;
  */
 public class ContentImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
+    private static final String MERGE_COUNTER = "Images upserted";
+    private static final String SKIP_COUNTER = "Images skipped";
+
     private final ContentService contentService;
     private final AttributeService attributeService;
 
@@ -63,6 +66,7 @@ public class ContentImageImportDomainObjectStrategyImpl extends AbstractImageImp
         final Content content = contentService.findContentIdBySeoUriOrGuid(code);
         if (content == null) {
             statusListener.notifyWarning("content with code {} not found.", code);
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
 
@@ -81,6 +85,7 @@ public class ContentImageImportDomainObjectStrategyImpl extends AbstractImageImp
             }
             if (attribute == null) {
                 statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
+                statusListener.count(SKIP_COUNTER);
                 return false;
             }
             imageAttributeValue = contentService.getGenericDao().getEntityFactory().getByIface(AttrValueContent.class);
@@ -88,6 +93,7 @@ public class ContentImageImportDomainObjectStrategyImpl extends AbstractImageImp
             imageAttributeValue.setAttributeCode(attribute.getCode());
             content.getAttributes().add(imageAttributeValue);
         } else if (isInsertOnly()) {
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
         imageAttributeValue.setVal(fileName);
@@ -96,10 +102,12 @@ public class ContentImageImportDomainObjectStrategyImpl extends AbstractImageImp
 
         try {
             contentService.update(content);
+            statusListener.count(MERGE_COUNTER);
             return true;
 
         } catch (DataIntegrityViolationException e) {
             statusListener.notifyError("image {} for content with code {} could not be added (db error).", e, fileName, content.getGuid());
+            statusListener.count(SKIP_COUNTER);
             return false;
 
         }

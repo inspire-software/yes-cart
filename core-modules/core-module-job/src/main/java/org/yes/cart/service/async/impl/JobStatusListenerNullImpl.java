@@ -20,6 +20,8 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -110,4 +112,37 @@ public class JobStatusListenerNullImpl implements JobStatusListener {
     public boolean isTimedOut() {
         return false;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public int count(final String name) {
+        return 0;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int count(final String name, final int add) {
+        return 0;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Map<String, Integer> getCounts() {
+        return Collections.emptyMap();
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public int getCount(final String name) {
+        return 0;
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void reset() {
+
+    }
+
 }

@@ -29,7 +29,10 @@ import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.DateUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * User: denispavlov
@@ -48,13 +51,13 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Manager domain, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final Manager domain) {
         this.managerService.delete(domain);
         this.managerService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Manager domain, final OrganisationUserType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Manager domain, final OrganisationUserType xmlType, final EntityImportModeType mode) {
 
         if (StringUtils.isNotBlank(xmlType.getCredentials().getPassword())) {
             domain.setPassword(xmlType.getCredentials().getPassword());
@@ -200,7 +203,7 @@ public class OrganisationUserXmlEntityHandler extends AbstractXmlEntityHandler<O
     }
 
     @Override
-    protected Manager getOrCreate(final JobStatusListener statusListener, final OrganisationUserType xmlType, final Map<String, Integer> entityCount) {
+    protected Manager getOrCreate(final JobStatusListener statusListener, final OrganisationUserType xmlType) {
         Manager manager = this.managerService.findSingleByCriteria(" where e.email = ?1", xmlType.getCredentials().getEmail());
         if (manager != null) {
             return manager;

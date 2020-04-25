@@ -39,6 +39,9 @@ import java.util.List;
  */
 public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
+    private static final String MERGE_COUNTER = "Images upserted";
+    private static final String SKIP_COUNTER = "Images skipped";
+
     private final ProductSkuService productSkuService;
 
     private final AttributeService attributeService;
@@ -65,6 +68,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
 
         if (productSku == null) {
             statusListener.notifyWarning("product sku with code {} not found.", code);
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
 
@@ -83,6 +87,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
             }
             if (attribute == null) {
                 statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
+                statusListener.count(SKIP_COUNTER);
                 return false;
             }
             imageAttributeValue = productSkuService.getGenericDao().getEntityFactory().getByIface(AttrValueProductSku.class);
@@ -90,6 +95,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
             imageAttributeValue.setAttributeCode(attribute.getCode());
             productSku.getAttributes().add(imageAttributeValue);
         } else if (isInsertOnly()) {
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
         imageAttributeValue.setVal(fileName);
@@ -101,9 +107,11 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
 
         try {
             productSkuService.update(productSku);
+            statusListener.count(MERGE_COUNTER);
             return true;
         } catch (DataIntegrityViolationException e) {
             statusListener.notifyError("image {} for product sku with code {} could not be added (db error).", e, fileName, productSku.getCode());
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
     }

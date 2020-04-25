@@ -50,7 +50,7 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable, JobStatusAwar
     private final SystemService systemService;
     private final CacheBundleHelper productCacheHelper;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Full reindex", true);
 
     public ProductsGlobalIndexProcessorImpl(final ProductService productService,
                                             final NodeService nodeService,
@@ -75,7 +75,7 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable, JobStatusAwar
         final String nodeId = getNodeId();
 
         if (isLuceneIndexDisabled()) {
-            LOG.info("Reindexing all products on {} ... disabled", nodeId);
+            listener.notifyMessage("Reindexing all products on {} ... disabled", nodeId);
             return;
         }
 

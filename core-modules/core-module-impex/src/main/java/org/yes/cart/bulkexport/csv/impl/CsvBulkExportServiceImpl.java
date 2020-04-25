@@ -27,8 +27,6 @@ import org.yes.cart.bulkexport.csv.*;
 import org.yes.cart.bulkexport.service.impl.AbstractExportService;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
-import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.federation.FederationFacade;
 
@@ -94,8 +92,10 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
                 csvFileWriter.writeLine(doExportTuple(statusListener, tuple, csvExportDescriptorName, csvExportDescriptor, null));
                 releaseEntity(entity);
             }
-            statusListener.notifyMessage("total data lines : {}",
-                    (csvExportDescriptor.getExportFileDescriptor().isPrintHeader() ? csvFileWriter.getRowsWritten() - 1 : csvFileWriter.getRowsWritten()));
+
+            final int lines = (csvExportDescriptor.getExportFileDescriptor().isPrintHeader() ? csvFileWriter.getRowsWritten() - 1 : csvFileWriter.getRowsWritten());
+            statusListener.count("total exported data lines", lines);
+            statusListener.notifyMessage("total data lines : {}", lines);
 
         } catch (UnsupportedEncodingException e) {
             statusListener.notifyError("wrong file encoding in xml descriptor : {} {}", e,

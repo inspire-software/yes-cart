@@ -20,6 +20,8 @@ import org.slf4j.Logger;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 23/06/2016
@@ -32,7 +34,7 @@ public class JobStatusListenerWithLoggerImpl implements JobStatusListener {
 
     public JobStatusListenerWithLoggerImpl(final JobStatusListener listener, final Logger log) {
         this.wrapped = listener;
-        this.logger = new JobStatusListenerLoggerWrapperImpl(log);
+        this.logger = new JobStatusListenerLoggerWrapperImpl(log, listener.getJobToken());
     }
 
 
@@ -114,4 +116,36 @@ public class JobStatusListenerWithLoggerImpl implements JobStatusListener {
     public boolean isTimedOut() {
         return wrapped.isTimedOut();
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public int count(final String name) {
+        return wrapped.count(name);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int count(final String name, final int add) {
+        return wrapped.count(name, add);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Map<String, Integer> getCounts() {
+        return wrapped.getCounts();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getCount(final String name) {
+        return wrapped.getCount(name);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void reset() {
+        this.wrapped.reset();
+    }
+
 }

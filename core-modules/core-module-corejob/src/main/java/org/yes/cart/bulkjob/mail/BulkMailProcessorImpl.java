@@ -44,6 +44,9 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkMailProcessorImpl.class);
 
+    private static final String SENT_COUNTER = "Mail sent";
+    private static final String ERROR_COUNTER = "Mail failed";
+
     private final MailService mailService;
     private final MailComposer mailComposer;
     private final JavaMailSenderFactory javaMailSenderFactory;
@@ -53,7 +56,7 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
     private long delayBetweenEmailsMs;
     private int cycleExceptionsThreshold;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Bulk send mail", true);
 
     public BulkMailProcessorImpl(final MailService mailService,
                                  final MailComposer mailComposer,
@@ -73,17 +76,13 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
     @Override
     public void run() {
 
-        LOG.info("Bulk send mail");
-
         final Map<String, Integer> exceptionsThresholdsByShop = new HashMap<>();
 
-        int success = 0;
-        int error = 0;
         Long lastFailedEmailId = null;
         Mail mail = mailService.findOldestMail(lastFailedEmailId);
         while (mail != null) {
 
-            LOG.info("Preparing mail object {}/{} for {} with subject {}",
+            listener.notifyMessage("Preparing mail object {}/{} for {} with subject {}",
                     mail.getMailId(), mail.getShopCode(), mail.getRecipients(), mail.getSubject());
 
             final String shopCode = mail.getShopCode();
@@ -96,12 +95,12 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
             int exceptionsThreshold = exceptionsThresholdsByShop.get(shopCode);
             if (exceptionsThreshold <= 0) {
                 lastFailedEmailId = mail.getMailId();
-                LOG.info("Skipping send mail as exception threshold is exceeded for shop {}", shopCode);
+                listener.notifyMessage("Skipping send mail as exception threshold is exceeded for shop {}", shopCode);
             } else {
 
                 final JavaMailSender javaMailSender = javaMailSenderFactory.getJavaMailSender(shopCode);
                 if (javaMailSender == null) {
-                    LOG.info("No mail sender configured for {}", shopCode);
+                    listener.notifyMessage("No mail sender configured for {}", shopCode);
                     lastFailedEmailId = mail.getMailId();
                 } else {
 
@@ -112,14 +111,14 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
                         mailComposer.convertMessage(mail, mimeMessage);
                         javaMailSender.send(mimeMessage);
                         sent = true;
-                        LOG.info("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
+                        listener.count(SENT_COUNTER);
+                        listener.notifyMessage("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
                         mailService.delete(mail);
-                        success++;
                     } catch (Exception exp) {
                         LOG.error(Markers.alert(), "Unable to send mail " + mail.getMailId() + "/" + mail.getSubject() + " for shop " + shopCode, exp);
                         lastFailedEmailId = mail.getMailId();
                         exceptionsThresholdsByShop.put(shopCode, exceptionsThreshold - 1);
-                        error++;
+                        listener.count(ERROR_COUNTER);
                     }
 
                     if (sent && delayBetweenEmailsMs > 0) {
@@ -139,9 +138,8 @@ public class BulkMailProcessorImpl implements Runnable, JobStatusAware, Disposab
 
         }
 
-        LOG.info("Bulk send mail ... completed");
-
-        listener.notifyPing("Bulk send mail ... completed, send: " + success + ", failed: " + error);
+        listener.notifyCompleted();
+        listener.reset();
 
     }
 

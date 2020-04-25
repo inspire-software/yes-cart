@@ -29,7 +29,6 @@ import org.yes.cart.service.domain.ContentService;
 
 import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -54,14 +53,13 @@ public class ShopContentCms1XmlEntityHandler extends AbstractXmlEntityHandler<Sh
                        final ImpExTuple<String, Shop> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
         final Content root = this.contentService.getRootContent(tuple.getData().getShopId());
         if (root != null) {
 
             final Category cms1root = this.categoryService.getById(root.getContentId());
-            this.handle(statusListener, xmlExportDescriptor, cms1root, xmlValueAdapter, fileToExport, writer, entityCount);
+            this.handle(statusListener, xmlExportDescriptor, cms1root, xmlValueAdapter, fileToExport, writer);
 
         }
 
@@ -72,17 +70,16 @@ public class ShopContentCms1XmlEntityHandler extends AbstractXmlEntityHandler<Sh
                         final Category category,
                         final XmlValueAdapter xmlValueAdapter,
                         final String fileToExport,
-                        final OutputStreamWriter writer,
-                        final Map<String, Integer> entityCount) throws Exception {
+                        final OutputStreamWriter writer) throws Exception {
 
         final List<Category> children =
                 this.categoryService.findChildCategoriesWithAvailability(category.getCategoryId(), false);
 
         final XmlExportTuple tuple = new XmlExportTupleImpl(category);
-        this.cms1XmlEntityHandler.handle(statusListener, xmlExportDescriptor, (ImpExTuple) tuple, xmlValueAdapter, fileToExport, writer, entityCount);
+        this.cms1XmlEntityHandler.handle(statusListener, xmlExportDescriptor, (ImpExTuple) tuple, xmlValueAdapter, fileToExport, writer);
 
         for (final Category child : children) {
-            handle(statusListener, xmlExportDescriptor, child, xmlValueAdapter, fileToExport, writer, entityCount);
+            handle(statusListener, xmlExportDescriptor, child, xmlValueAdapter, fileToExport, writer);
         }
 
     }

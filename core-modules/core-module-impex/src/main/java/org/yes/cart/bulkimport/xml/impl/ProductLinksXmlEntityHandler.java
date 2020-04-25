@@ -29,7 +29,6 @@ import org.yes.cart.service.domain.ProductAssociationService;
 import org.yes.cart.service.domain.ProductService;
 
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -47,13 +46,13 @@ public class ProductLinksXmlEntityHandler extends AbstractXmlEntityHandler<org.y
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Product product, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final Product product) {
         this.productService.delete(product);
         this.productService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Product domain, final org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType xmlType, final EntityImportModeType mode) {
 
         if (domain != null) {
             processProductAssociations(domain, xmlType);
@@ -134,7 +133,7 @@ public class ProductLinksXmlEntityHandler extends AbstractXmlEntityHandler<org.y
     }
 
     @Override
-    protected Product getOrCreate(final JobStatusListener statusListener, final org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType xmlType, final Map<String, Integer> entityCount) {
+    protected Product getOrCreate(final JobStatusListener statusListener, final org.yes.cart.bulkimport.xml.internal.ProductLinksCodeType xmlType) {
         Product product = this.productService.findSingleByCriteria(" where e.code = ?1", xmlType.getProductCode());
         if (product != null) {
             return product;

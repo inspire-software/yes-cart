@@ -20,12 +20,9 @@ import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
 import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.domain.ShopService;
 
 import java.io.OutputStreamWriter;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -44,10 +41,9 @@ public class AddressXmlEntityHandler extends AbstractXmlEntityHandler<Address>  
                        final ImpExTuple<String, Address> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagAddress(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagAddress(null, tuple.getData()), writer, statusListener);
         
     }
 

@@ -146,6 +146,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                 allowing(listener).notifyPing();
                 allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
                 allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+                allowing(listener).count(with(any(String.class)));
             }});
 
             Set<String> importedFilesSet = new HashSet<>();
@@ -857,6 +858,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listenerCarrier).notifyPing();
             allowing(listenerCarrier).notifyPing(with(any(String.class)), with(any(Object[].class)));
             allowing(listenerCarrier).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+            allowing(listenerCarrier).count(with(any(String.class)));
         }});
 
         final JobStatusListener listenerCarrierSla = mockery.mock(JobStatusListener.class, "listenerCarrierSla");
@@ -865,6 +867,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listenerCarrierSla).notifyPing();
             allowing(listenerCarrierSla).notifyPing(with(any(String.class)), with(any(Object[].class)));
             allowing(listenerCarrierSla).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+            allowing(listenerCarrierSla).count(with(any(String.class)));
             oneOf(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row :")), with(any(Exception.class)), with(any(Object[].class)));
             oneOf(listenerCarrierSla).notifyError(with(aStringStartingWith("error during processing import file")), with(any(Exception.class)), with(any(Object[].class)));
         }});
@@ -923,6 +926,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener).notifyPing();
             allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
             allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+            allowing(listener).count(with(any(String.class)));
         }});
 
 
@@ -969,6 +973,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener).notifyPing();
             allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
             allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+            allowing(listener).count(with(any(String.class)));
         }});
 
 
@@ -1009,6 +1014,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener).notifyPing();
             allowing(listener).notifyPing(with(any(String.class)), with(any(Object[].class)));
             allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
+            allowing(listener).count(with(any(String.class)));
         }});
 
 
@@ -1093,6 +1099,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
             oneOf(listener).notifyPing(with(aStringStartingWith("Skipping tuple (unresolved foreign key):")), with(any(Object[].class)));
             allowing(listener).notifyPing(with(aStringStartingWith("Importing tuple: ")), with(any(Object[].class)));
+            allowing(listener).count(with(any(String.class)));
         }});
 
 
@@ -1134,10 +1141,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener1).notifyPing();
             allowing(listener1).notifyMessage(with(any(String.class)), with(any(Object[].class)));
             allowing(listener1).notifyPing(with(aStringStartingWith("Importing tuple: ")), with(any(Object[].class)));
+            allowing(listener1).count(with(any(String.class)));
 
             allowing(listener2).notifyPing();
             allowing(listener2).notifyMessage(with(any(String.class)), with(any(Object[].class)));
             allowing(listener2).notifyPing(with(aStringStartingWith("Importing tuple: ")), with(any(Object[].class)));
+            allowing(listener2).count(with(any(String.class)));
             oneOf(listener2).notifyPing(with(aStringStartingWith("Skipping tuple (no change):")), with(any(Object[].class)));
         }});
 
@@ -1206,10 +1215,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener1).notifyPing();
             allowing(listener1).notifyMessage(with(any(String.class)), with(any(Object[].class)));
             allowing(listener1).notifyPing(with(aStringStartingWith("Importing tuple: ")), with(any(Object[].class)));
+            allowing(listener1).count(with(any(String.class)));
 
             allowing(listener2).notifyPing();
             allowing(listener2).notifyMessage(with(any(String.class)), with(any(Object[].class)));
             allowing(listener2).notifyPing(with(aStringStartingWith("Importing tuple: ")), with(any(Object[].class)));
+            allowing(listener2).count(with(any(String.class)));
             oneOf(listener2).notifyPing(with(aStringStartingWith("Skipping tuple (update restricted):")), with(any(Object[].class)));
         }});
 
@@ -1275,15 +1286,18 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listener1).notifyPing();
             allowing(listener1).notifyMessage(with(any(String.class)), with(any(Object[].class)));
             allowing(listener1).notifyPing(with(aStringStartingWith("Importing tuple: ")), with(any(Object[].class)));
+            allowing(listener1).count(with(any(String.class)));
             oneOf(listener1).notifyPing(with(aStringStartingWith("Skipping tuple (insert restricted):")), with(any(Object[].class)));
 
             allowing(listener2).notifyPing();
             allowing(listener2).notifyMessage(with(any(String.class)), with(any(Object[].class)));
             allowing(listener2).notifyPing(with(aStringStartingWith("Importing tuple: ")), with(any(Object[].class)));
+            allowing(listener2).count(with(any(String.class)));
 
             allowing(listener3).notifyPing();
             allowing(listener3).notifyMessage(with(any(String.class)), with(any(Object[].class)));
             allowing(listener3).notifyPing(with(aStringStartingWith("Importing tuple: ")), with(any(Object[].class)));
+            allowing(listener3).count(with(any(String.class)));
         }});
 
 

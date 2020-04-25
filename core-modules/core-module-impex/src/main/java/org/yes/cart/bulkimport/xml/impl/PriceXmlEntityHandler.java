@@ -24,8 +24,6 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ShopService;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -41,13 +39,13 @@ public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, S
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final SkuPrice price, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final SkuPrice price) {
         this.priceService.delete(price);
         this.priceService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final SkuPrice domain, final PriceType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final SkuPrice domain, final PriceType xmlType, final EntityImportModeType mode) {
 
         domain.setQuantity(xmlType.getQuantity());
         domain.setPriceUponRequest(xmlType.isRequest());
@@ -76,7 +74,7 @@ public class PriceXmlEntityHandler extends AbstractXmlEntityHandler<PriceType, S
     }
 
     @Override
-    protected SkuPrice getOrCreate(final JobStatusListener statusListener, final PriceType xmlType, final Map<String, Integer> entityCount) {
+    protected SkuPrice getOrCreate(final JobStatusListener statusListener, final PriceType xmlType) {
         SkuPrice price = this.priceService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (price != null) {
             return price;

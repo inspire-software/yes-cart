@@ -1,7 +1,6 @@
 package org.yes.cart.bulkimport.service;
 
 import org.yes.cart.bulkcommon.service.ImportService;
-import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.service.async.JobStatusListener;
 

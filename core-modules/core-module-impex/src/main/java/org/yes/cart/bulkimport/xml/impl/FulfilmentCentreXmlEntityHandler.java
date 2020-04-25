@@ -23,8 +23,6 @@ import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.WarehouseService;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -39,13 +37,13 @@ public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<F
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Warehouse fc, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final Warehouse fc) {
         this.warehouseService.delete(fc);
         this.warehouseService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Warehouse domain, final FulfilmentCentreType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Warehouse domain, final FulfilmentCentreType xmlType, final EntityImportModeType mode) {
         domain.setName(xmlType.getName());
         domain.setDisplayName(processI18n(xmlType.getDisplayName(), domain.getDisplayName()));
         domain.setDescription(xmlType.getDescription());
@@ -70,7 +68,7 @@ public class FulfilmentCentreXmlEntityHandler extends AbstractXmlEntityHandler<F
     }
 
     @Override
-    protected Warehouse getOrCreate(final JobStatusListener statusListener, final FulfilmentCentreType xmlType, final Map<String, Integer> entityCount) {
+    protected Warehouse getOrCreate(final JobStatusListener statusListener, final FulfilmentCentreType xmlType) {
         Warehouse warehouse = this.warehouseService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (warehouse != null) {
             return warehouse;

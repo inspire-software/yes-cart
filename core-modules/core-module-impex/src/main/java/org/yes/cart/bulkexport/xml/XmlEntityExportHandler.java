@@ -21,7 +21,6 @@ import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.service.async.JobStatusListener;
 
 import java.io.OutputStreamWriter;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -49,7 +48,6 @@ public interface XmlEntityExportHandler<T> {
      * @param xmlValueAdapter     adapter
      * @param fileToExport        file to export (if exporting to file)
      * @param writer              writer stream to print tag(s) using {@link OutputStreamWriter#write(String)}
-     * @param entityCount         count of entities that have been exported
      *
      * @throws Exception in case of write errors
      */
@@ -58,8 +56,7 @@ public interface XmlEntityExportHandler<T> {
                 ImpExTuple<String, T> tuple,
                 XmlValueAdapter xmlValueAdapter,
                 String fileToExport,
-                OutputStreamWriter writer,
-                Map<String, Integer> entityCount) throws Exception;
+                OutputStreamWriter writer) throws Exception;
 
 
 

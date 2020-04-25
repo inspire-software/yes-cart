@@ -42,10 +42,9 @@ public class PaymentGatewayCallbackXmlEntityHandler extends AbstractXmlEntityHan
                        final ImpExTuple<String, PaymentGatewayCallback> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagCallback(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagCallback(null, tuple.getData()), writer, statusListener);
 
     }
 

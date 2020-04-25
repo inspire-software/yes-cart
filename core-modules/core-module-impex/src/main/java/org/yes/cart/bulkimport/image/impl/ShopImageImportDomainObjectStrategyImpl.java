@@ -40,6 +40,9 @@ import java.util.List;
  */
 public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
+    private static final String MERGE_COUNTER = "Images upserted";
+    private static final String SKIP_COUNTER = "Images skipped";
+
     private final ShopService shopService;
     private final AttributeService attributeService;
 
@@ -64,6 +67,7 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
         final Shop shop = shopService.getShopByCode(code);
         if (shop == null) {
             statusListener.notifyWarning("shop with code {} not found.", code);
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
 
@@ -92,6 +96,7 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
             }
             if (attribute == null) {
                 statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
+                statusListener.count(SKIP_COUNTER);
                 return false;
             }
             imageAttributeValue = shopService.getGenericDao().getEntityFactory().getByIface(AttrValueShop.class);
@@ -99,6 +104,7 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
             imageAttributeValue.setAttributeCode(attribute.getCode());
             shop.getAttributes().add(imageAttributeValue);
         } else if (isInsertOnly()) {
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
         imageAttributeValue.setVal(fileName);
@@ -107,10 +113,12 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
 
         try {
             shopService.update(shop);
+            statusListener.count(MERGE_COUNTER);
             return true;
 
         } catch (DataIntegrityViolationException e) {
             statusListener.notifyError("image {} for shop with name {} could not be added (db error).", e, fileName, shop.getName());
+            statusListener.count(SKIP_COUNTER);
             return false;
 
         }

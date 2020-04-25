@@ -24,7 +24,6 @@ import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.async.JobStatusListener;
 
 import java.io.OutputStreamWriter;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -45,10 +44,9 @@ public class ShippingProviderXmlEntityHandler extends AbstractXmlEntityHandler<C
                        final ImpExTuple<String, Carrier> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagShippingProvider(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagShippingProvider(null, tuple.getData()), writer, statusListener);
 
     }
 

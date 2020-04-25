@@ -141,6 +141,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                         will(returnValue(descriptor));
                         allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
                         allowing(listener).notifyPing("Processed {} of {} images", 1, 1);
+                        allowing(listener).count(with(any(String.class)));
                     }});
 
                     ImportService service = (ImportService) createContext().getBean("imagesBulkImportService");
@@ -214,6 +215,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR); will(returnValue(descriptor));
                         allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
                         allowing(listener).notifyPing("Processed {} of {} images", 1, 1);
+                        allowing(listener).count(with(any(String.class)));
                     }});
 
                     ImportService service = (ImportService) createContext().getBean("imagesBulkImportService");
@@ -287,6 +289,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
                         allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR); will(returnValue(descriptor));
                         allowing(listener).notifyMessage(with(any(String.class)), with(any(Object[].class)));
                         allowing(listener).notifyPing("Processed {} of {} images", 1, 1);
+                        allowing(listener).count(with(any(String.class)));
                     }});
 
                     ImportService service = (ImportService) createContext().getBean("imagesBulkImportService");

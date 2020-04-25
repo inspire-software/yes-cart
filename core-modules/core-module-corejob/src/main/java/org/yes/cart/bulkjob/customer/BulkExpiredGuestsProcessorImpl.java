@@ -44,6 +44,8 @@ public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcesso
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkExpiredGuestsProcessorImpl.class);
 
+    private static final String REMOVED_COUNTER = "Removed guest accounts";
+
     private static final long MS_IN_DAY = 86400000L;
 
     private final CustomerService customerService;
@@ -51,7 +53,7 @@ public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcesso
     private long expiredTimeoutMs = MS_IN_DAY;
     private int batchSize = 500;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Processing expired guest", true);
 
     public BulkExpiredGuestsProcessorImpl(final CustomerService customerService,
                                           final SystemService systemService) {
@@ -71,29 +73,30 @@ public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcesso
 
         final Instant lastModification = Instant.now().plusMillis(-determineExpiryInMs());
 
-        LOG.info("Look up all Guest accounts created before {}", lastModification);
+        listener.notifyMessage("Look up all Guest accounts created before {}", lastModification);
 
         final int batchSize = determineBatchSize();
         final List<Customer> batch = new ArrayList<>(batchSize);
-
-        final int count[] = new int[] { 0 };
 
         this.customerService.findByCriteriaIterator(
                 " where e.guest = ?1 and e.createdTimestamp < ?2",
                 new Object[] { Boolean.TRUE, lastModification },
                 guest -> {
+                    int count;
                     if (batch.size() + 1 > batchSize) {
                         // Remove batch
                         self().removeGuests(batch);
-                        count[0] += batch.size();
+                        count = listener.count(REMOVED_COUNTER, batch.size());
                         batch.clear();
                         // release memory from HS
                         customerService.getGenericDao().clear();
+                    } else {
+                        count = listener.getCount(REMOVED_COUNTER);
                     }
                     batch.add(guest);
 
-                    if (count[0] % batchSize == 0) { // minify string concatenation
-                        listener.notifyPing("Removed guest accounts: " + count[0]);
+                    if (count % batchSize == 0) { // minify string concatenation
+                        listener.notifyPing("Removed guest accounts: " + count);
                     }
 
                     return true; // read fully
@@ -103,13 +106,11 @@ public class BulkExpiredGuestsProcessorImpl implements BulkExpiredGuestsProcesso
         if (batch.size() > 0) {
             // Remove last batch
             self().removeGuests(batch);
-            count[0] += batch.size();
+            listener.count(REMOVED_COUNTER, batch.size());
         }
 
-        LOG.info("Removed {} guest account(s)", count[0]);
-        listener.notifyPing("Removed " + count[0] + " guest account(s) in last run");
-
-        LOG.info("Processing expired guest ... completed");
+        listener.notifyCompleted();
+        listener.reset();
 
     }
 

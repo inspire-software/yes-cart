@@ -23,8 +23,6 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AttributeService;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -39,13 +37,13 @@ public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<Attribut
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Attribute attribute, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final Attribute attribute) {
         this.attributeService.delete(attribute);
         this.attributeService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Attribute domain, final AttributeType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Attribute domain, final AttributeType xmlType, final EntityImportModeType mode) {
         domain.setMandatory(xmlType.isMandatory());
         domain.setSecure(xmlType.isSecure());
         domain.setAllowduplicate(xmlType.isAllowDuplicate());
@@ -74,7 +72,7 @@ public class AttributeXmlEntityHandler extends AbstractXmlEntityHandler<Attribut
     }
 
     @Override
-    protected Attribute getOrCreate(final JobStatusListener statusListener, final AttributeType xmlType, final Map<String, Integer> entityCount) {
+    protected Attribute getOrCreate(final JobStatusListener statusListener, final AttributeType xmlType) {
         Attribute attribute = this.attributeService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (attribute != null) {
             return attribute;

@@ -25,8 +25,6 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -42,13 +40,13 @@ public class SkuXmlEntityHandler extends AbstractAttributableXmlEntityHandler<Sk
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final ProductSku sku, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final ProductSku sku) {
         this.productSkuService.delete(sku);
         this.productSkuService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final ProductSku domain, final SkuType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final ProductSku domain, final SkuType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getManufacturer() != null) {
             domain.setManufacturerCode(xmlType.getManufacturer().getManufacturerCode());
@@ -80,7 +78,7 @@ public class SkuXmlEntityHandler extends AbstractAttributableXmlEntityHandler<Sk
     }
 
     @Override
-    protected ProductSku getOrCreate(final JobStatusListener statusListener, final SkuType xmlType, final Map<String, Integer> entityCount) {
+    protected ProductSku getOrCreate(final JobStatusListener statusListener, final SkuType xmlType) {
         ProductSku sku = this.productSkuService.findSingleByCriteria(" where e.code = ?1", xmlType.getCode());
         if (sku != null) {
             return sku;

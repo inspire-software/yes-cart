@@ -27,7 +27,6 @@ import org.yes.cart.service.domain.ContentService;
 
 import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -51,13 +50,12 @@ public class ShopContentCms3XmlEntityHandler extends AbstractXmlEntityHandler<Sh
                        final ImpExTuple<String, Shop> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
         final Content root = this.contentService.getRootContent(tuple.getData().getShopId());
         if (root != null) {
 
-            this.handle(statusListener, xmlExportDescriptor, root, xmlValueAdapter, fileToExport, writer, entityCount);
+            this.handle(statusListener, xmlExportDescriptor, root, xmlValueAdapter, fileToExport, writer);
 
         }
 
@@ -68,17 +66,16 @@ public class ShopContentCms3XmlEntityHandler extends AbstractXmlEntityHandler<Sh
                         final Content content,
                         final XmlValueAdapter xmlValueAdapter,
                         final String fileToExport,
-                        final OutputStreamWriter writer,
-                        final Map<String, Integer> entityCount) throws Exception {
+                        final OutputStreamWriter writer) throws Exception {
 
         final List<Content> children =
                 this.contentService.findChildContentWithAvailability(content.getContentId(), false);
 
         final XmlExportTuple tuple = new XmlExportTupleImpl(content);
-        this.cms3XmlEntityHandler.handle(statusListener, xmlExportDescriptor, (ImpExTuple) tuple, xmlValueAdapter, fileToExport, writer, entityCount);
+        this.cms3XmlEntityHandler.handle(statusListener, xmlExportDescriptor, (ImpExTuple) tuple, xmlValueAdapter, fileToExport, writer);
 
         for (final Content child : children) {
-            handle(statusListener, xmlExportDescriptor, child, xmlValueAdapter, fileToExport, writer, entityCount);
+            handle(statusListener, xmlExportDescriptor, child, xmlValueAdapter, fileToExport, writer);
         }
 
     }

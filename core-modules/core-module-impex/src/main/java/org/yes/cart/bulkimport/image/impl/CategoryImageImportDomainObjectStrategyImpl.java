@@ -39,6 +39,9 @@ import java.util.List;
  */
 public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
+    private static final String MERGE_COUNTER = "Images upserted";
+    private static final String SKIP_COUNTER = "Images skipped";
+
     private final CategoryService categoryService;
     private final AttributeService attributeService;
 
@@ -63,6 +66,7 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
         final Category category = categoryService.findCategoryIdBySeoUriOrGuid(code);
         if (category == null) {
             statusListener.notifyWarning("category with code {} not found.", code);
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
 
@@ -81,6 +85,7 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
             }
             if (attribute == null) {
                 statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
+                statusListener.count(SKIP_COUNTER);
                 return false;
             }
             imageAttributeValue = categoryService.getGenericDao().getEntityFactory().getByIface(AttrValueCategory.class);
@@ -88,6 +93,7 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
             imageAttributeValue.setAttributeCode(attribute.getCode());
             category.getAttributes().add(imageAttributeValue);
         } else if (isInsertOnly()) {
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
         imageAttributeValue.setVal(fileName);
@@ -96,10 +102,12 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
 
         try {
             categoryService.update(category);
+            statusListener.count(MERGE_COUNTER);
             return true;
 
         } catch (DataIntegrityViolationException e) {
             statusListener.notifyError("image {} for category with code {} could not be added (db error).", e, fileName, category.getGuid());
+            statusListener.count(SKIP_COUNTER);
             return false;
 
         }

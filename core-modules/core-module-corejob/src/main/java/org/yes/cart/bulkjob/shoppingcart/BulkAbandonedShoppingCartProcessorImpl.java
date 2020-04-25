@@ -47,6 +47,9 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
 
     private static final Logger LOG = LoggerFactory.getLogger(BulkAbandonedShoppingCartProcessorImpl.class);
 
+    private static final String REMOVED_CARTS_COUNTER = "Removed carts";
+    private static final String REMOVED_ORDERS_COUNTER = "Removed temp orders";
+
     private static final long MS_IN_DAY = 86400000L;
 
     private final ShoppingCartStateService shoppingCartStateService;
@@ -55,7 +58,7 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
     private long abandonedTimeoutMs = 30 * MS_IN_DAY;
     private int batchSize = 500;
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Abandoned carts", true);
 
     public BulkAbandonedShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
                                                   final CustomerOrderService customerOrderService,
@@ -79,9 +82,6 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
 
         LOG.info("Look up all ShoppingCartStates not modified since {}", lastModification);
 
-        final int count[] = new int[] { 0 };
-        final int removedOrders[] = new int[] { 0 };
-
         final int batchSize = determineBatchSize();
         final List<ShoppingCartState> batch = new ArrayList<>();
 
@@ -92,8 +92,8 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
 
                     if (batch.size() + 1 >= batchSize) {
                         // Remove batch
-                        removedOrders[0] += self().removeCarts(batch);
-                        count[0] += batch.size();
+                        listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
+                        listener.count(REMOVED_CARTS_COUNTER, batch.size());
                         batch.clear();
                         // release memory from HS
                         shoppingCartStateService.getGenericDao().clear();
@@ -106,14 +106,12 @@ public class BulkAbandonedShoppingCartProcessorImpl implements BulkShoppingCartR
 
         if (batch.size() > 0) {
             // Remove last batch
-            removedOrders[0] += self().removeCarts(batch);
-            count[0] += batch.size();
+            listener.count(REMOVED_ORDERS_COUNTER, self().removeCarts(batch));
+            listener.count(REMOVED_CARTS_COUNTER, batch.size());
         }
 
-        LOG.info("Removed {} carts and {} temporary orders", count, removedOrders);
-        listener.notifyPing("Removed " + count[0] + " carts and " + removedOrders[0] + " temporary orders in last run");
-
-        LOG.info("Processing abandoned baskets ... completed");
+        listener.notifyCompleted();
+        listener.reset();
 
     }
 

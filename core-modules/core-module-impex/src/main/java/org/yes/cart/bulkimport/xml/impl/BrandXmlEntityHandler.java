@@ -24,8 +24,6 @@ import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.BrandService;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -40,13 +38,13 @@ public class BrandXmlEntityHandler extends AbstractAttributableXmlEntityHandler<
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Brand brand, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final Brand brand) {
         this.brandService.delete(brand);
         this.brandService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Brand domain, final BrandType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Brand domain, final BrandType xmlType, final EntityImportModeType mode) {
 
         updateExt(xmlType.getCustomAttributes(), domain, domain.getAttributes());
 
@@ -62,7 +60,7 @@ public class BrandXmlEntityHandler extends AbstractAttributableXmlEntityHandler<
     }
 
     @Override
-    protected Brand getOrCreate(final JobStatusListener statusListener, final BrandType xmlType, final Map<String, Integer> entityCount) {
+    protected Brand getOrCreate(final JobStatusListener statusListener, final BrandType xmlType) {
         Brand brand = this.brandService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (brand != null) {
             return brand;

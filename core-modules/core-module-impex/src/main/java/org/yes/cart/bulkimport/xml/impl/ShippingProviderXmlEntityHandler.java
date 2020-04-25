@@ -26,8 +26,6 @@ import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CarrierService;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -44,13 +42,13 @@ public class ShippingProviderXmlEntityHandler extends AbstractXmlEntityHandler<S
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final Carrier carrier, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final Carrier carrier) {
         this.carrierService.delete(carrier);
         this.carrierService.getGenericDao().flush();
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final Carrier domain, final ShippingProviderType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final Carrier domain, final ShippingProviderType xmlType, final EntityImportModeType mode) {
 
         if (xmlType.getConfiguration() != null) {
             domain.setWorldwide(xmlType.getConfiguration().isWorldwide());
@@ -75,7 +73,7 @@ public class ShippingProviderXmlEntityHandler extends AbstractXmlEntityHandler<S
             for (final ShippingMethodType xmlShippingMethodType : xmlType.getShippingMethods().getShippingMethod()) {
 
                 xmlShippingMethodType.setProvider(domain.getGuid());
-                shippingMethodXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlShippingMethodType.getGuid(), xmlShippingMethodType), null, null, entityCount);
+                shippingMethodXmlEntityImportHandler.handle(statusListener, null, (ImpExTuple) new XmlImportTupleImpl(xmlShippingMethodType.getGuid(), xmlShippingMethodType), null, null);
 
             }
         }
@@ -83,7 +81,7 @@ public class ShippingProviderXmlEntityHandler extends AbstractXmlEntityHandler<S
     }
 
     @Override
-    protected Carrier getOrCreate(final JobStatusListener statusListener, final ShippingProviderType xmlType, final Map<String, Integer> entityCount) {
+    protected Carrier getOrCreate(final JobStatusListener statusListener, final ShippingProviderType xmlType) {
         Carrier carrier = this.carrierService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (carrier != null) {
             return carrier;

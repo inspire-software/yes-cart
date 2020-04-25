@@ -25,8 +25,6 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.utils.DateUtils;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 05/11/2018
@@ -41,12 +39,12 @@ public class CustomerOrderPaymentXmlEntityHandler extends AbstractXmlEntityHandl
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final CustomerOrderPayment payment, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final CustomerOrderPayment payment) {
         this.customerOrderPaymentService.delete(payment);
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final CustomerOrderPayment domain, final CustomerOrderPaymentType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final CustomerOrderPayment domain, final CustomerOrderPaymentType xmlType, final EntityImportModeType mode) {
 
         if (domain.getCustomerOrderPaymentId() == 0L) {
             this.customerOrderPaymentService.create(domain);
@@ -57,7 +55,7 @@ public class CustomerOrderPaymentXmlEntityHandler extends AbstractXmlEntityHandl
     }
 
     @Override
-    protected CustomerOrderPayment getOrCreate(final JobStatusListener statusListener, final CustomerOrderPaymentType xmlType, final Map<String, Integer> entityCount) {
+    protected CustomerOrderPayment getOrCreate(final JobStatusListener statusListener, final CustomerOrderPaymentType xmlType) {
         CustomerOrderPayment payment = this.customerOrderPaymentService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (payment != null) {
             return payment;

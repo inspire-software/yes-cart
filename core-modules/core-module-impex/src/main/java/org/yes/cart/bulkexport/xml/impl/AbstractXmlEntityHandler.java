@@ -20,8 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkexport.xml.XmlEntityExportHandler;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.utils.DateUtils;
 
 import java.io.OutputStreamWriter;
@@ -460,35 +460,21 @@ public abstract class AbstractXmlEntityHandler<T> implements XmlEntityExportHand
     }
 
     /**
-     * Convenience method to count entities.
-     *
-     * @param entityCount count map
-     * @param entity      entity to count
-     */
-    protected void count(final Map<String, Integer> entityCount, final String entity) {
-        if (entityCount.containsKey(entity)) {
-            entityCount.put(entity, entityCount.get(entity) + 1);
-        } else {
-            entityCount.put(entity, 1);
-        }
-    }
-
-    /**
      * Convenience method to write a non-empty tag and count it.
      *
      * @param tag         tag to output
      * @param writer      writer to output tag to
-     * @param entityCount entity counter
+     * @param listener    listener
      *
      * @throws Exception in case of write errors
      */
     protected void handleInternal(final Tag tag,
                                   final OutputStreamWriter writer,
-                                  final Map<String, Integer> entityCount) throws Exception {
+                                  final JobStatusListener listener) throws Exception {
         final String xmlChunk = tag.toXml();
         if (xmlChunk != null) {
             write(writer, xmlChunk);
-            count(entityCount, tag.name);
+            listener.count(tag.name);
         }
     }
 

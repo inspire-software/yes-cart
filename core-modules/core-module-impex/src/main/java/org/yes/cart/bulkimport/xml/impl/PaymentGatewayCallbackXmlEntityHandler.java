@@ -42,12 +42,12 @@ public class PaymentGatewayCallbackXmlEntityHandler extends AbstractXmlEntityHan
     }
 
     @Override
-    protected void delete(final JobStatusListener statusListener, final PaymentGatewayCallback callback, final Map<String, Integer> entityCount) {
+    protected void delete(final JobStatusListener statusListener, final PaymentGatewayCallback callback) {
         this.paymentGatewayCallbackService.delete(callback);
     }
 
     @Override
-    protected void saveOrUpdate(final JobStatusListener statusListener, final PaymentGatewayCallback domain, final PaymentGatewayCallbackType xmlType, final EntityImportModeType mode, final Map<String, Integer> entityCount) {
+    protected void saveOrUpdate(final JobStatusListener statusListener, final PaymentGatewayCallback domain, final PaymentGatewayCallbackType xmlType, final EntityImportModeType mode) {
 
         if (domain.getPaymentGatewayCallbackId() == 0L) {
             this.paymentGatewayCallbackService.create(domain);
@@ -58,7 +58,7 @@ public class PaymentGatewayCallbackXmlEntityHandler extends AbstractXmlEntityHan
     }
 
     @Override
-    protected PaymentGatewayCallback getOrCreate(final JobStatusListener statusListener, final PaymentGatewayCallbackType xmlType, final Map<String, Integer> entityCount) {
+    protected PaymentGatewayCallback getOrCreate(final JobStatusListener statusListener, final PaymentGatewayCallbackType xmlType) {
         PaymentGatewayCallback payment = this.paymentGatewayCallbackService.findSingleByCriteria(" where e.guid = ?1", xmlType.getGuid());
         if (payment != null) {
             return payment;

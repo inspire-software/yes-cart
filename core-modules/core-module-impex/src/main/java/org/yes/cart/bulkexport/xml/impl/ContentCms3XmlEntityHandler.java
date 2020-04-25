@@ -50,10 +50,9 @@ public class ContentCms3XmlEntityHandler extends AbstractXmlEntityHandler<Conten
                        final ImpExTuple<String, Content> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
-        handleInternal(tagContent(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagContent(null, tuple.getData()), writer, statusListener);
 
     }
 

@@ -40,6 +40,9 @@ import java.util.List;
  */
 public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
+    private static final String MERGE_COUNTER = "Images upserted";
+    private static final String SKIP_COUNTER = "Images skipped";
+
     private final BrandService brandService;
     private final AttributeService attributeService;
 
@@ -64,6 +67,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
         final Brand brand = brandService.findByNameOrGuid(code);
         if (brand == null) {
             statusListener.notifyWarning("brand with code {} not found.", code);
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
 
@@ -92,6 +96,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
             }
             if (attribute == null) {
                 statusListener.notifyWarning("attribute with code {} not found.", attributeCode);
+                statusListener.count(SKIP_COUNTER);
                 return false;
             }
             imageAttributeValue = brandService.getGenericDao().getEntityFactory().getByIface(AttrValueBrand.class);
@@ -99,6 +104,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
             imageAttributeValue.setAttributeCode(attribute.getCode());
             brand.getAttributes().add(imageAttributeValue);
         }  else if (isInsertOnly()) {
+            statusListener.count(SKIP_COUNTER);
             return false;
         }
         imageAttributeValue.setVal(fileName);
@@ -107,10 +113,12 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
 
         try {
             brandService.update(brand);
+            statusListener.count(MERGE_COUNTER);
             return true;
 
         } catch (DataIntegrityViolationException e) {
             statusListener.notifyError("image {} for brand with name {} could not be added (db error).", e, fileName, brand.getName());
+            statusListener.count(SKIP_COUNTER);
             return false;
 
         }

@@ -57,8 +57,7 @@ public class AbstractXmlEntityHandlerTest {
                            final ImpExTuple<String, Object> tuple,
                            final XmlValueAdapter xmlValueAdapter,
                            final String fileToExport,
-                           final OutputStreamWriter writer,
-                           final Map<String, Integer> entityCount) {
+                           final OutputStreamWriter writer) {
             // do nothing
         }
     };
@@ -70,8 +69,7 @@ public class AbstractXmlEntityHandlerTest {
                            final ImpExTuple<String, Object> tuple,
                            final XmlValueAdapter xmlValueAdapter,
                            final String fileToExport,
-                           final OutputStreamWriter writer,
-                           final Map<String, Integer> entityCount) {
+                           final OutputStreamWriter writer) {
             // do nothing
         }
     };
@@ -377,22 +375,4 @@ public class AbstractXmlEntityHandlerTest {
 
     }
 
-    @Test
-    public void count() throws Exception {
-
-        final Map<String, Integer> counts = new ConcurrentHashMap<>();
-
-        handler.count(counts, "a");
-        handler.count(counts, "a");
-        handler.count(counts, "b");
-        handler.count(counts, "c");
-        handler.count(counts, "c");
-        handler.count(counts, "c");
-
-        assertEquals(Integer.valueOf(2), counts.get("a"));
-        assertEquals(Integer.valueOf(1), counts.get("b"));
-        assertEquals(Integer.valueOf(3), counts.get("c"));
-        assertEquals(3, counts.size());
-
-    }
 }

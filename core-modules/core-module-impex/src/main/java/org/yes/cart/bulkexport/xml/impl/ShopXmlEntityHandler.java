@@ -28,7 +28,6 @@ import org.yes.cart.service.domain.WarehouseService;
 
 import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -61,13 +60,12 @@ public class ShopXmlEntityHandler extends AbstractXmlEntityHandler<Shop> {
                        final ImpExTuple<String, Shop> tuple,
                        final XmlValueAdapter xmlValueAdapter,
                        final String fileToExport,
-                       final OutputStreamWriter writer,
-                       final Map<String, Integer> entityCount) throws Exception {
+                       final OutputStreamWriter writer) throws Exception {
 
         if (this.includeMaster && tuple.getData().getMaster() != null) {
-            handleInternal(tagShop(null, tuple.getData().getMaster()), writer, entityCount);
+            handleInternal(tagShop(null, tuple.getData().getMaster()), writer, statusListener);
         }
-        handleInternal(tagShop(null, tuple.getData()), writer, entityCount);
+        handleInternal(tagShop(null, tuple.getData()), writer, statusListener);
 
     }
 

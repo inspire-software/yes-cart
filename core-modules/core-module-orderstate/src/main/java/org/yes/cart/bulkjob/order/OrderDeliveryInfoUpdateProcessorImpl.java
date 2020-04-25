@@ -56,7 +56,7 @@ public class OrderDeliveryInfoUpdateProcessorImpl
 
     private List<Iterator<OrderDeliveryStatusUpdate>> dataFeeds = new ArrayList<>();
 
-    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG);
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Delivery update", true);
 
     public OrderDeliveryInfoUpdateProcessorImpl(final CustomerOrderService customerOrderService,
                                                 final OrderStateManager orderStateManager) {
@@ -75,8 +75,6 @@ public class OrderDeliveryInfoUpdateProcessorImpl
     public void run() {
 
 
-        LOG.info("Process delivery info updates");
-
         for (final Iterator<OrderDeliveryStatusUpdate> dataFeed : dataFeeds) {
 
             while (dataFeed.hasNext()) {
@@ -87,7 +85,8 @@ public class OrderDeliveryInfoUpdateProcessorImpl
 
                     proxy().processDeliveryUpdate(update);
 
-                    listener.notifyPing("Processed delivery update for order " + update.getOrderNumber());
+                    listener.notifyMessage("Processed delivery update for order {}", update.getOrderNumber());
+                    listener.count("delivery updates");
 
                 } catch (Exception exp) {
 
@@ -99,9 +98,8 @@ public class OrderDeliveryInfoUpdateProcessorImpl
 
         }
 
-        LOG.info("Process delivery info updates ... completed");
-
-        listener.notifyPing(null); // unset last message
+        listener.notifyCompleted();
+        listener.reset();
 
     }
 
