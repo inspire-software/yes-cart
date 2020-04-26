@@ -16,6 +16,9 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.ProductOption;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
@@ -24,6 +27,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -86,6 +90,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
                            final ProductSku productSku,
                            final String skuCode,
                            final String supplier,
+                           final String itemGroup,
                            final BigDecimal qty,
                            final Map<String, Object> parameters) {
 
@@ -109,7 +114,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
 
         }
 
-        shoppingCart.addProductSkuToCart(supplier, skuCode, skuName, toAdd);
+        shoppingCart.addProductSkuToCart(supplier, skuCode, skuName, toAdd, itemGroup);
         recalculatePricesInCart(shoppingCart);
         markDirty(shoppingCart);
         LOG.debug("[{}] Added {} item(s) of sku code {}", shoppingCart.getGuid(), toAdd, skuCode);
