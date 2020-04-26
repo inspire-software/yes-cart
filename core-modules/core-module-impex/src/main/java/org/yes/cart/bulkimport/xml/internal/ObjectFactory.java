@@ -1833,6 +1833,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ProductType.Configuration }
+     * 
+     */
+    public ProductType.Configuration createProductTypeConfiguration() {
+        return new ProductType.Configuration();
+    }
+
+    /**
      * Create an instance of {@link ContentType.Availability }
      * 
      */

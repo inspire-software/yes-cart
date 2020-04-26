@@ -30,6 +30,7 @@
     <bean id="attributeLuceneQueryBuilder" class="org.yes.cart.search.query.impl.AttributeSearchQueryBuilder"/>
     <bean id="attributeSkuLuceneQueryBuilder" class="org.yes.cart.search.query.impl.AttributeSearchQueryBuilder"/>
     <bean id="featuredProductLuceneQueryBuilder" class="org.yes.cart.search.query.impl.FeaturedProductSearchQueryBuilder"/>
+    <bean id="notSoldSeparatelyProductLuceneQueryBuilder" class="org.yes.cart.search.query.impl.NotSoldSeparatelyProductSearchQueryBuilder"/>
     <bean id="hasOfferProductSearchQueryBuilder" class="org.yes.cart.search.query.impl.HasOfferProductSearchQueryBuilder"/>
     <bean id="inStockProductSearchQueryBuilder" class="org.yes.cart.search.query.impl.InStockProductSearchQueryBuilder"/>
     <bean id="keywordProductLuceneQueryBuilder" class="org.yes.cart.search.query.impl.KeywordProductSearchQueryBuilder"/>
@@ -80,6 +81,7 @@
                 <entry key="productShopId"                          value-ref="productShopLuceneQueryBuilder"/>
                 <entry key="productInStockShopId"                   value-ref="productShopInStockLuceneQueryBuilder"/>
                 <entry key="productHasPriceShopId"                  value-ref="productShopHasPriceLuceneQueryBuilder"/>
+                <entry key="notSoldSeparately"                      value-ref="notSoldSeparatelyProductLuceneQueryBuilder"/>
             </map>
         </constructor-arg>
         <constructor-arg index="3">
@@ -106,6 +108,7 @@
                 <entry key="attribute.attribute"           value-ref="attributeSkuLuceneQueryBuilder"/>
                 <entry key="productCategory.category"      value-ref="noopLuceneQueryBuilder"/>
                 <entry key="productShopId"                 value-ref="noopLuceneQueryBuilder"/>
+                <entry key="notSoldSeparately"             value-ref="notSoldSeparatelyProductLuceneQueryBuilder"/>
             </map>
         </constructor-arg>
     </bean>

@@ -193,6 +193,22 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      */
     void setProducttype(ProductType producttype);
 
+
+    /**
+     * Flag to indicate that this product cannot be sold separately (i.e. an option, part of bundle etc).
+     *
+     * @return true means not to be sold separately
+     */
+    boolean getNotSoldSeparately();
+
+    /**
+     * Flag to indicate that this product cannot be sold separately (i.e. an option, part of bundle etc).
+     *
+     * @param notSoldSeparately true means not to be sold separately
+     */
+    void setNotSoldSeparately(boolean notSoldSeparately);
+
+
     /**
      * Product's SKUs. SKU - Stock keeping unit or product variation. Each product has at least one sku.
      *

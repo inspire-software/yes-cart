@@ -59,6 +59,8 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     private String productName;
     private String supplierCode;
 
+    private String itemGroup;
+
     private String deliveryRemarks;
     private LocalDateTime deliveryEstimatedMin;
     private LocalDateTime deliveryEstimatedMax;
@@ -236,6 +238,20 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     }
 
     @Override
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
+    }
+
+    @Override
+    public String getItemGroup() {
+        return itemGroup;
+    }
+
+    public void setItemGroup(final String itemGroup) {
+        this.itemGroup = itemGroup;
+    }
+
+    @Override
     public String getDeliveryGroup() {
         return "";
     }
@@ -244,11 +260,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     public DeliveryBucket getDeliveryBucket() {
         final String supplierCode = this.supplierCode == null ? "" : this.supplierCode;
         return new DeliveryBucketImpl(getDeliveryGroup(), supplierCode, getCustomerOrder().getOrdernum());
-    }
-
-    @Override
-    public void setSupplierCode(final String supplierCode) {
-        this.supplierCode = supplierCode;
     }
 
     @Override

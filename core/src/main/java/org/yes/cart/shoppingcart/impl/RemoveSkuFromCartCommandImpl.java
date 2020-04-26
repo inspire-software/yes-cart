@@ -93,13 +93,14 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
                            final ProductSku productSku,
                            final String skuCode,
                            final String supplier,
+                           final String itemGroup,
                            final BigDecimal qty,
                            final Map<String, Object> parameters) {
 
         final long shopId = shoppingCart.getShoppingContext().getCustomerShopId();
 
         if(!shoppingCart.removeCartItemQuantity(supplier, skuCode,
-                getQuantityValue(shopId, skuCode, supplier, shoppingCart.getProductSkuQuantity(supplier, skuCode)))) {
+                getQuantityValue(shopId, skuCode, supplier, shoppingCart.getProductSkuQuantity(supplier, skuCode)), itemGroup)) {
             LOG.warn("Can not remove one sku with code {} from cart", skuCode);
         }
 

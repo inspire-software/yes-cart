@@ -12,6 +12,7 @@ export * from './product-type-group.component';
 export * from './products.component';
 export * from './product.component';
 export * from './product-categories-min.component';
+export * from './product-options.component';
 export * from './product-associations.component';
 export * from './skus.component';
 export * from './sku.component';

@@ -417,6 +417,7 @@
   "PRODUCT_TEMPLATE": "Шаблон",
   "PRODUCT_SEARCH_TEMPLATE": "Шаблон поиска",
   "PRODUCT_CONFIGURABLE": "Сборный",
+  "PRODUCT_NOT_SOLD_SEPARATELY": "Компонент/Деталь",
 
   "PRODUCT_TAB_AVAILABILITY": "Доступность",
   "PRODUCT_TAB_CATALOG": "Каталог",
@@ -425,6 +426,9 @@
 
   "PRODUCT_ASSOCIATION_BIDIRECTIONAL": "Взаимно",
   "PRODUCT_ASSOCIATION_BIDIRECTIONAL_TIP": "Создать также ассоциацию для связанного товара",
+
+  "PRODUCT_OPTIONS": "Компоненты/Детали",
+  "PRODUCT_OPTIONS_SKU": "Варианты",
 
   "EMAILPREVIEW_ORDER": "Выберите заказ для предварительного просмотра шаблона почты: {{value}}",
 

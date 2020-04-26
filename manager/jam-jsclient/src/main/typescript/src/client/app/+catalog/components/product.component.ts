@@ -16,10 +16,10 @@
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { ProductWithLinksVO, AttrValueProductVO, ProductAssociationVO, BrandVO, ProductTypeInfoVO, ProductSkuVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { ProductWithLinksVO, AttrValueProductVO, ProductOptionVO, ProductAssociationVO, BrandVO, ProductTypeInfoVO, ProductSkuVO, Pair, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
-import { ProductAssociationsComponent } from './index';
+import { ProductAssociationsComponent, ProductOptionsComponent } from './index';
 import { UiUtil } from './../../shared/ui/index';
 import { BrandSelectComponent, ProductTypeSelectComponent } from './../../shared/catalog/index';
 import { LogUtil } from './../../shared/log/index';
@@ -49,12 +49,15 @@ export class ProductComponent implements OnInit, OnDestroy {
   private attributeSort:Pair<string, boolean> = { first: 'name', second: false };
   private associationFilter:string;
   private associationSort:Pair<string, boolean> = { first: 'associationId', second: false };
+  private optionsFilter:string;
+  private optionsSort:Pair<string, boolean> = { first: 'rank', second: false };
   private skuSort:Pair<string, boolean> = { first: 'rank', second: false };
 
   private _changes:Array<Pair<AttrValueProductVO, boolean>>;
 
   private selectedRowAttribute:AttrValueProductVO;
   private selectedRowAssociation:ProductAssociationVO;
+  private selectedRowOption:ProductOptionVO;
 
   private delayedChange:Future;
 
@@ -70,6 +73,9 @@ export class ProductComponent implements OnInit, OnDestroy {
   @ViewChild('associationsComponent')
   private associationsComponent:ProductAssociationsComponent;
 
+  @ViewChild('optionsComponent')
+  private optionsComponent:ProductOptionsComponent;
+
   @ViewChild('brandsModalDialog')
   private brandsModalDialog:BrandSelectComponent;
 
@@ -78,6 +84,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   private searchHelpShowAttribute:boolean = false;
   private searchHelpShowAssociation:boolean = false;
+  private searchHelpShowOptions:boolean = false;
 
   private reloadCatalogue:boolean = false;
 
@@ -147,6 +154,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       'tag': ['', YcValidators.nonBlankTrimmed],
       'brandName': ['', YcValidators.requiredNonBlankTrimmed],
       'productTypeName': ['', YcValidators.requiredNonBlankTrimmed],
+      'notSoldSeparately': [''],
       'configurable': [''],
       'description': [''],
       'uri': ['', validUri],
@@ -241,6 +249,11 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   onAssociationDataChanged(event:any) {
     LogUtil.debug('ProductComponent assoc data changed', this._product);
+    this.delayedChange.delay();
+  }
+
+  onOptionsDataChanged(event:any) {
+    LogUtil.debug('ProductComponent options data changed', this._product);
     this.delayedChange.delay();
   }
 
@@ -359,6 +372,52 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
 
+  protected onRowAddOption() {
+    this.optionsComponent.onRowAdd();
+  }
+
+
+  protected onRowDeleteSelectedOption() {
+    if (this.selectedRowOption != null) {
+      this.optionsComponent.onRowDeleteSelected();
+    }
+  }
+
+  protected onRowEditSelectedOption() {
+    if (this.selectedRowOption != null) {
+      this.optionsComponent.onRowEditSelected();
+    }
+  }
+
+  protected onPageSelectedOption(page:number) {
+    LogUtil.debug('ProductComponent onPageSelectedOption', page);
+  }
+
+
+
+  protected onSortSelectedOption(sort:Pair<string, boolean>) {
+    LogUtil.debug('ProductComponent onSortSelectedOption', sort);
+    if (sort == null) {
+      this.optionsSort = { first: 'rank', second: false };
+    } else {
+      this.optionsSort = sort;
+    }
+  }
+
+
+  protected onSelectRowOption(row:ProductOptionVO) {
+    LogUtil.debug('ProductComponent onSelectRowOption handler', row);
+    if (row == this.selectedRowOption) {
+      this.selectedRowOption = null;
+    } else {
+      this.selectedRowOption = row;
+    }
+  }
+
+
+
+
+
   protected onRowAddAssociation() {
     this.associationsComponent.onRowAdd();
   }
@@ -399,7 +458,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-
   protected onEditBrand() {
     this.brandsModalDialog.showDialog();
   }
@@ -432,6 +490,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchHelpAttributeToggle() {
+    this.searchHelpShowAttribute = !this.searchHelpShowAttribute;
+  }
+
+  protected onSearchHelpOptionToggle() {
     this.searchHelpShowAttribute = !this.searchHelpShowAttribute;
   }
 
@@ -470,5 +532,18 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.searchHelpShowAssociation = false;
     this.associationFilter = '#cross';
   }
+
+  protected onSearchOption() {
+    this.searchHelpShowOptions = false;
+    this.optionsFilter = '#';
+  }
+
+
+  protected onClearOptionsFilter() {
+
+    this.optionsFilter = '';
+
+  }
+
 
 }

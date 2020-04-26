@@ -136,6 +136,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                            final ProductSku productSku,
                            final String skuCode,
                            final String supplier,
+                           final String itemGroup,
                            final BigDecimal qty,
                            final Map<String, Object> parameters) {
 

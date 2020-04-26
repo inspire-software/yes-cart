@@ -72,9 +72,10 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
                            final ProductSku productSku,
                            final String skuCode,
                            final String supplier,
+                           final String itemGroup,
                            final BigDecimal qty,
                            final Map<String, Object> parameters) {
-        if(!shoppingCart.removeCartItem(supplier, skuCode)) {
+        if(!shoppingCart.removeCartItem(supplier, skuCode, itemGroup)) {
             LOG.warn("Cannot remove all skus with code {} from cart", skuCode);
 
         } else  {

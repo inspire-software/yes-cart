@@ -547,6 +547,25 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 // Verify that we find all multi SKUs in multiple fulfilment centres
                 assertSearchSkuMatchesBaseSku(products, skus.getResults());
 
+                // Search for option by SKU 001_CFG01, which is not to be sold separately
+                pContext = searchQueryFactory.getFilteredNavigationQueryChain(10L, 10L, null, null,
+                        false, Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("001_CFG01", "001_CFG02")));
+
+                // Get product search result
+                page = productService.getProductSearchResultDTOByQuery(pContext, 0, 10, null, false);
+                products = page.getResults();
+                assertEquals("Failed [" + pContext.getProductQuery().toString() + "]", 1, products.size());
+
+                sContext = searchQueryFactory.getSkuSnowBallQuery(pContext, products);
+
+                // Get relevant SKU
+                skus = productSkuService.getProductSkuSearchResultDTOByQuery(sContext);
+                assertEquals("Failed [" + sContext.getProductSkuQuery().toString() + "]", 3, skus.getResults().size());
+
+                // Verify that we find all single SKUs
+                assertSearchSkuMatchesBaseSku(products, skus.getResults());
+
+
                 status.setRollbackOnly();
             }
 
@@ -715,7 +734,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
                 brandFacetResults = facets.get("brandFacet");
                 assertNotNull(brandFacetResults);
-                assertEquals(6, brandFacetResults.size());
+                assertEquals(7, brandFacetResults.size());
 
                 final List<Pair<Pair<String, I18NModel>, Integer>> expectedInShop = Arrays.asList(
                         new Pair<>(new Pair<>("cc tests", null), 13),
@@ -723,7 +742,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                         new Pair<>(new Pair<>("Samsung", null), 2),
                         new Pair<>(new Pair<>("Sony", null), 1),
                         new Pair<>(new Pair<>("LG", null), 1),
-                        new Pair<>(new Pair<>("Unknown", null), 2)
+                        new Pair<>(new Pair<>("Unknown", null), 2),
+                        new Pair<>(new Pair<>("TestOptions", null), 1)
                 );
 
                 for (final Pair<Pair<String, I18NModel>, Integer> brandFacetResultItem : brandFacetResults) {
@@ -802,12 +822,13 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
                 productTypeFacetResults = facets.get("productTypeFacet");
                 assertNotNull(productTypeFacetResults);
-                assertEquals(3, productTypeFacetResults.size());
+                assertEquals(4, productTypeFacetResults.size());
 
                 final List<Pair<Pair<String, I18NModel>, Integer>> expectedInShop = Arrays.asList(
                         new Pair<>(new Pair<>("DVD Player", null), 14),
                         new Pair<>(new Pair<>("Robots", new StringI18NModel("en#~#Robots#~#ru#~#Роботы#~#ua#~#Роботи#~#")), 4),
-                        new Pair<>(new Pair<>("Digital product", null), 4)
+                        new Pair<>(new Pair<>("Digital product", null), 4),
+                        new Pair<>(new Pair<>("Configurable", null), 1)
                 );
 
                 for (final Pair<Pair<String, I18NModel>, Integer> productTypeFacetResultItem : productTypeFacetResults) {
@@ -885,12 +906,13 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
                 tagFacetResults = facets.get("tagsFacet");
                 assertNotNull(tagFacetResults);
-                assertEquals(3, tagFacetResults.size());
+                assertEquals(4, tagFacetResults.size());
 
                 final List<Pair<Pair<String, I18NModel>, Integer>> expectedInShop = Arrays.asList(
                         new Pair<>(new Pair<>("sale", null), 2),
                         new Pair<>(new Pair<>("newarrival", null), 3),
-                        new Pair<>(new Pair<>("specialpromo", null), 2)
+                        new Pair<>(new Pair<>("specialpromo", null), 2),
+                        new Pair<>(new Pair<>("configurable", null), 1)
                 );
 
                 for (final Pair<Pair<String, I18NModel>, Integer> tagFacetResultItem : tagFacetResults) {

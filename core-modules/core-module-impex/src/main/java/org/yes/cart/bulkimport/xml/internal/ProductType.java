@@ -61,6 +61,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
+ *         &lt;element name="configuration" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element name="not-sold-separately" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="display-name" type="{}i18nsType" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -94,6 +105,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     "manufacturer",
     "supplier",
     "pim",
+    "configuration",
     "name",
     "displayName",
     "description",
@@ -121,6 +133,7 @@ public class ProductType {
     protected ProductType.Supplier supplier;
     @XmlElement(required = true)
     protected ProductType.Pim pim;
+    protected ProductType.Configuration configuration;
     @XmlElement(required = true)
     protected String name;
     @XmlElement(name = "display-name")
@@ -277,6 +290,30 @@ public class ProductType {
      */
     public void setPim(ProductType.Pim value) {
         this.pim = value;
+    }
+
+    /**
+     * Gets the value of the configuration property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ProductType.Configuration }
+     *     
+     */
+    public ProductType.Configuration getConfiguration() {
+        return configuration;
+    }
+
+    /**
+     * Sets the value of the configuration property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ProductType.Configuration }
+     *     
+     */
+    public void setConfiguration(ProductType.Configuration value) {
+        this.configuration = value;
     }
 
     /**
@@ -709,6 +746,61 @@ public class ProductType {
      */
     public void setImportMode(EntityImportModeType value) {
         this.importMode = value;
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element name="not-sold-separately" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "notSoldSeparately"
+    })
+    public static class Configuration {
+
+        @XmlElement(name = "not-sold-separately")
+        protected Boolean notSoldSeparately;
+
+        /**
+         * Gets the value of the notSoldSeparately property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link Boolean }
+         *     
+         */
+        public Boolean isNotSoldSeparately() {
+            return notSoldSeparately;
+        }
+
+        /**
+         * Sets the value of the notSoldSeparately property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link Boolean }
+         *     
+         */
+        public void setNotSoldSeparately(Boolean value) {
+            this.notSoldSeparately = value;
+        }
+
     }
 
 

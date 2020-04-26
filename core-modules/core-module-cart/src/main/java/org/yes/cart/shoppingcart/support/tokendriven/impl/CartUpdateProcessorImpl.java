@@ -238,11 +238,17 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
     private void mergeNonGiftSKU(final ShoppingCart shoppingCart, final ShoppingCart oldCart, final Map<String, Object> cmdParams) {
 
+        final Map<String, Set<String>> skuBySupplier = new HashMap<>();
+        for (final CartItem cartItem : shoppingCart.getCartItemList()) {
+            final Set<String> skus = skuBySupplier.computeIfAbsent(cartItem.getSupplierCode(), k -> new HashSet<>());
+            skus.add(cartItem.getProductSkuCode());
+        }
+
         for (final CartItem cartItem : oldCart.getCartItemList()) {
             // Only merge non gifts and items that are NOT already in the cart
             if (!cartItem.isGift() &&
                     StringUtils.isNotBlank(cartItem.getSupplierCode()) &&
-                    shoppingCart.indexOfProductSku(cartItem.getSupplierCode(), cartItem.getProductSkuCode()) == -1) {
+                    !skuBySupplier.getOrDefault(cartItem.getSupplierCode(), Collections.emptySet()).contains(cartItem.getProductSkuCode())) {
 
                 cmdParams.clear();
 

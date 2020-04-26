@@ -99,6 +99,10 @@
                   <input formControlName="configurable" name="configurable" type="checkbox" [(ngModel)]="product.configurable">
                   <label>{{ 'PRODUCT_CONFIGURABLE' | translate }}</label>
                 </div>
+                <div>
+                  <input formControlName="notSoldSeparately" name="notSoldSeparately" type="checkbox" [(ngModel)]="product.notSoldSeparately">
+                  <label>{{ 'PRODUCT_NOT_SOLD_SEPARATELY' | translate }}</label>
+                </div>
               </fieldset>
             </div>
           </div>
@@ -612,6 +616,113 @@
                               { key: 'associatedName', messageKey: 'NAME' }
                           ]) "
                           (sortSelected)="onSortSelectedAssociation($event)"></yc-sort-select>
+
+        </ng-template>
+
+      </tab>
+
+
+      <tab (select)="tabSelected('Options')">
+
+        <ng-template tabHeading>
+          {{ 'PRODUCT_OPTIONS' | translate }} <span class="label label-info">YCE</span>
+        </ng-template>
+
+        <ng-template [ngIf]="!(product.productId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </ng-template>
+
+        <ng-template [ngIf]="product.productId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="row data-control">
+
+
+                <div class="col-xs-12 col-md-5 padding-lr-0">
+
+                  <form class="width-100">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button type="button" (click)="onSearchHelpOptionToggle()" class="btn {{ searchHelpShowOptions ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}">
+                          <i class="fa fa-question-circle-o"></i>
+                        </button>
+                        <button type="button" (click)="sortSelectOptionsModal.showDialog()" class="btn {{ optionsSort.first ? 'btn-info' : 'btn-default' }} btn-square btn-xl" title="{{ 'MODAL_BUTTON_HELPSORT' | translate }}">
+                          <i class="fa fa-sort-amount-asc"></i>
+                        </button>
+                      </span>
+                      <input class="form-control filter-input" type="text" name="optionsFilter" [(ngModel)]="optionsFilter" autocomplete="off"/>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearOptionsFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+                          <i class="fa fa-times-circle-o"></i>
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+
+                </div>
+
+                <div class="col-xs-12 col-md-7 padding-lr-0 button-panel">
+
+                  <button type="button" (click)="onRowAddOption()" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                    <i class="fa fa-plus"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowEditSelectedOption()" [disabled]="selectedRowOption == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                    <i class="fa fa-edit"></i>
+                  </button>
+
+                  <button type="button" (click)="onRowDeleteSelectedOption()" [disabled]="selectedRowOption == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                    <i class="fa fa-remove"></i>
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div *ngIf="searchHelpShowOptions">
+                <div class="bg-info text-padding block-margin-spacer">
+                  <p>{{ 'SEARCH_HELP_ASSOCIATION_TYPE' | translate }} <span><button type="button" (click)="onSearchOption()" class="btn btn-default btn-circle"><i class="fa fa-tag"></i></button></span></p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <yc-product-options #optionsComponent
+                                  [masterObject]="product"
+                                  [optionFilter]="optionsFilter"
+                                  [sortorder]="optionsSort"
+                                  (dataSelected)="onSelectRowOption($event)"
+                                  (dataChanged)="onOptionsDataChanged($event)"
+                                  (pageSelected)="onPageSelectedOption($event)"
+                                  (sortSelected)="onSortSelectedOption($event)"></yc-product-options>
+
+            </div>
+          </div>
+
+
+          <yc-sort-select #sortSelectOptionsModal
+                          [sortColumn]="optionsSort.first"
+                          [sortDesc]="optionsSort.second"
+                          [availableOptions]=" ([
+                              { key: 'attributeCode', messageKey: 'CODE' },
+                              { key: 'rank', messageKey: 'AV_RANK' },
+                              { key: 'mandatory', messageKey: 'ATTRIBUTE_MANDATORY' },
+                              { key: 'skuCode', messageKey: 'SKU' }
+                          ]) "
+                          (sortSelected)="onSortSelectedOption($event)"></yc-sort-select>
 
         </ng-template>
 

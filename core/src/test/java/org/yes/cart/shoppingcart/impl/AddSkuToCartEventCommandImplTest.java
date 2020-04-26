@@ -117,4 +117,31 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
 
     }
 
+    @Test
+    public void testExecuteProductWithOptions() throws Exception {
+
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
+
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
+        Map<String, String> params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 49.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("49.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 20049.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("20049.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+
+
+    }
 }

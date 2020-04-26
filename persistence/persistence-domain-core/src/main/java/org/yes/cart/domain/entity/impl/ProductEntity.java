@@ -57,6 +57,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private Brand brand;
     private ProductType producttype;
 
+    private boolean notSoldSeparately;
+
     private Set<AttrValueProduct> attributes = new HashSet<>(0);
     private Set<ProductCategory> productCategory = new HashSet<>(0);
     private Collection<ProductSku> sku = new ArrayList<>(0);
@@ -257,6 +259,16 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @Override
     public void setProducttype(final ProductType producttype) {
         this.producttype = producttype;
+    }
+
+    @Override
+    public boolean getNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    @Override
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
     }
 
     @Override

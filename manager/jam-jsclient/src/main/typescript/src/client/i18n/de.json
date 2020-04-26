@@ -417,6 +417,7 @@
   "PRODUCT_TEMPLATE": "Template",
   "PRODUCT_SEARCH_TEMPLATE": "Suchtemplate",
   "PRODUCT_CONFIGURABLE": "Konfigurierbar",
+  "PRODUCT_NOT_SOLD_SEPARATELY": "Komponente/Teil",
 
   "PRODUCT_TAB_AVAILABILITY": "Verfügbarkeit",
   "PRODUCT_TAB_CATALOG": "Katalog",
@@ -425,6 +426,9 @@
 
   "PRODUCT_ASSOCIATION_BIDIRECTIONAL": "Bidirektional",
   "PRODUCT_ASSOCIATION_BIDIRECTIONAL_TIP": "Erstellen Sie auch eine Assoziation für das zugehörige Produkt",
+
+  "PRODUCT_OPTIONS": "Komponenten/Teile",
+  "PRODUCT_OPTIONS_SKU": "Optionen",
 
   "EMAILPREVIEW_ORDER": "Geben Sie eine aktuelle Bestellnummer zur Vorschau der E-Mail ein: {{value}}",
 

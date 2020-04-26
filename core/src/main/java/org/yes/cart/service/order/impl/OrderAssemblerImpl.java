@@ -344,11 +344,18 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
         customerOrder.setOrderMessage(shoppingCart.getOrderMessage());
         customerOrder.setB2bRemarks(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_REMARKS_ID));
 
-        final LocalDateTime requestedDate =
-                DateUtils.ldtFrom(
-                        NumberUtils.toLong(shoppingCart.getOrderInfo().getDetailByKey(
-                                AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID), 0)
-                );
+
+        long lastRequested = 0L;
+        for (final Map.Entry<String, String> entry : shoppingCart.getOrderInfo().getDetails().entrySet()) {
+            if (entry.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_REQUESTED_DELIVERY_DATE_ID)) {
+                final long selectedDate = NumberUtils.toLong(entry.getValue());
+                if (selectedDate > 0) {
+                    lastRequested = Math.max(selectedDate, lastRequested);
+                };
+            }
+        }
+
+        final LocalDateTime requestedDate = DateUtils.ldtFrom(lastRequested);
         if (requestedDate.isAfter(now())) {
             customerOrder.setRequestedDeliveryDate(requestedDate);
         }

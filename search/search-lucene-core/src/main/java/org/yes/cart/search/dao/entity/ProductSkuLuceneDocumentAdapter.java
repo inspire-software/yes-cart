@@ -112,6 +112,8 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                     addSortField(document, SKU_PRODUCT_MANUFACTURER_CODE_SORT_FIELD, entity.getManufacturerCode());
                     addStemFields(document, SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD, entity.getManufacturerCode(), entity.getManufacturerPartCode(), entity.getSupplierCode());
 
+                    addSimpleField(document, PRODUCT_NOT_SOLD_SEPARATELY, String.valueOf(entity.getProduct().getNotSoldSeparately()));
+
                     addSearchField(document, PRODUCT_NAME_FIELD, entity.getName());
                     addSortField(document, PRODUCT_NAME_SORT_FIELD, entity.getName());
                     addStemFields(document, PRODUCT_NAME_STEM_FIELD, entity.getName(), entity.getSeo().getTitle(), entity.getSeo().getMetakeywords());

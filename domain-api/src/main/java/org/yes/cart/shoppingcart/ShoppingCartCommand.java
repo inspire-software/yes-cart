@@ -31,6 +31,7 @@ public interface ShoppingCartCommand extends Serializable {
 
     String CMD_P_QTY = "qty";
     String CMD_P_SUPPLIER = "supplier";
+    String CMD_P_ITEM_GROUP = "itmgrp";
 
     String CMD_ADDTOWISHLIST = "addToWishListCmd";
     String CMD_ADDTOWISHLIST_P_TYPE = "type";

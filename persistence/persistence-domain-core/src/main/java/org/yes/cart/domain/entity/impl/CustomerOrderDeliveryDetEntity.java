@@ -59,6 +59,8 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     private String productName;
     private String supplierCode;
 
+    private String itemGroup;
+
     private String deliveryRemarks;
     private LocalDateTime deliveryEstimatedMin;
     private LocalDateTime deliveryEstimatedMax;
@@ -182,6 +184,15 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     @Override
     public void setSupplierCode(final String supplierCode) {
         this.supplierCode = supplierCode;
+    }
+
+    @Override
+    public String getItemGroup() {
+        return itemGroup;
+    }
+
+    public void setItemGroup(final String itemGroup) {
+        this.itemGroup = itemGroup;
     }
 
     @Override

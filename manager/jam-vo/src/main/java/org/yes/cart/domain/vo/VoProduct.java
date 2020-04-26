@@ -88,6 +88,9 @@ public class VoProduct {
             readOnly = true)
     private VoProductTypeInfo productType;
 
+    @DtoField(value = "notSoldSeparately")
+    private boolean notSoldSeparately;
+
     @DtoCollection(
             value = "productCategoryDTOs",
             dtoBeanKey = "VoProductCategory",
@@ -267,6 +270,14 @@ public class VoProduct {
 
     public void setProductType(final VoProductTypeInfo productType) {
         this.productType = productType;
+    }
+
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
     }
 
     public Set<VoProductCategory> getProductCategories() {

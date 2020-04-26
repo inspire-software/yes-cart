@@ -107,10 +107,11 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         for (final CartItem orderItem : customerOrder.getOrderDetail()) {
 
-            final int index = reassembledCart.indexOfProductSku(orderItem.getSupplierCode(), orderItem.getProductSkuCode());
-            assertTrue(index != -1);
+            final CartItem cartItem = reassembledCart.getCartItemList().stream().filter(item ->
+                    orderItem.getProductSkuCode().equals(item.getProductSkuCode()) &&
+                            orderItem.getSupplierCode().equals(item.getSupplierCode())).findFirst().orElse(null);
 
-            final CartItem cartItem = reassembledCart.getCartItemList().get(index);
+            assertNotNull(cartItem);
 
             assertEquals(orderItem.getQty(), cartItem.getQty());
             assertEquals(orderItem.getPrice(), cartItem.getPrice());
@@ -238,10 +239,11 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         for (final CartItem orderItem : customerOrder.getOrderDetail()) {
 
-            final int index = reassembledCart.indexOfProductSku(orderItem.getSupplierCode(), orderItem.getProductSkuCode());
-            assertTrue(index != -1);
+            final CartItem cartItem = reassembledCart.getCartItemList().stream().filter(item ->
+                    orderItem.getProductSkuCode().equals(item.getProductSkuCode()) &&
+                            orderItem.getSupplierCode().equals(item.getSupplierCode())).findFirst().orElse(null);
 
-            final CartItem cartItem = reassembledCart.getCartItemList().get(index);
+            assertNotNull(cartItem);
 
             assertEquals(orderItem.getQty(), cartItem.getQty());
             assertEquals(orderItem.getPrice(), cartItem.getPrice());
@@ -386,10 +388,11 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         for (final CartItem orderItem : customerOrder.getOrderDetail()) {
 
-            final int index = reassembledCart.indexOfProductSku(orderItem.getSupplierCode(), orderItem.getProductSkuCode());
-            assertTrue(index != -1);
+            final CartItem cartItem = reassembledCart.getCartItemList().stream().filter(item ->
+                    orderItem.getProductSkuCode().equals(item.getProductSkuCode()) &&
+                            orderItem.getSupplierCode().equals(item.getSupplierCode())).findFirst().orElse(null);
 
-            final CartItem cartItem = reassembledCart.getCartItemList().get(index);
+            assertNotNull(cartItem);
 
             assertEquals(orderItem.getQty(), cartItem.getQty());
             assertEquals(orderItem.getPrice(), cartItem.getPrice());
@@ -536,10 +539,11 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         for (final CartItem orderItem : customerOrder.getOrderDetail()) {
 
-            final int index = reassembledCart.indexOfProductSku(orderItem.getSupplierCode(), orderItem.getProductSkuCode());
-            assertTrue(index != -1);
+            final CartItem cartItem = reassembledCart.getCartItemList().stream().filter(item ->
+                    orderItem.getProductSkuCode().equals(item.getProductSkuCode()) &&
+                            orderItem.getSupplierCode().equals(item.getSupplierCode())).findFirst().orElse(null);
 
-            final CartItem cartItem = reassembledCart.getCartItemList().get(index);
+            assertNotNull(cartItem);
 
             assertEquals(orderItem.getQty(), cartItem.getQty());
             assertEquals(orderItem.getPrice(), cartItem.getPrice());

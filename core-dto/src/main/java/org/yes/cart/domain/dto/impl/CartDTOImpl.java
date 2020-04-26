@@ -329,11 +329,7 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
     public BigDecimal getProductSkuQuantity(final String supplier,
                                             final String sku) {
 
-        final int skuIndex = indexOfProductSku(supplier, sku);
-        if (skuIndex == -1) { //not found
-            return BigDecimal.ZERO;
-        }
-        return getItems().get(skuIndex).getQty();
+        return ShoppingCartUtils.getProductSkuQuantity(getItems(), supplier, sku);
     }
 
     @Override
@@ -397,26 +393,6 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
     @Override
     public String getOrderMessage() {
         return getOrderInfo().getOrderMessage();
-    }
-
-    @Override
-    public boolean contains(final String supplier, final String skuCode) {
-        return (indexOfProductSku(supplier, skuCode) != -1);
-    }
-
-    @Override
-    public int indexOfShipping(final String carrierSlaGUID, final DeliveryBucket deliveryBucket) {
-        return ShoppingCartUtils.indexOf(carrierSlaGUID, deliveryBucket, getShipping());
-    }
-
-    @Override
-    public int indexOfProductSku(final String supplier, final String skuCode) {
-        return ShoppingCartUtils.indexOf(supplier, skuCode, getItems());
-    }
-
-    @Override
-    public int indexOfGift(final String supplier, final String skuCode) {
-        return ShoppingCartUtils.indexOf(supplier, skuCode, getGifts());
     }
 
 }

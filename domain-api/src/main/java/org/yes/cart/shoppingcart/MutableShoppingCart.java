@@ -54,10 +54,11 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     /**
      * Add product sku to cart.
      *
-     * @param supplier product sku supplier
-     * @param sku      product sku to add
-     * @param skuName  product name to add
-     * @param quantity the quantity to add
+     * @param supplier      product sku supplier
+     * @param sku           product sku to add
+     * @param skuName       product name to add
+     * @param quantity      the quantity to add
+     * @param group         item group
      *
      * @return true if item has been added to the cart as a separate cart item,
      *         false if adding this item cause only quantity update of already present in cart product sku.
@@ -65,7 +66,8 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     boolean addProductSkuToCart(String supplier,
                                 String sku,
                                 String skuName,
-                                BigDecimal quantity);
+                                BigDecimal quantity,
+                                String group);
 
     /**
      * Add product sku to cart.
@@ -107,6 +109,7 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      * @param sku           product sku to add
      * @param skuName       product name to add
      * @param quantity      the quantity to add
+     * @param group         item group
      *
      * @return true if item has been added to the cart as a separate cart item,
      *         false if adding this item cause only quantity update of already present in cart
@@ -115,7 +118,8 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     boolean setProductSkuToCart(String supplier,
                                 String sku,
                                 String skuName,
-                                BigDecimal quantity);
+                                BigDecimal quantity,
+                                String group);
 
     /**
      * Set sku supplier to be used.
@@ -144,11 +148,13 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      *
      * @param supplier      product sku supplier
      * @param productSku    product sku
+     * @param group         item group
      *
      * @return true if item has been removed, false if item was not present in the cart.
      */
     boolean removeCartItem(String supplier,
-                           String productSku);
+                           String productSku,
+                           String group);
 
     /**
      * Removes the shipping from shopping cart.
@@ -174,12 +180,14 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      * @param supplier      product sku supplier
      * @param productSku    product sku
      * @param quantity      quantity to remove
+     * @param group         item group
      *
      * @return true if quantity has been removed, false if item was not present in the cart.
      */
     boolean removeCartItemQuantity(String supplier,
                                    String productSku,
-                                   BigDecimal quantity);
+                                   BigDecimal quantity,
+                                   String group);
 
     /**
      * Remove all cart promotions, which effectively removes promotion prices and reinstates

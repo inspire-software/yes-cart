@@ -45,6 +45,8 @@ public class CartItemDTOImpl implements CartItem, Serializable {
     private String supplierCode;
     @DtoField(readOnly = true)
     private String deliveryGroup;
+    @DtoField(readOnly = true)
+    private String itemGroup;
 
     @DtoField(readOnly = true)
     private BigDecimal price = BigDecimal.ZERO;
@@ -107,6 +109,15 @@ public class CartItemDTOImpl implements CartItem, Serializable {
 
     public void setDeliveryGroup(final String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
+    }
+
+    @Override
+    public String getItemGroup() {
+        return itemGroup;
+    }
+
+    public void setItemGroup(final String itemGroup) {
+        this.itemGroup = itemGroup;
     }
 
     @Override

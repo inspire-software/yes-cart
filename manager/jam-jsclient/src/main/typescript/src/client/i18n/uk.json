@@ -417,6 +417,7 @@
   "PRODUCT_TEMPLATE": "Шаблон",
   "PRODUCT_SEARCH_TEMPLATE": "Шаблон пошуку",
   "PRODUCT_CONFIGURABLE": "Збірний",
+  "PRODUCT_NOT_SOLD_SEPARATELY": "Компонент/Деталь",
 
   "PRODUCT_TAB_AVAILABILITY": "Доступність",
   "PRODUCT_TAB_CATALOG": "Каталог",
@@ -425,6 +426,9 @@
 
   "PRODUCT_ASSOCIATION_BIDIRECTIONAL": "Взаємно",
   "PRODUCT_ASSOCIATION_BIDIRECTIONAL_TIP": "Створити також асоціацію для пов'язаного товару",
+
+  "PRODUCT_OPTIONS": "Компонент/Деталь",
+  "PRODUCT_OPTIONS_SKU": "Варіанти",
 
   "EMAILPREVIEW_ORDER": "Виберіть замовлення для попереднього перегляду шаблону пошти: {{value}}",
 

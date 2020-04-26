@@ -92,6 +92,10 @@ public class ProductXmlEntityHandler extends AbstractAttributableXmlEntityHandle
             domain.setProducttype(productType);
         }
 
+        if (xmlType.getConfiguration() != null) {
+            domain.setNotSoldSeparately(xmlType.getConfiguration().isNotSoldSeparately() != null ? xmlType.getConfiguration().isNotSoldSeparately() : domain.getNotSoldSeparately());
+        }
+
         updateSeo(xmlType.getSeo(), domain.getSeo());
         updateExt(xmlType.getCustomAttributes(), domain, domain.getAttributes());
 

@@ -92,7 +92,7 @@ public abstract class AbstractShoppingCartStateSerDesTest {
             }
         });
 
-        cart.addProductSkuToCart("s01","ABC", "ABC", BigDecimal.TEN);
+        cart.addProductSkuToCart("s01","ABC", "ABC", BigDecimal.TEN, null);
         cart.setProductSkuPrice("s01","ABC", new BigDecimal("49.99"), new BigDecimal("99.99"));
         cart.setProductSkuPromotion("s01","ABC", new BigDecimal("39.99"), "PROMO1");
         cart.addGiftToCart("s01","GIFT", "GIFT", BigDecimal.ONE, "GIFT");
@@ -287,7 +287,7 @@ public abstract class AbstractShoppingCartStateSerDesTest {
             sale = sale.add(itemQty.multiply(itemSale));
             promo = promo.add(itemQty.multiply(itemPromo));
 
-            cart.addProductSkuToCart("s01","ABC-" + i, "ABC", itemQty);
+            cart.addProductSkuToCart("s01","ABC-" + i, "ABC", itemQty, null);
             cart.setProductSkuPrice("s01","ABC-" + i, itemSale, itemList);
             if (isPromo) {
                 cart.setProductSkuPromotion("s01","ABC-" + i, itemPromo, "IPROMO-" + i);

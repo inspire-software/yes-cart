@@ -89,6 +89,9 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoParent(value = "producttypeId", retriever = "productTypeDTO2ProductType")
     private ProductTypeDTO productTypeDTO;
 
+    @DtoField(value = "notSoldSeparately")
+    private boolean notSoldSeparately;
+
     @DtoCollection(
             value = "productCategory",
             dtoBeanKey = "org.yes.cart.domain.dto.ProductCategoryDTO",
@@ -382,6 +385,22 @@ public class ProductDTOImpl implements ProductDTO {
     @Override
     public void setProductTypeDTO(final ProductTypeDTO productTypeDTO) {
         this.productTypeDTO = productTypeDTO;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean getNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
     }
 
     /**

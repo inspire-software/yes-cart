@@ -47,6 +47,7 @@ public class VoProductServiceImpl implements VoProductService {
     private final DtoProductService dtoProductService;
     private final DtoProductSkuService dtoProductSkuService;
     private final DtoProductAssociationService dtoProductAssociationService;
+    private final DtoProductOptionService dtoProductOptionService;
     private final DtoProductCategoryService dtoProductCategoryService;
     private final DtoBrandService dtoBrandService;
     private final DtoProductTypeService dtoProductTypeService;
@@ -63,6 +64,7 @@ public class VoProductServiceImpl implements VoProductService {
                                 final DtoProductService dtoProductService,
                                 final DtoProductSkuService dtoProductSkuService,
                                 final DtoProductAssociationService dtoProductAssociationService,
+                                final DtoProductOptionService dtoProductOptionService,
                                 final DtoProductCategoryService dtoProductCategoryService,
                                 final DtoBrandService dtoBrandService,
                                 final DtoProductTypeService dtoProductTypeService,
@@ -74,6 +76,7 @@ public class VoProductServiceImpl implements VoProductService {
         this.dtoProductService = dtoProductService;
         this.dtoProductSkuService = dtoProductSkuService;
         this.dtoProductAssociationService = dtoProductAssociationService;
+        this.dtoProductOptionService = dtoProductOptionService;
         this.dtoProductCategoryService = dtoProductCategoryService;
         this.dtoBrandService = dtoBrandService;
         this.dtoProductTypeService = dtoProductTypeService;
@@ -225,8 +228,10 @@ public class VoProductServiceImpl implements VoProductService {
             }
         }
 
+        ProductDTO origin = dtoProductService.getById(vo.getProductId());
+
         ProductDTO dto = voAssemblySupport.assembleDto(ProductDTO.class, VoProductWithLinks.class,
-                dtoProductService.getById(vo.getProductId()), vo);
+                origin, vo);
 
         dto.setBrandDTO(dtoBrandService.getById(vo.getBrand().getBrandId()));
         dto.setProductTypeDTO(dtoProductTypeService.getById(vo.getProductType().getProducttypeId()));
@@ -323,6 +328,42 @@ public class VoProductServiceImpl implements VoProductService {
                     }
                 }
             }
+        }
+
+
+
+        final Map<Long, VoProductOption> keepOpts = new HashMap<>();
+        final List<VoProductOption> addOpts = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(vo.getConfigurationOptions())) {
+            for (final VoProductOption productOption : vo.getConfigurationOptions()) {
+                if (productOption.getProductoptionId() > 0L) {
+                    keepOpts.put(productOption.getProductoptionId(), productOption);
+                } else {
+                    addOpts.add(productOption);
+                }
+            }
+        }
+
+        final List<ProductOptionDTO> existingOpts = origin.getConfigurationOptions();
+        if (CollectionUtils.isNotEmpty(existingOpts)) {
+            for (final ProductOptionDTO existing : existingOpts) {
+                final VoProductOption update = keepOpts.get(existing.getProductoptionId());
+                keepOpts.remove(existing.getProductoptionId());
+                if (update == null) {
+                    dtoProductOptionService.remove(existing.getProductoptionId());
+                } else {
+                    dtoProductOptionService.update(
+                            voAssemblySupport.assembleDto(ProductOptionDTO.class, VoProductOption.class, existing, update)
+                    );
+                }
+            }
+        }
+
+        for (final VoProductOption optToAdd : addOpts) {
+            final ProductOptionDTO opt = dtoProductOptionService.getNew();
+            dtoProductOptionService.create(
+                    voAssemblySupport.assembleDto(ProductOptionDTO.class, VoProductOption.class, opt, optToAdd)
+            );
         }
 
         return getProductById(dto.getProductId());

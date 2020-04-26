@@ -44,6 +44,7 @@ public interface ProductSearchQueryBuilder<T> extends SearchQueryBuilder<T> {
     String PRODUCT_MANUFACTURER_CODE_STEM_FIELD = "manufacturerCode_stem";
     String PRODUCT_DEFAULT_SKU_CODE_FIELD = "defaultSku";
     String PRODUCT_MULTISKU = "multisku";
+    String PRODUCT_NOT_SOLD_SEPARATELY = "notSoldSeparately";
 
     String PRODUCT_CREATED_FIELD = "createdTimestamp"; //for projections only
     String PRODUCT_CREATED_SORT_FIELD = "createdTimestamp_sort"; //for projections only

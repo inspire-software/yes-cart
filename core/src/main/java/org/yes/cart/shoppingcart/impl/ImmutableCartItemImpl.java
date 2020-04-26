@@ -80,6 +80,14 @@ public class ImmutableCartItemImpl implements CartItem {
      * {@inheritDoc}
      */
     @Override
+    public String getItemGroup() {
+        return cartItem.getItemGroup();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public DeliveryBucket getDeliveryBucket() {
         return cartItem.getDeliveryBucket();
     }

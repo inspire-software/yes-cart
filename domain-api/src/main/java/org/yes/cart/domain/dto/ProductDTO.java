@@ -212,6 +212,19 @@ public interface ProductDTO extends Identifiable, Guidable {
      */
     void setProductTypeDTO(ProductTypeDTO producttype);
 
+    /**
+     * Flag to indicate that this product cannot be sold separately (i.e. an option, part of bundle etc).
+     *
+     * @return true means not to be sold separately
+     */
+    boolean getNotSoldSeparately();
+
+    /**
+     * Flag to indicate that this product cannot be sold separately (i.e. an option, part of bundle etc).
+     *
+     * @param notSoldSeparately true means not to be sold separately
+     */
+    void setNotSoldSeparately(boolean notSoldSeparately);
 
     /**
      * Get product name.

@@ -112,6 +112,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                     addStemField(document, PRODUCT_CODE_STEM_FIELD, entity.getCode());
 
                     addSimpleField(document, PRODUCT_MULTISKU, String.valueOf(entity.isMultiSkuProduct()));
+                    addSimpleField(document, PRODUCT_NOT_SOLD_SEPARATELY, String.valueOf(entity.getNotSoldSeparately()));
 
                     for (final ProductSku sku : entity.getSku()) {
                         if (result.getBaseSku(sku.getSkuId()) != null) {

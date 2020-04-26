@@ -44,7 +44,8 @@ public final class ShoppingCartUtils {
      *
      * @return all items
      */
-    public static List<CartItem> getCartItemImmutableList(final List<? extends CartItem> items, final List<? extends CartItem> gifts) {
+    public static List<CartItem> getCartItemImmutableList(final List<? extends CartItem> items,
+                                                          final List<? extends CartItem> gifts) {
 
         final List<CartItem> immutableItems = new ArrayList<>(items.size());
 
@@ -72,7 +73,8 @@ public final class ShoppingCartUtils {
         return Collections.unmodifiableList(immutableItems);
     }
 
-    private static void addCartItemsToImmutableList(final List<CartItem> fullList, final List<? extends CartItem> itemsToAdd) {
+    private static void addCartItemsToImmutableList(final List<CartItem> fullList,
+                                                    final List<? extends CartItem> itemsToAdd) {
 
         for (CartItem item : itemsToAdd) {
             fullList.add(new ImmutableCartItemImpl(item));
@@ -89,7 +91,8 @@ public final class ShoppingCartUtils {
      *
      * @return all items
      */
-    public static Map<DeliveryBucket, List<CartItem>> getCartItemImmutableMap(final List<? extends CartItem> items, final List<? extends CartItem> gifts) {
+    public static Map<DeliveryBucket, List<CartItem>> getCartItemImmutableMap(final List<? extends CartItem> items,
+                                                                              final List<? extends CartItem> gifts) {
 
         final Map<DeliveryBucket, List<CartItem>> map = new LinkedHashMap<>(items.size() * 2);
 
@@ -116,7 +119,8 @@ public final class ShoppingCartUtils {
     }
 
 
-    private static void addCartItemsToImmutableMap(final Map<DeliveryBucket, List<CartItem>> fullMap, final List<? extends CartItem> itemsToAdd) {
+    private static void addCartItemsToImmutableMap(final Map<DeliveryBucket, List<CartItem>> fullMap,
+                                                   final List<? extends CartItem> itemsToAdd) {
 
         for (final CartItem item : itemsToAdd) {
             final DeliveryBucket itemBucket = item.getDeliveryBucket();
@@ -141,50 +145,6 @@ public final class ShoppingCartUtils {
         return new DeliveryBucketImpl(item.getDeliveryGroup(), item.getSupplierCode());
     }
 
-
-    /**
-     * Search for an index of first item with given SKU.
-     *
-     * @param supplier supplier
-     * @param skuCode SKU
-     * @param items items to search
-     *
-     * @return index, or -1 if not found
-     */
-    public static int indexOf(final String supplier,
-                              final String skuCode,
-                              final List<? extends CartItem> items) {
-
-        for (int index = 0; index < items.size(); index++) {
-            final CartItem item = items.get(index);
-            if (item.getProductSkuCode().equals(skuCode) &&
-                    ((item.getSupplierCode() == null && supplier == null)
-                        || (item.getSupplierCode() != null && item.getSupplierCode().equals(supplier)))) {
-                return index;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Search for an index of first item with given SKU and bucket.
-     *
-     * @param skuCode SKU
-     * @param bucket delivery bucket
-     * @param items items to search
-     *
-     * @return index, or -1 if not found
-     */
-    public static int indexOf(final String skuCode, final DeliveryBucket bucket, final List<? extends CartItem> items) {
-        for (int index = 0; index < items.size(); index++) {
-            final CartItem item = items.get(index);
-            if (item.getProductSkuCode().equals(skuCode) && (bucket == null || bucket.equals(item.getDeliveryBucket()))) {
-                return index;
-            }
-        }
-        return -1;
-    }
-
     /**
      * Get sum of quantities of products and gifts.
      *
@@ -193,7 +153,8 @@ public final class ShoppingCartUtils {
      *
      * @return quantities of all items
      */
-    public static int getCartItemsCount(final List<? extends CartItem> items, final List<? extends CartItem> gifts) {
+    public static int getCartItemsCount(final List<? extends CartItem> items,
+                                        final List<? extends CartItem> gifts) {
         BigDecimal quantity = BigDecimal.ZERO;
         for (CartItem cartItem : items) {
             quantity = quantity.add(cartItem.getQty());
@@ -204,6 +165,111 @@ public final class ShoppingCartUtils {
         return quantity.intValue();
     }
 
+
+    /**
+     * Get total quantity of SKU.
+     *
+     * @param items     items
+     * @param supplier  supplier
+     * @param sku       sku
+     *
+     * @return quantities of all items
+     */
+    public static BigDecimal getProductSkuQuantity(final List<? extends CartItem> items,
+                                                   final String supplier,
+                                                   final String sku) {
+        BigDecimal quantity = BigDecimal.ZERO;
+        for (CartItem cartItem : items) {
+            if (isCartItem(cartItem, supplier, sku)) {
+                quantity = quantity.add(cartItem.getQty());
+            }
+        }
+        return quantity;
+    }
+
+    /**
+     * Check if cart item matches SKU by given supplier.
+     *
+     * @param item      item to check
+     * @param supplier  supplier to match
+     * @param skuCode   SKU to match
+     *
+     * @return true if supplier and SKU match exactly
+     */
+    public static boolean isCartItem(final CartItem item,
+                                     final String supplier,
+                                     final String skuCode) {
+
+        return item.getProductSkuCode().equals(skuCode) &&
+                ((item.getSupplierCode() == null && supplier == null)
+                        || (item.getSupplierCode() != null && item.getSupplierCode().equals(supplier)));
+
+    }
+
+    /**
+     * Check if cart item matches SKU by given supplier.
+     *
+     * @param item      item to check
+     * @param supplier  supplier to match
+     * @param skuCode   SKU to match
+     * @param group     group to match
+     *
+     * @return true if supplier and SKU match exactly
+     */
+    public static boolean isCartItem(final CartItem item,
+                                     final String supplier,
+                                     final String skuCode,
+                                     final String group) {
+
+        return item.getProductSkuCode().equals(skuCode) &&
+                ((item.getSupplierCode() == null && supplier == null)
+                        || (item.getSupplierCode() != null && item.getSupplierCode().equals(supplier))) &&
+                ((item.getItemGroup() == null && group == null)
+                        || (item.getItemGroup() != null && item.getItemGroup().equals(group)));
+
+    }
+
+    /**
+     * Check if cart item matches SKU by given supplier.
+     *
+     * @param item      item to check
+     * @param bucket    bucket to match
+     * @param skuCode   SKU to match
+     *
+     * @return true if supplier and SKU match exactly
+     */
+    public static boolean isCartItem(final CartItem item,
+                                     final DeliveryBucket bucket,
+                                     final String skuCode) {
+
+        return item.getProductSkuCode().equals(skuCode) &&
+                (bucket == null || bucket.equals(item.getDeliveryBucket()));
+
+    }
+
+    /**
+     * Check if cart item matches SKU by given supplier.
+     *
+     * @param item      item to check
+     * @param bucket    bucket to match
+     * @param skuCode   SKU to match
+     * @param group     group to match
+     *
+     * @return true if supplier and SKU match exactly
+     */
+    public static boolean isCartItem(final CartItem item,
+                                     final DeliveryBucket bucket,
+                                     final String skuCode,
+                                     final String group) {
+
+        return item.getProductSkuCode().equals(skuCode) &&
+                (bucket == null || bucket.equals(item.getDeliveryBucket())) &&
+                ((item.getItemGroup() == null && group == null)
+                        || (item.getItemGroup() != null && item.getItemGroup().equals(group)));
+
+    }
+
+
     /**
      * Get all supplier codes of products and gifts.
      *
@@ -212,7 +278,8 @@ public final class ShoppingCartUtils {
      *
      * @return unique list of supplier codes
      */
-    public static List<String> getCartItemsSuppliers(final List<? extends CartItem> items, final List<? extends CartItem> gifts) {
+    public static List<String> getCartItemsSuppliers(final List<? extends CartItem> items,
+                                                     final List<? extends CartItem> gifts) {
         final Set<String> codes = new HashSet<>();
         for (CartItem cartItem : items) {
             if (cartItem.getSupplierCode() != null) {
@@ -236,7 +303,9 @@ public final class ShoppingCartUtils {
      *
      * @return unique list of supplier codes
      */
-    public static boolean isAllCarrierSlaSelected(final List<? extends CartItem> items, final List<? extends CartItem> gifts, final Map<String, Long> slaSelection) {
+    public static boolean isAllCarrierSlaSelected(final List<? extends CartItem> items,
+                                                  final List<? extends CartItem> gifts,
+                                                  final Map<String, Long> slaSelection) {
         for (CartItem cartItem : items) {
             if (cartItem.getSupplierCode() == null || !slaSelection.containsKey(cartItem.getSupplierCode())) {
                 return false;
@@ -260,7 +329,8 @@ public final class ShoppingCartUtils {
      *
      * @return true if all items and gifts have delivery bucket
      */
-    public static boolean isAllCartItemsBucketed(final List<? extends CartItem> items, final List<? extends CartItem> gifts) {
+    public static boolean isAllCartItemsBucketed(final List<? extends CartItem> items,
+                                                 final List<? extends CartItem> gifts) {
         for (CartItem cartItem : items) {
             if (cartItem.getSupplierCode() == null || cartItem.getDeliveryGroup() == null) {
                 return false;

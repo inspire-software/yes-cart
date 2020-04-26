@@ -76,7 +76,7 @@ public class ShoppingCartCalculatorImpl implements ShoppingCartCalculator {
 
         final MutableShoppingCart cart = createNewCart(currentCart, true, false, true);
 
-        cart.addProductSkuToCart(supplier, skuCode, skuCode, BigDecimal.ONE);
+        cart.addProductSkuToCart(supplier, skuCode, skuCode, BigDecimal.ONE, "calculator");
         cart.setProductSkuPrice(supplier, skuCode, minimalPrice, minimalPrice);
 
         cart.recalculate();

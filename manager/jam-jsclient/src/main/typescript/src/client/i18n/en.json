@@ -417,6 +417,7 @@
   "PRODUCT_TEMPLATE": "Template",
   "PRODUCT_SEARCH_TEMPLATE": "Search template",
   "PRODUCT_CONFIGURABLE": "Configurable",
+  "PRODUCT_NOT_SOLD_SEPARATELY": "Component/Part",
 
   "PRODUCT_TAB_AVAILABILITY": "Availability",
   "PRODUCT_TAB_CATALOG": "Catalog",
@@ -425,6 +426,9 @@
 
   "PRODUCT_ASSOCIATION_BIDIRECTIONAL": "Bi-directional",
   "PRODUCT_ASSOCIATION_BIDIRECTIONAL_TIP": "Create association for the associated product as well",
+
+  "PRODUCT_OPTIONS": "Components/Parts",
+  "PRODUCT_OPTIONS_SKU": "Options",
 
   "EMAILPREVIEW_ORDER": "Select order to preview email: {{value}}",
 

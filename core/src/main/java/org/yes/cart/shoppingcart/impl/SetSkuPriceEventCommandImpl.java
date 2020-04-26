@@ -84,38 +84,43 @@ public class SetSkuPriceEventCommandImpl extends AbstractCartCommandImpl {
                 return;
             }
 
-            final int index = shoppingCart.indexOfProductSku(supplier, skuCode);
+            boolean matched = false;
 
-            if (index != -1) {
+            for (final CartItem item : shoppingCart.getCartItemList()) {
 
-                final CartItem item = shoppingCart.getCartItemList().get(index);
+                if (ShoppingCartUtils.isCartItem(item, supplier, skuCode)) {
 
-                if (MoneyUtils.isFirstBiggerThanSecond(item.getSalePrice(), offer)) {
+                    matched = true;
 
-                    if (!shoppingCart.setProductSkuOffer(supplier, skuCode, offer, auth)) {
-                        LOG.warn("Can not set price to sku with code {} ", skuCode);
+                    if (MoneyUtils.isFirstBiggerThanSecond(item.getSalePrice(), offer)) {
+
+                        if (!shoppingCart.setProductSkuOffer(supplier, skuCode, offer, auth)) {
+                            LOG.warn("Can not set price to sku with code {} ", skuCode);
+                        } else {
+
+                            recalculate(shoppingCart);
+                            markDirty(shoppingCart);
+
+                        }
+
                     } else {
+                        // Use case whereby we override the price upwards
+                        if (!(shoppingCart.setProductSkuPrice(supplier, skuCode, offer, offer) &&
+                                shoppingCart.setProductSkuOffer(supplier, skuCode, offer, auth))) {
+                            LOG.warn("Can not set price to sku with code {} ", skuCode);
+                        } else {
 
-                        recalculate(shoppingCart);
-                        markDirty(shoppingCart);
+                            recalculate(shoppingCart);
+                            markDirty(shoppingCart);
 
-                    }
-
-                } else {
-                    // Use case whereby we override the price upwards
-                    if (!(shoppingCart.setProductSkuPrice(supplier, skuCode, offer, offer) &&
-                            shoppingCart.setProductSkuOffer(supplier, skuCode, offer, auth))) {
-                        LOG.warn("Can not set price to sku with code {} ", skuCode);
-                    } else {
-
-                        recalculate(shoppingCart);
-                        markDirty(shoppingCart);
+                        }
 
                     }
 
                 }
 
-            } else {
+            }
+            if (!matched) {
 
                 LOG.warn("Can not locate product sku dto with code {} in cart {}", skuCode, shoppingCart.getGuid());
 

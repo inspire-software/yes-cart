@@ -107,7 +107,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   protected getFlags(row:ProductVO) {
     let flags = '';
-    if (row.configurable) {
+    if (row.notSoldSeparately) {
+      flags += '<i class="fa fa-puzzle-piece"></i>&nbsp;';
+    } else if (row.configurable) {
       flags += '<i class="fa fa-gears"></i>&nbsp;';
     }
     return flags;

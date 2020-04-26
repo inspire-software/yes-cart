@@ -197,46 +197,6 @@ public interface ShoppingCart extends Serializable {
      */
     int getLogonState();
 
-
-    /**
-     * Is sku code present in cart
-     *
-     * @param supplier  supplier
-     * @param skuCode   product sku code
-     *
-     * @return true if sku code present in cart
-     */
-    boolean contains(String supplier, String skuCode);
-
-    /**
-     * This method only searches for shipping indexes.
-     *
-     * @param carrierSlaGUID sku code
-     * @param deliveryBucket delivery bucket
-     * @return index of cart item for this sku
-     */
-    int indexOfShipping(final String carrierSlaGUID, DeliveryBucket deliveryBucket);
-
-    /**
-     * This method only searches for non-gift items indexes.
-     *
-     * @param supplier  supplier
-     * @param skuCode   sku code
-     *
-     * @return index of cart item for this sku
-     */
-    int indexOfProductSku(String supplier, String skuCode);
-
-    /**
-     * This method only searches for gift items indexes.
-     *
-     * @param supplier  supplier
-     * @param skuCode   sku code
-     *
-     * @return index of cart item for this sku
-     */
-    int indexOfGift(String supplier, String skuCode);
-
     /**
      * Get shopping context
      *

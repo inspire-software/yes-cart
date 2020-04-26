@@ -144,6 +144,8 @@ export interface ProductVO {
   brand : BrandVO;
   productType : ProductTypeInfoVO;
 
+  notSoldSeparately : boolean;
+
   productCategories : ProductCategoryVO[];
 
   name : string;

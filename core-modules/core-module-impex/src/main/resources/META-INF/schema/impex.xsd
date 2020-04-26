@@ -557,6 +557,13 @@
                     <xsd:attribute type="xsd:boolean" name="disabled" use="required"/>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="configuration" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element type="xsd:boolean" name="not-sold-separately" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
             <xsd:element type="xsd:string" name="name"/>
             <xsd:element type="i18nsType" name="display-name" minOccurs="0"/>
             <xsd:element type="xsd:string" name="description" minOccurs="0"/>

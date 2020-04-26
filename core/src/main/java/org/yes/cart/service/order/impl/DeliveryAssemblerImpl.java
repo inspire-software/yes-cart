@@ -125,8 +125,9 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 final Total cartTotal = shoppingCart.getTotal();
 
                 final String shippingSlaGUID = customerOrderDelivery.getCarrierSla().getGuid();
-                final int index = shoppingCart.indexOfShipping(shippingSlaGUID, entry.getKey());
-                final CartItem shipping = index > -1 ? shoppingCart.getShippingList().get(index) : null;
+                final CartItem shipping = shoppingCart.getShippingListMap().get(entry.getKey())
+                        .stream().filter(item -> shippingSlaGUID.equals(item.getProductSkuCode()))
+                        .findFirst().orElse(null);
 
                 if (cartTotal == null
                         || shipping == null

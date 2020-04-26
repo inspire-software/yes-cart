@@ -57,6 +57,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
     private final SearchQueryBuilder<Query> productShopBuilder;
     private final SearchQueryBuilder<Query> productShopStockBuilder;
     private final SearchQueryBuilder<Query> productShopPriceBuilder;
+    private final SearchQueryBuilder<Query> productCanSellBuilder;
     private final SearchQueryBuilder<Query> productAttributeBuilder;
     private final SearchQueryBuilder<Query> skuAttributeBuilder;
 
@@ -83,6 +84,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
         this.productShopBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD);
         this.productShopStockBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD);
         this.productShopPriceBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD);
+        this.productCanSellBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_NOT_SOLD_SEPARATELY);
         this.productAttributeBuilder = productBuilders.get(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD);
         this.skuAttributeBuilder = skuBuilders.get(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD);
     }
@@ -256,6 +258,15 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
                 snowball.add(hasPrice.get(0), BooleanClause.Occur.MUST);
             }
 
+            // If not search by code enforce "not sold separately" filter
+            if (!navigationParameters.containsKey(ProductSearchQueryBuilder.PRODUCT_CODE_FIELD) &&
+                    !navigationParameters.containsKey(ProductSearchQueryBuilder.SKU_PRODUCT_CODE_FIELD)) {
+                final  List<Query> canSell = productCanSellBuilder.createQueryChain(navigationContext, ProductSearchQueryBuilder.PRODUCT_NOT_SOLD_SEPARATELY, Boolean.FALSE);
+                if (canSell != null) {
+                    snowball.add(canSell.get(0), BooleanClause.Occur.MUST);
+                }
+            }
+
         }
 
         return new NavigationContextImpl<>(
@@ -371,6 +382,15 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
         final  List<Query> hasPrice = productShopPriceBuilder.createQueryChain(temp, ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD, customerShopId);
         if (hasPrice != null) {
             productQueryStrictClauses.add(hasPrice.get(0));
+        }
+
+        // If not search by code enforce "not sold separately" filter
+        if (!navigationParameters.containsKey(ProductSearchQueryBuilder.PRODUCT_CODE_FIELD) &&
+                !navigationParameters.containsKey(ProductSearchQueryBuilder.SKU_PRODUCT_CODE_FIELD)) {
+            final  List<Query> canSell = productCanSellBuilder.createQueryChain(temp, ProductSearchQueryBuilder.PRODUCT_NOT_SOLD_SEPARATELY, Boolean.FALSE);
+            if (canSell != null) {
+                productQueryStrictClauses.add(canSell.get(0));
+            }
         }
 
         Query prod = null;

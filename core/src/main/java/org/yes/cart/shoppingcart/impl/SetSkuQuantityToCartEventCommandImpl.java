@@ -113,6 +113,7 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
                            final ProductSku productSku,
                            final String skuCode,
                            final String supplier,
+                           final String itemGroup,
                            final BigDecimal qty,
                            final Map<String, Object> parameters) {
 
@@ -125,14 +126,14 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
                     productSku.getDisplayName(),
                     productSku.getName()
             ).getValue(shoppingCart.getCurrentLocale());
-            shoppingCart.setProductSkuToCart(supplier, skuCode, skuName, validQuantity);
+            shoppingCart.setProductSkuToCart(supplier, skuCode, skuName, validQuantity, itemGroup);
             recalculatePricesInCart(shoppingCart);
             LOG.debug("Set product sku with code {} to qty {}", productSku.getCode(), validQuantity);
             markDirty(shoppingCart);
         } else if (determineSkuPrice(shoppingCart, supplier, skuCode, BigDecimal.ONE) != null) {
             // if we have no product for SKU, make sure we have price for this SKU
             final BigDecimal validQuantity = getQuantityValue(parameters, shopId, null, supplier, shoppingCart.getProductSkuQuantity(supplier, skuCode));
-            shoppingCart.setProductSkuToCart(supplier, skuCode, skuCode, validQuantity);
+            shoppingCart.setProductSkuToCart(supplier, skuCode, skuCode, validQuantity, itemGroup);
             recalculatePricesInCart(shoppingCart);
             LOG.debug("Set product sku with code {} to qty {}", skuCode, validQuantity);
             markDirty(shoppingCart);

@@ -53,6 +53,11 @@ public interface CartItem extends Serializable {
     String getDeliveryGroup();
 
     /**
+     * @return item group.
+     */
+    String getItemGroup();
+
+    /**
      * @return delivery bucket.
      */
     DeliveryBucket getDeliveryBucket();

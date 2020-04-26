@@ -123,13 +123,14 @@
         <constructor-arg index="1" ref="dtoProductService"/>
         <constructor-arg index="2" ref="dtoProductSkuService"/>
         <constructor-arg index="3" ref="dtoProductAssociationService"/>
-        <constructor-arg index="4" ref="dtoProductCategoryService"/>
-        <constructor-arg index="5" ref="dtoBrandService"/>
-        <constructor-arg index="6" ref="dtoProductTypeService"/>
-        <constructor-arg index="7" ref="dtoAttributeService"/>
-        <constructor-arg index="8" ref="uiFederationFacade"/>
-        <constructor-arg index="9" ref="voAssemblySupport"/>
-        <constructor-arg index="10" ref="voIOSupport"/>
+        <constructor-arg index="4" ref="dtoProductOptionService"/>
+        <constructor-arg index="5" ref="dtoProductCategoryService"/>
+        <constructor-arg index="6" ref="dtoBrandService"/>
+        <constructor-arg index="7" ref="dtoProductTypeService"/>
+        <constructor-arg index="8" ref="dtoAttributeService"/>
+        <constructor-arg index="9" ref="uiFederationFacade"/>
+        <constructor-arg index="10" ref="voAssemblySupport"/>
+        <constructor-arg index="11" ref="voIOSupport"/>
     </bean>
 
     <bean id="voProductSupplierService" class="org.yes.cart.service.vo.impl.VoProductSupplierServiceImpl">

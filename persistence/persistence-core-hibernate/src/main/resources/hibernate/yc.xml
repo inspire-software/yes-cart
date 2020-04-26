@@ -1155,6 +1155,7 @@
         <property name="pimDisabled" column="PIM_DISABLED" type="boolean" index="PRODUCT_PDISABLED" not-null="true"/>
         <property name="pimOutdated" column="PIM_OUTDATED" type="boolean" index="PRODUCT_POUTDATED" not-null="true"/>
         <property name="pimUpdated" column="PIM_UPDATED" type="java.time.Instant" not-null="false"/>
+        <property name="notSoldSeparately" column="NOT_SOLD_SEPARATELY" type="boolean" not-null="true"/>
 
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME" length="255" not-null="true"/>
@@ -2243,6 +2244,7 @@
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
 
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
+        <property name="itemGroup" column="ITEM_GROUP" type="string" length="36"/>
 
         <property name="deliveryRemarks" column="DELIVERY_REMARKS" type="string" length="255"/>
         <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="java.time.LocalDateTime"/>
@@ -2374,6 +2376,7 @@
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
 
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
+        <property name="itemGroup" column="ITEM_GROUP" type="string" length="255"/>
 
         <property name="deliveryRemarks" column="DELIVERY_REMARKS" type="string" length="255"/>
         <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="java.time.LocalDateTime"/>

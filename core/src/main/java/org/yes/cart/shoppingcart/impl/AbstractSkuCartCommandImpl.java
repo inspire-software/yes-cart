@@ -59,6 +59,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractRecalculatePric
         if (parameters.containsKey(getCmdKey())) {
             final String skuCode = (String) parameters.get(getCmdKey());
             final String supplier = (String) parameters.get(CMD_P_SUPPLIER);
+            final String itemGroup = (String) parameters.get(CMD_P_ITEM_GROUP);
             final Object strQty = parameters.get(CMD_P_QTY);
             BigDecimal qty = null;
             if (strQty instanceof String) {
@@ -69,11 +70,14 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractRecalculatePric
                 } catch (Exception exp) {
                     LOG.error("[" + shoppingCart.getGuid() + "] Invalid quantity in add to cart command", exp);
                 }
+            } else if (strQty instanceof BigDecimal) {
+                qty = (BigDecimal) strQty;
             }
+
 
             try {
                 final ProductSku productSku = getProductService().getProductSkuByCode(skuCode);
-                execute(shoppingCart, productSku, skuCode, supplier, qty, parameters);
+                execute(shoppingCart, productSku, skuCode, supplier, itemGroup, qty, parameters);
             } catch (Exception e) {
                 LOG.error("[" + shoppingCart.getGuid() + "] Error processing command for " + skuCode + ", caused: " + e.getMessage(), e);
             }
@@ -87,6 +91,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractRecalculatePric
      * @param productSku    current sku object (if exists)
      * @param skuCode       actual SKU code sent
      * @param supplier      SKU supplier
+     * @param itemGroup     marker to group items together in cart
      * @param qty           SKU quantity parameter if provided
      * @param parameters    all parameters
      */
@@ -94,6 +99,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractRecalculatePric
                                     final ProductSku productSku,
                                     final String skuCode,
                                     final String supplier,
+                                    final String itemGroup,
                                     final BigDecimal qty,
                                     final Map<String, Object> parameters);
 

@@ -198,26 +198,6 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean contains(final String supplier, final String skuCode) {
-        return original.contains(supplier, skuCode);
-    }
-
-    @Override
-    public int indexOfShipping(final String carrierSlaId, final DeliveryBucket deliveryBucket) {
-        return original.indexOfShipping(carrierSlaId, deliveryBucket);
-    }
-
-    @Override
-    public int indexOfProductSku(final String supplier, final String skuCode) {
-        return original.indexOfProductSku(supplier, skuCode);
-    }
-
-    @Override
-    public int indexOfGift(final String supplier, final String skuCode) {
-        return original.indexOfGift(supplier, skuCode);
-    }
-
-    @Override
     public MutableShoppingContext getShoppingContext() {
         return shoppingContext;
     }
@@ -269,7 +249,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean addProductSkuToCart(final String supplier, final String sku, final String skuName, final BigDecimal quantity) {
+    public boolean addProductSkuToCart(final String supplier, final String sku, final String skuName, final BigDecimal quantity, final String itemGroup) {
         return false;
     }
 
@@ -284,7 +264,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean setProductSkuToCart(final String supplier, final String sku, final String skuName, final BigDecimal quantity) {
+    public boolean setProductSkuToCart(final String supplier, final String sku, final String skuName, final BigDecimal quantity, final String itemGroup) {
         return false;
     }
 
@@ -299,7 +279,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean removeCartItem(final String supplier, final String productSku) {
+    public boolean removeCartItem(final String supplier, final String productSku, final String itemGroup) {
         return false;
     }
 
@@ -314,7 +294,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean removeCartItemQuantity(final String supplier, final String productSku, final BigDecimal quantity) {
+    public boolean removeCartItemQuantity(final String supplier, final String productSku, final BigDecimal quantity, final String itemGroup) {
         return false;
     }
 

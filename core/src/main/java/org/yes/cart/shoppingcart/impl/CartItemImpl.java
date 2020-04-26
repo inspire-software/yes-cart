@@ -45,6 +45,7 @@ public class CartItemImpl implements CartItem {
     private BigDecimal quantity = DEFAULT_QUANTITY;
     private String supplierCode;
     private String deliveryGroup;
+    private String itemGroup;
 
     private BigDecimal price = BigDecimal.ZERO;
     private BigDecimal salePrice = BigDecimal.ZERO;
@@ -129,6 +130,24 @@ public class CartItemImpl implements CartItem {
      */
     public void setDeliveryGroup(final String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getItemGroup() {
+        return itemGroup;
+    }
+
+    /**
+     * Set item group (indicates logical grouping of SKU, e.g. bundle or product with options).
+     *
+     * @param itemGroup group
+     */
+    public void setItemGroup(final String itemGroup) {
+        this.itemGroup = itemGroup;
     }
 
     /**
@@ -385,6 +404,7 @@ public class CartItemImpl implements CartItem {
                 "productSkuCode='" + productSkuCode + '\'' +
                 ", supplierCode='" + supplierCode + '\'' +
                 ", deliveryGroup='" + deliveryGroup + '\'' +
+                ", itemGroup='" + itemGroup + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 '}';

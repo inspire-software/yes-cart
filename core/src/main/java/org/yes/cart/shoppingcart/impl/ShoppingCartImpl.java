@@ -232,11 +232,15 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     public BigDecimal getProductSkuQuantity(final String supplier,
                                             final String sku) {
 
-        final int skuIndex = indexOfProductSku(supplier, sku);
-        if (skuIndex == -1) { //not found
-            return BigDecimal.ZERO;
+        BigDecimal quantity = BigDecimal.ZERO;
+
+        for (final CartItem item : getItems()) {
+            if (ShoppingCartUtils.isCartItem(item, supplier, sku)) {
+                quantity = quantity.add(item.getQty());
+            }
         }
-        return getItems().get(skuIndex).getQty();
+
+        return quantity;
     }
 
     /** {@inheritDoc} */
@@ -244,12 +248,14 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     public boolean addProductSkuToCart(final String supplier,
                                        final String sku,
                                        final String skuName,
-                                       final BigDecimal quantity) {
+                                       final BigDecimal quantity,
+                                       final String itemGroup) {
 
-        final int skuIndex = indexOfProductSku(supplier, sku);
-        if (skuIndex != -1) {
-            getItems().get(skuIndex).addQuantity(quantity);
-            return false;
+        for (final CartItemImpl item : getItems()) {
+            if (ShoppingCartUtils.isCartItem(item, supplier, sku, itemGroup)) {
+                item.addQuantity(quantity);
+                return false;
+            }
         }
 
         final CartItemImpl newItem = new CartItemImpl();
@@ -257,6 +263,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
         newItem.setProductSkuCode(sku);
         newItem.setProductName(skuName);
         newItem.setQuantity(quantity);
+        newItem.setItemGroup(itemGroup);
         getItems().add(newItem);
         return true;
     }
@@ -268,10 +275,11 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                      final String carrierSlaName,
                                      final BigDecimal quantity) {
 
-        final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
-        if (shipIndex != -1) {
-            getShipping().get(shipIndex).addQuantity(quantity);
-            return false;
+        for (final CartItemImpl shipping : getShipping()) {
+            if (ShoppingCartUtils.isCartItem(shipping, deliveryBucket, carrierSlaGUID)) {
+                shipping.addQuantity(quantity);
+                return false;
+            }
         }
 
         final CartItemImpl newItem = new CartItemImpl();
@@ -292,12 +300,12 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                  final BigDecimal quantity,
                                  final String promotionCode) {
 
-        final int skuIndex = indexOfGift(supplier, sku);
-        if (skuIndex != -1) {
-            final CartItemImpl item = getGifts().get(skuIndex);
-            item.addQuantity(quantity);
-            addPromoCode(item, promotionCode);
-            return false;
+        for (final CartItemImpl gift : getGifts()) {
+            if (ShoppingCartUtils.isCartItem(gift, supplier, sku)) {
+                gift.addQuantity(quantity);
+                addPromoCode(gift, promotionCode);
+                return false;
+            }
         }
 
         final CartItemImpl newItem = new CartItemImpl();
@@ -342,20 +350,30 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     public boolean setProductSkuToCart(final String supplier,
                                        final String sku,
                                        final String skuName,
-                                       final BigDecimal quantity) {
+                                       final BigDecimal quantity,
+                                       final String itemGroup) {
 
         final CartItemImpl newItem = new CartItemImpl();
         newItem.setSupplierCode(supplier);
         newItem.setProductSkuCode(sku);
         newItem.setProductName(skuName);
         newItem.setQuantity(quantity);
+        newItem.setItemGroup(itemGroup);
 
-        final int skuIndex = indexOfProductSku(supplier, sku);
-        if (skuIndex == -1) { //not found
-            getItems().add(newItem);
-        } else {
-            getItems().set(skuIndex, newItem);
+        boolean updated = false;
+
+        for (int i = 0; i < getItems().size(); i++) {
+            final CartItemImpl item = getItems().get(i);
+            if (ShoppingCartUtils.isCartItem(item, supplier, sku, itemGroup)) {
+                getItems().set(i, newItem);
+                updated = true;
+            }
         }
+
+        if (!updated) {
+            getItems().add(newItem);
+        }
+
         return true;
     }
 
@@ -364,20 +382,22 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     public boolean setProductSkuDeliveryBucket(final String sku,
                                                final DeliveryBucket deliveryBucket) {
 
-        final int skuIndex = indexOfProductSku(deliveryBucket.getSupplier(), sku);
-        if (skuIndex == -1) { //not found
-            return false;
+        boolean updated = false;
+
+        for (final CartItemImpl item : getItems()) {
+            if (ShoppingCartUtils.isCartItem(item, deliveryBucket.getSupplier(), sku)) {
+
+                final DeliveryBucket bucket = item.getDeliveryBucket();
+                if (bucket == null || !bucket.equals(deliveryBucket)) {
+                    item.setSupplierCode(deliveryBucket.getSupplier());
+                    item.setDeliveryGroup(deliveryBucket.getGroup());
+                    updated = true;
+                }
+            }
         }
 
-        final CartItemImpl item = getItems().get(skuIndex);
-        final DeliveryBucket bucket = item.getDeliveryBucket();
+        return updated;
 
-        if (bucket == null || !bucket.equals(deliveryBucket)) {
-            item.setSupplierCode(deliveryBucket.getSupplier());
-            item.setDeliveryGroup(deliveryBucket.getGroup());
-            return true;
-        }
-        return false;
     }
 
     /** {@inheritDoc} */
@@ -385,51 +405,57 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     public boolean setGiftDeliveryBucket(final String sku,
                                          final DeliveryBucket deliveryBucket) {
 
-        final int skuIndex = indexOfGift(deliveryBucket.getSupplier(), sku);
-        if (skuIndex == -1) { //not found
-            return false;
+        boolean updated = false;
+
+        for (final CartItemImpl gift : getGifts()) {
+            if (ShoppingCartUtils.isCartItem(gift, deliveryBucket.getSupplier(), sku)) {
+                final DeliveryBucket bucket = gift.getDeliveryBucket();
+
+                if (bucket == null || !bucket.equals(deliveryBucket)) {
+                    gift.setSupplierCode(deliveryBucket.getSupplier());
+                    gift.setDeliveryGroup(deliveryBucket.getGroup());
+                    updated = true;
+                }
+            }
         }
 
-        final CartItemImpl item = getGifts().get(skuIndex);
-        final DeliveryBucket bucket = item.getDeliveryBucket();
+        return updated;
 
-        if (bucket == null || !bucket.equals(deliveryBucket)) {
-            item.setSupplierCode(deliveryBucket.getSupplier());
-            item.setDeliveryGroup(deliveryBucket.getGroup());
-            return true;
-        }
-        return false;
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean removeCartItem(final String supplier,
-                                  final String productSku) {
+                                  final String productSku,
+                                  final String itemGroup) {
 
-        final int skuIndex = indexOfProductSku(supplier, productSku);
-        if (skuIndex != -1) {
-            getItems().remove(skuIndex);
-            return true;
-        }
-        return false;
+        return getItems().removeIf(item -> ShoppingCartUtils.isCartItem(item, supplier, productSku, itemGroup));
+
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean removeCartItemQuantity(final String supplier,
                                           final String productSku,
-                                          final BigDecimal quantity) {
+                                          final BigDecimal quantity,
+                                          final String itemGroup) {
 
-        final int skuIndex = indexOfProductSku(supplier, productSku);
-        if (skuIndex != -1) {
-            try {
-                getItems().get(skuIndex).removeQuantity(quantity);
-            } catch (final CartItemRequiresDeletion cartItemRequiresDeletion) {
-                getItems().remove(skuIndex);
+        boolean updated = false;
+
+        final Iterator<CartItemImpl> itemIt = getItems().iterator();
+        while (itemIt.hasNext()) {
+            final CartItemImpl item = itemIt.next();
+            if (ShoppingCartUtils.isCartItem(item, supplier, productSku, itemGroup)) {
+                try {
+                    item.removeQuantity(quantity);
+                } catch (final CartItemRequiresDeletion cartItemRequiresDeletion) {
+                    itemIt.remove();
+                }
+                updated = true;
             }
-            return true;
         }
-        return false;
+
+        return updated;
     }
 
     /** {@inheritDoc} */
@@ -484,12 +510,8 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     public boolean removeShipping(final String carrierSlaGUID,
                                   final DeliveryBucket deliveryBucket) {
 
-        final int skuIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
-        if (skuIndex != -1) {
-            getItems().remove(skuIndex);
-            return true;
-        }
-        return false;
+        return getShipping().removeIf(shipping -> ShoppingCartUtils.isCartItem(shipping, deliveryBucket, carrierSlaGUID));
+
     }
 
     /** {@inheritDoc} */
@@ -499,30 +521,37 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                       final BigDecimal salePrice,
                                       final BigDecimal listPrice) {
 
-        final int skuIndex = indexOfProductSku(supplier, skuCode);
-        if (skuIndex != -1) {
-            final CartItemImpl cartItem = getItems().get(skuIndex);
-            if (cartItem.isFixedPrice()) {
-                if (MoneyUtils.isFirstBiggerThanSecond(salePrice, cartItem.getPrice())) {
-                    // Do not overwrite the offers, only base prices
-                    cartItem.setSalePrice(salePrice);
-                    cartItem.setListPrice(listPrice);
+        boolean updated = false;
+
+        for (final CartItemImpl item : getItems()) {
+
+            if (ShoppingCartUtils.isCartItem(item, supplier, skuCode)) {
+
+                if (item.isFixedPrice()) {
+                    if (MoneyUtils.isFirstBiggerThanSecond(salePrice, item.getPrice())) {
+                        // Do not overwrite the offers, only base prices
+                        item.setSalePrice(salePrice);
+                        item.setListPrice(listPrice);
+                    } else {
+                        // else fixed price is more than sale do not show sale price
+                        item.setSalePrice(item.getPrice());
+                        item.setListPrice(item.getPrice());
+                    }
                 } else {
-                    // else fixed price is more than sale do not show sale price
-                    cartItem.setSalePrice(cartItem.getPrice());
-                    cartItem.setListPrice(cartItem.getPrice());
+                    item.setPrice(salePrice != null ? salePrice : listPrice);
+                    item.setSalePrice(salePrice);
+                    item.setListPrice(listPrice);
+                    // clear promotion as we effectively changed the base price for promo calculations
+                    item.setAppliedPromo(null);
+                    item.setPromoApplied(false);
                 }
-            } else {
-                cartItem.setPrice(salePrice != null ? salePrice : listPrice);
-                cartItem.setSalePrice(salePrice);
-                cartItem.setListPrice(listPrice);
-                // clear promotion as we effectively changed the base price for promo calculations
-                cartItem.setAppliedPromo(null);
-                cartItem.setPromoApplied(false);
+                updated = true;
+
             }
-            return true;
+
         }
-        return false;
+
+        return updated;
     }
 
     /** {@inheritDoc} */
@@ -532,18 +561,22 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                     final BigDecimal salePrice,
                                     final BigDecimal listPrice) {
 
-        final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
-        if (shipIndex != -1) {
-            final CartItemImpl shipItem = getShipping().get(shipIndex);
-            shipItem.setPrice(salePrice != null ? salePrice : listPrice);
-            shipItem.setSalePrice(salePrice);
-            shipItem.setListPrice(listPrice);
-            // clear promotion as we effectively changed the base price for promo calculations
-            shipItem.setAppliedPromo(null);
-            shipItem.setPromoApplied(false);
-            return true;
+        boolean updated = false;
+
+        for (final CartItemImpl shipping : getShipping()) {
+            if (ShoppingCartUtils.isCartItem(shipping, deliveryBucket, carrierSlaGUID)) {
+                shipping.setPrice(salePrice != null ? salePrice : listPrice);
+                shipping.setSalePrice(salePrice);
+                shipping.setListPrice(listPrice);
+                // clear promotion as we effectively changed the base price for promo calculations
+                shipping.setAppliedPromo(null);
+                shipping.setPromoApplied(false);
+
+                updated = true;
+            }
         }
-        return false;
+
+        return updated;
     }
 
     /** {@inheritDoc} */
@@ -553,21 +586,24 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                 final BigDecimal salePrice,
                                 final BigDecimal listPrice) {
 
-        final int skuIndex = indexOfGift(supplier, skuCode);
-        if (skuIndex != -1) {
-            final CartItemImpl cartItem = getGifts().get(skuIndex);
-            cartItem.setPrice(MoneyUtils.ZERO);
-            cartItem.setNetPrice(MoneyUtils.ZERO);
-            cartItem.setGrossPrice(MoneyUtils.ZERO);
-            cartItem.setTaxRate(MoneyUtils.ZERO);
-            cartItem.setTaxCode("");
-            cartItem.setTaxExclusiveOfPrice(false);
-            cartItem.setSalePrice(salePrice);
-            cartItem.setListPrice(listPrice);
-            // must not clear any promotion data
-            return true;
+        boolean updated = false;
+
+        for (final CartItemImpl gift : getGifts()) {
+            if (ShoppingCartUtils.isCartItem(gift, supplier, skuCode)) {
+                gift.setPrice(MoneyUtils.ZERO);
+                gift.setNetPrice(MoneyUtils.ZERO);
+                gift.setGrossPrice(MoneyUtils.ZERO);
+                gift.setTaxRate(MoneyUtils.ZERO);
+                gift.setTaxCode("");
+                gift.setTaxExclusiveOfPrice(false);
+                gift.setSalePrice(salePrice);
+                gift.setListPrice(listPrice);
+                // must not clear any promotion data
+                updated = true;
+            }
         }
-        return false;
+
+        return updated;
     }
 
     /** {@inheritDoc} */
@@ -577,14 +613,19 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                           final BigDecimal promoPrice,
                                           final String promoCode) {
 
-        final int skuIndex = indexOfProductSku(supplier, skuCode);
-        if (skuIndex != -1) {
-            final CartItemImpl cartItem = getItems().get(skuIndex);
-            cartItem.setPrice(promoPrice);
-            addPromoCode(cartItem, promoCode);
-            return true;
+        boolean updated = false;
+
+        for (final CartItemImpl item : getItems()) {
+
+            if (ShoppingCartUtils.isCartItem(item, supplier, skuCode)) {
+                item.setPrice(promoPrice);
+                addPromoCode(item, promoCode);
+                updated = true;
+            }
+
         }
-        return false;
+
+        return updated;
     }
 
     /** {@inheritDoc} */
@@ -594,22 +635,27 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                       final BigDecimal fixedPrice,
                                       final String authCode) {
 
-        final int skuIndex = indexOfProductSku(supplier, skuCode);
-        if (skuIndex != -1) {
-            final CartItemImpl cartItem = getItems().get(skuIndex);
-            cartItem.setPrice(fixedPrice);
-            cartItem.setAppliedPromo(authCode); // Only one Auth code for offer
-            cartItem.setPromoApplied(false); // This is not promotion, promotions are removed every time we recalculate
-            cartItem.setFixedPrice(true); // Offers do not participate in promotions
+        boolean updated = false;
 
-            getOrderInfo().putDetail(
-                    AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + supplier + "_" + skuCode,
-                    StringUtils.isNotBlank(authCode) ? authCode : null
-            );
+        for (final CartItemImpl item : getItems()) {
 
-            return true;
+            if (ShoppingCartUtils.isCartItem(item, supplier, skuCode)) {
+                item.setPrice(fixedPrice);
+                item.setAppliedPromo(authCode); // Only one Auth code for offer
+                item.setPromoApplied(false); // This is not promotion, promotions are removed every time we recalculate
+                item.setFixedPrice(true); // Offers do not participate in promotions
+
+                getOrderInfo().putDetail(
+                        AttributeNamesKeys.Cart.ORDER_INFO_ORDER_LINE_PRICE_REF_ID + supplier + "_" + skuCode,
+                        StringUtils.isNotBlank(authCode) ? authCode : null
+                );
+
+                updated = true;
+            }
+
         }
-        return false;
+
+        return updated;
     }
 
     /** {@inheritDoc} */
@@ -619,14 +665,18 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                         final BigDecimal promoPrice,
                                         final String promoCode) {
 
-        final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
-        if (shipIndex != -1) {
-            final CartItemImpl shipItem = getShipping().get(shipIndex);
-            shipItem.setPrice(promoPrice);
-            addPromoCode(shipItem, promoCode);
-            return true;
+        boolean updated = false;
+
+        for (final CartItemImpl shipping : getShipping()) {
+            if (ShoppingCartUtils.isCartItem(shipping, deliveryBucket, carrierSlaGUID)) {
+                shipping.setPrice(promoPrice);
+                addPromoCode(shipping, promoCode);
+                updated = true;
+            }
         }
-        return false;
+
+        return updated;
+
     }
 
     /** {@inheritDoc} */
@@ -639,33 +689,42 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                     final String taxCode,
                                     final boolean exclPrice) {
 
-        final int skuIndex = indexOfProductSku(supplier, skuCode);
-        if (skuIndex != -1) {
-            final CartItemImpl cartItem = getItems().get(skuIndex);
-            cartItem.setNetPrice(netPrice);
-            cartItem.setGrossPrice(grossPrice);
-            cartItem.setTaxRate(rate);
-            cartItem.setTaxCode(taxCode);
-            cartItem.setTaxExclusiveOfPrice(exclPrice);
-            return true;
+        boolean updated = false;
+
+        for (final CartItemImpl item : getItems()) {
+
+            if (ShoppingCartUtils.isCartItem(item, supplier, skuCode)) {
+                item.setNetPrice(netPrice);
+                item.setGrossPrice(grossPrice);
+                item.setTaxRate(rate);
+                item.setTaxCode(taxCode);
+                item.setTaxExclusiveOfPrice(exclPrice);
+                updated = true;
+            }
+
         }
-        return false;
+
+        return updated;
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean setShippingTax(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
-        final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
-        if (shipIndex != -1) {
-            final CartItemImpl shipItem = getShipping().get(shipIndex);
-            shipItem.setNetPrice(netPrice);
-            shipItem.setGrossPrice(grossPrice);
-            shipItem.setTaxRate(rate);
-            shipItem.setTaxCode(taxCode);
-            shipItem.setTaxExclusiveOfPrice(exclPrice);
-            return true;
+
+        boolean updated = false;
+
+        for (final CartItemImpl shipping : getShipping()) {
+            if (ShoppingCartUtils.isCartItem(shipping, deliveryBucket, carrierSlaGUID)) {
+                shipping.setNetPrice(netPrice);
+                shipping.setGrossPrice(grossPrice);
+                shipping.setTaxRate(rate);
+                shipping.setTaxCode(taxCode);
+                shipping.setTaxExclusiveOfPrice(exclPrice);
+                updated = true;
+            }
         }
-        return false;
+
+        return updated;
     }
 
     /** {@inheritDoc} */
@@ -758,32 +817,6 @@ public class ShoppingCartImpl implements MutableShoppingCart {
         return ShoppingCartUtils.getCartItemsSuppliers(getItems(), getGifts());
 
     }
-
-    /** {@inheritDoc} */
-    @Override
-    public int indexOfProductSku(final String supplier, final String skuCode) {
-        return ShoppingCartUtils.indexOf(supplier, skuCode, getItems());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int indexOfShipping(final String carrierSlaId, final DeliveryBucket deliveryBucket) {
-        return ShoppingCartUtils.indexOf(carrierSlaId, deliveryBucket, getShipping());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int indexOfGift(final String supplier, final String skuCode) {
-        return ShoppingCartUtils.indexOf(supplier, skuCode, getGifts());
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean contains(final String supplier, final String skuCode) {
-        return (indexOfProductSku(supplier, skuCode) != -1);
-    }
-
 
     /**
      * Internal access to mutable items.

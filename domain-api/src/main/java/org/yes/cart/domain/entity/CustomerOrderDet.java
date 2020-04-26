@@ -288,6 +288,18 @@ public interface CustomerOrderDet extends Auditable, CartItem {
      */
     void setSupplierCode(String supplierCode);
 
+    /**
+     * @return item group.
+     */
+    String getItemGroup();
+
+    /**
+     * Set item group (indicates logical grouping of SKU, e.g. bundle or product with options).
+     *
+     * @param itemGroup group
+     */
+    void setItemGroup(String itemGroup);
+
 
     /**
      * Delivery remarks (could be used for third party integrations or in JAM)
