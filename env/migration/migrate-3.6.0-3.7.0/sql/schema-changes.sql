@@ -229,9 +229,6 @@ alter table TPROMOTIONCOUPONUSAGE drop column COUPON_ID;
 
 create index PROMOTIONCOUPONUSAGE_CODE on TPROMOTIONCOUPONUSAGE (COUPON_CODE);
 
-alter table TCUSTOMERORDERDET add column ITEM_GROUP varchar(36);
-alter table TCUSTOMERORDERDELIVERYDET add column ITEM_GROUP varchar(36);
-
 
 --
 -- YC-962 Allow fulfilment centre specific pricing
@@ -379,6 +376,10 @@ alter table TPRODUCT add column CONFIGURABLE bit default 0;
 alter table TPRODUCT add column NOT_SOLD_SEPARATELY bit default 0;
 -- alter table TPRODUCT add column CONFIGURABLE smallint DEFAULT 0;
 -- alter table TPRODUCT add column NOT_SOLD_SEPARATELY smallint DEFAULT 0;
+
+
+alter table TCUSTOMERORDERDET add column ITEM_GROUP varchar(36);
+alter table TCUSTOMERORDERDELIVERYDET add column ITEM_GROUP varchar(36);
 
 drop table TENSEMBLEOPT;
 
