@@ -171,7 +171,9 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
             return rez;
         } catch (final OrderItemAllocationException th) {
 
-            LOG.warn("Insufficient inventory for product {}:{}", orderEvent.getCustomerOrderDelivery().getDeliveryNum(), th.getProductSkuCode());
+            LOG.warn("Insufficient inventory for product {}:{}",
+                    orderEvent.getCustomerOrderDelivery() != null ? orderEvent.getCustomerOrderDelivery().getDeliveryNum(): orderEvent.getCustomerOrder().getOrdernum(),
+                    th.getProductSkuCode());
 
             final String key = "OUT_OF_STOCK_NOTIFICATION:" + orderEvent.getCustomerOrderDelivery().getDeliveryNum();
 
