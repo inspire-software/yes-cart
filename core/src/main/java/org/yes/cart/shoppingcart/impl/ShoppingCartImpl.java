@@ -249,7 +249,9 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                        final String sku,
                                        final String skuName,
                                        final BigDecimal quantity,
-                                       final String itemGroup) {
+                                       final String itemGroup,
+                                       final boolean configurable,
+                                       final boolean notSoldSeparately) {
 
         for (final CartItemImpl item : getItems()) {
             if (ShoppingCartUtils.isCartItem(item, supplier, sku, itemGroup)) {
@@ -264,6 +266,8 @@ public class ShoppingCartImpl implements MutableShoppingCart {
         newItem.setProductName(skuName);
         newItem.setQuantity(quantity);
         newItem.setItemGroup(itemGroup);
+        newItem.setConfigurable(configurable);
+        newItem.setNotSoldSeparately(notSoldSeparately);
         getItems().add(newItem);
         return true;
     }

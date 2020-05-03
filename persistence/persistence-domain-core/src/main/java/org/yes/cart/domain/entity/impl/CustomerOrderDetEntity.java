@@ -50,6 +50,9 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     private String taxCode;
     private boolean taxExclusiveOfPrice;
 
+    private boolean notSoldSeparately;
+    private boolean configurable;
+
     private boolean gift;
     private boolean promoApplied;
     private boolean fixedPrice;
@@ -170,6 +173,34 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     @Override
     public void setListPrice(final BigDecimal listPrice) {
         this.listPrice = listPrice;
+    }
+
+    @Override
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    @Override
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
+    }
+
+    @Override
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    @Override
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
+    }
+
+    public CustomerOrderDetAttributesImpl getStoredAttributes() {
+        return storedAttributes;
+    }
+
+    public void setStoredAttributes(final CustomerOrderDetAttributesImpl storedAttributes) {
+        this.storedAttributes = storedAttributes;
     }
 
     @Override

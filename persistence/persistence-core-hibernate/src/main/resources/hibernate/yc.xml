@@ -2235,6 +2235,9 @@
         <property name="taxExclusiveOfPrice" column="TAX_EXCLUSIVE_OF_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="taxCode" column="TAX_CODE" type="string" length="255" not-null="true"/>
 
+        <property name="notSoldSeparately" column="NOT_SOLD_SEPARATELY" type="boolean" length="1" not-null="true"/>
+        <property name="configurable" column="CONFIGURABLE" type="boolean" length="1" not-null="true"/>
+
         <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
         <property name="fixedPrice" column="IS_FIXED_PRICE" type="boolean" length="1" not-null="true"/>
@@ -2367,6 +2370,9 @@
         <property name="taxExclusiveOfPrice" column="TAX_EXCLUSIVE_OF_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="taxCode" column="TAX_CODE" type="string" length="255" not-null="true"/>
 
+        <property name="notSoldSeparately" column="NOT_SOLD_SEPARATELY" type="boolean" length="1" not-null="true"/>
+        <property name="configurable" column="CONFIGURABLE" type="boolean" length="1" not-null="true"/>
+
         <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
         <property name="fixedPrice" column="IS_FIXED_PRICE" type="boolean" length="1" not-null="true"/>
@@ -2376,7 +2382,7 @@
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
 
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
-        <property name="itemGroup" column="ITEM_GROUP" type="string" length="255"/>
+        <property name="itemGroup" column="ITEM_GROUP" type="string" length="36"/>
 
         <property name="deliveryRemarks" column="DELIVERY_REMARKS" type="string" length="255"/>
         <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="java.time.LocalDateTime"/>

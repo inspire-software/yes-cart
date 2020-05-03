@@ -249,7 +249,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean addProductSkuToCart(final String supplier, final String sku, final String skuName, final BigDecimal quantity, final String itemGroup) {
+    public boolean addProductSkuToCart(final String supplier, final String sku, final String skuName, final BigDecimal quantity, final String itemGroup, final boolean configurable, final boolean notSoldSeparately) {
         return false;
     }
 

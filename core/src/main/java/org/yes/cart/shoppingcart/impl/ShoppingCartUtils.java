@@ -157,7 +157,9 @@ public final class ShoppingCartUtils {
                                         final List<? extends CartItem> gifts) {
         BigDecimal quantity = BigDecimal.ZERO;
         for (CartItem cartItem : items) {
-            quantity = quantity.add(cartItem.getQty());
+            if (!cartItem.isNotSoldSeparately()) {
+                quantity = quantity.add(cartItem.getQty());
+            }
         }
         for (CartItem cartItem : gifts) {
             quantity = quantity.add(cartItem.getQty());

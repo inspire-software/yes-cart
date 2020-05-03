@@ -409,6 +409,18 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         this.typeMask = downloadable ? this.typeMask | 32 : this.typeMask & ~ 32;
     }
 
+    @Override
+    @JsonIgnore
+    public boolean isNotSoldSeparately() {
+        return (this.typeMask & 64) != 0;
+    }
+
+
+    // JSON accessor
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.typeMask = notSoldSeparately ? this.typeMask | 64 : this.typeMask & ~ 64;
+    }
+
     /** {@inheritDoc} */
     @Override
     public String getTag() {

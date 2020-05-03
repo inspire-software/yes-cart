@@ -72,7 +72,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                     shoppingCart.setGiftPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                     shoppingCart.setGiftDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                 } else {
-                    shoppingCart.addProductSkuToCart(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getItemGroup());
+                    shoppingCart.addProductSkuToCart(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getItemGroup(), orderDet.isConfigurable(), orderDet.isNotSoldSeparately());
                     shoppingCart.setProductSkuPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                     if (orderDet.isFixedPrice()) {
                         // Offers in existing order
@@ -94,7 +94,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                         shoppingCart.setGiftPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                         shoppingCart.setGiftDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                     } else {
-                        shoppingCart.addProductSkuToCart(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getItemGroup());
+                        shoppingCart.addProductSkuToCart(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getItemGroup(), orderDet.isConfigurable(), orderDet.isNotSoldSeparately());
                         shoppingCart.setProductSkuPrice(orderDet.getSupplierCode(), orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
                         if (orderDet.isFixedPrice()) {
                             // Offers in existing order

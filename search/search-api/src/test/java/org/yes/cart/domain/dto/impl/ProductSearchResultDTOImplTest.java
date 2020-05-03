@@ -191,114 +191,133 @@ public class ProductSearchResultDTOImplTest {
         assertFalse(dto.isShippable());
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
+        assertFalse(dto.isNotSoldSeparately());
 
         dto.setService(true);
         dto.setConfigurable(false);
         dto.setShippable(false);
         dto.setDigital(false);
         dto.setDownloadable(false);
+        dto.setNotSoldSeparately(false);
 
         assertTrue(dto.isService());
         assertFalse(dto.isConfigurable());
         assertFalse(dto.isShippable());
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
+        assertFalse(dto.isNotSoldSeparately());
 
         dto.setService(false);
         dto.setConfigurable(true);
         dto.setShippable(false);
         dto.setDigital(false);
         dto.setDownloadable(false);
+        dto.setNotSoldSeparately(false);
 
         assertFalse(dto.isService());
         assertTrue(dto.isConfigurable());
         assertFalse(dto.isShippable());
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
+        assertFalse(dto.isNotSoldSeparately());
 
         dto.setService(false);
         dto.setConfigurable(false);
         dto.setShippable(true);
         dto.setDigital(false);
         dto.setDownloadable(false);
+        dto.setNotSoldSeparately(false);
 
         assertFalse(dto.isService());
         assertFalse(dto.isConfigurable());
         assertTrue(dto.isShippable());
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
+        assertFalse(dto.isNotSoldSeparately());
 
         dto.setService(false);
         dto.setConfigurable(false);
         dto.setShippable(false);
         dto.setDigital(true);
         dto.setDownloadable(false);
+        dto.setNotSoldSeparately(false);
 
         assertFalse(dto.isService());
         assertFalse(dto.isConfigurable());
         assertFalse(dto.isShippable());
         assertTrue(dto.isDigital());
         assertFalse(dto.isDownloadable());
+        assertFalse(dto.isNotSoldSeparately());
 
         dto.setService(false);
         dto.setConfigurable(false);
         dto.setShippable(false);
         dto.setDigital(false);
         dto.setDownloadable(true);
+        dto.setNotSoldSeparately(false);
 
         assertFalse(dto.isService());
         assertFalse(dto.isConfigurable());
         assertFalse(dto.isShippable());
         assertFalse(dto.isDigital());
         assertTrue(dto.isDownloadable());
+        assertFalse(dto.isNotSoldSeparately());
 
         dto.setService(false);
         dto.setConfigurable(false);
         dto.setShippable(false);
         dto.setDigital(false);
         dto.setDownloadable(false);
+        dto.setNotSoldSeparately(false);
 
         assertFalse(dto.isService());
         assertFalse(dto.isConfigurable());
         assertFalse(dto.isShippable());
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
+        assertFalse(dto.isNotSoldSeparately());
 
         dto.setService(false);
         dto.setConfigurable(false);
         dto.setShippable(false);
         dto.setDigital(false);
         dto.setDownloadable(false);
+        dto.setNotSoldSeparately(false);
 
         assertFalse(dto.isService());
         assertFalse(dto.isConfigurable());
         assertFalse(dto.isShippable());
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
+        assertFalse(dto.isNotSoldSeparately());
 
         dto.setService(true);
         dto.setConfigurable(true);
         dto.setShippable(true);
         dto.setDigital(true);
         dto.setDownloadable(true);
+        dto.setNotSoldSeparately(true);
 
         assertTrue(dto.isService());
         assertTrue(dto.isConfigurable());
         assertTrue(dto.isShippable());
         assertTrue(dto.isDigital());
         assertTrue(dto.isDownloadable());
+        assertTrue(dto.isNotSoldSeparately());
 
         dto.setService(false);
         dto.setConfigurable(false);
         dto.setShippable(false);
         dto.setDigital(false);
         dto.setDownloadable(false);
-
+        dto.setNotSoldSeparately(false);
+        
         assertFalse(dto.isService());
         assertFalse(dto.isConfigurable());
         assertFalse(dto.isShippable());
         assertFalse(dto.isDigital());
         assertFalse(dto.isDownloadable());
+        assertFalse(dto.isNotSoldSeparately());
 
     }
 }

@@ -490,6 +490,9 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
             customerOrderDet.setTaxCode(item.getTaxCode());
             customerOrderDet.setTaxRate(item.getTaxRate());
             customerOrderDet.setTaxExclusiveOfPrice(item.isTaxExclusiveOfPrice());
+            customerOrderDet.setConfigurable(item.isConfigurable());
+            customerOrderDet.setNotSoldSeparately(item.isNotSoldSeparately());
+            customerOrderDet.setItemGroup(item.getItemGroup());
 
             customerOrderDet.setProductSkuCode(item.getProductSkuCode());
             fillOrderDetail(customerOrder, shoppingCart, item, customerOrderDet, supplier, temp);

@@ -63,6 +63,11 @@ public class CartItemRO implements Serializable {
     private boolean taxExclusiveOfPrice;
 
     @DtoField(readOnly = true)
+    private boolean notSoldSeparately;
+    @DtoField(readOnly = true)
+    private boolean configurable;
+
+    @DtoField(readOnly = true)
     private boolean gift;
     @DtoField(readOnly = true)
     private boolean promoApplied;
@@ -181,6 +186,24 @@ public class CartItemRO implements Serializable {
 
     public void setSalePrice(final BigDecimal salePrice) {
         this.salePrice = salePrice;
+    }
+
+    @XmlAttribute(name = "not-sold-separately")
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
+    }
+
+    @XmlAttribute(name = "configurable")
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
     }
 
     @XmlAttribute(name = "gift")

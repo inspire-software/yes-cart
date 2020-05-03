@@ -135,13 +135,50 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
 
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 49.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("49.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals(1, shoppingCart.getCartItemsCount());
+        assertEquals(1, shoppingCart.getCartItemList().size());
 
+        params.clear();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "001_CFG01");
-        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-A");
+        params.put("MATERIAL", "001_CFG_OPT1_A");
 
         commands.execute(shoppingCart, (Map) params);
         assertTrue("Expected 20049.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("20049.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals(2, shoppingCart.getCartItemsCount());
+        assertEquals(3, shoppingCart.getCartItemList().size());
 
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-B");
+        params.put("MATERIAL", "001_CFG_OPT1_B");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 45049.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("45049.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals(3, shoppingCart.getCartItemsCount());
+        assertEquals(5, shoppingCart.getCartItemList().size());
+
+
+        // Same group - no change
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-A");
+        params.put("MATERIAL", "001_CFG_OPT1_A");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 45049.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("45049.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals(3, shoppingCart.getCartItemsCount());
+        assertEquals(5, shoppingCart.getCartItemList().size());
+
+        // Auto generated group - new item
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "001_CFG01");
+        params.put("MATERIAL", "001_CFG_OPT1_A");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 65049.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("65049.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals(4, shoppingCart.getCartItemsCount());
+        assertEquals(7, shoppingCart.getCartItemList().size());
 
     }
 }

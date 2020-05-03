@@ -145,6 +145,9 @@ public class ProductRO implements Serializable {
     )
     private Collection<ProductOptionRO> options;
 
+    @DtoField(value = "notSoldSeparately", readOnly = true)
+    private boolean notSoldSeparately;
+
     private List<ProductSkuRO> skus;
 
     @XmlElement(name = "product-id")
@@ -396,6 +399,15 @@ public class ProductRO implements Serializable {
 
     public void setOptions(final Collection<ProductOptionRO> options) {
         this.options = options;
+    }
+
+    @XmlElement(name = "not-sold-separately")
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
     }
 
     @XmlElement(name = "product-availability")

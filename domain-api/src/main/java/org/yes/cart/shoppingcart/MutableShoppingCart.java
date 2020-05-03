@@ -54,11 +54,13 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     /**
      * Add product sku to cart.
      *
-     * @param supplier      product sku supplier
-     * @param sku           product sku to add
-     * @param skuName       product name to add
-     * @param quantity      the quantity to add
-     * @param group         item group
+     * @param supplier              product sku supplier
+     * @param sku                   product sku to add
+     * @param skuName               product name to add
+     * @param quantity              the quantity to add
+     * @param group                 item group
+     * @param configurable          configurable item (main item in group)
+     * @param notSoldSeparately     not sold separately item (additional item in group)
      *
      * @return true if item has been added to the cart as a separate cart item,
      *         false if adding this item cause only quantity update of already present in cart product sku.
@@ -67,7 +69,9 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
                                 String sku,
                                 String skuName,
                                 BigDecimal quantity,
-                                String group);
+                                String group,
+                                boolean configurable,
+                                boolean notSoldSeparately);
 
     /**
      * Add product sku to cart.

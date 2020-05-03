@@ -129,6 +129,22 @@ public class ImmutableCartItemImpl implements CartItem {
      * {@inheritDoc}
      */
     @Override
+    public boolean isConfigurable() {
+        return cartItem.isConfigurable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isNotSoldSeparately() {
+        return cartItem.isNotSoldSeparately();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isGift() {
         return cartItem.isGift();
     }

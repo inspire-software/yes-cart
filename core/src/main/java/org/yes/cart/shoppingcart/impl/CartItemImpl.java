@@ -57,6 +57,9 @@ public class CartItemImpl implements CartItem {
     private String taxCode;
     private boolean taxExclusiveOfPrice;
 
+    private boolean notSoldSeparately;
+    private boolean configurable;
+
     private boolean gift;
     private boolean promoApplied;
     private boolean fixedPrice;
@@ -336,6 +339,45 @@ public class CartItemImpl implements CartItem {
      */
     public void setSalePrice(final BigDecimal salePrice) {
         this.salePrice = salePrice;
+    }
+
+
+    /**
+     * This product not to be sold separately.
+     *
+     * @return not to be sold separately product.
+     */
+    @Override
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    /**
+     * Set notSoldSeparately flag.
+     *
+     * @param notSoldSeparately true if this is a notSoldSeparately
+     */
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
+    }
+
+    /**
+     * This is a configurable product.
+     *
+     * @return true if this is a configurable product.
+     */
+    @Override
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    /**
+     * Set configurable flag.
+     *
+     * @param configurable true if this is a configurable
+     */
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
     }
 
     /** {@inheritDoc} */

@@ -944,6 +944,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         baseResult.setType(entity.getProducttype().getName());
         baseResult.setService(entity.getProducttype().isService());
         baseResult.setConfigurable(entity.getOptions().isConfigurable());
+        baseResult.setNotSoldSeparately(entity.getNotSoldSeparately());
         baseResult.setDigital(entity.getProducttype().isDigital());
         baseResult.setShippable(entity.getProducttype().isShippable());
         baseResult.setDownloadable(entity.getProducttype().isDownloadable());

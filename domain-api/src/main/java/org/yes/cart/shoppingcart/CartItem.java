@@ -124,6 +124,20 @@ public interface CartItem extends Serializable {
     BigDecimal getListPrice();
 
     /**
+     * This is a configurable product.
+     *
+     * @return true if this is a configurable product.
+     */
+    boolean isConfigurable();
+
+    /**
+     * This product not to be sold separately.
+     *
+     * @return not to be sold separately product.
+     */
+    boolean isNotSoldSeparately();
+
+    /**
      * Returns true if this item has been added as gift as
      * a result of promotion.
      *

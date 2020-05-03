@@ -17,18 +17,18 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductOption;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Default implementation of the add to cart visitor.
@@ -105,6 +105,9 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
         final BigDecimal toAdd = getQuantityValue(shopId, supplier, skuCode, qty, cartQty);
 
         String skuName = skuCode;
+        boolean configurable = false;
+        Map<String, Pair<String, BigDecimal>> selectedOptions = Collections.emptyMap();
+
         if (productSku != null) {
 
             skuName = new FailoverStringI18NModel(
@@ -112,9 +115,68 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
                     productSku.getName()
             ).getValue(shoppingCart.getCurrentLocale());
 
+            final Product product = getProductService().getProductById(productSku.getProduct().getProductId());
+
+            if (product.getOptions().isConfigurable()) {
+
+                configurable = true;
+                selectedOptions = new LinkedHashMap<>();
+
+                final List<ProductOption> options = product.getOptions().getConfigurationOptionForSKU(productSku);
+
+                for (final ProductOption option : options) {
+
+                    final String skuOption = (String) parameters.get(option.getAttributeCode());
+                    if ((option.isMandatory() && StringUtils.isBlank(skuOption)) ||
+                            (StringUtils.isNotBlank(skuOption) && !option.getOptionSkuCodes().contains(skuOption))) {
+                        LOG.debug("[{}] Unable to add item {} for supplier {} because option {} has invalid value {}",
+                                shoppingCart.getGuid(), skuCode, supplier, option.getAttributeCode(), skuOption);
+                        return;
+                    }
+
+                    if (StringUtils.isBlank(skuOption)) {
+                        continue; // skip valid missed selections
+                    }
+
+                    final ProductSku productSkuOption = getProductService().getProductSkuByCode(skuOption);
+
+                    if (determineSkuPrice(shoppingCart, supplier, skuOption, BigDecimal.ONE) == null) {
+                        LOG.debug("[{}] Unable to add item {} for supplier {} because could not resolve price for option {} value {}",
+                                shoppingCart.getGuid(), skuCode, supplier, option.getAttributeCode(), skuOption);
+                        return;
+                    }
+
+                    final BigDecimal toAddOption = toAdd.multiply(option.getQuantity());
+
+                    final String skuNameOption = new FailoverStringI18NModel(
+                            productSkuOption.getDisplayName(),
+                            productSkuOption.getName()
+                    ).getValue(shoppingCart.getCurrentLocale());
+
+                    selectedOptions.put(skuOption, new Pair<>(skuNameOption, toAddOption));
+
+                }
+
+            }
+
         }
 
-        shoppingCart.addProductSkuToCart(supplier, skuCode, skuName, toAdd, itemGroup);
+        final String enforceGroup = configurable && StringUtils.isBlank(itemGroup) ? UUID.randomUUID().toString() : itemGroup;
+
+        final boolean optionalGroupExists = configurable && shoppingCart.getCartItemList().stream().anyMatch(cartItem -> ShoppingCartUtils.isCartItem(cartItem, supplier, skuCode, enforceGroup));
+
+        if (optionalGroupExists) {
+            LOG.debug("[{}] Unable to add item {} for supplier {} because item with this group already exists {}",
+                    shoppingCart.getGuid(), skuCode, supplier, enforceGroup);
+            return;
+        }
+
+        shoppingCart.addProductSkuToCart(supplier, skuCode, skuName, toAdd, enforceGroup, configurable, false);
+        if (configurable) {
+            for (final Map.Entry<String, Pair<String, BigDecimal>> optItem : selectedOptions.entrySet()) {
+                shoppingCart.addProductSkuToCart(supplier, optItem.getKey(), optItem.getValue().getFirst(), optItem.getValue().getSecond(), enforceGroup, false, true);
+            }
+        }
         recalculatePricesInCart(shoppingCart);
         markDirty(shoppingCart);
         LOG.debug("[{}] Added {} item(s) of sku code {}", shoppingCart.getGuid(), toAdd, skuCode);

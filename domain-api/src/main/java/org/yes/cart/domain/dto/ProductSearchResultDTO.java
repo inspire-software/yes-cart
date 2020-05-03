@@ -237,6 +237,13 @@ public interface ProductSearchResultDTO extends Identifiable {
     boolean isConfigurable();
 
     /**
+     * Is this product cannot be sold separately.
+     *
+     * @return true if not sold separately
+     */
+    boolean isNotSoldSeparately();
+
+    /**
      * Is this product type can be shipped
      *
      * @return true if product shippable

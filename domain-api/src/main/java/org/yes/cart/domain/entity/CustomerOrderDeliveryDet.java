@@ -400,6 +400,35 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      */
     void setListPrice( BigDecimal listPrice);
 
+
+    /**
+     * This is a configurable product.
+     *
+     * @return true if this is a configurable product.
+     */
+    boolean isConfigurable();
+
+    /**
+     * Set configurable flag.
+     *
+     * @param configurable true if this is a configurable
+     */
+    void setConfigurable(final boolean configurable);
+
+    /**
+     * This product not to be sold separately.
+     *
+     * @return not to be sold separately product.
+     */
+    boolean isNotSoldSeparately();
+
+    /**
+     * Set notSoldSeparately flag.
+     *
+     * @param notSoldSeparately true if this is a notSoldSeparately
+     */
+    void setNotSoldSeparately(boolean notSoldSeparately);
+
     /**
      * Returns true if this item has been added as gift as
      * a result of promotion.

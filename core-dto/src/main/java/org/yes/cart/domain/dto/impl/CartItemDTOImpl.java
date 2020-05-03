@@ -67,6 +67,11 @@ public class CartItemDTOImpl implements CartItem, Serializable {
     private boolean taxExclusiveOfPrice;
 
     @DtoField(readOnly = true)
+    private boolean notSoldSeparately;
+    @DtoField(readOnly = true)
+    private boolean configurable;
+
+    @DtoField(readOnly = true)
     private boolean gift;
     @DtoField(readOnly = true)
     private boolean promoApplied;
@@ -74,6 +79,7 @@ public class CartItemDTOImpl implements CartItem, Serializable {
     private boolean fixedPrice;
     @DtoField(readOnly = true)
     private String appliedPromo;
+
 
     @Override
     public String getProductSkuCode() {
@@ -206,6 +212,24 @@ public class CartItemDTOImpl implements CartItem, Serializable {
 
     public void setSalePrice(final BigDecimal salePrice) {
         this.salePrice = salePrice;
+    }
+
+    @Override
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
+    }
+
+    @Override
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
     }
 
     @Override

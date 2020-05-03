@@ -379,7 +379,16 @@ alter table TPRODUCT add column NOT_SOLD_SEPARATELY bit default 0;
 
 
 alter table TCUSTOMERORDERDET add column ITEM_GROUP varchar(36);
+alter table TCUSTOMERORDERDET add column CONFIGURABLE bit default 0;
+alter table TCUSTOMERORDERDET add column NOT_SOLD_SEPARATELY bit default 0;
+-- alter table TCUSTOMERORDERDET add column CONFIGURABLE smallint DEFAULT 0;
+-- alter table TCUSTOMERORDERDET add column NOT_SOLD_SEPARATELY smallint DEFAULT 0;
+
 alter table TCUSTOMERORDERDELIVERYDET add column ITEM_GROUP varchar(36);
+alter table TCUSTOMERORDERDELIVERYDET add column CONFIGURABLE bit default 0;
+alter table TCUSTOMERORDERDELIVERYDET add column NOT_SOLD_SEPARATELY bit default 0;
+-- alter table TCUSTOMERORDERDELIVERYDET add column CONFIGURABLE smallint DEFAULT 0;
+-- alter table TCUSTOMERORDERDELIVERYDET add column NOT_SOLD_SEPARATELY smallint DEFAULT 0;
 
 drop table TENSEMBLEOPT;
 
