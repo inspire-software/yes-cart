@@ -565,14 +565,15 @@ public class DtoContentCMS1ServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityCategory valueEntityCategory = attrValueEntityCategoryDao.findById(attributeValuePk);
         final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityCategory.getAttributeCode());
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            imageService.deleteImage(valueEntityCategory.getVal(),
-                    Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            fileService.deleteFile(valueEntityCategory.getVal(),
-                    Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+        if (attributeDTO != null) {
+            if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                imageService.deleteImage(valueEntityCategory.getVal(),
+                        Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+            } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                fileService.deleteFile(valueEntityCategory.getVal(),
+                        Constants.CATEGORY_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+            }
         }
-
         attrValueEntityCategoryDao.delete(valueEntityCategory);
         return valueEntityCategory.getCategory().getCategoryId();
     }

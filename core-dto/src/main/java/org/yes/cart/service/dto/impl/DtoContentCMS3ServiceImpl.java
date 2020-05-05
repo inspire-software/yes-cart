@@ -563,14 +563,15 @@ public class DtoContentCMS3ServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityContent valueEntityContent = attrValueEntityContentDao.findById(attributeValuePk);
         final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityContent.getAttributeCode());
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            imageService.deleteImage(valueEntityContent.getVal(),
-                    Constants.CONTENT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            fileService.deleteFile(valueEntityContent.getVal(),
-                    Constants.CONTENT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+        if (attributeDTO != null) {
+            if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                imageService.deleteImage(valueEntityContent.getVal(),
+                        Constants.CONTENT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+            } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                fileService.deleteFile(valueEntityContent.getVal(),
+                        Constants.CONTENT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+            }
         }
-
         attrValueEntityContentDao.delete(valueEntityContent);
         return valueEntityContent.getContent().getContentId();
     }

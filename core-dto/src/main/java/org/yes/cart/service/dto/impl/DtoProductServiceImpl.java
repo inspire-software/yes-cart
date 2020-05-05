@@ -595,12 +595,14 @@ public class DtoProductServiceImpl
             throws UnableToCreateInstanceException, UnmappedInterfaceException {
         final AttrValueProduct attrValue = attrValueEntityProductDao.findById(attributeValuePk);
         final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(attrValue.getAttributeCode());
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            imageService.deleteImage(attrValue.getVal(),
-                    Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            fileService.deleteFile(attrValue.getVal(),
-                    Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+        if (attributeDTO != null) {
+            if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                imageService.deleteImage(attrValue.getVal(),
+                        Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+            } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                fileService.deleteFile(attrValue.getVal(),
+                        Constants.PRODUCT_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+            }
         }
         attrValueEntityProductDao.delete(attrValue);
         return attrValue.getProduct().getProductId();

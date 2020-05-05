@@ -61,7 +61,10 @@ public class DtoAttributeServiceImpl
     @Override
     public AttributeDTO findByAttributeCode(final String attributeCode)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Attribute attribute =  ((AttributeService)service).findByAttributeCode(attributeCode);
+        final Attribute attribute = ((AttributeService)service).findByAttributeCode(attributeCode);
+        if (attribute == null) {
+            return null;
+        }
         return fillDTO(attribute);
     }
 

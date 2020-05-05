@@ -191,12 +191,14 @@ public class DtoBrandServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityBrand valueEntityBrand = attrValueEntityBrandDao.findById(attributeValuePk);
         final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityBrand.getAttributeCode());
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            imageService.deleteImage(valueEntityBrand.getVal(),
-                    Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            fileService.deleteFile(valueEntityBrand.getVal(),
-                    Constants.BRAND_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+        if (attributeDTO != null) {
+            if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                imageService.deleteImage(valueEntityBrand.getVal(),
+                        Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+            } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                fileService.deleteFile(valueEntityBrand.getVal(),
+                        Constants.BRAND_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+            }
         }
         attrValueEntityBrandDao.delete(valueEntityBrand);
         return valueEntityBrand.getBrand().getBrandId();

@@ -352,15 +352,17 @@ public class DtoShopServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException{
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attributeValuePk);
         final AttributeDTO attributeDTO = dtoAttributeService.findByAttributeCode(valueEntityShop.getAttributeCode());
-        if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            imageService.deleteImage(valueEntityShop.getVal(),
-                    Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
-        } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            fileService.deleteFile(valueEntityShop.getVal(),
-                    Constants.SHOP_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
-        } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
-            fileService.deleteFile(valueEntityShop.getVal(),
-                    Constants.SHOP_SYSFILE_REPOSITORY_URL_PATTERN, systemService.getSystemFileRepositoryDirectory());
+        if (attributeDTO != null) {
+            if (Etype.IMAGE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                imageService.deleteImage(valueEntityShop.getVal(),
+                        Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+            } else if (Etype.FILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                fileService.deleteFile(valueEntityShop.getVal(),
+                        Constants.SHOP_FILE_REPOSITORY_URL_PATTERN, systemService.getFileRepositoryDirectory());
+            } else if (Etype.SYSFILE_BUSINESS_TYPE.equals(attributeDTO.getEtype())) {
+                fileService.deleteFile(valueEntityShop.getVal(),
+                        Constants.SHOP_SYSFILE_REPOSITORY_URL_PATTERN, systemService.getSystemFileRepositoryDirectory());
+            }
         }
         attrValueEntityShopDao.delete(valueEntityShop);
         return valueEntityShop.getShop().getShopId();
