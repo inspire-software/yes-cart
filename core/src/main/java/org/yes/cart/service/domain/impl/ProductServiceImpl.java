@@ -718,6 +718,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 productSkuDao.fullTextSearchReindex(sku.getSkuId());
             }
             productDao.fullTextSearchReindex(pk);
+        } else {
+            productDao.fullTextSearchReindex(pk, true);
         }
     }
 
@@ -730,6 +732,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         if (productSku != null) {
             productSkuDao.fullTextSearchReindex(productSku.getSkuId());
             productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
+        } else {
+            productSkuDao.fullTextSearchReindex(pk, true);
         }
     }
 
