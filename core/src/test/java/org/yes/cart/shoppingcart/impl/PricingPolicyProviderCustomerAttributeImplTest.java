@@ -26,7 +26,8 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * User: denispavlov

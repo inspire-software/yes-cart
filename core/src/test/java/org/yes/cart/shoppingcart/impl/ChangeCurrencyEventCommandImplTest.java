@@ -24,12 +24,10 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.utils.MoneyUtils;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -54,10 +52,10 @@ public class ChangeCurrencyEventCommandImplTest extends BaseCoreDBTestCase {
                     (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
         }
 
-        assertTrue("Expected 57.00 Actual " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("57.00")).equals(shoppingCart.getTotal().getSubTotal()));
+        assertEquals("57.00", shoppingCart.getTotal().getSubTotal().toPlainString());
         commands.execute(shoppingCart,
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD"));
         assertEquals("USD", shoppingCart.getCurrencyCode());
-        assertTrue("Expected 570.03", (new BigDecimal("570.03")).equals(shoppingCart.getTotal().getSubTotal()));
+        assertEquals("570.03", shoppingCart.getTotal().getSubTotal().toPlainString());
     }
 }

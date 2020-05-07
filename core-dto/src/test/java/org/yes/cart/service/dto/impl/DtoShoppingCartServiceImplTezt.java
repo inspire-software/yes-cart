@@ -191,7 +191,7 @@ public class DtoShoppingCartServiceImplTezt extends BaseCoreDBTestCase {
 
         // 2. Test removal
 
-        dtoShoppingCartService.removeLine(reassembledCart.getGuid(), removedSkuSupplier, removedSku);
+        dtoShoppingCartService.removeLine(reassembledCart.getGuid(), removedSkuSupplier, removedSku, null);
 
         final ShoppingCart afterRemove = dtoShoppingCartService.getById(reassembledCart.getGuid());
         assertEquals(customerOrder.getOrderDetail().size() - 1, afterRemove.getCartItemList().size());
@@ -223,7 +223,7 @@ public class DtoShoppingCartServiceImplTezt extends BaseCoreDBTestCase {
 
         // 3. Test addition
 
-        dtoShoppingCartService.updateLineQuantity(reassembledCart.getGuid(), removedSkuSupplier, removedSku, removedQuantity);
+        dtoShoppingCartService.createLine(reassembledCart.getGuid(), removedSkuSupplier, removedSku, null, removedQuantity);
 
 
         final ShoppingCart afterAdd = dtoShoppingCartService.getById(reassembledCart.getGuid());

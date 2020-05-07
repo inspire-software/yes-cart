@@ -212,7 +212,7 @@ export class ProductOptionsComponent implements OnInit, OnChanges {
 
 
   protected onSearchProduct() {
-    if (this.optionToEdit != null && this.optionToEdit.productoptionId <= 0) {
+    if (this.optionToEdit != null) {
       this.productSelectDialog.showDialog();
     }
   }
@@ -221,7 +221,7 @@ export class ProductOptionsComponent implements OnInit, OnChanges {
 
   protected onProductSelected(event:FormValidationEvent<ProductSkuVO>) {
     LogUtil.debug('ProductOptionsComponent onProductSelected', event);
-    if (event.valid && this.optionToEdit != null && this.optionToEdit.productoptionId <= 0) {
+    if (event.valid && this.optionToEdit != null) {
       if (this.optionToEdit.optionSkuCodes.findIndex(val => val.first === event.source.code) === -1 &&
           this.options.findIndex(val => val.code === event.source.code) === -1) {
         this.optionToEdit.optionSkuCodes.push({first: event.source.code, second: event.source.name});

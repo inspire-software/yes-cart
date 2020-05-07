@@ -185,13 +185,13 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
     private  void addStdCartItems(final ShoppingCart shoppingCart, final ShoppingCartCommandFactory commands) {
 
         Map<String, String> param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST1");
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
         param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
         commands.execute(shoppingCart, (Map) param);
 
         param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST2");
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST2");
         param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
@@ -265,7 +265,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
     private  void addPreorderCartItems(final ShoppingCart shoppingCart, final ShoppingCartCommandFactory commands) {
 
         Map<String, String> param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST6");
         param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         param.put(ShoppingCartCommand.CMD_P_QTY, "3.00");
         commands.execute(shoppingCart, (Map) param);
@@ -275,7 +275,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
     private  void addBackorderCartItems(final ShoppingCart shoppingCart, final ShoppingCartCommandFactory commands) {
 
         Map<String, String> param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5-NOINV");
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST5-NOINV");
         param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         param.put(ShoppingCartCommand.CMD_P_QTY, "4.00");
         commands.execute(shoppingCart, (Map) param);
@@ -302,7 +302,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
     private  void addDigitalCartItems(final ShoppingCart shoppingCart, final ShoppingCartCommandFactory commands) {
 
         Map<String, String> param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST9");
         param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         param.put(ShoppingCartCommand.CMD_P_QTY, "5.00");
         commands.execute(shoppingCart, (Map) param);

@@ -357,28 +357,17 @@ public class ShoppingCartImpl implements MutableShoppingCart {
                                        final BigDecimal quantity,
                                        final String itemGroup) {
 
-        final CartItemImpl newItem = new CartItemImpl();
-        newItem.setSupplierCode(supplier);
-        newItem.setProductSkuCode(sku);
-        newItem.setProductName(skuName);
-        newItem.setQuantity(quantity);
-        newItem.setItemGroup(itemGroup);
-
         boolean updated = false;
 
         for (int i = 0; i < getItems().size(); i++) {
             final CartItemImpl item = getItems().get(i);
             if (ShoppingCartUtils.isCartItem(item, supplier, sku, itemGroup)) {
-                getItems().set(i, newItem);
+                getItems().get(i).setQuantity(quantity);
                 updated = true;
             }
         }
 
-        if (!updated) {
-            getItems().add(newItem);
-        }
-
-        return true;
+        return updated;
     }
 
     /** {@inheritDoc} */

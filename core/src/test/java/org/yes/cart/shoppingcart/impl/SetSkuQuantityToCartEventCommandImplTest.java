@@ -24,12 +24,11 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.utils.MoneyUtils;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -52,17 +51,69 @@ public class SetSkuQuantityToCartEventCommandImplTest extends BaseCoreDBTestCase
 
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         Map<String, String> params = new HashMap<>();
-        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST4");
+        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_ADDTOCART, "CC_TEST4");
         params.put(ShoppingCartCommand.CMD_P_QTY, "1");
         commands.execute(shoppingCart, (Map) params);
 
-        assertTrue("Expected 123.00", (new BigDecimal("123.00")).equals(shoppingCart.getTotal().getSubTotal()));
-        params = new HashMap<>();
+        assertEquals("123.00", shoppingCart.getTotal().getSubTotal().toPlainString());
+
+        params.clear();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST4");
         params.put(ShoppingCartCommand.CMD_P_QTY, "5");
         commands.execute(shoppingCart, (Map) params);
 
-        assertTrue("Expected 499.55 but got " + shoppingCart.getTotal().getSubTotal(),
-                (new BigDecimal("499.95")).equals(shoppingCart.getTotal().getSubTotal()));
+        assertEquals("499.95", shoppingCart.getTotal().getSubTotal().toPlainString());
+
     }
+
+
+    @Test
+    public void testExecuteProductWithOptions() throws Exception {
+
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
+
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
+        Map<String, String> params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU");
+
+        commands.execute(shoppingCart, (Map) params);
+
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-A");
+        params.put("MATERIAL", "001_CFG_OPT1_A");
+
+        commands.execute(shoppingCart, (Map) params);
+
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-B");
+        params.put("MATERIAL", "001_CFG_OPT1_B");
+
+        commands.execute(shoppingCart, (Map) params);
+
+        assertEquals("45049.99", shoppingCart.getTotal().getSubTotal().toPlainString());
+        assertEquals(3, shoppingCart.getCartItemsCount());
+        assertEquals(5, shoppingCart.getCartItemList().size());
+
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-B");
+        params.put(ShoppingCartCommand.CMD_P_QTY, "4");
+        commands.execute(shoppingCart, (Map) params);
+
+        assertEquals("120049.99", shoppingCart.getTotal().getSubTotal().toPlainString());
+        assertEquals(6, shoppingCart.getCartItemsCount());
+        assertEquals(5, shoppingCart.getCartItemList().size());
+
+
+    }
+
 }

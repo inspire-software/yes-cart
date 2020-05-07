@@ -43,6 +43,8 @@ public class CartItemRO implements Serializable {
     private String supplierCode;
     @DtoField(readOnly = true)
     private String deliveryGroup;
+    @DtoField(readOnly = true)
+    private String itemGroup;
 
     @DtoField(readOnly = true)
     private BigDecimal price = BigDecimal.ZERO;
@@ -115,6 +117,14 @@ public class CartItemRO implements Serializable {
         this.deliveryGroup = deliveryGroup;
     }
 
+    @XmlAttribute(name = "item-group")
+    public String getItemGroup() {
+        return itemGroup;
+    }
+
+    public void setItemGroup(final String itemGroup) {
+        this.itemGroup = itemGroup;
+    }
 
     @XmlAttribute(name = "price")
     public BigDecimal getPrice() {

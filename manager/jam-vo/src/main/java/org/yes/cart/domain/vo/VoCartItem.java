@@ -42,6 +42,8 @@ public class VoCartItem {
     private String supplierCode;
     @DtoField(readOnly = true)
     private String deliveryGroup;
+    @DtoField(readOnly = true)
+    private String itemGroup;
 
     @DtoField(readOnly = true)
     private BigDecimal price = BigDecimal.ZERO;
@@ -60,6 +62,11 @@ public class VoCartItem {
     private String taxCode;
     @DtoField(readOnly = true)
     private boolean taxExclusiveOfPrice;
+
+    @DtoField(readOnly = true)
+    private boolean notSoldSeparately;
+    @DtoField(readOnly = true)
+    private boolean configurable;
 
     @DtoField(readOnly = true)
     private boolean gift;
@@ -108,6 +115,30 @@ public class VoCartItem {
 
     public void setDeliveryGroup(final String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
+    }
+
+    public String getItemGroup() {
+        return itemGroup;
+    }
+
+    public void setItemGroup(final String itemGroup) {
+        this.itemGroup = itemGroup;
+    }
+
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
+    }
+
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
     }
 
     public BigDecimal getPrice() {

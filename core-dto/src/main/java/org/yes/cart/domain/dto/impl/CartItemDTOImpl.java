@@ -127,6 +127,24 @@ public class CartItemDTOImpl implements CartItem, Serializable {
     }
 
     @Override
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
+    }
+
+    @Override
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
+    }
+
+    @Override
     public DeliveryBucket getDeliveryBucket() {
 
         return ShoppingCartUtils.getDeliveryBucket(this);
@@ -212,24 +230,6 @@ public class CartItemDTOImpl implements CartItem, Serializable {
 
     public void setSalePrice(final BigDecimal salePrice) {
         this.salePrice = salePrice;
-    }
-
-    @Override
-    public boolean isNotSoldSeparately() {
-        return notSoldSeparately;
-    }
-
-    public void setNotSoldSeparately(final boolean notSoldSeparately) {
-        this.notSoldSeparately = notSoldSeparately;
-    }
-
-    @Override
-    public boolean isConfigurable() {
-        return configurable;
-    }
-
-    public void setConfigurable(final boolean configurable) {
-        this.configurable = configurable;
     }
 
     @Override

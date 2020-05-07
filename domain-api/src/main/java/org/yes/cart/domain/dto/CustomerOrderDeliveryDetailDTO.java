@@ -100,6 +100,18 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
 
 
     /**
+     * @return item group.
+     */
+    String getItemGroup();
+
+    /**
+     * Set item group
+     *
+     * @param itemGroup item group
+     */
+    void setItemGroup(String itemGroup);
+
+    /**
      * Delivery remarks (could be used for third party integrations or in JAM)
      *
      * @return remarks
@@ -381,6 +393,34 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
      */
     void setListPrice(BigDecimal listPrice);
 
+
+    /**
+     * This is a configurable product.
+     *
+     * @return true if this is a configurable product.
+     */
+    boolean isConfigurable();
+
+    /**
+     * Set configurable
+     *
+     * @param configurable true if this is a configurable product.
+     */
+    void setConfigurable(boolean configurable);
+
+    /**
+     * This product not to be sold separately.
+     *
+     * @return not to be sold separately product.
+     */
+    boolean isNotSoldSeparately();
+
+    /**
+     * Set not sold separately
+     *
+     * @param notSoldSeparately not to be sold separately product.
+     */
+    void setNotSoldSeparately(boolean notSoldSeparately);
 
     /**
      * Returns true if this item has been added as gift as

@@ -68,6 +68,44 @@ public interface CustomerOrderDetailDTO extends Identifiable {
     void setSkuName(String skuName);
 
     /**
+     * @return supplier code.
+     */
+    String getSupplierCode();
+
+    /**
+     * Set supplier code (fulfilment centre/warehouse code).
+     *
+     * @param supplierCode supplier code
+     */
+    void setSupplierCode(String supplierCode);
+
+
+    /**
+     * @return delivery group.
+     */
+    String getDeliveryGroup();
+
+    /**
+     * Set delivery group
+     *
+     * @param deliveryGroup delivery group
+     */
+    void setDeliveryGroup(String deliveryGroup);
+
+
+    /**
+     * @return item group.
+     */
+    String getItemGroup();
+
+    /**
+     * Set item group
+     *
+     * @param itemGroup item group
+     */
+    void setItemGroup(String itemGroup);
+
+    /**
      * Get quantity.
      * @return  quantity.
      */
@@ -189,6 +227,34 @@ public interface CustomerOrderDetailDTO extends Identifiable {
      */
     void setListPrice(BigDecimal listPrice);
 
+
+    /**
+     * This is a configurable product.
+     *
+     * @return true if this is a configurable product.
+     */
+    boolean isConfigurable();
+
+    /**
+     * Set configurable
+     *
+     * @param configurable true if this is a configurable product.
+     */
+    void setConfigurable(boolean configurable);
+
+    /**
+     * This product not to be sold separately.
+     *
+     * @return not to be sold separately product.
+     */
+    boolean isNotSoldSeparately();
+
+    /**
+     * Set not sold separately
+     *
+     * @param notSoldSeparately not to be sold separately product.
+     */
+    void setNotSoldSeparately(boolean notSoldSeparately);
 
     /**
      * Returns true if this item has been added as gift as

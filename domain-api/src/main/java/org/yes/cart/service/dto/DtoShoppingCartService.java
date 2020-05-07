@@ -54,10 +54,12 @@ public interface DtoShoppingCartService {
      * @param guid      cart guid
      * @param supplier  supplier
      * @param sku       SKU to remove
+     * @param group     SKU group
      */
     void removeLine(String guid,
                     String supplier,
-                    String sku);
+                    String sku,
+                    String group);
 
     /**
      * Update SKU line quantity (if sku did not exist creates one).
@@ -65,11 +67,28 @@ public interface DtoShoppingCartService {
      * @param guid      cart guid
      * @param supplier  supplier
      * @param sku       SKU to update
+     * @param group     SKU group
+     * @param quantity  quantity to set
+     */
+    void createLine(String guid,
+                    String supplier,
+                    String sku,
+                    String group,
+                    BigDecimal quantity);
+
+    /**
+     * Update SKU line quantity (if sku did not exist creates one).
+     *
+     * @param guid      cart guid
+     * @param supplier  supplier
+     * @param sku       SKU to update
+     * @param group     SKU group
      * @param quantity  quantity to set
      */
     void updateLineQuantity(String guid,
                             String supplier,
                             String sku,
+                            String group,
                             BigDecimal quantity);
 
     /**

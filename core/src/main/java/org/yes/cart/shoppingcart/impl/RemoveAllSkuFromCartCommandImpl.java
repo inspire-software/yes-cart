@@ -16,18 +16,18 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.PriceResolver;
-import org.yes.cart.shoppingcart.PricingPolicyProvider;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -75,12 +75,32 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
                            final String itemGroup,
                            final BigDecimal qty,
                            final Map<String, Object> parameters) {
-        if(!shoppingCart.removeCartItem(supplier, skuCode, itemGroup)) {
-            LOG.warn("Cannot remove all skus with code {} from cart", skuCode);
 
-        } else  {
+        if (StringUtils.isNotBlank(itemGroup)) {
+
+            final List<String> allInGroup = shoppingCart.getCartItemList().stream()
+                    .filter(item -> itemGroup.equals(item.getItemGroup()))
+                    .map(CartItem::getProductSkuCode).collect(Collectors.toList());
+
+            for (final String sku : allInGroup) {
+                if(!shoppingCart.removeCartItem(supplier, sku, itemGroup)) {
+                    LOG.warn("Cannot remove all skus with code {}:{} from cart", sku, itemGroup);
+                    return;
+                }
+            }
+
             recalculatePricesInCart(shoppingCart);
             markDirty(shoppingCart);
+
+        } else if(shoppingCart.removeCartItem(supplier, skuCode, itemGroup)) {
+
+            recalculatePricesInCart(shoppingCart);
+            markDirty(shoppingCart);
+
+        } else  {
+
+            LOG.warn("Cannot remove all skus with code {} from cart", skuCode);
+
         }
     }
 

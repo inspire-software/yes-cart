@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
@@ -31,6 +32,7 @@ import org.yes.cart.utils.TimeContext;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -122,11 +124,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
             final DeliveryBucket bucket = new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());
 
-            if (!deliveryGroups.containsKey(bucket)) {
-                deliveryGroups.put(bucket, new ArrayList<>());
-            }
-
-            deliveryGroups.get(bucket).add(cartItem);
+            deliveryGroups.computeIfAbsent(bucket, k -> new ArrayList<>()).add(cartItem);
 
         }
 
@@ -142,6 +140,8 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         final List<DeliveryBucket> removeBuckets = new ArrayList<>();
         final Map<DeliveryBucket, List<CartItem>> collectors = new HashMap<>();
+
+        final Set<String> splitGroups = getSplitItemGroups(deliveryGroups);
 
         for (Map.Entry<DeliveryBucket, List<CartItem>> entry : deliveryGroups.entrySet()) {
 
@@ -162,6 +162,29 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
                     removeBuckets.add(entry.getKey());
                     collector.addAll(entry.getValue());
+                }
+
+            } else if (CollectionUtils.isNotEmpty(splitGroups)) {
+
+                final Iterator<CartItem> lineIt = entry.getValue().iterator();
+
+                while (lineIt.hasNext()) {
+
+                    final CartItem line = lineIt.next();
+
+                    if (splitGroups.contains(line.getItemGroup())) {
+
+                        final DeliveryBucket mix = new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, supplier);
+
+                        List<CartItem> collector = collectors.computeIfAbsent(mix, k -> new ArrayList<>());
+                        collector.add(line);
+                        lineIt.remove();
+                        if (entry.getValue().isEmpty()) {
+                            removeBuckets.add(entry.getKey());
+                        }
+
+                    }
+
                 }
 
             }
@@ -304,6 +327,30 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
             counts.merge(bucket.getSupplier(), delta, (a, b) -> a + b);
         }
         return counts;
+    }
+
+    /**
+     * Determines whether items group is split in different deliveries.
+     *
+     * @param deliveryMap map of delivery buckets
+     *
+     * @return group names that are split
+     */
+    Set<String> getSplitItemGroups(final Map<DeliveryBucket, List<CartItem>> deliveryMap) {
+        final Map<String, Integer> counts = new HashMap<>();
+        for (final DeliveryBucket bucket : deliveryMap.keySet()) {
+
+            deliveryMap.get(bucket).stream().map(CartItem::getItemGroup).collect(Collectors.toSet()).forEach(group -> {
+                if (group != null) {
+                    counts.merge(group, 1, (a, b) -> a + b);
+                }
+            });
+
+        }
+
+        counts.entrySet().removeIf(entry -> entry.getValue() == 1);
+
+        return counts.keySet();
     }
 
     /** {@inheritDoc} */

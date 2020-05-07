@@ -65,7 +65,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
         try {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
@@ -137,7 +137,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
         try {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
@@ -216,7 +216,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
         try {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);
@@ -294,7 +294,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
         try {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             param.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) param);

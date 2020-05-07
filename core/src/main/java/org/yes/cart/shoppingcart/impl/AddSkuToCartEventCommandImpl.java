@@ -146,7 +146,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
                         return;
                     }
 
-                    final BigDecimal toAddOption = toAdd.multiply(option.getQuantity());
+                    final BigDecimal toAddOption = toAdd.multiply(option.getQuantity()).stripTrailingZeros();
 
                     final String skuNameOption = new FailoverStringI18NModel(
                             productSkuOption.getDisplayName(),

@@ -27,7 +27,6 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.utils.MoneyUtils;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,21 +65,21 @@ public class AddCouponEventCommandImplTest extends BaseCoreDBTestCase {
         Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 19.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("19.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("19.99", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.remove(ShoppingCartCommand.CMD_ADDTOCART);
         params.put(ShoppingCartCommand.CMD_ADDCOUPON, "ZZZZZ");
         commands.execute(shoppingCart, (Map) params);
         assertEquals(1, shoppingCart.getCoupons().size());
         assertTrue(shoppingCart.getAppliedCoupons().isEmpty());
-        assertTrue("Expected 19.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("19.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("19.99", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.put(ShoppingCartCommand.CMD_ADDCOUPON, couponCodeValid);
         commands.execute(shoppingCart, (Map) params);
         assertEquals(2, shoppingCart.getCoupons().size());
         assertEquals(1, shoppingCart.getAppliedCoupons().size());
         assertTrue(shoppingCart.getAppliedCoupons().contains(couponCodeValid));
-        assertTrue("Expected 17.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("17.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("17.99", shoppingCart.getTotal().getSubTotal().toPlainString());
         assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains(couponCodeValid));
 
         params.put(ShoppingCartCommand.CMD_ADDCOUPON, couponCodeInvalid);
@@ -88,7 +87,7 @@ public class AddCouponEventCommandImplTest extends BaseCoreDBTestCase {
         assertEquals(3, shoppingCart.getCoupons().size());
         assertEquals(1, shoppingCart.getAppliedCoupons().size());
         assertTrue(shoppingCart.getAppliedCoupons().contains(couponCodeValid));
-        assertTrue("Expected 17.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("17.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("17.99", shoppingCart.getTotal().getSubTotal().toPlainString());
         assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("PROMO-" + couponCodeValid));
 
     }

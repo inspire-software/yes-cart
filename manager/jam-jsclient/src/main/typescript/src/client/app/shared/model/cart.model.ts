@@ -103,6 +103,7 @@ export interface CartItemVO {
   quantity: number;
   supplierCode: string;
   deliveryGroup: string;
+  itemGroup: string;
 
   price: number;
   salePrice: number;
@@ -113,6 +114,9 @@ export interface CartItemVO {
   taxRate: number;
   taxCode: string;
   taxExclusiveOfPrice: boolean;
+
+  notSoldSeparately: boolean;
+  configurable: boolean;
 
   gift: boolean;
   promoApplied: boolean;

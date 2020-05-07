@@ -129,6 +129,10 @@ public class OrderSplittingStrategyImplTest {
 
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
+        context.checking(new Expectations() {{
+            allowing(d4).getItemGroup(); will(returnValue(null));
+        }});
+
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d4));
@@ -149,6 +153,10 @@ public class OrderSplittingStrategyImplTest {
     public void testGroupDeliveriesIntoMixedIfNecessaryOnlyElectronicSingleFalse() throws Exception {
 
         final CartItem d4 = context.mock(CartItem.class, "d4");
+
+        context.checking(new Expectations() {{
+            allowing(d4).getItemGroup(); will(returnValue(null));
+        }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
@@ -172,6 +180,11 @@ public class OrderSplittingStrategyImplTest {
 
         final CartItem d4_1 = context.mock(CartItem.class, "d4_1");
         final CartItem d4_2 = context.mock(CartItem.class, "d4_2");
+
+        context.checking(new Expectations() {{
+            allowing(d4_1).getItemGroup(); will(returnValue(null));
+            allowing(d4_2).getItemGroup(); will(returnValue(null));
+        }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
@@ -204,6 +217,11 @@ public class OrderSplittingStrategyImplTest {
 
         final CartItem d4_1 = context.mock(CartItem.class, "d4_1");
         final CartItem d4_2 = context.mock(CartItem.class, "d4_2");
+
+        context.checking(new Expectations() {{
+            allowing(d4_1).getItemGroup(); will(returnValue(null));
+            allowing(d4_2).getItemGroup(); will(returnValue(null));
+        }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
@@ -240,6 +258,13 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
+        context.checking(new Expectations() {{
+            allowing(d1).getItemGroup(); will(returnValue(null));
+            allowing(d2).getItemGroup(); will(returnValue(null));
+            allowing(d3).getItemGroup(); will(returnValue(null));
+            allowing(d4).getItemGroup(); will(returnValue(null));
+        }});
+
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
@@ -273,6 +298,13 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2 = context.mock(CartItem.class, "d2");
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
+
+        context.checking(new Expectations() {{
+            allowing(d1).getItemGroup(); will(returnValue(null));
+            allowing(d2).getItemGroup(); will(returnValue(null));
+            allowing(d3).getItemGroup(); will(returnValue(null));
+            allowing(d4).getItemGroup(); will(returnValue(null));
+        }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
@@ -317,6 +349,13 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
+        context.checking(new Expectations() {{
+            allowing(d1).getItemGroup(); will(returnValue(null));
+            allowing(d2).getItemGroup(); will(returnValue(null));
+            allowing(d3).getItemGroup(); will(returnValue(null));
+            allowing(d4).getItemGroup(); will(returnValue(null));
+        }});
+
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1));
@@ -357,6 +396,13 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2 = context.mock(CartItem.class, "d2");
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
+
+        context.checking(new Expectations() {{
+            allowing(d1).getItemGroup(); will(returnValue(null));
+            allowing(d2).getItemGroup(); will(returnValue(null));
+            allowing(d3).getItemGroup(); will(returnValue(null));
+            allowing(d4).getItemGroup(); will(returnValue(null));
+        }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
@@ -403,6 +449,13 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
 
+        context.checking(new Expectations() {{
+            allowing(d1).getItemGroup(); will(returnValue(null));
+            allowing(d2).getItemGroup(); will(returnValue(null));
+            allowing(d3).getItemGroup(); will(returnValue(null));
+            allowing(d4).getItemGroup(); will(returnValue(null));
+        }});
+
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), Collections.<CartItem>singletonList(d1));
@@ -443,6 +496,13 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2 = context.mock(CartItem.class, "d2");
         final CartItem d3 = context.mock(CartItem.class, "d3");
         final CartItem d4 = context.mock(CartItem.class, "d4");
+
+        context.checking(new Expectations() {{
+            allowing(d1).getItemGroup(); will(returnValue(null));
+            allowing(d2).getItemGroup(); will(returnValue(null));
+            allowing(d3).getItemGroup(); will(returnValue(null));
+            allowing(d4).getItemGroup(); will(returnValue(null));
+        }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
@@ -488,6 +548,12 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2 = context.mock(CartItem.class, "d2");
         final CartItem d3 = context.mock(CartItem.class, "d3");
 
+        context.checking(new Expectations() {{
+            allowing(d1).getItemGroup(); will(returnValue(null));
+            allowing(d2).getItemGroup(); will(returnValue(null));
+            allowing(d3).getItemGroup(); will(returnValue(null));
+        }});
+
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1));
@@ -514,6 +580,12 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d1 = context.mock(CartItem.class, "d1");
         final CartItem d2 = context.mock(CartItem.class, "d2");
         final CartItem d3 = context.mock(CartItem.class, "d3");
+
+        context.checking(new Expectations() {{
+            allowing(d1).getItemGroup(); will(returnValue(null));
+            allowing(d2).getItemGroup(); will(returnValue(null));
+            allowing(d3).getItemGroup(); will(returnValue(null));
+        }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
@@ -555,6 +627,18 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d1_3 = context.mock(CartItem.class, "d1_3");
         final CartItem d2_3 = context.mock(CartItem.class, "d2_3");
         final CartItem d3_3 = context.mock(CartItem.class, "d3_3");
+
+        context.checking(new Expectations() {{
+            allowing(d1_1).getItemGroup(); will(returnValue(null));
+            allowing(d2_1).getItemGroup(); will(returnValue(null));
+            allowing(d3_1).getItemGroup(); will(returnValue(null));
+            allowing(d1_2).getItemGroup(); will(returnValue(null));
+            allowing(d2_2).getItemGroup(); will(returnValue(null));
+            allowing(d3_2).getItemGroup(); will(returnValue(null));
+            allowing(d1_3).getItemGroup(); will(returnValue(null));
+            allowing(d2_3).getItemGroup(); will(returnValue(null));
+            allowing(d3_3).getItemGroup(); will(returnValue(null));
+        }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
@@ -614,6 +698,18 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d1_3 = context.mock(CartItem.class, "d1_3");
         final CartItem d2_3 = context.mock(CartItem.class, "d2_3");
         final CartItem d3_3 = context.mock(CartItem.class, "d3_3");
+
+        context.checking(new Expectations() {{
+            allowing(d1_1).getItemGroup(); will(returnValue(null));
+            allowing(d2_1).getItemGroup(); will(returnValue(null));
+            allowing(d3_1).getItemGroup(); will(returnValue(null));
+            allowing(d1_2).getItemGroup(); will(returnValue(null));
+            allowing(d2_2).getItemGroup(); will(returnValue(null));
+            allowing(d3_2).getItemGroup(); will(returnValue(null));
+            allowing(d1_3).getItemGroup(); will(returnValue(null));
+            allowing(d2_3).getItemGroup(); will(returnValue(null));
+            allowing(d3_3).getItemGroup(); will(returnValue(null));
+        }});
 
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
@@ -698,6 +794,18 @@ public class OrderSplittingStrategyImplTest {
         final CartItem d2_3 = context.mock(CartItem.class, "d2_3");
         final CartItem d3_3 = context.mock(CartItem.class, "d3_3");
 
+        context.checking(new Expectations() {{
+            allowing(d1_1).getItemGroup(); will(returnValue(null));
+            allowing(d2_1).getItemGroup(); will(returnValue(null));
+            allowing(d3_1).getItemGroup(); will(returnValue(null));
+            allowing(d1_2).getItemGroup(); will(returnValue(null));
+            allowing(d2_2).getItemGroup(); will(returnValue(null));
+            allowing(d3_2).getItemGroup(); will(returnValue(null));
+            allowing(d1_3).getItemGroup(); will(returnValue(null));
+            allowing(d2_3).getItemGroup(); will(returnValue(null));
+            allowing(d3_3).getItemGroup(); will(returnValue(null));
+        }});
+
         final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
 
         groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), Collections.<CartItem>singletonList(d1_1));
@@ -751,6 +859,88 @@ public class OrderSplittingStrategyImplTest {
         assertSame(d3_3, mixed_3.get(2));
 
     }
+
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryMultipleSuppliersSingleMixedWithGroupped() throws Exception {
+
+        final CartItem d1_1 = context.mock(CartItem.class, "d1_1");
+        final CartItem d2_1 = context.mock(CartItem.class, "d2_1");
+        final CartItem d3_1 = context.mock(CartItem.class, "d3_1");
+        final CartItem d1_2 = context.mock(CartItem.class, "d1_2");
+        final CartItem d2_2 = context.mock(CartItem.class, "d2_2");
+        final CartItem d3_2 = context.mock(CartItem.class, "d3_2");
+        final CartItem d1_3 = context.mock(CartItem.class, "d1_3");
+        final CartItem d2_3 = context.mock(CartItem.class, "d2_3");
+        final CartItem d3_3 = context.mock(CartItem.class, "d3_3");
+
+        context.checking(new Expectations() {{
+            allowing(d1_1).getItemGroup(); will(returnValue("grp1"));
+            allowing(d2_1).getItemGroup(); will(returnValue("grp1"));
+            allowing(d3_1).getItemGroup(); will(returnValue(null));
+            allowing(d1_2).getItemGroup(); will(returnValue("grp2"));
+            allowing(d2_2).getItemGroup(); will(returnValue(null));
+            allowing(d3_2).getItemGroup(); will(returnValue("grp2"));
+            allowing(d1_3).getItemGroup(); will(returnValue("grp3"));
+            allowing(d2_3).getItemGroup(); will(returnValue(null));
+            allowing(d3_3).getItemGroup(); will(returnValue("grp3"));
+        }});
+
+        final Map<DeliveryBucket, List<CartItem>> groups = new TreeMap<>();
+
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S001"), new ArrayList<>(Collections.<CartItem>singletonList(d1_1)));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S001"), new ArrayList<>(Collections.<CartItem>singletonList(d2_1)));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"), new ArrayList<>(Collections.<CartItem>singletonList(d3_1)));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S002"), new ArrayList<>(Collections.<CartItem>singletonList(d1_2)));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"), new ArrayList<>(Collections.<CartItem>singletonList(d2_2)));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S002"), new ArrayList<>(Collections.<CartItem>singletonList(d3_2)));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "S003"), new ArrayList<>(Collections.<CartItem>singletonList(d1_3)));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S003"), new ArrayList<>(Collections.<CartItem>singletonList(d2_3)));
+        groups.put(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S003"), new ArrayList<>(Collections.<CartItem>singletonList(d3_3)));
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(groups, new HashMap<String, Boolean>() {{
+            put("S001", Boolean.FALSE);
+            put("S002", Boolean.FALSE);
+            put("S003", Boolean.TRUE);
+        }});
+
+        assertEquals(5, groups.size());
+
+        final List<CartItem> mixed_1 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(mixed_1);
+        assertEquals(2, mixed_1.size());
+        assertSame(d1_1, mixed_1.get(0));
+        assertSame(d2_1, mixed_1.get(1));
+
+        final List<CartItem> inv_1 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "S001"));
+
+        assertNotNull(inv_1);
+        assertEquals(1, inv_1.size());
+        assertSame(d3_1, inv_1.get(0));
+
+        final List<CartItem> mix_2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "S002"));
+        final List<CartItem> date_2 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "S002"));
+
+        assertNotNull(mix_2);
+        assertEquals(2, mix_2.size());
+        assertSame(d1_2, mix_2.get(0));
+        assertSame(d3_2, mix_2.get(1));
+
+        assertNotNull(date_2);
+        assertEquals(1, date_2.size());
+        assertSame(d2_2, date_2.get(0));
+
+        final List<CartItem> mixed_3 = groups.get(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "S003"));
+
+        assertNotNull(mixed_3);
+        assertEquals(3, mixed_3.size());
+        assertSame(d1_3, mixed_3.get(0));
+        assertSame(d2_3, mixed_3.get(1));
+        assertSame(d3_3, mixed_3.get(2));
+
+    }
+
 
 
     private void testGetDeliveryGroup(final int availability,
@@ -2247,9 +2437,11 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(item).getDeliveryBucket(); will(returnValue(itemBucket));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getItemGroup(); will(returnValue(null));
             allowing(item).isGift(); will(returnValue(false));
             allowing(other).getDeliveryBucket(); will(returnValue(null));
             allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).getItemGroup(); will(returnValue(null));
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
@@ -2286,9 +2478,11 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(item).getDeliveryBucket(); will(returnValue(itemBucket));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getItemGroup(); will(returnValue(null));
             allowing(item).isGift(); will(returnValue(false));
             allowing(other).getDeliveryBucket(); will(returnValue(itemBucket));
             allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).getItemGroup(); will(returnValue(null));
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
@@ -2326,9 +2520,11 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(item).getDeliveryBucket(); will(returnValue(itemBucket));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getItemGroup(); will(returnValue(null));
             allowing(item).isGift(); will(returnValue(false));
             allowing(other).getDeliveryBucket(); will(returnValue(otherBucket));
             allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).getItemGroup(); will(returnValue(null));
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
@@ -2366,9 +2562,11 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(item).getDeliveryBucket(); will(returnValue(itemBucket));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getItemGroup(); will(returnValue(null));
             allowing(item).isGift(); will(returnValue(false));
             allowing(other).getDeliveryBucket(); will(returnValue(otherBucket));
             allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).getItemGroup(); will(returnValue(null));
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
@@ -2413,9 +2611,11 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(item).getDeliveryBucket(); will(returnValue(null));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getItemGroup(); will(returnValue(null));
             allowing(item).isGift(); will(returnValue(false));
             allowing(other).getDeliveryBucket(); will(returnValue(null));
             allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).getItemGroup(); will(returnValue(null));
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
@@ -2466,9 +2666,11 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(item).getDeliveryBucket(); will(returnValue(null));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getItemGroup(); will(returnValue(null));
             allowing(item).isGift(); will(returnValue(false));
             allowing(other).getDeliveryBucket(); will(returnValue(itemBucket));
             allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).getItemGroup(); will(returnValue(null));
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
@@ -2521,9 +2723,11 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(item).getDeliveryBucket(); will(returnValue(null));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getItemGroup(); will(returnValue(null));
             allowing(item).isGift(); will(returnValue(false));
             allowing(other).getDeliveryBucket(); will(returnValue(itemBucket));
             allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).getItemGroup(); will(returnValue(null));
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));
@@ -2577,9 +2781,11 @@ public class OrderSplittingStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(item).getDeliveryBucket(); will(returnValue(null));
             allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).getItemGroup(); will(returnValue(null));
             allowing(item).isGift(); will(returnValue(false));
             allowing(other).getDeliveryBucket(); will(returnValue(itemBucket));
             allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).getItemGroup(); will(returnValue(null));
             allowing(other).isGift(); will(returnValue(false));
 
             allowing(cart).getOrderInfo(); will(returnValue(info));

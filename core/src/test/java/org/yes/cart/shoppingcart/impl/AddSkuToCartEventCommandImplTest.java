@@ -24,13 +24,11 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.utils.MoneyUtils;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -55,21 +53,21 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 19.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("19.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("19.99", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 39.98", (new BigDecimal("39.98")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("39.98", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 57.00", (new BigDecimal("57.00")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("57.00", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.put(ShoppingCartCommand.CMD_P_QTY, "7");
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 180.00", (new BigDecimal("180.00")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("180.00", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.put(ShoppingCartCommand.CMD_P_QTY, "zzzz"); // if invalid use 1
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 198.00", (new BigDecimal("198.00")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("198.00", shoppingCart.getTotal().getSubTotal().toPlainString());
 
 
     }
@@ -91,29 +89,29 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 49.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("49.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("49.99", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 99.98", (new BigDecimal("99.98")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("99.98", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 149.97", (new BigDecimal("149.97")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("149.97", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.put(ShoppingCartCommand.CMD_P_QTY, "7");
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 499.90", (new BigDecimal("499.90")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("499.90", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.put(ShoppingCartCommand.CMD_P_QTY, "zzzz"); // if invalid use 1
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 549.89", (new BigDecimal("549.89")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("549.89", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.put(ShoppingCartCommand.CMD_P_QTY, "0.3"); // if no prod model round up to int
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 599.88", (new BigDecimal("599.88")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("599.88", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU-NONEXISTENT");
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 599.88", (new BigDecimal("599.88")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("599.88", shoppingCart.getTotal().getSubTotal().toPlainString());
 
     }
 
@@ -134,7 +132,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 49.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("49.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("49.99", shoppingCart.getTotal().getSubTotal().toPlainString());
         assertEquals(1, shoppingCart.getCartItemsCount());
         assertEquals(1, shoppingCart.getCartItemList().size());
 
@@ -144,7 +142,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         params.put("MATERIAL", "001_CFG_OPT1_A");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 20049.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("20049.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("20049.99", shoppingCart.getTotal().getSubTotal().toPlainString());
         assertEquals(2, shoppingCart.getCartItemsCount());
         assertEquals(3, shoppingCart.getCartItemList().size());
 
@@ -154,7 +152,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         params.put("MATERIAL", "001_CFG_OPT1_B");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 45049.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("45049.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("45049.99", shoppingCart.getTotal().getSubTotal().toPlainString());
         assertEquals(3, shoppingCart.getCartItemsCount());
         assertEquals(5, shoppingCart.getCartItemList().size());
 
@@ -166,7 +164,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         params.put("MATERIAL", "001_CFG_OPT1_A");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 45049.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("45049.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("45049.99", shoppingCart.getTotal().getSubTotal().toPlainString());
         assertEquals(3, shoppingCart.getCartItemsCount());
         assertEquals(5, shoppingCart.getCartItemList().size());
 
@@ -176,7 +174,7 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
         params.put("MATERIAL", "001_CFG_OPT1_A");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 65049.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("65049.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("65049.99", shoppingCart.getTotal().getSubTotal().toPlainString());
         assertEquals(4, shoppingCart.getCartItemsCount());
         assertEquals(7, shoppingCart.getCartItemList().size());
 

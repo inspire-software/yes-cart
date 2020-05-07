@@ -16,8 +16,10 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.QuantityModel;
 import org.yes.cart.service.domain.ProductService;
@@ -25,7 +27,10 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -99,13 +104,57 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
         final long shopId = shoppingCart.getShoppingContext().getCustomerShopId();
 
-        if(!shoppingCart.removeCartItemQuantity(supplier, skuCode,
-                getQuantityValue(shopId, skuCode, supplier, shoppingCart.getProductSkuQuantity(supplier, skuCode)), itemGroup)) {
-            LOG.warn("Can not remove one sku with code {} from cart", skuCode);
-        }
+        if (StringUtils.isNotBlank(itemGroup)) {
 
-        recalculatePricesInCart(shoppingCart);
-        markDirty(shoppingCart);
+            final Optional<CartItem> main = shoppingCart.getCartItemList().stream()
+                    .filter(item -> ShoppingCartUtils.isCartItem(item, supplier, skuCode, itemGroup)).findFirst();
+
+            if (!main.isPresent() || main.get().isNotSoldSeparately()) {
+                LOG.warn("Cannot remove one sku with code {}:{} from cart, it is not main in group", skuCode, itemGroup);
+                return;
+            }
+
+            final CartItem mainItem = main.get();
+
+            final List<CartItem> allInGroup = shoppingCart.getCartItemList().stream()
+                    .filter(item -> itemGroup.equals(item.getItemGroup()) && !mainItem.getProductSkuCode().equals(item.getProductSkuCode()))
+                    .collect(Collectors.toList());
+
+            final BigDecimal toRemove = getQuantityValue(shopId, skuCode, supplier, mainItem.getQty());
+
+            for (final CartItem component : allInGroup) {
+
+                final BigDecimal ratio = component.getQty().divide(mainItem.getQty(), 10, BigDecimal.ROUND_HALF_UP);
+                final BigDecimal toRemoveComponent = toRemove.multiply(ratio).setScale(Constants.INVENTORY_SCALE, BigDecimal.ROUND_HALF_EVEN).stripTrailingZeros();
+
+                if(!shoppingCart.removeCartItemQuantity(supplier, component.getProductSkuCode(), toRemoveComponent, itemGroup)) {
+                    LOG.warn("Cannot remove one sku with code {}:{} from cart", component.getProductSkuCode(), itemGroup);
+                    return;
+                }
+            }
+
+            if (shoppingCart.removeCartItemQuantity(supplier, skuCode, toRemove, itemGroup)) {
+
+                recalculatePricesInCart(shoppingCart);
+                markDirty(shoppingCart);
+
+            } else {
+
+                LOG.warn("Cannot remove one sku with code {}:{} from cart", skuCode, itemGroup);
+
+            }
+
+        } else if(shoppingCart.removeCartItemQuantity(supplier, skuCode,
+                getQuantityValue(shopId, skuCode, supplier, shoppingCart.getProductSkuQuantity(supplier, skuCode)), itemGroup)) {
+
+            recalculatePricesInCart(shoppingCart);
+            markDirty(shoppingCart);
+
+        } else {
+
+            LOG.warn("Can not remove one sku with code {} from cart", skuCode);
+
+        }
 
     }
 

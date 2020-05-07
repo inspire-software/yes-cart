@@ -27,7 +27,6 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.utils.MoneyUtils;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +62,7 @@ public class RemoveCouponEventCommandImplTest extends BaseCoreDBTestCase {
         Map<String, String> params = new HashMap<>();
         params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1");
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 19.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("19.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("19.99", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.remove(ShoppingCartCommand.CMD_ADDTOCART);
         params.put(ShoppingCartCommand.CMD_ADDCOUPON, couponCodeValid);
@@ -72,14 +71,14 @@ public class RemoveCouponEventCommandImplTest extends BaseCoreDBTestCase {
         assertEquals(1, shoppingCart.getAppliedCoupons().size());
         assertTrue(shoppingCart.getAppliedCoupons().contains(couponCodeValid));
         assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("PROMO-" + couponCodeValid));
-        assertTrue("Expected 17.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("17.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("17.99", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.remove(ShoppingCartCommand.CMD_ADDCOUPON);
         params.put(ShoppingCartCommand.CMD_REMOVECOUPON, couponCodeValid);
         commands.execute(shoppingCart, (Map) params);
         assertTrue(shoppingCart.getCoupons().isEmpty());
         assertTrue(shoppingCart.getAppliedCoupons().isEmpty());
-        assertTrue("Expected 19.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("19.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("19.99", shoppingCart.getTotal().getSubTotal().toPlainString());
         assertNull(shoppingCart.getTotal().getAppliedOrderPromo());
 
     }

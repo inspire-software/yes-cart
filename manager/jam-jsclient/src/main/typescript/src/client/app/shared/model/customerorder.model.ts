@@ -105,6 +105,8 @@ export interface CustomerOrderLineVO {
   skuName : string;
 
   supplierCode : string;
+  deliveryGroup : string;
+  itemGroup : string;
 
   deliveryRemarks : string;
   deliveryEstimatedMin : Date;
@@ -125,6 +127,9 @@ export interface CustomerOrderLineVO {
 
   listPrice : number;
   salePrice : number;
+
+  notSoldSeparately : boolean;
+  configurable : boolean;
 
   gift : boolean;
   promoApplied : boolean;

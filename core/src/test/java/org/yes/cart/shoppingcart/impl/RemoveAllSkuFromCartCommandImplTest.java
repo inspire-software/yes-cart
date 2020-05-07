@@ -24,10 +24,10 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.utils.MoneyUtils;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -52,15 +52,74 @@ public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
 
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         Map<String, String> params = new HashMap<>();
-        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST2");
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST2");
         params.put(ShoppingCartCommand.CMD_P_QTY, "10");
         commands.execute(shoppingCart, (Map) params);
 
-        assertTrue("Expected 221.70 but was " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("221.70")).equals(shoppingCart.getTotal().getSubTotal()));
-        params = new HashMap<>();
-        params.put(RemoveAllSkuFromCartCommandImpl.CMD_REMOVEALLSKU, "CC_TEST2");
+        assertEquals("221.70", shoppingCart.getTotal().getSubTotal().toPlainString());
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_REMOVEALLSKU, "CC_TEST2");
         commands.execute(shoppingCart, (Map) params);
         assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
         assertTrue(shoppingCart.getCartItemList().isEmpty());
     }
+
+
+    @Test
+    public void testExecuteProductWithOptions() throws Exception {
+
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
+
+        assertEquals(MoneyUtils.ZERO, shoppingCart.getTotal().getSubTotal());
+        Map<String, String> params = new HashMap<>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU");
+
+        commands.execute(shoppingCart, (Map) params);
+
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-A");
+        params.put("MATERIAL", "001_CFG_OPT1_A");
+
+        commands.execute(shoppingCart, (Map) params);
+
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-B");
+        params.put("MATERIAL", "001_CFG_OPT1_B");
+
+        commands.execute(shoppingCart, (Map) params);
+
+        assertEquals("45049.99", shoppingCart.getTotal().getSubTotal().toPlainString());
+        assertEquals(3, shoppingCart.getCartItemsCount());
+        assertEquals(5, shoppingCart.getCartItemList().size());
+
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_REMOVEALLSKU, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-A");
+        commands.execute(shoppingCart, (Map) params);
+
+        assertEquals("25049.99", shoppingCart.getTotal().getSubTotal().toPlainString());
+        assertEquals(2, shoppingCart.getCartItemsCount());
+        assertEquals(3, shoppingCart.getCartItemList().size());
+
+        params.clear();
+        params.put(ShoppingCartCommand.CMD_REMOVEALLSKU, "001_CFG01");
+        params.put(ShoppingCartCommand.CMD_P_ITEM_GROUP, "001_CFG01-B");
+        commands.execute(shoppingCart, (Map) params);
+
+        assertEquals("49.99", shoppingCart.getTotal().getSubTotal().toPlainString());
+        assertEquals(1, shoppingCart.getCartItemsCount());
+        assertEquals(1, shoppingCart.getCartItemList().size());
+
+
+    }
+
 }

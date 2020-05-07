@@ -133,14 +133,14 @@ public class CustomerOrderServiceImplTest extends BaseCoreDBTestCase {
 
         // this digital product available
         Map<String, String> param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST9");
         param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
         commands.execute(shoppingCart,
                 (Map) param);
 
         param = new HashMap<>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
+        param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST5");
         param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
         param.put(ShoppingCartCommand.CMD_P_QTY, "200.00");
         commands.execute(shoppingCart,

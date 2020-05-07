@@ -56,6 +56,8 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private String supplierCode;
     @DtoField(readOnly = true)
     private String deliveryGroup;
+    @DtoField(readOnly = true)
+    private String itemGroup;
 
     @DtoField(readOnly = true)
     private String deliveryRemarks;
@@ -106,6 +108,11 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private String taxCode;
     @DtoField(value = "taxExclusiveOfPrice", readOnly = true)
     private boolean taxExclusiveOfPrice;
+
+    @DtoField(readOnly = true)
+    private boolean notSoldSeparately;
+    @DtoField(readOnly = true)
+    private boolean configurable;
 
     private BigDecimal lineTotal;
     private BigDecimal lineTotalGross;
@@ -228,6 +235,36 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @Override
     public void setDeliveryGroup(final String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
+    }
+
+    @Override
+    public String getItemGroup() {
+        return itemGroup;
+    }
+
+    @Override
+    public void setItemGroup(final String itemGroup) {
+        this.itemGroup = itemGroup;
+    }
+
+    @Override
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    @Override
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
+    }
+
+    @Override
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    @Override
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
     }
 
     @Override

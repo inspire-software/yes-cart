@@ -57,8 +57,8 @@ public class SetSkuPriceEventCommandImplTest extends BaseCoreDBTestCase {
         params.put(ShoppingCartCommand.CMD_P_QTY, "5");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 90.00, was: " + shoppingCart.getTotal().getListSubTotal(), (new BigDecimal("90.00")).compareTo(shoppingCart.getTotal().getListSubTotal()) == 0);
-        assertTrue("Expected 90.00, was: " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("90.00")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("90.00", shoppingCart.getTotal().getListSubTotal().toPlainString());
+        assertEquals("90.00", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.clear();
         params.put(ShoppingCartCommand.CMD_SETPRICE, "CC_TEST1");
@@ -66,8 +66,8 @@ public class SetSkuPriceEventCommandImplTest extends BaseCoreDBTestCase {
         params.put(ShoppingCartCommand.CMD_SETPRICE_P_AUTH, "CC0001");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 90.00, was: " + shoppingCart.getTotal().getListSubTotal(), (new BigDecimal("90.00")).compareTo(shoppingCart.getTotal().getListSubTotal()) == 0);
-        assertTrue("Expected 75.00, was: " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("75.00")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("90.00", shoppingCart.getTotal().getListSubTotal().toPlainString());
+        assertEquals("75.00", shoppingCart.getTotal().getSubTotal().toPlainString());
 
         params.clear();
         params.put(ShoppingCartCommand.CMD_SETPRICE, "CC_TEST1");
@@ -75,8 +75,8 @@ public class SetSkuPriceEventCommandImplTest extends BaseCoreDBTestCase {
         params.put(ShoppingCartCommand.CMD_SETPRICE_P_AUTH, "CC0001");
 
         commands.execute(shoppingCart, (Map) params);
-        assertTrue("Expected 150.00, was: " + shoppingCart.getTotal().getListSubTotal(), (new BigDecimal("150.00")).compareTo(shoppingCart.getTotal().getListSubTotal()) == 0);
-        assertTrue("Expected 150.00, was: " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("150.00")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+        assertEquals("150.00", shoppingCart.getTotal().getListSubTotal().toPlainString());
+        assertEquals("150.00", shoppingCart.getTotal().getSubTotal().toPlainString());
 
     }
 }

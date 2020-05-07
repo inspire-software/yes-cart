@@ -47,6 +47,10 @@ public class VoCustomerOrderLine {
     private BigDecimal qty;
     @DtoField(value = "supplierCode", readOnly = true)
     private String supplierCode;
+    @DtoField(readOnly = true)
+    private String deliveryGroup;
+    @DtoField(readOnly = true)
+    private String itemGroup;
 
     @DtoField(value = "deliveryRemarks", readOnly = true)
     private String deliveryRemarks;
@@ -97,6 +101,11 @@ public class VoCustomerOrderLine {
     private String taxCode;
     @DtoField(value = "taxExclusiveOfPrice", readOnly = true)
     private boolean taxExclusiveOfPrice;
+
+    @DtoField(readOnly = true)
+    private boolean notSoldSeparately;
+    @DtoField(readOnly = true)
+    private boolean configurable;
 
     @DtoField(value = "lineTotal", readOnly = true)
     private BigDecimal lineTotal;
@@ -157,6 +166,38 @@ public class VoCustomerOrderLine {
 
     public void setSupplierCode(final String supplierCode) {
         this.supplierCode = supplierCode;
+    }
+
+    public String getDeliveryGroup() {
+        return deliveryGroup;
+    }
+
+    public void setDeliveryGroup(final String deliveryGroup) {
+        this.deliveryGroup = deliveryGroup;
+    }
+
+    public String getItemGroup() {
+        return itemGroup;
+    }
+
+    public void setItemGroup(final String itemGroup) {
+        this.itemGroup = itemGroup;
+    }
+
+    public boolean isNotSoldSeparately() {
+        return notSoldSeparately;
+    }
+
+    public void setNotSoldSeparately(final boolean notSoldSeparately) {
+        this.notSoldSeparately = notSoldSeparately;
+    }
+
+    public boolean isConfigurable() {
+        return configurable;
+    }
+
+    public void setConfigurable(final boolean configurable) {
+        this.configurable = configurable;
     }
 
     public String getDeliveryRemarks() {

@@ -69,7 +69,7 @@ public class ItemGiftPromotionActionTest extends BaseCoreDBTestCase {
         try {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             param.put(ShoppingCartCommand.CMD_P_QTY, "5.00");
             commands.execute(shoppingCart, (Map) param);
@@ -139,7 +139,7 @@ public class ItemGiftPromotionActionTest extends BaseCoreDBTestCase {
         try {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             param.put(ShoppingCartCommand.CMD_P_QTY, "5.00");
             commands.execute(shoppingCart, (Map) param);
@@ -209,7 +209,7 @@ public class ItemGiftPromotionActionTest extends BaseCoreDBTestCase {
         try {
             // add qualifying items
             Map<String, String> param = new HashMap<>();
-            param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             param.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             param.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) param);
@@ -268,14 +268,14 @@ public class ItemGiftPromotionActionTest extends BaseCoreDBTestCase {
         try {
             // add qualifying items
             Map<String, String> paramQ = new HashMap<>();
-            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            paramQ.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             paramQ.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             paramQ.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) paramQ);
 
             // add non-qualifying items
             Map<String, String> paramNQ = new HashMap<>();
-            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
+            paramNQ.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST6");
             paramNQ.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             paramNQ.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) paramNQ);
@@ -373,14 +373,14 @@ public class ItemGiftPromotionActionTest extends BaseCoreDBTestCase {
         try {
             // add qualifying items
             Map<String, String> paramQ = new HashMap<>();
-            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            paramQ.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4");
             paramQ.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             paramQ.put(ShoppingCartCommand.CMD_P_QTY, "2.00");
             commands.execute(shoppingCart, (Map) paramQ);
 
             // add non-qualifying items
             Map<String, String> paramNQ = new HashMap<>();
-            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
+            paramNQ.put(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST6");
             paramNQ.put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_1");
             paramNQ.put(ShoppingCartCommand.CMD_P_QTY, "1.00");
             commands.execute(shoppingCart, (Map) paramNQ);
