@@ -56,7 +56,7 @@ public abstract class SingletonJobRunner implements JobRunner {
 
     /** {@inheritDoc} */
     @Override
-    public String doJob(final JobContext ctx) {
+    public JobStatus doJob(final JobContext ctx) {
 
         final JobStatusListener listener = ctx.getListener();
         jobListeners.put(listener.getJobToken(), listener);
@@ -69,7 +69,7 @@ public abstract class SingletonJobRunner implements JobRunner {
             // if this is sync then mutex will hold the execution
             job.run();
         }
-        return listener.getJobToken();
+        return listener.getLatestStatus();
     }
 
     private Runnable createMutexJobRunnable(final JobContext ctx) {

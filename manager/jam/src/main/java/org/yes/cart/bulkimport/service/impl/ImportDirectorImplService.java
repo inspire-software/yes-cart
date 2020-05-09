@@ -54,8 +54,8 @@ import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.utils.DateUtils;
-import org.yes.cart.utils.log.Markers;
 import org.yes.cart.utils.impl.ZipUtils;
+import org.yes.cart.utils.log.Markers;
 
 import java.io.File;
 import java.io.IOException;
@@ -149,7 +149,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     /** {@inheritDoc} */
     @Override
-    public String doImport(final String descriptorGroup, final String fileName, final boolean async) {
+    public JobStatus doImport(final String descriptorGroup, final String fileName, final boolean async) {
 
         final AsyncContext ctx = getAsyncContext();
 

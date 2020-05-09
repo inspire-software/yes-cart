@@ -56,10 +56,10 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   importFromFile(group:string, fileName:string) {
-    let body = fileName;
-    return this.http.post(this._serviceBaseUrl + '/impex/import?group=' + encodeURIComponent(group), body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8', accept: 'text/plain' }))
-      .map(res => <string> res.text())
+    let body = JSON.stringify({ group: group, fileName: fileName });
+    return this.http.post(this._serviceBaseUrl + '/impex/import', body,
+          Util.requestOptions())
+      .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -78,10 +78,10 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   exportToFile(group:string, fileName:string) {
-    let body = fileName;
-    return this.http.post(this._serviceBaseUrl + '/impex/export?group=' + encodeURIComponent(group), body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8', accept: 'text/plain' }))
-      .map(res => <string> res.text())
+    let body = JSON.stringify({ group: group, fileName: fileName });
+    return this.http.post(this._serviceBaseUrl + '/impex/export', body,
+          Util.requestOptions())
+      .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
 

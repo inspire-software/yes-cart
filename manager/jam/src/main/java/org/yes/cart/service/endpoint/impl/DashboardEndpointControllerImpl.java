@@ -15,6 +15,8 @@
  */
 package org.yes.cart.service.endpoint.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,7 @@ import org.yes.cart.service.vo.VoDashboardWidgetService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -51,8 +54,13 @@ public class DashboardEndpointControllerImpl implements DashboardEndpointControl
 
     @Override
     public @ResponseBody
-    void updateDashboardSelection(final @RequestBody String dashboard) throws Exception {
-        voDashboardWidgetService.updateDashboardSelection(dashboard);
+    void updateDashboardSelection(final @RequestBody List<VoDashboardWidgetInfo> dashboard) throws Exception {
+        String dashboardCsv = null;
+        if (CollectionUtils.isNotEmpty(dashboard)) {
+            final List<String> wid = dashboard.stream().map(VoDashboardWidgetInfo::getWidgetId).collect(Collectors.toList());
+            dashboardCsv = StringUtils.join(wid, ',');
+        }
+        voDashboardWidgetService.updateDashboardSelection(dashboardCsv);
     }
 
     @Override

@@ -6,11 +6,11 @@
   <div class="text-right data-control">
 
     <button type="button" (click)="onReindexAll()" [hidden]="jobCompleted" [disabled]="jobRunning" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_INDEXALL' | translate }}">
-      <i class="fa fa-gears"></i>
+      <i class="fa fa-forward"></i>
     </button>
 
     <button type="button" (click)="onReindexOne()" [hidden]="jobCompleted" [disabled]="jobRunning || (selectedShop == null)" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_INDEXONE' | translate }}">
-      <i class="fa fa-gear"></i>
+      <i class="fa fa-play"></i>
     </button>
 
     <button type="button" (click)="onRefreshResults()" [hidden]="jobCompleted == false" class="btn btn-info btn-circle btn-xl" >

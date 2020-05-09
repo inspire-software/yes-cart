@@ -57,14 +57,14 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
 
     @Override
     public @ResponseBody
-    VoCustomerOrderTransitionResult transitionOrder(@PathVariable("transition") final String transition, @PathVariable("ordernum") final String ordernum, @RequestBody(required = false) final String message) throws Exception {
-        return voCustomerOrderService.transitionOrder(transition, ordernum, message);
+    VoCustomerOrderTransitionResult transitionOrder(@PathVariable("ordernum") final String ordernum, @RequestBody final VoCustomerOrderTransition transition) throws Exception {
+        return voCustomerOrderService.transitionOrder(transition.getTransition(), ordernum, transition.getMessage());
     }
 
     @Override
     public @ResponseBody
-    VoCustomerOrderTransitionResult transitionDelivery(@PathVariable("transition") final String transition, @PathVariable("ordernum") final String ordernum, @PathVariable("deliverynum") final String deliverynum, @RequestBody(required = false) final String message) throws Exception {
-        return voCustomerOrderService.transitionDelivery(transition, ordernum, deliverynum, message);
+    VoCustomerOrderTransitionResult transitionDelivery(@PathVariable("ordernum") final String ordernum, @PathVariable("deliverynum") final String deliverynum, @RequestBody final VoCustomerOrderTransition transition) throws Exception {
+        return voCustomerOrderService.transitionDelivery(transition.getTransition(), ordernum, deliverynum, transition.getMessage());
     }
 
     @Override

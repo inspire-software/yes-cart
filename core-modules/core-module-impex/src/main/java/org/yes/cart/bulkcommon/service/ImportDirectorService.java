@@ -57,16 +57,20 @@ public interface ImportDirectorService {
 
     /**
      * Perform bulk import.
+     *
      * @param descriptorGroup descriptor group marker
      * @param fileName optional full filename to import
      * @param async if true then perform asynchronous import
+     *
      * @return status object token
      */
-    String doImport(String descriptorGroup, String fileName, boolean async);
+    JobStatus doImport(String descriptorGroup, String fileName, boolean async);
 
     /**
      * Get latest job status update for given token
+     *
      * @param token job token from #doImport
+     *
      * @return status object
      */
     JobStatus getImportStatus(String token);

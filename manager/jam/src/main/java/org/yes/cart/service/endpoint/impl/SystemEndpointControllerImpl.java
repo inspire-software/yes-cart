@@ -128,10 +128,10 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     /** {@inheritDoc} */
     @Override
     public @ResponseBody
-    List<Object[]> runQuery(@RequestBody final String query, @PathVariable("type") String type, @PathVariable("node") final String node) throws Exception{
+    List<Object[]> runQuery(@RequestBody final VoSystemQuery query, @PathVariable("node") final String node) throws Exception{
         final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_CONNECTOR_QUERY_TIMEOUT_MS);
-        return clusterService.runQuery(createCtx(param), type, query, node);
+        return clusterService.runQuery(createCtx(param), query.getType(), query.getQuery(), node);
     }
 
     /** {@inheritDoc} */
@@ -197,11 +197,7 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
         clusterService.warmUp(createCtx(param));
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public @ResponseBody
-    VoJobStatus getIndexJobStatus(@PathVariable("token") final String token) {
-        final JobStatus status = reindexService.getIndexJobStatus(createCtx(null), token);
+    private VoJobStatus statusToVo(final JobStatus status) {
         final VoJobStatus vo = new VoJobStatus();
         vo.setToken(status.getToken());
         vo.setState(status.getState().name());
@@ -215,17 +211,22 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     /** {@inheritDoc} */
     @Override
     public @ResponseBody
+    VoJobStatus getIndexJobStatus(@PathVariable("token") final String token) {
+        return statusToVo(reindexService.getIndexJobStatus(createCtx(null), token));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public @ResponseBody
     VoJobStatus reindexAllProducts() {
-        final String token = reindexService.reindexAllProducts(createCtx(null));
-        return getIndexJobStatus(token);
+        return statusToVo(reindexService.reindexAllProducts(createCtx(null)));
     }
 
     /** {@inheritDoc} */
     @Override
     public @ResponseBody
     VoJobStatus reindexShopProducts(@PathVariable("id") final long shopPk) {
-        final String token = reindexService.reindexShopProducts(createCtx(null), shopPk);
-        return getIndexJobStatus(token);
+        return statusToVo(reindexService.reindexShopProducts(createCtx(null), shopPk));
     }
 
     private AsyncContext createCtx(final Map<String, Object> param) {

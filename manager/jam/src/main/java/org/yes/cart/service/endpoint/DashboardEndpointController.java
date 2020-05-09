@@ -39,9 +39,9 @@ public interface DashboardEndpointController {
     List<VoDashboardWidgetInfo> getAvailableWidgets(@PathVariable("lang") String lang) throws Exception;
 
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/dashboard/{lang}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE })
+    @RequestMapping(value = "/dashboard/{lang}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    void updateDashboardSelection(@RequestBody String dashboard) throws Exception;
+    void updateDashboardSelection(@RequestBody List<VoDashboardWidgetInfo> dashboard) throws Exception;
 
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/dashboard/{lang}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })

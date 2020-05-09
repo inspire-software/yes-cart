@@ -14,24 +14,31 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.async;
-
-import org.yes.cart.service.async.model.JobContext;
-import org.yes.cart.service.async.model.JobStatus;
+package org.yes.cart.domain.vo;
 
 /**
  * User: denispavlov
- * Date: 12-08-05
- * Time: 2:48 PM
+ * Date: 09/05/2020
+ * Time: 17:35
  */
-public interface JobRunner extends JobStatusAware {
+public class VoCustomerOrderTransition {
 
-    /**
-     * Run a job with given context.
-     *
-     * @param ctx context
-     *
-     * @return token for this job ({@link #getStatus(String)})
-     */
-    JobStatus doJob(JobContext ctx);
+    private String transition;
+    private String message;
+
+    public String getTransition() {
+        return transition;
+    }
+
+    public void setTransition(final String transition) {
+        this.transition = transition;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(final String message) {
+        this.message = message;
+    }
 }

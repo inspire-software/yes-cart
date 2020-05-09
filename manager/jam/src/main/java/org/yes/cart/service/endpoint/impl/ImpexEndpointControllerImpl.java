@@ -23,10 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.bulkcommon.service.ExportDirectorService;
 import org.yes.cart.bulkcommon.service.ImportDirectorService;
-import org.yes.cart.domain.vo.VoDataDescriptor;
-import org.yes.cart.domain.vo.VoDataGroup;
-import org.yes.cart.domain.vo.VoDataGroupInfo;
-import org.yes.cart.domain.vo.VoJobStatus;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.endpoint.ImpexEndpointController;
 import org.yes.cart.service.vo.VoDataGroupService;
@@ -64,8 +61,8 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
 
     @Override
     public @ResponseBody
-    String doExport(@RequestParam("group") final String descriptorGroup, @RequestBody(required = false) final String fileName) {
-        return this.exportDirectorService.doExport(descriptorGroup, fileName, true);
+    VoJobStatus doExport(final VoImpExJob impExJob) {
+        return statusToVo(this.exportDirectorService.doExport(impExJob.getGroup(), impExJob.getFileName(), true));
     }
 
     @Override
@@ -82,8 +79,8 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
 
     @Override
     public @ResponseBody
-    String doImport(@RequestParam("group") final String descriptorGroup, @RequestBody(required = false) final String fileName) {
-        return this.importDirectorService.doImport(descriptorGroup, fileName, true);
+    VoJobStatus doImport(@RequestBody final VoImpExJob impExJob) {
+        return statusToVo(this.importDirectorService.doImport(impExJob.getGroup(), impExJob.getFileName(), true));
     }
 
     @Override

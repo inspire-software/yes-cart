@@ -77,15 +77,10 @@ export class ReportsService {
    */
   updateDashboardWidgets(widgets:DashboardWidgetInfoVO[], lang:string) {
 
-    let widgetCsv = '';
-    widgets.forEach(function(widget) {
-       widgetCsv += (widgetCsv.length > 0 ? ',' : '') + widget.widgetId;
-    });
-
-    let body = widgetCsv;
+    let body = JSON.stringify(widgets);
 
     return this.http.post(this._serviceBaseUrl + '/dashboard/' + lang + '/', body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
+          Util.requestOptions())
       .catch(this.handleError);
 
   }

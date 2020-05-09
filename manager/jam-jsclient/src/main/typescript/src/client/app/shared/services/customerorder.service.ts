@@ -75,10 +75,10 @@ export class CustomerOrderService {
    */
   transitionOrder(order:CustomerOrderInfoVO, action:string, manualMsg:string) {
 
-    let body = manualMsg;
+    let body = JSON.stringify({ transition: action, message: manualMsg });
 
-    return this.http.post(this._serviceBaseUrl + '/transition/' + action + '/' + order.ordernum + '/', body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
+    return this.http.post(this._serviceBaseUrl + '/transition/' + order.ordernum + '/', body,
+          Util.requestOptions())
         .map(res => <CustomerOrderTransitionResultVO> this.json(res))
         .catch(this.handleError);
   }
@@ -94,10 +94,10 @@ export class CustomerOrderService {
    */
   transitionDelivery(order:CustomerOrderInfoVO, delivery:CustomerOrderDeliveryInfoVO, action:string, manualMsg:string) {
 
-    let body = manualMsg;
+    let body = JSON.stringify({ transition: action, message: manualMsg });
 
-    return this.http.post(this._serviceBaseUrl + '/transition/' + action + '/' + order.ordernum + '/' + delivery.deliveryNum + '/', body,
-          Util.requestOptions({ type:'text/plain; charset=utf-8' }))
+    return this.http.post(this._serviceBaseUrl + '/transition/' + order.ordernum + '/' + delivery.deliveryNum + '/', body,
+          Util.requestOptions())
         .map(res => <CustomerOrderTransitionResultVO> this.json(res))
         .catch(this.handleError);
   }

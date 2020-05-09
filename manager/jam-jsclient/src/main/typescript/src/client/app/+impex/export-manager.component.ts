@@ -193,7 +193,7 @@ export class ExportManagerComponent implements OnInit {
 
           LogUtil.debug('ExportManagerComponent exportToFile', res);
 
-          data.status.token = res;
+          data.status.token = res != null ? res.token : null;
           data.running = true;
 
           _sub.unsubscribe();

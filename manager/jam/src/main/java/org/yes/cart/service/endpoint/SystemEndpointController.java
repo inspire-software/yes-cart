@@ -97,9 +97,9 @@ public interface SystemEndpointController {
      * @return list of rows
      */
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/query/{node}/{type}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/query/{node}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<Object[]> runQuery(@RequestBody String query, @PathVariable("type") String type, @PathVariable("node") String node) throws Exception;
+    List<Object[]> runQuery(@RequestBody VoSystemQuery query, @PathVariable("node") String node) throws Exception;
 
 
     /**

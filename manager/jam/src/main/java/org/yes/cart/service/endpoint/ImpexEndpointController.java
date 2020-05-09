@@ -19,10 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.yes.cart.domain.vo.VoDataDescriptor;
-import org.yes.cart.domain.vo.VoDataGroup;
-import org.yes.cart.domain.vo.VoDataGroupInfo;
-import org.yes.cart.domain.vo.VoJobStatus;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -50,18 +47,21 @@ public interface ImpexEndpointController {
 
     /**
      * Perform bulk export.
-     * @param descriptorGroup descriptor group marker
-     * @param fileName optional override full filename to export
+     *
+     * @param impExJob export request
+     *
      * @return status object token
      */
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
-    @RequestMapping(value = "/export", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
+    @RequestMapping(value = "/export", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    String doExport(@RequestParam("group") String descriptorGroup, @RequestBody(required = false) String fileName);
+    VoJobStatus doExport(@RequestBody VoImpExJob impExJob);
 
     /**
      * Get latest job status update for given token
+     *
      * @param token job token from #doExport
+     *
      * @return status object
      */
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
@@ -85,18 +85,21 @@ public interface ImpexEndpointController {
 
     /**
      * Perform bulk import.
-     * @param descriptorGroup descriptor group marker
-     * @param fileName optional full filename to import
+     *
+     * @param impExJob import request
+     *
      * @return status object token
      */
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
-    @RequestMapping(value = "/import", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.TEXT_PLAIN_VALUE })
+    @RequestMapping(value = "/import", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    String doImport(@RequestParam("group") String descriptorGroup, @RequestBody(required = false) String fileName);
+    VoJobStatus doImport(@RequestBody VoImpExJob impExJob);
 
     /**
      * Get latest job status update for given token
+     *
      * @param token job token from #doImport
+     *
      * @return status object
      */
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})

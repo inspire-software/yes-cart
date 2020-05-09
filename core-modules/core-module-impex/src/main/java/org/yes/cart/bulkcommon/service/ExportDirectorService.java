@@ -47,16 +47,20 @@ public interface ExportDirectorService {
 
     /**
      * Perform bulk export.
+     *
      * @param descriptorGroup descriptor group marker
      * @param fileName optional override full filename to export
      * @param async if true then perform asynchronous export
+     *
      * @return status object token
      */
-    String doExport(String descriptorGroup, String fileName, boolean async);
+    JobStatus doExport(String descriptorGroup, String fileName, boolean async);
 
     /**
      * Get latest job status update for given token
+     *
      * @param token job token from #doExport
+     *
      * @return status object
      */
     JobStatus getExportStatus(String token);

@@ -222,8 +222,12 @@ export class SystemService {
    */
   runQuery(node:string, typ:string, query:string) {
 
-    return this.http.post(this._serviceBaseUrl + '/query/' + node + '/' + typ, query,
-        Util.requestOptions({ type:'text/plain; charset=utf-8' }))
+    let body = JSON.stringify({ type: typ, query: query });
+
+    console.log('hello', body);
+
+    return this.http.post(this._serviceBaseUrl + '/query/' + node + '/', body,
+        Util.requestOptions())
       .map(res => <Array<Array<string>>> this.json(res))
       .catch(this.handleError);
   }

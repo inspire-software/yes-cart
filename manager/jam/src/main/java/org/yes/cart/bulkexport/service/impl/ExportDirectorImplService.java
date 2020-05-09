@@ -132,7 +132,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
 
     /** {@inheritDoc} */
     @Override
-    public String doExport(final String descriptorGroup, final String fileName, final boolean async) {
+    public JobStatus doExport(final String descriptorGroup, final String fileName, final boolean async) {
 
         final AsyncContext ctx = getAsyncContext();
 

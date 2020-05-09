@@ -218,13 +218,13 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
     /** {@inheritDoc} */
     @Override
-    public String reindexAllProducts(final AsyncContext context) {
+    public JobStatus reindexAllProducts(final AsyncContext context) {
         return doJob(createJobContext(context, 0L, AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
     }
 
     /** {@inheritDoc} */
     @Override
-    public String reindexShopProducts(final AsyncContext context, final long shopPk) {
+    public JobStatus reindexShopProducts(final AsyncContext context, final long shopPk) {
         return doJob(createJobContext(context, shopPk, AttributeNamesKeys.System.SYSTEM_CONNECTOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
     }
 

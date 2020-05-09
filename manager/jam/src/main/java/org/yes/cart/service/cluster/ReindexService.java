@@ -43,7 +43,7 @@ public interface ReindexService {
      *
      * @return quantity product in created index.
      */
-    String reindexAllProducts(AsyncContext context);
+    JobStatus reindexAllProducts(AsyncContext context);
 
     /**
      * Reindex all products.
@@ -53,6 +53,6 @@ public interface ReindexService {
      *
      * @return quantity product in created index.
      */
-    String reindexShopProducts(AsyncContext context, long shopPk);
+    JobStatus reindexShopProducts(AsyncContext context, long shopPk);
 
 }

@@ -168,7 +168,7 @@ export class ImportManagerComponent implements OnInit {
 
           LogUtil.debug('ImportManagerComponent importFromFile', res);
 
-          data.status.token = res;
+          data.status.token = res != null ? res.token : null;
           data.running = true;
 
           _sub.unsubscribe();
