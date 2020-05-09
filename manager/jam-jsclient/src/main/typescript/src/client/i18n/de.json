@@ -35,6 +35,7 @@
   "MODAL_BUTTON_CLOSE": "Schliessen",
   "MODAL_BUTTON_RESET": "Zurücksetzen",
   "MODAL_ERROR_TITLE": "FEHLER",
+  "MODAL_LOGIN_FAILED_AUTH": "Session abgelaufen, bitte Loggen Sie sich wieder neu ein",
   "MODAL_ERROR_MESSAGE_AUTH": "Session abgelaufen, bitte Loggen Sie sich wieder neu ein",
   "MODAL_ERROR_MESSAGE_AUTH200": "Fehler beim Zugriff auf den Server, Ihre Session ist abgelaufen und Sie müssen sich neu einloggen",
   "MODAL_ERROR_MESSAGE_AUTH403": "Sie sind nicht berechtigt diese Daten zu sehen und/oder zu updaten. Klicken Sie auf 'Ignorieren', um fortzufahren. Wenn Sie den Lade-Indikator sehen, ignorieren Sie ihn bitte oder klicken Sie auf 'Aktualisieren', um ihn erneut zu laden.",

@@ -3202,6 +3202,15 @@
        ]]>
     </query>
 
+    <query  name="DELIVERIES.IDS.WAITING.FOR.INVENTORY.BY.SHOP">
+        <![CDATA[
+       select distinct d.customerOrderDeliveryId from CustomerOrderDeliveryEntity d inner join d.detail dd
+       where  d.deliveryStatus = ?1
+       and d.customerOrder.orderStatus in ?2 and d.customerOrder.shop.shopId in ?3
+       order by d.customerOrderDeliveryId
+       ]]>
+    </query>
+
     <query name="PRODUCT.ATTRIBUTE.DISPLAYVALUES.BY.VALUE">
         <![CDATA[
        select a.displayValInternal

@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CustomerOrderService, I18nEventBus, ErrorEventBus, UserEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, Pair, SearchResultVO } from './../shared/model/index';
@@ -54,6 +55,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     { first: 'qs.rejected', second: false },
     { first: 'qs.expired', second: false },
     { first: 'qs.ordered', second: false },
+  ];
+
+  private static _waiting:string[] = [
+    'os.waiting.approve', 'os.waiting'
+  ];
+
+  private static _inProgress:string[] = [
+    'os.in.progress', 'os.partially.shipped'
   ];
 
   private static _open:string[] = [
@@ -122,7 +131,10 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   private changed:boolean = false;
   private validForSave:boolean = false;
 
-  constructor(private _customerorderService:CustomerOrderService) {
+  private routeQueryParamsSub:any;
+
+  constructor(private _customerorderService:CustomerOrderService,
+              private _route: ActivatedRoute) {
     LogUtil.debug('AllCustomerOrdersComponent constructed');
     this.customerorders = this.newSearchResultInstance();
   }
@@ -151,7 +163,41 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     this.delayedFiltering = Futures.perpetual(function() {
       that.getFilteredCustomerorders();
     }, this.delayedFilteringMs);
+    this.routeQueryParamsSub = this._route.queryParams.subscribe(params => {
+      LogUtil.debug('AllCustomerOrdersComponent queryParams', params);
+      let filter = params['filter'];
+      if (filter != null) {
+        LogUtil.debug('AllCustomerOrdersComponent filter from queryParams is', filter);
+        if (filter == 'ordnew') {
 
+          let now = new Date();
+          let yearStart = now.getFullYear();
+          let mthStart = now.getMonth() + 1;
+
+          this.customerorderFilter = yearStart + '-' + (mthStart < 10 ? '0'+mthStart : mthStart)  + '<';
+
+          this.getFilteredCustomerorders();
+
+        } else if (filter != null) {
+          LogUtil.debug('AllCustomerOrdersComponent filter from queryParams is', filter);
+          if (filter == 'ordwait') {
+
+            this.statuses.forEach((_st: Pair<string, boolean>) => {
+              _st.second = AllCustomerOrdersComponent._waiting.includes(_st.first);
+            });
+            this.forceShowAll = true;
+            this.getFilteredCustomerorders();
+          } else if (filter == 'ordinp') {
+
+            this.statuses.forEach((_st: Pair<string, boolean>) => {
+              _st.second = AllCustomerOrdersComponent._inProgress.includes(_st.first);
+            });
+            this.forceShowAll = true;
+            this.getFilteredCustomerorders();
+          }
+        }
+      }
+    });
   }
 
   get statuses():Pair<string, boolean>[] {
@@ -179,6 +225,9 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     LogUtil.debug('AllCustomerOrdersComponent ngOnDestroy');
+    if (this.routeQueryParamsSub) {
+      this.routeQueryParamsSub.unsubscribe();
+    }
   }
 
 

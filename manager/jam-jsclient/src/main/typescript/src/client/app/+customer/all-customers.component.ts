@@ -64,7 +64,8 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
   private changed:boolean = false;
   private validForSave:boolean = false;
 
-  private customerIdSub:any;
+  private routeParamsSub:any;
+  private routeQueryParamsSub:any;
   private openFirstResultOnSearch:boolean = false;
 
   constructor(private _customerService:CustomerService,
@@ -112,13 +113,30 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
     this.delayedFiltering = Futures.perpetual(function() {
       that.getFilteredCustomers();
     }, this.delayedFilteringMs);
-    this.customerIdSub = this._route.params.subscribe(params => {
+    this.routeParamsSub = this._route.params.subscribe(params => {
+      LogUtil.debug('AllCustomersComponent params', params);
       let customerId = params['customerId'];
       if (customerId != null) {
-        LogUtil.debug('AllCustomersComponent customerId from params is ' + customerId);
+        LogUtil.debug('AllCustomersComponent customerId from params is', customerId);
         this.customerFilter = '#' + customerId;
         this.openFirstResultOnSearch = true;
         this.getFilteredCustomers();
+      }
+    });
+    this.routeQueryParamsSub = this._route.queryParams.subscribe(params => {
+      LogUtil.debug('AllCustomersComponent queryParams', params);
+      let filter = params['filter'];
+      if (filter != null) {
+        LogUtil.debug('AllCustomersComponent filter from queryParams is', filter);
+        if (filter == 'regthismth') {
+
+          let now = new Date();
+          let yearStart = now.getFullYear();
+          let mthStart = now.getMonth() + 1;
+
+          this.customerFilter = yearStart + '-' + (mthStart < 10 ? '0'+mthStart : mthStart)  + '<';
+          this.getFilteredCustomers();
+        }
       }
     });
   }
@@ -128,8 +146,11 @@ export class AllCustomersComponent implements OnInit, OnDestroy {
     if (this.shopAllSub) {
       this.shopAllSub.unsubscribe();
     }
-    if (this.customerIdSub) {
-      this.customerIdSub.unsubscribe();
+    if (this.routeParamsSub) {
+      this.routeParamsSub.unsubscribe();
+    }
+    if (this.routeQueryParamsSub) {
+      this.routeQueryParamsSub.unsubscribe();
     }
   }
 

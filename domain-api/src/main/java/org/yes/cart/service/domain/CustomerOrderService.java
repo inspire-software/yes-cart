@@ -71,6 +71,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      *
      * @param customer {@link Customer}
      * @param since    given date optional
+     *
      * @return list of all orders
      */
     List<CustomerOrder> findCustomerOrders(Customer customer, LocalDateTime since);
@@ -80,6 +81,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      *
      * @param customerId customer id
      * @param since      given date optional
+     *
      * @return list of all orders
      */
     List<CustomerOrder> findCustomerOrders(long customerId, LocalDateTime since);
@@ -105,6 +107,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * Find specific delivery.
      *
      * @param deliveryNum delivery number
+     *
      * @return delivery
      */
     CustomerOrderDelivery findDeliveryByNumber(String deliveryNum);
@@ -119,9 +122,21 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     /**
      * Find orders, which are waiting for inventory to be completed.
      *
+     * @param shops          what shops are required. optional
+     * @param deliveryStatus status of delivery
+     * @param orderStatus    order status
+     *
+     * @return awaiting orders count
+     */
+    int findAwaitingDeliveriesCount(Set<Long> shops, String deliveryStatus, List<String> orderStatus);
+
+    /**
+     * Find orders, which are waiting for inventory to be completed.
+     *
      * @param skuCodes       what sku is required. optional
      * @param deliveryStatus status of delivery
      * @param orderStatus    order status
+     *
      * @return awaiting orders
      */
     List<Long> findAwaitingDeliveriesIds(List<String> skuCodes, String deliveryStatus, List<String> orderStatus);
@@ -132,6 +147,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param skuCodes       what sku is required. optional
      * @param deliveryStatus status of delivery
      * @param orderStatus    order status
+     *
      * @return awaiting orders
      */
     ResultsIterator<CustomerOrderDelivery> findAwaitingDeliveries(List<String> skuCodes, String deliveryStatus, List<String> orderStatus);
@@ -177,6 +193,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * Find created order by cart guid.
      *
      * @param shoppingCartGuid shopping cart  guid
+     *
      * @return created order.
      *
      * @deprecated use {@link #findByReference(String)}
@@ -188,6 +205,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * Find created order by order number.
      *
      * @param orderNumber order number
+     *
      * @return created order.
      *
      * @deprecated use {@link #findByReference(String)}
@@ -199,6 +217,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * Is order can be with multiple deliveries.
      *
      * @param shoppingCart cart to  check
+     *
      * @return true if order can be with several physical deliveries
      */
     Map<String, Boolean> isOrderMultipleDeliveriesAllowed(ShoppingCart shoppingCart);

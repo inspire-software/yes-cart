@@ -18,6 +18,7 @@ package org.yes.cart.service.vo.impl;
 
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerRole;
@@ -100,12 +101,27 @@ public class VoDashboardWidgetPluginOrdersInShops extends AbstractVoDashboardWid
                 waiting, shops, Arrays.asList(CustomerOrder.ORDER_STATUS_WAITING, CustomerOrder.ORDER_STATUS_APPROVE)
         );
 
+        final int allocWaiting = this.customerOrderService.findAwaitingDeliveriesCount(shops,
+                CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT,
+                Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED));
+
+        final int dateWaiting = this.customerOrderService.findAwaitingDeliveriesCount(shops,
+                CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
+                Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED));
+
+        final int inventoryWaiting = this.customerOrderService.findAwaitingDeliveriesCount(shops,
+                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED));
+
 
         final Map<String, Integer> data = new HashMap<>();
         data.put("ordersToday", ordersToday);
         data.put("ordersThisWeek", ordersWeek);
         data.put("ordersThisMonth", ordersMonth);
         data.put("ordersWaiting", ordersWaiting);
+        data.put("deliveriesWaitingAllocation", allocWaiting);
+        data.put("deliveriesWaitingDate", dateWaiting);
+        data.put("deliveriesWaitingInventory", inventoryWaiting);
 
         widget.setData(data);
 

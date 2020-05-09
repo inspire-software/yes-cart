@@ -13,6 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+import { Router } from '@angular/router';
 import { Component, Input } from '@angular/core';
 import { DashboardWidgetVO } from '../../shared/model/index';
 
@@ -33,7 +34,7 @@ import { DashboardWidgetVO } from '../../shared/model/index';
             </div>
           </div>
         </div>
-        <a [routerLink]="['/customer/allcustomers']">
+        <a (click)="onCustomerClick('regthismth')" class="js-click">
           <div class="panel-footer">
             <span class="pull-left">{{ 'DASHBOARD_CUSTOMERS_DETAILS' | translate }}</span>
             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -47,5 +48,15 @@ import { DashboardWidgetVO } from '../../shared/model/index';
 export class WidgetCustomersComponent {
 
   @Input() widget: DashboardWidgetVO;
+
+  constructor(private _router : Router) {
+
+  }
+
+  onCustomerClick(filter:string = 'new') {
+
+    this._router.navigate(['/customer/allcustomers'], { queryParams: { filter: filter } });
+
+  }
 
 }
