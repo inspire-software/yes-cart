@@ -158,7 +158,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
             String locale = mediaFileNameStrategy.resolveLocale(servletPath);  //optional locale
             String originalFileName = mediaFileNameStrategy.resolveFileName(servletPath);  //here file name with prefix
 
-            final String imageRealPathPrefix = getImageRepositoryRoot();
+            final String imageRealPathPrefix = getImageRepositoryRoot(mediaFileNameStrategy.getUrlPath());
 
             String absolutePathToOriginal =
                             imageRealPathPrefix +
@@ -193,7 +193,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
         }
     }
 
-    private String getImageRepositoryRoot() {
+    private String getImageRepositoryRoot(final String strategyUrl) {
 
         return systemService.getImageRepositoryDirectory();
 

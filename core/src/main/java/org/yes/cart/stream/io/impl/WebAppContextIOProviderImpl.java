@@ -22,6 +22,7 @@ import org.yes.cart.stream.io.IOProvider;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * User: denispavlov
@@ -32,6 +33,8 @@ public class WebAppContextIOProviderImpl extends AbstractFileSystemIOProviderImp
 
     private static final String PROTOCOL1 = "context:" + File.separator + File.separator;
     private static final String PROTOCOL2 = "context://";
+
+    private static final Pattern WIN_ROOT = Pattern.compile("[a-zA-Z]{1}:(.*)");
 
     private ServletContext servletContext;
 
@@ -61,7 +64,8 @@ public class WebAppContextIOProviderImpl extends AbstractFileSystemIOProviderImp
     @Override
     public boolean supports(final String uri) {
         return uri != null && (uri.startsWith(PROTOCOL1) || uri.startsWith(PROTOCOL2) ||
-                !uri.startsWith(File.separator));
+                (File.separatorChar == '/' && !uri.startsWith(File.separator)) ||
+                (File.separatorChar != '/' && !WIN_ROOT.matcher(uri).matches()));
     }
 
     /** {@inheritDoc} */

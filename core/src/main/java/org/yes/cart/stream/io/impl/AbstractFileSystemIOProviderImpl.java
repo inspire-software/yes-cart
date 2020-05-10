@@ -19,11 +19,15 @@ package org.yes.cart.stream.io.impl;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.stream.io.FileSystemIOProvider;
+import org.yes.cart.stream.io.IOItem;
+import org.yes.cart.stream.io.IOProvider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,7 +35,7 @@ import java.util.Map;
  * Date: 30/08/2014
  * Time: 19:50
  */
-public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOProvider {
+public abstract class AbstractFileSystemIOProviderImpl implements IOProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFileSystemIOProviderImpl.class);
 
@@ -43,7 +47,6 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
      *
      * @return file object
      */
-    @Override
     public abstract File resolveFileFromUri(final String uri, final Map<String, Object> context);
 
     /**
@@ -63,10 +66,60 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
 
     /** {@inheritDoc} */
     @Override
+    public List<IOItem> list(final String uri, final Map<String, Object> context) {
+
+        final List<IOItem> items = new ArrayList<>();
+
+        final File dir = resolveFileFromUri(uri, context);
+        if (dir.exists() && dir.isDirectory()) {
+
+            final File[] list = dir.listFiles();
+
+            if (list != null) {
+
+                for (final File file : list) {
+
+                    items.add(new IOItemImpl(
+                            uri,
+                            file.getName(),
+                            Instant.ofEpochMilli(file.lastModified()),
+                            file.isDirectory(),
+                            file.getAbsolutePath()));
+
+                }
+
+            }
+
+        }
+
+        return items;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public boolean exists(final String uri, final Map<String, Object> context) {
 
         final File file = resolveFileFromUri(uri, context);
         return file != null && file.exists();
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String path(final String uri, final String subPath, final Map<String, Object> context) {
+        if (uri.endsWith("/")) {
+            return uri + (subPath.startsWith("/") ? subPath.substring(1) : subPath).replace('\\', '/');
+        } else {
+            return uri + (subPath.startsWith("/") ? subPath : "/".concat(subPath)).replace('\\', '/');
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String nativePath(final String uri, final Map<String, Object> context) {
+
+        final File nat = resolveFileFromUri(uri, context);
+        return nat.getAbsolutePath();
 
     }
 
@@ -120,6 +173,22 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
         final File file = resolveFileFromUri(uri, context);
 
         if (file != null && file.exists()) {
+            delete(file);
+        }
+
+    }
+
+    private void delete(final File file) {
+
+        if (file != null && file.exists()) {
+            if (file.isDirectory()) {
+                final File[] files = file.listFiles();
+                if (files != null) {
+                    for (final File subFile : files) {
+                        delete(subFile);
+                    }
+                }
+            }
             if (!file.delete()) {
                 LOG.error("Unable to delete file {}", file.getAbsolutePath());
             }

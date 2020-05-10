@@ -30,12 +30,14 @@ import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.service.media.MediaFileNameStrategyResolver;
 import org.yes.cart.service.media.impl.ProductMediaFileNameStrategyImpl;
 import org.yes.cart.service.misc.LanguageService;
+import org.yes.cart.stream.io.IOItem;
 import org.yes.cart.stream.io.IOProvider;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
@@ -134,6 +136,21 @@ public class ImageServiceTest {
             }
 
             @Override
+            public String path(final String uri, final String subPath, final Map<String, Object> context) {
+                return new File(uri, subPath).toURI().toString();
+            }
+
+            @Override
+            public String nativePath(final String uri, final Map<String, Object> context) {
+                return null;
+            }
+
+            @Override
+            public List<IOItem> list(final String uri, final Map<String, Object> context) {
+                return Collections.emptyList();
+            }
+
+            @Override
             public boolean isNewerThan(final String uriToCheck, final String uriToCheckAgainst, final Map<String, Object> context) {
                 return false;
             }
@@ -192,6 +209,21 @@ public class ImageServiceTest {
             @Override
             public boolean exists(final String uri, final Map<String, Object> context) {
                 return new File(uri).exists();
+            }
+
+            @Override
+            public String path(final String uri, final String subPath, final Map<String, Object> context) {
+                return new File(uri, subPath).toURI().toString();
+            }
+
+            @Override
+            public String nativePath(final String uri, final Map<String, Object> context) {
+                return null;
+            }
+
+            @Override
+            public List<IOItem> list(final String uri, final Map<String, Object> context) {
+                return Collections.emptyList();
             }
 
             @Override

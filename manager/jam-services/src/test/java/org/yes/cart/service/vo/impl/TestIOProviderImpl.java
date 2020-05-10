@@ -15,11 +15,12 @@
  */
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.stream.io.FileSystemIOProvider;
+import org.yes.cart.stream.io.IOItem;
 import org.yes.cart.stream.io.IOProvider;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,16 +28,26 @@ import java.util.Map;
  * Date: 23/09/2019
  * Time: 08:31
  */
-public class TestIOProviderImpl implements IOProvider, FileSystemIOProvider {
-
-    @Override
-    public File resolveFileFromUri(final String uri, final Map<String, Object> context) {
-        return null;
-    }
+public class TestIOProviderImpl implements IOProvider {
 
     @Override
     public boolean supports(final String uri) {
         return true;
+    }
+
+    @Override
+    public String path(final String uri, final String subPath, final Map<String, Object> context) {
+        return null;
+    }
+
+    @Override
+    public String nativePath(final String uri, final Map<String, Object> context) {
+        return null;
+    }
+
+    @Override
+    public List<IOItem> list(final String uri, final Map<String, Object> context) {
+        return Collections.emptyList();
     }
 
     @Override

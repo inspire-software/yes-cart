@@ -90,7 +90,7 @@ public class FileServiceImpl implements FileService {
 
         String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(filename, code, null);
 
-        return ioProvider.exists(pathInRepository, Collections.EMPTY_MAP);
+        return ioProvider.exists(pathInRepository, Collections.emptyMap());
 
     }
 
@@ -111,7 +111,7 @@ public class FileServiceImpl implements FileService {
 
         final String uniqueName = createRepositoryUniqueName(pathInRepository, ioProvider, strategy, code, suffix, locale);
 
-        ioProvider.write(uniqueName, fileBody, Collections.EMPTY_MAP);
+        ioProvider.write(uniqueName, fileBody, Collections.emptyMap());
 
         return strategy.resolveFileName(uniqueName);
     }
@@ -130,7 +130,7 @@ public class FileServiceImpl implements FileService {
         if (this.replaceFilesModeOn) {
             return fileName;
         }
-        if (ioProvider.exists(fileName, Collections.EMPTY_MAP)) {
+        if (ioProvider.exists(fileName, Collections.emptyMap())) {
             final String newFileName = strategy.createRollingFileName(fileName, code, suffix, locale);
             return createRepositoryUniqueName(newFileName, ioProvider, strategy, code, suffix, locale);
         }
@@ -148,7 +148,7 @@ public class FileServiceImpl implements FileService {
         final String file = strategy.resolveFileName(fileName);
         String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code, null);
 
-        return ioProvider.read(pathInRepository, Collections.EMPTY_MAP);
+        return ioProvider.read(pathInRepository, Collections.emptyMap());
 
     }
 
@@ -164,7 +164,7 @@ public class FileServiceImpl implements FileService {
         String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code, null);
 
         try {
-            ioProvider.delete(pathInRepository, Collections.EMPTY_MAP);
+            ioProvider.delete(pathInRepository, Collections.emptyMap());
             return true;
         } catch (IOException e) {
             return false;

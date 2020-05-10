@@ -349,7 +349,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
                               final boolean cropToFit) {
 
         try {
-            final Map<String, Object> ctx = Collections.EMPTY_MAP;
+            final Map<String, Object> ctx = Collections.emptyMap();
 
             if (resized != null) {
 
@@ -403,7 +403,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
 
         String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(filename, code, null);
 
-        return ioProvider.exists(pathInRepository, Collections.EMPTY_MAP);
+        return ioProvider.exists(pathInRepository, Collections.emptyMap());
 
     }
 
@@ -424,7 +424,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
 
         final String uniqueName = createRepositoryUniqueName(pathInRepository, ioProvider, strategy, code, suffix, locale);
 
-        ioProvider.write(uniqueName, imgBody, Collections.EMPTY_MAP);
+        ioProvider.write(uniqueName, imgBody, Collections.emptyMap());
 
         return strategy.resolveFileName(uniqueName);
     }
@@ -443,7 +443,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
         if (this.replaceFilesModeOn) {
             return fileName;
         }
-        if (ioProvider.exists(fileName, Collections.EMPTY_MAP)) {
+        if (ioProvider.exists(fileName, Collections.emptyMap())) {
             final String newFileName = strategy.createRollingFileName(fileName, code, suffix, locale);
             return createRepositoryUniqueName(newFileName, ioProvider, strategy, code, suffix, locale);
         }
@@ -461,7 +461,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
         final String file = strategy.resolveFileName(fileName);
         String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code, null);
 
-        return ioProvider.read(pathInRepository, Collections.EMPTY_MAP);
+        return ioProvider.read(pathInRepository, Collections.emptyMap());
 
     }
 
@@ -482,7 +482,7 @@ public class ImageServiceImpl extends BaseGenericServiceImpl<SeoImage> implement
         String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code, null);
 
         try {
-            ioProvider.delete(pathInRepository, Collections.EMPTY_MAP);
+            ioProvider.delete(pathInRepository, Collections.emptyMap());
             return true;
         } catch (IOException e) {
             return false;

@@ -88,10 +88,10 @@ public class FileFilter extends AbstractFilter implements Filter {
 
         final MediaFileNameStrategy mediaFileNameStrategy = fileService.getFileNameStrategy(servletPath);
 
-        String code = mediaFileNameStrategy.resolveObjectCode(servletPath);  //optional product or sku code
-        String originalFileName = mediaFileNameStrategy.resolveFileName(servletPath);  //here file name with prefix
+        final String code = mediaFileNameStrategy.resolveObjectCode(servletPath);  //optional product or sku code
+        final String originalFileName = mediaFileNameStrategy.resolveFileName(servletPath);  //here file name with prefix
 
-        final String fileRealPathPrefix = getFileRepositoryRoot();
+        final String fileRealPathPrefix = getFileRepositoryRoot(mediaFileNameStrategy.getUrlPath());
 
         final boolean origFileExists = fileService.isFileInRepository(originalFileName, code, mediaFileNameStrategy.getUrlPath(), fileRealPathPrefix);
 
@@ -108,7 +108,7 @@ public class FileFilter extends AbstractFilter implements Filter {
         }
     }
 
-    private String getFileRepositoryRoot() {
+    private String getFileRepositoryRoot(final String strategyUrl) {
 
         return systemService.getFileRepositoryDirectory();
 

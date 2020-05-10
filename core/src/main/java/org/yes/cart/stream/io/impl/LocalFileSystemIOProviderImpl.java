@@ -20,6 +20,7 @@ import org.yes.cart.stream.io.IOProvider;
 
 import java.io.File;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * User: denispavlov
@@ -30,6 +31,8 @@ public class LocalFileSystemIOProviderImpl extends AbstractFileSystemIOProviderI
 
     private static final String PROTOCOL1 = "file:" + File.separator + File.separator;
     private static final String PROTOCOL2 = "file://";
+
+    private static final Pattern WIN_ROOT = Pattern.compile("[a-zA-Z]{1}:(.*)");
 
 
     /** {@inheritDoc} */
@@ -49,7 +52,8 @@ public class LocalFileSystemIOProviderImpl extends AbstractFileSystemIOProviderI
     /** {@inheritDoc} */
     @Override
     public boolean supports(final String uri) {
-        return uri != null && (uri.startsWith(PROTOCOL1) || uri.startsWith(PROTOCOL2) || uri.startsWith(File.separator));
+        return uri != null && (uri.startsWith(PROTOCOL1) || uri.startsWith(PROTOCOL2) || uri.startsWith(File.separator)
+                || (File.separatorChar != '/' && WIN_ROOT.matcher(uri).matches()));
     }
 
 }

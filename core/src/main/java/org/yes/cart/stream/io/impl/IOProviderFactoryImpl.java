@@ -16,11 +16,11 @@
 
 package org.yes.cart.stream.io.impl;
 
-import org.yes.cart.stream.io.FileSystemIOProvider;
+import org.yes.cart.stream.io.IOItem;
 import org.yes.cart.stream.io.IOProvider;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,7 +28,7 @@ import java.util.Map;
  * Date: 30/08/2014
  * Time: 15:32
  */
-public class IOProviderFactoryImpl implements IOProvider, FileSystemIOProvider {
+public class IOProviderFactoryImpl implements IOProvider {
 
     private final IOProvider[] ioProviders;
 
@@ -58,6 +58,39 @@ public class IOProviderFactoryImpl implements IOProvider, FileSystemIOProvider {
             }
         }
         return false;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String path(final String uri, final String subPath, final Map<String, Object> context) {
+        for (final IOProvider ioProvider : ioProviders) {
+            if (ioProvider.supports(uri)) {
+                return ioProvider.path(uri, subPath, context);
+            }
+        }
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String nativePath(final String uri, final Map<String, Object> context) {
+        for (final IOProvider ioProvider : ioProviders) {
+            if (ioProvider.supports(uri)) {
+                return ioProvider.nativePath(uri, context);
+            }
+        }
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<IOItem> list(final String uri, final Map<String, Object> context) {
+        for (final IOProvider ioProvider : ioProviders) {
+            if (ioProvider.supports(uri)) {
+                return ioProvider.list(uri, context);
+            }
+        }
+        return null;
     }
 
     /** {@inheritDoc} */
@@ -106,16 +139,4 @@ public class IOProviderFactoryImpl implements IOProvider, FileSystemIOProvider {
         throw new IOException("Unsupported uri " + uri);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public File resolveFileFromUri(final String uri, final Map<String, Object> context) {
-        for (final IOProvider ioProvider : ioProviders) {
-            if (ioProvider.supports(uri)) {
-                if (ioProvider instanceof FileSystemIOProvider) {
-                    return ((FileSystemIOProvider) ioProvider).resolveFileFromUri(uri, context);
-                }
-            }
-        }
-        return null;
-    }
 }

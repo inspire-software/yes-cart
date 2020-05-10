@@ -540,9 +540,8 @@
     </bean>
 
 
-    <bean id="imageNameStrategyResolver" class="org.yes.cart.service.media.impl.MediaFileNameStrategyResolverImpl">
-        <constructor-arg index="0" ref="productImageNameStrategy"/>
-        <constructor-arg index="1">
+    <bean id="imageNameStrategyResolverStrategies" class="org.yes.cart.utils.spring.ArrayListBean">
+        <constructor-arg>
             <list>
                 <ref bean="categoryImageNameStrategy"/>
                 <ref bean="contentImageNameStrategy"/>
@@ -552,6 +551,11 @@
                 <ref bean="systemImageNameStrategy"/>
             </list>
         </constructor-arg>
+    </bean>
+
+    <bean id="imageNameStrategyResolver" class="org.yes.cart.service.media.impl.MediaFileNameStrategyResolverImpl">
+        <constructor-arg index="0" ref="productImageNameStrategy"/>
+        <constructor-arg index="1" ref="imageNameStrategyResolverStrategies"/>
     </bean>
 
     <!--
@@ -853,9 +857,8 @@
     </bean>
 
 
-    <bean id="fileNameStrategyResolver" class="org.yes.cart.service.media.impl.MediaFileNameStrategyResolverImpl">
-        <constructor-arg index="0" ref="productFileNameStrategy"/>
-        <constructor-arg index="1">
+    <bean id="fileNameStrategyResolverStrategies" class="org.yes.cart.utils.spring.ArrayListBean">
+        <constructor-arg>
             <list>
                 <ref bean="categoryFileNameStrategy"/>
                 <ref bean="contentFileNameStrategy"/>
@@ -869,6 +872,10 @@
         </constructor-arg>
     </bean>
 
+    <bean id="fileNameStrategyResolver" class="org.yes.cart.service.media.impl.MediaFileNameStrategyResolverImpl">
+        <constructor-arg index="0" ref="productFileNameStrategy"/>
+        <constructor-arg index="1" ref="fileNameStrategyResolverStrategies"/>
+    </bean>
 
     <bean id="fileService" class="org.yes.cart.service.domain.impl.FileServiceImpl">
         <constructor-arg type="org.yes.cart.service.media.MediaFileNameStrategyResolver" ref="fileNameStrategyResolver"/>

@@ -7,95 +7,119 @@
 
 package org.yes.cart.bulkjob.images;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.service.async.JobStatusAware;
+import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.async.impl.JobStatusListenerLoggerWrapperImpl;
+import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.stream.io.FileSystemIOProvider;
+import org.yes.cart.stream.io.IOItem;
+import org.yes.cart.stream.io.IOProvider;
 
-import java.io.File;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 05/06/2018
  * Time: 21:00
  */
-public class LocalFileShareProductImageVaultCleanupProcessorImpl implements Runnable {
+public class LocalFileShareProductImageVaultCleanupProcessorImpl implements Runnable, JobStatusAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(LocalFileShareProductImageVaultCleanupProcessorImpl.class);
 
+    private static final String ELIGIBLE_IMG_COUNTER = "Eligible image codes";
+    private static final String REMOVED_IMG_COUNTER = "Removed image codes";
+
     private final SystemService systemService;
-    private final FileSystemIOProvider ioProvider;
+    private final IOProvider ioProvider;
     private final ProductService productService;
 
     private String processingModeAttribute = "SCAN";
 
+    private final JobStatusListener listener = new JobStatusListenerLoggerWrapperImpl(LOG, "Image vault clean up", true);
+
     public LocalFileShareProductImageVaultCleanupProcessorImpl(final SystemService systemService,
-                                                               final FileSystemIOProvider ioProvider,
+                                                               final IOProvider ioProvider,
                                                                final ProductService productService) {
         this.systemService = systemService;
         this.ioProvider = ioProvider;
         this.productService = productService;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public JobStatus getStatus(final String token) {
+        return listener.getLatestStatus();
+    }
+
     @Override
     public void run() {
+
+        listener.reset();
 
         final String imgVault = systemService.getImageRepositoryDirectory();
 
         LOG.info("Cleaning product imagevault {}", imgVault);
 
-        final File imageVault = ioProvider.resolveFileFromUri(imgVault, Collections.EMPTY_MAP);
-        if (imageVault == null || !imageVault.exists()) {
-            LOG.info("Cleaning product imagevault {} failed because either this is not a local file system path or directory does not exist", imageVault);
+        if (!ioProvider.exists(imgVault, Collections.emptyMap())) {
+            LOG.info("Scanning imagevault '{}' -> '{}' failed because either this is not a local file system path or directory does not exist",
+                    imgVault, ioProvider.nativePath(imgVault, Collections.emptyMap()));
             return;
         }
 
-        final File productImageVault = new File(imageVault, "product");
+        final String productImageVault = ioProvider.path(imgVault, "product", Collections.emptyMap());
 
-        if (!productImageVault.exists()) {
-            LOG.info("Cleaning product imagevault {} failed because either this is not a local file system path or directory does not exist", productImageVault);
+        if (!ioProvider.exists(productImageVault, Collections.emptyMap())) {
+            LOG.info("Cleaning product imagevault '{}' -> '{}' failed because either this is not a local file system path or directory does not exist",
+                    productImageVault, ioProvider.nativePath(productImageVault, Collections.emptyMap()));
             return;
         }
 
-        final int removed = scanRoot(productImageVault);
+        scanRoot(productImageVault);
 
-        LOG.info("Cleaning product imagevault ... completed, removed {}", removed);
+        listener.notifyCompleted();
 
     }
 
-    private int scanRoot(final File dir) {
+    private int scanRoot(final String root) {
 
         final boolean delete = "DELETE".equals(systemService.getAttributeValue(this.processingModeAttribute));
 
-        LOG.info("Cleaning product directory {} in mode {}", dir.getAbsolutePath(), delete ? "DELETE" : "SCAN");
+        LOG.info("Cleaning product directory '{}' -> '{}' in mode {}",
+                root, ioProvider.nativePath(root, Collections.emptyMap()), delete ? "DELETE" : "SCAN");
 
-        final File[] letters = dir.listFiles();
-        if (letters == null) {
+        final List<IOItem> letters = ioProvider.list(root, Collections.emptyMap());
+        if (CollectionUtils.isEmpty(letters)) {
             return 0;
         }
 
         int count = 0;
         int lettersCount = 0;
-        int totalLetters = letters.length;
+        int totalLetters = letters.size();
 
-        for (final File letter : letters) {
+        for (final IOItem letter : letters) {
 
             int letterProgress = Math.round(lettersCount++ * 100/totalLetters);
 
             // Only look at single letter directories at top level
             if (letter.getName().length() == 1) {
 
-                LOG.info("Cleaning product imagevault directory {}% {}", letterProgress, letter.getAbsolutePath());
+                final String letterPath = ioProvider.path(letter.getPath(), letter.getName(), Collections.emptyMap());
 
-                final File[] codes = letter.listFiles();
-                if (codes == null) {
+                listener.notifyPing("Cleaning product imagevault directory {}% {}", letterProgress, letter);
+                listener.notifyMessage("Cleaning product imagevault directory {}% {}", letterProgress, letter);
+
+                final List<IOItem> codes = ioProvider.list(letterPath, Collections.emptyMap());
+                if (CollectionUtils.isEmpty(codes)) {
                     continue;
                 }
 
-                for (final File code : codes) {
+                for (final IOItem code : codes) {
 
                     if (Constants.NO_IMAGE.equals(code.getName())) {
                         continue; // Must not remove noimage directory
@@ -106,40 +130,26 @@ public class LocalFileShareProductImageVaultCleanupProcessorImpl implements Runn
                         final Long skuId = productService.findProductSkuIdByCode(code.getName());
                         if (skuId == null) {
 
-                            LOG.info("Directory {} is eligible for removal because there is no product or SKU with this code", code.getAbsolutePath());
+                            LOG.info("Directory '{}' is eligible for removal because there is no product or SKU with this code", code);
+                            listener.count(ELIGIBLE_IMG_COUNTER);
 
                             if (delete) {
 
-                                final File[] images = code.listFiles();
-                                if (images == null) {
-                                    continue;
-                                }
+                                final String codePath = ioProvider.path(code.getPath(), code.getName(), Collections.emptyMap());
 
-                                boolean hasFailures = false;
-                                for (final File image : images) {
-
-                                    if (!image.delete()) {
-                                        LOG.error("Unable to delete file {}", image.getAbsolutePath());
-                                        hasFailures = true;
-                                    } else {
-                                        LOG.info("Removed file {}", image.getAbsolutePath());
-                                        count++;
-                                    }
-                                }
-
-                                if (!hasFailures) {
-
-                                    if (code.delete()) {
-                                        LOG.info("Removed directory {}", code.getAbsolutePath());
-                                    } else {
-                                        LOG.error("Unable to delete directory {}", code.getAbsolutePath());
-                                    }
-
+                                try {
+                                    ioProvider.delete(codePath, Collections.emptyMap());
+                                    LOG.info("Removed directory {}", code);
+                                    listener.count(REMOVED_IMG_COUNTER);
+                                    count++;
+                                } catch (Exception exp) {
+                                    LOG.error("Unable to delete directory {}", code);
                                 }
 
                             }
 
                         }
+
                     }
 
                 }
@@ -149,9 +159,9 @@ public class LocalFileShareProductImageVaultCleanupProcessorImpl implements Runn
         }
 
         if (count > 0) {
-            LOG.info("Cleaning product imagevault directory 100% {} ... found {} orphan images", dir.getAbsolutePath(), count);
+            LOG.info("Cleaning product imagevault directory 100% {} ... found {} orphan codes", root, count);
         } else {
-            LOG.info("Cleaning product imagevault directory 100% {} ... no orphan images found", dir.getAbsolutePath());
+            LOG.info("Cleaning product imagevault directory 100% {} ... no orphan codes found", root);
         }
 
         return count;

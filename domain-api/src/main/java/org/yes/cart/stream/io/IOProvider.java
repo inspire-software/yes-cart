@@ -17,6 +17,7 @@
 package org.yes.cart.stream.io;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +48,37 @@ public interface IOProvider {
      * @return true if given resource exists
      */
     boolean exists(String uri, Map<String, Object> context);
+
+    /**
+     * List all IO items under this uri.
+     *
+     * @param uri uri of the read target
+     * @param context any applicable context for given provider
+     *
+     * @return list of items
+     */
+    List<IOItem> list(String uri, Map<String, Object> context);
+
+    /**
+     * Convert to sub path uri
+     *
+     * @param uri base uri of the read target
+     * @param subPath sub path
+     * @param context any applicable context for given provider
+     *
+     * @return uri (to use for CRUD operations)
+     */
+    String path(String uri, String subPath, Map<String, Object> context);
+
+    /**
+     * Convert to native path
+     *
+     * @param uri base uri of the read target
+     * @param context any applicable context for given provider
+     *
+     * @return native path
+     */
+    String nativePath(String uri, Map<String, Object> context);
 
     /**
      * Check if uriToCheck has newer timestamp than uriToCheckAgainst (i.e. uriToCheck.lastModified > uriToCheckAgainst.lastModified).
