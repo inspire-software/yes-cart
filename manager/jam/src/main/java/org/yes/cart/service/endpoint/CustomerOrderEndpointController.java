@@ -15,6 +15,7 @@
  */
 package org.yes.cart.service.endpoint;
 
+import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,7 @@ import org.yes.cart.domain.vo.*;
  * Time: 20:30
  */
 @Controller
+@Api(value = "Order", tags = "order")
 @RequestMapping("/customerorder")
 public interface CustomerOrderEndpointController {
 

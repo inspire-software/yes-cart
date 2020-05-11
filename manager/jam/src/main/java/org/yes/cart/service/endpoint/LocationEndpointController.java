@@ -15,6 +15,7 @@
  */
 package org.yes.cart.service.endpoint;
 
+import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,7 @@ import java.util.List;
  * Time: 15:32
  */
 @Controller
+@Api(value = "Location", tags = "location")
 @RequestMapping("/location")
 public interface LocationEndpointController {
 

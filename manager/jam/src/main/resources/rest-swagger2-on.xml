@@ -17,20 +17,27 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <import resource="classpath:rest-mvc.xml"/>
-    <import resource="classpath*:api-servlet-ext.xml"/>
+    <bean id="swagger2Config" class="org.yes.cart.web.swagger2.Swagger2"/>
 
-    <import resource="classpath:rest-swagger2-${webapp.swagger2.ui}.xml"/>
+    <mvc:resources order="1" location="/resources/"
+                   mapping="/resources/**" />
+    <mvc:resources mapping="swagger-ui.html"
+                   location="classpath:/META-INF/resources/" />
+    <mvc:resources mapping="/webjars/**"
+                   location="classpath:/META-INF/resources/webjars/" />
 
     <!-- ################################ Register module  ####################################################### -->
 
     <bean class="org.yes.cart.env.impl.ModuleImpl">
         <property name="functionalArea" value="app"/>
-        <property name="name" value="api"/>
-        <property name="subName" value="rest-servlet"/>
+        <property name="name" value="jam"/>
+        <property name="subName" value="swagger2-ui"/>
     </bean>
 
 </beans>

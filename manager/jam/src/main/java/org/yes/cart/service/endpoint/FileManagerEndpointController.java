@@ -15,6 +15,7 @@
  */
 package org.yes.cart.service.endpoint;
 
+import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ import java.util.List;
  * Time: 11:38
  */
 @Controller
+@Api(value = "File Manager", tags = "file")
 @RequestMapping("/filemanager")
 public interface FileManagerEndpointController {
 

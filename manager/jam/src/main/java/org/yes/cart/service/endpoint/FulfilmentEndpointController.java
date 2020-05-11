@@ -15,6 +15,7 @@
  */
 package org.yes.cart.service.endpoint;
 
+import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,7 @@ import java.util.List;
  * Time: 11:48
  */
 @Controller
+@Api(value = "Fulfilment", tags = "fulfilment")
 @RequestMapping("/fulfilment")
 public interface FulfilmentEndpointController {
 

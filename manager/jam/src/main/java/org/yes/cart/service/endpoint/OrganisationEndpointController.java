@@ -1,5 +1,6 @@
 package org.yes.cart.service.endpoint;
 
+import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import java.util.List;
  * Date 8/22/2016.
  */
 @Controller
+@Api(value = "Organisation", tags = "organisation")
 @RequestMapping("/organisation")
 public interface OrganisationEndpointController {
 

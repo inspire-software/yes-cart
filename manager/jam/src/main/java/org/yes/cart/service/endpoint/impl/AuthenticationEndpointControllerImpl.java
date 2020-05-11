@@ -13,32 +13,39 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.yes.cart.service.endpoint;
+package org.yes.cart.service.endpoint.impl;
 
-import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.vo.VoValidationRequest;
-import org.yes.cart.domain.vo.VoValidationResult;
+import org.yes.cart.security.impl.LoginData;
+import org.yes.cart.service.endpoint.AuthenticationEndpointController;
 
 /**
  * User: denispavlov
- * Date: 29/08/2016
- * Time: 15:51
+ * Date: 11/05/2020
+ * Time: 00:22
  */
 @Controller
-@Api(value = "Validation", tags = "validation")
-@RequestMapping("/validation")
-public interface ValidationEndpointController {
+public class AuthenticationEndpointControllerImpl implements AuthenticationEndpointController {
 
-    @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    VoValidationResult validate(@RequestBody VoValidationRequest vo) throws Exception;
+
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    public void authenticate(@RequestBody LoginData loginData) {
+
+    }
+
+    @RequestMapping(value = "/refreshtoken", method = RequestMethod.POST)
+    public void refreshToken() {
+
+    }
+
+    @RequestMapping(value = "/changepwd", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    public void changePwd(@RequestBody LoginData loginData) {
+        
+    }
+
 
 }

@@ -48,6 +48,8 @@
     <import resource="classpath:manager-cronjob.xml"/>
     <import resource="classpath*:adm-servlet-ext.xml"/>
 
+    <import resource="classpath:rest-swagger2-${webapp.swagger2.ui}.xml"/>
+
     <context:component-scan base-package="org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl" />
 
     <tx:annotation-driven />

@@ -15,6 +15,7 @@
  */
 package org.yes.cart.service.endpoint;
 
+import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ import java.util.List;
  * Time: 09:20
  */
 @Controller
+@Api(value = "Dashboard", tags = "dashboard")
 @RequestMapping("/reports")
 public interface DashboardEndpointController {
 

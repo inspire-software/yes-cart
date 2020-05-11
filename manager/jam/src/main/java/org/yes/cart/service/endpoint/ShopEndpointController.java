@@ -15,6 +15,7 @@
  */
 package org.yes.cart.service.endpoint;
 
+import io.swagger.annotations.Api;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +35,7 @@ import java.util.List;
  * Created by Igor_Azarny on 3/15/2016.
  */
 @Controller
+@Api(value = "Shop", tags = "shop")
 @RequestMapping("/shop")
 public interface ShopEndpointController {
 

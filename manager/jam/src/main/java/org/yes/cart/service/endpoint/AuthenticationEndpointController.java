@@ -1,5 +1,5 @@
 /*
- * Copyright 2009- 2016 Denys Pavlov, Igor Azarnyi
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -13,31 +13,33 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.servlet.http.HttpServletRequest;
+import org.yes.cart.security.impl.LoginData;
 
 /**
  * User: denispavlov
- * Date: 19/05/2017
- * Time: 11:42
+ * Date: 11/05/2020
+ * Time: 00:10
  */
 @Controller
-@Api(value = "Web", tags = "pages")
-public interface IndexController {
+@Api(value = "Authentication", tags = "authentication")
+public interface AuthenticationEndpointController {
 
-    @RequestMapping(value = "/login.jsp", method = { RequestMethod.GET, RequestMethod.POST })
-    String login();
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    void authenticate(@RequestBody LoginData loginData);
 
-    @RequestMapping(value = "/index.jsp", method = { RequestMethod.GET, RequestMethod.POST })
-    String index();
+    @RequestMapping(value = "/refreshtoken", method = RequestMethod.POST)
+    void refreshToken();
 
-    @RequestMapping(value = "/changepassword.jsp", method = { RequestMethod.GET, RequestMethod.POST })
-    String changePassword(HttpServletRequest request);
+    @RequestMapping(value = "/changepwd", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    void changePwd(@RequestBody LoginData loginData);
 
 }

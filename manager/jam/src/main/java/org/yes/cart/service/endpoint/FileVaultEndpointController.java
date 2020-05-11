@@ -15,6 +15,7 @@
  */
 package org.yes.cart.service.endpoint;
 
+import io.swagger.annotations.Api;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,7 @@ import java.io.IOException;
  * Time: 19:17
  */
 @Controller
+@Api(value = "File Vault", tags = "file")
 @RequestMapping("/filevault")
 public interface FileVaultEndpointController {
 

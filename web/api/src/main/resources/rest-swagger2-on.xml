@@ -32,4 +32,12 @@
     <mvc:resources mapping="/webjars/**"
                    location="classpath:/META-INF/resources/webjars/" />
 
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="app"/>
+        <property name="name" value="api"/>
+        <property name="subName" value="swagger2-ui"/>
+    </bean>
+
 </beans>
