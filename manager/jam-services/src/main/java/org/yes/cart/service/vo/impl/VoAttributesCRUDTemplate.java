@@ -183,7 +183,8 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
         final VoAssemblySupport.VoAssembler<V, D> asm =
                 voAssemblySupport.with(this.voClass, this.dtoClass);
 
-        Map<Long, D> existing = Collections.emptyMap();
+        Map<Long, D> existingById = Collections.emptyMap();
+        Map<String, D> existingNonMultiByCode = Collections.emptyMap();
         for (final MutablePair<V, Boolean> item : vo) {
             if (objectId == 0L) {
                 objectId = determineObjectId(item.getFirst());
@@ -192,7 +193,9 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                     throw new AccessDeniedException("Access is denied");
                 }
                 objectCode = pair.getSecond();
-                existing = mapAvById((List) genericAttrValueService.getEntityAttributes(objectId));
+                final List avs = (List) genericAttrValueService.getEntityAttributes(objectId);
+                existingById = mapAvById(avs);
+                existingNonMultiByCode = mapAvSingleByCode(avs);
             } else if (objectId != determineObjectId(item.getFirst())) {
                 throw new AccessDeniedException("Access is denied");
             }
@@ -209,12 +212,26 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                         throw new AccessDeniedException("Access is denied");
                     }
 
-                    // delete mode
+                    // delete mode explicit
                     genericAttrValueService.deleteAttributeValue(item.getFirst().getAttrvalueId());
+                } else if (existingNonMultiByCode.containsKey(item.getFirst().getAttribute().getCode())) {
+
+                    if (skipSecure(item.getFirst(), item.getFirst().getAttribute(), includeSecure)) {
+                        throw new AccessDeniedException("Access is denied");
+                    }
+
+                    final D dto = existingNonMultiByCode.get(item.getFirst().getAttribute().getCode());
+                    if (dto != null) {
+                        // delete mode by code
+                        genericAttrValueService.deleteAttributeValue(dto.getAttrvalueId());
+                    }
+
                 }
-            } else if (item.getFirst().getAttrvalueId() > 0L) {
+            } else if (item.getFirst().getAttrvalueId() > 0L || existingNonMultiByCode.containsKey(item.getFirst().getAttribute().getCode())) {
                 // update mode
-                final D dto = existing.get(item.getFirst().getAttrvalueId());
+                final D dto = item.getFirst().getAttrvalueId() > 0L ?
+                        existingById.get(item.getFirst().getAttrvalueId()) :
+                        existingNonMultiByCode.get(item.getFirst().getAttribute().getCode());
                 if (dto != null) {
 
                     if (skipSecure(dto, dto.getAttributeDTO(), includeSecure)) {
@@ -341,6 +358,16 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
         Map<Long, D> map = new HashMap<>();
         for (final D dto : entityAttributes) {
             map.put(dto.getAttrvalueId(), dto);
+        }
+        return map;
+    }
+
+    private Map<String, D> mapAvSingleByCode(final List<D> entityAttributes) {
+        Map<String, D> map = new HashMap<>();
+        for (final D dto : entityAttributes) {
+            if (dto.getAttrvalueId() > 0L && (dto.getAttributeDTO() == null || !dto.getAttributeDTO().isAllowduplicate())) {
+                map.put(dto.getAttributeDTO().getCode(), dto);
+            }
         }
         return map;
     }

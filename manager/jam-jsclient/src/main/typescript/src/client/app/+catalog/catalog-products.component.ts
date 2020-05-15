@@ -198,6 +198,30 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     this.validForSave = event.valid;
     this.productEdit = event.source.first;
     this.productAttributesUpdate = event.source.second;
+    if (this.productEdit.sku != null && this.productEdit.sku.length == 1 && this.productEdit.code == this.productEdit.sku[0].code) {
+      let productSku = this.productEdit.sku[0];
+      let skuAttrUpdate:Array<Pair<AttrValueProductSkuVO, boolean>> = [];
+      this.productAttributesUpdate.forEach(avpp => {
+        if (avpp.first.attribute.etype == 'Image') {
+          skuAttrUpdate.push({ first: {
+            attrvalueId: 0,
+            skuId: productSku.skuId,
+            val: avpp.first.val,
+            displayVals: avpp.first.displayVals,
+            valBase64Data: avpp.first.valBase64Data,
+            attribute: avpp.first.attribute,
+          }, second: avpp.second });
+        }
+      });
+      if (skuAttrUpdate.length > 0) {
+        LogUtil.debug('CatalogProductsComponent onProductChanged SKU', skuAttrUpdate);
+        this.skuAttributesUpdate = skuAttrUpdate;
+      } else {
+        this.skuAttributesUpdate = null;
+      }
+    } else {
+      this.skuAttributesUpdate = null;
+    }
   }
 
   protected onSkuSelected(data:ProductSkuVO) {
@@ -488,7 +512,20 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
                   LogUtil.debug('CatalogProductsComponent product attributes updated', rez);
                   this.productAttributesUpdate = null;
                   this.loading = false;
-                  this.getFilteredProducts();
+
+                  if (this.skuAttributesUpdate != null && this.skuAttributesUpdate.length > 0) {
+                    this.loading = true;
+                    let _sub3:any = this._pimService.saveSKUAttributes(this.skuAttributesUpdate).subscribe(rez => {
+                      _sub3.unsubscribe();
+                      LogUtil.debug('CatalogProductsComponent product SKU attributes updated', rez);
+                      this.skuAttributesUpdate = null;
+                      this.loading = false;
+                      this.getFilteredProducts();
+                    });
+
+                  } else {
+                    this.getFilteredProducts();
+                  }
                 });
               } else {
                 this.getFilteredProducts();
