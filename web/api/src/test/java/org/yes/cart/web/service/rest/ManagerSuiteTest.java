@@ -112,7 +112,7 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
         final byte[] loginBody = toJsonBytes(login);
 
         final MvcResult loginResult =
-                mockMvc.perform(put("/auth/login")
+                mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .locale(locale)
@@ -181,7 +181,7 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
         loginOnBehalf.setUsername("reg@test.com");
         final byte[] loginOnBehalfBody = toJsonBytes(loginOnBehalf);
 
-        mockMvc.perform(put("/auth/login?customer=true")
+        mockMvc.perform(post("/auth/login?customer=true")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -210,7 +210,7 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(put("/auth/logout?customer=true")
+        mockMvc.perform(post("/auth/logout?customer=true")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -237,7 +237,7 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(put("/auth/logout")
+        mockMvc.perform(post("/auth/logout")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)

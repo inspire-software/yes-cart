@@ -77,7 +77,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
 
-        mockMvc.perform(get("/categories/menu/106")
+        mockMvc.perform(get("/categories/106/menu")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale))
@@ -86,7 +86,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Retro Gadgets")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/categories/view/106")
+        mockMvc.perform(get("/categories/106/view")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale))
@@ -109,7 +109,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/categories/menu/106")
+        mockMvc.perform(get("/categories/106/menu")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale))
@@ -118,7 +118,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Retro Gadgets")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/categories/view/106")
+        mockMvc.perform(get("/categories/106/view")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale))
@@ -134,7 +134,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
     @Test
     public void testContentJson() throws Exception {
 
-        mockMvc.perform(get("/content/menu/SHOIP1_menu_item_1")
+        mockMvc.perform(get("/content/SHOIP1_menu_item_1/menu")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale))
@@ -143,7 +143,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("menu item 1")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/content/view/SHOIP1_menu_item_1")
+        mockMvc.perform(get("/content/SHOIP1_menu_item_1/view")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale))
@@ -157,7 +157,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
     @Test
     public void testContentXML() throws Exception {
 
-        mockMvc.perform(get("/content/menu/SHOIP1_menu_item_1")
+        mockMvc.perform(get("/content/SHOIP1_menu_item_1/menu")
                 .contentType(MediaType.APPLICATION_XML)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale))
@@ -166,7 +166,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("menu item 1")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/content/view/SHOIP1_menu_item_1")
+        mockMvc.perform(get("/content/SHOIP1_menu_item_1/view")
                 .contentType(MediaType.APPLICATION_XML)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale))
@@ -494,7 +494,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
 
         final byte[] bodySRefs = toJsonBytes(sRefs);
 
-        mockMvc.perform(get("/skus/list")
+        mockMvc.perform(post("/skus/list")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)

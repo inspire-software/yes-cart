@@ -17,6 +17,8 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +50,7 @@ import java.util.*;
  * Time: 10:35
  */
 @Controller
-@Api(value = "Manager", tags = "manager")
+@Api(value = "Manager", description = "Manager controller", tags = "manager")
 @RequestMapping("/management")
 public class ManagerController {
 
@@ -63,7 +65,7 @@ public class ManagerController {
     @Qualifier("restRoMappingMixin")
     private RoMappingMixin mappingMixin;
 
-
+    @ApiOperation(value = "Perform a customer search.")
     @RequestMapping(
             value = "customers/search",
             method = RequestMethod.POST,
@@ -71,8 +73,8 @@ public class ManagerController {
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody
-    SearchResultCustomerRO search(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                  final @RequestBody SearchRO search,
+    SearchResultCustomerRO search(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                  final @ApiParam(value = "Search request") @RequestBody SearchRO search,
                                   final HttpServletRequest request,
                                   final HttpServletResponse response) {
 

@@ -17,6 +17,8 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.groovy.util.ListHashMap;
@@ -58,7 +60,7 @@ import java.util.*;
  * Time: 07:52
  */
 @Controller
-@Api(value = "Customer", tags = "customer")
+@Api(value = "Customer", description = "Current customer controller", tags = "customer")
 @RequestMapping("/customer")
 public class CustomerController {
 
@@ -158,12 +160,13 @@ public class CustomerController {
      *
      * @return customer object
      */
+    @ApiOperation(value = "Display customer profile information.")
     @RequestMapping(
             value = "/summary",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CustomerRO viewSummary(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody CustomerRO viewSummary(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                 final HttpServletRequest request,
                                                 final HttpServletResponse response) {
 
@@ -190,10 +193,10 @@ public class CustomerController {
     }
 
     /**
-     * Interface: PUT /api/rest/customer/summary
+     * Interface: POST /api/rest/customer/summary
      * <p>
      * <p>
-     * Display customer profile information.
+     * Update customer profile information.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -363,14 +366,15 @@ public class CustomerController {
      *
      * @return customer object
      */
+    @ApiOperation(value = "Update customer profile information.")
     @RequestMapping(
             value = "/summary",
-            method = RequestMethod.PUT,
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CustomerUpdatedRO updateSummary(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                         final @RequestBody CustomerRO update,
+    public @ResponseBody CustomerUpdatedRO updateSummary(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                         final @ApiParam(value = "Profile update") @RequestBody CustomerRO update,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
@@ -533,13 +537,14 @@ public class CustomerController {
      *
      * @return list of addresses
      */
+    @ApiOperation(value = "Display customer address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
             value = "/addressbook/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<AddressRO> viewAddressbook(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                         final @PathVariable(value = "type") String type,
+    public @ResponseBody List<AddressRO> viewAddressbook(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                         final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
@@ -600,13 +605,14 @@ public class CustomerController {
      *
      * @return list of addresses
      */
+    @ApiOperation(value = "Display customer address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
             value = "/addressbook/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AddressListRO viewAddressbookXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                          final @PathVariable(value = "type") String type,
+    public @ResponseBody AddressListRO viewAddressbookXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                          final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                           final HttpServletRequest request,
                                                           final HttpServletResponse response) {
 
@@ -675,13 +681,14 @@ public class CustomerController {
      *
      * @return list of countries
      */
+    @ApiOperation(value = "Display country options for address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
             value = "/addressbook/{type}/options/countries",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<CountryRO> viewAddressbookCountries(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                  final @PathVariable(value = "type") String type,
+    public @ResponseBody List<CountryRO> viewAddressbookCountries(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                  final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                                   final HttpServletRequest request,
                                                                   final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -735,13 +742,14 @@ public class CustomerController {
      *
      * @return list of countries
      */
+    @ApiOperation(value = "Display country options for address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
             value = "/addressbook/{type}/options/countries",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CountryListRO viewAddressbookCountriesXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                   final @PathVariable(value = "type") String type,
+    public @ResponseBody CountryListRO viewAddressbookCountriesXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                   final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                                    final HttpServletRequest request,
                                                                    final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -765,7 +773,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /api/rest/customer/addressbook/{type}/options/country/{code}
+     * Interface: GET /api/rest/customer/addressbook/{type}/options/countries/{code}
      * <p>
      * <p>
      * Display country options for address book.
@@ -807,14 +815,15 @@ public class CustomerController {
      *
      * @return list of country states
      */
+    @ApiOperation(value = "Display country options for address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
-            value = "/addressbook/{type}/options/country/{code}",
+            value = "/addressbook/{type}/options/countries/{code}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<StateRO> viewAddressbookCountries(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                final @PathVariable(value = "type") String type,
-                                                                final @PathVariable(value = "code") String code,
+    public @ResponseBody List<StateRO> viewAddressbookCountries(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+                                                                final @ApiParam(value = "Country code") @PathVariable(value = "code") String code,
                                                                 final HttpServletRequest request,
                                                                 final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -825,7 +834,7 @@ public class CustomerController {
 
 
     /**
-     * Interface: GET /api/rest/customer/addressbook/{type}/options/country/{code}
+     * Interface: GET /api/rest/customer/addressbook/{type}/options/countries/{code}
      * <p>
      * <p>
      * Display country options for address book.
@@ -866,14 +875,15 @@ public class CustomerController {
      *
      * @return list of country states
      */
+    @ApiOperation(value = "Display country options for address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
-            value = "/addressbook/{type}/options/country/{code}",
+            value = "/addressbook/{type}/options/countries/{code}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody StateListRO viewAddressbookCountriesXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                 final @PathVariable(value = "type") String type,
-                                                                 final @PathVariable(value = "code") String code,
+    public @ResponseBody StateListRO viewAddressbookCountriesXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                 final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+                                                                 final @ApiParam(value = "Country code") @PathVariable(value = "code") String code,
                                                                  final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -934,10 +944,10 @@ public class CustomerController {
 
 
     /**
-     * Interface: PUT /api/rest/customer/addressbook/{type}
+     * Interface: POST /api/rest/customer/addressbook/{type}
      * <p>
      * <p>
-     * Display customer address book.
+     * Update customer address book.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -1030,15 +1040,16 @@ public class CustomerController {
      *
      * @return list of addresses
      */
+    @ApiOperation(value = "Update customer address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
             value = "/addressbook/{type}",
-            method = RequestMethod.PUT,
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody List<AddressRO> updateAddressbook(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                           final @PathVariable(value = "type") String type,
-                                                           final @RequestBody AddressRO address,
+    public @ResponseBody List<AddressRO> updateAddressbook(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                           final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+                                                           final @ApiParam(value = "Address") @RequestBody AddressRO address,
                                                            final HttpServletRequest request,
                                                            final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1048,10 +1059,10 @@ public class CustomerController {
     }
 
     /**
-     * Interface: PUT /api/rest/customer/addressbook/{type}
+     * Interface: POST /api/rest/customer/addressbook/{type}
      * <p>
      * <p>
-     * Display customer address book.
+     * Update customer address book.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -1140,15 +1151,16 @@ public class CustomerController {
      *
      * @return list of addresses
      */
+    @ApiOperation(value = "Update customer address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
             value = "/addressbook/{type}",
-            method = RequestMethod.PUT,
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AddressListRO updateAddressbookXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                            final @PathVariable(value = "type") String type,
-                                                            final @RequestBody AddressRO address,
+    public @ResponseBody AddressListRO updateAddressbookXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                            final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+                                                            final @ApiParam(value = "Address") @RequestBody AddressRO address,
                                                             final HttpServletRequest request,
                                                             final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1264,7 +1276,7 @@ public class CustomerController {
      * Interface: GET /api/rest/customer/wishlist/{type}
      * <p>
      * <p>
-     * Display customer default wishlist.
+     * Display customer wish list.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -1348,13 +1360,14 @@ public class CustomerController {
      *
      * @return list of wish list items
      */
+    @ApiOperation(value = "Display customer wish list.", tags = { "product", "customer" })
     @RequestMapping(
             value = "/wishlist/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductWishlistRO> viewWishlist(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @PathVariable(value = "type") String type,
+    public @ResponseBody List<ProductWishlistRO> viewWishlist(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                              final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 
@@ -1369,7 +1382,7 @@ public class CustomerController {
      * Interface: GET /api/rest/customer/wishlist/{type}/{tag}
      * <p>
      * <p>
-     * Display customer wishlist by tag.
+     * Display customer wish list by tag.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -1454,14 +1467,15 @@ public class CustomerController {
      *
      * @return list of wish list items
      */
+    @ApiOperation(value = "Display customer wish list by tag.", tags = { "product", "customer" })
     @RequestMapping(
             value = "/wishlist/{type}/{tag}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductWishlistRO> viewWishlist(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @PathVariable(value = "type") String type,
-                                                              final @PathVariable(value = "tag") String tag,
+    public @ResponseBody List<ProductWishlistRO> viewWishlist(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                              final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
+                                                              final @ApiParam(value = "Tag") @PathVariable(value = "tag") String tag,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 
@@ -1557,13 +1571,14 @@ public class CustomerController {
      *
      * @return list of wish list items
      */
+    @ApiOperation(value = "Display customer wish list.", tags = { "product", "customer" })
     @RequestMapping(
             value = "/wishlist/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductWishlistListRO viewWishlistXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                               final @PathVariable(value = "type") String type,
+    public @ResponseBody ProductWishlistListRO viewWishlistXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                               final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
                                                                final HttpServletRequest request,
                                                                final HttpServletResponse response) {
 
@@ -1658,14 +1673,15 @@ public class CustomerController {
      *
      * @return list of wish list items
      */
+    @ApiOperation(value = "Display customer wish list by tag.", tags = { "product", "customer" })
     @RequestMapping(
             value = "/wishlist/{type}/{tag}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductWishlistListRO viewWishlistXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                               final @PathVariable(value = "type") String type,
-                                                               final @PathVariable(value = "tag") String tag,
+    public @ResponseBody ProductWishlistListRO viewWishlistXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                               final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
+                                                               final @ApiParam(value = "Tag") @PathVariable(value = "tag") String tag,
                                                                final HttpServletRequest request,
                                                                final HttpServletResponse response) {
 
@@ -1788,12 +1804,13 @@ public class CustomerController {
      *
      * @return list of products
      */
+    @ApiOperation(value = "Display list of recently viewed products.", tags = { "product", "customer" })
     @RequestMapping(
             value = "/recentlyviewed",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductSearchResultRO> viewRecent(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody List<ProductSearchResultRO> viewRecent(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                                 final HttpServletRequest request,
                                                                 final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1877,12 +1894,13 @@ public class CustomerController {
      *
      * @return list of products
      */
+    @ApiOperation(value = "Display list of recently viewed products.", tags = { "product", "customer" })
     @RequestMapping(
             value = "/recentlyviewed",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductSearchResultListRO viewRecentXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody ProductSearchResultListRO viewRecentXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                                  final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -2076,12 +2094,13 @@ public class CustomerController {
      *
      * @return list of all orders
      */
+    @ApiOperation(value = "Display list of all customer orders.", tags = { "orders", "customer" })
     @RequestMapping(
             value = "/orders",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody OrderHistoryRO viewOrderHistory(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody OrderHistoryRO viewOrderHistory(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
@@ -2276,13 +2295,14 @@ public class CustomerController {
      *
      * @return list of all orders since date
      */
+    @ApiOperation(value = "Display list of all customer orders since date.", tags = { "orders", "customer" })
     @RequestMapping(
             value = "/orders/{date}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody OrderHistoryRO viewOrderHistorySince(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @PathVariable(value = "date") String date,
+    public @ResponseBody OrderHistoryRO viewOrderHistorySince(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                              final @ApiParam(value = "Date in 'yyyy-MM-dd HH:mm:ss' format") @PathVariable(value = "date") String date,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 

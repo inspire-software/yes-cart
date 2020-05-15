@@ -17,6 +17,8 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -63,7 +65,7 @@ import java.util.Map;
  * Time: 15:17
  */
 @Controller
-@Api(value = "Search", tags = "search")
+@Api(value = "Search", description = "Search controller", tags = "search")
 @RequestMapping("/search")
 public class SearchController {
 
@@ -471,6 +473,7 @@ public class SearchController {
      *
      * @return category object
      */
+    @ApiOperation(value = "Perform a product search.")
     @RequestMapping(
             value = "",
             method = RequestMethod.POST,
@@ -478,8 +481,8 @@ public class SearchController {
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody
-    SearchResultProductRO search(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                 final @RequestBody SearchRO search,
+    SearchResultProductRO search(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                 final @ApiParam(value = "Search request") @RequestBody SearchRO search,
                                  final HttpServletRequest request,
                                  final HttpServletResponse response) {
 

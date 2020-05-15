@@ -17,6 +17,8 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,6 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * User: denispavlov
@@ -54,16 +55,10 @@ import java.util.regex.Pattern;
  * Time: 14:46
  */
 @Controller
-@Api(value = "Authentication", tags = "auth")
-@RequestMapping("/auth")
+@Api(value = "Authentication", description = "Authentication controller", tags = "auth")
 public class AuthenticationController {
 
     private static final String REG_FORM_CODE = "regAddressForm";
-
-    private static final Pattern EMAIL =
-            Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)",
-                    Pattern.CASE_INSENSITIVE);
-
 
     @Autowired
     private CustomerServiceFacade customerServiceFacade;
@@ -146,12 +141,14 @@ public class AuthenticationController {
      *
      * @return authentication result
      */
+    @ApiOperation(value = "Check interface that allows to check authentication state of user. " +
+            "The token for the authenticated cart is returned back as response header and also as a cookie.")
     @RequestMapping(
-            value = "/check",
+            value = "/auth/check",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO check(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody AuthenticationResultRO check(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -186,7 +183,7 @@ public class AuthenticationController {
     }
 
     /**
-     * Interface: PUT /api/rest/auth/login
+     * Interface: POST /api/rest/auth/login
      * <p>
      * <p>
      * Login interface that allows to authenticate user cart. The token for the authenticated cart is
@@ -267,14 +264,17 @@ public class AuthenticationController {
      *
      * @return authentication result
      */
+    @ApiOperation(value = "Login interface that allows to authenticate user cart. " +
+            "The token for the authenticated cart is returned back as response header and also as a cookie.", tags = { "auth", "manager"})
     @RequestMapping(
-            value = "/login",
-            method = RequestMethod.PUT,
+            value = "/auth/login",
+            method = RequestMethod.POST,
+            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO login(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @RequestParam(value = "customer", required = false)  Boolean customer,
-                                                      final @RequestBody LoginRO loginRO,
+    public @ResponseBody AuthenticationResultRO login(final @ApiParam(value = "Request token")  @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @ApiParam(value = "Login as customer flag") @RequestParam(value = "customer", required = false)  Boolean customer,
+                                                      final @ApiParam(value = "Login data") @RequestBody LoginRO loginRO,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -300,7 +300,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: GET /api/rest/auth/logout
+     * Interface: POST /api/rest/auth/logout
      * <p>
      * <p>
      * Logout interface that allows to de-authenticate user cart. The token for the authenticated cart is
@@ -356,13 +356,15 @@ public class AuthenticationController {
      *
      * @return authentication result
      */
+    @ApiOperation(value = "Logout interface that allows to de-authenticate user cart. " +
+            "The token for the authenticated cart is returned back as response header and also as a cookie.", tags = { "auth", "manager"})
     @RequestMapping(
-            value = "/logout",
-            method = RequestMethod.PUT,
+            value = "/auth/logout",
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO logout(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                       final @RequestParam(value = "customer", required = false)  Boolean customer,
+    public @ResponseBody AuthenticationResultRO logout(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                       final @ApiParam(value = "Logout from customer account flag") @RequestParam(value = "customer", required = false)  Boolean customer,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -500,13 +502,17 @@ public class AuthenticationController {
      *
      * @return registration data
      */
+    @ApiOperation(value = "Interface to list all attributes required for registration. " +
+            "If customerType is not specified returns form with two custom attributes: " +
+            "1) customerType - containing customer type choices and 2) guestCheckoutEnabled - containing true/false flag. " +
+            "If customerType is specified returns custom attributes that represent form fields.", tags = { "auth", "manager"})
     @RequestMapping(
-            value = "/register",
+            value = "/auth/register",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody RegisterFormRO register(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                 final @RequestParam(value = "customerType", required = false) String customerType,
+    public @ResponseBody RegisterFormRO register(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                 final @ApiParam(value = "Customer type to retrieve registration attributes for") @RequestParam(value = "customerType", required = false) String customerType,
                                                  final HttpServletRequest request,
                                                  final HttpServletResponse response) {
 
@@ -591,7 +597,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: PUT /api/rest/auth/register
+     * Interface: POST /api/rest/auth/register
      * <p>
      * <p>
      * Register interface that allows to register user. The token for the authenticated cart is
@@ -701,14 +707,16 @@ public class AuthenticationController {
      *
      * @return authentication result
      */
+    @ApiOperation(value = "Register interface that allows to register user. " +
+            "The token for the authenticated cart is returned back as response header and also as a cookie.", tags = { "auth", "manager"})
     @RequestMapping(
-            value = "/register",
-            method = RequestMethod.PUT,
+            value = "/auth/register",
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO register(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                         final @RequestBody RegisterRO registerRO,
+    public @ResponseBody AuthenticationResultRO register(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                         final @ApiParam(value = "Registration details") @RequestBody RegisterRO registerRO,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
@@ -791,7 +799,7 @@ public class AuthenticationController {
 
 
     /**
-     * Interface: PUT /api/rest/auth/guest
+     * Interface: POST /api/rest/auth/guest
      * <p>
      * <p>
      * Guest interface that allows create guest user. The token for the authenticated cart is
@@ -899,14 +907,16 @@ public class AuthenticationController {
      *
      * @return authentication result
      */
+    @ApiOperation(value = "Guest interface that allows create guest user. " +
+            "The token for the authenticated cart is returned back as response header and also as a cookie.")
     @RequestMapping(
-            value = "/guest",
-            method = RequestMethod.PUT,
+            value = "/auth/guest",
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO guest(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @RequestBody RegisterRO registerRO,
+    public @ResponseBody AuthenticationResultRO guest(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @ApiParam(value = "Registration details") @RequestBody RegisterRO registerRO,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -1055,15 +1065,18 @@ public class AuthenticationController {
      *
      * @return authentication result
      */
+    @ApiOperation(value = "Reset password interface that allows to request password to be reset and reset it. " +
+            "Password reset is a two step process. First step is to provide valid email of registered customer and " +
+            "generate authToken. Second step is to use authToken in order to confirm password reset.", tags = "customer")
     @RequestMapping(
-            value = "/resetpassword",
+            value = "/auth/resetpassword",
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO resetPassword(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @RequestParam(value = "email", required = false) String email,
-                                                              final @RequestParam(value = "authToken", required = false) String authToken,
-                                                              final @RequestParam(value = "newPassword", required = false) String newPassword,
+    public @ResponseBody AuthenticationResultRO resetPassword(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                              final @ApiParam(value = "Email") @RequestParam(value = "email", required = false) String email,
+                                                              final @ApiParam(value = "Authentication token to authorise new password") @RequestParam(value = "authToken", required = false) String authToken,
+                                                              final @ApiParam(value = "New password") @RequestParam(value = "newPassword", required = false) String newPassword,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 
@@ -1160,14 +1173,17 @@ public class AuthenticationController {
      *
      * @return authentication result
      */
+    @ApiOperation(value = "Delete account of currently logged in user. " +
+            "Delete account is a two step process. First step is to provide valid email of registered " +
+            "customer and generate authToken. Second step is to use authToken in order to confirm account deletion.", tags = "customer")
     @RequestMapping(
-            value = "/deleteaccount",
+            value = "/auth/deleteaccount",
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO deleteAccount(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @RequestParam(value = "authToken", required = false) String authToken,
-                                                              final @RequestParam(value = "password", required = false) String password,
+    public @ResponseBody AuthenticationResultRO deleteAccount(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                              final @ApiParam(value = "Authentication token to authorise account removal") @RequestParam(value = "authToken", required = false) String authToken,
+                                                              final @ApiParam(value = "Current password") @RequestParam(value = "password", required = false) String password,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 
@@ -1194,224 +1210,6 @@ public class AuthenticationController {
         }
         return new AuthenticationResultRO("INVALID_PARAMETERS");
     }
-
-
-
-    /**
-     * Interface: POST /api/rest/auth/signupnewsletter
-     * <p>
-     * <p>
-     * Sign up for newsletter interface sends email request to shop administrator with provided
-     * email.
-     * <p>
-     * <p>
-     * <h3>Headers for operation</h3><p>
-     * <table border="1">
-     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
-     * </table>
-     * <p>
-     * <p>
-     * <h3>Parameters for operation</h3><p>
-     * <table border="1">
-     *     <tr><td>email</td><td>
-     *         E-mail to be used for newsletters.
-     *     </td></tr>
-     * </table>
-     * <p>
-     * <p>
-     * <h3>Output</h3><p>
-     * <p>
-     * Output that does not have error code indicates successful processing.
-     * <p>
-     * <table border="1">
-     *     <tr><td>JSON example</td><td>
-     * <pre><code>
-     * {
-     *    "success" : false,
-     *    "greeting" : null,
-     *    "token" : null,
-     *    "error" : null
-     * }
-     * </code></pre>
-     *     </td></tr>
-     *     <tr><td>XML example</td><td>
-     * <pre><code>
-     * &lt;authentication-result&gt;
-     *    &lt;greeting/&gt;
-     *    &lt;success&gt;false&lt;/success&gt;
-     *    &lt;token/&gt;
-     * &lt;/authentication-result&gt;
-     * </code></pre>
-     *     </td></tr>
-     * </table>
-     * <p>
-     * <p>
-     * <h3>Error codes</h3><p>
-     * <table border="1">
-     *     <tr><td>INVALID_EMAIL</td><td>Supplied email is invalidr</td></tr>
-     * </table>
-     *
-     *
-     * @param request request
-     * @param response response
-     *
-     * @return authentication result
-     */
-    @RequestMapping(
-            value = "/signupnewsletter",
-            method = RequestMethod.POST,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
-    )
-    public @ResponseBody AuthenticationResultRO signUpNewsletter(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                 final @RequestParam(value = "email", required = false) String email,
-                                                                 final HttpServletRequest request,
-                                                                 final HttpServletResponse response) {
-
-        cartMixin.persistShoppingCart(request, response);
-
-        final Shop shop = cartMixin.getCurrentShop();
-        final AuthenticationResultRO result = checkValidEmail(email, shop);
-        if (result != null) {
-            return result;
-        }
-
-        customerServiceFacade.registerNewsletter(shop, email, new HashMap<>());
-
-        return new AuthenticationResultRO();
-
-    }
-
-    private AuthenticationResultRO checkValidEmail(final String email, final Shop shop) {
-
-        final AttrValueWithAttribute emailConfig = customerServiceFacade.getShopEmailAttribute(shop);
-        if (emailConfig != null) {
-
-            final AuthenticationResultRO result = checkValid(emailConfig.getAttribute(), email, cartMixin.getCurrentCart().getCurrentLocale());
-            if (result != null) {
-
-                return result;
-
-            }
-
-        } else if (StringUtils.isBlank(email)
-                || email.length() < 6
-                || email.length() > 256
-                || !EMAIL.matcher(email).matches()) {
-
-            return new AuthenticationResultRO("EMAIL_FAILED");
-
-        }
-        return null;
-    }
-
-    /**
-     * Interface: POST /api/rest/auth/contactus
-     * <p>
-     * <p>
-     * Contact Us interface sends email request to shop administrator with provided
-     * email.
-     * <p>
-     * <p>
-     * <h3>Headers for operation</h3><p>
-     * <table border="1">
-     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
-     * </table>
-     * <p>
-     * <p>
-     * <h3>Parameters for operation</h3><p>
-     * <table border="1">
-     *     <tr><td>email</td><td>
-     *         E-mail to be used for newsletters.
-     *     </td></tr>
-     * </table>
-     * <p>
-     * <p>
-     * <h3>Output</h3><p>
-     * <p>
-     * Output that does not have error code indicates successful processing.
-     * <p>
-     * <table border="1">
-     *     <tr><td>JSON example</td><td>
-     * <pre><code>
-     * {
-     *    "success" : false,
-     *    "greeting" : null,
-     *    "token" : null,
-     *    "error" : null
-     * }
-     * </code></pre>
-     *     </td></tr>
-     *     <tr><td>XML example</td><td>
-     * <pre><code>
-     * &lt;authentication-result&gt;
-     *    &lt;greeting/&gt;
-     *    &lt;success&gt;false&lt;/success&gt;
-     *    &lt;token/&gt;
-     * &lt;/authentication-result&gt;
-     * </code></pre>
-     *     </td></tr>
-     * </table>
-     * <p>
-     * <p>
-     * <h3>Error codes</h3><p>
-     * <table border="1">
-     *     <tr><td>INVALID_EMAIL</td><td>Supplied email is invalid</td></tr>
-     * </table>
-     *
-     *
-     * @param request request
-     * @param response response
-     *
-     * @return authentication result
-     */
-    @RequestMapping(
-            value = "/contactus",
-            method = RequestMethod.POST,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
-    )
-    public @ResponseBody AuthenticationResultRO contactUs(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                          final @RequestParam(value = "email", required = false) String email,
-                                                          final @RequestParam(value = "name", required = false) String name,
-                                                          final @RequestParam(value = "phone", required = false) String phone,
-                                                          final @RequestParam(value = "subject", required = false) String subject,
-                                                          final @RequestParam(value = "message", required = false) String message,
-                                                          final HttpServletRequest request,
-                                                          final HttpServletResponse response) {
-
-        cartMixin.persistShoppingCart(request, response);
-
-        final Shop shop = cartMixin.getCurrentShop();
-        final AuthenticationResultRO result = checkValidEmail(email, shop);
-        if (result != null) {
-            return result;
-        }
-        
-        final Map<String, Object> data = new HashMap<>();
-        data.put("name", name);
-        data.put("phone", phone);
-        data.put("email", email);
-        data.put("subject", subject);
-        data.put("body", message);
-
-
-        for (final Map.Entry<String, Object> entry : data.entrySet()) {
-            final String val = (String) entry.getValue();
-            if (StringUtils.isBlank(val)) {
-
-                return new AuthenticationResultRO(entry.getKey() + "_FAILED");
-
-            }
-        }
-
-
-        customerServiceFacade.registerEmailRequest(shop, email, data);
-
-        return new AuthenticationResultRO();
-
-    }
-
 
 
     /**

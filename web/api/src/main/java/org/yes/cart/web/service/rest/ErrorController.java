@@ -16,10 +16,9 @@
 
 package org.yes.cart.web.service.rest;
 
-import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +30,7 @@ import java.io.IOException;
  * Time: 19:28
  */
 @Controller
-@Api(value = "Error", tags = "error")
+@ApiIgnore
 @RequestMapping("/error")
 public class ErrorController {
 
@@ -56,7 +55,33 @@ public class ErrorController {
         response.setCharacterEncoding("UTF-8");
 
         final StringBuilder error = new StringBuilder();
-        error.append("{\"error\":\"Bad input").append("\"}");
+        error.append("{\"error\":\"Bad input\"}");
+        response.getWriter().write(error.toString());
+
+    }
+
+    @RequestMapping(value = "/401")
+    public void error401(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        final StringBuilder error = new StringBuilder();
+        error.append("{\"error\":\"Unauthorized\"}");
+        response.getWriter().write(error.toString());
+
+    }
+
+    @RequestMapping(value = "/403")
+    public void error403(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        final StringBuilder error = new StringBuilder();
+        error.append("{\"error\":\"Forbidden\"}");
         response.getWriter().write(error.toString());
 
     }
@@ -69,7 +94,7 @@ public class ErrorController {
         response.setCharacterEncoding("UTF-8");
 
         final StringBuilder error = new StringBuilder();
-        error.append("{\"error\":\"Server error").append("\"}");
+        error.append("{\"error\":\"Server error\"}");
         response.getWriter().write(error.toString());
 
     }

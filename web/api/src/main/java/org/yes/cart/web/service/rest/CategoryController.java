@@ -17,6 +17,8 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -45,7 +47,7 @@ import java.util.*;
  * Time: 23:42
  */
 @Controller
-@Api(value = "Category", tags = "category")
+@Api(value = "Category", description = "Category controller", tags = "category")
 @RequestMapping("/categories")
 public class CategoryController {
 
@@ -87,7 +89,7 @@ public class CategoryController {
     }
 
     /**
-     * Interface: GET /api/rest/category/menu
+     * Interface: GET /api/rest/categories/menu
      * <p>
      * <p>
      * Display top category menu. uitemplate is taken from the object without failover.
@@ -155,12 +157,13 @@ public class CategoryController {
      *
      * @return category object
      */
+    @ApiOperation(value = "Display top category menu. uitemplate is taken from the object without failover.")
     @RequestMapping(
             value = "/menu",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody List<CategoryRO> listRoot(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody List<CategoryRO> listRoot(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                    final HttpServletRequest request,
                                                    final HttpServletResponse response) {
 
@@ -172,7 +175,7 @@ public class CategoryController {
     }
 
     /**
-     * Interface: GET /api/rest/category/menu
+     * Interface: GET /api/rest/categories/menu
      * <p>
      * <p>
      * Display top category menu. uitemplate is taken from the object without failover.
@@ -251,13 +254,13 @@ public class CategoryController {
      *
      * @return category object
      */
-
+    @ApiOperation(value = "Display top category menu. uitemplate is taken from the object without failover.")
     @RequestMapping(
             value = "/menu",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
-    public @ResponseBody CategoryListRO listRootXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody CategoryListRO listRootXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                     final HttpServletRequest request,
                                                     final HttpServletResponse response) {
 
@@ -271,7 +274,7 @@ public class CategoryController {
 
 
     /**
-     * Interface: GET /api/rest/category/view/{id}
+     * Interface: GET /api/rest/categories/{id}/view
      * <p>
      * <p>
      * Display category. uitemplate is is correctly resolved using central view resolver.
@@ -392,13 +395,14 @@ public class CategoryController {
      *
      * @return category object
      */
+    @ApiOperation(value = "Display category. uitemplate is is correctly resolved using central view resolver.")
     @RequestMapping(
-            value = "/view/{id}",
+            value = "/{id}/view",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CategoryRO viewCategory(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                 final @PathVariable(value = "id") String category,
+    public @ResponseBody CategoryRO viewCategory(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                 final @ApiParam(value = "Category ID or URI") @PathVariable(value = "id") String category,
                                                  final HttpServletRequest request,
                                                  final HttpServletResponse response) {
 
@@ -464,7 +468,7 @@ public class CategoryController {
 
 
     /**
-     * Interface: GET /api/rest/category/menu/{id}
+     * Interface: GET /api/rest/categories/{id}/menu
      * <p>
      * <p>
      * Display category menu. uitemplate is taken from the object without failover.
@@ -536,13 +540,14 @@ public class CategoryController {
      *
      * @return category object
      */
+    @ApiOperation(value = "Display category menu. uitemplate is taken from the object without failover.")
     @RequestMapping(
-            value = "/menu/{id}",
+            value = "/{id}/menu",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody List<CategoryRO> listCategory(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                       final @PathVariable(value = "id") String category,
+    public @ResponseBody List<CategoryRO> listCategory(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                       final @ApiParam(value = "Category ID or URI") @PathVariable(value = "id") String category,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -554,7 +559,7 @@ public class CategoryController {
     }
 
     /**
-     * Interface: GET /api/rest/category/menu/{id}
+     * Interface: GET /api/rest/categories/{id}/menu
      * <p>
      * <p>
      * Display category menu. uitemplate is taken from the object without failover.
@@ -634,12 +639,13 @@ public class CategoryController {
      *
      * @return category object
      */
+    @ApiOperation(value = "Display category menu. uitemplate is taken from the object without failover.")
     @RequestMapping(
-            value = "/menu/{id}",
+            value = "/{id}/menu",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
-    public @ResponseBody CategoryListRO listCategoryXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody CategoryListRO listCategoryXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                         final @PathVariable(value = "id") String category,
                                                         final HttpServletRequest request,
                                                         final HttpServletResponse response) {

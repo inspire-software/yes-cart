@@ -17,6 +17,8 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -59,7 +61,7 @@ import java.util.*;
  * Time: 17:30
  */
 @Controller
-@Api(value = "Cart", tags = "cart")
+@Api(value = "Cart", description = "Current customer cart controller", tags = "cart")
 public class CartController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CartController.class);
@@ -293,19 +295,21 @@ public class CartController {
      *
      * @return cart object
      */
+    @ApiOperation(value = "Display current cart.")
     @RequestMapping(
             value = "/cart",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO viewCart(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody CartRO viewCart(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                         final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
                                          final HttpServletRequest request,
                                          final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
-        if (Boolean.valueOf(request.getParameter("updatePrices"))) {
+        if (updatePrices) {
             shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
                     cart,
                     Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
@@ -412,7 +416,7 @@ public class CartController {
 
 
     /**
-     * Interface: PUT /api/rest/cart
+     * Interface: POST /api/rest/cart
      * <p>
      * <p>
      * Display current cart.
@@ -612,26 +616,28 @@ public class CartController {
      *
      * @return cart object
      */
+    @ApiOperation(value = "Perform cart command")
     @RequestMapping(
             value = "/cart",
-            method = RequestMethod.PUT,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
-            consumes = { MediaType.APPLICATION_JSON_VALUE }
+            method = RequestMethod.POST,
+            consumes = { MediaType.APPLICATION_JSON_VALUE },
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO command(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                        final @RequestBody Map<String, Object> params,
+    public @ResponseBody CartRO command(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                        final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
+                                        final @ApiParam(value = "Command") @RequestBody Map<String, Object> params,
                                         final HttpServletRequest request,
                                         final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         commandInternalRun(params);
-        return viewCart(requestToken, request, response);
+        return viewCart(requestToken, updatePrices, request, response);
 
     }
 
 
     /**
-     * Interface: PUT /api/rest/cart
+     * Interface: POST /api/rest/cart
      * <p>
      * <p>
      * Display current cart.
@@ -833,20 +839,22 @@ public class CartController {
      *
      * @return cart object
      */
+    @ApiOperation(value = "Perform cart command")
     @RequestMapping(
             value = "/cart",
-            method = RequestMethod.PUT,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
-            consumes = { MediaType.APPLICATION_XML_VALUE }
+            method = RequestMethod.POST,
+            consumes = { MediaType.APPLICATION_XML_VALUE },
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO commandXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                           final @RequestBody XMLParamsRO params,
+    public @ResponseBody CartRO commandXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                           final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
+                                           final @ApiParam(value = "Command") @RequestBody XMLParamsRO params,
                                            final HttpServletRequest request,
                                            final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         commandInternalRun((Map) params.getParameters());
-        return viewCart(requestToken, request, response);
+        return viewCart(requestToken, updatePrices, request, response);
 
     }
 
@@ -947,12 +955,13 @@ public class CartController {
      *
      * @return list of carriers and SLA
      */
+    @ApiOperation(value = "Display shipping methods available.")
     @RequestMapping(
             value = "/cart/options/shipping",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<CartCarrierRO> cartCarrierOptions(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody List<CartCarrierRO> cartCarrierOptions(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                                 final HttpServletRequest request,
                                                                 final HttpServletResponse response) {
 
@@ -1007,12 +1016,13 @@ public class CartController {
      *
      * @return list of carriers and SLA
      */
+    @ApiOperation(value = "Display shipping methods available.")
     @RequestMapping(
             value = "/cart/options/shipping",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartCarrierListRO cartCarrierOptionsXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody CartCarrierListRO cartCarrierOptionsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                                  final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
 
@@ -1024,7 +1034,7 @@ public class CartController {
     }
 
     /**
-     * Interface: PUT /api/rest/cart/options/shipping
+     * Interface: POST /api/rest/cart/options/shipping
      * <p>
      * <p>
      * Set shipping method.
@@ -1244,14 +1254,16 @@ public class CartController {
      *
      * @return cart object
      */
+    @ApiOperation(value = "Set shipping method.")
     @RequestMapping(
             value = "/cart/options/shipping",
-            method = RequestMethod.PUT,
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO cartCarrierOptionsSet(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @RequestBody ShippingOptionRO shippingOption,
+    public @ResponseBody CartRO cartCarrierOptionsSet(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
+                                                      final @ApiParam(value = "Shipping option") @RequestBody ShippingOptionRO shippingOption,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -1362,7 +1374,7 @@ public class CartController {
 
         }
 
-        return viewCart(requestToken, request, response);
+        return viewCart(requestToken, updatePrices, request, response);
 
     }
 
@@ -1379,7 +1391,7 @@ public class CartController {
     }
 
     /**
-     * Interface: GET /api/rest/cart/options/address/{type}
+     * Interface: GET /api/rest/cart/options/addresses/{type}
      * <p>
      * <p>
      * Display customer address book.
@@ -1432,13 +1444,14 @@ public class CartController {
      *
      * @return list of addresses
      */
+    @ApiOperation(value = "Display customer address book.", tags = { "addressbook", "cart" })
     @RequestMapping(
-            value = "/cart/options/address/{type}",
+            value = "/cart/options/addresses/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<AddressRO> cartAddressOptions(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                            final @PathVariable(value = "type") String type,
+    public @ResponseBody List<AddressRO> cartAddressOptions(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                            final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                             final HttpServletRequest request,
                                                             final HttpServletResponse response) {
 
@@ -1498,13 +1511,14 @@ public class CartController {
      *
      * @return list of addresses
      */
+    @ApiOperation(value = "Display customer address book.", tags = { "addressbook", "cart" })
     @RequestMapping(
-            value = "/cart/options/address/{type}",
+            value = "/cart/options/addresses/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AddressListRO cartAddressOptionsXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                             final @PathVariable(value = "type") String type,
+    public @ResponseBody AddressListRO cartAddressOptionsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                             final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                              final HttpServletRequest request,
                                                              final HttpServletResponse response) {
 
@@ -1516,10 +1530,10 @@ public class CartController {
 
 
     /**
-     * Interface: PUT /api/rest/cart/options/address/{type}
+     * Interface: POST /api/rest/cart/options/addresses/{type}
      * <p>
      * <p>
-     * Set shipping method.
+     * Set address from address book.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -1724,15 +1738,17 @@ public class CartController {
      *
      * @return cart object
      */
+    @ApiOperation(value = "Set address from address book.", tags = { "addressbook", "cart" })
     @RequestMapping(
-            value = "/cart/options/address/{type}",
-            method = RequestMethod.PUT,
+            value = "/cart/options/addresses/{type}",
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO cartAddressOptions(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                   final @PathVariable(value = "type") String type,
-                                                   final @RequestBody AddressOptionRO option,
+    public @ResponseBody CartRO cartAddressOptions(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                   final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+                                                   final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
+                                                   final @ApiParam(value = "Address option") @RequestBody AddressOptionRO option,
                                                    final HttpServletRequest request,
                                                    final HttpServletResponse response) {
 
@@ -1776,7 +1792,7 @@ public class CartController {
                 }
             }
         }
-        return viewCart(requestToken, request, response);
+        return viewCart(requestToken, updatePrices, request, response);
 
     }
 
@@ -1842,12 +1858,13 @@ public class CartController {
      *
      * @return list of payment gateways options
      */
+    @ApiOperation(value = "Display payment gateways available.")
     @RequestMapping(
             value = "/cart/options/payment",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<PaymentGatewayRO> cartPaymentOptions(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody List<PaymentGatewayRO> cartPaymentOptions(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                                    final HttpServletRequest request,
                                                                    final HttpServletResponse response) {
 
@@ -1896,12 +1913,13 @@ public class CartController {
      *
      * @return list of payment gateways options
      */
+    @ApiOperation(value = "Display payment gateways available.")
     @RequestMapping(
             value = "/cart/options/payment",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody PaymentGatewayListRO cartPaymentOptionsXML(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody PaymentGatewayListRO cartPaymentOptionsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                                     final HttpServletRequest request,
                                                                     final HttpServletResponse response) {
 
@@ -1913,7 +1931,7 @@ public class CartController {
 
 
     /**
-     * Interface: PUT /api/rest/cart/options/payment
+     * Interface: POST /api/rest/cart/options/payment
      * <p>
      * <p>
      * Set payment option for current cart.
@@ -2119,13 +2137,15 @@ public class CartController {
      *
      * @return cart object
      */
+    @ApiOperation(value = "Set payment option for current cart.")
     @RequestMapping(
             value = "/cart/options/payment",
-            method = RequestMethod.PUT,
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO cartPaymentOptionsSet(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @RequestBody PaymentGatewayOptionRO option,
+    public @ResponseBody CartRO cartPaymentOptionsSet(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
+                                                      final @ApiParam(value = "Payment option") @RequestBody PaymentGatewayOptionRO option,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -2143,14 +2163,14 @@ public class CartController {
             }
         }
 
-        return viewCart(requestToken, request, response);
+        return viewCart(requestToken, updatePrices, request, response);
 
     }
 
 
 
     /**
-     * Interface: GET /api/rest/cart/validate
+     * Interface: POST /api/rest/cart/validate
      * <p>
      * <p>
      * Display cart validation result.
@@ -2200,12 +2220,15 @@ public class CartController {
      *
      * @return list of payment gateways options
      */
+    @ApiOperation(value = "Display cart validation result. " +
+            "\"checkoutBlocked=true\" indicates that checkout should not be engaged as there is a problem with cart contents, " +
+            "\"checkoutBlocked=false\" indicates that cart is valid")
     @RequestMapping(
             value = "/cart/validate",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartValidationRO cartValidate(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody CartValidationRO cartValidate(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -2239,7 +2262,7 @@ public class CartController {
 
 
     /**
-     * Interface: PUT /order/preview
+     * Interface: POST /order/preview
      * <p>
      * <p>
      * Create order preview (temporary order that is ready to be paid).
@@ -2466,13 +2489,14 @@ public class CartController {
      *
      * @return order preview object
      */
+    @ApiOperation(value = "Create order preview from cart (temporary order that is ready to be paid).", tags = { "orders", "cart" })
     @RequestMapping(
             value = "/order/preview",
-            method = RequestMethod.PUT,
+            method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody OrderPreviewRO orderPreview(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                     final @RequestBody OrderDeliveryOptionRO option,
+    public @ResponseBody OrderPreviewRO orderPreview(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                     final @ApiParam(value = "Delivery options") @RequestBody OrderDeliveryOptionRO option,
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
@@ -2877,12 +2901,13 @@ public class CartController {
      *
      * @return order placed object
      */
+    @ApiOperation(value = "Submit payment for internal payment processor and place order.", tags = { "orders", "cart" })
     @RequestMapping(
             value = "/order/place",
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody OrderPlacedRO orderPlace(final @RequestHeader(value = "yc", required = false) String requestToken,
+    public @ResponseBody OrderPlacedRO orderPlace(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                   final HttpServletRequest request,
                                                   final HttpServletResponse response) {
 

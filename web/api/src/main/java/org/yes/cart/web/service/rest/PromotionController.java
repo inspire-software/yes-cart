@@ -17,6 +17,8 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -41,7 +43,7 @@ import java.util.Map;
  * Time: 16:14
  */
 @Controller
-@Api(value = "Promotion", tags = "promotion")
+@Api(value = "Promotion", description = "Promotion controller", tags = "promotions")
 public class PromotionController {
 
     @Autowired
@@ -105,14 +107,15 @@ public class PromotionController {
      *
      * @return promotions
      */
+    @ApiOperation(value = "Display promotion details.")
     @RequestMapping(
-            value = "/promotions/{ids}",
+            value = "/promotions/{codes}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
     public @ResponseBody
-    List<PromotionRO> viewProducts(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                   final @PathVariable(value = "ids") String promotions,
+    List<PromotionRO> viewProducts(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                   final @ApiParam(value = "CSV of promotion codes") @PathVariable(value = "codes") String promotions,
                                    final HttpServletRequest request,
                                    final HttpServletResponse response) {
 
@@ -172,14 +175,15 @@ public class PromotionController {
      *
      * @return promotions
      */
+    @ApiOperation(value = "Display promotion details.")
     @RequestMapping(
-            value = "/promotions/{ids}",
+            value = "/promotions/{codes}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody
-    PromotionListRO viewProductsXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                    final @PathVariable(value = "ids") String promotions,
+    PromotionListRO viewProductsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                    final @ApiParam(value = "CSV of promotion codes") @PathVariable(value = "codes") String promotions,
                                     final HttpServletRequest request,
                                     final HttpServletResponse response) {
 

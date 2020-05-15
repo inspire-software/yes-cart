@@ -44,8 +44,9 @@ public class Swagger2 {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("org.yes.cart.web.service.rest"))
-                .paths(PathSelectors.any())
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.regex("(?!/error).+"))
+                .paths(PathSelectors.regex("(?!/connector).+"))
                 .build()
                 .apiInfo(apiInfo());
     }

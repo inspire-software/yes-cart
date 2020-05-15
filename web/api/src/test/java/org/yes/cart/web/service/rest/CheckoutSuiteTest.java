@@ -76,7 +76,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
 
         final MvcResult regResult =
-                mockMvc.perform(put("/auth/register")
+                mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .locale(locale)
@@ -109,7 +109,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(put("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -125,7 +125,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         matcherS.find();
         final String shippingAddressId = matcherS.group(1);
 
-        mockMvc.perform(get("/cart/options/address/S")
+        mockMvc.perform(get("/cart/options/addresses/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -137,7 +137,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(put("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -153,7 +153,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         matcherB.find();
         final String billingAddressId = matcherB.group(1);
 
-        mockMvc.perform(get("/cart/options/address/B")
+        mockMvc.perform(get("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -163,7 +163,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("GB")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -180,7 +180,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -198,7 +198,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -214,7 +214,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         shipAddressOptionRO.setAddressId(shippingAddressId);
         final byte[] setShippingCart = toJsonBytes(shipAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/S")
+        mockMvc.perform(post("/cart/options/addresses/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -231,7 +231,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionRO.setAddressId(billingAddressId);
         final byte[] setBillingCart = toJsonBytes(billAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -250,7 +250,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionROSame.setShippingSameAsBilling(true);
         final byte[] setBillingSameCart = toJsonBytes(billAddressOptionROSame);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -287,7 +287,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
-        mockMvc.perform(put("/cart/options/shipping")
+        mockMvc.perform(post("/cart/options/shipping")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -306,7 +306,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -333,7 +333,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] pgOptionBody = toJsonBytes(pgOption);
 
-        mockMvc.perform(put("/cart/options/payment")
+        mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -348,7 +348,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] delOptionBody = toJsonBytes(delOption);
 
-        mockMvc.perform(put("/order/preview")
+        mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -414,7 +414,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
 
         final MvcResult regResult =
-                mockMvc.perform(put("/auth/register")
+                mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .locale(locale)
@@ -447,7 +447,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(put("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -463,7 +463,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         matcherS.find();
         final String shippingAddressId = matcherS.group(1);
 
-        mockMvc.perform(get("/cart/options/address/S")
+        mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -475,7 +475,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(put("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -491,7 +491,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         matcherB.find();
         final String billingAddressId = matcherB.group(1);
 
-        mockMvc.perform(get("/cart/options/address/B")
+        mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -501,7 +501,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("GB")))
                 .andExpect(header().string("yc", uuid));
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -517,7 +517,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -535,7 +535,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -550,7 +550,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         shipAddressOptionRO.setAddressId(shippingAddressId);
         final byte[] setShippingCart = toJsonBytes(shipAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/S")
+        mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -567,7 +567,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionRO.setAddressId(billingAddressId);
         final byte[] setBillingCart = toJsonBytes(billAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -586,7 +586,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionROSame.setShippingSameAsBilling(true);
         final byte[] setBillingSameCart = toJsonBytes(billAddressOptionROSame);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -624,7 +624,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
-        mockMvc.perform(put("/cart/options/shipping")
+        mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -643,7 +643,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -670,7 +670,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] pgOptionBody = toJsonBytes(pgOption);
 
-        mockMvc.perform(put("/cart/options/payment")
+        mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -685,7 +685,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] delOptionBody = toJsonBytes(delOption);
 
-        mockMvc.perform(put("/order/preview")
+        mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -767,21 +767,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
-        try {
-            mockMvc.perform(put("/customer/addressbook/S")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .header("yc", uuid)
-                    .content(shippingAddress))
-                    .andDo(print());
-            fail("Cannot update address for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+        mockMvc.perform(post("/customer/addressbook/S")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid)
+                .content(shippingAddress))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
 
-        mockMvc.perform(get("/cart/options/address/S")
+        mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -793,20 +789,16 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
 
-        try {
-            mockMvc.perform(put("/customer/addressbook/B")
+        mockMvc.perform(post("/customer/addressbook/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .header("yc", uuid)
                 .content(billingAddress))
-                .andDo(print());
-            fail("Cannot update address for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
-        mockMvc.perform(get("/cart/options/address/B")
+        mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -817,7 +809,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -834,7 +826,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -850,7 +842,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -865,7 +857,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         shipAddressOptionRO.setAddressId("10");
         final byte[] setShippingCart = toJsonBytes(shipAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/S")
+        mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -882,7 +874,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionRO.setAddressId("10");
         final byte[] setBillingCart = toJsonBytes(billAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -901,7 +893,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionROSame.setShippingSameAsBilling(true);
         final byte[] setBillingSameCart = toJsonBytes(billAddressOptionROSame);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -938,7 +930,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
-        mockMvc.perform(put("/cart/options/shipping")
+        mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -957,7 +949,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -983,7 +975,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] pgOptionBody = toJsonBytes(pgOption);
 
-        mockMvc.perform(put("/cart/options/payment")
+        mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -998,57 +990,39 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] delOptionBody = toJsonBytes(delOption);
 
-        try {
-            mockMvc.perform(put("/order/preview")
+        mockMvc.perform(post("/order/preview")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
                     .header("yc", uuid)
                     .content(delOptionBody))
-                .andDo(print());
-            fail("Cannot preview for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                    .andDo(print())
+                    .andExpect(status().is4xxClientError());
 
-
-        try {
-            mockMvc.perform(post("/order/place")
+        mockMvc.perform(post("/order/place")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
                     .header("yc", uuid))
-                .andDo(print());
-            fail("Cannot place order for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                    .andDo(print())
+                    .andExpect(status().is4xxClientError());
 
 
-
-        try {
-            mockMvc.perform(get("/customer/orders")
+        mockMvc.perform(get("/customer/orders")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
                     .header("yc", uuid))
-                .andDo(print());
-            fail("Cannot view orders for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                    .andDo(print())
+                    .andExpect(status().is4xxClientError());
 
-        try {
-            mockMvc.perform(get("/customer/orders/2014-01-01")
+        mockMvc.perform(get("/customer/orders/2014-01-01")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .header("yc", uuid))
-                    .andDo(print());
-            fail("Cannot view orders for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
 
 
@@ -1066,7 +1040,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
 
         final MvcResult regResult =
-                mockMvc.perform(put("/auth/guest")
+                mockMvc.perform(post("/auth/guest")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .locale(locale)
@@ -1101,7 +1075,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(put("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1117,7 +1091,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         matcherS.find();
         final String shippingAddressId = matcherS.group(1);
 
-        mockMvc.perform(get("/cart/options/address/S")
+        mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1129,7 +1103,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(put("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1145,7 +1119,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         matcherB.find();
         final String billingAddressId = matcherB.group(1);
 
-        mockMvc.perform(get("/cart/options/address/B")
+        mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1156,7 +1130,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1173,7 +1147,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1191,7 +1165,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1206,7 +1180,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         shipAddressOptionRO.setAddressId(shippingAddressId);
         final byte[] setShippingCart = toJsonBytes(shipAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/S")
+        mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1223,7 +1197,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionRO.setAddressId(billingAddressId);
         final byte[] setBillingCart = toJsonBytes(billAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1242,7 +1216,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionROSame.setShippingSameAsBilling(true);
         final byte[] setBillingSameCart = toJsonBytes(billAddressOptionROSame);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1278,7 +1252,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
-        mockMvc.perform(put("/cart/options/shipping")
+        mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1297,7 +1271,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1324,7 +1298,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] pgOptionBody = toJsonBytes(pgOption);
 
-        mockMvc.perform(put("/cart/options/payment")
+        mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1339,7 +1313,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] delOptionBody = toJsonBytes(delOption);
 
-        mockMvc.perform(put("/order/preview")
+        mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1382,7 +1356,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
 
         final MvcResult regResult =
-                mockMvc.perform(put("/auth/register")
+                mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_XML)
                         .locale(locale)
@@ -1415,7 +1389,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(put("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1432,7 +1406,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         final String shippingAddressId = matcherS.group(1);
 
 
-        mockMvc.perform(get("/cart/options/address/S")
+        mockMvc.perform(get("/cart/options/addresses/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1445,7 +1419,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(put("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1461,7 +1435,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         matcherB.find();
         final String billingAddressId = matcherB.group(1);
 
-        mockMvc.perform(get("/cart/options/address/B")
+        mockMvc.perform(get("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1472,7 +1446,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1489,7 +1463,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1505,7 +1479,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1520,7 +1494,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         shipAddressOptionRO.setAddressId(shippingAddressId);
         final byte[] setShippingCart = toJsonBytes(shipAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/S")
+        mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1536,7 +1510,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionRO.setAddressId(billingAddressId);
         final byte[] setBillingCart = toJsonBytes(billAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1555,7 +1529,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionROSame.setShippingSameAsBilling(true);
         final byte[] setBillingSameCart = toJsonBytes(billAddressOptionROSame);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1591,7 +1565,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
-        mockMvc.perform(put("/cart/options/shipping")
+        mockMvc.perform(post("/cart/options/shipping")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1610,7 +1584,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1639,7 +1613,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] pgOptionBody = toJsonBytes(pgOption);
 
-        mockMvc.perform(put("/cart/options/payment")
+        mockMvc.perform(post("/cart/options/payment")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1654,7 +1628,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] delOptionBody = toJsonBytes(delOption);
 
-        mockMvc.perform(put("/order/preview")
+        mockMvc.perform(post("/order/preview")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1718,7 +1692,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
 
         final MvcResult regResult =
-                mockMvc.perform(put("/auth/register")
+                mockMvc.perform(post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_XML)
                         .locale(locale)
@@ -1751,7 +1725,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(put("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1768,7 +1742,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         final String shippingAddressId = matcherS.group(1);
 
 
-        mockMvc.perform(get("/cart/options/address/S")
+        mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1781,7 +1755,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(put("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1797,7 +1771,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         matcherB.find();
         final String billingAddressId = matcherB.group(1);
 
-        mockMvc.perform(get("/cart/options/address/B")
+        mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1808,7 +1782,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1825,7 +1799,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1840,7 +1814,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1855,7 +1829,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         shipAddressOptionRO.setAddressId(shippingAddressId);
         final byte[] setShippingCart = toJsonBytes(shipAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/S")
+        mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1871,7 +1845,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionRO.setAddressId(billingAddressId);
         final byte[] setBillingCart = toJsonBytes(billAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1890,7 +1864,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionROSame.setShippingSameAsBilling(true);
         final byte[] setBillingSameCart = toJsonBytes(billAddressOptionROSame);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1926,7 +1900,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
-        mockMvc.perform(put("/cart/options/shipping")
+        mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1945,7 +1919,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1974,7 +1948,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] pgOptionBody = toJsonBytes(pgOption);
 
-        mockMvc.perform(put("/cart/options/payment")
+        mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1989,7 +1963,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] delOptionBody = toJsonBytes(delOption);
 
-        mockMvc.perform(put("/order/preview")
+        mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2068,21 +2042,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
-        try {
-            mockMvc.perform(put("/customer/addressbook/S")
+        mockMvc.perform(post("/customer/addressbook/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid)
                 .content(shippingAddress))
-                .andDo(print());
-            fail("Cannot update address for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
 
-        mockMvc.perform(get("/cart/options/address/S")
+        mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2095,20 +2065,16 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
 
-        try {
-            mockMvc.perform(put("/customer/addressbook/B")
+        mockMvc.perform(post("/customer/addressbook/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid)
                 .content(billingAddress))
-                .andDo(print());
-            fail("Cannot update address for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
-        mockMvc.perform(get("/cart/options/address/B")
+        mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2125,7 +2091,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2143,7 +2109,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         shipAddressOptionRO.setAddressId("10");
         final byte[] setShippingCart = toJsonBytes(shipAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/S")
+        mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2162,7 +2128,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionRO.setAddressId("10");
         final byte[] setBillingCart = toJsonBytes(billAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2183,7 +2149,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionROSame.setShippingSameAsBilling(true);
         final byte[] setBillingSameCart = toJsonBytes(billAddressOptionROSame);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2221,7 +2187,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
-        mockMvc.perform(put("/cart/options/shipping")
+        mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2241,7 +2207,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2269,7 +2235,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] pgOptionBody = toJsonBytes(pgOption);
 
-        mockMvc.perform(put("/cart/options/payment")
+        mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2289,54 +2255,38 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] delOptionBody = toJsonBytes(delOption);
 
-        try {
-            mockMvc.perform(put("/order/preview")
+        mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid)
                 .content(delOptionBody))
-                .andDo(print());
-            fail("Cannot update address for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
-        try {
-            mockMvc.perform(post("/order/place")
+        mockMvc.perform(post("/order/place")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print());
-            fail("Cannot update address for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
-        try {
-            mockMvc.perform(get("/customer/orders")
+        mockMvc.perform(get("/customer/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print());
-            fail("Cannot update address for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
-        try {
-            mockMvc.perform(get("/customer/orders/2014-01-01")
+        mockMvc.perform(get("/customer/orders/2014-01-01")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print());
-            fail("Cannot update address for non-auth user");
-        } catch (Exception exp) {
-            assertTrue(exp.getCause() instanceof BadCredentialsException);
-        }
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
 
     }
 
@@ -2351,7 +2301,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
 
         final MvcResult regResult =
-                mockMvc.perform(put("/auth/guest")
+                mockMvc.perform(post("/auth/guest")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_XML)
                         .locale(locale)
@@ -2385,7 +2335,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(put("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2402,7 +2352,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         final String shippingAddressId = matcherS.group(1);
 
 
-        mockMvc.perform(get("/cart/options/address/S")
+        mockMvc.perform(get("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2415,7 +2365,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(put("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2431,7 +2381,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         matcherB.find();
         final String billingAddressId = matcherB.group(1);
 
-        mockMvc.perform(get("/cart/options/address/B")
+        mockMvc.perform(get("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2442,7 +2392,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2460,7 +2410,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2476,7 +2426,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/cart/validate")
+        mockMvc.perform(post("/cart/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2491,7 +2441,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         shipAddressOptionRO.setAddressId(shippingAddressId);
         final byte[] setShippingCart = toJsonBytes(shipAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/S")
+        mockMvc.perform(post("/cart/options/addresses/S")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2507,7 +2457,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionRO.setAddressId(billingAddressId);
         final byte[] setBillingCart = toJsonBytes(billAddressOptionRO);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2526,7 +2476,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         billAddressOptionROSame.setShippingSameAsBilling(true);
         final byte[] setBillingSameCart = toJsonBytes(billAddressOptionROSame);
 
-        mockMvc.perform(put("/cart/options/address/B")
+        mockMvc.perform(post("/cart/options/addresses/B")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2562,7 +2512,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
-        mockMvc.perform(put("/cart/options/shipping")
+        mockMvc.perform(post("/cart/options/shipping")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2581,7 +2531,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
         }});
 
-        mockMvc.perform(put("/cart")
+        mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2610,7 +2560,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] pgOptionBody = toJsonBytes(pgOption);
 
-        mockMvc.perform(put("/cart/options/payment")
+        mockMvc.perform(post("/cart/options/payment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2625,7 +2575,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
         final byte[] delOptionBody = toJsonBytes(delOption);
 
-        mockMvc.perform(put("/order/preview")
+        mockMvc.perform(post("/order/preview")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)

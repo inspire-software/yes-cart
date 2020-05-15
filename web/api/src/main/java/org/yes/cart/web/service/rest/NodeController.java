@@ -17,6 +17,7 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,7 @@ import org.yes.cart.cluster.node.Node;
  * Time: 21:45
  */
 @Controller
-@Api(value = "Node", tags = "node")
+@Api(value = "Node", description = "Node controller", tags = "node")
 @RequestMapping("/node")
 public class NodeController {
 
@@ -82,6 +83,7 @@ public class NodeController {
      * <p>
      * @return node information
      */
+    @ApiOperation(value = "Display node information.")
     @RequestMapping(
             value = "",
             method = RequestMethod.GET,

@@ -17,6 +17,8 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -50,7 +52,7 @@ import java.util.*;
  * Time: 23:42
  */
 @Controller
-@Api(value = "Content", tags = "content")
+@Api(value = "Content", description = "Content controller", tags = "content")
 @RequestMapping("/content")
 public class ContentController {
 
@@ -99,7 +101,7 @@ public class ContentController {
     }
 
     /**
-     * Interface: GET /api/rest/content/view/{id}
+     * Interface: GET /api/rest/content/{id}/view
      * <p>
      * <p>
      * Display content. uitemplate is is correctly resolved using central view resolver.
@@ -199,13 +201,14 @@ public class ContentController {
      *
      * @return content object
      */
+    @ApiOperation(value = "Display content. uitemplate is is correctly resolved using central view resolver.")
     @RequestMapping(
-            value = "/view/{id}",
+            value = "/{id}/view",
             method = RequestMethod.GET,
             produces =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ContentRO viewContent(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                               final @PathVariable(value = "id")String content,
+    public @ResponseBody ContentRO viewContent(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                               final @ApiParam(value = "Comntent ID or URI") @PathVariable(value = "id")String content,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
@@ -217,7 +220,7 @@ public class ContentController {
 
 
     /**
-     * Interface: PUT /api/rest/content/view/{id}
+     * Interface: POST /api/rest/content/{id}/view
      * <p>
      * <p>
      * Display dynamic content. uitemplate is is correctly resolved using central view resolver.
@@ -287,15 +290,16 @@ public class ContentController {
      *
      * @return content object
      */
+    @ApiOperation(value = "Display dynamic content. uitemplate is is correctly resolved using central view resolver.")
     @RequestMapping(
-            value = "/view/{id}",
-            method = RequestMethod.PUT,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            value = "/{id}/view",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ContentRO viewContent(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                               final @PathVariable(value = "id") String content,
-                                               final @RequestBody Map<String, Object> params,
+    public @ResponseBody ContentRO viewContent(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                               final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
+                                               final @ApiParam(value = "Dynamic parameters") @RequestBody Map<String, Object> params,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
@@ -306,7 +310,7 @@ public class ContentController {
     }
 
     /**
-     * Interface: PUT /api/rest/content/view/{id}
+     * Interface: POST /api/rest/content/{id}/view
      * <p>
      * <p>
      * Display dynamic content. uitemplate is is correctly resolved using central view resolver.
@@ -380,15 +384,16 @@ public class ContentController {
      *
      * @return content object
      */
+    @ApiOperation(value = "Display dynamic content. uitemplate is is correctly resolved using central view resolver.")
     @RequestMapping(
-            value = "/view/{id}",
-            method = RequestMethod.PUT,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
-            consumes = MediaType.APPLICATION_XML_VALUE
+            value = "/{id}/view",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_XML_VALUE,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ContentRO viewContentXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                  final @PathVariable(value = "id") String content,
-                                                  final @RequestBody XMLParamsRO params,
+    public @ResponseBody ContentRO viewContentXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                  final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
+                                                  final @ApiParam(value = "Dynamic parameters") @RequestBody XMLParamsRO params,
                                                   final HttpServletRequest request,
                                                   final HttpServletResponse response) {
 
@@ -429,7 +434,7 @@ public class ContentController {
     }
 
     /**
-     * Interface: GET /api/rest/content/menu/{id}
+     * Interface: GET /api/rest/content/{id}/menu
      * <p>
      * <p>
      * Display content menu. uitemplate is taken from the object without failover.
@@ -491,13 +496,14 @@ public class ContentController {
      *
      * @return content object
      */
+    @ApiOperation(value = "Display content menu. uitemplate is taken from the object without failover.")
     @RequestMapping(
-            value = "/menu/{id}",
+            value = "/{id}/menu",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody List<ContentRO> listContent(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                     final @PathVariable(value = "id") String content,
+    public @ResponseBody List<ContentRO> listContent(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                     final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
@@ -509,7 +515,7 @@ public class ContentController {
     }
 
     /**
-     * Interface: GET /api/rest/content/menu/{id}
+     * Interface: GET /api/rest/content/{id}/menu
      * <p>
      * <p>
      * Display content menu. uitemplate is taken from the object without failover.
@@ -578,13 +584,14 @@ public class ContentController {
      *
      * @return content object
      */
+    @ApiOperation(value = "Display content menu. uitemplate is taken from the object without failover.")
     @RequestMapping(
-            value = "/menu/{id}",
+            value = "/{id}/menu",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
-    public @ResponseBody ContentListRO listContentXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @PathVariable(value = "id") String content,
+    public @ResponseBody ContentListRO listContentXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 

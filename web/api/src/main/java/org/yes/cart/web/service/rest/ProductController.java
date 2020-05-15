@@ -17,8 +17,9 @@
 package org.yes.cart.web.service.rest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -55,7 +56,7 @@ import java.util.Map;
  * Time: 10:43
  */
 @Controller
-@Api(value = "Product", tags = "product")
+@Api(value = "Product", description = "Products controller", tags = "product")
 public class ProductController {
 
     @Autowired
@@ -474,14 +475,15 @@ public class ProductController {
      *
      * @return product
      */
+    @ApiOperation(value = "Display full product details.")
     @RequestMapping(
             value = "/products/{id}/supplier/{supplier}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductRO viewProduct(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                               final @PathVariable(value = "id") String product,
-                                               final @PathVariable(value = "supplier") String supplier,
+    public @ResponseBody ProductRO viewProduct(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                               final @ApiParam(value = "Product ID or URI") @PathVariable(value = "id") String product,
+                                               final @ApiParam(value = "Supplier code (Fulfilment centre)") @PathVariable(value = "supplier") String supplier,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
@@ -719,13 +721,15 @@ public class ProductController {
      *
      * @return product
      */
+    @ApiOperation(value = "Display full product details.", tags = { "product", "search" })
     @RequestMapping(
             value = "/products/list",
             method = RequestMethod.POST,
+            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductRO> viewProducts(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @RequestBody ProductReferenceListRO products,
+    public @ResponseBody List<ProductRO> viewProducts(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @ApiParam(value = "List of product references") @RequestBody ProductReferenceListRO products,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
@@ -912,13 +916,15 @@ public class ProductController {
      *
      * @return product
      */
+    @ApiOperation(value = "Display full product details.", tags = { "product", "search" })
     @RequestMapping(
             value = "/products/list",
             method = RequestMethod.POST,
+            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductListRO viewProductsXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                       final @RequestBody ProductReferenceListRO products,
+    public @ResponseBody ProductListRO viewProductsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                       final @ApiParam(value = "List of product references") @RequestBody ProductReferenceListRO products,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -1032,14 +1038,15 @@ public class ProductController {
      *
      * @return list of products
      */
+    @ApiOperation(value = "Display list of associated products.")
     @RequestMapping(
             value = "/products/{id}/associations/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductSearchResultRO> viewProductAssociations(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                             final @PathVariable(value = "id") String product,
-                                                                             final @PathVariable(value = "type") String type,
+    public @ResponseBody List<ProductSearchResultRO> viewProductAssociations(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                             final @ApiParam(value = "Product ID or URI") @PathVariable(value = "id") String product,
+                                                                             final @ApiParam(value = "Association type code") @PathVariable(value = "type") String type,
                                                                              final HttpServletRequest request,
                                                                              final HttpServletResponse response) {
 
@@ -1128,14 +1135,15 @@ public class ProductController {
      *
      * @return list of products
      */
+    @ApiOperation(value = "Display list of associated products.")
     @RequestMapping(
             value = "/products/{id}/associations/{type}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductSearchResultListRO viewProductAssociationsXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                              final @PathVariable(value = "id") String product,
-                                                                              final @PathVariable(value = "type") String type,
+    public @ResponseBody ProductSearchResultListRO viewProductAssociationsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                              final @ApiParam(value = "Product ID or URI") @PathVariable(value = "id") String product,
+                                                                              final @ApiParam(value = "Association type code") @PathVariable(value = "type") String type,
                                                                               final HttpServletRequest request,
                                                                               final HttpServletResponse response) {
 
@@ -1226,7 +1234,7 @@ public class ProductController {
      * Interface: GET /skus/{id}/supplier/{supplier}
      * <p>
      * <p>
-     * Display full product details.
+     * Display full SKU details.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -1373,14 +1381,15 @@ public class ProductController {
      *
      * @return product sku
      */
+    @ApiOperation(value = "Display full SKU details.")
     @RequestMapping(
             value = "/skus/{id}/supplier/{supplier}",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductSkuRO viewSku(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                              final @PathVariable(value = "id") String sku,
-                                              final @PathVariable(value = "supplier") String supplier,
+    public @ResponseBody ProductSkuRO viewSku(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                              final @ApiParam(value = "SKU ID or URI") @PathVariable(value = "id") String sku,
+                                              final @ApiParam(value = "Supplier code (Fulfilment centre)") @PathVariable(value = "supplier") String supplier,
                                               final HttpServletRequest request,
                                               final HttpServletResponse response) {
 
@@ -1416,7 +1425,7 @@ public class ProductController {
      * Interface: POST /skus/list
      * <p>
      * <p>
-     * Display full product details.
+     * Display full SKU details.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -1528,13 +1537,15 @@ public class ProductController {
      *
      * @return product sku
      */
+    @ApiOperation(value = "Display full SKU details.", tags = { "product", "search" })
     @RequestMapping(
             value = "/skus/list",
             method = RequestMethod.POST,
+            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductSkuRO> viewSkus(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                     final @RequestBody ProductReferenceListRO skus,
+    public @ResponseBody List<ProductSkuRO> viewSkus(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                     final @ApiParam(value = "List of SKU references") @RequestBody ProductReferenceListRO skus,
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
@@ -1548,7 +1559,7 @@ public class ProductController {
      * Interface: POST /skus/list
      * <p>
      * <p>
-     * Display full product details.
+     * Display full SKU details.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -1647,13 +1658,15 @@ public class ProductController {
      *
      * @return product sku
      */
+    @ApiOperation(value = "Display full SKU details.", tags = { "product", "search" })
     @RequestMapping(
             value = "/skus/list",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
+            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductSkuListRO viewSkusXML(final @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @RequestBody ProductReferenceListRO skus,
+    public @ResponseBody ProductSkuListRO viewSkusXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                      final @ApiParam(value = "List of SKU references") @RequestBody ProductReferenceListRO skus,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
