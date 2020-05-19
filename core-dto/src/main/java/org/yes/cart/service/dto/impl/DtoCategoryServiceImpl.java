@@ -356,6 +356,10 @@ public class DtoCategoryServiceImpl
                         currentFilter.put("categoryId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(parentCatId)));
                         currentFilter.put("parentId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(parentCatId)));
 
+                    } else {
+
+                        return new SearchResult<>(filter, Collections.emptyList(), 0);
+
                     }
 
                 }
