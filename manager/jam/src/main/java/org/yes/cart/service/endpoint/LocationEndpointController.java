@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,66 +33,85 @@ import java.util.List;
  * Time: 15:32
  */
 @Controller
-@Api(value = "Location", tags = "location")
-@RequestMapping("/location")
+@Api(value = "Location", description = "Location controller", tags = "location")
+@RequestMapping("/locations")
 public interface LocationEndpointController {
 
+
+    @ApiOperation(value = "Countries search")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/country/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/countries/search", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoSearchResult<VoCountryInfo> getFilteredCountries(@RequestBody VoSearchContext filter) throws Exception;
+    VoSearchResult<VoCountryInfo> getFilteredCountries(@ApiParam(
+            value = "Search criteria with the following parameter support:" +
+                    "\n* filter - text filter expands to 'countryCode', 'isoCode', 'name' and 'guid'", name = "filter")
+                                                       @RequestBody VoSearchContext filter) throws Exception;
 
+    @ApiOperation(value = "Retrieve country")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/country/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/countries/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCountry getCountryById(@PathVariable("id") long id) throws Exception;
+    VoCountry getCountryById(@ApiParam(value = "Country ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Create country")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/country", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/countries", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCountry createCountry(@RequestBody VoCountry voCountry)  throws Exception;
+    VoCountry createCountry(@ApiParam(value = "Country", name = "vo", required = true) @RequestBody VoCountry voCountry)  throws Exception;
 
+    @ApiOperation(value = "Update country")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/country", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/countries", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCountry updateCountry(@RequestBody VoCountry voCountry)  throws Exception;
+    VoCountry updateCountry(@ApiParam(value = "Country", name = "vo", required = true) @RequestBody VoCountry voCountry)  throws Exception;
 
+    @ApiOperation(value = "Delete country")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/country/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/countries/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    void removeCountry(@PathVariable("id") long id) throws Exception;
+    void removeCountry(@ApiParam(value = "Country ID", required = true) @PathVariable("id") long id) throws Exception;
 
 
+    @ApiOperation(value = "Retrieve country states")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/country/state/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/countries/{id}/states", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoState> getCountryStatesAll(@PathVariable("id") long id) throws Exception;
+    List<VoState> getCountryStatesAll(@ApiParam(value = "Country ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "States search")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/country/state/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/states/search", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoSearchResult<VoState> getFilteredStates(@RequestBody VoSearchContext filter) throws Exception;
+    VoSearchResult<VoState> getFilteredStates(@ApiParam(
+            value = "Search criteria with the following parameter support:" +
+                    "\n* filter - text filter expands to 'countryCode', 'stateCode', 'name' and 'guid'" +
+                    "\n* countryCodes - optional list of code to limit search", name = "filter")
+                                              @RequestBody VoSearchContext filter) throws Exception;
 
+    @ApiOperation(value = "Retrieve state")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/state/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/states/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoState getStateById(@PathVariable("id") long id) throws Exception;
+    VoState getStateById(@ApiParam(value = "State ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Create state")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/state", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/states", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoState createState(@RequestBody VoState voState)  throws Exception;
+    VoState createState(@ApiParam(value = "State", name = "vo", required = true) @RequestBody VoState voState)  throws Exception;
 
 
+    @ApiOperation(value = "Update state")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/state", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/states", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoState updateState(@RequestBody VoState voState)  throws Exception;
+    VoState updateState(@ApiParam(value = "State", name = "vo", required = true) @RequestBody VoState voState)  throws Exception;
 
 
+    @ApiOperation(value = "Delete state")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/state/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/states/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    void removeState(@PathVariable("id") long id) throws Exception;
+    void removeState(@ApiParam(value = "State ID", required = true) @PathVariable("id") long id) throws Exception;
 
 }

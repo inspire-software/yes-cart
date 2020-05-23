@@ -162,10 +162,8 @@ public class DtoProductServiceImpl
     }
 
     private final static char[] TAG_OR_CODE_OR_BRAND_OR_TYPE = new char[] { '#', '?', '!', '^', '*' };
-    private final static char[] AVAILABILITY = new char[] { '@' };
     static {
         Arrays.sort(TAG_OR_CODE_OR_BRAND_OR_TYPE);
-        Arrays.sort(AVAILABILITY);
     }
 
 

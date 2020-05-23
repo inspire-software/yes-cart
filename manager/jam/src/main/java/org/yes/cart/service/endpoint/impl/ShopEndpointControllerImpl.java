@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
@@ -100,7 +101,7 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     @Override
     public @ResponseBody
-    VoShopSummary getSummary(@PathVariable("id") final long id, @PathVariable("lang") final String lang) throws Exception {
+    VoShopSummary getSummary(@PathVariable("id") final long id, @RequestParam("lang") final String lang) throws Exception {
 
         final VoShopSummary summary = new VoShopSummary();
         voShopService.fillShopSummaryDetails(summary, id, lang);
@@ -115,7 +116,7 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     @Override
     public @ResponseBody
-    VoShopSeo getLocalization(@PathVariable("shopId") final long shopId) throws Exception {
+    VoShopSeo getLocalization(@PathVariable("id") final long shopId) throws Exception {
         return voShopService.getShopLocale(shopId);
     }
 
@@ -127,7 +128,7 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     @Override
     public @ResponseBody
-    VoShopUrl getUrl(@PathVariable("shopId") final long shopId) throws Exception {
+    VoShopUrl getUrl(@PathVariable("id") final long shopId) throws Exception {
         return voShopService.getShopUrls(shopId);
     }
 
@@ -139,7 +140,7 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     @Override
     public @ResponseBody
-    VoShopAlias getAlias(@PathVariable("shopId") final long shopId) throws Exception {
+    VoShopAlias getAlias(@PathVariable("id") final long shopId) throws Exception {
         return voShopService.getShopAliases(shopId);
     }
 
@@ -151,7 +152,7 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     @Override
     public @ResponseBody
-    VoShopSupportedCurrencies getCurrency(@PathVariable("shopId") final long shopId) throws Exception {
+    VoShopSupportedCurrencies getCurrency(@PathVariable("id") final long shopId) throws Exception {
         return voShopService.getShopCurrencies(shopId);
     }
 
@@ -163,7 +164,7 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     @Override
     public @ResponseBody
-    VoShopLanguages getLanguage(@PathVariable("shopId") final long shopId) throws Exception {
+    VoShopLanguages getLanguage(@PathVariable("id") final long shopId) throws Exception {
         return voShopService.getShopLanguages(shopId);
     }
 
@@ -175,7 +176,7 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     @Override
     public @ResponseBody
-    VoShopLocations getLocation(@PathVariable("shopId") final long shopId) throws Exception {
+    VoShopLocations getLocation(@PathVariable("id") final long shopId) throws Exception {
         return voShopService.getShopLocations(shopId);
     }
 
@@ -187,43 +188,38 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoCategory> getCategories(@PathVariable("shopId") final long shopId) throws Exception {
+    List<VoCategory> getCategories(@PathVariable("id") final long shopId) throws Exception {
         return voShopCategoryService.getAllByShopId(shopId);
     }
 
     @Override
     public @ResponseBody
-    List<VoCategory> update(@PathVariable("shopId") final long shopId, @RequestBody final List<VoCategory> voCategories) throws Exception {
+    List<VoCategory> update(@PathVariable("id") final long shopId, @RequestBody final List<VoCategory> voCategories) throws Exception {
         return voShopCategoryService.update(shopId, voCategories);
     }
 
     @Override
     public @ResponseBody
-    VoShop updateDisabledFlag(@PathVariable("shopId") final long shopId, @PathVariable("state") final boolean state) throws Exception {
-        return voShopService.updateDisabledFlag(shopId, state);
+    VoShop updateDisabledFlag(@PathVariable("id") final long shopId, @PathVariable("state") final VoShopStatus state) throws Exception {
+        return voShopService.updateDisabledFlag(shopId, state.isDisabled());
     }
 
     @Override
     public  @ResponseBody
-    List<VoAttrValueShop> getShopAttributes(@PathVariable("shopId") final long shopId) throws Exception {
+    List<VoAttrValueShop> getShopAttributes(@PathVariable("id") final long shopId, @RequestParam(value = "includeSecure", required = false) final boolean includeSecure) throws Exception {
         return voShopService.getShopAttributes(shopId, false);
     }
 
     @Override
     public  @ResponseBody
-    List<VoAttrValueShop> getShopAttributesSecure(@PathVariable("shopId") final long shopId) throws Exception {
-        return voShopService.getShopAttributes(shopId, true);
+    List<VoAttrValueShop> getShopAttributesSecure(@PathVariable("id") final long shopId, @RequestParam(value = "includeSecure", required = false) final boolean includeSecure) throws Exception {
+        return voShopService.getShopAttributes(shopId, includeSecure);
     }
 
     @Override
     public  @ResponseBody
-    List<VoAttrValueShop> update(@RequestBody final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
-        return voShopService.update(vo, false);
+    List<VoAttrValueShop> update(@RequestParam(value = "includeSecure", required = false) final boolean includeSecure, @RequestBody final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
+        return voShopService.update(vo, includeSecure);
     }
 
-    @Override
-    public  @ResponseBody
-    List<VoAttrValueShop> updateSecure(@RequestBody final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
-        return voShopService.update(vo, true);
-    }
 }

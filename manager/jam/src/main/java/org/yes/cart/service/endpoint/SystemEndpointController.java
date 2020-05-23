@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -31,7 +33,7 @@ import java.util.List;
  * Time: 22:01
  */
 @Controller
-@Api(value = "System", tags = "system")
+@Api(value = "System", description = "System controller", tags = "system")
 @RequestMapping("/system")
 public interface SystemEndpointController {
 
@@ -43,6 +45,7 @@ public interface SystemEndpointController {
      *
      * @return node objects
      */
+    @ApiOperation(value = "Retrieve cluster nodes information")
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/cluster", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
@@ -53,16 +56,18 @@ public interface SystemEndpointController {
      *
      * @return module objects
      */
+    @ApiOperation(value = "Retrieve cluster node modules information")
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/cluster/{node}/modules", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoModule> getModuleInfo(@PathVariable("node") String node) throws Exception;
+    List<VoModule> getModuleInfo(@ApiParam(value = "Node ID", required = true) @PathVariable("node") String node) throws Exception;
 
     /**
      * All registered modules in this cluster's node.
      *
      * @return module objects
      */
+    @ApiOperation(value = "Retrieve cluster configurations")
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/cluster/configurations", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
@@ -72,8 +77,9 @@ public interface SystemEndpointController {
     /**
      * Reload system configurations on all nodes.
      */
+    @ApiOperation(value = "Update cluster configurations")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/reloadconfigurations", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/cluster/configurations", method = RequestMethod.PUT, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoClusterNode> reloadConfigurations() throws Exception;
 
@@ -83,8 +89,9 @@ public interface SystemEndpointController {
      *
      * @return map of supported queries
      */
+    @ApiOperation(value = "Retrieve query API supported")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/query/supported", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/query", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<MutablePair<String, List<String>>> supportedQueries() throws Exception;
 
@@ -98,10 +105,11 @@ public interface SystemEndpointController {
      *
      * @return list of rows
      */
+    @ApiOperation(value = "Create query request")
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/query/{node}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<Object[]> runQuery(@RequestBody VoSystemQuery query, @PathVariable("node") String node) throws Exception;
+    List<Object[]> runQuery(@ApiParam(value = "Query", name = "vo", required = true) @RequestBody VoSystemQuery query, @ApiParam(value = "Node ID", required = true) @PathVariable("node") String node) throws Exception;
 
 
     /**
@@ -109,6 +117,7 @@ public interface SystemEndpointController {
      *
      * @return list of information per each cache per node.
      */
+    @ApiOperation(value = "Retrieve cache information")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(value = "/cache", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
@@ -119,6 +128,7 @@ public interface SystemEndpointController {
      *
      * @return state if the cache has evicted on nodes
      */
+    @ApiOperation(value = "Delete all cache")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(value = "/cache", method = RequestMethod.DELETE, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
@@ -131,37 +141,30 @@ public interface SystemEndpointController {
      *
      * @return state if the cache has evicted on nodes
      */
+    @ApiOperation(value = "Delete cache")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(value = "/cache/{name}", method = RequestMethod.DELETE, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCacheInfo> evictCache(@PathVariable("name") String name) throws Exception;
+    List<VoCacheInfo> evictCache(@ApiParam(value = "Cache (all nodes)", required = true) @PathVariable("name") String name) throws Exception;
 
     /**
      * Enable cache statistics by name.
      *
      * @param name name of cache to evict
      */
+    @ApiOperation(value = "Update cache")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/cache/on/{name}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/cache/{name}/status", method = RequestMethod.PUT, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCacheInfo> enableCache(@PathVariable("name") String name) throws Exception;
-
-    /**
-     * Disable cache statistics by name.
-     *
-     * @param name name of cache to evict
-     */
-    @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/cache/off/{name}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<VoCacheInfo> disableCache(@PathVariable("name") String name) throws Exception;
+    List<VoCacheInfo> statusCache(@ApiParam(value = "Cache (all nodes)", required = true) @PathVariable("name") String name, @ApiParam(value = "Status", name = "vo", required = true) @RequestBody VoCacheStatus status) throws Exception;
 
 
     /**
      * Warm up all storefront servers.
      */
+    @ApiOperation(value = "Create basic cache")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/cache/warmup", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/cache", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     void warmUp() throws Exception;
 
@@ -173,18 +176,20 @@ public interface SystemEndpointController {
      *
      * @return status of indexing
      */
+    @ApiOperation(value = "Retrieve index status")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/index/status/{token}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/index/{token}/status", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoJobStatus getIndexJobStatus(@PathVariable("token") String token);
+    VoJobStatus getIndexJobStatus(@ApiParam(value = "Index job token", required = true) @PathVariable("token") String token);
 
     /**
      * Reindex all products.
      *
      * @return status of indexing.
      */
+    @ApiOperation(value = "Create index job")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/index/all", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/index", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoJobStatus reindexAllProducts();
 
@@ -195,10 +200,11 @@ public interface SystemEndpointController {
      *
      * @return status of indexing.
      */
+    @ApiOperation(value = "Create index job")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/index/shop/{id}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/index/shops/{id}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoJobStatus reindexShopProducts(@PathVariable("id") long shopPk);
+    VoJobStatus reindexShopProducts(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopPk);
 
 
 }

@@ -17,6 +17,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,54 +35,65 @@ import java.util.List;
  * Time: 18:38
  */
 @Controller
-@Api(value = "Attributes", tags = "attributes")
-@RequestMapping("/attributes")
+@Api(value = "Attributes", description = "Attribute controller", tags = "attributes")
 public interface AttributeEndpointController {
 
+    @ApiOperation(value = "Attribute value types")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/etype/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/attributes/etypes", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoEtype> getAllEtypes() throws Exception;
 
+    @ApiOperation(value = "Attribute groups")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/group/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/attributes/groups", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoAttributeGroup> getAllGroups() throws Exception;
 
+    @ApiOperation(value = "Attributes search")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/attribute/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/attributes/search", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoSearchResult<VoAttribute> getFilteredAttributes(@RequestBody VoSearchContext filter) throws Exception;
+    VoSearchResult<VoAttribute> getFilteredAttributes(@ApiParam(
+            value = "Search criteria with the following parameter support:" +
+                    "\n* filter - text filter expands to 'name', 'displayNameInternal', 'description' and 'code'" +
+                    "\n  * [!] prefix - exact match by 'code' (e.g. '!MY_CODE')" +
+                    "\n* groups - optional list of group codes", name = "filter")
+                                                      @RequestBody(required = false) VoSearchContext filter) throws Exception;
 
+    @ApiOperation(value = "Product types which include provided attribute code")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/attribute/producttype/{code}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/attributes/{code}/producttypes", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<MutablePair<Long, String>> getProductTypesByAttributeCode(@PathVariable("code") String code) throws Exception;
+    List<MutablePair<Long, String>> getProductTypesByAttributeCode(@ApiParam(value = "Attribute code", required = true) @PathVariable("code") String code) throws Exception;
 
 
+    @ApiOperation(value = "Retrieve attribute")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/attribute/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/attributes/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoAttribute getAttributeById(@PathVariable("id") long id) throws Exception;
+    VoAttribute getAttributeById(@ApiParam(value = "Attribute ID", required = true) @PathVariable("id") long id) throws Exception;
 
 
-
+    @ApiOperation(value = "Create attribute")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/attribute", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoAttribute createAttribute(@RequestBody VoAttribute vo)  throws Exception;
+    VoAttribute createAttribute(@ApiParam(value = "Attribute", name = "vo", required = true) @RequestBody VoAttribute vo)  throws Exception;
 
 
+    @ApiOperation(value = "Update attribute")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/attribute", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/attributes", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoAttribute updateAttribute(@RequestBody VoAttribute vo)  throws Exception;
+    VoAttribute updateAttribute(@ApiParam(value = "Attribute", name = "vo", required = true) @RequestBody VoAttribute vo)  throws Exception;
 
 
+    @ApiOperation(value = "Delete attribute")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/attribute/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/attributes/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    void removeAttribute(@PathVariable("id") long id) throws Exception;
+    void removeAttribute(@ApiParam(value = "Attribute ID", required = true) @PathVariable("id") long id) throws Exception;
 
 
 }

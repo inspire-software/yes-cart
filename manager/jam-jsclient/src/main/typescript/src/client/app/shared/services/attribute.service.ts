@@ -34,7 +34,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class AttributeService {
 
-  private _serviceBaseUrl = Config.API + 'service/attributes';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service';  // URL to web api
 
   /**
    * Construct attribute service, which has methods to work with information related to shop(s).
@@ -49,7 +49,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllEtypes() {
-    return this.http.get(this._serviceBaseUrl + '/etype/all', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/attributes/etypes', Util.requestOptions())
       .map(res => <EtypeVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -59,7 +59,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllGroups() {
-    return this.http.get(this._serviceBaseUrl + '/group/all', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/attributes/groups', Util.requestOptions())
       .map(res => <AttributeGroupVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -73,7 +73,7 @@ export class AttributeService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/attribute/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/attributes/search', body,
               Util.requestOptions())
       .map(res => <SearchResultVO<AttributeVO>> this.json(res))
       .catch(this.handleError);
@@ -86,7 +86,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getProductTypesByAttributeCode(code:string) {
-    return this.http.get(this._serviceBaseUrl + '/attribute/producttype/' + code, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/attributes/' + code + '/producttypes', Util.requestOptions())
       .map(res => <Pair<number,string>[]> this.json(res))
       .catch(this.handleError);
   }
@@ -99,7 +99,7 @@ export class AttributeService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAttributeById(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/attribute/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/attributes/' + id, Util.requestOptions())
       .map(res => <AttributeVO> this.json(res))
       .catch(this.handleError);
   }
@@ -114,11 +114,11 @@ export class AttributeService {
     let body = JSON.stringify(attribute);
 
     if (attribute.attributeId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/attribute', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/attributes', body, Util.requestOptions())
         .map(res => <AttributeVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/attribute', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/attributes', body, Util.requestOptions())
         .map(res => <AttributeVO> this.json(res))
         .catch(this.handleError);
     }
@@ -132,7 +132,7 @@ export class AttributeService {
    */
   removeAttribute(attribute:AttributeVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/attribute/' + attribute.attributeId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/attributes/' + attribute.attributeId, Util.requestOptions())
       .catch(this.handleError);
   }
 

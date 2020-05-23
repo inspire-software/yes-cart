@@ -242,9 +242,13 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   onRunTestResult(event:PromotionTestVO) {
     LogUtil.debug('ShopPriceListComponent onRunTestResult', event);
-    if (event != null) {
+    if (event != null && this.selectedShop != null) {
       this.loading = true;
-      let _sub:any = this._priceService.testPromotions(this.selectedShop, this.selectedCurrency, event).subscribe(
+
+      event.shopCode = this.selectedShop.code;
+      event.currency = this.selectedCurrency;
+
+      let _sub:any = this._priceService.testPromotions(event).subscribe(
         cart => {
           _sub.unsubscribe();
           this.loading = false;

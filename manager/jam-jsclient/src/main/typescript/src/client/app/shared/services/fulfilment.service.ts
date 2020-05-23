@@ -35,7 +35,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class FulfilmentService {
 
-  private _serviceBaseUrl = Config.API + 'service/fulfilment';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service';  // URL to web api
 
   /**
    * Construct service, which has methods to work with information related to shop(s).
@@ -53,7 +53,7 @@ export class FulfilmentService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/centre/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/fulfilment/centres/search', body,
       Util.requestOptions())
       .map(res => <SearchResultVO<FulfilmentCentreInfoVO>> this.json(res))
       .catch(this.handleError);
@@ -65,7 +65,7 @@ export class FulfilmentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getShopFulfilmentCentres(shopId:number) {
-    return this.http.get(this._serviceBaseUrl + '/centre/shop/' + shopId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/shops/' + shopId + '/centres', Util.requestOptions())
       .map(res => <ShopFulfilmentCentreVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -75,7 +75,7 @@ export class FulfilmentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getFulfilmentCentreById(centreId:number) {
-    return this.http.get(this._serviceBaseUrl + '/centre/' + centreId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/fulfilment/centres/' + centreId, Util.requestOptions())
       .map(res => <ShopFulfilmentCentreVO> this.json(res))
       .catch(this.handleError);
   }
@@ -90,11 +90,11 @@ export class FulfilmentService {
     let body = JSON.stringify(centre);
 
     if (centre.warehouseId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/centre', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/fulfilment/centres', body, Util.requestOptions())
         .map(res => <FulfilmentCentreVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/centre', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/fulfilment/centres', body, Util.requestOptions())
         .map(res => <FulfilmentCentreVO> this.json(res))
         .catch(this.handleError);
     }
@@ -109,7 +109,7 @@ export class FulfilmentService {
   createFulfilmentCentre(centre:FulfilmentCentreInfoVO, shopId : number) {
     let body = JSON.stringify(centre);
 
-    return this.http.put(this._serviceBaseUrl + '/centre/shop/' + shopId, body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/shops/' + shopId + '/centres', body, Util.requestOptions())
       .map(res => <FulfilmentCentreVO> this.json(res))
       .catch(this.handleError);
   }
@@ -124,7 +124,7 @@ export class FulfilmentService {
 
     let body = JSON.stringify(centres);
 
-    return this.http.post(this._serviceBaseUrl + '/centre/shop', body, Util.requestOptions())
+    return this.http.put(this._serviceBaseUrl + '/fulfilment/centres/shops', body, Util.requestOptions())
       .map(res => <Array<ShopFulfilmentCentreVO>> this.json(res))
       .catch(this.handleError);
   }
@@ -137,7 +137,7 @@ export class FulfilmentService {
    */
   removeFulfilmentCentre(centre:FulfilmentCentreVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/centre/' + centre.warehouseId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/fulfilment/centres/' + centre.warehouseId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -150,7 +150,7 @@ export class FulfilmentService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/inventory/centre/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/fulfilment/inventory/search', body,
           Util.requestOptions())
       .map(res => <SearchResultVO<InventoryVO>> this.json(res))
       .catch(this.handleError);
@@ -162,7 +162,7 @@ export class FulfilmentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getInventoryById(inventoryId:number) {
-    return this.http.get(this._serviceBaseUrl + '/inventory/' + inventoryId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/fulfilment/inventory/' + inventoryId, Util.requestOptions())
       .map(res => <InventoryVO> this.json(res))
       .catch(this.handleError);
   }
@@ -178,11 +178,11 @@ export class FulfilmentService {
     let body = JSON.stringify(inventory);
 
     if (inventory.skuWarehouseId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/inventory', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/fulfilment/inventory', body, Util.requestOptions())
         .map(res => <InventoryVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/inventory', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/fulfilment/inventory', body, Util.requestOptions())
         .map(res => <InventoryVO> this.json(res))
         .catch(this.handleError);
     }
@@ -196,7 +196,7 @@ export class FulfilmentService {
    */
   removeInventory(inventory:InventoryVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/inventory/' + inventory.skuWarehouseId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/fulfilment/inventory/' + inventory.skuWarehouseId, Util.requestOptions())
       .catch(this.handleError);
   }
 

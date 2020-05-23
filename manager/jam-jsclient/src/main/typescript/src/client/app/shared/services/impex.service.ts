@@ -46,7 +46,7 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   getGroups(lang:string, mode:string) {
-    return this.http.get(this._serviceBaseUrl + '/impex/' + mode + '/groups/' + lang, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/impex/' + mode + '/groups?lang=' + lang, Util.requestOptions())
       .map(res => <DataGroupInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -103,7 +103,7 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   getFiles(mode:string) {
-    return this.http.get(this._serviceBaseUrl + '/filemanager/list/' + mode, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/filemanager/list?mode=' + mode, Util.requestOptions())
       .map(res => <Pair<string, string>[]> this.json(res))
       .catch(this.handleError);
   }

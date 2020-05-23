@@ -17,6 +17,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -35,23 +37,26 @@ import java.util.List;
  * Time: 12:35
  */
 @Controller
-@Api(value = "Reports", tags = "reports")
+@Api(value = "Reports", description = "Reports controller", tags = "reports")
 @RequestMapping("/reports")
 public interface ReportEndpointController {
 
+    @ApiOperation(value = "Retrieve all available reports")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/report/all", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoReportDescriptor> getReportDescriptors();
 
+    @ApiOperation(value = "Configure report parameters")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/report/configure", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/configure", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoReportRequest getParameterValues(@RequestBody VoReportRequest reportRequest);
+    VoReportRequest getParameterValues(@ApiParam(value = "Report request", name = "vo", required = true) @RequestBody VoReportRequest reportRequest);
 
+    @ApiOperation(value = "Generate report")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/report/generate", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/generate", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    String generateReport(@RequestBody VoReportRequest reportRequest) throws Exception;
+    String generateReport(@ApiParam(value = "Report request", name = "vo", required = true) @RequestBody VoReportRequest reportRequest) throws Exception;
 
 }

@@ -19,7 +19,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Config } from '../config/env.config';
 import {
-  ShopVO, PriceListVO,
+  PriceListVO,
   TaxVO, TaxConfigVO,
   PromotionVO, PromotionCouponVO,
   CartVO, PromotionTestVO,
@@ -54,7 +54,7 @@ export class PricingService {
   getFilteredPriceLists(filter:SearchContextVO) {
 
     let body = JSON.stringify(filter);
-    return this.http.post(this._serviceBaseUrl + '/price/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/prices/search', body,
           Util.requestOptions())
         .map(res => <SearchResultVO<PriceListVO>> this.json(res))
         .catch(this.handleError);
@@ -65,7 +65,7 @@ export class PricingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getPriceListById(priceId:number) {
-    return this.http.get(this._serviceBaseUrl + '/price/' + priceId)
+    return this.http.get(this._serviceBaseUrl + '/prices/' + priceId)
       .map(res => <PriceListVO> this.json(res))
       .catch(this.handleError);
   }
@@ -80,11 +80,11 @@ export class PricingService {
     let body = JSON.stringify(price);
 
     if (price.skuPriceId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/price', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/prices', body, Util.requestOptions())
         .map(res => <PriceListVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/price', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/prices', body, Util.requestOptions())
         .map(res => <PriceListVO> this.json(res))
         .catch(this.handleError);
     }
@@ -98,7 +98,7 @@ export class PricingService {
    */
   removePriceList(price:PriceListVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/price/' + price.skuPriceId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/prices/' + price.skuPriceId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -112,7 +112,7 @@ export class PricingService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/tax/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/taxes/search', body,
           Util.requestOptions())
       .map(res => <SearchResultVO<TaxVO>> this.json(res))
       .catch(this.handleError);
@@ -123,7 +123,7 @@ export class PricingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getTaxById(taxId:number) {
-    return this.http.get(this._serviceBaseUrl + '/tax/' + taxId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/taxes/' + taxId, Util.requestOptions())
       .map(res => <TaxVO> this.json(res))
       .catch(this.handleError);
   }
@@ -138,11 +138,11 @@ export class PricingService {
     let body = JSON.stringify(tax);
 
     if (tax.taxId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/tax', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/taxes', body, Util.requestOptions())
         .map(res => <TaxVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/tax', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/taxes', body, Util.requestOptions())
         .map(res => <TaxVO> this.json(res))
         .catch(this.handleError);
     }
@@ -156,7 +156,7 @@ export class PricingService {
    */
   removeTax(tax:TaxVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/tax/' + tax.taxId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/taxes/' + tax.taxId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -170,7 +170,7 @@ export class PricingService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/taxconfig/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/taxconfigs/search', body,
         Util.requestOptions())
       .map(res => <SearchResultVO<TaxConfigVO>> this.json(res))
       .catch(this.handleError);
@@ -181,7 +181,7 @@ export class PricingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getTaxConfigById(taxConfigId:number) {
-    return this.http.get(this._serviceBaseUrl + '/taxconfig/' + taxConfigId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/taxconfigs/' + taxConfigId, Util.requestOptions())
       .map(res => <TaxConfigVO> this.json(res))
       .catch(this.handleError);
   }
@@ -195,7 +195,7 @@ export class PricingService {
 
     let body = JSON.stringify(taxConfig);
 
-    return this.http.put(this._serviceBaseUrl + '/taxconfig', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/taxconfigs', body, Util.requestOptions())
       .map(res => <TaxConfigVO> this.json(res))
       .catch(this.handleError);
   }
@@ -208,7 +208,7 @@ export class PricingService {
    */
   removeTaxConfig(taxConfig:TaxConfigVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/taxconfig/' + taxConfig.taxConfigId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/taxconfigs/' + taxConfig.taxConfigId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -218,11 +218,11 @@ export class PricingService {
    * Test rule for given shop in specified currency,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  testPromotions(shop:ShopVO, currency:string, test:PromotionTestVO) {
+  testPromotions(test:PromotionTestVO) {
 
     let body = JSON.stringify(test);
 
-    return this.http.post(this._serviceBaseUrl + '/promotion/test/shop/' + shop.code + '/currency/' + currency + '/', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/promotions/test', body, Util.requestOptions())
       .map(res => <CartVO> this.json(res))
       .catch(this.handleError);
   }
@@ -236,7 +236,7 @@ export class PricingService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/promotion/filtered', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/promotions/search', body, Util.requestOptions())
       .map(res => <SearchResultVO<PromotionVO>> this.json(res))
       .catch(this.handleError);
   }
@@ -246,7 +246,7 @@ export class PricingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getPromotionById(promotionId:number) {
-    return this.http.get(this._serviceBaseUrl + '/promotion/' + promotionId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/promotions/' + promotionId, Util.requestOptions())
       .map(res => <PromotionVO> this.json(res))
       .catch(this.handleError);
   }
@@ -261,11 +261,11 @@ export class PricingService {
     let body = JSON.stringify(promotion);
 
     if (promotion.promotionId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/promotion', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/promotions', body, Util.requestOptions())
         .map(res => <PromotionVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/promotion', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/promotions', body, Util.requestOptions())
         .map(res => <PromotionVO> this.json(res))
         .catch(this.handleError);
     }
@@ -279,7 +279,7 @@ export class PricingService {
    */
   removePromotion(promotion:PromotionVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/promotion/' + promotion.promotionId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/promotions/' + promotion.promotionId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -293,8 +293,10 @@ export class PricingService {
   updatePromotionDisabledFlag(promotion:PromotionVO, state:boolean) {
     LogUtil.debug('PricingService change state promotion ' + promotion.promotionId + ' to ' + state ? 'online' : 'offline');
 
-    return this.http.post(this._serviceBaseUrl + '/promotion/offline/' + promotion.promotionId + '/' + state, null,
-        Util.requestOptions({ type:'text/plain; charset=utf-8' }))
+    let body = JSON.stringify({ disabled: state });
+
+    return this.http.post(this._serviceBaseUrl + '/promotions/' + promotion.promotionId + '/status', body,
+        Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -305,9 +307,9 @@ export class PricingService {
    */
   getFilteredPromotionCoupons(filter:SearchContextVO) {
 
-    let body = filter;
+    let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/promotioncoupon/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/promotioncoupons/search', body,
           Util.requestOptions())
       .map(res => <SearchResultVO<PromotionCouponVO>> this.json(res))
       .catch(this.handleError);
@@ -323,7 +325,7 @@ export class PricingService {
 
     let body = JSON.stringify(coupons);
 
-    return this.http.put(this._serviceBaseUrl + '/promotioncoupon', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/promotioncoupons', body, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -335,7 +337,7 @@ export class PricingService {
    */
   removePromotionCoupon(coupon:PromotionCouponVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/promotioncoupon/' + coupon.promotioncouponId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/promotioncoupons/' + coupon.promotioncouponId, Util.requestOptions())
       .catch(this.handleError);
   }
 

@@ -37,7 +37,7 @@ public class OrganisationEndpointControllerImpl implements OrganisationEndpointC
 
     @Override
     public @ResponseBody
-    VoManager getManagerByEmail(@PathVariable("id") final long id) throws Exception {
+    VoManager getManagerById(@PathVariable("id") final long id) throws Exception {
         return voManagementService.getManagerById(id);
     }
 
@@ -67,8 +67,8 @@ public class OrganisationEndpointControllerImpl implements OrganisationEndpointC
 
     @Override
     public @ResponseBody
-    void updateDisabledFlag(@PathVariable("id") final long id, @PathVariable("state") boolean disabled) throws Exception {
-        voManagementService.updateDisabledFlag(id, disabled);
+    void updateDisabledFlag(@PathVariable("id") final long id, @RequestBody VoManagerAccountStatus account) throws Exception {
+        voManagementService.updateDisabledFlag(id, account.isDisabled());
     }
 
     @Override

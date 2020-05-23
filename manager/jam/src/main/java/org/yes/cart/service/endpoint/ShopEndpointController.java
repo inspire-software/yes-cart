@@ -16,15 +16,13 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 
@@ -35,150 +33,171 @@ import java.util.List;
  * Created by Igor_Azarny on 3/15/2016.
  */
 @Controller
-@Api(value = "Shop", tags = "shop")
-@RequestMapping("/shop")
+@Api(value = "Shop", description = "Shop controller", tags = "shop")
+@RequestMapping("/shops")
 public interface ShopEndpointController {
 
+    @ApiOperation(value = "Retireve all shops")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoShop> getAll() throws Exception;
 
+    @ApiOperation(value = "Retrieve sub shops")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER"})
-    @RequestMapping(value = "/sub/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/subs", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoShop> getAllSubs(@PathVariable("id") long id) throws Exception;
+    List<VoShop> getAllSubs(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Retrieve shop")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShop getById(@PathVariable("id") long id) throws Exception;
+    VoShop getById(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long id) throws Exception;
 
 
+    @ApiOperation(value = "Create shop")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    VoShop create(@RequestBody VoShop voShop) throws Exception;
-
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/sub", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    VoShop createSub(@RequestBody VoSubShop voShop) throws Exception;
-
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShop update(@RequestBody VoShop voShop) throws Exception;
+    VoShop create(@ApiParam(value = "Shop", name = "vo", required = true) @RequestBody VoShop voShop) throws Exception;
 
+    @ApiOperation(value = "Create sub shop")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/subs", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoShop createSub(@ApiParam(value = "Sub shop", name = "vo", required = true) @RequestBody VoSubShop voShop) throws Exception;
+
+    @ApiOperation(value = "Update shop")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoShop update(@ApiParam(value = "Shop", name = "vo", required = true) @RequestBody VoShop voShop) throws Exception;
+
+    @ApiOperation(value = "Delete shop")
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(method = RequestMethod.DELETE,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    void remove(@PathVariable("id") long id) throws Exception;
+    void remove(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Retrieve shop summary")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER"})
-    @RequestMapping(value = "/summary/{id}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/summary", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopSummary getSummary(@PathVariable("id") long id, @PathVariable("lang") String lang) throws Exception;
+    VoShopSummary getSummary(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long id, @ApiParam(value = "Language code", required = true) @RequestParam("lang") String lang) throws Exception;
 
+    @ApiOperation(value = "Retrieve shop SEO")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
-    @RequestMapping(value = "/localization/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/seo", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopSeo getLocalization(@PathVariable("id") long id) throws Exception;
+    VoShopSeo getLocalization(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Update shop SEO")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/localization", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/seo", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopSeo update(@RequestBody VoShopSeo voShopSeo)  throws Exception;
+    VoShopSeo update(@ApiParam(value = "SEO", name = "vo", required = true) @RequestBody VoShopSeo voShopSeo)  throws Exception;
 
+    @ApiOperation(value = "Retrieve shop URLs")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
-    @RequestMapping(value = "/urls/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/urls", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopUrl getUrl(@PathVariable("shopId") long shopId) throws Exception;
+    VoShopUrl getUrl(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId) throws Exception;
 
+    @ApiOperation(value = "Update shop URLs")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/urls", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/urls", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopUrl update(@RequestBody VoShopUrl voShopUrl)  throws Exception;
+    VoShopUrl update(@ApiParam(value = "URLs", name = "vo", required = true) @RequestBody VoShopUrl voShopUrl)  throws Exception;
 
 
+    @ApiOperation(value = "Retrieve shop aliases")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER"})
-    @RequestMapping(value = "/aliases/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/aliases", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopAlias getAlias(@PathVariable("shopId") long shopId) throws Exception;
+    VoShopAlias getAlias(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId) throws Exception;
 
+    @ApiOperation(value = "Update shop aliases")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/aliases", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/aliases", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopAlias update(@RequestBody VoShopAlias voShopAlias)  throws Exception;
+    VoShopAlias update(@ApiParam(value = "Aliases", name = "vo", required = true) @RequestBody VoShopAlias voShopAlias)  throws Exception;
 
 
+    @ApiOperation(value = "Retrieve shop aliases")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMMARKETINGADMIN","ROLE_SMMARKETINGUSER"})
-    @RequestMapping(value = "/currencies/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/currencies", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopSupportedCurrencies getCurrency(@PathVariable("shopId") long shopId) throws Exception;
+    VoShopSupportedCurrencies getCurrency(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId) throws Exception;
 
+    @ApiOperation(value = "Update shop aliases")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/currencies", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/currencies", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopSupportedCurrencies update(@RequestBody VoShopSupportedCurrencies supportedCurrencies) throws Exception;
+    VoShopSupportedCurrencies update(@ApiParam(value = "Currencies", name = "vo", required = true) @RequestBody VoShopSupportedCurrencies supportedCurrencies) throws Exception;
 
+    @ApiOperation(value = "Retrieve shop languages")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
-    @RequestMapping(value = "/languages/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/languages", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopLanguages getLanguage(@PathVariable("shopId") long shopId) throws Exception;
+    VoShopLanguages getLanguage(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId) throws Exception;
 
+    @ApiOperation(value = "Update shop languages")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/languages", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/languages", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopLanguages update(@RequestBody VoShopLanguages langs) throws Exception;
+    VoShopLanguages update(@ApiParam(value = "Languages", name = "vo", required = true) @RequestBody VoShopLanguages langs) throws Exception;
 
+    @ApiOperation(value = "Retrieve shop locations")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
-    @RequestMapping(value = "/locations/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/locations", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopLocations getLocation(@PathVariable("shopId") long shopId) throws Exception;
+    VoShopLocations getLocation(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId) throws Exception;
 
+    @ApiOperation(value = "Update shop locations")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/locations", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/locations", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopLocations update(@RequestBody VoShopLocations locations) throws Exception;
+    VoShopLocations update(@ApiParam(value = "Locations", name = "vo", required = true) @RequestBody VoShopLocations locations) throws Exception;
 
+    @ApiOperation(value = "Retrieve shop categories")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER"})
-    @RequestMapping(value = "/categories/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/categories", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCategory> getCategories(@PathVariable("shopId") long shopId) throws Exception;
+    List<VoCategory> getCategories(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId) throws Exception;
 
+    @ApiOperation(value = "Update shop categories")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/categories/{shopId}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/categories", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCategory> update(@PathVariable("shopId") long shopId, @RequestBody List<VoCategory> voCategories) throws Exception;
+    List<VoCategory> update(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId, @ApiParam(value = "Categories", name = "vo", required = true) @RequestBody List<VoCategory> voCategories) throws Exception;
 
+    @ApiOperation(value = "Update shop status")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/offline/{shopId}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/status", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShop updateDisabledFlag(@PathVariable("shopId") long shopId, @PathVariable("state") boolean state) throws Exception;
+    VoShop updateDisabledFlag(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId, @ApiParam(value = "Status", name = "vo", required = true) @RequestBody VoShopStatus state) throws Exception;
 
 
+    @ApiOperation(value = "Retrieve shop attributes")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER"})
-    @RequestMapping(value = "/attributes/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/attributes", params = "includeSecure=false", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttrValueShop> getShopAttributes(@PathVariable("shopId") long shopId) throws Exception;
+    List<VoAttrValueShop> getShopAttributes(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId, @ApiParam(value = "Include secure attributes", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure) throws Exception;
 
 
+    @ApiOperation(value = "Retrieve shop attributes")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/attributes/secure/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/{id}/attributes", params = "includeSecure=true", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttrValueShop> getShopAttributesSecure(@PathVariable("shopId") long shopId) throws Exception;
+    List<VoAttrValueShop> getShopAttributesSecure(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId, @ApiParam(value = "Include secure attributes", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure) throws Exception;
 
 
+    @ApiOperation(value = "Update shop attributes")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(value = "/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttrValueShop> update(@RequestBody List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception;
-
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/attributes/secure", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<VoAttrValueShop> updateSecure(@RequestBody List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception;
+    List<VoAttrValueShop> update(@ApiParam(value = "Update secure attributes", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure, @ApiParam(value = "Attributes", name = "vo", required = true) @RequestBody List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception;
 
 
 }

@@ -630,7 +630,7 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Boolean> enableCache(final AsyncContext context, final String name) {
+    public Map<String, Boolean> enableCacheStats(final AsyncContext context, final String name) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
@@ -665,7 +665,7 @@ public class ClusterServiceImpl implements ClusterService {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Boolean> disableCache(final AsyncContext context, final String name) {
+    public Map<String, Boolean> disableCacheStats(final AsyncContext context, final String name) {
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),

@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -30,7 +32,7 @@ import java.util.List;
  * Time: 08:41
  */
 @Controller
-@Api(value = "ImpEx", tags = "impex")
+@Api(value = "ImpEx", description = "Import/Export controller", tags = "impex")
 @RequestMapping("/impex")
 public interface ImpexEndpointController {
 
@@ -42,10 +44,11 @@ public interface ImpexEndpointController {
      *
      * @return configured import groups
      */
+    @ApiOperation(value = "Retrieve available export data groups")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
-    @RequestMapping(value = "/export/groups/{lang}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/export/groups", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoDataGroupInfo> getExportGroups(@PathVariable("lang") String language);
+    List<VoDataGroupInfo> getExportGroups(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String language);
 
     /**
      * Perform bulk export.
@@ -54,10 +57,11 @@ public interface ImpexEndpointController {
      *
      * @return status object token
      */
+    @ApiOperation(value = "Perform export job")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/export", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoJobStatus doExport(@RequestBody VoImpExJob impExJob);
+    VoJobStatus doExport(@ApiParam(value = "Export request", name = "impExJob", required = true) @RequestBody VoImpExJob impExJob);
 
     /**
      * Get latest job status update for given token
@@ -66,10 +70,11 @@ public interface ImpexEndpointController {
      *
      * @return status object
      */
+    @ApiOperation(value = "Check export job status")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/export/status", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoJobStatus getExportStatus(@RequestParam("token") String token);
+    VoJobStatus getExportStatus(@ApiParam(value = "Export job token", required = true) @RequestParam("token") String token);
 
 
     /**
@@ -80,10 +85,11 @@ public interface ImpexEndpointController {
      *
      * @return configured import groups
      */
+    @ApiOperation(value = "Retrieve available import data groups")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
-    @RequestMapping(value = "/import/groups/{lang}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/import/groups", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoDataGroupInfo> getImportGroups(@PathVariable("lang") String language);
+    List<VoDataGroupInfo> getImportGroups(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String language);
 
     /**
      * Perform bulk import.
@@ -92,10 +98,11 @@ public interface ImpexEndpointController {
      *
      * @return status object token
      */
+    @ApiOperation(value = "Perform import job")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/import", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoJobStatus doImport(@RequestBody VoImpExJob impExJob);
+    VoJobStatus doImport(@ApiParam(value = "Import request", name = "impExJob", required = true) @RequestBody VoImpExJob impExJob);
 
     /**
      * Get latest job status update for given token
@@ -104,66 +111,77 @@ public interface ImpexEndpointController {
      *
      * @return status object
      */
+    @ApiOperation(value = "Check import job status")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
     @RequestMapping(value = "/import/status", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoJobStatus getImportStatus(@RequestParam("token") String token);
+    VoJobStatus getImportStatus(@ApiParam(value = "Import job token", required = true) @RequestParam("token") String token);
 
 
 
 
 
+    @ApiOperation(value = "Retrieve data groups")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datagroup/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/datagroups", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoDataGroup> getAllDataGroups() throws Exception;
 
+    @ApiOperation(value = "Retrieve data group")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datagroup/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/datagroups/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoDataGroup getDataGroupById(@PathVariable("id") long id) throws Exception;
+    VoDataGroup getDataGroupById(@ApiParam(value = "Data group ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Create data group")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datagroup", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/datagroups", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoDataGroup createDataGroup(@RequestBody VoDataGroup voDataGroup)  throws Exception;
+    VoDataGroup createDataGroup(@ApiParam(value = "Data group", name = "vo", required = true) @RequestBody VoDataGroup voDataGroup)  throws Exception;
 
+    @ApiOperation(value = "Update data group")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datagroup", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/datagroups", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoDataGroup updateDataGroup(@RequestBody VoDataGroup voDataGroup)  throws Exception;
+    VoDataGroup updateDataGroup(@ApiParam(value = "Data group", name = "vo", required = true) @RequestBody VoDataGroup voDataGroup)  throws Exception;
 
+    @ApiOperation(value = "Delete data group")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datagroup/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/datagroups/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    void removeDataGroup(@PathVariable("id") long id) throws Exception;
+    void removeDataGroup(@ApiParam(value = "Data group ID", required = true) @PathVariable("id") long id) throws Exception;
 
 
 
+    @ApiOperation(value = "Retrieve data descriptors")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datadescriptor/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/datadescriptors", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoDataDescriptor> getAllDataDescriptors() throws Exception;
 
+    @ApiOperation(value = "Retrieve data descriptor")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datadescriptor/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/datadescriptors/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoDataDescriptor getDataDescriptorById(@PathVariable("id") long id) throws Exception;
+    VoDataDescriptor getDataDescriptorById(@ApiParam(value = "Data descriptor ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Create data descriptor")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datadescriptor", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/datadescriptors", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoDataDescriptor createDataDescriptor(@RequestBody VoDataDescriptor voDataDescriptor)  throws Exception;
+    VoDataDescriptor createDataDescriptor(@ApiParam(value = "Data descriptor", name = "vo", required = true) @RequestBody VoDataDescriptor voDataDescriptor)  throws Exception;
 
+    @ApiOperation(value = "Update data descriptor")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datadescriptor", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/datadescriptors", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoDataDescriptor updateDataDescriptor(@RequestBody VoDataDescriptor voDataDescriptor)  throws Exception;
+    VoDataDescriptor updateDataDescriptor(@ApiParam(value = "Data descriptor", name = "vo", required = true) @RequestBody VoDataDescriptor voDataDescriptor)  throws Exception;
 
+    @ApiOperation(value = "Delete data descriptor")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/datadescriptor/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/datadescriptors/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    void removeDataDescriptor(@PathVariable("id") long id) throws Exception;
+    void removeDataDescriptor(@ApiParam(value = "Data descriptor ID", required = true) @PathVariable("id") long id) throws Exception;
 
 
 

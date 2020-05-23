@@ -34,7 +34,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class ContentService {
 
-  private _serviceBaseUrl = Config.API + 'service/content';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service';  // URL to web api
 
   /**
    * Construct service, which has methods to work with information related to shop(s).
@@ -49,7 +49,7 @@ export class ContentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllShopContent(shopId:number) {
-    return this.http.get(this._serviceBaseUrl + '/shop/' + shopId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/shops/' + shopId + '/content', Util.requestOptions())
       .map(res => <ContentVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -65,11 +65,11 @@ export class ContentService {
       expand.forEach(node => {
         param += node + '|';
       });
-      return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/?expand=' + encodeURIComponent(param), Util.requestOptions())
+      return this.http.get(this._serviceBaseUrl +  '/shops/' + shopId + '/content/' + root + '/branches?expand=' + encodeURIComponent(param), Util.requestOptions())
         .map(res => <ContentVO[]> this.json(res))
         .catch(this.handleError);
     }
-    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branch/' + root + '/', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl +  '/shops/' + shopId + '/content/' + root + '/branches', Util.requestOptions())
       .map(res => <ContentVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -83,7 +83,7 @@ export class ContentService {
     expand.forEach(node => {
       param += node + '|';
     });
-    return this.http.get(this._serviceBaseUrl +  '/shop/' + shopId + '/branchpaths/?expand=' + encodeURIComponent(param), Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl +  '/shops/' + shopId + '/content/branchpaths/?expand=' + encodeURIComponent(param), Util.requestOptions())
       .map(res => <number[]> this.json(res))
       .catch(this.handleError);
   }
@@ -97,7 +97,7 @@ export class ContentService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/shop/' + shopId + '/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/shops/' + shopId + '/content/search', body,
           Util.requestOptions())
       .map(res => <SearchResultVO<ContentVO>> this.json(res))
       .catch(this.handleError);
@@ -108,7 +108,7 @@ export class ContentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getContentById(contentId:number) {
-    return this.http.get(this._serviceBaseUrl + '/' + contentId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/content/' + contentId, Util.requestOptions())
       .map(res => <ContentWithBodyVO> this.json(res))
       .catch(this.handleError);
   }
@@ -124,11 +124,11 @@ export class ContentService {
     let body = JSON.stringify(content);
 
     if (content.contentId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/content/', body, Util.requestOptions())
         .map(res => <ContentWithBodyVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/content/', body, Util.requestOptions())
         .map(res => <ContentWithBodyVO> this.json(res))
         .catch(this.handleError);
     }
@@ -143,7 +143,7 @@ export class ContentService {
    */
   removeContent(content:ContentVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/' + content.contentId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/content/' + content.contentId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -154,7 +154,7 @@ export class ContentService {
    * @returns {Observable<R>}
    */
   getContentAttributes(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/attributes/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/content/' + id + '/attributes', Util.requestOptions())
       .map(res => <AttrValueContentVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -167,7 +167,7 @@ export class ContentService {
    */
   saveContentAttributes(attrs:Array<Pair<AttrValueContentVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    return this.http.post(this._serviceBaseUrl + '/attributes', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/content/attributes', body, Util.requestOptions())
       .map(res => <AttrValueContentVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -180,7 +180,7 @@ export class ContentService {
    * @returns {Observable<R>}
    */
   getContentBody(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/body/' + id)
+    return this.http.get(this._serviceBaseUrl + '/content/' + id + '/body')
       .map(res => <ContentBodyVO[]> this.json(res))
       .catch(this.handleError);
   }

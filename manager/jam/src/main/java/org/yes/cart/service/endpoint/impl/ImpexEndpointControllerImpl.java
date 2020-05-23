@@ -55,7 +55,7 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoDataGroupInfo> getExportGroups(@PathVariable("lang") final String language) {
+    List<VoDataGroupInfo> getExportGroups(@RequestParam("lang") final String language) {
         return mapToGroups(this.exportDirectorService.getExportGroups(language));
     }
 
@@ -73,7 +73,7 @@ public class ImpexEndpointControllerImpl implements ImpexEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoDataGroupInfo> getImportGroups(@PathVariable("lang") final String language) {
+    List<VoDataGroupInfo> getImportGroups(@RequestParam("lang") final String language) {
         return mapToGroups(this.importDirectorService.getImportGroups(language));
     }
 

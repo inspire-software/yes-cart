@@ -25,6 +25,8 @@ import java.time.Instant;
  */
 public class VoPromotionTest {
 
+    private String shopCode;
+    private String currency;
     private String customer;
     private String supplier;
     private String shipping;
@@ -32,6 +34,22 @@ public class VoPromotionTest {
     private String sku;
     private String language;
     private Instant time;
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(final String shopCode) {
+        this.shopCode = shopCode;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(final String currency) {
+        this.currency = currency;
+    }
 
     public String getSupplier() {
         return supplier;

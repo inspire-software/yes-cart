@@ -93,7 +93,7 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoAttrValueBrand> getBrandAttributes(@PathVariable("brandId") final long brandId) throws Exception {
+    List<VoAttrValueBrand> getBrandAttributes(@PathVariable("id") final long brandId) throws Exception {
         return voBrandService.getBrandAttributes(brandId);
     }
 
@@ -135,7 +135,7 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoProductTypeAttr> getProductTypeAttributes(@PathVariable("typeId") final long typeId) throws Exception {
+    List<VoProductTypeAttr> getProductTypeAttributes(@PathVariable("id") final long typeId) throws Exception {
         return voProductTypeService.getTypeAttributes(typeId);
     }
 
@@ -159,7 +159,7 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoCategory> getBranchCategories(@PathVariable("branch") final long branch,
+    List<VoCategory> getBranchCategories(@PathVariable("id") final long branch,
                                          @RequestParam(value = "expand", required = false) final String expand) throws Exception {
 
         final List<Long> expandIds = determineBranchIds(expand);
@@ -221,7 +221,7 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoAttrValueCategory> getCategoryAttributes(@PathVariable("categoryId") final long categoryId) throws Exception {
+    List<VoAttrValueCategory> getCategoryAttributes(@PathVariable("id") final long categoryId) throws Exception {
         return voCategoryService.getCategoryAttributes(categoryId);
     }
 

@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -32,13 +34,14 @@ import org.yes.cart.domain.vo.VoValidationResult;
  * Time: 15:51
  */
 @Controller
-@Api(value = "Validation", tags = "validation")
+@Api(value = "Validation", description = "Validation controller", tags = "validation")
 @RequestMapping("/validation")
 public interface ValidationEndpointController {
 
+    @ApiOperation(value = "Validate data")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoValidationResult validate(@RequestBody VoValidationRequest vo) throws Exception;
+    VoValidationResult validate(@ApiParam(value = "Validation request", name = "vo") @RequestBody VoValidationRequest vo) throws Exception;
 
 }

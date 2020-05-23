@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
@@ -61,7 +62,7 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
 
     @Override
     public @ResponseBody
-    List<MutablePair<String, String>> getCustomerTypes(@PathVariable("lang") final String lang) throws Exception {
+    List<MutablePair<String, String>> getCustomerTypes(@RequestParam("lang") final String lang) throws Exception {
         return voShopService.getAvailableShopsCustomerTypes(lang);
     }
 
@@ -109,7 +110,7 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
 
     @Override
     public @ResponseBody
-    List<VoAttrValueCustomer> getCustomerAttributes(@PathVariable("customerId") final long customerId) throws Exception {
+    List<VoAttrValueCustomer> getCustomerAttributes(@PathVariable("id") final long customerId) throws Exception {
         return voCustomerService.getCustomerAttributes(customerId);
     }
 
@@ -121,13 +122,13 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
 
     @Override
     public @ResponseBody
-    void resetPassword(@PathVariable("customerId") final long customerId, @PathVariable("shopId") final long shopId) throws Exception {
+    void resetPassword(@PathVariable("id") final long customerId, @PathVariable("shopId") final long shopId) throws Exception {
         voCustomerService.resetPassword(customerId, shopId);
     }
 
     @Override
     public @ResponseBody
-    VoAddressBook getAddressBook(@PathVariable("id") final long customerId, @PathVariable("formattingShopId") final long formattingShopId, @PathVariable("lang") final String lang) throws Exception {
+    VoAddressBook getAddressBook(@PathVariable("id") final long customerId, @RequestParam("shopId") final long formattingShopId, @RequestParam("lang") final String lang) throws Exception {
         return voAddressBookService.getAddressBook(customerId, formattingShopId, lang);
     }
 

@@ -31,7 +31,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class LocationService {
 
-  private _serviceBaseUrl = Config.API + 'service/location';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service/locations';  // URL to web api
 
   /**
    * Construct service, which has methods to work with information related to shop(s).
@@ -49,7 +49,7 @@ export class LocationService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/country/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/countries/search', body,
       Util.requestOptions())
       .map(res => <SearchResultVO<CountryInfoVO>> this.json(res))
       .catch(this.handleError);
@@ -61,7 +61,7 @@ export class LocationService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getCountryById(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/country/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/countries/' + id, Util.requestOptions())
       .map(res => <CountryVO> this.json(res))
       .catch(this.handleError);
   }
@@ -76,11 +76,11 @@ export class LocationService {
     let body = JSON.stringify(country);
 
     if (country.countryId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/country', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/countries', body, Util.requestOptions())
         .map(res => <CountryVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/country', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/countries', body, Util.requestOptions())
         .map(res => <CountryVO> this.json(res))
         .catch(this.handleError);
     }
@@ -94,7 +94,7 @@ export class LocationService {
    */
   removeCountry(country:CountryVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/country/' + country.countryId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/countries/' + country.countryId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -104,7 +104,7 @@ export class LocationService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getCountryStates(country:CountryVO) {
-    return this.http.get(this._serviceBaseUrl + '/country/state/' + country.countryId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/countries/' + country.countryId + '/states', Util.requestOptions())
       .map(res => <StateVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -117,7 +117,7 @@ export class LocationService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/country/state/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/states/search', body,
       Util.requestOptions())
       .map(res => <SearchResultVO<StateVO>> this.json(res))
       .catch(this.handleError);
@@ -130,7 +130,7 @@ export class LocationService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getStateById(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/state/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/states/' + id, Util.requestOptions())
       .map(res => <StateVO> this.json(res))
       .catch(this.handleError);
   }
@@ -144,11 +144,11 @@ export class LocationService {
     let body = JSON.stringify(state);
 
     if (state.stateId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/state', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/states', body, Util.requestOptions())
         .map(res => <StateVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/state', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/states', body, Util.requestOptions())
         .map(res => <StateVO> this.json(res))
         .catch(this.handleError);
     }
@@ -161,7 +161,7 @@ export class LocationService {
    */
   removeState(state:StateVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/state/' + state.stateId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/states/' + state.stateId, Util.requestOptions())
       .catch(this.handleError);
   }
 

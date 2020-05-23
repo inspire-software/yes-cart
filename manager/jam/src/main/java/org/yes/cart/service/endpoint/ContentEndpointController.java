@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -31,72 +33,89 @@ import java.util.List;
  * Time: 16:00
  */
 @Controller
-@Api(value = "Content", tags = "content")
-@RequestMapping("/content")
+@Api(value = "Content", description = "Content controller", tags = "content")
 public interface ContentEndpointController {
 
 
+    @ApiOperation(value = "Retrieve shop content")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
-    @RequestMapping(value = "/shop/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{shopId}/content", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoContent> getShopContent(@PathVariable("shopId") long shopId) throws Exception;
+    List<VoContent> getShopContent(@ApiParam(value = "Shop ID", required = true) @PathVariable("shopId") long shopId) throws Exception;
 
+    @ApiOperation(value = "Retrieve content branch")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
-    @RequestMapping(value = "/shop/{shopId}/branch/{branch}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{shopId}/content/{id}/branches", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoContent> getShopBranchContent(@PathVariable("shopId") long shopId, @PathVariable("branch") long branch, @RequestParam(value = "expand", required = false) String expand) throws Exception;
+    List<VoContent> getShopBranchContent(@ApiParam(value = "Shop ID", required = true) @PathVariable("shopId") long shopId, @ApiParam(value = "Content ID", required = true) @PathVariable("id") long branch, @ApiParam(value = "Content branches to expand (pipe delimited list of ID)") @RequestParam(value = "expand", required = false) String expand) throws Exception;
 
+    @ApiOperation(value = "Retrieve content branch path")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
-    @RequestMapping(value = "/shop/{shopId}/branchpaths", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{shopId}/content/branchpaths", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<Long> getShopBranchesContentPaths(@PathVariable("shopId") long shopId, @RequestParam(value = "expand", required = false) String expand) throws Exception;
+    List<Long> getShopBranchesContentPaths(@ApiParam(value = "Shop ID") @PathVariable("shopId") long shopId, @ApiParam(value = "Content branches to expand (pipe delimited list of ID)") @RequestParam(value = "expand", required = false) String expand) throws Exception;
 
+    @ApiOperation(value = "Shop content search")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
-    @RequestMapping(value = "/shop/{shopId}/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{shopId}/content/search", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoSearchResult<VoContent> getFilteredContent(@PathVariable("shopId") long shopId, @RequestBody VoSearchContext filter) throws Exception;
+    VoSearchResult<VoContent> getFilteredContent(@ApiParam(value = "Shop ID", required = true) @PathVariable("shopId") long shopId, @ApiParam(
+            value = "Search criteria with the following parameter support:" +
+                    "\n* filter - text filter expands to 'name', 'seoInternal.uri' and 'guid'" +
+                    "\n  * [^] prefix - exact match by parent 'guid' (e.g. '!MyParentContent')" +
+                    "\n  * [@] prefix - match by 'seoInternal.uri' (e.g. '@my-content-uri')" +
+                    "\n* contentIds - optional injected automatically according to current user access", name = "filter")
+                                                @RequestBody VoSearchContext filter) throws Exception;
 
+    @ApiOperation(value = "Retrieve content")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/content/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoContentWithBody getContentById(@PathVariable("id") long id) throws Exception;
+    VoContentWithBody getContentById(@ApiParam(value = "Content ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Create content")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN"})
-    @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/content", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoContentWithBody createContent(@RequestBody VoContent voContent) throws Exception;
+    VoContentWithBody createContent(@ApiParam(value = "Content", name = "vo", required = true) @RequestBody VoContent voContent) throws Exception;
 
+    @ApiOperation(value = "Update content")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN"})
-    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/content", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoContentWithBody updateContent(@RequestBody VoContentWithBody voContent) throws Exception;
+    VoContentWithBody updateContent(@ApiParam(value = "Content", name = "vo", required = true) @RequestBody VoContentWithBody voContent) throws Exception;
 
+    @ApiOperation(value = "Delete content")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN"})
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/content/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    void removeContent(@PathVariable("id") long id) throws Exception;
+    void removeContent(@ApiParam(value = "Content ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Retrieve content attributes")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
-    @RequestMapping(value = "/attributes/{contentId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/content/{id}/attributes", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttrValueContent> getContentAttributes(@PathVariable("contentId") long contentId) throws Exception;
+    List<VoAttrValueContent> getContentAttributes(@ApiParam(value = "Content ID", required = true) @PathVariable("id") long contentId) throws Exception;
 
 
+    @ApiOperation(value = "Update content attributes")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN"})
-    @RequestMapping(value = "/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/content/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttrValueContent> updateContent(@RequestBody List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception;
+    List<VoAttrValueContent> updateContent(@ApiParam(value = "Attributes", name = "vo", required = true) @RequestBody List<MutablePair<VoAttrValueContent, Boolean>> vo) throws Exception;
 
 
+    @ApiOperation(value = "Retrieve content body")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCONTENTADMIN","ROLE_SMCONTENTUSER"})
-    @RequestMapping(value = "/body/{contentId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/content/{id}/body", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoContentBody> getContentBody(@PathVariable("contentId") long contentId) throws Exception;
+    List<VoContentBody> getContentBody(@ApiParam(value = "Content ID", required = true) @PathVariable("id") long contentId) throws Exception;
 
 
+    @ApiOperation(value = "Show shop mail template preview")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER"})
-    @RequestMapping(value = "/mail/{shopId}/{template}", method = RequestMethod.GET,  produces = { MediaType.TEXT_HTML_VALUE })
+    @RequestMapping(value = "/shops/{shopId}/mail/{template}/preview", method = RequestMethod.GET,  produces = { MediaType.TEXT_HTML_VALUE })
     @ResponseBody
-    String getShopMail(@PathVariable("shopId") long shopId, @PathVariable("template") String template, @RequestParam(value = "order", required = false) String order, @RequestParam(value = "delivery", required = false) String delivery, @RequestParam(value = "customer", required = false) String customer) throws Exception;
+    String getShopMail(@ApiParam(value = "Shop ID", required = true) @PathVariable("shopId") long shopId, @ApiParam(value = "Mail template code", required = true) @PathVariable("template") String template, @ApiParam(value = "Order details to use") @RequestParam(value = "order", required = false) String order, @ApiParam(value = "Order delivery details to use") @RequestParam(value = "delivery", required = false) String delivery, @ApiParam(value = "Customer details to use") @RequestParam(value = "customer", required = false) String customer) throws Exception;
 
 }

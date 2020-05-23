@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.CustomerOrderEndpointController;
@@ -45,13 +46,13 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
 
     @Override
     public @ResponseBody
-    VoSearchResult<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") final String lang, @RequestBody(required = false) final VoSearchContext filter) throws Exception {
+    VoSearchResult<VoCustomerOrderInfo> getFilteredOrders(@RequestParam("lang") final String lang, @RequestBody(required = false) final VoSearchContext filter) throws Exception {
         return voCustomerOrderService.getFilteredOrders(lang, filter);
     }
 
     @Override
     public @ResponseBody
-    VoCustomerOrder getOrderById(@PathVariable("lang") final String lang, @PathVariable("id") final long id) throws Exception {
+    VoCustomerOrder getOrderById(@RequestParam("lang") final String lang, @PathVariable("id") final long id) throws Exception {
         return voCustomerOrderService.getOrderById(lang, id);
     }
 
@@ -69,7 +70,7 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
 
     @Override
     public @ResponseBody
-    VoCustomerOrder exportOrder(@PathVariable("lang") final String lang, @PathVariable("id") final long id, @PathVariable("export") final boolean export) throws Exception {
+    VoCustomerOrder exportOrder(@RequestParam("lang") final String lang, @PathVariable("id") final long id, @RequestParam("export") final boolean export) throws Exception {
         return voCustomerOrderService.exportOrder(lang, id, export);
     }
 

@@ -15,10 +15,10 @@
  */
 package org.yes.cart.service.endpoint;
 
-import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
  * Time: 11:42
  */
 @Controller
-@Api(value = "Web", tags = "pages")
+@ApiIgnore
 public interface IndexController {
 
     @RequestMapping(value = "/login.jsp", method = { RequestMethod.GET, RequestMethod.POST })

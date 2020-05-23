@@ -58,7 +58,7 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoContent> getShopBranchContent(@PathVariable("shopId") final long shopId, @PathVariable("branch") final long branch, @RequestParam(value = "expand", required = false) final String expand) throws Exception {
+    List<VoContent> getShopBranchContent(@PathVariable("shopId") final long shopId, @PathVariable("id") final long branch, @RequestParam(value = "expand", required = false) final String expand) throws Exception {
         return voContentService.getBranch(shopId, branch, determineBranchIds(expand));
     }
 
@@ -113,7 +113,7 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoAttrValueContent> getContentAttributes(@PathVariable("contentId") final long contentId) throws Exception {
+    List<VoAttrValueContent> getContentAttributes(@PathVariable("id") final long contentId) throws Exception {
         return voContentService.getContentAttributes(contentId);
     }
 
@@ -125,7 +125,7 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
 
     @Override
     public @ResponseBody
-    List<VoContentBody> getContentBody(@PathVariable("contentId") final long contentId) throws Exception {
+    List<VoContentBody> getContentBody(@PathVariable("id") final long contentId) throws Exception {
         return voContentService.getContentBody(contentId);
     }
 

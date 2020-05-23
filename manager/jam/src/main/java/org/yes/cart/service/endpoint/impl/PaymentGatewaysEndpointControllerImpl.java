@@ -19,11 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoPaymentGateway;
 import org.yes.cart.domain.vo.VoPaymentGatewayInfo;
 import org.yes.cart.domain.vo.VoPaymentGatewayParameter;
+import org.yes.cart.domain.vo.VoPaymentGatewayStatus;
 import org.yes.cart.service.endpoint.PaymentGatewaysEndpointController;
 import org.yes.cart.service.vo.VoPaymentGatewayService;
 
@@ -45,67 +47,50 @@ public class PaymentGatewaysEndpointControllerImpl implements PaymentGatewaysEnd
     }
 
     @Override
-    public @ResponseBody List<VoPaymentGatewayInfo> getPaymentGateways(@PathVariable("lang") final String lang) throws Exception {
+    public @ResponseBody List<VoPaymentGatewayInfo> getPaymentGateways(@RequestParam("lang") final String lang, @RequestParam("enabledOnly") final boolean enabledOnly) throws Exception {
+        if (enabledOnly) {
+            return voPaymentGatewayService.getAllowedPaymentGatewaysForShops(lang);
+        }
         return voPaymentGatewayService.getPaymentGateways(lang);
     }
 
     @Override
-    public @ResponseBody List<VoPaymentGatewayInfo> getPaymentGatewaysForShop(@PathVariable("lang") final String lang, @PathVariable("code") final String shopCode) throws Exception {
+    public @ResponseBody List<VoPaymentGatewayInfo> getPaymentGatewaysForShop(@RequestParam("lang") final String lang, @PathVariable("code") final String shopCode) throws Exception {
         return voPaymentGatewayService.getPaymentGatewaysForShop(lang, shopCode);
     }
 
     @Override
-    public @ResponseBody List<VoPaymentGatewayInfo> getAllowedPaymentGatewaysForShops(@PathVariable("lang") final String lang) throws Exception {
-        return voPaymentGatewayService.getAllowedPaymentGatewaysForShops(lang);
+    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParameters(@RequestParam("lang") final String lang, @RequestParam("includeSecure") final boolean includeSecure) throws Exception {
+        return voPaymentGatewayService.getPaymentGatewaysWithParameters(lang, includeSecure);
     }
 
     @Override
-    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParameters(@PathVariable("lang") final String lang) throws Exception {
-        return voPaymentGatewayService.getPaymentGatewaysWithParameters(lang, false);
-    }
-
-    @Override
-    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParametersSecure(@PathVariable("lang") final String lang) throws Exception {
-        return voPaymentGatewayService.getPaymentGatewaysWithParameters(lang, true);
-    }
-
-    @Override
-    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(@PathVariable("lang") final String lang, @PathVariable("code") final String shopCode) throws Exception {
+    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(@RequestParam("lang") final String lang, @PathVariable("code") final String shopCode, @RequestParam("includeSecure") final boolean includeSecure) throws Exception {
         return voPaymentGatewayService.getPaymentGatewaysWithParametersForShop(lang, shopCode, false);
     }
 
     @Override
-    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParametersForShopSecure(@PathVariable("lang") final String lang, @PathVariable("code") final String shopCode) throws Exception {
+    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParametersForShopSecure(@RequestParam("lang") final String lang, @PathVariable("code") final String shopCode, @RequestParam("includeSecure") final boolean includeSecure) throws Exception {
         return voPaymentGatewayService.getPaymentGatewaysWithParametersForShop(lang, shopCode, true);
     }
 
     @Override
-    public @ResponseBody List<VoPaymentGatewayParameter> update(@PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
-        return voPaymentGatewayService.updateParameters(pgLabel, vo, false);
+    public @ResponseBody List<VoPaymentGatewayParameter> update(@PathVariable("label") final String pgLabel, @RequestParam("includeSecure") final boolean includeSecure, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
+        return voPaymentGatewayService.updateParameters(pgLabel, vo, includeSecure);
     }
 
     @Override
-    public @ResponseBody List<VoPaymentGatewayParameter> updateSecure(@PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
-        return voPaymentGatewayService.updateParameters(pgLabel, vo, true);
+    public @ResponseBody List<VoPaymentGatewayParameter> update(@PathVariable("code") final String shopCode, @PathVariable("label") final String pgLabel, @RequestParam("includeSecure") final boolean includeSecure, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
+        return voPaymentGatewayService.updateParameters(shopCode, pgLabel, vo, includeSecure);
     }
 
     @Override
-    public @ResponseBody List<VoPaymentGatewayParameter> update(@PathVariable("code") final String shopCode, @PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
-        return voPaymentGatewayService.updateParameters(shopCode, pgLabel, vo, false);
+    public @ResponseBody void updateDisabledFlag(@PathVariable("label") final String pgLabel, @RequestBody final VoPaymentGatewayStatus status) throws Exception {
+        voPaymentGatewayService.updateDisabledFlag(pgLabel, status.isDisabled());
     }
 
     @Override
-    public @ResponseBody List<VoPaymentGatewayParameter> updateSecure(@PathVariable("code") final String shopCode, @PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
-        return voPaymentGatewayService.updateParameters(shopCode, pgLabel, vo, true);
-    }
-
-    @Override
-    public @ResponseBody void updateDisabledFlag(@PathVariable("label") final String pgLabel, @PathVariable("state") final boolean disabled) throws Exception {
-        voPaymentGatewayService.updateDisabledFlag(pgLabel, disabled);
-    }
-
-    @Override
-    public @ResponseBody void updateDisabledFlag(@PathVariable("code") final String shopCode, @PathVariable("label") final String pgLabel, @PathVariable("state") final boolean disabled) throws Exception {
-        voPaymentGatewayService.updateDisabledFlag(shopCode, pgLabel, disabled);
+    public @ResponseBody void updateDisabledFlag(@PathVariable("code") final String shopCode, @PathVariable("label") final String pgLabel, @RequestBody final VoPaymentGatewayStatus status) throws Exception {
+        voPaymentGatewayService.updateDisabledFlag(shopCode, pgLabel, status.isDisabled());
     }
 }

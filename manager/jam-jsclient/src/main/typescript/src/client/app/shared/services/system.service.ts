@@ -47,7 +47,7 @@ export class SystemService {
    * @returns {Observable<R>}
    */
   getSystemPreferences(includeSecure:boolean) {
-    return this.http.get(this._serviceBaseUrl + (includeSecure ? '/preferences/secure' : '/preferences'), Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/preferences?includeSecure=' + includeSecure, Util.requestOptions())
       .map(res => <AttrValueSystemVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -60,7 +60,7 @@ export class SystemService {
    */
   saveSystemAttributes(attrs:Array<Pair<AttrValueSystemVO, boolean>>, includeSecure:boolean) {
     let body = JSON.stringify(attrs);
-    return this.http.post(this._serviceBaseUrl + (includeSecure ? '/preferences/secure' : '/preferences'), body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/preferences?includeSecure=' + includeSecure, body, Util.requestOptions())
       .map(res => <AttrValueSystemVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -110,9 +110,9 @@ export class SystemService {
    */
   saveCacheFlag(name:string, enable:boolean) {
 
-    let path = enable ? 'on/' : 'off/';
+    let body = JSON.stringify({ statisticsDisabled: !enable });
 
-    return this.http.post(this._serviceBaseUrl + '/cache/' + path + name + '/', null, Util.requestOptions())
+    return this.http.put(this._serviceBaseUrl + '/cache/' + name + '/status', body, Util.requestOptions())
       .map(res => <CacheInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -158,7 +158,7 @@ export class SystemService {
    */
   reloadConfigurations() {
 
-    return this.http.post(this._serviceBaseUrl + '/reloadconfigurations', null, Util.requestOptions())
+    return this.http.put(this._serviceBaseUrl + '/cluster/configurations', null, Util.requestOptions())
       .map(res => <ClusterNodeVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -170,7 +170,7 @@ export class SystemService {
    * @returns {Observable<R>}
    */
   getIndexJobStatus(token:string) {
-    return this.http.get(this._serviceBaseUrl + '/index/status/' + token + '/', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/index/' + token + '/status', Util.requestOptions())
       .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
@@ -182,7 +182,7 @@ export class SystemService {
    */
   reindexAllProducts() {
 
-    return this.http.post(this._serviceBaseUrl + '/index/all', null, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/index', null, Util.requestOptions())
       .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
@@ -195,7 +195,7 @@ export class SystemService {
    */
   reindexShopProducts(id:number) {
 
-    return this.http.post(this._serviceBaseUrl + '/index/shop/' + id, null, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/index/shops/' + id, null, Util.requestOptions())
       .map(res => <JobStatusVO> this.json(res))
       .catch(this.handleError);
   }
@@ -207,7 +207,7 @@ export class SystemService {
    */
   supportedQueries() {
 
-    return this.http.get(this._serviceBaseUrl + '/query/supported/', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/query', Util.requestOptions())
       .map(res => <Pair<string, Array<string>>[]> this.json(res))
       .catch(this.handleError);
   }
@@ -223,8 +223,6 @@ export class SystemService {
   runQuery(node:string, typ:string, query:string) {
 
     let body = JSON.stringify({ type: typ, query: query });
-
-    console.log('hello', body);
 
     return this.http.post(this._serviceBaseUrl + '/query/' + node + '/', body,
         Util.requestOptions())

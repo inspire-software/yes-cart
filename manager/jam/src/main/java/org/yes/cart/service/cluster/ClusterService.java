@@ -208,7 +208,7 @@ public interface ClusterService {
      * @param context web service context
      * @param name name of cache to evict
      */
-    Map<String, Boolean> enableCache(AsyncContext context, String name);
+    Map<String, Boolean> enableCacheStats(AsyncContext context, String name);
 
     /**
      * Disable cache statistics by name.
@@ -216,7 +216,7 @@ public interface ClusterService {
      * @param context web service context
      * @param name name of cache to evict
      */
-    Map<String, Boolean> disableCache(AsyncContext context, String name);
+    Map<String, Boolean> disableCacheStats(AsyncContext context, String name);
 
     /**
      * Get platform alerts

@@ -285,9 +285,13 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   onRunTestResult(event:PromotionTestVO) {
     LogUtil.debug('ShopPromotionsComponent onRunTestResult', event);
-    if (event != null) {
+    if (event != null && this.selectedShop != null) {
       this.loading = true;
-      let _sub:any = this._promotionService.testPromotions(this.selectedShop, this.selectedCurrency, event).subscribe(
+
+      event.shopCode = this.selectedShop.code;
+      event.currency = this.selectedCurrency;
+
+      let _sub:any = this._promotionService.testPromotions(event).subscribe(
         cart => {
           _sub.unsubscribe();
           this.loading = false;

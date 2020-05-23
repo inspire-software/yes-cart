@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,7 @@ import java.io.IOException;
  * Time: 19:17
  */
 @Controller
-@Api(value = "File Vault", tags = "file")
+@Api(value = "File Vault", description = "File vault controller", tags = "file")
 @RequestMapping("/filevault")
 public interface FileVaultEndpointController {
 
@@ -42,24 +44,27 @@ public interface FileVaultEndpointController {
      * Download given file as bytes.
      * @param fileName file name
      */
+    @ApiOperation(value = "Download image from image vault")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/image/{type}", method = RequestMethod.GET)
-    void downloadImage(@PathVariable("type") String type, @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
+    @RequestMapping(value = "/images/{type}", method = RequestMethod.GET)
+    void downloadImage(@ApiParam(value = "Type", allowableValues = "category,content,product,brand,shop,system") @PathVariable("type") String type, @ApiParam(value = "File name") @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
     /**
      * Download given file as bytes.
      * @param fileName file name
      */
+    @ApiOperation(value = "Download file from file vault")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/file/{type}", method = RequestMethod.GET)
-    void downloadFile(@PathVariable("type") String type, @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
+    @RequestMapping(value = "/files/{type}", method = RequestMethod.GET)
+    void downloadFile(@ApiParam(value = "Type", allowableValues = "category,content,product,brand,shop,system") @PathVariable("type") String type, @ApiParam(value = "File name") @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
     /**
      * Download given file as bytes.
      * @param fileName file name
      */
+    @ApiOperation(value = "Download file from system file vault")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
-    @RequestMapping(value = "/sysfile/{type}", method = RequestMethod.GET)
-    void downloadSysFile(@PathVariable("type") String type, @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
+    @RequestMapping(value = "/sysfiles/{type}", method = RequestMethod.GET)
+    void downloadSysFile(@ApiParam(value = "Type", allowableValues = "shop,system") @PathVariable("type") String type, @ApiParam(value = "File name") @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
 }

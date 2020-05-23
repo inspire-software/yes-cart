@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -30,81 +32,102 @@ import java.util.List;
  * Time: 18:18
  */
 @Controller
-@Api(value = "Shipping", tags = "shipping")
-@RequestMapping("/shipping")
+@Api(value = "Shipping", description = "Shipping controller", tags = "shipping")
 public interface ShippingEndpointController {
 
+    @ApiOperation(value = "Shipping carriers search")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
-    @RequestMapping(value = "/carrier/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shipping/carriers/search", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoSearchResult<VoCarrierInfo> getFilteredCarriers(@RequestBody VoSearchContext filter) throws Exception;
+    VoSearchResult<VoCarrierInfo> getFilteredCarriers(@ApiParam(
+            value = "Search criteria with the following parameter support:" +
+                    "\n* filter - text filter expands to 'name', 'description' and 'guid'" +
+                    "\n* shopIds - optional injected automatically according to current user access", name = "filter")
+                                                      @RequestBody VoSearchContext filter) throws Exception;
 
+    @ApiOperation(value = "Retrieve shop carriers", tags = { "shipping", "shop" })
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
-    @RequestMapping(value = "/carrier/shop/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{id}/carriers", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoShopCarrierAndSla> getShopCarriers(@PathVariable("id") long shopId) throws Exception;
+    List<VoShopCarrierAndSla> getShopCarriers(@ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId) throws Exception;
 
+    @ApiOperation(value = "Retrieve carrier")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
-    @RequestMapping(value = "/carrier/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shipping/carriers/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCarrier getCarrierById(@PathVariable("id") long id) throws Exception;
+    VoCarrier getCarrierById(@ApiParam(value = "Carrier ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Create carrier")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
-    @RequestMapping(value = "/carrier", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shipping/carriers", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCarrier createCarrier(@RequestBody VoCarrier vo)  throws Exception;
+    VoCarrier createCarrier(@ApiParam(value = "Carrier", name = "vo", required = true) @RequestBody VoCarrier vo)  throws Exception;
 
+    @ApiOperation(value = "Create carrier assigned to a shop", tags = { "shipping", "shop" })
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
-    @RequestMapping(value = "/carrier/shop/{id}", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{id}/carriers", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCarrier createShopCarrier(@RequestBody VoCarrierInfo vo, @PathVariable("id") long shopId)  throws Exception;
+    VoCarrier createShopCarrier(@ApiParam(value = "Carrier", name = "vo", required = true) @RequestBody VoCarrierInfo vo, @ApiParam(value = "Shop ID", required = true) @PathVariable("id") long shopId)  throws Exception;
 
+    @ApiOperation(value = "Update carrier")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
-    @RequestMapping(value = "/carrier", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shipping/carriers", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCarrier updateCarrier(@RequestBody VoCarrier vo)  throws Exception;
+    VoCarrier updateCarrier(@ApiParam(value = "Carrier", name = "vo", required = true) @RequestBody VoCarrier vo)  throws Exception;
 
+    @ApiOperation(value = "Update shop carriers", tags = { "shipping", "shop" })
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
-    @RequestMapping(value = "/carrier/shop", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/carriers", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoShopCarrierAndSla> updateShopCarriers(@RequestBody List<VoShopCarrierAndSla> vo)  throws Exception;
+    List<VoShopCarrierAndSla> updateShopCarriers(@ApiParam(value = "Shop carriers", name = "vo", required = true) @RequestBody List<VoShopCarrierAndSla> vo)  throws Exception;
 
+    @ApiOperation(value = "Delete carrier")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/carrier/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/shipping/carriers/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    void removeCarrier(@PathVariable("id") long id) throws Exception;
+    void removeCarrier(@ApiParam(value = "Carrier ID", required = true) @PathVariable("id") long id) throws Exception;
 
 
+    @ApiOperation(value = "Retrieve carrier SLAs")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
-    @RequestMapping(value = "/carrier/sla/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shipping/carriers/{id}/slas", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCarrierSla> getCarrierSlaAll(@PathVariable("id") long carrierId) throws Exception;
+    List<VoCarrierSla> getCarrierSlaAll(@ApiParam(value = "Carrier ID", required = true) @PathVariable("id") long carrierId) throws Exception;
 
 
+    @ApiOperation(value = "Carrier SLA search")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
-    @RequestMapping(value = "/carriersla/filtered", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shipping/carrierslas/search", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoSearchResult<VoCarrierSlaInfo> getFilteredCarrierSlas(@RequestBody VoSearchContext filter) throws Exception;
+    VoSearchResult<VoCarrierSlaInfo> getFilteredCarrierSlas(@ApiParam(
+            value = "Search criteria with the following parameter support:" +
+                    "\n* filter - text filter expands to 'name', 'description' and 'guid'" +
+                    "\n* shopIds - optional injected automatically according to current user access", name = "filter")
+                                                            @RequestBody VoSearchContext filter) throws Exception;
 
+    @ApiOperation(value = "Retrieve carrier SLA")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER","ROLE_SMSHIPPINGADMIN","ROLE_SMSHIPPINGUSER"})
-    @RequestMapping(value = "/carriersla/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shipping/carrierslas/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCarrierSla getCarrierSlaById(@PathVariable("id") long id) throws Exception;
+    VoCarrierSla getCarrierSlaById(@ApiParam(value = "Carrier SLA ID", required = true) @PathVariable("id") long id) throws Exception;
 
+    @ApiOperation(value = "Create carrier SLA")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
-    @RequestMapping(value = "/carriersla", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shipping/carrierslas", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCarrierSla createCarrierSla(@RequestBody VoCarrierSla vo)  throws Exception;
+    VoCarrierSla createCarrierSla(@ApiParam(value = "SLA", name = "vo", required = true) @RequestBody VoCarrierSla vo)  throws Exception;
 
+    @ApiOperation(value = "Update carrier SLA")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
-    @RequestMapping(value = "/carriersla", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shipping/carrierslas", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCarrierSla updateCarrierSla(@RequestBody VoCarrierSla vo)  throws Exception;
+    VoCarrierSla updateCarrierSla(@ApiParam(value = "SLA", name = "vo", required = true) @RequestBody VoCarrierSla vo)  throws Exception;
 
+    @ApiOperation(value = "Delete carrier SLA")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
-    @RequestMapping(value = "/carriersla/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/shipping/carrierslas/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    void removeCarrierSla(@PathVariable("id") long id) throws Exception;
+    void removeCarrierSla(@ApiParam(value = "Carrier SLA ID", required = true) @PathVariable("id") long id) throws Exception;
 
 
 

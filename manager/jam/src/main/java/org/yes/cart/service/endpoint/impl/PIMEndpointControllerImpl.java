@@ -93,7 +93,7 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoAttrValueProduct> getProductAttributes(@PathVariable("productId") final long productId) throws Exception {
+    List<VoAttrValueProduct> getProductAttributes(@PathVariable("id") final long productId) throws Exception {
         return voProductService.getProductAttributes(productId);
     }
 
@@ -109,7 +109,7 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoProductSku> getProductSkuAll(@PathVariable("productId") final long productId) throws Exception {
+    List<VoProductSku> getProductSkuAll(@PathVariable("id") final long productId) throws Exception {
         return voProductService.getProductSkuAll(productId);
     }
 
@@ -153,7 +153,7 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
 
     @Override
     public @ResponseBody
-    List<VoAttrValueProductSku> getSkuAttributes(@PathVariable("skuId") final long skuId) throws Exception {
+    List<VoAttrValueProductSku> getSkuAttributes(@PathVariable("id") final long skuId) throws Exception {
         return voProductService.getSkuAttributes(skuId);
     }
 

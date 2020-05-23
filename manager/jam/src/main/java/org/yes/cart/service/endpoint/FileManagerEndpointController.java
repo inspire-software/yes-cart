@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -34,7 +36,7 @@ import java.util.List;
  * Time: 11:38
  */
 @Controller
-@Api(value = "File Manager", tags = "file")
+@Api(value = "File Manager", description = "File manager controller", tags = "file")
 @RequestMapping("/filemanager")
 public interface FileManagerEndpointController {
 
@@ -45,35 +47,39 @@ public interface FileManagerEndpointController {
      * @return pair of absolute and human friendly paths
      * @throws IOException errors
      */
+    @ApiOperation(value = "List files available in current user directory")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/list/{mode}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/list", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<MutablePair<String, String>> list(@PathVariable("mode") String mode) throws IOException;
+    List<MutablePair<String, String>> list(@ApiParam(value = "Access mode", allowableValues = "import,export,*", required = true) @RequestParam("mode") String mode) throws IOException;
 
     /**
      * Download given file as bytes.
      * @param fileName file name
      */
+    @ApiOperation(value = "Download specified file")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/download", method = RequestMethod.GET)
-    void download(@RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
+    void download(@ApiParam(value = "Fully qualified file path (see /list)") @RequestParam("fileName") String fileName, HttpServletResponse response) throws IOException;
 
     /**
      * Store given bytes as file.
      * @param file file body.
      */
+    @ApiOperation(value = "Upload a file")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    void upload(@RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws IOException;
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    void upload(@ApiParam(value = "File as multipart/form-data") @RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     /**
      * Delete given file.
      * @param fileName file name
      */
+    @ApiOperation(value = "Delete a file")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     @ResponseBody
-    void delete(@RequestParam("fileName") String fileName) throws IOException;
+    void delete(@ApiParam(value = "Fully qualified file path (see /list)") @RequestParam("fileName") String fileName) throws IOException;
 
 
 }

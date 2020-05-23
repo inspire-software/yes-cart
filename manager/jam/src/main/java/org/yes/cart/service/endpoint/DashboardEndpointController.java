@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -31,29 +33,33 @@ import java.util.List;
  * Time: 09:20
  */
 @Controller
-@Api(value = "Dashboard", tags = "dashboard")
+@Api(value = "Dashboard", description = "Dashboard controller", tags = "dashboard")
 @RequestMapping("/reports")
 public interface DashboardEndpointController {
 
+    @ApiOperation(value = "Retrieve all available widgets")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/dashboard/{lang}/available", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/dashboard/available", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoDashboardWidgetInfo> getAvailableWidgets(@PathVariable("lang") String lang) throws Exception;
+    List<VoDashboardWidgetInfo> getAvailableWidgets(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String lang) throws Exception;
 
+    @ApiOperation(value = "Update dashboard widgets selection")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/dashboard/{lang}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/dashboard", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    void updateDashboardSelection(@RequestBody List<VoDashboardWidgetInfo> dashboard) throws Exception;
+    void updateDashboardSelection(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String lang, @ApiParam(value = "Dashboard selection") @RequestBody List<VoDashboardWidgetInfo> dashboard) throws Exception;
 
+    @ApiOperation(value = "Retrieve widgets for current user")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/dashboard/{lang}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/dashboard", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoDashboardWidget> getDashboard(@PathVariable("lang") String lang) throws Exception;
+    List<VoDashboardWidget> getDashboard(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String lang) throws Exception;
 
+    @ApiOperation(value = "Retrieve widget")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/dashboard/{lang}/{widget}/", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/dashboard/{widget}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoDashboardWidget> getDashboardWidget(@PathVariable("widget") String widget, @PathVariable("lang") String lang) throws Exception;
+    List<VoDashboardWidget> getDashboardWidget(@ApiParam(value = "Widget ID", required = true) @PathVariable("widget") String widget, @ApiParam(value = "Language code", required = true) @RequestParam("lang") String lang) throws Exception;
 
 
 }

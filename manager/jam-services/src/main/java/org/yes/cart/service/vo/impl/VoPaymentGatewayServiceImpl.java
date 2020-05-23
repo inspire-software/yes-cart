@@ -347,7 +347,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         int rank = 100; // default priority in modules
 
         for (final VoPaymentGatewayParameter parameter : parameters) {
-            if ("priority".equals(parameter.getLabel())) {
+            if ("priority".equals(parameter.getLabel()) || parameter.getLabel().endsWith("_priority")) {
                 rank = NumberUtils.toInt(parameter.getValue(), rank);
                 break;
             }

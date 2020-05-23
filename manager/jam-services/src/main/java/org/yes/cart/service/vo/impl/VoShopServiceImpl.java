@@ -930,22 +930,16 @@ public class VoShopServiceImpl implements VoShopService {
 
         final List<String> all = currencyService.getSupportedCurrencies();
         final String supportedStr = dtoShopService.getSupportedCurrencies(shopId);
-        final List<String> supported = supportedStr == null ? Collections.emptyList() : Arrays.asList(supportedStr.split(","));
+        final List<String> supported = StringUtils.isBlank(supportedStr) ? Collections.emptyList() : Arrays.asList(supportedStr.split(","));
         final Map<String, String> names = currencyService.getCurrencyName();
 
         for (final String one : all) {
-            if (names.containsKey(one)) {
-                ssc.getAll().add(MutablePair.of(one, names.get(one)));
-            } else {
-                ssc.getAll().add(MutablePair.of(one, one));
-            }
+            ssc.getAll().add(MutablePair.of(one, names.getOrDefault(one, one)));
         }
 
         for (final String one : supported) {
-            if (names.containsKey(one)) {
-                ssc.getSupported().add(MutablePair.of(one, names.get(one)));
-            } else {
-                ssc.getSupported().add(MutablePair.of(one, one));
+            if (StringUtils.isNotBlank(one)) {
+                ssc.getSupported().add(MutablePair.of(one, names.getOrDefault(one, one)));
             }
         }
 
@@ -999,7 +993,7 @@ public class VoShopServiceImpl implements VoShopService {
     private VoShopLanguages getShopLanguagesInternal(long shopId) throws Exception {
         final VoShopLanguages voShopLanguages = new VoShopLanguages();
         String lng = dtoShopService.getSupportedLanguages(shopId);
-        voShopLanguages.setSupported(lng == null ? Collections.emptyList() : Arrays.asList(lng.split(",")));
+        voShopLanguages.setSupported(StringUtils.isBlank(lng) ? Collections.emptyList() : Arrays.asList(lng.split(",")));
         voShopLanguages.setAll(VoUtils.adaptMapToPairs(languageService.getLanguageName()));
         voShopLanguages.setShopId(shopId);
         return voShopLanguages;

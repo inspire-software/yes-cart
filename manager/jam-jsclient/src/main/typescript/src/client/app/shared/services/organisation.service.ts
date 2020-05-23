@@ -31,7 +31,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class OrganisationService {
 
-  private _serviceBaseUrl = Config.API + 'service/organisation';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service/organisations';  // URL to web api
 
   /**
    * Construct service, which has methods to work with information related to role(s).
@@ -49,7 +49,7 @@ export class OrganisationService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/managers/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/managers/search', body,
       Util.requestOptions())
       .map(res => <SearchResultVO<ManagerInfoVO>> this.json(res))
       .catch(this.handleError);
@@ -60,7 +60,7 @@ export class OrganisationService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getManagerById(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/manager/' + id + '/', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/managers/' + id + '/', Util.requestOptions())
       .map(res => <ManagerVO> this.json(res))
       .catch(this.handleError);
   }
@@ -75,11 +75,11 @@ export class OrganisationService {
     let body = JSON.stringify(manager);
 
     if (manager.managerId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/manager', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/managers', body, Util.requestOptions())
         .map(res => <ManagerVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/manager', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/managers', body, Util.requestOptions())
         .map(res => <ManagerVO> this.json(res))
         .catch(this.handleError);
     }
@@ -92,7 +92,7 @@ export class OrganisationService {
    */
   removeManager(id:number) {
 
-    return this.http.delete(this._serviceBaseUrl + '/manager/' + id + '/', Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/managers/' + id + '/', Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -103,20 +103,22 @@ export class OrganisationService {
    */
   resetPassword(id:number) {
 
-    return this.http.post(this._serviceBaseUrl + '/manager/reset/' + id + '/', null, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/managers/' + id + '/reset', null, Util.requestOptions())
       .catch(this.handleError);
   }
 
   /**
    * Update manager on/off flag.
-   * @param manager manager email
-   * @param state manager state
+   * @param id manager id
+   * @param state manager account state
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   updateDisabledFlag(id:number, state:boolean) {
     LogUtil.debug('ManagementService change manager state for ' + id + ' to ' + state ? 'online' : 'offline');
 
-    return this.http.post(this._serviceBaseUrl +  '/manager/offline/' + id + '/' + state, null, Util.requestOptions())
+    let body = JSON.stringify({ disabled: state });
+
+    return this.http.post(this._serviceBaseUrl +  '/managers/' + id + '/account', body, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -125,7 +127,7 @@ export class OrganisationService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllRoles() {
-    return this.http.get(this._serviceBaseUrl + '/role/all', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/roles', Util.requestOptions())
       .map(res => <RoleVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -140,11 +142,11 @@ export class OrganisationService {
     let body = JSON.stringify(role);
 
     if (role.roleId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/role', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/roles', body, Util.requestOptions())
         .map(res => <RoleVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/role', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/roles', body, Util.requestOptions())
         .map(res => <RoleVO> this.json(res))
         .catch(this.handleError);
     }
@@ -157,7 +159,7 @@ export class OrganisationService {
    */
   removeRole(role:RoleVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/role/' + role.code, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/roles/' + role.code, Util.requestOptions())
       .catch(this.handleError);
   }
 

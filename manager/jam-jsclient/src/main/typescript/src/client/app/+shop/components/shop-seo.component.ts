@@ -122,7 +122,7 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopSEOComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopLocalization) {
       this.loading = true;
-      let _sub:any = this._shopService.saveShopLocalization(this.shopLocalization).subscribe(shopLocalization => {
+      let _sub:any = this._shopService.saveShopSeo(this.shopLocalization).subscribe(shopLocalization => {
         LogUtil.debug('ShopSEOComponent Saved i18n', shopLocalization);
 
         UiUtil.formInitialise(this, 'shopSEOForm', 'shopLocalization', shopLocalization);
@@ -139,7 +139,7 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopSEOComponent Discard handler for shop', this.shop);
     if (this.shop.shopId > 0) {
       this.loading = true;
-      let _sub:any = this._shopService.getShopLocalization(this.shop.shopId).subscribe(shopLocalization => {
+      let _sub:any = this._shopService.getShopSeo(this.shop.shopId).subscribe(shopLocalization => {
         LogUtil.debug('ShopSEOComponent Refreshed i18n', shopLocalization);
 
         UiUtil.formInitialise(this, 'shopSEOForm', 'shopLocalization', shopLocalization);

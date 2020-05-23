@@ -16,13 +16,12 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttrValueSystem;
 
@@ -34,29 +33,20 @@ import java.util.List;
  * Time: 17:52
  */
 @Controller
-@Api(value = "System", tags = "system")
+@Api(value = "System", description = "System controller", tags = "system")
 @RequestMapping("/system/preferences")
 public interface SystemPreferencesEndpointController {
 
+    @ApiOperation(value = "Retrieve system preferences")
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttrValueSystem> getSystemPreferences() throws Exception;
+    List<VoAttrValueSystem> getSystemPreferences(@ApiParam(value = "Include secure attributes", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure) throws Exception;
 
-    @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/secure", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<VoAttrValueSystem> getSystemPreferencesSecure() throws Exception;
-
+    @ApiOperation(value = "Update system preferences")
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttrValueSystem> update(@RequestBody List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception;
-
-    @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/secure", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<VoAttrValueSystem> updateSecure(@RequestBody List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception;
-
+    List<VoAttrValueSystem> update(@ApiParam(value = "Update secure attributes", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure, @ApiParam(value = "Attributes", name = "vo", required = true) @RequestBody List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception;
 
 }

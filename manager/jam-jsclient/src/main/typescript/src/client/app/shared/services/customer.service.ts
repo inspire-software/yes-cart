@@ -35,7 +35,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class CustomerService {
 
-  private _serviceBaseUrl = Config.API + 'service/customer';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service/customers';  // URL to web api
 
   /**
    * Construct service, which has methods to work with information related to shop(s).
@@ -53,7 +53,7 @@ export class CustomerService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/search', body,
           Util.requestOptions())
         .map(res => <SearchResultVO<CustomerInfoVO>> this.json(res))
         .catch(this.handleError);
@@ -68,7 +68,7 @@ export class CustomerService {
    */
   getCustomerTypes(customerId:number, lang:string) {
 
-    return this.http.get(this._serviceBaseUrl + '/types/' + lang + '/' + customerId + '/', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + customerId + '/types?lang=' + lang, Util.requestOptions())
       .map(res => <Pair<string, string>[]> this.json(res))
       .catch(this.handleError);
   }
@@ -94,11 +94,11 @@ export class CustomerService {
     let body = JSON.stringify(customer);
 
     if (customer.customerId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/', body, Util.requestOptions())
         .map(res => <CustomerVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/', body, Util.requestOptions())
         .map(res => <CustomerVO> this.json(res))
         .catch(this.handleError);
     }
@@ -123,7 +123,7 @@ export class CustomerService {
    * @returns {Observable<R>}
    */
   getCustomerAttributes(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/attributes/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + id + '/attributes', Util.requestOptions())
       .map(res => <AttrValueCustomerVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -149,7 +149,7 @@ export class CustomerService {
    */
   resetPassword(customer:CustomerInfoVO, shopId:number) {
 
-    return this.http.post(this._serviceBaseUrl + '/reset/' + customer.customerId + '/' + shopId, null, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/' + customer.customerId + '/reset/' + shopId, null, Util.requestOptions())
         .catch(this.handleError);
   }
 
@@ -160,7 +160,7 @@ export class CustomerService {
    */
   getAddressBook(customer:CustomerInfoVO, formattingShopId:number, lang:string) {
 
-    return this.http.get(this._serviceBaseUrl + '/addressbook/' + customer.customerId + '/' + formattingShopId + '/' + lang, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + customer.customerId + '/addressbook?shopId=' + formattingShopId + '&lang=' + lang, Util.requestOptions())
       .map(res => <AddressBookVO> this.json(res))
       .catch(this.handleError);
   }
@@ -177,11 +177,11 @@ export class CustomerService {
     let body = JSON.stringify(address);
 
     if (address.addressId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/addressbook', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/addressbook', body, Util.requestOptions())
         .map(res => <AddressVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/addressbook', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/addressbook', body, Util.requestOptions())
         .map(res => <AddressVO> this.json(res))
         .catch(this.handleError);
     }

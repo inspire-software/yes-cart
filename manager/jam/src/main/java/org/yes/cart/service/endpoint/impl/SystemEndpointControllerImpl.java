@@ -171,20 +171,14 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
     /** {@inheritDoc} */
     @Override
     public @ResponseBody
-    List<VoCacheInfo> enableCache(@PathVariable("name") final String name) throws Exception {
+    List<VoCacheInfo> statusCache(@PathVariable("name") final String name, @RequestBody final VoCacheStatus status) throws Exception {
         final Map<String, Object> param = new HashMap<>();
         param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS);
-        clusterService.enableCache(createCtx(param), name);
-        return getCacheInfo();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public @ResponseBody
-    List<VoCacheInfo> disableCache(@PathVariable("name") final String name) throws Exception {
-        final Map<String, Object> param = new HashMap<>();
-        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_CONNECTOR_CACHE_TIMEOUT_MS);
-        clusterService.disableCache(createCtx(param), name);
+        if (status.isStatisticsDisabled()) {
+            clusterService.disableCacheStats(createCtx(param), name);
+        } else {
+            clusterService.enableCacheStats(createCtx(param), name);
+        }
         return getCacheInfo();
     }
 

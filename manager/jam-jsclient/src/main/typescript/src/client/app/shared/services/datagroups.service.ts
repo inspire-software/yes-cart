@@ -46,7 +46,7 @@ export class DataGroupsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllDataGroups() {
-    return this.http.get(this._serviceBaseUrl + '/impex/datagroup/all', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/impex/datagroups', Util.requestOptions())
       .map(res => <DataGroupVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -57,7 +57,7 @@ export class DataGroupsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getDataGroupById(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/impex/datagroup/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/impex/datagroups/' + id, Util.requestOptions())
       .map(res => <DataGroupVO> this.json(res))
       .catch(this.handleError);
   }
@@ -72,11 +72,11 @@ export class DataGroupsService {
     let body = JSON.stringify(group);
 
     if (group.datagroupId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/impex/datagroup', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/impex/datagroups', body, Util.requestOptions())
         .map(res => <DataGroupVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/impex/datagroup', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/impex/datagroups', body, Util.requestOptions())
         .map(res => <DataGroupVO> this.json(res))
         .catch(this.handleError);
     }
@@ -90,7 +90,7 @@ export class DataGroupsService {
    */
   removeDataGroup(group:DataGroupVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/impex/datagroup/' + group.datagroupId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/impex/datagroups/' + group.datagroupId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -100,7 +100,7 @@ export class DataGroupsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllDataDescriptors() {
-    return this.http.get(this._serviceBaseUrl + '/impex/datadescriptor/all', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/impex/datadescriptors', Util.requestOptions())
       .map(res => <DataDescriptorVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -112,7 +112,7 @@ export class DataGroupsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getDataDescriptorById(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/impex/datadescriptor/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/impex/datadescriptors/' + id, Util.requestOptions())
       .map(res => <DataDescriptorVO> this.json(res))
       .catch(this.handleError);
   }
@@ -126,11 +126,11 @@ export class DataGroupsService {
     let body = JSON.stringify(descriptor);
 
     if (descriptor.datadescriptorId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/impex/datadescriptor', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/impex/datadescriptors', body, Util.requestOptions())
         .map(res => <DataDescriptorVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/impex/datadescriptor', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/impex/datadescriptors', body, Util.requestOptions())
         .map(res => <DataDescriptorVO> this.json(res))
         .catch(this.handleError);
     }
@@ -143,7 +143,7 @@ export class DataGroupsService {
    */
   removeDataDescriptor(descriptor:DataDescriptorVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/impex/datadescriptor/' + descriptor.datadescriptorId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/impex/datadescriptors/' + descriptor.datadescriptorId, Util.requestOptions())
       .catch(this.handleError);
   }
 

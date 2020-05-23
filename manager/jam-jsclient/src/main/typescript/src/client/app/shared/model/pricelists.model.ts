@@ -124,6 +124,8 @@ export interface TaxConfigVO {
 
 export interface PromotionTestVO {
 
+  shopCode: string;
+  currency: string;
   supplier: string;
   customer: string;
   shipping: string;

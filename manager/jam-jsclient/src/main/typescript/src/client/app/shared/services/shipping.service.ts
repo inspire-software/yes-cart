@@ -31,7 +31,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class ShippingService {
 
-  private _serviceBaseUrl = Config.API + 'service/shipping';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service';  // URL to web api
 
   /**
    * Construct service, which has methods to work with information related to shop(s).
@@ -49,7 +49,7 @@ export class ShippingService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/carrier/filtered', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/shipping/carriers/search', body, Util.requestOptions())
       .map(res => <SearchResultVO<CarrierInfoVO>> this.json(res))
       .catch(this.handleError);
   }
@@ -59,7 +59,7 @@ export class ShippingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getCarrierById(carrierId:number) {
-    return this.http.get(this._serviceBaseUrl + '/carrier/' + carrierId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/shipping/carriers/' + carrierId, Util.requestOptions())
       .map(res => <CarrierVO> this.json(res))
       .catch(this.handleError);
   }
@@ -69,7 +69,7 @@ export class ShippingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getShopCarriers(shopId:number) {
-    return this.http.get(this._serviceBaseUrl + '/carrier/shop/' + shopId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/shops/' + shopId + '/carriers', Util.requestOptions())
       .map(res => <ShopCarrierAndSlaVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -84,11 +84,11 @@ export class ShippingService {
     let body = JSON.stringify(carrier);
 
     if (carrier.carrierId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/carrier', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/shipping/carriers', body, Util.requestOptions())
         .map(res => <CarrierVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/carrier', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/shipping/carriers', body, Util.requestOptions())
         .map(res => <CarrierVO> this.json(res))
         .catch(this.handleError);
     }
@@ -103,7 +103,7 @@ export class ShippingService {
   createCarrier(carrier:CarrierInfoVO, shopId : number) {
     let body = JSON.stringify(carrier);
 
-    return this.http.put(this._serviceBaseUrl + '/carrier/shop/' + shopId, body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/shops/' + shopId + '/carriers', body, Util.requestOptions())
       .map(res => <CarrierVO> this.json(res))
       .catch(this.handleError);
   }
@@ -118,7 +118,7 @@ export class ShippingService {
 
     let body = JSON.stringify(carriers);
 
-    return this.http.post(this._serviceBaseUrl + '/carrier/shop', body, Util.requestOptions())
+    return this.http.put(this._serviceBaseUrl + '/shops/carriers', body, Util.requestOptions())
       .map(res => <Array<ShopCarrierAndSlaVO>> this.json(res))
       .catch(this.handleError);
   }
@@ -131,7 +131,7 @@ export class ShippingService {
    */
   removeCarrier(carrier:CarrierVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/carrier/' + carrier.carrierId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/shipping/carriers/' + carrier.carrierId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -141,7 +141,7 @@ export class ShippingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getCarrierSlas(carrierId:number) {
-    return this.http.get(this._serviceBaseUrl + '/carrier/sla/' + carrierId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/shipping/carriers/' + carrierId + '/slas', Util.requestOptions())
       .map(res => <CarrierSlaVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -154,7 +154,7 @@ export class ShippingService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/carriersla/filtered/', body,
+    return this.http.post(this._serviceBaseUrl + '/shipping/carriersla/search', body,
         Util.requestOptions())
       .map(res => <SearchResultVO<CarrierSlaInfoVO>> this.json(res))
       .catch(this.handleError);
@@ -171,11 +171,11 @@ export class ShippingService {
     let body = JSON.stringify(sla);
 
     if (sla.carrierslaId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/carriersla', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/shipping/carrierslas', body, Util.requestOptions())
         .map(res => <CarrierSlaVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/carriersla', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/shipping/carrierslas', body, Util.requestOptions())
         .map(res => <CarrierSlaVO> this.json(res))
         .catch(this.handleError);
     }
@@ -190,7 +190,7 @@ export class ShippingService {
    */
   removeCarrierSla(sla:CarrierSlaVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/carriersla/' + sla.carrierslaId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/shipping/carrierslas/' + sla.carrierslaId, Util.requestOptions())
       .catch(this.handleError);
   }
 

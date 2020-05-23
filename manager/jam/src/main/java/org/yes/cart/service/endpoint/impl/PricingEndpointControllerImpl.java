@@ -177,8 +177,8 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     @Override
     public @ResponseBody
-    void updatePromotionDisabledFlag(@PathVariable("id") final long id, @PathVariable("state") final boolean state) throws Exception {
-        voPromotionService.updateDisabledFlag(id, state);
+    void updatePromotionDisabledFlag(@PathVariable("id") final long id, @RequestBody final VoPromotionStatus state) throws Exception {
+        voPromotionService.updateDisabledFlag(id, state.isDisabled());
     }
 
     @Override
@@ -201,8 +201,8 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     @Override
     public @ResponseBody
-    VoCart testPromotions(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final VoPromotionTest testData) throws Exception {
-        return voPromotionService.testPromotions(shopCode, currency, testData);
+    VoCart testPromotions(@RequestBody final VoPromotionTest testData) throws Exception {
+        return voPromotionService.testPromotions(testData.getShopCode(), testData.getCurrency(), testData);
     }
 
 }

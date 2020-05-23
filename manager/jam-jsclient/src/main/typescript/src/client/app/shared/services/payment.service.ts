@@ -31,7 +31,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class PaymentService {
 
-  private _serviceBaseUrl = Config.API + 'service/payment';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service';  // URL to web api
 
   /**
    * Construct service, which has methods to work with information related to shop(s).
@@ -47,7 +47,7 @@ export class PaymentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getPaymentGateways(lang:string) {
-    return this.http.get(this._serviceBaseUrl + '/gateways/all/' + lang, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/paymentgateways?enabledOnly=false&lang=' + lang, Util.requestOptions())
       .map(res => <PaymentGatewayInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -59,7 +59,7 @@ export class PaymentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getPaymentGatewaysForShop(lang:string, shopCode:string) {
-    return this.http.get(this._serviceBaseUrl + '/gateways/shop/' + shopCode + '/' + lang, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/shops/' + shopCode + '/paymentgateways?lang=' + lang, Util.requestOptions())
       .map(res => <PaymentGatewayInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -70,7 +70,7 @@ export class PaymentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllowedPaymentGatewaysForShops(lang:string) {
-    return this.http.get(this._serviceBaseUrl + '/gateways/shop/allowed/' + lang, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/paymentgateways?enabledOnly=true&lang=' + lang, Util.requestOptions())
       .map(res => <PaymentGatewayInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -85,10 +85,14 @@ export class PaymentService {
    */
   getPaymentGatewaysWithParameters(lang:string, shopCode:string, includeSecure:boolean) {
 
-    let _secure = includeSecure ? 'secure/' : '';
-    let _path = shopCode != null ? ('/gateways/configure/' + _secure + 'shop/' + shopCode + '/') : ('/gateways/configure/' + _secure + 'all/');
+    let _path = '';
+    if (shopCode != null) {
+      _path = '/shops/' + shopCode + '/paymentgateways/details?includeSecure=' + includeSecure + '&lang=' + lang;
+    } else {
+      _path = '/paymentgateways/details?includeSecure=' + includeSecure + '&lang=' + lang;
+    }
 
-    return this.http.get(this._serviceBaseUrl + _path + lang, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + _path, Util.requestOptions())
       .map(res => <PaymentGatewayVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -103,9 +107,16 @@ export class PaymentService {
   updateDisabledFlag(shopCode: string, pgLabel:string, state:boolean) {
     LogUtil.debug('PaymentService change state PG ' + pgLabel + ' for ' + shopCode + ' to ' + state ? 'online' : 'offline');
 
-    let _path = shopCode != null ? '/gateways/offline/' + shopCode : '/gateways/offline';
+    let body = JSON.stringify({ disabled: state });
 
-    return this.http.post(this._serviceBaseUrl + _path + '/' + pgLabel + '/' + state, null, Util.requestOptions())
+    let _path = '';
+    if (shopCode != null) {
+      _path = '/shops/' + shopCode + '/paymentgateways/' + pgLabel + '/status';
+    } else {
+      _path = '/paymentgateways/' + pgLabel + '/status';
+    }
+
+    return this.http.post(this._serviceBaseUrl +_path, body, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -121,8 +132,12 @@ export class PaymentService {
   savePaymentGatewayParameters(shopCode: string, pgLabel:string, attrs:Array<Pair<PaymentGatewayParameterVO, boolean>>, includeSecure:boolean) {
     let body = JSON.stringify(attrs);
 
-    let _secure = includeSecure ? 'secure/' : '';
-    let _path = shopCode != null ? ('/gateways/configure/'  + _secure + pgLabel + '/' + shopCode + '/') : ('/gateways/configure/' + _secure + pgLabel + '/');
+    let _path = '';
+    if (shopCode != null) {
+      _path = '/shops/' + shopCode + '/paymentgateways/' + pgLabel + '?includeSecure=' + includeSecure;
+    } else {
+      _path = '/paymentgateways/' + pgLabel + '?includeSecure=' + includeSecure;
+    }
 
     return this.http.post(this._serviceBaseUrl + _path , body, Util.requestOptions())
       .map(res => <PaymentGatewayParameterVO[]> this.json(res))

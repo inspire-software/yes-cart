@@ -52,7 +52,7 @@ export class PIMService {
    */
   getAllAssociations() {
 
-    return this.http.get(this._serviceBaseUrl + '/associations/all', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/associations', Util.requestOptions())
       .map(res => <AssociationVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -67,7 +67,7 @@ export class PIMService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/product/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/products/search', body,
           Util.requestOptions())
       .map(res => <SearchResultVO<ProductVO>> this.json(res))
       .catch(this.handleError);
@@ -78,7 +78,7 @@ export class PIMService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getProductById(productId:number) {
-    return this.http.get(this._serviceBaseUrl + '/product/' + productId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/products/' + productId, Util.requestOptions())
       .map(res => <ProductWithLinksVO> this.json(res))
       .catch(this.handleError);
   }
@@ -93,11 +93,11 @@ export class PIMService {
     let body = JSON.stringify(product);
 
     if (product.productId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/product', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/products', body, Util.requestOptions())
         .map(res => <ProductWithLinksVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/product', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/products', body, Util.requestOptions())
         .map(res => <ProductWithLinksVO> this.json(res))
         .catch(this.handleError);
     }
@@ -111,7 +111,7 @@ export class PIMService {
    */
   removeProduct(product:ProductVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/product/' + product.productId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/products/' + product.productId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -122,7 +122,7 @@ export class PIMService {
    * @returns {Observable<R>}
    */
   getProductAttributes(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/product/attributes/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/products/' + id + '/attributes/', Util.requestOptions())
       .map(res => <AttrValueProductVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -135,7 +135,7 @@ export class PIMService {
    */
   saveProductAttributes(attrs:Array<Pair<AttrValueProductVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    return this.http.post(this._serviceBaseUrl + '/product/attributes', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/products/attributes', body, Util.requestOptions())
       .map(res => <AttrValueProductVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -149,7 +149,7 @@ export class PIMService {
    */
   getProductSkuAll(product:ProductVO) {
 
-    return this.http.get(this._serviceBaseUrl + '/product/sku/' + product.productId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/products/' + product.productId + '/skus', Util.requestOptions())
       .map(res => <ProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -164,7 +164,7 @@ export class PIMService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/product/sku/filtered', body,
+    return this.http.post(this._serviceBaseUrl + '/skus/search', body,
           Util.requestOptions())
       .map(res => <SearchResultVO<ProductSkuVO>> this.json(res))
       .catch(this.handleError);
@@ -176,7 +176,7 @@ export class PIMService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getSkuById(skuId:number) {
-    return this.http.get(this._serviceBaseUrl + '/sku/' + skuId, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/skus/' + skuId, Util.requestOptions())
       .map(res => <ProductSkuVO> this.json(res))
       .catch(this.handleError);
   }
@@ -191,11 +191,11 @@ export class PIMService {
     let body = JSON.stringify(sku);
 
     if (sku.skuId > 0) {
-      return this.http.post(this._serviceBaseUrl + '/sku', body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl + '/skus', body, Util.requestOptions())
         .map(res => <ProductSkuVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.put(this._serviceBaseUrl + '/sku', body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl + '/skus', body, Util.requestOptions())
         .map(res => <ProductSkuVO> this.json(res))
         .catch(this.handleError);
     }
@@ -209,7 +209,7 @@ export class PIMService {
    */
   removeSKU(sku:ProductSkuVO) {
 
-    return this.http.delete(this._serviceBaseUrl + '/sku/' + sku.skuId, Util.requestOptions())
+    return this.http.delete(this._serviceBaseUrl + '/skus/' + sku.skuId, Util.requestOptions())
       .catch(this.handleError);
   }
 
@@ -220,7 +220,7 @@ export class PIMService {
    * @returns {Observable<R>}
    */
   getSKUAttributes(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/sku/attributes/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/skus/' + id + '/attributes', Util.requestOptions())
       .map(res => <AttrValueProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -233,7 +233,7 @@ export class PIMService {
    */
   saveSKUAttributes(attrs:Array<Pair<AttrValueProductSkuVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    return this.http.post(this._serviceBaseUrl + '/sku/attributes', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/skus/attributes', body, Util.requestOptions())
       .map(res => <AttrValueProductSkuVO[]> this.json(res))
       .catch(this.handleError);
   }

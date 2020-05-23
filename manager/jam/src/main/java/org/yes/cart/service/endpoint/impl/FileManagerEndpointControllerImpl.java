@@ -47,7 +47,7 @@ public class FileManagerEndpointControllerImpl implements FileManagerEndpointCon
 
     @Override
     public @ResponseBody
-    List<MutablePair<String, String>> list(@PathVariable("mode") final String mode) throws IOException {
+    List<MutablePair<String, String>> list(@RequestParam("mode") final String mode) throws IOException {
         return fileManager.list(mode);
     }
 

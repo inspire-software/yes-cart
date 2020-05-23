@@ -35,7 +35,7 @@
               {{supported.first.name}} {{supported.second != null ? ' / ' + supported.second.name : ''}}
               <button class="pull-right btn btn-danger btn-circle btn-sm" title="{{supported.first.name}}" (click)=onSupportedCarrierClick(supported.first)><i class="fa fa-unlink"></i></button>
               <button *ngIf="supported.second != null" class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}" (click)=onSupportedCarrierSlaRankClick(supported.second)>{{supported.second.rank}}</button>
-              <button *ngIf="supported.second != null" class="pull-right btn {{ supported.second.disabled ? 'btn-success' : 'btn-danger' }} btn-circle btn-sm" style="margin-right: 3px" title="{{ supported.second.name }}" (click)=onSupportedCarrierSlaDisableClick(supported.second)><i class="fa fa-power-off"></i></button>
+              <button *ngIf="supported.second != null" class="pull-right btn {{ supported.second.disabled ? 'btn-danger' : 'btn-success' }} btn-circle btn-sm" style="margin-right: 3px" title="{{ supported.second.name }}" (click)=onSupportedCarrierSlaDisableClick(supported.second)><i class="fa fa-power-off"></i></button>
             </h5>
             <p *ngIf="supported.second != null">
               <small>{{supported.second.code}}</small><br/>

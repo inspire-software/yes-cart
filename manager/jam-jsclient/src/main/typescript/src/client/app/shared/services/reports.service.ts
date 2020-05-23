@@ -46,7 +46,7 @@ export class ReportsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getDashboard(lang:string) {
-    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/dashboard?lang=' + lang, Util.requestOptions())
       .map(res => <DashboardWidgetVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -56,7 +56,7 @@ export class ReportsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getDashboardWidget(widget:string, lang:string) {
-    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/' + widget + '/', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/dashboard/' + widget + '?lang=' + lang, Util.requestOptions())
       .map(res => <DashboardWidgetVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -66,7 +66,7 @@ export class ReportsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAvailableWidgets(lang:string) {
-    return this.http.get(this._serviceBaseUrl + '/dashboard/' + lang + '/available/', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/dashboard/available?lang=' + lang, Util.requestOptions())
       .map(res => <DashboardWidgetInfoVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -79,7 +79,7 @@ export class ReportsService {
 
     let body = JSON.stringify(widgets);
 
-    return this.http.post(this._serviceBaseUrl + '/dashboard/' + lang + '/', body,
+    return this.http.post(this._serviceBaseUrl + '/dashboard?lang=' + lang, body,
           Util.requestOptions())
       .catch(this.handleError);
 
@@ -90,7 +90,7 @@ export class ReportsService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getReportDescriptors() {
-    return this.http.get(this._serviceBaseUrl + '/report/all', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl, Util.requestOptions())
       .map(res => <ReportDescriptorVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -105,7 +105,7 @@ export class ReportsService {
 
     let body = JSON.stringify(req);
 
-    return this.http.post(this._serviceBaseUrl + '/report/configure', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/configure', body, Util.requestOptions())
         .map(res => <ReportRequestVO> this.json(res))
         .catch(this.handleError);
   }
@@ -120,7 +120,7 @@ export class ReportsService {
 
     let body = JSON.stringify(req);
 
-    return this.http.post(this._serviceBaseUrl + '/report/generate', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/generate', body, Util.requestOptions())
         .map(res => res.text())
         .catch(this.handleError);
   }

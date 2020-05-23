@@ -16,6 +16,8 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +27,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoPaymentGateway;
 import org.yes.cart.domain.vo.VoPaymentGatewayInfo;
 import org.yes.cart.domain.vo.VoPaymentGatewayParameter;
+import org.yes.cart.domain.vo.VoPaymentGatewayStatus;
 
 import java.util.List;
 
@@ -34,77 +37,65 @@ import java.util.List;
  * Time: 17:55
  */
 @Controller
-@Api(value = "Payment", tags = "payment")
-@RequestMapping("/payment")
+@Api(value = "Payment gateways", description = "Payment gateways controller", tags = "payment")
 public interface PaymentGatewaysEndpointController {
 
 
+    @ApiOperation(value = "Retrieve all payment gateways (basic details)")
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/gateways/all/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/paymentgateways", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPaymentGatewayInfo> getPaymentGateways(@PathVariable("lang") String lang) throws Exception;
+    List<VoPaymentGatewayInfo> getPaymentGateways(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String lang, @ApiParam(value = "Show only available (enabled) payment gateways", required = false) @RequestParam(value = "enabledOnly", required = false) boolean enabledOnly) throws Exception;
 
+    @ApiOperation(value = "Retrieve shop's payment gateways", tags = { "payment", "shop" })
     @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/gateways/shop/{code}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{code}/paymentgateways", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPaymentGatewayInfo> getPaymentGatewaysForShop(@PathVariable("lang") String lang, @PathVariable("code") String shopCode) throws Exception;
-
-    @PreAuthorize("isFullyAuthenticated()")
-    @RequestMapping(value = "/gateways/shop/allowed/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<VoPaymentGatewayInfo> getAllowedPaymentGatewaysForShops(@PathVariable("lang") String lang) throws Exception;
+    List<VoPaymentGatewayInfo> getPaymentGatewaysForShop(@ApiParam(value = "Language code", required = true) @RequestParam("lang")  String lang, @ApiParam(value = "Shop code", required = true) @PathVariable("code") String shopCode) throws Exception;
 
 
+    @ApiOperation(value = "Retrieve all payment gateways (full details)")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/gateways/configure/all/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/paymentgateways/details", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPaymentGateway> getPaymentGatewaysWithParameters(@PathVariable("lang") String lang) throws Exception;
-
-    @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/gateways/configure/secure/all/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<VoPaymentGateway> getPaymentGatewaysWithParametersSecure(@PathVariable("lang") String lang) throws Exception;
+    List<VoPaymentGateway> getPaymentGatewaysWithParameters(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String lang, @ApiParam(value = "Show secure details (attributes)", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure) throws Exception;
 
 
+    @ApiOperation(value = "Retrieve shop's payment gateways (full details)", tags = { "payment", "shop" })
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER"})
-    @RequestMapping(value = "/gateways/configure/shop/{code}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{code}/paymentgateways/details", params = "includeSecure=false", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(@PathVariable("lang") String lang, @PathVariable("code") String shopCode) throws Exception;
+    List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String lang, @ApiParam(value = "Shop code", required = true) @PathVariable("code") String shopCode, @ApiParam(value = "Show secure details (attributes)", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure) throws Exception;
 
+    @ApiOperation(value = "Retrieve shop's payment gateways (full details)", tags = { "payment", "shop" })
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/gateways/configure/secure/shop/{code}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{code}/paymentgateways/details", params = "includeSecure=true", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPaymentGateway> getPaymentGatewaysWithParametersForShopSecure(@PathVariable("lang") String lang, @PathVariable("code") String shopCode) throws Exception;
+    List<VoPaymentGateway> getPaymentGatewaysWithParametersForShopSecure(@ApiParam(value = "Language code", required = true) @RequestParam("lang") String lang, @ApiParam(value = "Shop code", required = true) @PathVariable("code") String shopCode, @ApiParam(value = "Show secure details (attributes)", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure) throws Exception;
 
+    @ApiOperation(value = "Update global payment gateway parameters")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/gateways/configure/{label}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/paymentgateways/{label}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPaymentGatewayParameter> update(@PathVariable("label") String pgLabel, @RequestBody List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
+    List<VoPaymentGatewayParameter> update(@ApiParam(value = "Payment gateway label", required = true) @PathVariable("label") String pgLabel, @ApiParam(value = "Update secure details (attributes)", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure, @ApiParam(value = "Attributes", name = "vo", required = true) @RequestBody List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
 
+    @ApiOperation(value = "Update shop's payment gateway parameters", tags = { "payment", "shop" })
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/shops/{code}/paymentgateways/{label}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoPaymentGatewayParameter> update(@ApiParam(value = "Shop code", required = true) @PathVariable("code") String shopCode, @ApiParam(value = "Payment gateway label", required = true) @PathVariable("label") String pgLabel, @ApiParam(value = "Update secure details (attributes)", required = false) @RequestParam(value = "includeSecure", required = false) boolean includeSecure, @ApiParam(value = "Attributes", name = "vo", required = true) @RequestBody List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
+
+    @ApiOperation(value = "Enable/disable payment gateway globally")
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/gateways/configure/secure/{label}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/paymentgateways/{label}/status", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPaymentGatewayParameter> updateSecure(@PathVariable("label") String pgLabel, @RequestBody List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
+    void updateDisabledFlag(@ApiParam(value = "Payment gateway label", required = true) @PathVariable("label") String pgLabel, @ApiParam(value = "Status", name = "vo", required = true) @RequestBody VoPaymentGatewayStatus status) throws Exception;
 
+    @ApiOperation(value = "Enable/disable payment gateway for shop", tags = { "payment", "shop" })
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/gateways/configure/{label}/{code}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/shops/{code}/paymentgateways/{label}/status", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPaymentGatewayParameter> update(@PathVariable("code") String shopCode, @PathVariable("label") String pgLabel, @RequestBody List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
-
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/gateways/configure/secure/{label}/{code}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    List<VoPaymentGatewayParameter> updateSecure(@PathVariable("code") String shopCode, @PathVariable("label") String pgLabel, @RequestBody List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
-
-    @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/gateways/offline/{label}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    void updateDisabledFlag(@PathVariable("label") String pgLabel, @PathVariable("state") boolean disabled) throws Exception;
-
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
-    @RequestMapping(value = "/gateways/offline/{code}/{label}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
-    @ResponseBody
-    void updateDisabledFlag(@PathVariable("code") String shopCode,@PathVariable("label") String pgLabel, @PathVariable("state") boolean disabled) throws Exception;
+    void updateDisabledFlag(@ApiParam(value = "Shop code", required = true) @PathVariable("code") String shopCode, @ApiParam(value = "Payment gateway label", required = true) @PathVariable("label") String pgLabel, @ApiParam(value = "Status", name = "vo", required = true) @RequestBody VoPaymentGatewayStatus status) throws Exception;
 
 
 }

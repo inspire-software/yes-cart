@@ -16,6 +16,7 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -33,25 +34,29 @@ import java.util.Map;
  * Time: 09:19
  */
 @Controller
-@Api(value = "Management", tags = "management")
+@Api(value = "Management", description = "Management controller", tags = "management")
 @RequestMapping("/management")
 public interface ManagementEndpointController {
 
+    @ApiOperation(value = "Retrieve currently logged in manager")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/myself", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoManager getMyself() throws Exception;
 
+    @ApiOperation(value = "Retrieve currently logged in manager license")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/license", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoLicenseAgreement getMyAgreement() throws Exception;
 
+    @ApiOperation(value = "Accept license agreement as currently logged in manager")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/license", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoLicenseAgreement acceptMyAgreement() throws Exception;
 
+    @ApiOperation(value = "Retireve applicable UI configurations for currently logged in manager")
     @PreAuthorize("isFullyAuthenticated()")
     @RequestMapping(value = "/myui", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody

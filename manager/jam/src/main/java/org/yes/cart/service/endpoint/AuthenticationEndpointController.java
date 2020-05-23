@@ -17,11 +17,14 @@
 package org.yes.cart.service.endpoint;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.security.impl.LoginData;
 
 /**
@@ -30,16 +33,22 @@ import org.yes.cart.security.impl.LoginData;
  * Time: 00:10
  */
 @Controller
-@Api(value = "Authentication", tags = "authentication")
+@Api(value = "Authentication", description = "Authentication controller", tags = "authentication")
 public interface AuthenticationEndpointController {
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
-    void authenticate(@RequestBody LoginData loginData);
+    @ApiOperation(value = "Authenticate using credentials")
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    void authenticate(@ApiParam(value = "Credentials", name = "loginData", required = true) @RequestBody LoginData loginData);
 
-    @RequestMapping(value = "/refreshtoken", method = RequestMethod.POST)
+    @ApiOperation(value = "Refresh token")
+    @RequestMapping(value = "/refreshtoken", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
     void refreshToken();
 
-    @RequestMapping(value = "/changepwd", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
-    void changePwd(@RequestBody LoginData loginData);
+    @ApiOperation(value = "Change password")
+    @RequestMapping(value = "/changepwd", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    void changePwd(@ApiParam(value = "Change password details", name = "changePwd", required = true) @RequestBody LoginData loginData);
 
 }

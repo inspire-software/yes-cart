@@ -30,7 +30,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class ShopService {
 
-  private _serviceBaseUrl = Config.API + 'service/shop';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service/shops';  // URL to web api
 
   /**
    * Construct shop service, which has methods to work with information related to shop(s).
@@ -45,7 +45,7 @@ export class ShopService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllShops() {
-    return this.http.get(this._serviceBaseUrl + '/all', Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl, Util.requestOptions())
       .map(res => <ShopVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -67,7 +67,7 @@ export class ShopService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getSubShops(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/sub/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + id + '/subs', Util.requestOptions())
       .map(res => <ShopVO[]> this.json(res))
       .catch(this.handleError);
   }
@@ -89,11 +89,11 @@ export class ShopService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   saveSubShop(shop:SubShopVO) {
-    LogUtil.debug('ShopService save sub shop ' + shop.masterId);
+    LogUtil.debug('ShopService save sub shop ', shop);
 
     let body = JSON.stringify(shop);
 
-    return this.http.put(this._serviceBaseUrl + '/sub', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/subs', body, Util.requestOptions())
       .map(res => <ShopVO> this.json(res))
       .catch(this.handleError);
   }
@@ -105,16 +105,16 @@ export class ShopService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   saveShop(shop:ShopVO) {
-    LogUtil.debug('ShopService save shop ' + shop.shopId);
+    LogUtil.debug('ShopService save shop ', shop);
 
     let body = JSON.stringify(shop);
 
     if (shop.shopId === 0) {
-      return this.http.put(this._serviceBaseUrl, body, Util.requestOptions())
+      return this.http.post(this._serviceBaseUrl, body, Util.requestOptions())
         .map(res => <ShopVO> this.json(res))
         .catch(this.handleError);
     } else {
-      return this.http.post(this._serviceBaseUrl, body, Util.requestOptions())
+      return this.http.put(this._serviceBaseUrl, body, Util.requestOptions())
         .map(res => <ShopVO> this.json(res))
         .catch(this.handleError);
     }
@@ -127,9 +127,11 @@ export class ShopService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   updateDisabledFlag(shop:ShopVO, state:boolean) {
-    LogUtil.debug('ShopService change state shop ' + shop.shopId + ' to ' + state ? 'online' : 'offline');
+    LogUtil.debug('ShopService change state shop ', shop.shopId, state);
 
-    return this.http.post(this._serviceBaseUrl + '/offline/' + shop.shopId + '/' + state, null, Util.requestOptions())
+    let body = JSON.stringify({ disabled: state });
+
+    return this.http.post(this._serviceBaseUrl + '/' + shop.shopId + '/status', body, Util.requestOptions())
       .map(res => <ShopVO> this.json(res))
       .catch(this.handleError);
   }
@@ -142,8 +144,8 @@ export class ShopService {
    * @return {Promise<ShopSummaryVO>}
    */
   getShopSummary(shopId:number, lang:string) {
-    LogUtil.debug('ShopService get shop summary info ' + shopId);
-    return this.http.get(this._serviceBaseUrl + '/summary/' + shopId + '/' + lang, Util.requestOptions())
+    LogUtil.debug('ShopService get shop summary info ', shopId, lang);
+    return this.http.get(this._serviceBaseUrl + '/' + shopId + '/summary?lang=' + lang, Util.requestOptions())
       .map(res => <ShopSummaryVO> this.json(res))
       .catch(this.handleError);
   }
@@ -154,9 +156,9 @@ export class ShopService {
    * @param shopId given shop id
    * @return {Promise<ShopSeoVO>}
    */
-  getShopLocalization(shopId:number) {
-    LogUtil.debug('ShopService get shop localization info ' + shopId);
-    return this.http.get(this._serviceBaseUrl + '/localization/' + shopId, Util.requestOptions())
+  getShopSeo(shopId:number) {
+    LogUtil.debug('ShopService get shop seo info ', shopId);
+    return this.http.get(this._serviceBaseUrl + '/' + shopId + '/seo', Util.requestOptions())
       .map(res => <ShopSeoVO> this.json(res))
       .catch(this.handleError);
   }
@@ -166,11 +168,11 @@ export class ShopService {
    * @param shopSeoVO
    * @returns {Promise<ShopSeoVO>}
      */
-  saveShopLocalization(shopSeoVO:ShopSeoVO) {
+  saveShopSeo(shopSeoVO:ShopSeoVO) {
     LogUtil.debug('ShopService save localization info', shopSeoVO);
 
     let body = JSON.stringify(shopSeoVO);
-    return this.http.post(this._serviceBaseUrl + '/localization', body, Util.requestOptions())
+    return this.http.put(this._serviceBaseUrl + '/seo', body, Util.requestOptions())
       .map(res => <ShopSeoVO> this.json(res))
       .catch(this.handleError);
   }
@@ -181,7 +183,7 @@ export class ShopService {
    * @returns {Observable<R>}
      */
   getShopUrls(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/urls/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + id + '/urls', Util.requestOptions())
       .map(res => <ShopUrlVO> this.json(res))
       .catch(this.handleError);
   }
@@ -195,7 +197,7 @@ export class ShopService {
 
     let body = JSON.stringify(shopUrl);
 
-    return this.http.post(this._serviceBaseUrl + '/urls', body, Util.requestOptions())
+    return this.http.put(this._serviceBaseUrl + '/urls', body, Util.requestOptions())
       .map(res => <ShopUrlVO> this.json(res))
       .catch(this.handleError);
 
@@ -208,7 +210,7 @@ export class ShopService {
    * @returns {Observable<R>}
    */
   getShopAliases(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/aliases/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + id + '/aliases', Util.requestOptions())
       .map(res => <ShopAliasVO> this.json(res))
       .catch(this.handleError);
   }
@@ -222,7 +224,7 @@ export class ShopService {
 
     let body = JSON.stringify(shopAlias);
 
-    return this.http.post(this._serviceBaseUrl + '/aliases', body, Util.requestOptions())
+    return this.http.put(this._serviceBaseUrl + '/aliases', body, Util.requestOptions())
       .map(res => <ShopAliasVO> this.json(res))
       .catch(this.handleError);
 
@@ -235,7 +237,7 @@ export class ShopService {
    * @returns {Observable<R>}
    */
   getShopCurrencies(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/currencies/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + id + '/currencies', Util.requestOptions())
       .map(res => <ShopSupportedCurrenciesVO> this.json(res))
       .catch(this.handleError);
   }
@@ -247,7 +249,7 @@ export class ShopService {
      */
   saveShopCurrencies(curr:ShopSupportedCurrenciesVO) {
     let body = JSON.stringify(curr);
-    return this.http.post(this._serviceBaseUrl + '/currencies', body, Util.requestOptions())
+    return this.http.put(this._serviceBaseUrl + '/currencies', body, Util.requestOptions())
       .map(res => <ShopSupportedCurrenciesVO> this.json(res))
       .catch(this.handleError);
   }
@@ -259,7 +261,19 @@ export class ShopService {
    * @returns {Observable<R>}
    */
   getShopLanguages(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/languages/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + id + '/languages', Util.requestOptions())
+      .map(res => <ShopLanguagesVO> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
+   * Update supported languages.
+   * @param langs
+   * @returns {Observable<R>}
+   */
+  saveShopLanguages(langs:ShopLanguagesVO) {
+    let body = JSON.stringify(langs);
+    return this.http.put(this._serviceBaseUrl + '/languages', body, Util.requestOptions())
       .map(res => <ShopLanguagesVO> this.json(res))
       .catch(this.handleError);
   }
@@ -271,58 +285,8 @@ export class ShopService {
    * @returns {Observable<R>}
    */
   getShopLocations(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/locations/' + id, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + id + '/locations', Util.requestOptions())
       .map(res => <ShopLocationsVO> this.json(res))
-      .catch(this.handleError);
-  }
-
-
-  /**
-   * Get attributes for given shop id.
-   * @param id
-   * @param includeSecure
-   * @returns {Observable<R>}
-   */
-  getShopAttributes(id:number, includeSecure:boolean) {
-    return this.http.get(this._serviceBaseUrl + (includeSecure ? '/attributes/secure/' : '/attributes/') + id, Util.requestOptions())
-      .map(res => <AttrValueShopVO[]> this.json(res))
-      .catch(this.handleError);
-  }
-
-  /**
-   * Get all categories assigned to given shop.
-   * @param id shop id
-   * @returns {Observable<R>}
-     */
-  getShopCategories(id:number) {
-    return this.http.get(this._serviceBaseUrl + '/categories/' + id, Util.requestOptions())
-      .map(res => <CategoryVO[]> this.json(res))
-      .catch(this.handleError);
-  }
-
-  /**
-   * Save changes in shop categories.
-   * @param shopId
-   * @param cats
-   * @returns {Observable<R>}
-     */
-  saveShopCategories(shopId:number, cats : CategoryVO[]) {
-    let body = JSON.stringify(cats);
-    LogUtil.debug('Save assigned categories ', cats);
-    return this.http.post(this._serviceBaseUrl + '/categories/' + shopId, body, Util.requestOptions())
-      .map(res => <CategoryVO[]> this.json(res))
-      .catch(this.handleError);
-  }
-
-  /**
-   * Update supported languages.
-   * @param langs
-   * @returns {Observable<R>}
-     */
-  saveShopLanguages(langs:ShopLanguagesVO) {
-    let body = JSON.stringify(langs);
-    return this.http.post(this._serviceBaseUrl + '/languages', body, Util.requestOptions())
-      .map(res => <ShopLanguagesVO> this.json(res))
       .catch(this.handleError);
   }
 
@@ -334,8 +298,45 @@ export class ShopService {
    */
   saveShopLocations(locs:ShopLocationsVO) {
     let body = JSON.stringify(locs);
-    return this.http.post(this._serviceBaseUrl + '/locations', body, Util.requestOptions())
+    return this.http.put(this._serviceBaseUrl + '/locations', body, Util.requestOptions())
       .map(res => <ShopLocationsVO> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get all categories assigned to given shop.
+   * @param id shop id
+   * @returns {Observable<R>}
+   */
+  getShopCategories(id:number) {
+    return this.http.get(this._serviceBaseUrl + '/' + id + '/categories', Util.requestOptions())
+      .map(res => <CategoryVO[]> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
+   * Save changes in shop categories.
+   * @param shopId
+   * @param cats
+   * @returns {Observable<R>}
+   */
+  saveShopCategories(shopId:number, cats : CategoryVO[]) {
+    let body = JSON.stringify(cats);
+    LogUtil.debug('Save assigned categories ', cats);
+    return this.http.put(this._serviceBaseUrl + '/' + shopId + '/categories', body, Util.requestOptions())
+      .map(res => <CategoryVO[]> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get attributes for given shop id.
+   * @param id
+   * @param includeSecure
+   * @returns {Observable<R>}
+   */
+  getShopAttributes(id:number, includeSecure:boolean) {
+    return this.http.get(this._serviceBaseUrl + '/' + id + '/attributes?includeSecure=' + includeSecure, Util.requestOptions())
+      .map(res => <AttrValueShopVO[]> this.json(res))
       .catch(this.handleError);
   }
 
@@ -348,7 +349,7 @@ export class ShopService {
    */
   saveShopAttributes(attrs:Array<Pair<AttrValueShopVO, boolean>>, includeSecure:boolean) {
     let body = JSON.stringify(attrs);
-    return this.http.post(this._serviceBaseUrl + (includeSecure ? '/attributes/secure' : '/attributes'), body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/attributes?includeSecure=' + includeSecure, body, Util.requestOptions())
       .map(res => <ShopLocationsVO[]> this.json(res))
       .catch(this.handleError);
   }

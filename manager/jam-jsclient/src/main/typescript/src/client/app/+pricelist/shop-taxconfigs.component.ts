@@ -288,9 +288,13 @@ export class ShopTaxConfigsComponent implements OnInit, OnDestroy {
 
   onRunTestResult(event:PromotionTestVO) {
     LogUtil.debug('ShopTaxConfigsComponent onRunTestResult', event);
-    if (event != null) {
+    if (event != null && this.selectedShop != null) {
       this.loading = true;
-      let _sub:any = this._taxService.testPromotions(this.selectedShop, this.selectedCurrency, event).subscribe(
+
+      event.shopCode = this.selectedShop.code;
+      event.currency = this.selectedCurrency;
+
+      let _sub:any = this._taxService.testPromotions(event).subscribe(
         cart => {
           _sub.unsubscribe();
           this.loading = false;

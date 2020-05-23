@@ -26,7 +26,7 @@
         <td title="{{ 'CUSTOMERORDER_CUSTOMER' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getUserIcon(row)"></span> {{row.salutation}} {{row.firstname}} {{row.middlename}} {{row.lastname}} ({{row.email}})</a></td>
         <td title="{{ 'CURRENCY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.currency}}</a></td>
         <td title="{{ (showGrossTotal ? 'CUSTOMERORDER_TOTAL_WITH_TAX' : 'CUSTOMERORDER_TOTAL_NO_TAX') | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{ (showGrossTotal ? row.orderGrossTotal : row.orderNetTotal) | ycprice}}</a></td>
-        <td title="{{ 'CUSTOMERORDER_PG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.pgName}}</a></td>
+        <td title="{{ 'CUSTOMERORDER_PG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ (row.pgName != null ? row.pgName : row.pgLabel) }}</a></td>
         <td title="{{ 'CUSTOMERORDER_BALANCE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.orderPaymentBalance | ycprice}}</a></td>
       </tr>
       </tbody>

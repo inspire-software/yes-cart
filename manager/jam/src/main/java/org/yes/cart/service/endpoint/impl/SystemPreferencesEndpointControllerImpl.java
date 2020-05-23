@@ -18,6 +18,7 @@ package org.yes.cart.service.endpoint.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttrValueSystem;
@@ -44,25 +45,13 @@ public class SystemPreferencesEndpointControllerImpl implements SystemPreference
 
     @Override
     public @ResponseBody
-    List<VoAttrValueSystem> getSystemPreferences() throws Exception {
-        return voSystemPreferencesService.getSystemPreferences(false);
+    List<VoAttrValueSystem> getSystemPreferences(@RequestParam(value = "includeSecure", required = false) boolean includeSecure) throws Exception {
+        return voSystemPreferencesService.getSystemPreferences(includeSecure);
     }
 
     @Override
     public @ResponseBody
-    List<VoAttrValueSystem> getSystemPreferencesSecure() throws Exception {
-        return voSystemPreferencesService.getSystemPreferences(true);
-    }
-
-    @Override
-    public @ResponseBody
-    List<VoAttrValueSystem> update(@RequestBody final List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception {
-        return voSystemPreferencesService.update(vo, false);
-    }
-
-    @Override
-    public @ResponseBody
-    List<VoAttrValueSystem> updateSecure(@RequestBody final List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception {
-        return voSystemPreferencesService.update(vo, true);
+    List<VoAttrValueSystem> update(@RequestParam(value = "includeSecure", required = false) boolean includeSecure, @RequestBody final List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception {
+        return voSystemPreferencesService.update(vo, includeSecure);
     }
 }

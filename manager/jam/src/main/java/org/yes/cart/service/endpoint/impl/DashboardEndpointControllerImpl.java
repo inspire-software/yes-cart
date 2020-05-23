@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoDashboardWidgetInfo;
@@ -48,13 +49,13 @@ public class DashboardEndpointControllerImpl implements DashboardEndpointControl
 
     @Override
     public @ResponseBody
-    List<VoDashboardWidgetInfo> getAvailableWidgets(final @PathVariable("lang") String lang) throws Exception {
+    List<VoDashboardWidgetInfo> getAvailableWidgets(final @RequestParam("lang") String lang) throws Exception {
         return voDashboardWidgetService.getAvailableWidgets(lang);
     }
 
     @Override
     public @ResponseBody
-    void updateDashboardSelection(final @RequestBody List<VoDashboardWidgetInfo> dashboard) throws Exception {
+    void updateDashboardSelection(final @RequestParam("lang") String lang, final @RequestBody List<VoDashboardWidgetInfo> dashboard) throws Exception {
         String dashboardCsv = null;
         if (CollectionUtils.isNotEmpty(dashboard)) {
             final List<String> wid = dashboard.stream().map(VoDashboardWidgetInfo::getWidgetId).collect(Collectors.toList());
@@ -65,13 +66,13 @@ public class DashboardEndpointControllerImpl implements DashboardEndpointControl
 
     @Override
     public @ResponseBody
-    List<VoDashboardWidget> getDashboard(final @PathVariable("lang") String lang) throws Exception {
+    List<VoDashboardWidget> getDashboard(final @RequestParam("lang") String lang) throws Exception {
         return voDashboardWidgetService.getDashboard(null, lang);
     }
 
     @Override
     public @ResponseBody
-    List<VoDashboardWidget> getDashboardWidget(final @PathVariable("widget") String widget, final @PathVariable("lang") String lang) throws Exception {
+    List<VoDashboardWidget> getDashboardWidget(final @PathVariable("widget") String widget, final @RequestParam("lang") String lang) throws Exception {
         return voDashboardWidgetService.getDashboard(Collections.singletonList(widget), lang);
     }
 }

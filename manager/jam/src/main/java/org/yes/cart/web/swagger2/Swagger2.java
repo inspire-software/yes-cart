@@ -26,6 +26,8 @@ import springfox.documentation.service.ApiKey;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.StringVendorExtension;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.OperationBuilderPlugin;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -42,12 +44,19 @@ import java.util.Collections;
 public class Swagger2 {
 
     @Bean
+    public OperationBuilderPlugin securityScanner(final DescriptionResolver descriptionResolver) {
+        return new SecurityRolesReader(descriptionResolver);
+    }
+
+    @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 //.apis(RequestHandlerSelectors.basePackage("org.yes.cart.service.endpoint.impl"))
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.regex("(?!/error).+"))
+                .paths(PathSelectors.regex("(?!/connector).+"))
+                .paths(PathSelectors.regex("^(?!.*\\.(jsp)($|\\?)).*"))
                 .build()
                 .securitySchemes(Arrays.asList(apiKey()))
                 .apiInfo(apiInfo());

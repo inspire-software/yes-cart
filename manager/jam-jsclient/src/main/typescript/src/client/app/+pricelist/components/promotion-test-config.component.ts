@@ -55,7 +55,7 @@ export class PromotionTestConfigComponent implements OnInit, OnDestroy {
 
   constructor(fb: FormBuilder) {
     LogUtil.debug('PromotionTestConfigComponent constructed');
-    this.testConfig = { supplier: null, customer: null, shipping: null, coupons: null, sku: null, language: null, time: null };
+    this.testConfig = { shopCode: null, currency: null, supplier: null, customer: null, shipping: null, coupons: null, sku: null, language: null, time: null };
     this.testRulesForm = fb.group({
       'testSupplier': ['', Validators.required],
       'testCustomer': [''],

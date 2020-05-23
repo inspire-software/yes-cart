@@ -31,7 +31,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class CustomerOrderService {
 
-  private _serviceBaseUrl = Config.API + 'service/customerorder';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service/customerorders';  // URL to web api
 
   /**
    * Construct service, which has methods to work with information related to shop(s).
@@ -49,7 +49,7 @@ export class CustomerOrderService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/filtered/' + lang, body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/search?lang=' + lang, body, Util.requestOptions())
         .map(res => <SearchResultVO<CustomerOrderInfoVO>> this.json(res))
         .catch(this.handleError);
   }
@@ -60,7 +60,7 @@ export class CustomerOrderService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getOrderById(lang:string, orderId:number) {
-    return this.http.get(this._serviceBaseUrl + '/order/' + orderId + '/' + lang, Util.requestOptions())
+    return this.http.get(this._serviceBaseUrl + '/' + orderId + '?lang=' + lang, Util.requestOptions())
       .map(res => <CustomerOrderVO> this.json(res))
       .catch(this.handleError);
   }
@@ -109,7 +109,7 @@ export class CustomerOrderService {
    */
   exportOrder(lang:string, orderId:number, doExport:boolean) {
 
-    return this.http.post(this._serviceBaseUrl + '/orderexport/' + orderId + '/' + lang + '/' + doExport + '/', null, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/' + orderId + '/orderexport?lang=' + lang + '&export=' + doExport + '/', null, Util.requestOptions())
       .map(res => <CustomerOrderVO> this.json(res))
       .catch(this.handleError);
   }
@@ -124,7 +124,7 @@ export class CustomerOrderService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/payments/filtered', body, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/payments/search', body, Util.requestOptions())
       .map(res => <SearchResultVO<PaymentVO>> this.json(res))
       .catch(this.handleError);
   }

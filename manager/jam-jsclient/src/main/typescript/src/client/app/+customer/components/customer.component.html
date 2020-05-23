@@ -347,7 +347,7 @@
     <ul *ngIf="availableCustomerTypes != null" class="nav nav-second-level item-list">
       <li [hidden]="availableCustomerTypes != null && availableCustomerTypes.length > 0">{{ 'CUSTOMER_TYPES_AVAILABLE_NONE' | translate }}</li>
       <li *ngFor="let availableCustomerType of availableCustomerTypes">
-        <a (click)="onSelectCustomerType(availableCustomerType)" class="{{ selectedCustomerType == availableCustomerType.first ? 'bg-info' : '' }} js-click">{{ availableCustomerType.second }}</a>
+        <a (click)="onSelectCustomerType(availableCustomerType)" class="{{ selectedCustomerType == availableCustomerType.first ? 'bg-info' : '' }} js-click"><span class="label label-info">{{ availableCustomerType.first }}</span> {{ availableCustomerType.second }}</a>
       </li>
     </ul>
   </div>
