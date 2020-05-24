@@ -31,8 +31,10 @@ import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSearchResultNavDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSearchResultPageDTOImpl;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.NonI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.IndexBuilder;
 import org.yes.cart.search.dao.entity.AdapterUtils;
@@ -46,6 +48,7 @@ import org.yes.cart.service.domain.ProductTypeAttrService;
 import org.yes.cart.utils.HQLUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -124,19 +127,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     }
 
 
-    private static final Comparator<Pair> BY_SECOND = (pair1, pair2) -> ((String) pair1.getSecond()).compareTo((String) pair2.getSecond());
-
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(
-            final String locale, final long productId, final long skuId, final long productTypeId) {
-
-        final List<ProdTypeAttributeViewGroup> productTypeAttrGroups = productTypeAttrService.getViewGroupsByProductTypeId(productTypeId);
-        final Map<String, List<Pair<String, String>>> attributeViewGroupMap =
-                mapAttributeGroupsByAttributeCode(locale, productTypeAttrGroups);
+    public ProductAttributesModel getProductAttributes(final long productId, final long skuId, final long productTypeId) {
 
         final ProductSku sku = skuId != 0L ? proxy().getSkuById(skuId, true) : null;
         final Product product = productId != 0L ? proxy().getProductById(productId, true) :
@@ -144,6 +139,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
         Collection<AttrValue> productAttrValues;
         Collection<AttrValue> skuAttrValues;
+
         if (sku != null) {
             productAttrValues = product.getAllAttributes();
             skuAttrValues = sku.getAllAttributes();
@@ -151,33 +147,27 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             productAttrValues = product.getAllAttributes();
             skuAttrValues = Collections.emptyList();
         } else {
-            return Collections.emptyMap();
+            return new ProductAttributesModelImpl(productId, null, skuId, null, productTypeId);
         }
 
-        final Map<String, Pair<String, String>> viewsGroupsI18n = new HashMap<>();
-        final Map<String, Pair<String, String>> attrI18n = new HashMap<>();
+        final List<ProductAttributesModelGroupImpl> attributeViewGroups = mapAttributeGroupsByAttributeCode(productTypeId);
 
-        final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributesToShow =
-                new TreeMap<>(BY_SECOND);
-
-        final Map<String, I18NModel> attrDisplayNames = attributeService.getAllAttributeNames();
-        final List<Attribute> multivalue = attributeService.findAttributesWithMultipleValues(AttributeGroupNames.PRODUCT);
-        final Set<String> multivalueCodes = new HashSet<>();
-        if (!CollectionUtils.isEmpty(multivalue)) {
-            for (final Attribute multi : multivalue) {
-                multivalueCodes.add(multi.getCode());
-            }
+        final ProductAttributesModelImpl attributesToShow;
+        if (sku != null) {
+            attributesToShow = new ProductAttributesModelImpl(product.getProductId(), product.getCode(), sku.getSkuId(), sku.getCode(), productTypeId, (List) attributeViewGroups);
+        } else {
+            attributesToShow = new ProductAttributesModelImpl(product.getProductId(), product.getCode(), 0L, null, productTypeId, (List) attributeViewGroups);
         }
 
         for (final AttrValue attrValue : productAttrValues) {
 
-            loadAttributeValueToAttributesToShowMap(locale, attributeViewGroupMap, viewsGroupsI18n, attrI18n, attributesToShow, attrValue, attrDisplayNames, multivalueCodes);
+            loadAttributeValueToAttributesToShowMap(attributesToShow, attrValue);
 
         }
 
         for (final AttrValue attrValue : skuAttrValues) {
 
-            loadAttributeValueToAttributesToShowMap(locale, attributeViewGroupMap, viewsGroupsI18n, attrI18n, attributesToShow, attrValue, attrDisplayNames, multivalueCodes);
+            loadAttributeValueToAttributesToShowMap(attributesToShow, attrValue);
 
         }
 
@@ -186,117 +176,94 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
 
 
-    private void loadAttributeValueToAttributesToShowMap(
-            final String locale, final Map<String, List<Pair<String, String>>> attributeViewGroupMap,
-            final Map<String, Pair<String, String>> viewsGroupsI18n, final Map<String, Pair<String, String>> attrI18n,
-            final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributesToShow,
-            final AttrValue attrValue, final Map<String, I18NModel> attrDisplayNames, final Set<String> multivalueCodes) {
+    private void loadAttributeValueToAttributesToShowMap(final ProductAttributesModelImpl model, final AttrValue attrValue) {
 
         if (attrValue.getAttributeCode() == null) {
             return;
         }
-        final Pair<String, String> attr;
-        if (attrI18n.containsKey(attrValue.getAttributeCode())) {
-            attr = attrI18n.get(attrValue.getAttributeCode());
-        } else {
 
-            final I18NModel attrModel = attrDisplayNames.get(attrValue.getAttributeCode());
-            final String name = attrModel != null ? attrModel.getValue(locale) : attrValue.getAttributeCode();
-
-            attr = new Pair<>(attrValue.getAttributeCode(), name);
-            attrI18n.put(attrValue.getAttributeCode(), attr);
-        }
-
-        List<Pair<String, String>> groupsForAttr = attributeViewGroupMap.get(attr.getFirst());
-        if (groupsForAttr == null) {
-            // groupsForAttr = NO_GROUP;
+        List<ProductAttributesModelAttribute> attributesInGroups = model.getAttributes(attrValue.getAttributeCode());
+        if (attributesInGroups.isEmpty()) {
             return; // no need to show un-grouped attributes
         }
-        for (final Pair<String, String> groupForAttr : groupsForAttr) {
 
-            final Pair<String, String> group;
-            final Map<Pair<String, String>, List<Pair<String, String>>> attrValuesInGroup;
-            if (viewsGroupsI18n.containsKey(groupForAttr.getFirst())) {
-                group = viewsGroupsI18n.get(groupForAttr.getFirst());
-                attrValuesInGroup = attributesToShow.get(group);
-            } else {
-                viewsGroupsI18n.put(groupForAttr.getFirst(), groupForAttr);
-                attrValuesInGroup = new TreeMap<>(BY_SECOND);
-                attributesToShow.put(groupForAttr, attrValuesInGroup);
-            }
+        final ProductAttributesModelValueImpl value = new ProductAttributesModelValueImpl(
+                attrValue.getAttributeCode(),
+                attrValue.getVal(),
+                new FailoverStringI18NModel(attrValue.getDisplayVal(), attrValue.getVal())
+        );
 
-            final Pair<String, String> val = new Pair<>(
-                    attrValue.getVal(),
-                    new FailoverStringI18NModel(
-                            attrValue.getDisplayVal(),
-                            attrValue.getVal()
-                    ).getValue(locale)
-            );
-
-            final List<Pair<String, String>> attrValuesForAttr;
-            if (attrValuesInGroup.containsKey(attr)) {
-                attrValuesForAttr = attrValuesInGroup.get(attr);
-                if (multivalueCodes.contains(attrValue.getAttributeCode())) {
-                    attrValuesForAttr.add(val);
-                } else {
-                    attrValuesForAttr.set(0, val); // replace with latest (hopefully SKU)
-                }
-            } else {
-                attrValuesForAttr = new ArrayList<>();
-                attrValuesInGroup.put(attr, attrValuesForAttr);
-                attrValuesForAttr.add(val);
-            }
-
+        for (final ProductAttributesModelAttribute attributeInGroups : attributesInGroups) {
+            ((ProductAttributesModelAttributeImpl) attributeInGroups).addValue(value);
         }
+        
     }
 
     /*
-        Attribute Code => List<Groups>
+        List of groups model pre-loaded with attributes definitions
      */
-    private Map<String, List<Pair<String, String>>> mapAttributeGroupsByAttributeCode(
-            final String locale, final Collection<ProdTypeAttributeViewGroup> attributeViewGroup) {
+    private List<ProductAttributesModelGroupImpl> mapAttributeGroupsByAttributeCode(final long productTypeId) {
+
+        final List<ProdTypeAttributeViewGroup> attributeViewGroup = productTypeAttrService.getViewGroupsByProductTypeId(productTypeId);
+
         if (CollectionUtils.isEmpty(attributeViewGroup)) {
-            return Collections.emptyMap();
+            return Collections.emptyList();
         }
-        final Map<String, List<Pair<String, String>>> map = new HashMap<>();
+
+        final Map<String, I18NModel> attrDisplayNames = attributeService.getAllAttributeNames();
+
+        final List<Attribute> multivalueAttrs = attributeService.findAttributesWithMultipleValues(AttributeGroupNames.PRODUCT);
+        final Set<String> multivalueCodes = multivalueAttrs != null ? multivalueAttrs.stream().map(Attribute::getCode).collect(Collectors.toSet()) : Collections.emptySet();
+
+        final List<ProductAttributesModelGroupImpl> groups = new ArrayList<>();
         for (final ProdTypeAttributeViewGroup group : attributeViewGroup) {
-            if (group.getAttrCodeList() != null) {
-                final String[] attributesCodes = group.getAttrCodeList().split(",");
+            final String[] attributesCodes = StringUtils.split(group.getAttrCodeList(),',');
+            if (attributesCodes != null && attributesCodes.length > 0) {
+
+                final ProductAttributesModelGroupImpl attrGroup = new ProductAttributesModelGroupImpl(
+                        String.valueOf(group.getProdTypeAttributeViewGroupId()),
+                        new FailoverStringI18NModel(group.getDisplayName(), group.getName())
+                );
+
                 for (final String attrCode : attributesCodes) {
-                    List<Pair<String, String>> groups = map.computeIfAbsent(attrCode, k -> new ArrayList<>());
-                    groups.add(new Pair<>(
-                            String.valueOf(group.getProdTypeAttributeViewGroupId()),
-                            new FailoverStringI18NModel(
-                                    group.getDisplayName(),
-                                    group.getName()
-                            ).getValue(locale)
-                    ));
+
+                    final I18NModel attributeI18n = attrDisplayNames.get(attrCode);
+                    final boolean multivalue = multivalueCodes.contains(attrCode);
+
+                    final ProductAttributesModelAttribute attribute;
+                    if (attributeI18n != null) {
+                        attribute = new ProductAttributesModelAttributeImpl(attrCode, multivalue, attributeI18n.copy());
+                    } else {
+                        attribute = new ProductAttributesModelAttributeImpl(attrCode, multivalue, new NonI18NModel(attrCode));
+                    }
+
+                    attrGroup.addAttribute(attribute);
                 }
+
+                groups.add(attrGroup);
             }
         }
-        return map;
+        return groups;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(final String locale,
-                                                                                                                              final List<Long> productId,
-                                                                                                                              final List<Long> skuId) {
+    public ProductCompareModel getCompareAttributes(final List<Long> productId,
+                                                    final List<Long> skuId) {
 
-        final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> view =
-                new TreeMap<>(BY_SECOND);
+        final ProductCompareModelImpl pcm = new ProductCompareModelImpl();
 
         for (final Long id : productId) {
 
             final Product product = proxy().getProductById(id, true);
             if (product != null) {
 
-                final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> productView =
-                        proxy().getProductAttributes(locale, id, 0L, product.getProducttype().getProducttypeId());
+                final ProductAttributesModel productView =
+                        proxy().getProductAttributes(id, 0L, product.getProducttype().getProducttypeId());
 
-                mergeCompareView(view, productView, "p_" + id);
+                mergeCompareView(pcm, productView, "p_" + id);
             }
 
         }
@@ -306,37 +273,64 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final ProductSku sku = proxy().getSkuById(id, true);
             if (sku != null) {
 
-                final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> productView =
-                        proxy().getProductAttributes(locale, sku.getProduct().getProductId(), id, sku.getProduct().getProducttype().getProducttypeId());
+                final ProductAttributesModel productView =
+                        proxy().getProductAttributes(sku.getProduct().getProductId(), id, sku.getProduct().getProducttype().getProducttypeId());
 
-                mergeCompareView(view, productView, "s_" + id);
+                mergeCompareView(pcm, productView, "s_" + id);
 
             }
 
         }
 
-        return view;
+        return pcm;
 
     }
 
 
-    private void mergeCompareView(final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> view,
-                                  final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> add,
+    private void mergeCompareView(final ProductCompareModelImpl pcm,
+                                  final ProductAttributesModel add,
                                   final String id) {
 
-        for (final Map.Entry<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> group : add.entrySet()) {
+        for (final ProductAttributesModelGroup addGroup : add.getGroups()) {
 
-            Map<Pair<String, String>, Map<String, List<Pair<String, String>>>> attributesInGroup = view.computeIfAbsent(group.getKey(), k -> new TreeMap<>(BY_SECOND));
-
-            for (final Map.Entry<Pair<String, String>, List<Pair<String, String>>> attribute : group.getValue().entrySet()) {
-
-                Map<String, List<Pair<String, String>>> valueByProduct = attributesInGroup.computeIfAbsent(attribute.getKey(), k -> new HashMap<>());
-
-                valueByProduct.put(id, new ArrayList<>(attribute.getValue()));
-
-
+            ProductCompareModelGroupImpl grp = (ProductCompareModelGroupImpl) pcm.getGroup(addGroup.getCode());
+            if (grp == null) {
+                grp = new ProductCompareModelGroupImpl(
+                        addGroup.getCode(),
+                        new FailoverStringI18NModel(addGroup.getDisplayNames(), addGroup.getDisplayName(I18NModel.DEFAULT))
+                );
+                pcm.addGroup(grp);
             }
 
+            for (final ProductAttributesModelAttribute addAttr : addGroup.getAttributes()) {
+
+                ProductCompareModelAttributeImpl attr = (ProductCompareModelAttributeImpl) grp.getAttribute(addAttr.getCode());
+                if (attr == null) {
+                    attr = new ProductCompareModelAttributeImpl(
+                            addAttr.getCode(),
+                            addAttr.isMultivalue(),
+                            new FailoverStringI18NModel(addAttr.getDisplayNames(), addAttr.getDisplayName(I18NModel.DEFAULT))
+                    );
+
+                    grp.addAttribute(attr);
+                }
+
+                for (final ProductAttributesModelValue addVal : addAttr.getValues()) {
+
+                    attr.addValue(
+                            new ProductCompareModelValueImpl(
+                                add.getProductId(),
+                                add.getProductCode(),
+                                add.getSkuId(),
+                                add.getSkuCode(),
+                                addVal
+                            )
+                    );
+
+
+                }
+
+            }
 
         }
 

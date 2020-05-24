@@ -23,6 +23,8 @@ import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.dto.ProductSearchResultNavDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductAttributesModel;
+import org.yes.cart.domain.entity.ProductCompareModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.dao.IndexBuilder;
@@ -80,19 +82,17 @@ public class ProductServiceCachedImpl implements ProductService {
      */
     @Override
     @Cacheable(value = "productService-productAttributes")
-    public Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(
-            final String locale, final long productId, final long skuId, final long productTypeId) {
-        return productService.getProductAttributes(locale, productId, skuId, productTypeId);
+    public ProductAttributesModel getProductAttributes(final long productId, final long skuId, final long productTypeId) {
+        return productService.getProductAttributes(productId, skuId, productTypeId);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(final String locale,
-                                                                                                                              final List<Long> productId,
-                                                                                                                              final List<Long> skuId) {
-        return productService.getCompareAttributes(locale, productId, skuId);
+    public ProductCompareModel getCompareAttributes(final List<Long> productId,
+                                                    final List<Long> skuId) {
+        return productService.getCompareAttributes(productId, skuId);
     }
 
     /**

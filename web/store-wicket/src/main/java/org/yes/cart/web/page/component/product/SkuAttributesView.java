@@ -16,18 +16,18 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * View to show attributes of particular sku.
@@ -39,6 +39,13 @@ import java.util.Map;
  * Time: 13:34:05
  */
 public class SkuAttributesView extends BaseComponent {
+
+    private static final Comparator<Pair> BY_FIRST = new Comparator<Pair>() {
+        @Override
+        public int compare(final Pair o1, final Pair o2) {
+            return ((String) o1.getFirst()).compareToIgnoreCase((String) o2.getFirst());
+        }
+    };
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String ATTR_GROUPS = "attrGroups";
@@ -66,37 +73,49 @@ public class SkuAttributesView extends BaseComponent {
         final long productTypeId = sku.getProduct().getProducttype().getProducttypeId();
 
         if (productOnly) {
-            attributesToShow = adapt(productServiceFacade.getProductAttributes(selectedLocale, sku.getProduct().getProductId(), 0L, productTypeId));
+            attributesToShow = adapt(productServiceFacade.getProductAttributes(sku.getProduct().getProductId(), 0L, productTypeId), selectedLocale);
         } else {
-            attributesToShow = adapt(productServiceFacade.getProductAttributes(selectedLocale, sku.getProduct().getProductId(), sku.getSkuId(), productTypeId));
+            attributesToShow = adapt(productServiceFacade.getProductAttributes(sku.getProduct().getProductId(), sku.getSkuId(), productTypeId), selectedLocale);
         }
 
     }
 
-    private List<Pair<String, List<Pair<String, String>>>> adapt(
-            final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attributes) {
+    private List<Pair<String, List<Pair<String, String>>>> adapt(final ProductAttributesModel pam, final String lang) {
 
-        final List<Pair<String, List<Pair<String, String>>>> displayGroups = new ArrayList<>(attributes.size());
-        for (final Pair<String, String> group : attributes.keySet()) {
+        final List<ProductAttributesModelGroup> groups = pam.getGroups();
+        final List<Pair<String, List<Pair<String, String>>>> displayGroups = new ArrayList<>(groups.size());
+        for (final ProductAttributesModelGroup group : groups) {
 
-            final Map<Pair<String, String>, List<Pair<String, String>>> attrs = attributes.get(group);
+            final List<ProductAttributesModelAttribute> attrs = group.getAttributes();
             final List<Pair<String, String>> displayAttrs = new ArrayList<>(attrs.size());
 
-            displayGroups.add(new Pair<>(group.getSecond(), displayAttrs));
+            for (final ProductAttributesModelAttribute attr : attrs) {
 
-            for (final Pair<String, String> attr : attrs.keySet()) {
+                final List<ProductAttributesModelValue> values = attr.getValues();
 
-                final List<Pair<String, String>> values = attrs.get(attr);
+                if (CollectionUtils.isNotEmpty(values)) {
+                    final StringBuilder csv = new StringBuilder();
+                    for (final ProductAttributesModelValue value : values) {
+                        csv.append(value.getDisplayVal(lang)).append(", ");
+                    }
+                    csv.delete(csv.length() - 2, csv.length());
 
-                final StringBuilder csv = new StringBuilder();
-                for (final Pair<String, String> value : values) {
-                    csv.append(value.getSecond()).append(", ");
+                    displayAttrs.add(new Pair<>(attr.getDisplayName(lang), csv.toString()));
                 }
-                csv.delete(csv.length() - 2, csv.length());
-
-                displayAttrs.add(new Pair<>(attr.getSecond(), csv.toString()));
             }
+
+            if (!displayAttrs.isEmpty()) {
+                displayGroups.add(new Pair<>(group.getDisplayName(lang), displayAttrs));
+            }
+
         }
+
+        for (final Pair<String, List<Pair<String, String>>> attrs : displayGroups) {
+            attrs.getSecond().sort(BY_FIRST);
+        }
+
+        displayGroups.sort(BY_FIRST);
+
         return displayGroups;
     }
 

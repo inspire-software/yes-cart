@@ -21,10 +21,7 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductOption;
-import org.yes.cart.domain.entity.ProductOptions;
-import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeService;
@@ -110,11 +107,11 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testNoneAttributesView() {
 
-        final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attrs =
-                productService.getProductAttributes("en", 0L, 0L, 1L);
+        final ProductAttributesModel model =
+                productService.getProductAttributes( 0L, 0L, 1L);
 
-        assertNotNull(attrs);
-        assertEquals(0, attrs.size());
+        assertNotNull(model);
+        assertEquals(0, model.getGroups().size());
 
     }
 
@@ -122,18 +119,23 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     public void testProductAttributesView() {
 
         // bender product
-        final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attrs =
-                productService.getProductAttributes("en", 9998L, 0L, 1L);
+        final ProductAttributesModel model =
+                productService.getProductAttributes( 9998L, 0L, 1L);
 
-        assertNotNull(attrs);
-        assertFalse(attrs.isEmpty());
-        final Pair<String, String> dvdKey = new Pair<>("3", "DVD Players view group");
-        assertTrue(attrs.containsKey(dvdKey));
-        final Pair<String, String> weightKey = new Pair<>("WEIGHT", "Weight");
-        assertTrue(attrs.get(dvdKey).containsKey(weightKey));
-        final List<Pair<String, String>> values = attrs.get(dvdKey).get(weightKey);
+        assertNotNull(model);
+        assertFalse(model.getGroups().isEmpty());
+        final ProductAttributesModelGroup grp = model.getGroup("3");
+        assertNotNull(grp);
+        assertEquals("DVD Players view group", grp.getDisplayName("en"));
+        final List<ProductAttributesModelAttribute> attrs = model.getAttributes("WEIGHT");
+        assertEquals(1, attrs.size());
+        assertEquals("Weight", attrs.get(0).getDisplayName("en"));
+        final ProductAttributesModelAttribute attr = grp.getAttribute("WEIGHT");
+        assertNotNull(attr);
+        assertEquals("Weight", attr.getDisplayName("en"));
+        final List<ProductAttributesModelValue> values = attr.getValues();
         assertEquals(1, values.size());
-        assertEquals("1.15", values.get(0).getSecond());
+        assertEquals("1.15", values.get(0).getVal());
 
     }
 
@@ -141,18 +143,23 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     public void testProductSkuAttributesView() {
 
         // bender sku
-        final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> attrs =
-                productService.getProductAttributes("en", 0L, 9998L, 1L);
+        final ProductAttributesModel model =
+                productService.getProductAttributes(0L, 9998L, 1L);
 
-        assertNotNull(attrs);
-        assertFalse(attrs.isEmpty());
-        final Pair<String, String> dvdKey = new Pair<>("3", "DVD Players view group");
-        assertTrue(attrs.containsKey(dvdKey));
-        final Pair<String, String> weightKey = new Pair<>("WEIGHT", "Weight");
-        assertTrue(attrs.get(dvdKey).containsKey(weightKey));
-        final List<Pair<String, String>> values = attrs.get(dvdKey).get(weightKey);
+        assertNotNull(model);
+        assertFalse(model.getGroups().isEmpty());
+        final ProductAttributesModelGroup grp = model.getGroup("3");
+        assertNotNull(grp);
+        assertEquals("DVD Players view group", grp.getDisplayName("en"));
+        final List<ProductAttributesModelAttribute> attrs = model.getAttributes("WEIGHT");
+        assertEquals(1, attrs.size());
+        assertEquals("Weight", attrs.get(0).getDisplayName("en"));
+        final ProductAttributesModelAttribute attr = grp.getAttribute("WEIGHT");
+        assertNotNull(attr);
+        assertEquals("Weight", attr.getDisplayName("en"));
+        final List<ProductAttributesModelValue> values = attr.getValues();
         assertEquals(1, values.size());
-        assertEquals("1.16", values.get(0).getSecond());
+        assertEquals("1.16", values.get(0).getVal());
 
     }
 
@@ -160,26 +167,31 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     public void testCompareAttributesView() throws Exception {
 
         // bender vs bender-ua sku
-        final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> attrs =
-                productService.getCompareAttributes("en", Collections.singletonList(9999L), Collections.singletonList(9998L));
+        final ProductCompareModel model =
+                productService.getCompareAttributes(Collections.singletonList(9999L), Collections.singletonList(9998L));
 
-        assertNotNull(attrs);
-        assertFalse(attrs.isEmpty());
-        final Pair<String, String> dvdKey = new Pair<>("3", "DVD Players view group");
-        assertTrue(attrs.containsKey(dvdKey));
-        final Pair<String, String> weightKey = new Pair<>("WEIGHT", "Weight");
-        assertTrue(attrs.get(dvdKey).containsKey(weightKey));
-        final Map<String, List<Pair<String, String>>> products = attrs.get(dvdKey).get(weightKey);
-        assertEquals(2, products.size());
+        assertNotNull(model);
+        assertFalse(model.getGroups().isEmpty());
+        final ProductCompareModelGroup grp = model.getGroup("3");
+        assertNotNull(grp);
+        assertEquals("DVD Players view group", grp.getDisplayName("en"));
+        final List<ProductCompareModelAttribute> attrs = model.getAttributes("WEIGHT");
+        assertEquals(1, attrs.size());
+        assertEquals("Weight", attrs.get(0).getDisplayName("en"));
+        final ProductCompareModelAttribute attr = grp.getAttribute("WEIGHT");
+        assertNotNull(attr);
+        assertEquals("Weight", attr.getDisplayName("en"));
+        final Map<String, List<ProductCompareModelValue>> values = attr.getValues();
+        assertEquals(2, values.size());
 
-        final List<Pair<String, String>> values9998 = products.get("s_9998");
+        final List<ProductCompareModelValue> values9998 = values.get("s_9998");
         assertEquals(1, values9998.size());
-        assertEquals("1.16", values9998.get(0).getSecond());
+        assertEquals("1.16", values9998.get(0).getVal());
 
-        final List<Pair<String, String>> values9999 = products.get("p_9999");
+        final List<ProductCompareModelValue> values9999 = values.get("p_9999");
         assertEquals(1, values9999.size());
-        assertEquals("1.1", values9999.get(0).getSecond());
-
+        assertEquals("1.1", values9999.get(0).getVal());
+        
     }
 
 

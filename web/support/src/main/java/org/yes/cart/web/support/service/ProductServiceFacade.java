@@ -89,17 +89,15 @@ public interface ProductServiceFacade {
      *  If this is SKU then it should inherit the attributes of the product,
      *  If this is just product then we only display product attributes
      *
-     * @param locale locale
      * @param productId  product ID
      * @param skuId sku ID
      * @param productTypeId product type id
      *
      * @return hierarchy of attributes for this product or sku.
      */
-    Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(String locale,
-                                                                                                          long productId,
-                                                                                                          long skuId,
-                                                                                                          long productTypeId);
+    ProductAttributesModel getProductAttributes(long productId,
+                                                long skuId,
+                                                long productTypeId);
 
     /**
      * Get the grouped product attributes, with values. The result can be represented in following form:
@@ -137,15 +135,13 @@ public interface ProductServiceFacade {
      *  If this is SKU then it should inherit the attributes of the product,
      *  If this is just product then we only display product attributes
      *
-     * @param locale locale
      * @param productId  product ID
      * @param skuId sku ID
      *              
      * @return hierarchy of attributes for this product or sku.
      */
-    Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(String locale,
-                                                                                                                       List<Long> productId,
-                                                                                                                       List<Long> skuId);
+    ProductCompareModel getCompareAttributes(List<Long> productId,
+                                             List<Long> skuId);
 
 
     /**

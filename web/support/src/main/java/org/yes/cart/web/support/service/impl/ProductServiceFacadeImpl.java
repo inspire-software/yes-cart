@@ -124,22 +124,20 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * {@inheritDoc}
      */
     @Override
-    public Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(final String locale,
-                                                                                                                 final long productId,
-                                                                                                                 final long skuId,
-                                                                                                                 final long productTypeId) {
-        return productService.getProductAttributes(locale, productId, skuId, productTypeId);
+    public ProductAttributesModel getProductAttributes(final long productId,
+                                                       final long skuId,
+                                                       final long productTypeId) {
+        return productService.getProductAttributes(productId, skuId, productTypeId);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(final String locale,
-                                                                                                                              final List<Long> productId,
-                                                                                                                              final List<Long> skuId) {
+    public ProductCompareModel getCompareAttributes(final List<Long> productId,
+                                                    final List<Long> skuId) {
 
-        return productService.getCompareAttributes(locale, productId, skuId);
+        return productService.getCompareAttributes(productId, skuId);
 
     }
 
