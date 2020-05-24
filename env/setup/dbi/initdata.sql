@@ -1373,7 +1373,7 @@ if (_status.equals("ok")) { %>
 ',10520,'12523_CAV');
 
 INSERT INTO TCONTENT(CONTENT_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10001, 10400, 0, 'License', 'License Page','content', 'License','license');
-INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (12010,'CONTENT_BODY_en_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi
+INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (12010,'CONTENT_BODY_en_1','<pre>Copyright 2009 Inspire-Software.com
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -1387,7 +1387,7 @@ INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (
     See the License for the specific language governing permissions and
     limitations under the License.
 </pre>',10001,'12010_CAV');
-INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (12011,'CONTENT_BODY_ru_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi
+INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (12011,'CONTENT_BODY_ru_1','<pre>Copyright 2009 Inspire-Software.com
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -1401,7 +1401,7 @@ INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (
     See the License for the specific language governing permissions and
     limitations under the License.
 </pre>',10001,'12011_CAV');
-INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (12014,'CONTENT_BODY_uk_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi
+INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (12014,'CONTENT_BODY_uk_1','<pre>Copyright 2009 Inspire-Software.com
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -1415,7 +1415,7 @@ INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (
     See the License for the specific language governing permissions and
     limitations under the License.
 </pre>',10001,'12014_CAV');
-INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (12017,'CONTENT_BODY_de_1','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
+INSERT INTO TCONTENTATTRVALUE(ATTRVALUE_ID, CODE,VAL, CONTENT_ID, GUID) VALUES (12017,'CONTENT_BODY_de_1','<pre>Copyright 2009 Inspire-Software.com
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
