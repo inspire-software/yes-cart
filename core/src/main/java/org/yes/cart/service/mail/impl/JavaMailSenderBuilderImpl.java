@@ -9,7 +9,9 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.JavaMailSenderBuilder;
+import org.yes.cart.utils.log.Markers;
 
 import java.util.Properties;
 
@@ -23,11 +25,14 @@ public class JavaMailSenderBuilderImpl implements JavaMailSenderBuilder {
     private final Logger LOG = LoggerFactory.getLogger(JavaMailSenderBuilderImpl.class);
 
     private final ShopService shopService;
+    private final SystemService systemService;
 
     private String connectionTimeout = "5000";
 
-    public JavaMailSenderBuilderImpl(final ShopService shopService) {
+    public JavaMailSenderBuilderImpl(final ShopService shopService, 
+                                     final SystemService systemService) {
         this.shopService = shopService;
+        this.systemService = systemService;
     }
 
     /**
@@ -37,53 +42,84 @@ public class JavaMailSenderBuilderImpl implements JavaMailSenderBuilder {
     @Cacheable(value = "mailSenderBuilder-buildJavaMailSender")
     public JavaMailSender buildJavaMailSender(final String shopCode) {
 
-        final Shop shop = this.shopService.getShopByCode(shopCode);
-        if (shop != null) {
-            final boolean enabled = getBooleanCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_CUSTOM_ENABLE);
-            if (enabled) {
+        if (StringUtils.isNotEmpty(shopCode) && !"DEFAULT".equals(shopCode)) {
+            final Shop shop = this.shopService.getShopByCode(shopCode);
+            if (shop != null) {
+                final boolean enabled = getBooleanCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_CUSTOM_ENABLE);
+                if (enabled) {
 
-                final String host = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_HOST);
-                final String port = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_PORT);
-                final String user = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_USERNAME);
-                final String pass = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_PASSWORD);
-                final String smtpauth = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_SMTPAUTH_ENABLE);
-                final String starttls = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_STARTTLS_ENABLE);
+                    final String host = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_HOST);
+                    final String port = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_PORT);
+                    final String user = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_USERNAME);
+                    final String pass = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_PASSWORD);
+                    final String smtpauth = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_SMTPAUTH_ENABLE);
+                    final String starttls = getStringCfg(shop, AttributeNamesKeys.Shop.SHOP_MAIL_SERVER_STARTTLS_ENABLE);
 
-                if (host == null || port == null) {
-                    LOG.error("Custom mail sender is missconfigured for {}, host or port missing", shopCode);
-                    return null;
+                    final JavaMailSender shopSpecific = configureMailSender(shopCode, host, port, user, pass, smtpauth, starttls);
+                    if (shopSpecific != null) {
+                        return shopSpecific;
+                    }
+
                 }
-
-                if (Boolean.valueOf(smtpauth) && user == null || pass == null) {
-                    LOG.error("Custom mail sender is missconfigured for {}, user or pass missing for SMTP-AUTH", shopCode);
-                    return null;
-                }
-
-                JavaMailSenderImpl shopMailSender = new JavaMailSenderImpl();
-                shopMailSender.setHost(host);
-                try {
-                    shopMailSender.setPort(Integer.valueOf(port));
-                } catch (NumberFormatException nfe) {
-                    LOG.error("Custom mail sender is missconfigured for {}, invalid port", shopCode);
-                    return null;
-                }
-
-                shopMailSender.setUsername(user);
-                shopMailSender.setPassword(pass);
-
-                final Properties properties = new Properties();
-                properties.put("mail.smtp.auth", smtpauth);
-                properties.put("mail.smtp.starttls.enable", starttls);
-                properties.put("mail.smtp.connectiontimeout", this.connectionTimeout);
-                properties.put("mail.smtp.timeout", this.connectionTimeout);
-                shopMailSender.setJavaMailProperties(properties);
-
-                return shopMailSender;
-
             }
         }
+        
+        final boolean enabled = Boolean.valueOf(this.systemService.getAttributeValue(AttributeNamesKeys.System.MAIL_SERVER_CUSTOM_ENABLE));
+        if (enabled) {
+
+            final String host = this.systemService.getAttributeValue(AttributeNamesKeys.System.MAIL_SERVER_HOST);
+            final String port = this.systemService.getAttributeValue(AttributeNamesKeys.System.MAIL_SERVER_PORT);
+            final String user = this.systemService.getAttributeValue(AttributeNamesKeys.System.MAIL_SERVER_USERNAME);
+            final String pass = this.systemService.getAttributeValue(AttributeNamesKeys.System.MAIL_SERVER_PASSWORD);
+            final String smtpauth = this.systemService.getAttributeValue(AttributeNamesKeys.System.MAIL_SERVER_SMTPAUTH_ENABLE);
+            final String starttls = this.systemService.getAttributeValue(AttributeNamesKeys.System.MAIL_SERVER_STARTTLS_ENABLE);
+
+            final JavaMailSender systemSpecific = configureMailSender(shopCode, host, port, user, pass, smtpauth, starttls);
+            if (systemSpecific != null) {
+                return systemSpecific;
+            }
+
+        }
+
         return null;
 
+    }
+
+    JavaMailSender configureMailSender(final String shopCode, final String host, final String port, final String user, final String pass, final String smtpauth, final String starttls) {
+        
+        if (host == null || port == null) {
+            LOG.error(Markers.alert(), "Custom mail sender is missconfigured for {}, host or port missing", shopCode);
+            return null;
+        }
+
+        if (Boolean.valueOf(smtpauth) && user == null || pass == null) {
+            LOG.error(Markers.alert(), "Custom mail sender is missconfigured for {}, user or pass missing for SMTP-AUTH", shopCode);
+            return null;
+        }
+
+        JavaMailSenderImpl shopMailSender = new JavaMailSenderImpl();
+        shopMailSender.setHost(host);
+        try {
+            shopMailSender.setPort(Integer.valueOf(port));
+        } catch (NumberFormatException nfe) {
+            LOG.error(Markers.alert(), "Custom mail sender is missconfigured for {}, invalid port", shopCode);
+            return null;
+        }
+
+        shopMailSender.setUsername(user);
+        shopMailSender.setPassword(pass);
+
+        final Properties properties = new Properties();
+        properties.put("mail.smtp.auth", smtpauth);
+        properties.put("mail.smtp.starttls.enable", starttls);
+        properties.put("mail.smtp.connectiontimeout", this.connectionTimeout);
+        properties.put("mail.smtp.timeout", this.connectionTimeout);
+        shopMailSender.setJavaMailProperties(properties);
+
+        LOG.info("Detected custom mail sender {}:{} for shop {}", host, port, shopCode);
+
+        return shopMailSender;
+        
     }
 
     private boolean getBooleanCfg(final Shop shop, final String attrKey) {

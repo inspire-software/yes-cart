@@ -25,6 +25,7 @@
 
     <bean id="mailSenderBuilder" class="org.yes.cart.service.mail.impl.JavaMailSenderBuilderImpl">
         <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="systemService"/>
         <property name="connectionTimeout" value="${admin.mail.smtp.timeout}"/>
     </bean>
 

@@ -26,10 +26,7 @@ public class JavaMailSenderFactoryImpl implements JavaMailSenderFactory {
      */
     @Override
     public JavaMailSender getJavaMailSender(final String shopCode) {
-        JavaMailSender sender = null;
-        if (StringUtils.isNotEmpty(shopCode) && !"DEFAULT".equals(shopCode)) {
-            sender = javaMailSenderBuilder.buildJavaMailSender(shopCode);
-        }
+        JavaMailSender sender = javaMailSenderBuilder.buildJavaMailSender(StringUtils.isBlank(shopCode) ? "DEFAULT" : shopCode);
         if (sender == null) {
             sender = defaultJavaMailSender;
         }

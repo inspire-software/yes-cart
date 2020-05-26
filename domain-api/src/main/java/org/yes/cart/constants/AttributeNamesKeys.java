@@ -195,6 +195,44 @@ public interface AttributeNamesKeys {
          * JWT expiry in minutes
          */
         String MANAGER_JWT_EXPIRY_MIN = "MANAGER_JWT_EXPIRY_MIN";
+
+
+        /**
+         * Flag to indicate that this shop is using custom mail sender configurations.
+         */
+        String MAIL_SERVER_CUSTOM_ENABLE = "SYSTEM_MAIL_SERVER_CUSTOM_ENABLE";
+
+        /**
+         * Custom mail sender configurations - host.
+         */
+        String MAIL_SERVER_HOST = "SYSTEM_MAIL_SERVER_HOST";
+
+        /**
+         * Custom mail sender configurations - port.
+         */
+        String MAIL_SERVER_PORT = "SYSTEM_MAIL_SERVER_PORT";
+
+        /**
+         * Custom mail sender configurations - username.
+         */
+        String MAIL_SERVER_USERNAME = "SYSTEM_MAIL_SERVER_USERNAME";
+
+        /**
+         * Custom mail sender configurations - password.
+         */
+        String MAIL_SERVER_PASSWORD = "SYSTEM_MAIL_SERVER_PASSWORD";
+
+        /**
+         * Custom mail sender configurations - Use SMTP-AUTH.
+         */
+        String MAIL_SERVER_SMTPAUTH_ENABLE = "SYSTEM_MAIL_SERVER_SMTPAUTH_ENABLE";
+
+        /**
+         * Custom mail sender configurations - Use TLS to encrypt.
+         */
+        String MAIL_SERVER_STARTTLS_ENABLE = "SYSTEM_MAIL_SERVER_STARTTLS_ENABLE";
+
+
     }
 
 
