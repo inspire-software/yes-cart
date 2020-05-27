@@ -85,13 +85,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Jaxb -->
-        <dependency>
-            <groupId>org.springframework.ws</groupId>
-            <artifactId>spring-oxm-tiger</artifactId>
-            <version>${spring-oxm.version}</version>
-        </dependency>
-
         <!-- Jackson JSON Mapper -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

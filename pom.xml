@@ -129,7 +129,6 @@
 
         <!-- Storefront API global versions -->
         <spring-ws.version>2.4.5.RELEASE</spring-ws.version>
-        <spring-oxm.version>1.5.10</spring-oxm.version>
 
         <!-- HTTP client + components -->
         <org.apache.httpcomponents.version>4.3.3</org.apache.httpcomponents.version>
