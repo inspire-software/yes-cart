@@ -482,7 +482,23 @@ public class SearchController {
     )
     public @ResponseBody
     SearchResultProductRO search(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                 final @ApiParam(value = "Search request") @RequestBody SearchRO search,
+                                 final @ApiParam(value = "Search request\n\n" +
+                                         "Example search for 'mouse' keyword:\n\n" +
+                                         "```\n" +
+                                         "{\n" +
+                                         "  \"category\": \"0\",\n" +
+                                         "  \"includeNavigation\": true,\n" +
+                                         "  \"pageNumber\": 0,\n" +
+                                         "  \"pageSize\": 10,\n" +
+                                         "  \"parameters\": {\n" +
+                                         "    \"query\": [\n" +
+                                         "      \"Mouse\"\n" +
+                                         "    ]\n" +
+                                         " },\n" +
+                                         "  \"sortDescending\": true,\n" +
+                                         "  \"sortField\": null\n" +
+                                         "}\n" +
+                                         "```\n\n") @RequestBody SearchRO search,
                                  final HttpServletRequest request,
                                  final HttpServletResponse response) {
 

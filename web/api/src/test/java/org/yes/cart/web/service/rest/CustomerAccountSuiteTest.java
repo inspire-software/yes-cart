@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.domain.ro.LoginRO;
+import org.yes.cart.domain.ro.xml.XMLParamsRO;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.ShoppingCartStateService;
@@ -744,7 +745,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
         addToWishList.put(ShoppingCartCommand.CMD_P_SUPPLIER, supplier);
         addToWishList.put(ShoppingCartCommand.CMD_P_QTY, "10");
 
-        return toJsonBytes(addToWishList);
+        return toJsonBytes(new XMLParamsRO(addToWishList));
 
     }
 

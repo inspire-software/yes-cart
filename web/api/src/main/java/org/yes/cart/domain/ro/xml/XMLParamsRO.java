@@ -33,6 +33,13 @@ public class XMLParamsRO {
 
     private Map<String, String> parameters;
 
+    public XMLParamsRO() {
+    }
+
+    public XMLParamsRO(final Map<String, String> parameters) {
+        this.parameters = parameters;
+    }
+
     @XmlJavaTypeAdapter(StringMapAdapter.class)
     @XmlElement(name = "entries")
     public Map<String, String> getParameters() {

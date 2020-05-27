@@ -29,6 +29,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.domain.ro.*;
+import org.yes.cart.domain.ro.xml.XMLParamsRO;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -175,10 +176,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -302,9 +303,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -512,10 +513,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("\"messageKey\":\"emptyCart\"")))
                 .andExpect(header().string("yc", uuid));
 
-        final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -639,9 +640,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -821,10 +822,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -945,9 +946,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -1142,10 +1143,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -1267,9 +1268,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -1458,10 +1459,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -1580,9 +1581,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -1794,10 +1795,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -1915,9 +1916,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -2086,10 +2087,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
 
 
-        final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -2203,9 +2204,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -2405,10 +2406,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
 
 
 
-        final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
             put(ShoppingCartCommand.CMD_P_SUPPLIER, "WAREHOUSE_2");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -2527,9 +2528,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
+        final byte[] addMessageToCart = toJsonBytes(new XMLParamsRO(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_SETORDERMSG, "My Message");
-        }});
+        }}));
 
         mockMvc.perform(post("/cart")
                 .contentType(MediaType.APPLICATION_JSON)

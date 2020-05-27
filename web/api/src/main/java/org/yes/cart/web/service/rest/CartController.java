@@ -16,9 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -413,227 +411,7 @@ public class CartController {
 
     }
 
-
-
-    /**
-     * Interface: POST /api/rest/cart
-     * <p>
-     * <p>
-     * Display current cart.
-     * <p>
-     * <p>
-     * <h3>Headers for operation</h3><p>
-     * <table border="1">
-     *     <tr><td>Content-Type</td><td>application/json</td></tr>
-     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
-     *     <tr><td>yc</td><td>token uuid</td></tr>
-     * </table>
-     * <p>
-     * <p>
-     * <h3>Parameters for operation</h3><p>
-     * <table border="1">
-     *     <tr><td>JSON example (see {@link ShoppingCartCommand})</td><td>
-     * <pre><code>
-     * {
-     *     "addToCartCmd": "BENDER-ua",
-     *     "supplier": "WAREHOUSE_1",
-     *     "qty": "1"
-     * }
-     * </code></pre>
-     *     </td></tr>
-     * </table>
-     * <p>
-     * <p>
-     * <h3>Output</h3><p>
-     * <table border="1">
-     *     <tr><td>JSON object CartRO</td><td>
-     * <pre><code>
-     * {
-     *     "items": [{
-     *         "productSkuCode": "BENDER-ua",
-     *         "quantity": 1,
-     *         "price": 99.99,
-     *         "salePrice": 99.99,
-     *         "listPrice": 99.99,
-     *         "netPrice": 83.32,
-     *         "grossPrice": 99.99,
-     *         "taxRate": 20.00,
-     *         "taxCode": "VAT",
-     *         "taxExclusiveOfPrice": false,
-     *         "gift": false,
-     *         "promoApplied": false,
-     *         "appliedPromo": null
-     *     }],
-     *     "gifts": [],
-     *     "coupons": [],
-     *     "appliedCoupons": [],
-     *     "shipping": [{
-     *         "productSkuCode": "4",
-     *         "quantity": 1.00,
-     *         "price": 10.00,
-     *         "salePrice": 10.00,
-     *         "listPrice": 10.00,
-     *         "netPrice": 8.33,
-     *         "grossPrice": 10.00,
-     *         "taxRate": 20.00,
-     *         "taxCode": "VAT",
-     *         "taxExclusiveOfPrice": false,
-     *         "gift": false,
-     *         "promoApplied": false,
-     *         "appliedPromo": null
-     *     }],
-     *     "guid": "9633d731-15e8-40ee-afdb-1cdcca4be78e",
-     *     "currentLocale": "en",
-     *     "currencyCode": "EUR",
-     *     "modifiedTimestamp": 1427896792015,
-     *     "modified": true,
-     *     "logonState": 2,
-     *     "processingStartTimestamp": 1427896791992,
-     *     "shoppingContext": {
-     *         "customerName": "Bob Doe",
-     *         "shopId": 10,
-     *         "shopCode": "SHOIP1",
-     *         "countryCode": "GB",
-     *         "stateCode": "GB-GB",
-     *         "customerEmail": "bob.doe@yc-json.com",
-     *         "customerShops": ["SHOIP1"],
-     *         "latestViewedSkus": [],
-     *         "latestViewedCategories": [],
-     *         "resolvedIp": null
-     *     },
-     *     "orderInfo": {
-     *         "paymentGatewayLabel": null,
-     *         "multipleDelivery": false,
-     *         "separateBillingAddress": false,
-     *         "billingAddressNotRequired": false,
-     *         "deliveryAddressNotRequired": false,
-     *         "carrierSlaId": {"WAREHOUSE_2":4},
-     *         "billingAddressId": 2,
-     *         "deliveryAddressId": 2,
-     *         "orderMessage": "My Message"
-     *     },
-     *     "total": {
-     *         "listSubTotal": 99.99,
-     *         "saleSubTotal": 99.99,
-     *         "nonSaleSubTotal": 99.99,
-     *         "priceSubTotal": 99.99,
-     *         "orderPromoApplied": false,
-     *         "appliedOrderPromo": null,
-     *         "subTotal": 99.99,
-     *         "subTotalTax": 16.67,
-     *         "subTotalAmount": 99.99,
-     *         "deliveryListCost": 10.00,
-     *         "deliveryCost": 10.00,
-     *         "deliveryPromoApplied": false,
-     *         "appliedDeliveryPromo": null,
-     *         "deliveryTax": 1.67,
-     *         "deliveryCostAmount": 10.00,
-     *         "total": 109.99,
-     *         "totalTax": 18.34,
-     *         "listTotalAmount": 109.99,
-     *         "totalAmount": 109.99
-     *     }
-     * }
-     * </code></pre>
-     *     </td></tr>
-     *     <tr><td>XML object CartRO</td><td>
-     * <pre><code>
-     * &lt;cart currency="EUR" locale="en"
-     * 	  guid="0f842ef5-620a-415f-a8c0-a0dda6bc6735" logon-state="2"
-     * 	  modified="true" modified-timestamp="1427899955177" processing-timestamp="1427899955172"&gt;
-     * 	&lt;applied-coupons/&gt;
-     * 	&lt;coupons/&gt;
-     * 	&lt;gifts/&gt;
-     * 	&lt;items&gt;
-     * 		&lt;item   gift="false"
-     * 				gross-price="99.99"
-     * 				list-price="99.99"
-     * 				net-price="83.32"
-     * 				price="99.99"
-     * 				product-sku-code="BENDER-ua"
-     * 				promo-applied="false"
-     * 				quantity="1"
-     * 				sale-price="99.99"
-     * 				tax-code="VAT"
-     * 				tax-exclusive-of-price="false"
-     * 				tax-rate="20.00"/&gt;
-     * 	&lt;/items&gt;
-     * 	&lt;order-info billing-address-id="4"
-     * 				billing-address-not-required="false"
-     * 				delivery-address-id="4"
-     * 				delivery-address-not-required="false"
-     * 				multiple-delivery="false"
-     * 				separate-billing-address="false"&gt;
-     * 			&lt;carrier-sla-ids&gt;&lt;selection supplier-code="WAREHOUSE_2"&gt;4&lt;/selection&gt;&lt;/carrier-sla-ids&gt;
-     * 	&lt;/order-info&gt;
-     * 	&lt;shipping-costs&gt;
-     * 		&lt;shipping-cost  gift="false"
-     * 					    gross-price="10.00"
-     * 					    list-price="10.00"
-     * 						net-price="8.33"
-     * 						price="10.00"
-     * 						product-sku-code="4"
-     * 						promo-applied="false"
-     * 						quantity="1.00"
-     * 						sale-price="10.00"
-     * 						tax-code="VAT"
-     * 						tax-exclusive-of-price="false"
-     * 						tax-rate="20.00"/&gt;
-     * 	&lt;/shipping-costs&gt;
-     * 	&lt;shopping-context country-code="GB" shop-code="SHOIP1" shop-id="10" state-code="GB-GB"&gt;
-     * 		&lt;customer-email&gt;bob.doe@yc-xml.com&lt;/customer-email&gt;
-     * 		&lt;customer-name&gt;Bob Doe&lt;/customer-name&gt;
-     * 		&lt;customer-shops&gt;
-     * 			&lt;shop&gt;SHOIP1&lt;/shop&gt;
-     * 		&lt;/customer-shops&gt;
-     * 		&lt;latest-viewed-categories/&gt;
-     * 		&lt;latest-viewed-skus/&gt;
-     * 	&lt;/shopping-context&gt;
-     * 	&lt;total  delivery-cost="10.00"
-     * 			delivery-cost-amount="10.00"
-     * 			delivery-list-cost="10.00"
-     * 			delivery-promo-applied="false"
-     * 			delivery-tax="1.67"
-     * 			list-sub-total="99.99"
-     * 			list-total-amount="109.99"
-     * 			non-sale-sub-total="99.99"
-     * 			promo-applied="false"
-     * 			price-sub-total="99.99"
-     * 			sale-sub-total="99.99"
-     * 			sub-total="99.99"
-     * 			sub-total-amount="99.99"
-     * 			sub-total-tax="16.67"
-     * 			total="109.99"
-     * 			total-amount="109.99"
-     * 			total-tax="18.34"/&gt;
-     * &lt;/cart&gt;
-     * </code></pre>
-     *     </td></tr>
-     * </table>
-     *
-     * @param request request
-     * @param response response
-     *
-     * @return cart object
-     */
-    @ApiOperation(value = "Perform cart command")
-    @RequestMapping(
-            value = "/cart",
-            method = RequestMethod.POST,
-            consumes = { MediaType.APPLICATION_JSON_VALUE },
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
-    )
-    public @ResponseBody CartRO command(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                        final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
-                                        final @ApiParam(value = "Command") @RequestBody Map<String, Object> params,
-                                        final HttpServletRequest request,
-                                        final HttpServletResponse response) {
-
-        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
-        commandInternalRun(params);
-        return viewCart(requestToken, updatePrices, request, response);
-
-    }
+    
 
 
     /**
@@ -839,16 +617,33 @@ public class CartController {
      *
      * @return cart object
      */
-    @ApiOperation(value = "Perform cart command")
+    @ApiOperation(value = "Perform a public cart command (see ShoppingCartCommand interface for command parameters). Note that for internal commands dedicated endpoints should be used (e.g. setting shipping method, or updating an address)")
     @RequestMapping(
             value = "/cart",
             method = RequestMethod.POST,
-            consumes = { MediaType.APPLICATION_XML_VALUE },
+            consumes = {  MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody CartRO commandXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                            final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
-                                           final @ApiParam(value = "Command") @RequestBody XMLParamsRO params,
+                                           final @ApiParam(value = "Command (see ShoppingCartCommand interface for command parameters)\n\n" +
+                                                   "Example 'Add to cart':\n\n" +
+                                                   "```\n" +
+                                                   "{\n" +
+                                                   "   parameters: {\n" +
+                                                   "      \"addToCartCmd\": \"SKU-0001\"\n" +
+                                                   "      \"supplier\": \"WAREHOUSE_1\"\n" +
+                                                   "   }\n" +
+                                                   "}\n" +
+                                                   "```\n\n" +
+                                                   "Example 'Set order message':\n\n" +
+                                                   "```\n" +
+                                                   "{\n" +
+                                                   "   parameters: {\n" +
+                                                   "      \"setOrderMsgCmd\": \"My Message\"\n" +
+                                                   "   }\n" +
+                                                   "}\n" +
+                                                   "```\n\n") @RequestBody XMLParamsRO params,
                                            final HttpServletRequest request,
                                            final HttpServletResponse response) {
 
