@@ -617,7 +617,7 @@ public class CartController {
      *
      * @return cart object
      */
-    @ApiOperation(value = "Perform a public cart command (see ShoppingCartCommand interface for command parameters). Note that for internal commands dedicated endpoints should be used (e.g. setting shipping method, or updating an address)")
+    @ApiOperation(value = "Perform a cart command (see ShoppingCartCommand interface for command parameters). Note that for internal commands dedicated endpoints should be used (e.g. setting shipping method, or updating an address)")
     @RequestMapping(
             value = "/cart",
             method = RequestMethod.POST,
