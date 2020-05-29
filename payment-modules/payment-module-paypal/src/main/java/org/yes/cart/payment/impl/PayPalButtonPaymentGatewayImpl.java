@@ -40,6 +40,7 @@ import org.yes.cart.utils.MoneyUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -65,6 +66,7 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     static final String PPB_POST_URL = "PPB_POST_URL";
 
     // Configuration parameters
+    static final String PPB_IPN_ENCODING = "PPB_IPN_ENCODING";
     static final String PPB_ENVIRONMENT = "PPB_ENVIRONMENT";
     static final String PPB_BUSINESS = "PPB_BUSINESS";
     static final String PPB_USER = "PPB_USER";
@@ -110,7 +112,16 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         setParameterIfNotNull(configurationMap, "acct1.Signature", PPB_SIGNATURE);
         setParameterIfNotNull(configurationMap, "mode", PPB_ENVIRONMENT);
 
-        return new IPNMessage(requestParams, configurationMap);
+        final Map<String, String[]> enhanced = new LinkedHashMap<>();
+        if (requestParams != null) {
+            enhanced.putAll(requestParams);
+        }
+        final String charset = getParameterValue(PPB_IPN_ENCODING);
+        if (StringUtils.isNotBlank(charset)) {
+            enhanced.put("charset", new String[]{ charset });
+        }
+
+        return new IPNMessage(enhanced, configurationMap, true);
     }
 
     /**

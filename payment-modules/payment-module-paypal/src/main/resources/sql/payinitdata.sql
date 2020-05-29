@@ -565,3 +565,6 @@ VALUES (14561, 'payPalButtonPaymentGateway', 'PPB_BUSINESS', '', 'Merchant email
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (14562, 'payPalButtonPaymentGateway', 'restrictToCustomerTags', null, 'Gateway restrictions (Customer tags)', 'Gateway restrictions (Customer tags)');
 
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (14563, 'payPalButtonPaymentGateway', 'PPB_IPN_ENCODING', 'utf-8', 'IPN encoding', 'IPN validation request encoding');
