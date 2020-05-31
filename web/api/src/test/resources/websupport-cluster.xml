@@ -31,6 +31,7 @@
                 <entry key="webapp.api.war.name" value="${webapp.api.war.name}"/>
                 <entry key="webapp.admin.context.path" value="${webapp.admin.context.path}"/>
                 <entry key="webapp.admin.war.name" value="${webapp.admin.war.name}"/>
+                <entry key="webapp.configuration" value="development"/>
             </map>
         </constructor-arg>
     </bean>
