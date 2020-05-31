@@ -42,7 +42,7 @@ $(document).ready(function() {
         if (!ctx.live) {
             console.log(msg, args);
         }
-    }
+    };
 
     // -- Search box -----------------------------------------------------------------------
 
