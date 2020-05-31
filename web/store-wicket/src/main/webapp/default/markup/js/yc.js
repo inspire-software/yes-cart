@@ -38,6 +38,12 @@
 
 $(document).ready(function() {
 
+    var log = function(msg, args) {
+        if (!ctx.live) {
+            console.log(msg, args);
+        }
+    }
+
     // -- Search box -----------------------------------------------------------------------
 
     var isBlank = function isBlank(str) {
@@ -46,7 +52,7 @@ $(document).ready(function() {
 
     var doSearch = function() {
         var _val = $('.js-search-input').val();
-        console.log('searching for "' + _val + '"');
+        log('searching for "' + _val + '"');
         if (!isBlank(_val)) {
             var _safeval = _val.replace(/\//g, ' '); // replace forward slashes
             var _loc = '';
@@ -59,7 +65,7 @@ $(document).ready(function() {
             } else {
                 _loc = ctx.root + '/query/' + _safeval;
             }
-            console.log('location "' + _loc + '"');
+            log('location "' + _loc + '"');
             window.location.href = _loc;
         }
     };
@@ -104,13 +110,13 @@ $(document).ready(function() {
         $('html, body').animate({ scrollTop: 0 }, 300);
         $('#mini-cart').addClass("loading");
 
-        console.log('clicking ATB "' + _ajaxATB + '"');
+        log('clicking ATB "' + _ajaxATB + '"');
 
         $.ajax({
             url: _ajaxATB
         }).done(function ( data ) {
 
-            console.log('got ATB response');
+            log('got ATB response');
 
             // update minicart for desktop
             var _newminicart = $(data).filter('.jsajaxresponseminicart');
@@ -125,7 +131,7 @@ $(document).ready(function() {
             }
 
             var _jsonstr = $(data).filter('.jsajaxresponseobj').html();
-            console.log('JSON: ' + _jsonstr);
+            log('JSON: ' + _jsonstr);
             var _json = $.parseJSON(_jsonstr);
 
 
@@ -142,7 +148,7 @@ $(document).ready(function() {
 
                 if (_panelObj != null) {
 
-                    console.log('updating qty picker for ' + _json.SKU);
+                    log('updating qty picker for ' + _json.SKU);
                     _panelObj.update(_json);
 
                 }
@@ -181,7 +187,7 @@ $(document).ready(function() {
 
             var _stepDecimalPoint = _stepStr.indexOf('.') > -1 ? _stepStr.length - _stepStr.indexOf('.') - 1 : 0;
 
-            console.log('quantity changed by ' + delta + ', min: ' + _min + ', max: ' + _max + ', step: ' + _step + ', step d/p: ' + _stepDecimalPoint);
+            log('quantity changed by ' + delta + ', min: ' + _min + ', max: ' + _max + ', step: ' + _step + ', step d/p: ' + _stepDecimalPoint);
 
             if (isNaN(_max) || _max <= 0) {
                 _min = 0;
@@ -198,7 +204,7 @@ $(document).ready(function() {
 
             _newVal = _step > 0 ? (_min + Math.round((_newVal - _min) / _step) * _step).toFixed(_stepDecimalPoint) : 0;
 
-            console.log('new quantity: ' + _newVal);
+            log('new quantity: ' + _newVal);
 
             if (_newVal == 0) {
                 _add.addClass('disabled');
@@ -321,7 +327,7 @@ $(document).ready(function() {
 
         var _href = $(this).attr('href');
 
-        console.log('wish list click: ' + _href);
+        log('wish list click: ' + _href);
 
         var _msgNode = createAreYouSure('', _href);
         $('body').append(_msgNode);
@@ -333,14 +339,14 @@ $(document).ready(function() {
 
     $('div[data-publickey]').each(function() {
 
-        console.log('loading wish list information, publickey: ' + $(this).data('publickey'));
+        log('loading wish list information, publickey: ' + $(this).data('publickey'));
 
         var _this = $(this);
 
         var _tagcloud = function() {
 
             var _tagcloudtemplate = function(tag, count, significance, index) {
-                console.log(count + ' items tagged with "' + tag + '" with significance ' + significance);
+                log(count + ' items tagged with "' + tag + '" with significance ' + significance);
                 return '<li><a href="#" class="tag' + significance + '" data-tag="' + tag + '" data-index="' + index + '">' + tag + '</a></li>';
             };
 
@@ -396,7 +402,7 @@ $(document).ready(function() {
                 $.each(_tagmap.alltags, function(index, tag) {
 
                     var _tagcount = _tagmap.bytag[tag].length;
-                    console.log('Count: ' + _tagcount + ', min: ' + _min + ', max: ' + _max);
+                    log('Count: ' + _tagcount + ', min: ' + _min + ', max: ' + _max);
                     var _tagli = $(_tagcloudtemplate(tag, _tagcount, _tagcount > _min ? Math.round((_tagcount - _min) / (_max - _min) * 10) : 0, index));
                     _tagcloud.append(_tagli);
                     var _taga = _tagli.find('a');
@@ -409,12 +415,12 @@ $(document).ready(function() {
                         if (_a.hasClass('selected')) {
                             _a.removeClass('selected');
                             _tagmap.selected[_index] = false;
-                            console.log(_a.data('tag') + ' de-selected');
+                            log(_a.data('tag') + ' de-selected');
                             $('#jsWishlistTagCloudShare').hide();
                         } else {
                             _a.addClass('selected');
                             _tagmap.selected[_index] = true;
-                            console.log(_a.data('tag') + ' selected');
+                            log(_a.data('tag') + ' selected');
                             $('#jsWishlistTagCloudShareTag').html(_a.data('tag'));
                             var _wlsharelink = ctx.url;
                             if (_wlsharelink.indexOf('?') != -1) {
@@ -436,20 +442,20 @@ $(document).ready(function() {
                         });
 
                         if (_atleastoneselected) {
-                            console.log('at least one tag is selected making all hidden');
+                            log('at least one tag is selected making all hidden');
                             $.each(_tagmap.allwls, function(index, wls) {
                                 $(wls).hide();
                             });
                             $.each(_tagmap.selected, function(index1, selected) {
                                 if (selected) {
                                     $.each(_tagmap.bytag[_tagmap.alltags[index1]], function(index2, wls) {
-                                        console.log('showing wish list item ' + wls.data('sku') + ' because of tag ' + _tagmap.alltags[index1]);
+                                        log('showing wish list item ' + wls.data('sku') + ' because of tag ' + _tagmap.alltags[index1]);
                                         $(wls).show();
                                     })
                                 }
                             });
                         } else {
-                            console.log('making all items visible');
+                            log('making all items visible');
                             $.each(_tagmap.allwls, function(index, wls) {
                                 $(wls).show();
                             });
@@ -486,7 +492,7 @@ $(document).ready(function() {
                 _tagpod.val(_tagvalue.replace(/\s+/g, ','));
             }
 
-            console.log(_wlpod.data('sku') + ' item has the following tags: ' + _tagpod.val());
+            log(_wlpod.data('sku') + ' item has the following tags: ' + _tagpod.val());
 
             _wlpod.find('.thumbnail').append(_tagpod);
             _tagpod.tagsinput();
@@ -497,14 +503,14 @@ $(document).ready(function() {
 
                 if (_tpa.hasClass('loading')) {
                     _tpa.removeClass('loading');
-                    console.log('Adding tag ' + event.item + ' to pod data: ' + _wla.data('tag'));
+                    log('Adding tag ' + event.item + ' to pod data: ' + _wla.data('tag'));
                     if (_wla.data('tag') != null && _wla.data('tag').length > 0) {
                         _wla.data('tag', _wla.data('tag') + ' ' + event.item);
                     } else {
                         _wla.data('tag', event.item);
                     }
                     _tagcloud.init();
-                    console.log('Added tag ' + event.item + ', pod data: ' + _wla.data('tag'));
+                    log('Added tag ' + event.item + ', pod data: ' + _wla.data('tag'));
                     return;
                 }
 
@@ -522,14 +528,14 @@ $(document).ready(function() {
                     + _wla.data('sku') + '/supplier/' + _wla.data('fc') + '/type/' + _wla.data('type') + '/tags/'
                     + _tiaall + '/tagsr/tagsr/qty/0';
 
-                console.log('Sending add to ' + _ajaxWLA);
+                log('Sending add to ' + _ajaxWLA);
 
                 $.ajax({
                     url: _ajaxWLA
                 }).done(function ( data ) {
 
                     var _json = $.parseJSON($(data).filter('.jsajaxresponseobj').html());
-                    console.log(_json.SKU);
+                    log(_json.SKU);
                     _tpa.addClass('loading');
                     _tpa.tagsinput('add', _tia);
 
@@ -546,10 +552,10 @@ $(document).ready(function() {
 
                 if (_tpr.hasClass('loading')) {
                     _tpr.removeClass('loading');
-                    console.log('Removing tag ' + event.item + ' from pod data: ' + _wlr.data('tag'));
+                    log('Removing tag ' + event.item + ' from pod data: ' + _wlr.data('tag'));
                     _wlr.data('tag', _wlr.data('tag').replace(event.item, '').replace(/\s{2,}/g, ' ').replace(/^\s+|\s+$/g, ''));
                     _tagcloud.init();
-                    console.log('Removed tag ' + event.item + ', pod data: ' + _wlr.data('tag'));
+                    log('Removed tag ' + event.item + ', pod data: ' + _wlr.data('tag'));
                     return;
                 }
 
@@ -564,14 +570,14 @@ $(document).ready(function() {
                     + _wlr.data('sku') + '/supplier/' + _wlr.data('fc') + '/type/' + _wlr.data('type') + '/tags/'
                     + _tirall + '/tagsr/tagsr/qty/0';
 
-                console.log('Sending remove to ' + _ajaxWL);
+                log('Sending remove to ' + _ajaxWL);
 
                 $.ajax({
                     url: _ajaxWL
                 }).done(function ( data ) {
 
                     var _json = $.parseJSON($(data).filter('.jsajaxresponseobj').html());
-                    console.log(_json.SKU);
+                    log(_json.SKU);
                     _tpr.addClass('loading');
                     _tpr.tagsinput('remove', _tir);
 
@@ -597,7 +603,7 @@ $(document).ready(function() {
 
         var _href = $(this).attr('href');
 
-        console.log('cart click: ' + _href);
+        log('cart click: ' + _href);
 
         var _msgNode = createAreYouSure('', _href);
         $('body').append(_msgNode);
@@ -677,6 +683,6 @@ $(document).ready(function() {
     $("[data-toggle=\"tooltip\"]").tooltip();
 
 
-    console.log('Loaded page: ' + ctx.page + ' with url ' + ctx.url);
+    log('Loaded page: ' + ctx.page + ' with url ' + ctx.url);
 });
 

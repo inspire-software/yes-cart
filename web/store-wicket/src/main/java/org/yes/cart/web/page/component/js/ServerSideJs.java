@@ -1,5 +1,7 @@
 package org.yes.cart.web.page.component.js;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.html.basic.Label;
 import org.yes.cart.web.page.component.BaseComponent;
 
@@ -17,10 +19,13 @@ public class ServerSideJs extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
+        final boolean deploymentMode = Application.get().getConfigurationType() == RuntimeConfigurationType.DEPLOYMENT;
+
         addOrReplace(new Label("jsInclude", new StringBuilder()
             .append("<script type=\"text/javascript\">")
             .append("var ctx = {").append("\n")
             .append("  url: document.URL,\n")
+            .append("  live: ").append(deploymentMode).append(",\n")
             .append("  page: '").append(getPage().getClass().getSimpleName()).append("',\n")
             .append("  root: '").append(getWicketUtil().getHttpServletRequest().getContextPath()).append("',\n")
             .append("  resources: {\n")
