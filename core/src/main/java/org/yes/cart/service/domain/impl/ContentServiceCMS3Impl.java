@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.config.Configuration;
 import org.yes.cart.config.ConfigurationContext;
+import org.yes.cart.config.RegistrationAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Content;
@@ -41,7 +42,7 @@ import java.util.*;
  * Date: 20/04/2019
  * Time: 18:41
  */
-public class ContentServiceCMS3Impl extends BaseGenericServiceImpl<Content> implements ContentService, Configuration {
+public class ContentServiceCMS3Impl extends BaseGenericServiceImpl<Content> implements ContentService, Configuration, RegistrationAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ContentServiceCMS3Impl.class);
 
@@ -62,28 +63,6 @@ public class ContentServiceCMS3Impl extends BaseGenericServiceImpl<Content> impl
         super(contentDao);
         this.contentDao = contentDao;
         this.templateSupport = templateSupport;
-
-        this.templateSupport.registerFunction("include", params -> {
-
-            if (params != null && params.length == 3) {
-
-                final String uri = String.valueOf(params[0]);
-
-                final Long contentId = proxy().findContentIdBySeoUri(uri);
-
-                if (contentId != null) {
-                    final String locale = String.valueOf(params[1]);
-                    final Map<String, Object> context = (Map<String, Object>) params[2];
-
-
-                    return proxy().getDynamicContentBody(contentId, locale, context);
-
-                }
-
-            }
-
-            return "";
-        });
     }
 
     /**
@@ -577,4 +556,33 @@ public class ContentServiceCMS3Impl extends BaseGenericServiceImpl<Content> impl
         this.cfgContext = cfgContext;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public void onRegisterEvent() {
+
+        LOG.info("Defining CMS.include function for CMS3");
+
+        this.templateSupport.registerFunction("include", params -> {
+
+            if (params != null && params.length == 3) {
+
+                final String uri = String.valueOf(params[0]);
+
+                final Long contentId = proxy().findContentIdBySeoUri(uri);
+
+                if (contentId != null) {
+                    final String locale = String.valueOf(params[1]);
+                    final Map<String, Object> context = (Map<String, Object>) params[2];
+
+
+                    return proxy().getDynamicContentBody(contentId, locale, context);
+
+                }
+
+            }
+
+            return "";
+        });
+
+    }
 }

@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.config.ConfigurationRegistry;
+import org.yes.cart.config.RegistrationAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIteratorCallback;
 import org.yes.cart.domain.entity.Content;
@@ -45,6 +46,9 @@ public class ContentServiceCachedImpl implements ContentService, ConfigurationRe
     public ContentServiceCachedImpl(final ContentService contentService) {
         this.contentService = contentService;
         this.fallback = contentService;
+        if (this.contentService instanceof RegistrationAware) {
+            ((RegistrationAware) this.contentService).onRegisterEvent();
+        }
     }
 
 
