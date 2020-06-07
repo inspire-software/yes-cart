@@ -157,8 +157,10 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
                             } else {
 
                                 SearchContext.JoinMode.OR.setMode(currentFilter);
-                                currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(byCode.getSecond())));
-                                currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(skuCodes)));
+                                currentFilter.put("skuCode", Arrays.asList(
+                                        SearchContext.MatchMode.EQ.toParam(byCode.getSecond()),
+                                        SearchContext.MatchMode.ANY.toParam(skuCodes)
+                                ));
 
                             }
 
@@ -182,8 +184,10 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
                             } else {
 
                                 SearchContext.JoinMode.OR.setMode(currentFilter);
-                                currentFilter.put("skuCode", Collections.singletonList(textFilter));
-                                currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(skuCodes)));
+                                currentFilter.put("skuCode", Arrays.asList(
+                                        textFilter,
+                                        SearchContext.MatchMode.ANY.toParam(skuCodes)
+                                ));
 
                             }
 

@@ -178,7 +178,6 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                             skuCodes.add(sku.getCode()); // sku codes from product match
                         }
 
-
                         if (skuCodes.isEmpty()) {
 
                             currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(byCode.getSecond())));
@@ -186,8 +185,10 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                         } else {
 
                             SearchContext.JoinMode.OR.setMode(currentFilter);
-                            currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(byCode.getSecond())));
-                            currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(skuCodes)));
+                            currentFilter.put("skuCode", Arrays.asList(
+                                    SearchContext.MatchMode.EQ.toParam(byCode.getSecond()),
+                                    SearchContext.MatchMode.ANY.toParam(skuCodes)
+                            ));
 
                         }
 
@@ -220,8 +221,10 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                         } else {
 
                             SearchContext.JoinMode.OR.setMode(currentFilter);
-                            currentFilter.put("skuCode", Collections.singletonList(textFilter));
-                            currentFilter.put("skuCode", Collections.singletonList(SearchContext.MatchMode.ANY.toParam(skuCodes)));
+                            currentFilter.put("skuCode", Arrays.asList(
+                                    textFilter,
+                                    SearchContext.MatchMode.ANY.toParam(skuCodes)
+                            ));
 
                         }
 
