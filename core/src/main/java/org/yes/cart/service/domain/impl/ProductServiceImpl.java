@@ -875,6 +875,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         sku.setDescription(instance.getDescription());
         sku.setProduct(instance);
         sku.setRank(0);
+        sku.setSupplierCatalogCode(instance.getSupplierCatalogCode());
         instance.getSku().add(sku);
 
         return getGenericDao().create(instance);

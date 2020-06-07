@@ -127,11 +127,12 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   newSkuInstance():ProductSkuVO {
     let product = this.selectedProduct != null ? this.selectedProduct.productId : 0;
+    let catCode = this.selectedProduct != null ? this.selectedProduct.supplierCatalogCode : null;
     return {
       skuId: 0, productId: product,
       guid: null, code: null,
       manufacturerCode: null, manufacturerPartCode: null,
-      supplierCode: null, supplierCatalogCode: null,
+      supplierCode: null, supplierCatalogCode: catCode,
       barCode: null,
       rank: 0,
       tag: null,
