@@ -360,7 +360,6 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
         // Pre-select single option to disable multi-delivery for non-supporting fulfilment centres
         final Map<String, Warehouse> warehouses = this.warehouseService.getByShopIdMapped(shopId, false);
         final Map<String, Boolean> single = new HashMap<>();
-        single.put("", Boolean.TRUE); // By default only non stock items are in shop so it is single anyway TODO: remove this after YC-668
         for (final Map.Entry<String, Warehouse> warehouse : warehouses.entrySet()) {
             single.put(warehouse.getKey(), !warehouse.getValue().isMultipleShippingSupported());
         }
