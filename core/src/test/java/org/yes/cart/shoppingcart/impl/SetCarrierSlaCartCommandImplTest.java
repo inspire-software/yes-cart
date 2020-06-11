@@ -271,7 +271,48 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         }});
 
         assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
-        assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
+        assertEquals(345, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
+        assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
+        assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
+        assertTrue(shoppingCart.getOrderInfo().isDeliveryAddressNotRequired());
+        assertEquals("GB", shoppingCart.getShoppingContext().getCountryCode());
+        assertEquals("GB-CAM", shoppingCart.getShoppingContext().getStateCode());
+
+    }
+
+    @Test
+    public void testExecuteWithAddressParamsShippingNotRequiredNoBilling() {
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        final Address billing = null;
+        final Address delivery = context.mock(Address.class, "delivery");
+
+        context.checking(new Expectations() {{
+            allowing(delivery).getAddressId(); will(returnValue(345L));
+            allowing(delivery).getCountryCode(); will(returnValue("GB"));
+            allowing(delivery).getStateCode(); will(returnValue("GB-CAM"));
+        }});
+
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
+        assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
+        assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
+
+        commands.execute(shoppingCart, new HashMap<String, Object>() {{
+            put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
+            put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
+            put(ShoppingCartCommand.CMD_SETSHOP, "10");
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, Boolean.FALSE);
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, Boolean.TRUE);
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billing);
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
+        }});
+
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
+        assertEquals(345, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
         assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
         assertTrue(shoppingCart.getOrderInfo().isDeliveryAddressNotRequired());
@@ -456,12 +497,56 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         }});
 
         assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
-        assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
+        assertEquals(345, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
         assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
         assertTrue(shoppingCart.getOrderInfo().isDeliveryAddressNotRequired());
-        assertNull(shoppingCart.getShoppingContext().getCountryCode());
-        assertNull(shoppingCart.getShoppingContext().getStateCode());
+        assertEquals("GB", shoppingCart.getShoppingContext().getCountryCode());
+        assertEquals("GB-CAM", shoppingCart.getShoppingContext().getStateCode());
+
+    }
+
+    @Test
+    public void testExecuteWithAddressParamsShippingNotRequiredOverwriteNoBilling() {
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        final Address billing = null;
+        final Address delivery = context.mock(Address.class, "delivery");
+
+        context.checking(new Expectations() {{
+            allowing(delivery).getAddressId(); will(returnValue(345L));
+            allowing(delivery).getCountryCode(); will(returnValue("GB"));
+            allowing(delivery).getStateCode(); will(returnValue("GB-CAM"));
+        }});
+
+        shoppingCart.getOrderInfo().setBillingAddressId(234L);
+        shoppingCart.getOrderInfo().setDeliveryAddressId(345L);
+
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
+        assertNotNull(shoppingCart.getOrderInfo().getBillingAddressId());
+        assertNotNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
+
+        commands.execute(shoppingCart, new HashMap<String, Object>() {{
+            put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
+            put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
+            put(ShoppingCartCommand.CMD_SETSHOP, "10");
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, Boolean.FALSE);
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, Boolean.TRUE);
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billing);
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
+        }});
+
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
+        assertEquals(345, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
+        assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
+        assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
+        assertTrue(shoppingCart.getOrderInfo().isDeliveryAddressNotRequired());
+        assertEquals("GB", shoppingCart.getShoppingContext().getCountryCode());
+        assertEquals("GB-CAM", shoppingCart.getShoppingContext().getStateCode());
 
     }
 

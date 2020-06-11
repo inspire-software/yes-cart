@@ -130,7 +130,7 @@ public class SetCarrierSlaCartCommandImpl extends AbstractCartCommandImpl implem
                 shoppingCart.getOrderInfo().setBillingAddressId(null);
             }
         } else {
-            final Address billing = (Address) parameters.get(CMD_SETCARRIERSLA_P_BILLING_ADDRESS);
+            final Address billing = (Address) parameters.get(CMD_SETADDRESES_P_BILLING_ADDRESS);
             if (billing != null) {
                 if (!Long.valueOf(billing.getAddressId()).equals(shoppingCart.getOrderInfo().getBillingAddressId())) {
                     shoppingCart.getOrderInfo().setBillingAddressId(billing.getAddressId());
@@ -148,6 +148,16 @@ public class SetCarrierSlaCartCommandImpl extends AbstractCartCommandImpl implem
         if (notRequiredShipping) {
             if (shoppingCart.getOrderInfo().getDeliveryAddressId() != null) {
                 shoppingCart.getOrderInfo().setDeliveryAddressId(null);
+            }
+            if (!shoppingCart.isSeparateBillingAddress() && !shoppingCart.isBillingAddressNotRequired()) {
+                final Address delivery = (Address) parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS);
+                if (delivery != null) {
+                    if (!Long.valueOf(delivery.getAddressId()).equals(shoppingCart.getOrderInfo().getBillingAddressId())) {
+                        shoppingCart.getOrderInfo().setBillingAddressId(delivery.getAddressId());
+                        shoppingCart.getShoppingContext().setCountryCode(delivery.getCountryCode());
+                        shoppingCart.getShoppingContext().setStateCode(delivery.getStateCode());
+                    }
+                }
             }
         } else {
             final Address delivery = (Address) parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS);

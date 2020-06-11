@@ -84,6 +84,17 @@ public class SetAddressesCartCommandImpl extends AbstractCartCommandImpl impleme
                         shoppingCart.getOrderInfo().setDeliveryAddressId(null);
                         changed = true;
                     }
+                    if (!shoppingCart.isSeparateBillingAddress() && !shoppingCart.isBillingAddressNotRequired()) {
+                        final Address delivery = (Address) parameters.get(CMD_SETADDRESES_P_DELIVERY_ADDRESS);
+                        if (delivery != null) {
+                            if (!Long.valueOf(delivery.getAddressId()).equals(shoppingCart.getOrderInfo().getBillingAddressId())) {
+                                shoppingCart.getOrderInfo().setBillingAddressId(delivery.getAddressId());
+                                shoppingCart.getShoppingContext().setCountryCode(delivery.getCountryCode());
+                                shoppingCart.getShoppingContext().setStateCode(delivery.getStateCode());
+                                changed = true;
+                            }
+                        }
+                    }
                 } else {
                     final Address delivery = (Address) parameters.get(CMD_SETADDRESES_P_DELIVERY_ADDRESS);
                     if (delivery != null) {
