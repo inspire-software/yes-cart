@@ -80,6 +80,8 @@ public class VoShopServiceImpl implements VoShopService {
 
     private Set<String> skipAttributesInView = Collections.emptySet();
 
+    private Map<String, List<VoShopSummaryEmailTemplate>> emailTemplateConfig;
+
     /**
      * Construct service.
      * @param languageService languages
@@ -321,7 +323,7 @@ public class VoShopServiceImpl implements VoShopService {
 
             addCustomerConfig(summary, lang, attrsMap, attrsMapSub);
 
-            addEmailTemplatesBasicSettings(summary, lang, attrsMap);
+            addEmailTemplatesBasicSettings(summary, configShopId, lang, attrsMap);
 
             addSettingsConfig(summary, lang, attrsMap);
 
@@ -640,120 +642,41 @@ public class VoShopServiceImpl implements VoShopService {
         }
     }
 
-    protected void addEmailTemplatesBasicSettings(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+    protected void addEmailTemplatesBasicSettings(final VoShopSummary summary, final long shopId, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
 
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-cant-allocate-product-qty", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-cant-allocate-product-qty-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-contactform-request", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-contactform-request-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-customer-registered", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-customer-registered-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-newsletter-request", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-newsletter-request-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-canceled", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-canceled-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-confirmed", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-confirmed-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-allocated", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-allocated-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress-wait", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress-wait-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-packing", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-packing-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready-wait", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready-wait-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-new", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-new-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-payment-confirmed", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-payment-confirmed-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-returned", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-returned-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-shipping-completed", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-shipping-completed-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-wait-confirmation", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-wait-confirmation-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-failed", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-failed-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped-failed", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped-failed-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund-failed", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund-failed-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-rfq-new", true, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-rfq-new-text", true, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-managedlist-rejected", true, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-managedlist-rejected-text", true, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-activation", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-activation-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-change-password", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-change-password-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-deactivation", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-deactivation-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-delete", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-delete-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-registered", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-registered-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-canceled", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-canceled-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-confirmed", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-confirmed-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-readytoshipping", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-readytoshipping-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-shipped", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-shipped-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-new", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-new-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-returned", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-returned-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-shipping-completed", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-shipping-completed-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "payment", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "payment-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "rfq-new", true, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "rfq-new-text", true, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "shipment-complete", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "shipment-complete-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "sup-order-new", false, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "sup-order-new-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "managedlist-created", true, false);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "managedlist-created-text", true, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-adm-footer", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-adm-header", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-adm-order-delivery-details", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-adm-order-delivery-details-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-adm-order-details", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-adm-order-details-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-footer", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-header", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-meta", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-order-delivery-details", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-order-details", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-order-details-text", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-styles", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "common-sup-order-deliveries-details", false, true);
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "mail-head_jpeg", false, false);
+        final List<String> themes = new ArrayList(themeService.getThemeChainByShopId(shopId, null));
+        Collections.reverse(themes);
+
+        final Map<String, VoShopSummaryEmailTemplate> shopEmailTemplates = new LinkedHashMap<>();
+        for (final String theme : themes) {
+            final List<VoShopSummaryEmailTemplate> themeTemplates = this.emailTemplateConfig.get(theme);
+            if (themeTemplates != null) {
+                for (final VoShopSummaryEmailTemplate template : themeTemplates) {
+                    shopEmailTemplates.put(template.getName(), template);
+                }
+            }
+
+        }
+
+        for (final VoShopSummaryEmailTemplate template : shopEmailTemplates.values()) {
+            addEmailTemplateBasicSettings(summary, lang, attrsMap, template);
+        }
+
 
     }
 
-    protected void addEmailTemplateBasicSettings(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap, final String template, final boolean yce, final boolean part) {
+    protected void addEmailTemplateBasicSettings(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap, final VoShopSummaryEmailTemplate templateConfig) {
 
         final MutablePair<String, String> shopAdmin = getShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL, lang, "");
 
+        final String template = templateConfig.getName();
+
         final VoShopSummaryEmailTemplate tmp = new VoShopSummaryEmailTemplate();
-        tmp.setDisabled(yce);
+        tmp.setDisabled(templateConfig.isDisabled());
         tmp.setName(template);
-        tmp.setYce(yce);
-        tmp.setPart(part);
-        tmp.setImage(template.contains("_jpeg") || template.contains("_png"));
+        tmp.setYce(templateConfig.isYce());
+        tmp.setPart(templateConfig.isPart());
+        tmp.setImage(templateConfig.isImage());
         if (!tmp.isPart() && !tmp.isImage()) {
             final String adminEmail = StringUtils.isNotBlank(shopAdmin.getSecond()) ? shopAdmin.getSecond() : null;
             tmp.setFrom(adminEmail);
@@ -1246,4 +1169,12 @@ public class VoShopServiceImpl implements VoShopService {
         this.skipAttributesInView = new HashSet<>(attributes);
     }
 
+    /**
+     * Spring IoC
+     *
+     * @param emailTemplateConfig email template configuration
+     */
+    public void setEmailTemplateConfig(final Map<String, List<VoShopSummaryEmailTemplate>> emailTemplateConfig) {
+        this.emailTemplateConfig = emailTemplateConfig;
+    }
 }

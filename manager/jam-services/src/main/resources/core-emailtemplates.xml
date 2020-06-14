@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Inspire-Software.com
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- ############################# Federation Core ######################### -->
+
+    <bean id="emailTemplatesConfigMapping" class="org.yes.cart.utils.spring.LinkedHashMapBean">
+        <constructor-arg>
+            <map>
+                <entry key="default">
+                    <list>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-cant-allocate-product-qty"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-cant-allocate-product-qty-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-contactform-request"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-contactform-request-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-customer-registered"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-customer-registered-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-newsletter-request"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-newsletter-request-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-canceled"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-canceled-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-confirmed"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-confirmed-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-allocated"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-allocated-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-inprogress"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-inprogress-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-inprogress-wait"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-inprogress-wait-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-packing"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-packing-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-ready"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-ready-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-ready-wait"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-delivery-ready-wait-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-new"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-new-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-payment-confirmed"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-payment-confirmed-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-returned"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-returned-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-shipping-completed"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-shipping-completed-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-wait-confirmation"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-order-wait-confirmation-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-payment"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-payment-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-payment-failed"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-payment-failed-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-payment-shipped"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-payment-shipped-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-payment-shipped-failed"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-payment-shipped-failed-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-refund"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-refund-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-refund-failed"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-refund-failed-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-rfq-new"/>
+                            <property name="yce" value="true"/>
+                            <property name="disabled" value="true"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-rfq-new-text"/>
+                            <property name="yce" value="true"/>
+                            <property name="disabled" value="true"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-managedlist-rejected"/>
+                            <property name="yce" value="true"/>
+                            <property name="disabled" value="true"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="adm-managedlist-rejected-text"/>
+                            <property name="yce" value="true"/>
+                            <property name="disabled" value="true"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-activation"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-activation-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-change-password"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-change-password-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-deactivation"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-deactivation-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-delete"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-delete-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-registered"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="customer-registered-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-canceled"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-canceled-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-confirmed"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-confirmed-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-delivery-readytoshipping"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-delivery-readytoshipping-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-delivery-shipped"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-delivery-shipped-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-new"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-new-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-returned"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-returned-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-shipping-completed"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="order-shipping-completed-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="payment"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="payment-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="rfq-new"/>
+                            <property name="yce" value="true"/>
+                            <property name="disabled" value="true"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="rfq-new-text"/>
+                            <property name="yce" value="true"/>
+                            <property name="disabled" value="true"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="shipment-complete"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="shipment-complete-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="sup-order-new"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="sup-order-new-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="managedlist-created"/>
+                            <property name="yce" value="true"/>
+                            <property name="disabled" value="true"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="managedlist-created-text"/>
+                            <property name="yce" value="true"/>
+                            <property name="disabled" value="true"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-adm-footer"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-adm-header"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-adm-order-delivery-details"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-adm-order-delivery-details-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-adm-order-details"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-adm-order-details-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-footer"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-header"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-meta"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-order-delivery-details"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-order-details"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-order-details-text"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-styles"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="common-sup-order-deliveries-details"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="true"/>
+                            <property name="image" value="false"/>
+                        </bean>
+                        <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
+                            <property name="name" value="mail-head_jpeg"/>
+                            <property name="yce" value="false"/>
+                            <property name="part" value="false"/>
+                            <property name="image" value="true"/>
+                        </bean>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!-- ################################ Register module  ####################################################### -->
+
+    <bean class="org.yes.cart.env.impl.ModuleImpl">
+        <property name="functionalArea" value="cms"/>
+        <property name="name" value="jam-services"/>
+        <property name="subName" value="core-emailtemplates"/>
+    </bean>
+
+</beans>
