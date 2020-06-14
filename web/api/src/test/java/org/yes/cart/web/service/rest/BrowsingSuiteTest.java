@@ -76,8 +76,26 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
+        mockMvc.perform(get("/categories/menu?mode=hierarchy")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
 
         mockMvc.perform(get("/categories/106/menu")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("Retro Gadgets")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+        mockMvc.perform(get("/categories/106/menu?mode=hierarchy")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale))
@@ -109,7 +127,25 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
+        mockMvc.perform(get("/categories/menu?mode=hierarchy")
+                    .contentType(MediaType.APPLICATION_XML)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
         mockMvc.perform(get("/categories/106/menu")
+                    .contentType(MediaType.APPLICATION_XML)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("Retro Gadgets")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+        mockMvc.perform(get("/categories/106/menu?mode=hierarchy")
                     .contentType(MediaType.APPLICATION_XML)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale))
@@ -143,6 +179,15 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("menu item 1")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
+        mockMvc.perform(get("/content/SHOIP1_menu_item_1/menu?mode=hierarchy")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("menu item 1")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
         mockMvc.perform(get("/content/SHOIP1_menu_item_1/view")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -158,6 +203,15 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
     public void testContentXML() throws Exception {
 
         mockMvc.perform(get("/content/SHOIP1_menu_item_1/menu")
+                .contentType(MediaType.APPLICATION_XML)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("menu item 1")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+        mockMvc.perform(get("/content/SHOIP1_menu_item_1/menu?mode=hierarchy")
                 .contentType(MediaType.APPLICATION_XML)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale))
@@ -368,6 +422,35 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
+        mockMvc.perform(get("/products/9998/attributes")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"productId\":9998")))
+                .andExpect(content().string(StringContains.containsString("\"skuId\":0")))
+                .andExpect(content().string(StringContains.containsString("Power supply")))
+                .andExpect(content().string(StringContains.containsString("Material and color")))
+                .andExpect(content().string(StringContains.containsString("BATTERY_TYPE")))
+                .andExpect(header().string("yc", uuid));
+
+        mockMvc.perform(get("/skus/9998/attributes")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"productId\":9998")))
+                .andExpect(content().string(StringContains.containsString("\"skuId\":9998")))
+                .andExpect(content().string(StringContains.containsString("Power supply")))
+                .andExpect(content().string(StringContains.containsString("Material and color")))
+                .andExpect(content().string(StringContains.containsString("BATTERY_TYPE")))
+                .andExpect(header().string("yc", uuid));
+
+
     }
 
 
@@ -564,6 +647,34 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
+        mockMvc.perform(get("/products/9998/attributes")
+                    .contentType(MediaType.APPLICATION_XML)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("product-id=\"9998\"")))
+                .andExpect(content().string(StringContains.containsString("sku-id=\"0\"")))
+                .andExpect(content().string(StringContains.containsString("Power supply")))
+                .andExpect(content().string(StringContains.containsString("Material and color")))
+                .andExpect(content().string(StringContains.containsString("BATTERY_TYPE")))
+                .andExpect(header().string("yc", uuid));
+
+        mockMvc.perform(get("/products/9998/attributes")
+                    .contentType(MediaType.APPLICATION_XML)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid))
+                    .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("product-id=\"9998\"")))
+                .andExpect(content().string(StringContains.containsString("sku-id=\"0\"")))
+                .andExpect(content().string(StringContains.containsString("Power supply")))
+                .andExpect(content().string(StringContains.containsString("Material and color")))
+                .andExpect(content().string(StringContains.containsString("BATTERY_TYPE")))
+                .andExpect(header().string("yc", uuid));
+        
     }
 
     @Test

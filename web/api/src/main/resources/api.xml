@@ -63,6 +63,11 @@
 
                 <entry key="org.yes.cart.domain.ro.PromotionRO"  value="org.yes.cart.domain.ro.PromotionRO"/>
 
+                <entry key="org.yes.cart.domain.ro.ProductAttributesModelRO"  value="org.yes.cart.domain.ro.ProductAttributesModelRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductAttributesModelGroupRO"  value="org.yes.cart.domain.ro.ProductAttributesModelGroupRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductAttributesModelAttributeRO"  value="org.yes.cart.domain.ro.ProductAttributesModelAttributeRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductAttributesModelValueRO"  value="org.yes.cart.domain.ro.ProductAttributesModelValueRO"/>
+
             </map>
         </constructor-arg>
     </bean>

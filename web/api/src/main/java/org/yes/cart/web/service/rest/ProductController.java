@@ -1677,6 +1677,95 @@ public class ProductController {
     }
 
 
+    private ProductAttributesModelRO  viewSkuAttributesInternal(final String sku) {
+
+        final long productId = bookmarkMixin.resolveSkuId(sku);
+
+        final ProductSku skuEntity;
+        if (productId > 0L) {
+            skuEntity = productServiceFacade.getSkuById(productId);
+        } else {
+            skuEntity = productServiceFacade.getProductSkuBySkuCode(sku);
+        }
+
+        if (skuEntity != null) {
+
+            final Product productEntity = productServiceFacade.getProductById(skuEntity.getProduct().getProductId());
+
+            if (productEntity != null) {
+
+                final ProductAttributesModel pam = productServiceFacade.getProductAttributes(
+                        productEntity.getProductId(), skuEntity.getSkuId(), productEntity.getProducttype().getProducttypeId());
+
+                return mappingMixin.map(pam, ProductAttributesModelRO.class, ProductAttributesModel.class);
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+    private ProductAttributesModelRO viewProductAttributesInternal(final String product) {
+
+        final long productId = bookmarkMixin.resolveProductId(product);
+
+        final Product productEntity = productServiceFacade.getProductById(productId);
+
+        if (productEntity != null) {
+
+            final ProductAttributesModel pam = productServiceFacade.getProductAttributes(
+                    productEntity.getProductId(), 0L, productEntity.getProducttype().getProducttypeId());
+
+            return mappingMixin.map(pam, ProductAttributesModelRO.class, ProductAttributesModel.class);
+
+        }
+
+        return null;
+    }
+
+
+
+    @ApiOperation(value = "Display products attributes as configured by product types.")
+    @RequestMapping(
+            value = "/products/{id}/attributes",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody ProductAttributesModelRO viewProductAttributes(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                        final @ApiParam(value = "Product ID or URI") @PathVariable(value = "id") String product,
+                                                                        final HttpServletRequest request,
+                                                                        final HttpServletResponse response) {
+
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
+        final ProductAttributesModelRO ro = viewProductAttributesInternal(product);
+        cartMixin.persistShoppingCart(request, response);
+        return ro;
+
+    }
+
+
+    @ApiOperation(value = "Display SKU attributes as configured by product types.")
+    @RequestMapping(
+            value = "/skus/{id}/attributes",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody ProductAttributesModelRO viewSkuAttributes(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                                    final @ApiParam(value = "SKU ID or URI") @PathVariable(value = "id") String sku,
+                                                                    final HttpServletRequest request,
+                                                                    final HttpServletResponse response) {
+
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
+        final ProductAttributesModelRO ro = viewSkuAttributesInternal(sku);
+        cartMixin.persistShoppingCart(request, response);
+        return ro;
+
+    }
+
+
+
     /**
      * Execute view product command.
      *

@@ -190,7 +190,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final ProductAttributesModelValueImpl value = new ProductAttributesModelValueImpl(
                 attrValue.getAttributeCode(),
                 attrValue.getVal(),
-                new FailoverStringI18NModel(attrValue.getDisplayVal(), attrValue.getVal())
+                new FailoverStringI18NModel(attrValue.getDisplayVal(), attrValue.getVal(), true)
         );
 
         for (final ProductAttributesModelAttribute attributeInGroups : attributesInGroups) {
@@ -222,7 +222,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
                 final ProductAttributesModelGroupImpl attrGroup = new ProductAttributesModelGroupImpl(
                         String.valueOf(group.getProdTypeAttributeViewGroupId()),
-                        new FailoverStringI18NModel(group.getDisplayName(), group.getName())
+                        new FailoverStringI18NModel(group.getDisplayName(), group.getName(), true)
                 );
 
                 for (final String attrCode : attributesCodes) {
@@ -232,7 +232,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
                     final ProductAttributesModelAttribute attribute;
                     if (attributeI18n != null) {
-                        attribute = new ProductAttributesModelAttributeImpl(attrCode, multivalue, attributeI18n.copy());
+                        attribute = new ProductAttributesModelAttributeImpl(attrCode, multivalue,
+                                new FailoverStringI18NModel(attributeI18n, attributeI18n.getValue(I18NModel.DEFAULT), true));
                     } else {
                         attribute = new ProductAttributesModelAttributeImpl(attrCode, multivalue, new NonI18NModel(attrCode));
                     }
