@@ -1,2 +1,4 @@
+ <% if (root.getOrderMessage()) { %><%=root.getOrderMessage()%><% } %>
+
  Detailierte Informationen zu Ihren Bestellungen finden Sie hier
  "<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

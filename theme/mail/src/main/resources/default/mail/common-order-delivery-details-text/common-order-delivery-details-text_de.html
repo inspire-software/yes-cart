@@ -1,3 +1,8 @@
+<% if (root.getOrderMessage()) { %>
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
+    <%=root.getOrderMessage()%>
+</p>
+<% } %>
 <p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
     Detailierte Informationen zu Ihren Bestellungen finden Sie
     <a href="<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>">hier</a>
