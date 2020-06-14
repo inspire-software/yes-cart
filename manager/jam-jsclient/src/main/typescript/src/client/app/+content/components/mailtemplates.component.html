@@ -28,7 +28,10 @@
         <td title="{{ 'SHOP_EMAIL_TEMPLATES_CMS' | translate }}">
           <ng-template [ngIf]="!emailTemplate.image">
             <a class="js-click" (click)="onClickCms(emailTemplate, emailTemplate.cmsNameHTML)"><span class="label {{ emailTemplate.cmsHTML ? 'label-info' : 'label-default' }}">HTML</span></a> &nbsp;
-            <a class="js-click" (click)="onClickCms(emailTemplate, emailTemplate.cmsNameTXT)"><span class="label {{ emailTemplate.cmsTXT ? 'label-info' : 'label-default' }}">TXT</span></a>
+            <a class="js-click" (click)="onClickCms(emailTemplate, emailTemplate.cmsNameTXT)"><span class="label {{ emailTemplate.cmsTXT ? 'label-info' : 'label-default' }}">TXT</span></a> &nbsp;
+            <ng-template [ngIf]="!emailTemplate.part">
+              <a class="js-click" (click)="onClickCms(emailTemplate, emailTemplate.cmsNameProp)"><span class="label {{ emailTemplate.cmsProp ? 'label-info' : 'label-default' }}">PROP</span></a>
+            </ng-template>
           </ng-template>
           <ng-template [ngIf]="emailTemplate.image">
             <a class="js-click" (click)="onClickCms(emailTemplate, emailTemplate.cmsNameImage)"><span class="label {{ emailTemplate.cmsImage ? 'label-info' : 'label-default' }}">IMG</span></a> &nbsp;

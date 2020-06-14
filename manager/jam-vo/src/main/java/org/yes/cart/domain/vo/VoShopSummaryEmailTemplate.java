@@ -26,12 +26,14 @@ public class VoShopSummaryEmailTemplate {
     private String cmsNameHTML;
     private String cmsNameTXT;
     private String cmsNameImage;
+    private String cmsNameProp;
     private boolean yce;
     private boolean part;
     private boolean image;
     private boolean cmsHTML;
     private boolean cmsTXT;
     private boolean cmsImage;
+    private boolean cmsProp;
     private String from;
     private String to;
 
@@ -73,6 +75,14 @@ public class VoShopSummaryEmailTemplate {
 
     public void setCmsNameImage(final String cmsNameImage) {
         this.cmsNameImage = cmsNameImage;
+    }
+
+    public String getCmsNameProp() {
+        return cmsNameProp;
+    }
+
+    public void setCmsNameProp(final String cmsNameProp) {
+        this.cmsNameProp = cmsNameProp;
     }
 
     public boolean isYce() {
@@ -121,6 +131,14 @@ public class VoShopSummaryEmailTemplate {
 
     public void setCmsImage(final boolean cmsImage) {
         this.cmsImage = cmsImage;
+    }
+
+    public boolean isCmsProp() {
+        return cmsProp;
+    }
+
+    public void setCmsProp(final boolean cmsProp) {
+        this.cmsProp = cmsProp;
     }
 
     public String getFrom() {

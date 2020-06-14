@@ -220,12 +220,14 @@ export interface ShopSummaryEmailTemplateVO {
   cmsNameHTML: string;
   cmsNameTXT: string;
   cmsNameImage: string;
+  cmsNameProp: string;
   yce: boolean;
   part: boolean;
   image: boolean;
   cmsHTML: boolean;
   cmsTXT: boolean;
   cmsImage: boolean;
+  cmsProp: boolean;
   from: string;
   to: string;
 

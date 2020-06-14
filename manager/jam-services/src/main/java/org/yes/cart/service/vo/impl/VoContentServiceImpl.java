@@ -233,10 +233,13 @@ public class VoContentServiceImpl implements VoContentService {
                     final String baseName = code.concat("_mail_").concat(shopEmail.getName());
                     final String htmlName = baseName.concat(".html");
                     final String txtName = baseName.concat(".txt");
+                    final String propName = baseName.concat(".properties");
                     shopEmail.setCmsNameHTML(htmlName);
                     shopEmail.setCmsNameTXT(txtName);
+                    shopEmail.setCmsNameProp(propName);
                     shopEmail.setCmsHTML(!dtoContentService.isUriAvailableForContent(htmlName, 0L));
                     shopEmail.setCmsTXT(!dtoContentService.isUriAvailableForContent(txtName, 0L));
+                    shopEmail.setCmsProp(!dtoContentService.isUriAvailableForContent(propName, 0L));
                 }
 
             }
