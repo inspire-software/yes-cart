@@ -102,7 +102,7 @@ public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileName
                         final String candidate = nameParts[nameParts.length - 2];
                         if (nameParts[nameParts.length - 1].length() == 1) {
                             final char csuf = nameParts[nameParts.length - 1].charAt(0);
-                            if (csuf >= 'a' && csuf <= 'g') {
+                            if (csuf >= 'a' && csuf <= 'z') {
                                 return candidate;
                             }
                         }
@@ -175,7 +175,7 @@ public abstract class AbstractMediaFileNameStrategyImpl implements MediaFileName
                         final String[] nameParts = urlNoLocale.split("_");
                         if (nameParts[nameParts.length - 1].length() == 1) {
                             final char csuf = nameParts[nameParts.length - 1].charAt(0);
-                            if (csuf >= 'a' && csuf <= 'g') {
+                            if (csuf >= 'a' && csuf <= 'z') {
                                 return String.valueOf(0 + csuf - 'a');
                             }
                         }
