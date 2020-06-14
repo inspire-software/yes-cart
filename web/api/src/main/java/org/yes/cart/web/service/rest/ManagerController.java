@@ -43,6 +43,7 @@ import org.yes.cart.web.support.utils.CustomerSortingUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -157,7 +158,7 @@ public class ManagerController {
 
         final Pair<String, String> widthHeight = managerServiceFacade.getCustomerListImageSizeConfig(browsingShopId);
 
-        result.setPageAvailableSize(itemsPerPageValues);
+        result.setPageAvailableSize(itemsPerPageValues != null ? itemsPerPageValues.stream().map(v -> NumberUtils.toInt(v)).collect(Collectors.toList()) : Collections.emptyList());
         result.setPageAvailableSort(sortPageValues);
         if (result.getSearch().getPageNumber() < 0) {
             result.getSearch().setPageNumber(0); // do not allow negative start page

@@ -43,7 +43,7 @@ public abstract class AbstractSearchResultRO implements Serializable {
     private String itemImageWidth;
     private String itemImageHeight;
 
-    private List<String> pageAvailableSize;
+    private List<Integer> pageAvailableSize;
     private Map<String, String> pageAvailableSort;
 
     private FilteredNavigationRO filteredNavigation;
@@ -88,11 +88,11 @@ public abstract class AbstractSearchResultRO implements Serializable {
 
     @XmlElementWrapper(name = "page-available-sizes")
     @XmlElement(name = "page-available-size")
-    public List<String> getPageAvailableSize() {
+    public List<Integer> getPageAvailableSize() {
         return pageAvailableSize;
     }
 
-    public void setPageAvailableSize(final List<String> pageAvailableSize) {
+    public void setPageAvailableSize(final List<Integer> pageAvailableSize) {
         this.pageAvailableSize = pageAvailableSize;
     }
 

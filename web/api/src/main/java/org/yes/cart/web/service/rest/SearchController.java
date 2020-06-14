@@ -54,10 +54,8 @@ import org.yes.cart.web.support.utils.ProductSortingUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * User: denispavlov
@@ -767,7 +765,7 @@ public class SearchController {
 
         final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, browsingShopId);
 
-        result.setPageAvailableSize(itemsPerPageValues);
+        result.setPageAvailableSize(itemsPerPageValues != null ? itemsPerPageValues.stream().map(v -> NumberUtils.toInt(v)).collect(Collectors.toList()) : Collections.emptyList());
         result.setPageAvailableSort(sortPageValues);
         if (result.getSearch().getPageNumber() < 0) {
             result.getSearch().setPageNumber(0); // do not allow negative start page
