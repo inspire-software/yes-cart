@@ -64,7 +64,7 @@ public class CategoryController {
     @Autowired
     private BookmarkMixin bookmarkMixin;
 
-    private List<CategoryRO> listRootInternal() {
+    private List<CategoryRO> listRootInternal(final boolean fullHierarchy) {
 
         final long browsingShopId = cartMixin.getCurrentCustomerShopId();
         final String lang = cartMixin.getCurrentCart().getCurrentLocale();
@@ -79,6 +79,10 @@ public class CategoryController {
                 final Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), browsingShopId);
                 if (parentId != null) {
                     cat.setParentId(parentId); // This may be parent from linkTo
+                }
+                if (fullHierarchy) {
+                    final List<CategoryRO> children = listCategoryInternal(String.valueOf(cat.getCategoryId()), true);
+                    cat.setChildren(children);
                 }
             }
 
@@ -164,13 +168,14 @@ public class CategoryController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public @ResponseBody List<CategoryRO> listRoot(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                   final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestHeader(value = "mode", required = false) String mode,
                                                    final HttpServletRequest request,
                                                    final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
-        return listRootInternal();
+        return listRootInternal("hierarchy".equalsIgnoreCase(mode));
 
     }
 
@@ -261,13 +266,14 @@ public class CategoryController {
             produces = MediaType.APPLICATION_XML_VALUE
     )
     public @ResponseBody CategoryListRO listRootXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                    final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestHeader(value = "mode", required = false) String mode,
                                                     final HttpServletRequest request,
                                                     final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
-        return new CategoryListRO(listRootInternal());
+        return new CategoryListRO(listRootInternal("hierarchy".equalsIgnoreCase(mode)));
 
     }
 
@@ -436,7 +442,7 @@ public class CategoryController {
 
     }
 
-    private List<CategoryRO> listCategoryInternal(final String category) {
+    private List<CategoryRO> listCategoryInternal(final String category, final boolean fullHierarchy) {
 
         final long categoryId = bookmarkMixin.resolveCategoryId(category);
         final long browsingShopId = cartMixin.getCurrentCustomerShopId();
@@ -455,6 +461,10 @@ public class CategoryController {
                     final Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), browsingShopId);
                     if (parentId != null) {
                         cat.setParentId(parentId); // This may be parent from linkTo
+                    }
+                    if (fullHierarchy) {
+                        final List<CategoryRO> children = listCategoryInternal(String.valueOf(cat.getCategoryId()), true);
+                        cat.setChildren(children);
                     }
                 }
 
@@ -548,13 +558,14 @@ public class CategoryController {
     )
     public @ResponseBody List<CategoryRO> listCategory(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                        final @ApiParam(value = "Category ID or URI") @PathVariable(value = "id") String category,
+                                                       final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestHeader(value = "mode", required = false) String mode,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
-        return listCategoryInternal(category);
+        return listCategoryInternal(category, "hierarchy".equalsIgnoreCase(mode));
 
     }
 
@@ -646,14 +657,15 @@ public class CategoryController {
             produces = MediaType.APPLICATION_XML_VALUE
     )
     public @ResponseBody CategoryListRO listCategoryXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                        final @PathVariable(value = "id") String category,
+                                                        final @ApiParam(value = "Category ID or URI") @PathVariable(value = "id") String category,
+                                                        final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestHeader(value = "mode", required = false) String mode,
                                                         final HttpServletRequest request,
                                                         final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
-        return new CategoryListRO(listCategoryInternal(category));
+        return new CategoryListRO(listCategoryInternal(category, "hierarchy".equalsIgnoreCase(mode)));
 
     }
 

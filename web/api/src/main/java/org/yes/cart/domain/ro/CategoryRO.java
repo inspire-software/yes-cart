@@ -126,6 +126,8 @@ public class CategoryRO implements Serializable {
 
     private List<BreadcrumbRO> breadcrumbs = Collections.EMPTY_LIST;
 
+    private List<CategoryRO> children;
+
     @XmlElement(name = "product-type-name")
     public String getProductTypeName() {
         return productTypeName;
@@ -350,5 +352,11 @@ public class CategoryRO implements Serializable {
         this.displayMetadescriptions = displayMetadescriptions;
     }
 
+    public List<CategoryRO> getChildren() {
+        return children;
+    }
 
+    public void setChildren(final List<CategoryRO> children) {
+        this.children = children;
+    }
 }
