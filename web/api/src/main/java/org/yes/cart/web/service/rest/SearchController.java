@@ -486,6 +486,7 @@ public class SearchController {
                                          "{\n" +
                                          "  \"category\": \"0\",\n" +
                                          "  \"includeNavigation\": true,\n" +
+                                         "  \"excludeResults\": false,\n" +
                                          "  \"pageNumber\": 0,\n" +
                                          "  \"pageSize\": 10,\n" +
                                          "  \"parameters\": {\n" +
@@ -523,7 +524,11 @@ public class SearchController {
 
         configureResultViewOptions(categoryId, browsingShopId, cart.getCurrentLocale(), cart.getCurrencyCode(), result);
 
-        populateSearchResults(context, result, cart);
+        if (!search.getExcludeResults()) {
+
+            populateSearchResults(context, result, cart);
+
+        }
 
         if (search.getIncludeNavigation()) {
 

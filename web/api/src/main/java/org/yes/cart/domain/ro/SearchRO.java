@@ -46,6 +46,7 @@ public class SearchRO implements Serializable {
     private boolean sortDescending;
 
     private boolean includeNavigation;
+    private boolean excludeResults;
 
     public String getCategory() {
         return category;
@@ -107,5 +108,14 @@ public class SearchRO implements Serializable {
 
     public void setIncludeNavigation(final boolean includeNavigation) {
         this.includeNavigation = includeNavigation;
+    }
+
+    @XmlElement(name = "exclude-results")
+    public boolean getExcludeResults() {
+        return excludeResults;
+    }
+
+    public void setExcludeResults(final boolean excludeResults) {
+        this.excludeResults = excludeResults;
     }
 }
