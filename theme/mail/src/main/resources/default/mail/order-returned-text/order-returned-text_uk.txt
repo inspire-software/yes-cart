@@ -1,0 +1,2 @@
+Шановний (-на) $root.firstname $root.lastname!
+Повернення замовлення $root.ordernum at $shop.name було виконано.

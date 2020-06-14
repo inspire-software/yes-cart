@@ -1,0 +1,1 @@
+Gutschrift überwiesen/verarbeitet für $root.ordernum bei $shop.name.

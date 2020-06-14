@@ -1,0 +1,5 @@
+Bestellung $root.ordernum at $shop.name wurde annuliert
+für $root.firstname $root.lastname $root.email.
+<% if (root.orderStatus.endsWith("waiting.payment")) { %>
+    Rückvergütung wurde nicht ausgeführt. Benötigt manuelle Verarbeitung.
+<% } %>

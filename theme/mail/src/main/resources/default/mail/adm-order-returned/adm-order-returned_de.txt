@@ -1,4 +1,0 @@
-Bestellung $root.ordernum zurück gesandt bei $shop.name
-für $root.firstname $root.lastname $root.email
-
-${include('common-adm-order-details')}

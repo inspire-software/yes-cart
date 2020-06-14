@@ -1,0 +1,2 @@
+Neue Bestellung $root.ordernum bei $shop.name ist erstellt
+für $root.firstname $root.lastname $root.email

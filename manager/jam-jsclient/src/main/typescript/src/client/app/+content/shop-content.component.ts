@@ -15,10 +15,10 @@
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ShopService, ContentService, UserEventBus, ShopEventBus } from './../shared/services/index';
+import { ShopService, ContentService, UserEventBus, ShopEventBus, I18nEventBus } from './../shared/services/index';
 import { ContentMinSelectComponent } from './../shared/content/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ShopVO, ShopUrlVO, ShopLanguagesVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair, SearchResultVO } from './../shared/model/index';
+import { ShopVO, ShopUrlVO, ShopLanguagesVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair, SearchResultVO, ShopSummaryEmailTemplateVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -36,6 +36,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
   private static CONTENTS:string = 'contents';
   private static CONTENT:string = 'content';
+  private static MAIL:string = 'mail';
 
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
@@ -47,6 +48,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   private shopPreviewCss = ShopContentComponent.DEFAULT_PREVIEW_CSS;
   private shopLanguages:ShopLanguagesVO = null;
   private shopSupportedLanguages: Array<string> = [];
+  private shopTemplates: Array<ShopSummaryEmailTemplateVO> = [];
 
   private shopIdSub:any;
   private shopSub:any;
@@ -63,6 +65,8 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   private contentEdit:ContentWithBodyVO;
   private contentEditAttributes:AttrValueContentVO[] = [];
   private contentAttributesUpdate:Array<Pair<AttrValueContentVO, boolean>>;
+
+  private mailFilter:string;
 
   @ViewChild('deleteConfirmationModalDialog')
   private deleteConfirmationModalDialog:ModalComponent;
@@ -86,7 +90,8 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
       this.shop = shopevt;
       this.forceShowAll = false;
-      this.getShopUrls();
+      this.getShopConfigs();
+      this.getShopEmailTemplates();
       this.getFilteredContents();
     });
   }
@@ -153,15 +158,23 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onFilterChange(event:any) {
+  protected onContentFilterChange(event:any) {
     this.contents.searchContext.start = 0; // changing filter means we need to start from first page
     this.delayedFiltering.delay();
+  }
+
+  protected onMailFilterChange(event:any) {
+    this.mailFilter = event;
   }
 
   protected onRefreshHandler() {
     LogUtil.debug('ShopContentComponent refresh handler');
     if (UserEventBus.getUserEventBus().current() != null) {
-      this.getFilteredContents();
+      if (this.viewMode == ShopContentComponent.MAIL) {
+        this.getShopEmailTemplates();
+      } else {
+        this.getFilteredContents();
+      }
     }
   }
 
@@ -196,6 +209,12 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     this.contentAttributesUpdate = event.source.second;
   }
 
+  protected onTemplateSelected(event:Pair<ShopSummaryEmailTemplateVO, string>) {
+    this.contentFilter = event.second;
+    this.viewMode = ShopContentComponent.CONTENTS;
+    this.getFilteredContents();
+  }
+
   protected onSearchHelpToggle() {
     this.searchHelpShow = !this.searchHelpShow;
   }
@@ -212,8 +231,16 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
   protected onBackToList() {
     LogUtil.debug('ShopContentComponent onBackToList handler');
-    if (this.viewMode === ShopContentComponent.CONTENT) {
+    if (this.viewMode !== ShopContentComponent.CONTENTS) {
       this.contentEdit = null;
+      this.viewMode = ShopContentComponent.CONTENTS;
+    }
+  }
+
+  protected onMailClick() {
+    if (this.viewMode == ShopContentComponent.CONTENTS) {
+      this.viewMode = ShopContentComponent.MAIL;
+    } else {
       this.viewMode = ShopContentComponent.CONTENTS;
     }
   }
@@ -352,10 +379,16 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onClearFilter() {
+  protected onClearContentFilter() {
 
     this.contentFilter = '';
     this.getFilteredContents();
+
+  }
+
+  protected onClearMailFilter() {
+
+    this.mailFilter = '';
 
   }
 
@@ -393,8 +426,8 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getShopUrls() {
-    LogUtil.debug('ShopContentComponent get urls', this.shop);
+  private getShopConfigs() {
+    LogUtil.debug('ShopContentComponent getShopConfigs', this.shop);
 
     this.shopUrl = null;
     this.shopPreviewUrl = ShopContentComponent.DEFAULT_PREVIEW_URL;
@@ -413,9 +446,29 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
       this._shopService.getShopLanguages(this.shop.shopId).subscribe( langs => {
 
-        LogUtil.debug('ShopContentComponent langs', this.shopUrl);
+        LogUtil.debug('ShopContentComponent langs', langs);
         this.shopLanguages = langs;
         this.shopSupportedLanguages = langs.supported;
+
+      });
+
+    }
+
+  }
+
+  private getShopEmailTemplates() {
+    LogUtil.debug('ShopContentComponent getShopEmailTemplates', this.shop);
+
+    this.shopTemplates = [];
+
+    if (this.shop != null && this.shop.shopId > 0) {
+
+      let lang = I18nEventBus.getI18nEventBus().current();
+
+      this._shopService.getShopSummary(this.shop.shopId, lang).subscribe(summary => {
+
+        this.shopTemplates = summary != null && summary.emailTemplates != null ? summary.emailTemplates : [];
+        LogUtil.debug('ShopContentComponent summary', summary, this.shopTemplates);
 
       });
 

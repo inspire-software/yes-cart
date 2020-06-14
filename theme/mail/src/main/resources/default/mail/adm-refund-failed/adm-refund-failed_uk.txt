@@ -1,3 +1,0 @@
-Не вдалося виконати повернення для замовлення $root.ordernum на $shop.name.
-
-${include('common-adm-order-details')}

@@ -1,8 +1,0 @@
-Уважаемый (-ая) $root.firstname $root.lastname!
-Доставка $deliveryNum по заказу $root.ordernum на $shop.name подготовлена.
-Метод доставки: $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>.
-
-${include('common-order-delivery-details')}
-
-Подробную информацию Вы можете посмотреть в истории заказов
-"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

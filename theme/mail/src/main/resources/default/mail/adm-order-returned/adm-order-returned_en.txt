@@ -1,3 +1,0 @@
-Order $root.ordernum returned at $shop.name for $root.firstname $root.lastname $root.email
-
-${include('common-adm-order-details')}

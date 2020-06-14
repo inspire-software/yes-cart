@@ -1,8 +1,8 @@
-Cannot allocate quantity for product $sku.name, code $sku.code
-for order $root.ordernum at $shop.name for $root.firstname $root.lastname $root.email
-
+${include('common-adm-header')}
+${include('adm-cant-allocate-product-qty-text')}
 <% if (getProperty('delivery') != null) { %>
 ${include('common-adm-order-delivery-details')}
 <% } else { %>
 ${include('common-adm-order-details')}
 <% } %>
+${include('common-adm-footer')}

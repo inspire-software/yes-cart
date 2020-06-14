@@ -1,6 +1,0 @@
-Замовлення $root.ordernum на $shop.name було скасовано для $root.firstname $root.lastname $root.email
-<% if (root.orderStatus.endsWith("waiting.payment")) { %>
-Повернення коштів не виконано. Необхідно провести повернення.
-<% } %>
-
-${include('common-adm-order-details')}

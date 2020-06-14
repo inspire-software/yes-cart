@@ -216,14 +216,28 @@ public class VoContentServiceImpl implements VoContentService {
     public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
         if (federationFacade.isManageable(summary.getShopId(), ShopDTO.class)){
 
-            for (final MutablePair<String, Boolean> shopEmail : summary.getEmailTemplatesShop()) {
+            for (final VoShopSummaryEmailTemplate shopEmail : summary.getEmailTemplates()) {
 
                 final String code = StringUtils.isBlank(summary.getMasterCode()) ? summary.getCode() : summary.getMasterCode();
-                final String uri = code.concat("_mail_").concat(shopEmail.getFirst()).concat(".html");
-
-                final boolean noOverride = dtoContentService.isUriAvailableForContent(uri, 0L);
-                shopEmail.setSecond(!noOverride);
-
+                if (shopEmail.isImage()) {
+                    final int lastPos = shopEmail.getName().lastIndexOf('_');
+                    final String resourceName;
+                    if (lastPos != -1) {
+                        resourceName = code.concat("_mail_").concat(shopEmail.getName().substring(0, lastPos)).concat(".").concat(shopEmail.getName().substring(lastPos + 1));
+                    } else {
+                        resourceName = code.concat("_mail_").concat(shopEmail.getName());
+                    }
+                    shopEmail.setCmsNameImage(resourceName);
+                    shopEmail.setCmsImage(!dtoContentService.isUriAvailableForContent(resourceName, 0L));
+                } else {
+                    final String baseName = code.concat("_mail_").concat(shopEmail.getName());
+                    final String htmlName = baseName.concat(".html");
+                    final String txtName = baseName.concat(".txt");
+                    shopEmail.setCmsNameHTML(htmlName);
+                    shopEmail.setCmsNameTXT(txtName);
+                    shopEmail.setCmsHTML(!dtoContentService.isUriAvailableForContent(htmlName, 0L));
+                    shopEmail.setCmsTXT(!dtoContentService.isUriAvailableForContent(txtName, 0L));
+                }
 
             }
 

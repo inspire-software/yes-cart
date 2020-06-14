@@ -16,52 +16,62 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>YesCart pure e-commerce</title>
+    ${include('common-meta')}
+    ${include('common-styles')}
 </head>
 <body>
 
-    <table width="700" border="0" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0">
 
-        ${include('common-adm-header')}
 
-        <tr>
-            <td style="border: 1px solid #CEE3F6; border-top: 0px;">
-                <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td width="2%">&nbsp;</td>
-                        <td>
-                            <b>Registration: $email $firstName $lastName</b> <br>
-                            <% if (shopUrl != null && !shopUrl.isEmpty()) { %>
-                            <a href="<%out.print(shopUrl.iterator().next())%>">$shopName</a>
-                            <% } else { %>
-                            $shopName
-                            <% }%>
-                            <% if (additionalData.requireApproval) { %>
-                                <b>Please ACTIVATE account by assigning shop to $email account in "Customer service &gt; Customers"</b>
-                            <% } %>
-                            <br>
-                            <br>
-                        </td>
-                        <td width="2%">&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td style="border-top: 1px solid #CEE3F6;">
-                            Contact information:
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+    <tbody>
+    <tr>
+        <td style="background-color:#dddddd">
 
-        ${include('common-adm-footer')}
+            <table cellpadding="0" cellspacing="0" width="600" class="table-mobile" align="center">
+                <tbody>
+                <tr>
+                    <td height="25"></td>
+                </tr>
 
-    </table>
+                <tr>
+                    <td>
+
+                        ${include('common-adm-header')}
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="main-content">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td width="2%">&nbsp;</td>
+                                <td>
+
+                                    ${include('adm-customer-registered-text')}
+
+                                </td>
+                                <td width="2%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td height="25"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            ${include('common-adm-footer')}
+
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>

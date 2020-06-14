@@ -1,0 +1,2 @@
+Zahlung für Bestellung $root.ordernum bei $shop.name wurde bestätigt
+für $root.firstname $root.lastname $root.email

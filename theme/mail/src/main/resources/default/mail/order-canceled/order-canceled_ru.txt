@@ -1,7 +1,0 @@
-Уважаемый (-ая) $root.firstname $root.lastname!
-Ваш заказ $root.ordernum на $shop.name был отменен.
-
-${include('common-order-details')}
-
-Подробную информацию Вы можете посмотреть в истории заказов
-"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

@@ -1,0 +1,2 @@
+Товары зарезервированы на складе для заказа $root.ordernum на $shop.name
+для $root.firstname $root.lastname $root.email

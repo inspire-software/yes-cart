@@ -1,4 +1,0 @@
-Шановний (-на) $firstName $lastName!
-
-Ви зареєструвалися на <% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>.
-Ваш пароль: $password

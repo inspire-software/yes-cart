@@ -1,3 +1,0 @@
-Gutschrift konnte nicht überwiesen werden $root.ordernum bei $shop.name.
-
-${include('common-adm-order-details')}

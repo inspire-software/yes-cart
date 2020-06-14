@@ -1,0 +1,15 @@
+Уважаемый (-ая) $firstName $lastName,
+
+Вы запросили удалить учетную запись на $shopName
+
+<% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>  <% out.print(shopSecureUrl.iterator().next()) %> <% } %>
+
+<% if (authToken != null) {
+     if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) {
+     %>Перейдите по этой ссылке для подтверждения <%out.print(shopSecureUrl.iterator().next())%>/deleteAccountCmd/$authToken .<%
+     } else {
+     %>Используйте код $authToken для подтверждения.<%
+     } %>
+<% } else { %>
+Ваша учетная запись удалена
+<% }%>

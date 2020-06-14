@@ -1,0 +1,8 @@
+|-------------------------------------------------------------------------------|
+ DANKE, DASS SIE UNSERE PLATTFORM AUSGEWÄHLT HABEN
+
+ Sie erhalten dies, weil Sie ein aktueller Abonnent sind oder bei uns gekauft
+ haben Webseite.
+
+ (C)  YesCart.org  ${org.yes.cart.utils.DateUtils.format(java.time.LocalDate.now(),'yyyy')}
+|-------------------------------------------------------------------------------|

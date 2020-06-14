@@ -1,0 +1,1 @@
+Выполнен возврат для заказа $root.ordernum на $shop.name.

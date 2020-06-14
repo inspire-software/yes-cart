@@ -1,0 +1,2 @@
+Guten Tag $root.firstname $root.lastname!
+Ihre Zahlung für die Lieferung $param1 für die Bestellung $root.ordernum haben wir erhalten. Besten Dank!

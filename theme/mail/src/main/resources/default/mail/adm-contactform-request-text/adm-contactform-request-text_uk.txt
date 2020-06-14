@@ -1,0 +1,6 @@
+Повідомлення від <%out.print(additionalData.email)%> у <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %> "<%out.print(shopSecureUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%> магазині.
+
+Тема: <%out.print(additionalData.subject)%>
+
+Повідомлення:
+<%out.print(additionalData.body)%>

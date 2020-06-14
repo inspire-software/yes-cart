@@ -1,0 +1,2 @@
+Шановний (-на) $root.firstname $root.lastname!
+Ваше замовлення $root.ordernum at $shop.name було скасовано.

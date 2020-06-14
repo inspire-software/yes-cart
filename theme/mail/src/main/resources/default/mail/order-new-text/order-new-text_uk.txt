@@ -1,0 +1,2 @@
+Шановний (-на) $root.firstname $root.lastname!
+Сформоване нове замовлення $root.ordernum на $shop.name.

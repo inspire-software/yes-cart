@@ -1,0 +1,13 @@
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
+    Registration: $email $firstName $lastName
+    <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>
+    <a href="<%out.print(shopSecureUrl.iterator().next())%>">$shopName</a>
+    <% } else { %>
+    $shopName
+    <% }%>
+    <% if (additionalData.requireApproval) { %>
+    <br>Please <b style="color:red;">ACTIVATE</b> account by assigning shop to $email account in "Customer service &gt; Customers"
+    <% } %>
+    <br>
+    <br>
+</p>

@@ -1,7 +1,4 @@
-Dear $root.firstname $root.lastname!
-New order $root.ordernum at $shop.name was confirmed.
-
+${include('common-adm-header')}
+${include('order-confirmed-text')}
 ${include('common-order-details')}
-
-You can view detailed information in order history
-"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"
+${include('common-adm-footer')}

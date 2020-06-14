@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CustomerOrderInfoVO, SearchContextVO } from './../model/index';
 import { CustomerOrderService, I18nEventBus } from './../services/index';
-import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
+import { ModalComponent, ModalResult } from './../modal/index';
 import { Futures, Future, FormValidationEvent } from './../event/index';
 import { Config } from './../config/env.config';
 import { LogUtil } from './../log/index';
@@ -69,10 +69,10 @@ export class MailPreviewComponent implements OnInit, OnDestroy {
 
   }
 
-  onSelectClick(customerorder: CustomerOrderInfoVO) {
+  onSelectClick(customerorder: CustomerOrderInfoVO, format: string = 'html') {
     LogUtil.debug('MailPreviewComponent onSelectClick', customerorder);
     this.selectedCustomerOrder = customerorder;
-    window.open(Config.CONTEXT_PATH + '/service/shops/' + this.selectedShop + '/mail/' + this.selectedTemplate + '/preview?order=' + customerorder.ordernum, 'PREVIEW', 'width=800,height=500');
+    window.open(Config.CONTEXT_PATH + '/service/shops/' + this.selectedShop + '/mail/' + this.selectedTemplate + '/preview?order=' + customerorder.ordernum + '&format=' + format, 'PREVIEW', 'width=800,height=500');
   }
 
   protected onFilterChange() {
@@ -86,20 +86,20 @@ export class MailPreviewComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  public showDialog(shop:number, template:string) {
+  public showDialog(shop:number, template:string, initFilter:string = null) {
     this.selectedShop = shop;
     this.selectedTemplate = template;
     LogUtil.debug('MailPreviewComponent showDialog', this.selectedShop, this.selectedTemplate);
     this.customerorderModalDialog.show();
+    if ((this.customerorderFilter == null || this.customerorderFilter == '') && initFilter != null) {
+      this.customerorderFilter = initFilter;
+      this.onFilterChange();
+    }
   }
 
 
   protected onSelectConfirmationResult(modalresult: ModalResult) {
     LogUtil.debug('ProductTypeSelectComponent onSelectConfirmationResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-      this.dataSelected.emit({ source: this.selectedCustomerOrder, valid: true });
-      this.selectedCustomerOrder = null;
-    }
   }
 
   private getAllCustomerOrders() {

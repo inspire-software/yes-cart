@@ -1,3 +1,0 @@
-Gutschrift überwiesen/verarbeitet für $root.ordernum bei $shop.name.
-
-${include('common-adm-order-details')}

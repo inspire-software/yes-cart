@@ -1,3 +1,0 @@
-Guten Tag $firstName $lastName!
-
-Ihr Konto ist aktiviert im <% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>

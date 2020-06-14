@@ -1,0 +1,5 @@
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
+    Guten Tag <b>$root.firstname $root.lastname</b>!<br>
+    Lieferung $deliveryNum für Bestellung <b>$root.ordernum</b> bei <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> wird ausgeführt <br>
+    by $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>.
+</p>

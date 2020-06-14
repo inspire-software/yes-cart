@@ -1,4 +1,0 @@
-Lieferung $deliveryNum für Bestellung $root.ordernum bei $shop.name wird vorbereitet
-für $root.firstname $root.lastname $root.email
-
-${include('common-adm-order-delivery-details')}

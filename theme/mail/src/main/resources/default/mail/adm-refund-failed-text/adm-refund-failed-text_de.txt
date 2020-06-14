@@ -1,0 +1,1 @@
+Gutschrift konnte nicht überwiesen werden $root.ordernum bei $shop.name.

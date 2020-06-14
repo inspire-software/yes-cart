@@ -20,9 +20,9 @@
               <i class="fa fa-filter"></i>
             </button>
           </span>
-          <input class="form-control filter-input" type="text" name="contentFilter" [(ngModel)]="contentFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+          <input class="form-control filter-input" type="text" name="contentFilter" [(ngModel)]="contentFilter" (ngModelChange)="onContentFilterChange($event)" autocomplete="off"/>
           <span class="input-group-btn">
-            <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+            <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearContentFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
               <i class="fa fa-times-circle-o"></i>
             </button>
           </span>
@@ -30,7 +30,20 @@
       </form>
     </div>
 
-    <div class="col-xs-12 {{ viewMode === 'contents' ? 'col-md-7' : '' }} padding-lr-0 button-panel">
+    <div class="col-xs-12 col-md-5 padding-lr-0" [hidden]="viewMode !== 'mail'">
+      <form class="width-100">
+        <div class="input-group">
+          <input class="form-control filter-input" type="text" name="mailFilter" [(ngModel)]="mailFilter" (ngModelChange)="onMailFilterChange($event)" autocomplete="off"/>
+          <span class="input-group-btn">
+            <button class="btn btn-default btn-circle btn-xl" type="button" (click)="onClearMailFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}">
+              <i class="fa fa-times-circle-o"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-xs-12 {{ viewMode !== 'content' ? 'col-md-7' : '' }} padding-lr-0 button-panel">
 
       <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'contents'" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_BACK' | translate }}">
         <i class="fa fa-chevron-left"></i>
@@ -38,6 +51,10 @@
 
       <button type="button" (click)="onViewTree()" [hidden]="viewMode !== 'contents'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCONTENT' | translate }}">
         <i class="fa fa-sitemap"></i>
+      </button>
+
+      <button type="button" (click)="onMailClick()" [hidden]="viewMode !== 'contents' && viewMode !== 'mail'" class="btn {{ viewMode === 'mail' ? 'btn-info' : 'btn-default' }} btn-circle btn-xl" title="{{ 'SHOP_EMAIL_TEMPLATES' | translate }}">
+        <i class="fa fa-envelope-o"></i>
       </button>
 
       <button type="button" (click)="onRowNew()" [disabled]="shop == null || viewMode !== 'contents'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
@@ -87,6 +104,12 @@
                 [shopPreviewUrl]="shopPreviewUrl" [shopPreviewCss]="shopPreviewCss" [shopSupportedLanguages]="shopSupportedLanguages"
                 (dataChanged)="onContentChanged($event)"></yc-content>
   </div>
+
+  <div [hidden]="viewMode !== 'mail'" class="{{ loading ? 'loading-data' : '' }}">
+    <yc-mailtemplates [shop]="shop" [filter]="mailFilter" [emailTemplates]="shopTemplates"
+                      (dataSelected)="onTemplateSelected($event)"></yc-mailtemplates>
+  </div>
+
 
   <yc-modal #deleteConfirmationModalDialog
             title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"

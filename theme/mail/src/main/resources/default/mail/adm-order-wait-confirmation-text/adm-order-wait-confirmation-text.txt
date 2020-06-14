@@ -1,0 +1,1 @@
+Need confirmation for order $root.ordernum at $shop.name for $root.firstname $root.lastname $root.email

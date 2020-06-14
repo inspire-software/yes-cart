@@ -1,8 +1,0 @@
-Уважаемый (-ая) $root.firstname $root.lastname!
-Оплата по Вашему заказу получена. Спасибо!
-Подробную информацию Вы можете посмотреть в истории заказов
-"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"
-
-Информация по заказу:
-${include('common-order-details')}
-

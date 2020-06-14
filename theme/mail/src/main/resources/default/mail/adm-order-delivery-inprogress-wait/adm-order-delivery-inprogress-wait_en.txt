@@ -1,3 +1,0 @@
-Delivery $deliveryNum in progress for order $root.ordernum at $shop.name, waiting for payment.
-
-${include('common-adm-order-delivery-details')}

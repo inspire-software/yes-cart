@@ -1,0 +1,13 @@
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
+    Dear <b>$firstName $lastName</b>! <br>
+    You are registered at
+    <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>
+    <a href="<%out.print(shopSecureUrl.iterator().next())%>">$shopName</a>
+    <% } else { %>
+    $shopName
+    <% }%>
+    shop.
+    <br>
+    <br>
+    Your password is: <b>$password</b>
+</p>

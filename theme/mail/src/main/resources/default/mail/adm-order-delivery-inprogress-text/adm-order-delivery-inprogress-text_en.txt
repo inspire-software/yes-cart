@@ -1,0 +1,1 @@
+Delivery $deliveryNum in progress for order $root.ordernum at $shop.name.

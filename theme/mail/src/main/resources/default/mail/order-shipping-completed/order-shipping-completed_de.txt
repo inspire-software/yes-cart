@@ -1,8 +1,0 @@
-Guten Tag $root.firstname $root.lastname!
-Versand abgeschlossen $deliveryNum für Bestellung $root.ordernum bei $shop.name
-durch $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>.
-
-${include('common-order-delivery-details')}
-
-Detailierte Informationen zu Ihren Bestellungen finden Sie hier
-"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

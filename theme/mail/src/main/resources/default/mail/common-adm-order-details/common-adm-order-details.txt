@@ -26,4 +26,4 @@ try {
 } catch (Exception e) {
     out.print(e.getMessage());
 }
-%>
+%>${include('common-adm-order-details-text')}

@@ -1,3 +1,4 @@
-Payment for order $root.ordernum at $shop.name was confirmed for $root.firstname $root.lastname $root.email
-
+${include('common-adm-header')}
+${include('adm-order-payment-confirmed-text')}
 ${include('common-adm-order-details')}
+${include('common-adm-footer')}

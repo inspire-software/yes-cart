@@ -1,0 +1,3 @@
+Versand abgeschlossen für $deliveryNum für Bestellung $root.ordernum bei $shop.name
+durch $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %> <br>
+für $root.firstname $root.lastname $root.email

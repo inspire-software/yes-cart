@@ -1,7 +1,4 @@
-Dear $root.firstname $root.lastname!
-Return for order $root.ordernum at $shop.name was processed.
-
+${include('common-adm-header')}
+${include('order-returned-text')}
 ${include('common-order-details')}
-
-You can view detailed information in order history
-"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"
+${include('common-adm-footer')}

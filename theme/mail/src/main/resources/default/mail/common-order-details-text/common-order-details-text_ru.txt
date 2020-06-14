@@ -1,0 +1,2 @@
+ Подробную информацию Вы можете посмотреть в истории заказов
+ "<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

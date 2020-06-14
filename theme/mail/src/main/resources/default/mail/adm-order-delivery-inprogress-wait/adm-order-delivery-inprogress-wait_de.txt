@@ -1,3 +1,0 @@
-Lieferung $deliveryNum für Bestellung $root.ordernum bei $shop.name in Bearbeitung, es wird auf die Zahlung gewartet.
-
-${include('common-adm-order-delivery-details')}

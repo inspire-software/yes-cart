@@ -1,0 +1,2 @@
+Dear $root.firstname $root.lastname!
+Your payment for order has been received. Thank You!

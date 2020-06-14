@@ -9,12 +9,12 @@
     <tr>
         <td colspan="2">
             <table width="100%" style="border-collapse: collapse;" cellpadding="3" cellspacing="0">
-                <tr bgcolor="#DBEAF9">
-                    <td width="20%" style="border: 1px solid #E0E0E0;">Code</td>
-                    <td width="40%" style="border: 1px solid #E0E0E0;">Name</td>
-                    <td width="10%" style="border: 1px solid #E0E0E0;text-align: right;">Quantity</td>
-                    <td width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Price (<%=root.currency%>)</td>
-                    <td width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Sum (<%=root.currency%>)</td>
+                <tr>
+                    <th width="20%" style="border: 1px solid #E0E0E0;">Code</th>
+                    <th width="40%" style="border: 1px solid #E0E0E0;">Name</th>
+                    <th width="10%" style="border: 1px solid #E0E0E0;text-align: right;">Quantity</th>
+                    <th width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Price (<%=root.currency%>)</th>
+                    <th width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Sum (<%=root.currency%>)</th>
                 </tr>
                 <%
                 def deliverySum = 0;
@@ -55,6 +55,14 @@
                     <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=(delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP)%></td>
                 </tr>
             </table>
+        </td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan="2" align="left">
+            ${include('common-order-delivery-details-text')}
         </td>
     </tr>
 </table>

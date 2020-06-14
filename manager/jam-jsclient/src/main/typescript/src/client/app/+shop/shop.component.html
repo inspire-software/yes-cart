@@ -8,10 +8,6 @@
 
   <tabset>
 
-    <tab heading="{{ 'SHOP_TAB_OVERVIEW' | translate }}" (select)="tabSelected('Summary')">
-      <yc-shop-summary [shop]="shop" [reload]="reloadSummary"></yc-shop-summary>
-    </tab>
-
     <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
       <yc-shop-main></yc-shop-main>
     </tab>
@@ -79,6 +75,9 @@
       <yc-addressbook [customer]="shopCustomer" [reload]="reloadAddressbook" [shops]="addressShops"></yc-addressbook>
     </tab>
 
+    <tab heading="{{ 'SHOP_TAB_OVERVIEW' | translate }}" (select)="tabSelected('Summary')">
+      <yc-shop-summary [shop]="shop" [reload]="reloadSummary"></yc-shop-summary>
+    </tab>
 
   </tabset>
 

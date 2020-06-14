@@ -1,0 +1,2 @@
+Шановний (-на) $root.firstname $root.lastname!
+Оплату по доставці $param1 по Вашому замовленню $root.ordernum прийнято. Дякуємо!

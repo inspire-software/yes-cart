@@ -1,3 +1,0 @@
-Шановний (-на) $firstName $lastName!
-
-Ваш обліковий запис активовано на <% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>.

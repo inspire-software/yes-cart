@@ -1,0 +1,1 @@
+Платіж по замовленню $root.ordernum на $shop.name підтверджено для $root.firstname $root.lastname $root.email

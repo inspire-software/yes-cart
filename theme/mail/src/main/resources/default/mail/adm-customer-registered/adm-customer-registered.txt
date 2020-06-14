@@ -1,5 +1,3 @@
-Registration: $email $firstName $lastName
-
-<% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
-
-<% if (additionalData.requireApproval) { %>Please ACTIVATE account by assigning shop to $email account in "Customer service > Customers"<% } %>
+${include('common-adm-header')}
+${include('adm-customer-registered-text')}
+${include('common-adm-footer')}

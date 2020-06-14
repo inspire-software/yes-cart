@@ -1,5 +1,4 @@
-Shipment completed for $deliveryNum for $root.ordernum at $shop.name
-by $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>
-for $root.firstname $root.lastname $root.email
-
+${include('common-adm-header')}
+${include('adm-order-shipping-completed-text')}
 ${include('common-adm-order-delivery-details')}
+${include('common-adm-footer')}

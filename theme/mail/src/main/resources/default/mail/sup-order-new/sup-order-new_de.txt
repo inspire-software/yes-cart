@@ -1,4 +1,0 @@
-Neue Bestellung <b>$root.ordernum</b> bei $shop.name ist erstellt
-für $root.firstname $root.lastname $root.email
-
-${include('common-sup-order-deliveries-details')}

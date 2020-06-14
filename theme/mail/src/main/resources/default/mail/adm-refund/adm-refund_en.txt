@@ -1,3 +1,0 @@
-Refund performed/processing for order $root.ordernum at $shop.name.
-
-${include('common-adm-order-details')}

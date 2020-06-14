@@ -18,6 +18,10 @@ package org.yes.cart.service.endpoint.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -131,7 +135,15 @@ public class ContentEndpointControllerImpl implements ContentEndpointController 
 
     @Override
     public @ResponseBody
-    String getShopMail(@PathVariable("shopId") final long shopId, @PathVariable("template") final String template, @RequestParam(value = "order", required = false) final String order, @RequestParam(value = "delivery", required = false) final String delivery, @RequestParam(value = "customer", required = false) final String customer) throws Exception {
-        return voMailService.getShopMail(shopId, template, order, delivery, customer);
+    ResponseEntity<String> getShopMail(@PathVariable("shopId") final long shopId, @PathVariable("template") final String template, @RequestParam(value = "order", required = false) final String order, @RequestParam(value = "delivery", required = false) final String delivery, @RequestParam(value = "customer", required = false) final String customer, @RequestParam(value = "format", required = false, defaultValue = "html") String format) throws Exception {
+        final String preview = voMailService.getShopMail(shopId, template, order, delivery, customer, format);
+        if ("txt".equalsIgnoreCase(format)) {
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            return new ResponseEntity<String>(preview, headers, HttpStatus.OK);
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_HTML);
+        return new ResponseEntity<String>(preview, headers, HttpStatus.OK);
     }
 }

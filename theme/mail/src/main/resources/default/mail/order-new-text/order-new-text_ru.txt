@@ -1,0 +1,2 @@
+Уважаемый (-ая) $root.firstname $root.lastname !
+Оформлен новый заказ $root.ordernum на $shop.name.

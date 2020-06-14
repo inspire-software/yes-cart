@@ -1,0 +1,2 @@
+Уважаемый (-ая) $root.firstname $root.lastname!
+Доставка номер $param1 по заказу $root.ordernum завершена.

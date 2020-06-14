@@ -1,3 +1,0 @@
-Уважаемый (-ая) $firstName $lastName!
-
-Ваша учетная запись активирована на <% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>.

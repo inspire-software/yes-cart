@@ -1,0 +1,7 @@
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
+    Замовлення <b>$root.ordernum</b> на <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> було скасовано
+    для $root.firstname $root.lastname $root.email <br>
+    <% if (root.orderStatus.endsWith("waiting.payment")) { %>
+    <b style="color:red;">Повернення коштів не виконано. Необхідно провести повернення.</b>
+    <% } %>
+</p>

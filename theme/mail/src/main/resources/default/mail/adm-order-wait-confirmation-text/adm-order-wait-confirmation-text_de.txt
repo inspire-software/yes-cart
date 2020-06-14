@@ -1,0 +1,2 @@
+Bestellbestätigung erforderlich für $root.firstname $root.lastname $root.email.
+Bestellnummer $root.ordernum bei $shop.name.

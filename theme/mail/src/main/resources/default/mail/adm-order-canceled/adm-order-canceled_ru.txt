@@ -1,6 +1,0 @@
-Заказ $root.ordernum на $shop.name был отменен для $root.firstname $root.lastname $root.email
-<% if (root.orderStatus.endsWith("waiting.payment")) { %>
-Возврат средств не совершен. Необходимо провести возврат.
-<% } %>
-
-${include('common-adm-order-details')}

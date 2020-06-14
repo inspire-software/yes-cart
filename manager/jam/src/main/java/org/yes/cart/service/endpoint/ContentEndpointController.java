@@ -19,6 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -114,8 +115,8 @@ public interface ContentEndpointController {
 
     @ApiOperation(value = "Show shop mail template preview")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHOPUSER","ROLE_SMSUBSHOPUSER"})
-    @RequestMapping(value = "/shops/{shopId}/mail/{template}/preview", method = RequestMethod.GET,  produces = { MediaType.TEXT_HTML_VALUE })
+    @RequestMapping(value = "/shops/{shopId}/mail/{template}/preview", method = RequestMethod.GET,  produces = { MediaType.TEXT_HTML_VALUE,  MediaType.TEXT_PLAIN_VALUE })
     @ResponseBody
-    String getShopMail(@ApiParam(value = "Shop ID", required = true) @PathVariable("shopId") long shopId, @ApiParam(value = "Mail template code", required = true) @PathVariable("template") String template, @ApiParam(value = "Order details to use") @RequestParam(value = "order", required = false) String order, @ApiParam(value = "Order delivery details to use") @RequestParam(value = "delivery", required = false) String delivery, @ApiParam(value = "Customer details to use") @RequestParam(value = "customer", required = false) String customer) throws Exception;
+    ResponseEntity<String> getShopMail(@ApiParam(value = "Shop ID", required = true) @PathVariable("shopId") long shopId, @ApiParam(value = "Mail template code", required = true) @PathVariable("template") String template, @ApiParam(value = "Order details to use") @RequestParam(value = "order", required = false) String order, @ApiParam(value = "Order delivery details to use") @RequestParam(value = "delivery", required = false) String delivery, @ApiParam(value = "Customer details to use") @RequestParam(value = "customer", required = false) String customer, @ApiParam(value = "Format to generate email", allowableValues = "html,txt") @RequestParam(value = "format", required = false, defaultValue = "html") String format) throws Exception;
 
 }

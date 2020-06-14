@@ -1,3 +1,5 @@
-Refund performed/processing for order $root.ordernum at $shop.name.
-
+${include('common-adm-header')}
+${include('adm-refund-text')}
 ${include('common-adm-order-details')}
+${include('common-adm-footer')}
+

@@ -208,13 +208,27 @@ export interface ShopSummaryVO {
   customerTypesAddressBookBillingDisabled: Pair<string, string[]>;
   customerTypesDisableAccountDelete: Pair<string, string[]>;
 
-  emailTemplates: Pair<string, boolean[]>;
-  emailTemplatesYCE: Pair<string, boolean[]>;
-  emailTemplatesFrom: Pair<string, string[]>;
-  emailTemplatesTo: Pair<string, string[]>;
-  emailTemplatesShop: Pair<string, boolean[]>;
+  emailTemplates: ShopSummaryEmailTemplateVO[];
 
   sfPageTraceEnabled: Pair<string, boolean>;
+}
+
+export interface ShopSummaryEmailTemplateVO {
+
+  name: string;
+  disabled: boolean;
+  cmsNameHTML: string;
+  cmsNameTXT: string;
+  cmsNameImage: string;
+  yce: boolean;
+  part: boolean;
+  image: boolean;
+  cmsHTML: boolean;
+  cmsTXT: boolean;
+  cmsImage: boolean;
+  from: string;
+  to: string;
+
 }
 
 export interface SubShopVO {

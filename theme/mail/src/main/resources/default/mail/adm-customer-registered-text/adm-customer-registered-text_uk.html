@@ -1,0 +1,13 @@
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
+    Реєстрація на сайті: $email $firstName $lastName
+    <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>
+    <a href="<%out.print(shopSecureUrl.iterator().next())%>">$shopName</a>
+    <% } else { %>
+    $shopName
+    <% }%>
+    <% if (additionalData.requireApproval) { %>
+    <br>Будь ласка, <b style="color:red;">АКТІВУЙТЄ</b> обліковий запис шляхом присвоєння магазину до облікового запису $email в "Обслуговування клієнтів &gt; Клієнти"
+    <% } %>
+    <br>
+    <br>
+</p>

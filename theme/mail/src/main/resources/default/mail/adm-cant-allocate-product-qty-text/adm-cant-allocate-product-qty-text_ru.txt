@@ -1,0 +1,2 @@
+Отсутствует остаток для товара $sku.name, код $sku.code
+для заказа $root.ordernum на $shop.name для $root.firstname $root.lastname $root.email

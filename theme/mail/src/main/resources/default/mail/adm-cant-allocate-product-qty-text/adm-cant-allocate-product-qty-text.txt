@@ -1,0 +1,2 @@
+Cannot allocate quantity for product $sku.name, code $sku.code
+for order $root.ordernum at $shop.name for $root.firstname $root.lastname $root.email

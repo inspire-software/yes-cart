@@ -20,12 +20,12 @@
     <tr>
         <td colspan="2">
             <table width="100%" style="border-collapse: collapse;" cellpadding="3" cellspacing="0">
-                <tr bgcolor="#DBEAF9">
-                    <td width="20%" style="border: 1px solid #E0E0E0;">SKU</td>
-                    <td width="35%" style="border: 1px solid #E0E0E0;">Name</td>
-                    <td width="10%" style="border: 1px solid #E0E0E0;text-align: right;">Anzahl</td>
-                    <td width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Preis (<%=root.currency%>)</td>
-                    <td width="20%" style="border: 1px solid #E0E0E0;text-align: right;">Summe(<%=root.currency%>)</td>
+                <tr>
+                    <th width="20%" style="border: 1px solid #E0E0E0;">SKU</th>
+                    <th width="35%" style="border: 1px solid #E0E0E0;">Name</th>
+                    <th width="10%" style="border: 1px solid #E0E0E0;text-align: right;">Anzahl</th>
+                    <th width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Preis (<%=root.currency%>)</th>
+                    <th width="20%" style="border: 1px solid #E0E0E0;text-align: right;">Summe(<%=root.currency%>)</th>
                 </tr>
                 <%
                 for(Object deliveryItem : delivery.getDetail()) {
@@ -77,5 +77,13 @@
     <tr>
         <td><b>Total Bestellung (<%=root.currency%>)</b></td>
         <td align="right"><b><%=totalSum.setScale(2, BigDecimal.ROUND_HALF_UP)%></b></td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan="2" align="left">
+            ${include('common-sup-order-deliveries-details-text')}
+        </td>
     </tr>
 </table>

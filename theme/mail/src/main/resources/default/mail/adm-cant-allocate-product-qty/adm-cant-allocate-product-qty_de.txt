@@ -1,8 +1,0 @@
-Die Artikel können leider nicht reserviert werden $sku.name, SKU $sku.code
-für Bestellung $root.ordernum at $shop.name für $root.firstname $root.lastname $root.email
-
-<% if (getProperty('delivery') != null) { %>
-${include('common-adm-order-delivery-details')}
-<% } else { %>
-${include('common-adm-order-details')}
-<% } %>

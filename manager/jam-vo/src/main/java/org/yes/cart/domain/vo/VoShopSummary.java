@@ -112,11 +112,7 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesAddressBookBillingDisabled;
     private MutablePair<String, List<String>> customerTypesDisableAccountDelete;
 
-    private List<MutablePair<String, Boolean>> emailTemplates = new ArrayList<>();
-    private List<MutablePair<String, Boolean>> emailTemplatesYCE = new ArrayList<>();
-    private List<MutablePair<String, String>> emailTemplatesFrom = new ArrayList<>();
-    private List<MutablePair<String, String>> emailTemplatesTo = new ArrayList<>();
-    private List<MutablePair<String, Boolean>> emailTemplatesShop = new ArrayList<>();
+    private List<VoShopSummaryEmailTemplate> emailTemplates = new ArrayList<>();
 
     private MutablePair<String, Boolean> sfPageTraceEnabled;
 
@@ -648,44 +644,12 @@ public class VoShopSummary {
         this.customerTypesDisableAccountDelete = customerTypesDisableAccountDelete;
     }
 
-    public List<MutablePair<String, Boolean>> getEmailTemplates() {
+    public List<VoShopSummaryEmailTemplate> getEmailTemplates() {
         return emailTemplates;
     }
 
-    public void setEmailTemplates(final List<MutablePair<String, Boolean>> emailTemplates) {
+    public void setEmailTemplates(final List<VoShopSummaryEmailTemplate> emailTemplates) {
         this.emailTemplates = emailTemplates;
-    }
-
-    public List<MutablePair<String, String>> getEmailTemplatesFrom() {
-        return emailTemplatesFrom;
-    }
-
-    public void setEmailTemplatesFrom(final List<MutablePair<String, String>> emailTemplatesFrom) {
-        this.emailTemplatesFrom = emailTemplatesFrom;
-    }
-
-    public List<MutablePair<String, String>> getEmailTemplatesTo() {
-        return emailTemplatesTo;
-    }
-
-    public void setEmailTemplatesTo(final List<MutablePair<String, String>> emailTemplatesTo) {
-        this.emailTemplatesTo = emailTemplatesTo;
-    }
-
-    public List<MutablePair<String, Boolean>> getEmailTemplatesShop() {
-        return emailTemplatesShop;
-    }
-
-    public void setEmailTemplatesShop(final List<MutablePair<String, Boolean>> emailTemplatesShop) {
-        this.emailTemplatesShop = emailTemplatesShop;
-    }
-
-    public List<MutablePair<String, Boolean>> getEmailTemplatesYCE() {
-        return emailTemplatesYCE;
-    }
-
-    public void setEmailTemplatesYCE(final List<MutablePair<String, Boolean>> emailTemplatesYCE) {
-        this.emailTemplatesYCE = emailTemplatesYCE;
     }
 
     public MutablePair<String, Boolean> getSfPageTraceEnabled() {

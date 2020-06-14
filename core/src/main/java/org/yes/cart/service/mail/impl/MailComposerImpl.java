@@ -713,7 +713,22 @@ public class MailComposerImpl implements MailComposer {
      *
      * @param mail persistent mail
      *
-     * @return HTML version with all resources embeded as BASE64 URLs
+     * @return HTML version with all resources embedded as BASE64 URLs
+     */
+    @Override
+    public String convertMessageToTXT(final Mail mail) {
+
+        final StringBuilder txtTemplate = new StringBuilder(mail.getTextVersion());
+
+        return txtTemplate.toString();
+
+    }
+
+    /**
+     *
+     * @param mail persistent mail
+     *
+     * @return HTML version with all resources embedded as BASE64 URLs
      */
     @Override
     public String convertMessageToHTML(final Mail mail) {

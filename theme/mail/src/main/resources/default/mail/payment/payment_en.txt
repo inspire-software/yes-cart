@@ -1,7 +1,0 @@
-Dear $root.firstname $root.lastname!
-Your payment for order has been received. Thank You!
-You can view detailed information in order history
-"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"
-
-Order information:
-${include('common-order-details')}

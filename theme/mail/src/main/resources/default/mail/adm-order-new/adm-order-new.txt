@@ -1,3 +1,4 @@
-New order $root.ordernum at $shop.name was created for $root.firstname $root.lastname $root.email
-
+${include('common-adm-header')}
+${include('adm-order-new-text')}
 ${include('common-adm-order-details')}
+${include('common-adm-footer')}

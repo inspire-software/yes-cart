@@ -1,0 +1,1 @@
+Доставка $deliveryNum підготовлена для замовлення $root.ordernum на $shop.name, очікується оплата.

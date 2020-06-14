@@ -1,3 +1,4 @@
-Delivery $deliveryNum in ready for order $root.ordernum at $shop.name, waiting for payment.
-
+${include('common-adm-header')}
+${include('adm-order-delivery-ready-wait-text')}
 ${include('common-adm-order-delivery-details')}
+${include('common-adm-footer')}

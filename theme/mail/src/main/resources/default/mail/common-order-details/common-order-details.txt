@@ -23,7 +23,8 @@ try {
     out.println(lineDelimiter);
     out.println(("| Order total            " + totalSum.setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
     out.println(lineDelimiter);
+    ${include('common-order-details-text')}
 } catch (Exception e) {
     out.print(e.getMessage());
 }
-%>
+%>${include('common-order-details-text')}

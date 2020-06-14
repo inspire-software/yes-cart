@@ -1,0 +1,40 @@
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
+    Не вдалося виконати оплату для замовлення <b>$root.ordernum</b> на <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a>
+    <br>
+    <br>
+    Деталі оплати:
+</p>
+
+<table style="border-collapse: collapse;" width="100%" cellpadding="3" cellspacing="0">
+    <tr>
+        <th style="border: 1px solid #E0E0E0;">Трансакція</th>
+        <th style="border: 1px solid #E0E0E0;">Операція</th>
+        <th style="border: 1px solid #E0E0E0;">Результат</th>
+        <th style="border: 1px solid #E0E0E0;">Сума</th>
+        <th style="border: 1px solid #E0E0E0;">Дата</th>
+    </tr>
+    <%
+    for (Object payment : payments) {
+    %>
+    <tr>
+        <td style="border: 1px solid #E0E0E0;vertical-align: top">
+            <%=payment.transactionGatewayLabel %><br>
+            №<%=payment.orderShipment %><br>
+            IP клієнта:<%=payment.shopperIpAddress != null ? payment.shopperIpAddress : "" %>
+        </td>
+        <td style="border: 1px solid #E0E0E0;vertical-align: top">
+            <%=payment.transactionOperation %>
+        </td>
+        <td style="border: 1px solid #E0E0E0;vertical-align: top">
+            <%=payment.paymentProcessorResult %> <%=payment.transactionOperationResultCode != null ? payment.transactionOperationResultCode : "" %><br>
+            <%=payment.transactionOperationResultMessage != null ? payment.transactionOperationResultMessage : "" %>
+        </td>
+        <td style="border: 1px solid #E0E0E0;vertical-align: top">
+            <%=payment.paymentAmount %> (<%=payment.orderCurrency %>)
+        </td>
+        <td style="border: 1px solid #E0E0E0;vertical-align: top">
+            <%=org.yes.cart.utils.DateUtils.format(payment.createdTimestamp,'dd-MM-yyyy HH:mm:ss') %>
+        </td>
+    </tr>
+    <% } %>
+</table>

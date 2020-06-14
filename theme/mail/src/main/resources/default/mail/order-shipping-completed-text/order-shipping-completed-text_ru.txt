@@ -1,0 +1,3 @@
+Уважаемый (-ая) $root.firstname $root.lastname!
+Доставка $deliveryNum по заказу $root.ordernum на $shop.name выполнена.
+Метод доставки: $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>.

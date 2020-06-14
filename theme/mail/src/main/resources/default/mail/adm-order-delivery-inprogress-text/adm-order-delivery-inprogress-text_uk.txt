@@ -1,0 +1,1 @@
+Доставка $deliveryNum виконується для замовлення $root.ordernum на $shop.name.

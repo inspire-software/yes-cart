@@ -19,4 +19,4 @@ try {
 } catch (Exception e) {
     out.print(e.getMessage());
 }
-%>
+%>${include('common-order-delivery-details-text')}

@@ -1,0 +1,1 @@
+Оплата выполнена для $root.ordernum на $shop.name

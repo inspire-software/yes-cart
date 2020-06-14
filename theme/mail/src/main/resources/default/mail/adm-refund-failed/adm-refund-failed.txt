@@ -1,3 +1,4 @@
-Refund failed for order $root.ordernum at $shop.name.
-
+${include('common-adm-header')}
+${include('adm-refund-failed-text')}
 ${include('common-adm-order-details')}
+${include('common-adm-footer')}

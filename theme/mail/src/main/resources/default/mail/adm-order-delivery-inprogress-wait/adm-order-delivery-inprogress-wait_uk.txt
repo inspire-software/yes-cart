@@ -1,3 +1,0 @@
-Доставка $deliveryNum в процесі для замовлення $root.ordernum на $shop.name, очікується оплата.
-
-${include('common-adm-order-delivery-details')}

@@ -1,8 +1,0 @@
-Шановний (-на) $root.firstname $root.lastname!
-Оплату по Вашому замовленню прийнято. Дякуємо!
-Детальну інформацію Ви можете переглянути в історії замовлень
-"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"
-
-Інформація по замовленню:
-${include('common-order-details')}
-

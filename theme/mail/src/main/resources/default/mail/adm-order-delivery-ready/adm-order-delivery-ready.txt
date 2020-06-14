@@ -1,4 +1,4 @@
-Delivery $deliveryNum for order $root.ordernum at $shop.name is ready for shipment
-for $root.firstname $root.lastname $root.email
-
+${include('common-adm-header')}
+${include('adm-order-delivery-ready-text')}
 ${include('common-adm-order-delivery-details')}
+${include('common-adm-footer')}

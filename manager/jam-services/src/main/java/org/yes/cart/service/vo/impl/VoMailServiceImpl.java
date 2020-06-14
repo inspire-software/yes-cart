@@ -80,7 +80,7 @@ public class VoMailServiceImpl implements VoMailService {
     }
 
     @Override
-    public String getShopMail(final long shopId, final String template, final String order, final String delivery, final String customer) throws Exception {
+    public String getShopMail(final long shopId, final String template, final String order, final String delivery, final String customer, final String format) throws Exception {
 
         if (!federationFacade.isManageable(shopId, ShopDTO.class)) {
             throw new AccessDeniedException("Access is denied");
@@ -180,6 +180,9 @@ public class VoMailServiceImpl implements VoMailService {
                     null,
                     emailModel);
 
+            if ("txt".equalsIgnoreCase(format)) {
+                return mailComposer.convertMessageToTXT(mail);
+            }
             return mailComposer.convertMessageToHTML(mail);
 
         } else if (template.contains("customer") || template.contains("contactform") || template.contains("newsletter") || template.contains("managedlist")) {
@@ -244,6 +247,9 @@ public class VoMailServiceImpl implements VoMailService {
                     null,
                     emailModel);
 
+            if ("txt".equalsIgnoreCase(format)) {
+                return mailComposer.convertMessageToTXT(mail);
+            }
             return mailComposer.convertMessageToHTML(mail);
 
         } else { // Order related
@@ -287,6 +293,9 @@ public class VoMailServiceImpl implements VoMailService {
                     null,
                     emailModel);
 
+            if ("txt".equalsIgnoreCase(format)) {
+                return mailComposer.convertMessageToTXT(mail);
+            }
             return mailComposer.convertMessageToHTML(mail);
 
         }

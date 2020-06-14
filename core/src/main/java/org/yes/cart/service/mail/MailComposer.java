@@ -86,4 +86,13 @@ public interface MailComposer {
      */
     String convertMessageToHTML(Mail mail);
 
+    /**
+     * Convert persistent message into mime message.
+     *
+     * @param mail persistent mail
+     *
+     * @return HTML message
+     */
+    String convertMessageToTXT(Mail mail);
+
 }

@@ -1,4 +1,0 @@
-Lieferung $deliveryNum für Bestellung $root.ordernum bei $shop.name ist versandbereit,
-es wird auf die Zahlung gewartet.
-
-${include('common-adm-order-delivery-details')}

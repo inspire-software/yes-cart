@@ -1,0 +1,2 @@
+Доставка $deliveryNum для заказа $root.ordernum на $shop.name готова к отправке
+для $root.firstname $root.lastname $root.email

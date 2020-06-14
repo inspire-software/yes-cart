@@ -3,3 +3,4 @@
  */
 export * from './contents.component';
 export * from './content.component';
+export * from './mailtemplates.component';

@@ -1,3 +1,0 @@
-Оплата виконана для $root.ordernum на $shop.name
-
-${include('common-adm-order-details')}

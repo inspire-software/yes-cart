@@ -1,7 +1,0 @@
-Шановний (-на) $root.firstname $root.lastname!
-Сформоване нове замовлення $root.ordernum на $shop.name.
-
-${include('common-order-details')}
-
-Детальну інформацію Ви можете переглянути в історії замовлень
-"<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"

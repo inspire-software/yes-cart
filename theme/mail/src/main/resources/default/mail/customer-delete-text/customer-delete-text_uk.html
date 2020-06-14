@@ -1,0 +1,20 @@
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
+    Шановний (-на) <b>$firstName $lastName</b>,<br>
+    Вами зроблений запит на видвлення облікового запису на
+    <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>
+    <a href="<%out.print(shopSecureUrl.iterator().next())%>">$shopName</a>.
+    <% } else { %>
+    $shopName
+    <% }%>
+    <br>
+    <br>
+    <% if (authToken != null) { %>
+    <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>
+    Перейдіть по <a href="<%out.print(shopSecureUrl.iterator().next())%>/deleteAccountCmd/$authToken">цьому</a> посиланню для підтвердження.
+    <% } else { %>
+    Використайте код <b>$authToken</b> для підтвердження.
+    <% }%>
+    <% } else { %>
+    <b>Ваш обліковий запис видалено</b>
+    <% }%>
+</p>

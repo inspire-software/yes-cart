@@ -13,10 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ShopVO, ShopSummaryVO, Pair } from './../../shared/model/index';
-import { MailPreviewComponent } from './../../shared/content/index';
 import { ShopService, I18nEventBus } from './../../shared/services/index';
 import { LogUtil } from './../../shared/log/index';
 
@@ -36,9 +35,6 @@ export class ShopSummaryComponent implements OnInit, OnDestroy {
   private loading:boolean = false;
 
   private misconfigured:boolean = false;
-
-  @ViewChild('mailPreviewComponent')
-  private mailPreviewComponent:MailPreviewComponent;
 
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
@@ -117,26 +113,6 @@ export class ShopSummaryComponent implements OnInit, OnDestroy {
     return enabled;
   }
 
-  getEmailConfigString(emailTemplate:string, strConfig:Pair<string, string>[]):string {
-    let _out:string = null;
-    strConfig.forEach(_str => {
-       if (_str.first == emailTemplate) {
-         _out = _str.second;
-       }
-    });
-    return _out;
-  }
-
-  isEmailConfigOn(emailTemplate:string, boolConfig:Pair<string, boolean>[]):boolean {
-    let _out:boolean = false;
-    boolConfig.forEach(_bool => {
-      if (_bool.first == emailTemplate) {
-        _out = _bool.second;
-      }
-    });
-    return _out;
-  }
-
   isI18nConfigOn(lang:string, overrides:Pair<string, boolean>[]):boolean {
     let _out:boolean = false;
     overrides.forEach(_bool => {
@@ -145,10 +121,6 @@ export class ShopSummaryComponent implements OnInit, OnDestroy {
       }
     });
     return _out;
-  }
-
-  onEmailPreview(template:string):void {
-    this.mailPreviewComponent.showDialog(this.shop.shopId, template);
   }
 
 }

@@ -1,0 +1,2 @@
+Guten Tag $root.firstname $root.lastname!
+Neue Bestellung $root.ordernum at $shop.name wurde erstellt.

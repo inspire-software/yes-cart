@@ -1,0 +1,6 @@
+Contact form message by <%out.print(additionalData.email)%> in <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %> "<%out.print(shopSecureUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
+
+Subject: <%out.print(additionalData.subject)%>
+
+Message:
+<%out.print(additionalData.body)%>

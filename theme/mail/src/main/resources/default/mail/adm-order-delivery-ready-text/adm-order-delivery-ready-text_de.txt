@@ -1,0 +1,2 @@
+Lieferung $deliveryNum für Bestellung $root.ordernum bei $shop.name ist versandbereit
+für $root.firstname $root.lastname $root.email

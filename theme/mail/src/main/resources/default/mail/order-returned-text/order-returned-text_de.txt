@@ -1,0 +1,2 @@
+Guten Tag $root.firstname $root.lastname!
+Rücksendung von Bestellung $root.ordernum bei $shop.name ist bearbeitet.

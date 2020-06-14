@@ -1,0 +1,3 @@
+Шановний (-на) $firstName $lastName!
+
+Ваш обліковий запис відключено на <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %> "<%out.print(shopSecureUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>.

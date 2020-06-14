@@ -1,0 +1,2 @@
+Delivery $deliveryNum for order $root.ordernum at $shop.name is being prepared
+for $root.firstname $root.lastname $root.email

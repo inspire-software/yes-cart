@@ -1,0 +1,15 @@
+<p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
+    Повідомлення від <%out.print(additionalData.email)%> у
+    <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>
+    <a href="<%out.print(shopSecureUrl.iterator().next())%>">$shopName</a>
+    <% } else { %>
+    $shopName
+    <% }%>
+    магазині.
+    <br>
+    <b>Тема:</b> <%out.print(additionalData.subject)%>
+    <br>
+    <b>Повідомлення:</b>
+    <br>
+    <%out.print(additionalData.body)%>
+</p>

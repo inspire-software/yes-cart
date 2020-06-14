@@ -1,0 +1,1 @@
+Payment taken/processing for $root.ordernum at $shop.name
