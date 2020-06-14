@@ -26,10 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.entity.Content;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.ro.AttrValueContentRO;
-import org.yes.cart.domain.ro.BreadcrumbRO;
-import org.yes.cart.domain.ro.ContentListRO;
-import org.yes.cart.domain.ro.ContentRO;
+import org.yes.cart.domain.ro.*;
 import org.yes.cart.domain.ro.xml.XMLParamsRO;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -403,7 +400,7 @@ public class ContentController {
         return viewContentInternal(content, (Map) params.getParameters());
     }
 
-    private List<ContentRO> listContentInternal(final String content) {
+    private List<ContentRO> listContentInternal(final String content, final boolean fullHierarchy) {
 
         final long contentId = bookmarkMixin.resolveContentId(content);
         final long contentShopId = cartMixin.getCurrentShopId();
@@ -421,6 +418,10 @@ public class ContentController {
                     final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cnt.getContentId(), contentShopId);
                     cnt.setBreadcrumbs(crumbs);
                     removeContentBodyAttributes(cnt);
+                    if (fullHierarchy) {
+                        final List<ContentRO> children = listContentInternal(String.valueOf(cnt.getContentId()), true);
+                        cnt.setChildren(children);
+                    }
                 }
 
             }
@@ -504,13 +505,14 @@ public class ContentController {
     )
     public @ResponseBody List<ContentRO> listContent(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                      final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
+                                                     final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestParam(value = "mode", required = false) String mode,
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
-        return listContentInternal(content);
+        return listContentInternal(content, "hierarchy".equalsIgnoreCase(mode));
 
     }
 
@@ -592,13 +594,14 @@ public class ContentController {
     )
     public @ResponseBody ContentListRO listContentXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                       final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
+                                                      final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestParam(value = "mode", required = false) String mode,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
-        return new ContentListRO(listContentInternal(content));
+        return new ContentListRO(listContentInternal(content, "hierarchy".equalsIgnoreCase(mode)));
 
     }
 

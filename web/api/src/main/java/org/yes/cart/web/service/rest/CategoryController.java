@@ -168,7 +168,7 @@ public class CategoryController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public @ResponseBody List<CategoryRO> listRoot(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                   final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestHeader(value = "mode", required = false) String mode,
+                                                   final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestParam(value = "mode", required = false) String mode,
                                                    final HttpServletRequest request,
                                                    final HttpServletResponse response) {
 
@@ -266,7 +266,7 @@ public class CategoryController {
             produces = MediaType.APPLICATION_XML_VALUE
     )
     public @ResponseBody CategoryListRO listRootXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                    final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestHeader(value = "mode", required = false) String mode,
+                                                    final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestParam(value = "mode", required = false) String mode,
                                                     final HttpServletRequest request,
                                                     final HttpServletResponse response) {
 
@@ -558,7 +558,7 @@ public class CategoryController {
     )
     public @ResponseBody List<CategoryRO> listCategory(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                        final @ApiParam(value = "Category ID or URI") @PathVariable(value = "id") String category,
-                                                       final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestHeader(value = "mode", required = false) String mode,
+                                                       final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestParam(value = "mode", required = false) String mode,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -658,7 +658,7 @@ public class CategoryController {
     )
     public @ResponseBody CategoryListRO listCategoryXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                         final @ApiParam(value = "Category ID or URI") @PathVariable(value = "id") String category,
-                                                        final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestHeader(value = "mode", required = false) String mode,
+                                                        final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestParam(value = "mode", required = false) String mode,
                                                         final HttpServletRequest request,
                                                         final HttpServletResponse response) {
 

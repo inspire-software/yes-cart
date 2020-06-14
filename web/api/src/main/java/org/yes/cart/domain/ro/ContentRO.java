@@ -111,6 +111,8 @@ public class ContentRO implements Serializable {
 
     private List<BreadcrumbRO> breadcrumbs = Collections.EMPTY_LIST;
 
+    private List<ContentRO> children;
+
     @XmlElement(name = "content-body")
     public String getContentBody() {
         return contentBody;
@@ -298,5 +300,11 @@ public class ContentRO implements Serializable {
         this.displayMetadescriptions = displayMetadescriptions;
     }
 
+    public List<ContentRO> getChildren() {
+        return children;
+    }
 
+    public void setChildren(final List<ContentRO> children) {
+        this.children = children;
+    }
 }
