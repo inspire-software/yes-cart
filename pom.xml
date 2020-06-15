@@ -72,7 +72,7 @@
         <hibernate.core.version>5.2.17.Final</hibernate.core.version>
         <lucene.version>8.1.1</lucene.version>
         <cxf.version>3.2.4</cxf.version>
-        <spring-security.version>4.2.13.RELEASE</spring-security.version>
+        <spring-security.version>5.3.3.RELEASE</spring-security.version>
         <spring.version>4.3.23.RELEASE</spring.version>
         <jjwt.version>0.9.0</jjwt.version>
         <ehcache-core.version>2.10.6</ehcache-core.version>
