@@ -87,7 +87,8 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     private VoManager getMyselfInternal() {
 
-        if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null
+                || !SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
             return null;
         }
         final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
