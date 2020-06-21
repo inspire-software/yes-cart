@@ -67,7 +67,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
                 while (category != null) {
                     final String searchInSub = category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH);
                     if (StringUtils.isBlank(searchInSub)) {
-                        final Long parentId = shopService.getShopCategoryParentId(customerShopId, category.getCategoryId());
+                        final Long parentId = shopService.getShopCategoryParentId(customerShopId, category.getCategoryId(), false);
                         if (parentId != null) {
                             category = categoryService.getById(parentId);
                         } else {
@@ -128,7 +128,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
         while (category != null) {
             String catValue = category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_NEW_ARRIVAL_DAYS_OFFSET);
             if (StringUtils.isBlank(catValue)) {
-                final Long parentId = shopService.getShopCategoryParentId(customerShopId, category.getCategoryId());
+                final Long parentId = shopService.getShopCategoryParentId(customerShopId, category.getCategoryId(), false);
                 if (parentId != null) {
                     category = categoryService.getById(parentId);
                 } else {

@@ -201,7 +201,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
                 boolean parentAvailable = true;
 
-                final Long parentId = shopService.getShopCategoryParentId(customerShopId, categoryId);
+                final Long parentId = shopService.getShopCategoryParentId(customerShopId, categoryId, false);
                 if (parentId != null && parentId > 0L) {
                     parentAvailable = fillCategories(categoriesCrumbs, customerShopId, parentId, shopCategoryIds, now);
                 }

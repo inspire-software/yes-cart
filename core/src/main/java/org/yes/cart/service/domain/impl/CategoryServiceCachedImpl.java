@@ -55,6 +55,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Override
+    @Cacheable(value = "categoryService-categoryLinks")
     public List<Long> getCategoryLinks(final long categoryId) {
         return categoryService.getCategoryLinks(categoryId);
     }
@@ -282,6 +283,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
+            "categoryService-categoryLinks",
             "categoryService-relationById",
             "categoryService-categoryParentsIds",
             "categoryService-categoryLinkedIds",
@@ -322,6 +324,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
+            "categoryService-categoryLinks",
             "categoryService-relationById",
             "categoryService-categoryParentsIds",
             "categoryService-categoryLinkedIds",
@@ -362,6 +365,7 @@ public class CategoryServiceCachedImpl implements CategoryService {
             "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
+            "categoryService-categoryLinks",
             "categoryService-relationById",
             "categoryService-categoryParentsIds",
             "categoryService-categoryLinkedIds"

@@ -14,7 +14,7 @@
 
   <div class="text-right data-control">
 
-    <button type="button" (click)="assignToShopClick(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null || selectedNode.id == '100'" title="{{ 'MODAL_BUTTON_ASSIGNCAT' | translate }}">
+    <button type="button" (click)="assignToShopClick(selectedNode)" class="btn btn-default btn-circle btn-xl" [disabled]="selectedNode == null || selectedNode.id == '100' || selectedNode.source.linkToId > 0" title="{{ 'MODAL_BUTTON_ASSIGNCAT' | translate }}">
       <i class="fa fa-link"></i>
     </button>
 

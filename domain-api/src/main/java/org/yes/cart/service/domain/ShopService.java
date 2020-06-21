@@ -209,12 +209,17 @@ public interface ShopService extends GenericService<Shop> {
     /**
      * Get the category parent ID for given shop.
      *
+     * For direct links if includeDirectLinks is enabled then parent of the linking category is returned.
+     * For parent links link to parent is returned.
+     * If no links available standards parent is returned
+     *
      * @param shopId shop id
      * @param categoryId given category PK
+     * @param includeDirectLinks if categoryId is PK of linked category then parent of the link is returned.
      *
      * @return parent ID (or symlink parent)
      */
-    Long getShopCategoryParentId(long shopId, long categoryId);
+    Long getShopCategoryParentId(long shopId, long categoryId, boolean includeDirectLinks);
 
 
     /**

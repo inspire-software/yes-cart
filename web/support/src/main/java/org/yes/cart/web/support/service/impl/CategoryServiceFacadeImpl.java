@@ -548,7 +548,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     @Override
     public Long getCategoryParentId(final long categoryId, final long customerShopId) {
-        return shopService.getShopCategoryParentId(customerShopId, categoryId);
+        return shopService.getShopCategoryParentId(customerShopId, categoryId, false);
     }
 
     /**

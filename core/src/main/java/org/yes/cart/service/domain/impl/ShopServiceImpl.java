@@ -331,7 +331,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * {@inheritDoc}
      */
     @Override
-    public Long getShopCategoryParentId(final long shopId, final long categoryId) {
+    public Long getShopCategoryParentId(final long shopId, final long categoryId, final boolean includeDirectLinks) {
 
         final Set<Long> shopCatIds = getShopCategoriesIds(shopId);
 
@@ -340,12 +340,28 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             final Category category = categoryService.getById(categoryId);
             if (category != null && !category.isRoot()) {
 
-                final List<Long> links = categoryService.getCategoryLinks(category.getParentId());
-                if (!links.isEmpty()) {
+                if (includeDirectLinks) {
+                    final List<Long> directLinks = categoryService.getCategoryLinks(category.getCategoryId());
+                    if (!directLinks.isEmpty()) {
 
-                    for (final Long linkId : links) {
+                        for (final Long linkId : directLinks) {
+                            if (shopCatIds.contains(linkId)) {
+                                // We have a direct symlink for current shop
+                                final Category proxyCat = categoryService.getById(linkId);
+                                if (proxyCat != null && shopCatIds.contains(proxyCat.getParentId())) {
+                                    return proxyCat.getParentId();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                final List<Long> parentLinks = categoryService.getCategoryLinks(category.getParentId());
+                if (!parentLinks.isEmpty()) {
+
+                    for (final Long linkId : parentLinks) {
                         if (shopCatIds.contains(linkId)) {
-                            // We have a symlink for current shop
+                            // We have a parent symlink for current shop
                             return linkId;
                         }
                     }
@@ -369,7 +385,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         if (category != null && !category.isRoot()) {
             if (StringUtils.isBlank(category.getUitemplate())) {
 
-                final Long parentId = proxy().getShopCategoryParentId(shopId, categoryId);
+                final Long parentId = proxy().getShopCategoryParentId(shopId, categoryId, false);
                 if (parentId != null) {
                     return proxy().getShopCategoryTemplate(shopId, parentId);
                 }
@@ -399,7 +415,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             final String template = category.getProductType() != null ? category.getProductType().getUisearchtemplate() : null;
 
             if (StringUtils.isBlank(template)) {
-                final Long parentId = proxy().getShopCategoryParentId(shopId, categoryId);
+                final Long parentId = proxy().getShopCategoryParentId(shopId, categoryId, false);
                 if (parentId != null) {
                     return proxy().getShopCategorySearchTemplate(shopId, parentId);
                 }
@@ -427,7 +443,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         final Category category = categoryService.getById(categoryId);
         if (category != null && !category.isRoot()) {
             if (category.getProductType() == null) {
-                final Long parentId = proxy().getShopCategoryParentId(shopId, categoryId);
+                final Long parentId = proxy().getShopCategoryParentId(shopId, categoryId, false);
                 if (parentId != null) {
                     return proxy().getShopCategoryProductTypeId(shopId, parentId);
                 }

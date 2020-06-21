@@ -221,8 +221,8 @@ public class ShopServiceCachedImpl implements ShopService {
      */
     @Override
     @Cacheable(value = "shopService-shopCategoryParentId")
-    public Long getShopCategoryParentId(final long shopId, final long categoryId) {
-        return shopService.getShopCategoryParentId(shopId, categoryId);
+    public Long getShopCategoryParentId(final long shopId, final long categoryId, final boolean includeDirectLinks) {
+        return shopService.getShopCategoryParentId(shopId, categoryId, includeDirectLinks);
     }
 
     /**

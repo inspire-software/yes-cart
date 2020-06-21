@@ -173,7 +173,7 @@ public class PromotionConditionSupportImpl implements PromotionConditionSupport 
                     return true;
                 }
             }
-            final Long parentId = shopService.getShopCategoryParentId(shopId, category.getCategoryId());
+            final Long parentId = shopService.getShopCategoryParentId(shopId, category.getCategoryId(), true);
             if (parentId != null) {
                 return isCategoryOneOf(parentId, shopId, categoryGUIDs);
             }

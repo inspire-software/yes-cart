@@ -93,14 +93,20 @@ public class ShopServiceImplTest extends BaseCoreDBTestCase {
     public void testGetShopCategoryParentId() throws Exception {
 
         // In shop 70 the parent is the linked category
-        assertEquals(Long.valueOf(411L), shopService.getShopCategoryParentId(70L, 313L));
-        assertNull(shopService.getShopCategoryParentId(70L, 312L));
+        assertEquals(Long.valueOf(411L), shopService.getShopCategoryParentId(70L, 313L, false));
+        assertEquals(Long.valueOf(411L), shopService.getShopCategoryParentId(70L, 313L, true));
+        assertNull(shopService.getShopCategoryParentId(70L, 312L, false));
+        assertEquals(Long.valueOf(401L), shopService.getShopCategoryParentId(70L, 312L, true));
         // In shop 80 the parent is the parent category
-        assertEquals(Long.valueOf(312L), shopService.getShopCategoryParentId(80L, 313L));
-        assertEquals(Long.valueOf(311L), shopService.getShopCategoryParentId(80L, 312L));
+        assertEquals(Long.valueOf(312L), shopService.getShopCategoryParentId(80L, 313L, false));
+        assertEquals(Long.valueOf(312L), shopService.getShopCategoryParentId(80L, 313L, true));
+        assertEquals(Long.valueOf(311L), shopService.getShopCategoryParentId(80L, 312L, false));
+        assertEquals(Long.valueOf(311L), shopService.getShopCategoryParentId(80L, 312L, true));
         // In shop 50 the category is not assigned
-        assertNull(shopService.getShopCategoryParentId(50L, 313L));
-        assertNull(shopService.getShopCategoryParentId(50L, 312L));
+        assertNull(shopService.getShopCategoryParentId(50L, 313L, false));
+        assertNull(shopService.getShopCategoryParentId(50L, 313L, true));
+        assertNull(shopService.getShopCategoryParentId(50L, 312L, false));
+        assertNull(shopService.getShopCategoryParentId(50L, 312L, true));
 
     }
 
