@@ -14,10 +14,11 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
-import { ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO } from './../../shared/model/index';
+import { ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO, AttributeVO } from './../../shared/model/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
-import { Util } from './../../shared/services/index';
+import { I18nEventBus, Util } from './../../shared/services/index';
+import { UiUtil } from './../../shared/ui/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
 
@@ -333,6 +334,26 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
     } else {
       this.groupToEdit = null;
     }
+  }
+
+  protected getGroupName(group:ProductTypeViewGroupVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = group.displayNames;
+    let def = group.name;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
+  }
+
+  protected getAttributeName(attr:AttributeVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = attr.displayNames;
+    let def = attr.name != null ? attr.name : attr.code;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
   }
 
   private processDataChangesEvent() {

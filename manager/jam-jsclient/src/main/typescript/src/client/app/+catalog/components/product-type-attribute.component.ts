@@ -15,7 +15,8 @@
  */
 import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { ProductTypeVO, ProductTypeAttrVO, AttributeVO, ProductTypeAttrNavigationRangeVO, Pair } from './../../shared/model/index';
-import { Util } from './../../shared/services/index';
+import { I18nEventBus, Util } from './../../shared/services/index';
+import { UiUtil } from './../../shared/ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
@@ -362,6 +363,16 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     this.attributeToEdit.rangeNavigation.ranges.splice(idx, 1);
     this.attributeToEdit.rangeNavigation.ranges = this.attributeToEdit.rangeNavigation.ranges.slice(0, this.attributeToEdit.rangeNavigation.ranges.length);
     this.onDataChange(this.attributeToEdit.rangeNavigation.ranges);
+  }
+
+  protected getAttributeName(attr:AttributeVO):string {
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let i18n = attr.displayNames;
+    let def = attr.name != null ? attr.name : attr.code;
+
+    return UiUtil.toI18nString(i18n, def, lang);
+
   }
 
   private loadData() {

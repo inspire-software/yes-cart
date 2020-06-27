@@ -16,6 +16,7 @@
 import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { AttrValueVO, AttributeVO, Pair } from './../model/index';
 import { I18nEventBus, Util } from './../services/index';
+import { UiUtil } from './../ui/index';
 import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
 import { FormValidationEvent, Futures, Future } from './../event/index';
 import { Config } from './../config/env.config';
@@ -572,19 +573,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     let i18n = attr.displayNames;
     let def = attr.name != null ? attr.name : attr.code;
 
-    if (i18n == null) {
-      return def;
-    }
+    return UiUtil.toI18nString(i18n, def, lang);
 
-    let namePair = i18n.find(_name => {
-      return _name.first == lang;
-    });
-
-    if (namePair != null) {
-      return namePair.second;
-    }
-
-    return def;
   }
 
 

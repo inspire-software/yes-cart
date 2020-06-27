@@ -576,19 +576,8 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   private getAttributeName(i18n:Pair<string, string>[], def:string, lang:string):string {
 
-    if (i18n == null) {
-      return def;
-    }
+    return UiUtil.toI18nString(i18n, def, lang);
 
-    let namePair = i18n.find(_name => {
-      return _name.first == lang;
-    });
-
-    if (namePair != null) {
-      return namePair.second;
-    }
-
-    return def;
   }
 
   private getSalutationOptions(choice:Pair<string, string>[], lang:string):Pair<string, string>[] {

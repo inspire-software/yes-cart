@@ -17,6 +17,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { I18nEventBus } from './../../shared/services/index';
+import { UiUtil } from './../../shared/ui/index';
 import { CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO, AttrValueVO, Pair } from './../../shared/model/index';
 import { CookieUtil } from './../../shared/cookies/index';
 import { Config } from './../../shared/config/env.config';
@@ -184,19 +185,8 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     let i18n = attr.attribute.displayNames;
     let def = attr.attribute.name != null ? attr.attribute.name : attr.attribute.code;
 
-    if (i18n == null) {
-      return def;
-    }
+    return UiUtil.toI18nString(i18n, def, lang);
 
-    let namePair = i18n.find(_name => {
-      return _name.first == lang;
-    });
-
-    if (namePair != null) {
-      return namePair.second;
-    }
-
-    return def;
   }
 
   getDisplayValue(attr:AttrValueVO, useDefault:boolean = true):string {
@@ -206,19 +196,8 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     let i18n = attr.displayVals;
     let def = useDefault ? attrName + ': ' + attr.val : '';
 
-    if (i18n == null) {
-      return def;
-    }
+    return UiUtil.toI18nString(i18n, def, lang);
 
-    let namePair = i18n.find(_name => {
-      return _name.first == lang;
-    });
-
-    if (namePair != null) {
-      return namePair.second;
-    }
-
-    return def;
   }
 
 

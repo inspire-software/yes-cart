@@ -46,7 +46,7 @@
            <div class="row">
              <div class="col-md-6">
                <div class="panel panel-default">
-                 <div class="panel-heading">{{selectedRow.name}} {{ 'ASSIGNED' | translate }}</div>
+                 <div class="panel-heading">{{getGroupName(selectedRow)}} {{ 'ASSIGNED' | translate }}</div>
                  <ul class="list-group">
                    <li class="list-group-item nav nav-second-level item-list-control">
                      <form>
@@ -62,7 +62,7 @@
                    </li>
                    <li *ngFor="let attr of selectedRowAssignedFiltered" class="list-group-item">
                      <h5>
-                       {{attr.attribute.name}}
+                       {{getAttributeName(attr.attribute)}}
                        <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onAssignedAttrClick(attr)><i class="fa fa-remove"></i></button>
                        <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}">{{attr.rank}}</button>
                      </h5>
@@ -97,7 +97,7 @@
                    </li>
                    <li *ngFor="let attr of selectedRowAvailableFiltered" class="list-group-item">
                      <h5>
-                       {{attr.attribute.name}}
+                       {{getAttributeName(attr.attribute)}}
                        <button class="pull-right btn btn-default btn-circle btn-sm" (click)=onAvailableAttrClick(attr)><i class="fa fa-plus"></i></button>
                      </h5>
                      <p>

@@ -15,6 +15,7 @@
  */
 
 import { LRUCache } from '../model/internal/cache.model';
+import { Pair } from '../model/common.model';
 import { FormValidationEvent } from '../event/index';
 import { LogUtil } from './../log/index';
 
@@ -60,6 +61,32 @@ export class UiUtil {
         } // let user edit the value, do not update model yet
       }
     }
+  }
+
+  /**
+   * Return display name.
+   *
+   * @param {Pair<string, string>[]} display
+   * @param {string} fallback
+   * @param {string} lang
+   * @return {string}
+   */
+  public static toI18nString(display:Pair<string, string>[], fallback:string, lang:string):string {
+
+    if (display == null) {
+      return fallback;
+    }
+
+    let namePair = display.find(_name => {
+      return _name.first == lang;
+    });
+
+    if (namePair != null) {
+      return namePair.second;
+    }
+
+    return fallback;
+
   }
 
   /**
