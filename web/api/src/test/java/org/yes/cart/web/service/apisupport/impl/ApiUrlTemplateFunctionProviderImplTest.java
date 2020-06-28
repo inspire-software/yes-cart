@@ -26,7 +26,7 @@ import org.yes.cart.web.application.ApplicationDirector;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: denispavlov
@@ -38,7 +38,7 @@ public class ApiUrlTemplateFunctionProviderImplTest {
     final Mockery context = new JUnit4Mockery();
 
     @Test
-    public void doAction() throws Exception {
+    public void doActionNoParamCtx() throws Exception {
 
         final Shop shop = this.context.mock(Shop.class);
 
@@ -48,26 +48,124 @@ public class ApiUrlTemplateFunctionProviderImplTest {
             allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
         }});
 
-        final ApiUrlTemplateFunctionProviderImpl func0 = new ApiUrlTemplateFunctionProviderImpl("", "a");
+        final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("/ctx");
 
-        assertEquals("https://www.myshop.com/a/1", func0.doAction("1", "en", Collections.emptyMap()));
-        assertEquals("https://www.myshop.com/a/1", func0.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
-        assertEquals("https://www.myshop.com/a/1", func0.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
-        assertEquals("https://www.myshop.com/a/1", func0.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/1", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/1", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/1/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/1/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
 
-        final ApiUrlTemplateFunctionProviderImpl func1 = new ApiUrlTemplateFunctionProviderImpl("/ctx", "a");
+    }
 
-        assertEquals("https://www.myshop.com/ctx/a/1", func1.doAction("1", "en", Collections.emptyMap()));
-        assertEquals("https://www.myshop.com/ctx/a/1", func1.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
-        assertEquals("https://www.myshop.com/ctx/a/1", func1.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
-        assertEquals("https://www.myshop.com/ctx/a/1", func1.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+    @Test
+    public void doActionNoParamRoot() throws Exception {
 
-        final ApiUrlTemplateFunctionProviderImpl func2 = new ApiUrlTemplateFunctionProviderImpl("/ctx/", "a", "b");
+        final Shop shop = this.context.mock(Shop.class);
 
-        assertEquals("https://www.myshop.com/ctx", func2.doAction("1", "en", Collections.emptyMap()));
-        assertEquals("https://www.myshop.com/ctx", func2.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
-        assertEquals("https://www.myshop.com/ctx/a/1/b/2", func2.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
-        assertEquals("https://www.myshop.com/ctx/a/1/b/2", func2.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+        ApplicationDirector.setCurrentShop(shop);
+
+        this.context.checking(new Expectations() {{
+            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+        }});
+
+        final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("");
+
+        assertEquals("https://www.myshop.com", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/1", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/1", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/1/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/1/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+
+    }
+
+    @Test
+    public void doActionOneParamCtx() throws Exception {
+
+        final Shop shop = this.context.mock(Shop.class);
+
+        ApplicationDirector.setCurrentShop(shop);
+
+        this.context.checking(new Expectations() {{
+            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+        }});
+
+        final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("/ctx", "one");
+
+        assertEquals("https://www.myshop.com/ctx", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/one/1", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/one/1", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/one/1/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/one/1/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+
+    }
+
+    @Test
+    public void doActionOneParamRoot() throws Exception {
+
+        final Shop shop = this.context.mock(Shop.class);
+
+        ApplicationDirector.setCurrentShop(shop);
+
+        this.context.checking(new Expectations() {{
+            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+        }});
+
+        final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("", "one");
+
+        assertEquals("https://www.myshop.com", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/one/1", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/one/1", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/one/1/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/one/1/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+
+    }
+
+    @Test
+    public void doActionTwoParamsCtx() throws Exception {
+
+        final Shop shop = this.context.mock(Shop.class);
+
+        ApplicationDirector.setCurrentShop(shop);
+
+        this.context.checking(new Expectations() {{
+            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+        }});
+
+        final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("/ctx", "one", "two");
+
+        assertEquals("https://www.myshop.com/ctx", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/one/1/two/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/ctx/one/1/two/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+
+    }
+
+    @Test
+    public void doActionTwoParamsRoot() throws Exception {
+
+        final Shop shop = this.context.mock(Shop.class);
+
+        ApplicationDirector.setCurrentShop(shop);
+
+        this.context.checking(new Expectations() {{
+            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+        }});
+
+        final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("", "one", "two");
+
+        assertEquals("https://www.myshop.com", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/one/1/two/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("https://www.myshop.com/one/1/two/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
 
     }
 

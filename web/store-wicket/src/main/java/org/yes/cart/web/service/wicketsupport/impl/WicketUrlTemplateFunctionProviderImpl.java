@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.wicketsupport.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.service.theme.templates.TemplateProcessor;
 import org.yes.cart.web.utils.WicketUtil;
 
@@ -48,20 +49,35 @@ public class WicketUrlTemplateFunctionProviderImpl implements TemplateProcessor.
     public Object doAction(final Object... params) {
 
         final StringBuilder url = new StringBuilder(wicketUtil.getHttpServletRequest().getContextPath());
-        if (params != null && this.paramName != null && params.length >= 1) {
+        if (params != null && params.length >= 1) {
 
             final List sections;
             if (params[0] instanceof Collection) {
                 sections = new ArrayList((Collection) params[0]);
-            } else {
+            } else if (params[0] != null) {
                 sections = Collections.singletonList(String.valueOf(params[0]));
-            }
-            if (sections.size() >= this.paramName.length) {
-                for (int i = 0; i < this.paramName.length; i++) {
-                    url.append('/').append(this.paramName[i]).append('/').append(sections.get(i));
-                }
+            } else {
+                sections = Collections.emptyList();
             }
 
+            final int pLength = this.paramName != null ? this.paramName.length : 0;
+            if (pLength <= sections.size()) {
+                for (int i = 0; i < pLength; i++) {
+                    final String sec = (String) sections.get(i);
+                    if (StringUtils.isNotBlank(sec)) {
+                        url.append('/').append(this.paramName[i]).append('/').append(sec);
+                    }
+                }
+                for (int i = pLength; i < sections.size(); i++) {
+                    final String sec = (String) sections.get(i);
+                    if (StringUtils.isNotBlank(sec)) {
+                        url.append('/').append(sec);
+                    }
+                }
+            }
+        }
+        if (url.length() == 0) {
+            return "/";
         }
         return url.toString();
     }

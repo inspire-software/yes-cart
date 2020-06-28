@@ -38,7 +38,7 @@ public class WicketUrlTemplateFunctionProviderImplTest {
     final Mockery context = new JUnit4Mockery();
 
     @Test
-    public void doAction() throws Exception {
+    public void doActionNoParamCtx() throws Exception {
 
         final HttpServletRequest rq = this.context.mock(HttpServletRequest.class);
 
@@ -50,22 +50,152 @@ public class WicketUrlTemplateFunctionProviderImplTest {
         };
 
         this.context.checking(new Expectations() {{
-            allowing(rq).getContextPath(); will(returnValue("ctx"));
+            allowing(rq).getContextPath(); will(returnValue("/ctx"));
         }});
 
-        final WicketUrlTemplateFunctionProviderImpl func1 = new WicketUrlTemplateFunctionProviderImpl(util, "a");
+        final WicketUrlTemplateFunctionProviderImpl func = new WicketUrlTemplateFunctionProviderImpl(util);
 
-        assertEquals("ctx/a/1", func1.doAction("1", "en", Collections.emptyMap()));
-        assertEquals("ctx/a/1", func1.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
-        assertEquals("ctx/a/1", func1.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
-        assertEquals("ctx/a/1", func1.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+        assertEquals("/ctx", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("/ctx", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("/ctx/1", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("/ctx/1", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("/ctx/1/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("/ctx/1/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
 
-        final WicketUrlTemplateFunctionProviderImpl func2 = new WicketUrlTemplateFunctionProviderImpl(util, "a", "b");
+    }
 
-        assertEquals("ctx", func2.doAction("1", "en", Collections.emptyMap()));
-        assertEquals("ctx", func2.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
-        assertEquals("ctx/a/1/b/2", func2.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
-        assertEquals("ctx/a/1/b/2", func2.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+    @Test
+    public void doActionNoParamRoot() throws Exception {
+
+        final HttpServletRequest rq = this.context.mock(HttpServletRequest.class);
+
+        final WicketUtil util = new WicketUtil() {
+            @Override
+            public HttpServletRequest getHttpServletRequest() {
+                return rq;
+            }
+        };
+
+        this.context.checking(new Expectations() {{
+            allowing(rq).getContextPath(); will(returnValue(""));
+        }});
+
+        final WicketUrlTemplateFunctionProviderImpl func = new WicketUrlTemplateFunctionProviderImpl(util);
+
+        assertEquals("/", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("/", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("/1", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("/1", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("/1/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("/1/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+
+    }
+
+    @Test
+    public void doActionOneParamCtx() throws Exception {
+
+        final HttpServletRequest rq = this.context.mock(HttpServletRequest.class);
+
+        final WicketUtil util = new WicketUtil() {
+            @Override
+            public HttpServletRequest getHttpServletRequest() {
+                return rq;
+            }
+        };
+
+        this.context.checking(new Expectations() {{
+            allowing(rq).getContextPath(); will(returnValue("/ctx"));
+        }});
+
+        final WicketUrlTemplateFunctionProviderImpl func = new WicketUrlTemplateFunctionProviderImpl(util, "one");
+
+        assertEquals("/ctx", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("/ctx", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("/ctx/one/1", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("/ctx/one/1", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("/ctx/one/1/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("/ctx/one/1/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+
+    }
+
+    @Test
+    public void doActionOneParamRoot() throws Exception {
+
+        final HttpServletRequest rq = this.context.mock(HttpServletRequest.class);
+
+        final WicketUtil util = new WicketUtil() {
+            @Override
+            public HttpServletRequest getHttpServletRequest() {
+                return rq;
+            }
+        };
+
+        this.context.checking(new Expectations() {{
+            allowing(rq).getContextPath(); will(returnValue(""));
+        }});
+
+        final WicketUrlTemplateFunctionProviderImpl func = new WicketUrlTemplateFunctionProviderImpl(util, "one");
+
+        assertEquals("/", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("/", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("/one/1", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("/one/1", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("/one/1/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("/one/1/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+
+    }
+
+    @Test
+    public void doActionTwoParamsCtx() throws Exception {
+
+        final HttpServletRequest rq = this.context.mock(HttpServletRequest.class);
+
+        final WicketUtil util = new WicketUtil() {
+            @Override
+            public HttpServletRequest getHttpServletRequest() {
+                return rq;
+            }
+        };
+
+        this.context.checking(new Expectations() {{
+            allowing(rq).getContextPath(); will(returnValue("/ctx"));
+        }});
+
+        final WicketUrlTemplateFunctionProviderImpl func = new WicketUrlTemplateFunctionProviderImpl(util, "one", "two");
+
+        assertEquals("/ctx", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("/ctx", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("/ctx", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("/ctx", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("/ctx/one/1/two/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("/ctx/one/1/two/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
+
+    }
+
+    @Test
+    public void doActionTwoParamsRoot() throws Exception {
+
+        final HttpServletRequest rq = this.context.mock(HttpServletRequest.class);
+
+        final WicketUtil util = new WicketUtil() {
+            @Override
+            public HttpServletRequest getHttpServletRequest() {
+                return rq;
+            }
+        };
+
+        this.context.checking(new Expectations() {{
+            allowing(rq).getContextPath(); will(returnValue(""));
+        }});
+
+        final WicketUrlTemplateFunctionProviderImpl func = new WicketUrlTemplateFunctionProviderImpl(util, "one", "two");
+
+        assertEquals("/", func.doAction(null, "en", Collections.emptyMap()));
+        assertEquals("/", func.doAction("", "en", Collections.emptyMap()));
+        assertEquals("/", func.doAction("1", "en", Collections.emptyMap()));
+        assertEquals("/", func.doAction(Collections.singleton("1"), "en", Collections.emptyMap()));
+        assertEquals("/one/1/two/2", func.doAction(Arrays.asList("1", "2"), "en", Collections.emptyMap()));
+        assertEquals("/one/1/two/2/3", func.doAction(Arrays.asList("1", "2", "3"), "en", Collections.emptyMap()));
 
     }
 
