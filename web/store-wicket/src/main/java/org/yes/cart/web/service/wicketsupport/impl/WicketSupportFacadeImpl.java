@@ -21,6 +21,7 @@ import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.utils.HttpUtil;
 import org.yes.cart.web.utils.WicketUtil;
 
 /**
@@ -46,9 +47,21 @@ public class WicketSupportFacadeImpl implements WicketSupportFacade {
 
         this.templateSupport.registerFunction("contentURL", new WicketUrlTemplateFunctionProviderImpl(this.wicketUtil, WebParametersKeys.CONTENT_ID));
         this.templateSupport.registerFunction("categoryURL", new WicketUrlTemplateFunctionProviderImpl(this.wicketUtil, WebParametersKeys.CATEGORY_ID));
-        this.templateSupport.registerFunction("productURL", new WicketUrlTemplateFunctionProviderImpl(this.wicketUtil, WebParametersKeys.PRODUCT_ID));
-        this.templateSupport.registerFunction("skuURL", new WicketUrlTemplateFunctionProviderImpl(this.wicketUtil, WebParametersKeys.SKU_ID));
+        this.templateSupport.registerFunction("productURL", new WicketUrlTemplateFunctionProviderImpl(this.wicketUtil, WebParametersKeys.FULFILMENT_CENTRE_ID, WebParametersKeys.PRODUCT_ID));
+        this.templateSupport.registerFunction("skuURL", new WicketUrlTemplateFunctionProviderImpl(this.wicketUtil, WebParametersKeys.FULFILMENT_CENTRE_ID, WebParametersKeys.SKU_ID));
         this.templateSupport.registerFunction("URL", new WicketUrlTemplateFunctionProviderImpl(this.wicketUtil));
+        this.templateSupport.registerFunction("encodeURI", new TemplateProcessor.FunctionProvider() {
+            @Override
+            public Object doAction(final Object... params) {
+                return HttpUtil.encodeUtf8UriParam(String.valueOf(params[0]));
+            }
+        });
+        this.templateSupport.registerFunction("decodeURI", new TemplateProcessor.FunctionProvider() {
+            @Override
+            public Object doAction(final Object... params) {
+                return HttpUtil.decodeUtf8UriParam(String.valueOf(params[0]));
+            }
+        });
 
     }
 

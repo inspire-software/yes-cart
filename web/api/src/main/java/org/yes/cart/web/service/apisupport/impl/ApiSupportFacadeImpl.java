@@ -20,6 +20,7 @@ import org.yes.cart.service.theme.templates.TemplateProcessor;
 import org.yes.cart.utils.RuntimeConstants;
 import org.yes.cart.web.service.apisupport.ApiSupportFacade;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.utils.HttpUtil;
 
 /**
  * User: denispavlov
@@ -39,9 +40,21 @@ public class ApiSupportFacadeImpl implements ApiSupportFacade {
 
         this.templateSupport.registerFunction("contentURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.CONTENT_ID));
         this.templateSupport.registerFunction("categoryURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.CATEGORY_ID));
-        this.templateSupport.registerFunction("productURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.PRODUCT_ID));
-        this.templateSupport.registerFunction("skuURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.SKU_ID));
+        this.templateSupport.registerFunction("productURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.FULFILMENT_CENTRE_ID, WebParametersKeys.PRODUCT_ID));
+        this.templateSupport.registerFunction("skuURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.FULFILMENT_CENTRE_ID, WebParametersKeys.SKU_ID));
         this.templateSupport.registerFunction("URL", new ApiUrlTemplateFunctionProviderImpl());
+        this.templateSupport.registerFunction("encodeURI", new TemplateProcessor.FunctionProvider() {
+            @Override
+            public Object doAction(final Object... params) {
+                return HttpUtil.encodeUtf8UriParam(String.valueOf(params[0]));
+            }
+        });
+        this.templateSupport.registerFunction("decodeURI", new TemplateProcessor.FunctionProvider() {
+            @Override
+            public Object doAction(final Object... params) {
+                return HttpUtil.decodeUtf8UriParam(String.valueOf(params[0]));
+            }
+        });
 
     }
 }
