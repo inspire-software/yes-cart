@@ -114,6 +114,17 @@ public class AttrValueAndAttributeRO implements Serializable {
         this.attribute.setAttributeId(attributeId);
     }
 
+    @XmlAttribute(name = "attribute-type")
+    public String getAttributeType() {
+        initAttribute();
+        return attribute.getEtype();
+    }
+
+    public void setAttribute(final String type) {
+        initAttribute();
+        this.attribute.setEtype(type);
+    }
+
     @XmlAttribute(name = "attribute-code")
     public String getAttributeCode() {
         initAttribute();

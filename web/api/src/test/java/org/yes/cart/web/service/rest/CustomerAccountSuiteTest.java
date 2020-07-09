@@ -98,6 +98,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("custom")))
                 .andExpect(content().string(StringContains.containsString("firstname")))
+                .andExpect(content().string(StringContains.containsString("attributeType\":\"String")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
 
