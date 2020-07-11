@@ -154,7 +154,7 @@ export class ShippingService {
 
     let body = JSON.stringify(filter);
 
-    return this.http.post(this._serviceBaseUrl + '/shipping/carriersla/search', body,
+    return this.http.post(this._serviceBaseUrl + '/shipping/carrierslas/search', body,
         Util.requestOptions())
       .map(res => <SearchResultVO<CarrierSlaInfoVO>> this.json(res))
       .catch(this.handleError);
