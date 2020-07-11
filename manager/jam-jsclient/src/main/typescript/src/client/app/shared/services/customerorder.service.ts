@@ -109,7 +109,7 @@ export class CustomerOrderService {
    */
   exportOrder(lang:string, orderId:number, doExport:boolean) {
 
-    return this.http.post(this._serviceBaseUrl + '/' + orderId + '/orderexport?lang=' + lang + '&export=' + doExport + '/', null, Util.requestOptions())
+    return this.http.post(this._serviceBaseUrl + '/' + orderId + '/orderexport?lang=' + lang + '&export=' + doExport, null, Util.requestOptions())
       .map(res => <CustomerOrderVO> this.json(res))
       .catch(this.handleError);
   }
