@@ -395,12 +395,12 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
                         newDefaultModel("AUDITEXPORT")
                 );
 
-                customerOrder.putValue("ORDER_MANAGER_NAME",
+                customerOrder.putValue(AttributeNamesKeys.Cart.ORDER_MANAGER_NAME,
                         shoppingCart.getShoppingContext().getManagerName(),
                         new NonI18NModel(shoppingCart.getShoppingContext().getManagerName())
                 );
 
-                customerOrder.putValue("ORDER_MANAGER_EMAIL",
+                customerOrder.putValue(AttributeNamesKeys.Cart.ORDER_MANAGER_EMAIL,
                         shoppingCart.getShoppingContext().getManagerName(),
                         new NonI18NModel(shoppingCart.getShoppingContext().getManagerName())
                 );
@@ -592,6 +592,22 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
          */
         final ProductSku sku = productSkuService.getProductSkuBySkuCode(item.getProductSkuCode());
         if (sku != null && !temp) {
+
+            if (StringUtils.isNotBlank(sku.getSupplierCode())) {
+                customerOrderDet.putValue(
+                        AttributeNamesKeys.Cart.ORDER_LINE_EXTERNAL_SKU,
+                        sku.getSupplierCode(),
+                        new StringI18NModel("SUPPLIER")
+                );
+            }
+            if (StringUtils.isNotBlank(sku.getSupplierCatalogCode())) {
+                customerOrderDet.putValue(
+                        AttributeNamesKeys.Cart.ORDER_LINE_EXTERNAL_CATALOG,
+                        sku.getSupplierCatalogCode(),
+                        new StringI18NModel("SUPPLIER")
+                );
+            }
+
             // stored attributes are configured per customer group
             final List<String> storedAttributes = customerOrder.getShop().getProductStoredAttributesAsList();
             if (CollectionUtils.isNotEmpty(storedAttributes)) {
@@ -664,7 +680,7 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
             if (price != null && price.getSkuPriceId() > 0L) {
                 final BigDecimal cost = MoneyUtils.secondOrFirst(price.getSalePriceForCalculation());
                 customerOrderDet.putValue(
-                        "ItemCostPrice",
+                        AttributeNamesKeys.Cart.ORDER_LINE_COST_PRICE,
                         cost.toPlainString(),
                         new StringI18NModel("SUPPLIER")
                 );
@@ -674,7 +690,7 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
             final String priceRefVal = shoppingCart.getOrderInfo().getDetailByKey(priceRef);
             if (StringUtils.isNotBlank(priceRefVal)) {
                 customerOrderDet.putValue(
-                        "ItemPriceRef",
+                        AttributeNamesKeys.Cart.ORDER_LINE_PRICE_REF,
                         priceRefVal,
                         new StringI18NModel("SUPPLIER")
                 );

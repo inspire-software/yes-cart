@@ -969,6 +969,14 @@ public interface AttributeNamesKeys {
         String ORDER_INFO_MANAGER_LOGIN_ON = "managerLoginOnBehalfEnabled";
         String ORDER_INFO_MANAGER_CREATE_MANAGED_LISTS_ON = "managerCreateManagedListsEnabled";
 
+        String ORDER_MANAGER_NAME = "ORDER_MANAGER_NAME";
+        String ORDER_MANAGER_EMAIL = "ORDER_MANAGER_EMAIL";
+
+        String ORDER_LINE_EXTERNAL_SKU = "ExternalSKU";
+        String ORDER_LINE_EXTERNAL_CATALOG = "ExternalCatalog";
+        String ORDER_LINE_COST_PRICE = "ItemCostPrice";
+        String ORDER_LINE_PRICE_REF = "ItemPriceRef";
+
     }
 
 }

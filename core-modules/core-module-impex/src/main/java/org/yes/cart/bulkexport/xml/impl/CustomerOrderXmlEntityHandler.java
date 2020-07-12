@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -172,7 +173,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
                         .tagCdata("remarks", item.getDeliveryRemarks())
                     .end();
 
-                final Pair<String, I18NModel> cost = item.getValue("ItemCostPrice");
+                final Pair<String, I18NModel> cost = item.getValue(AttributeNamesKeys.Cart.ORDER_LINE_COST_PRICE);
 
                 if (cost != null) {
 
@@ -307,7 +308,7 @@ public class CustomerOrderXmlEntityHandler extends AbstractXmlEntityHandler<Cust
                                 .tagCdata("remarks", item.getDeliveryRemarks())
                             .end();
 
-                    final Pair<String, I18NModel> cost = item.getValue("ItemCostPrice");
+                    final Pair<String, I18NModel> cost = item.getValue(AttributeNamesKeys.Cart.ORDER_LINE_COST_PRICE);
 
                     if (cost != null) {
 

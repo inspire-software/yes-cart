@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -327,7 +328,7 @@ public class SalesByCategoryArrayReportWorker implements ReportWorker {
 
     private BigDecimal[] calculateCounters(final CustomerOrderDet detail) {
 
-        final Pair<String, I18NModel> cost = detail.getValue("ItemCostPrice");
+        final Pair<String, I18NModel> cost = detail.getValue(AttributeNamesKeys.Cart.ORDER_LINE_COST_PRICE);
         BigDecimal lineCost = BigDecimal.ZERO;
         if (cost != null) {
             lineCost = new BigDecimal(cost.getFirst()).multiply(detail.getQty());

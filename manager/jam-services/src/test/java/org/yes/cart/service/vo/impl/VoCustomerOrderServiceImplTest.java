@@ -18,6 +18,7 @@ package org.yes.cart.service.vo.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.vo.VoCustomerOrderService;
@@ -62,7 +63,7 @@ public class VoCustomerOrderServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("CC_TEST1", line.getSkuCode());
         assertNotNull(line.getAllValues());
         final VoAttrValue customVal =
-                line.getAllValues().stream().filter(val -> val.getAttribute().getCode().equals("ItemCostPrice")).findFirst().get();
+                line.getAllValues().stream().filter(val -> val.getAttribute().getCode().equals(AttributeNamesKeys.Cart.ORDER_LINE_COST_PRICE)).findFirst().get();
         assertEquals("190.99", customVal.getVal());
         assertEquals(I18NModel.DEFAULT, customVal.getDisplayVals().get(0).getFirst());
         assertEquals("SUPPLIER", customVal.getDisplayVals().get(0).getSecond());

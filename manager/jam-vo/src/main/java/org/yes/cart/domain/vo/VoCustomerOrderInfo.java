@@ -18,6 +18,7 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.utils.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -572,10 +573,10 @@ public class VoCustomerOrderInfo {
     private void remapOrderValues() {
         if (this.allValues != null) {
             for (final VoAttrValue av : this.allValues) {
-                if ("ORDER_MANAGER_NAME".equals(av.getAttribute().getCode())) {
+                if (AttributeNamesKeys.Cart.ORDER_MANAGER_NAME.equals(av.getAttribute().getCode())) {
                     this.managerName = av.getVal();
                     this.managedOrder = true;
-                } else if ("ORDER_MANAGER_EMAIL".equals(av.getAttribute().getCode())) {
+                } else if (AttributeNamesKeys.Cart.ORDER_MANAGER_EMAIL.equals(av.getAttribute().getCode())) {
                     this.managerEmail = av.getVal();
                     this.managedOrder = true;
                 }
