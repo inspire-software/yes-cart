@@ -626,16 +626,7 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
                                     withFc.setFulfilmentCentreCode(code);
                                     withFc.setCreatedTimestamp(stock.getCreatedTimestamp());
                                     withFc.setUpdatedTimestamp(stock.getUpdatedTimestamp());
-                                    if (stock.getTag() != null) {
-                                        final Set<String> uniqueTags = new TreeSet<>();
-                                        if (entity.getTag() != null) {
-                                            Collections.addAll(uniqueTags, StringUtils.split(entity.getTag(), ' '));
-                                        }
-                                        if (stock.getTag() != null) {
-                                            Collections.addAll(uniqueTags, StringUtils.split(stock.getTag(), ' '));
-                                        }
-                                        withFc.setTag(StringUtils.join(uniqueTags, ' '));
-                                    }
+                                    withFc.setTag(joinTags(entity.getTag(), stock.getTag()));
 
                                     resultsByFc.put(code, withFc);
                                     availableIn.put(withFc, new HashSet<>());
@@ -679,6 +670,25 @@ public class ProductSkuLuceneDocumentAdapter implements LuceneDocumentAdapter<Pr
     LocalDateTime now() {
         return TimeContext.getLocalDateTime();
     }
+
+
+    private String joinTags(String ... tags) {
+        Set<String> uniqueTags = null;
+        for (final String tag : tags) {
+            if (StringUtils.isNotBlank(tag)) {
+                if (uniqueTags == null) {
+                    uniqueTags = new TreeSet<>();
+                }
+                Collections.addAll(uniqueTags, StringUtils.split(tag, ' '));
+            }
+        }
+        if (CollectionUtils.isEmpty(uniqueTags)) {
+            return null;
+        }
+        return StringUtils.join(uniqueTags, ' ');
+    }
+
+
 
     /**
      * Check is product need to be in index.

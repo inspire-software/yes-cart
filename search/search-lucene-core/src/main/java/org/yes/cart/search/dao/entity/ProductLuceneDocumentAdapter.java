@@ -174,7 +174,7 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
 
                     final Set<String> uniqueTags = new TreeSet<>();
                     if (result.getTag() != null) {
-                        Collections.addAll(uniqueTags, StringUtils.split(entity.getTag(), ' '));
+                        Collections.addAll(uniqueTags, StringUtils.split(result.getTag(), ' '));
                     }
                     if (result.getBaseSkus() != null) {
                         for (final ProductSkuSearchResultDTO sku : result.getBaseSkus().values()) {
@@ -853,39 +853,19 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
                                         withFc.setUpdatedTimestamp(stock.getUpdatedTimestamp());
                                         withFc.setBaseSkus(new HashMap<>());
                                         withFc.setSearchSkus(new ArrayList<>());
-                                        if (sku.getTag() != null || stock.getTag() != null) {
-                                            final Set<String> uniqueTags = new TreeSet<>();
-                                            if (entity.getTag() != null) {
-                                                Collections.addAll(uniqueTags, StringUtils.split(entity.getTag(), ' '));
-                                            }
-                                            if (sku.getTag() != null) {
-                                                Collections.addAll(uniqueTags, StringUtils.split(sku.getTag(), ' '));
-                                            }
-                                            if (stock.getTag() != null) {
-                                                Collections.addAll(uniqueTags, StringUtils.split(stock.getTag(), ' '));
-                                            }
-                                            withFc.setTag(StringUtils.join(uniqueTags, ' '));
-                                        }
-
                                         resultsByFc.put(code, withFc);
                                         availableIn.put(withFc, new HashSet<>());
+
                                     }
+
                                     final Set<Long> withFcAvailableIn = availableIn.get(withFc);
 
                                     final BigDecimal atsAdd = MoneyUtils.isPositive(ats) ? ats : BigDecimal.ZERO;
 
                                     final ProductSkuSearchResultDTOImpl withFcSku = createSKUResultObject(sku, stock);
                                     withFcSku.setFulfilmentCentreCode(code);
-                                    if (stock.getTag() != null) {
-                                        final Set<String> uniqueTags = new TreeSet<>();
-                                        if (entity.getTag() != null) {
-                                            Collections.addAll(uniqueTags, StringUtils.split(entity.getTag(), ' '));
-                                        }
-                                        if (stock.getTag() != null) {
-                                            Collections.addAll(uniqueTags, StringUtils.split(stock.getTag(), ' '));
-                                        }
-                                        withFc.setTag(StringUtils.join(uniqueTags, ' '));
-                                    }
+
+                                    withFc.setTag(joinTags(entity.getTag(), sku.getTag(), stock.getTag()));
 
                                     // Populate both base and search SKU when indexing as some values are dynamic
                                     // and search result dependent
@@ -1008,6 +988,21 @@ public class ProductLuceneDocumentAdapter implements LuceneDocumentAdapter<Produ
         return baseResult;
     }
 
+    private String joinTags(String ... tags) {
+        Set<String> uniqueTags = null;
+        for (final String tag : tags) {
+            if (StringUtils.isNotBlank(tag)) {
+                if (uniqueTags == null) {
+                    uniqueTags = new TreeSet<>();
+                }
+                Collections.addAll(uniqueTags, StringUtils.split(tag, ' '));
+            }
+        }
+        if (CollectionUtils.isEmpty(uniqueTags)) {
+            return null;
+        }
+        return StringUtils.join(uniqueTags, ' ');
+    }
 
 
 
