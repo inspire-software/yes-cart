@@ -37,6 +37,13 @@ public interface OrderDeliveryStatusUpdate {
     String getOrderNumber();
 
     /**
+     * Our order number.
+     *
+     * @return order number
+     */
+    String getDeliveryNumber();
+
+    /**
      * Get supplier code for this order.
      *
      * @return supplier code

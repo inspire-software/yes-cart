@@ -31,6 +31,7 @@ import java.util.Map;
 public class OrderDeliveryStatusUpdateImpl implements OrderDeliveryStatusUpdate {
 
     private final String orderNumber;
+    private final String deliveryNumber;
     private final String supplierCode;
     private final List<OrderDeliveryLineStatusUpdate> lineStatus;
     private final Map<String, Pair<String, I18NModel>> additionalData = new HashMap<>();
@@ -38,24 +39,38 @@ public class OrderDeliveryStatusUpdateImpl implements OrderDeliveryStatusUpdate 
     public OrderDeliveryStatusUpdateImpl(final String orderNumber,
                                          final String supplierCode,
                                          final List<OrderDeliveryLineStatusUpdate> lineStatus) {
-        this.orderNumber = orderNumber;
-        this.supplierCode = supplierCode;
-        this.lineStatus = lineStatus;
+        this(orderNumber, null, supplierCode, lineStatus, null);
     }
 
     public OrderDeliveryStatusUpdateImpl(final String orderNumber,
                                          final String supplierCode,
                                          final List<OrderDeliveryLineStatusUpdate> lineStatus,
                                          final Map<String, Pair<String, I18NModel>> additionalData) {
+        this(orderNumber, null, supplierCode, lineStatus, additionalData);
+    }
+
+    public OrderDeliveryStatusUpdateImpl(final String orderNumber,
+                                         final String deliveryNumber,
+                                         final String supplierCode,
+                                         final List<OrderDeliveryLineStatusUpdate> lineStatus,
+                                         final Map<String, Pair<String, I18NModel>> additionalData) {
         this.orderNumber = orderNumber;
+        this.deliveryNumber = deliveryNumber;
         this.supplierCode = supplierCode;
         this.lineStatus = lineStatus;
-        this.additionalData.putAll(additionalData);
+        if (additionalData != null) {
+            this.additionalData.putAll(additionalData);
+        }
     }
 
     @Override
     public String getOrderNumber() {
         return orderNumber;
+    }
+
+    @Override
+    public String getDeliveryNumber() {
+        return deliveryNumber;
     }
 
     @Override
@@ -77,6 +92,7 @@ public class OrderDeliveryStatusUpdateImpl implements OrderDeliveryStatusUpdate 
     public String toString() {
         return "OrderDeliveryStatusUpdateImpl{" +
                 "orderNumber='" + orderNumber + '\'' +
+                ", deliveryNumber='" + deliveryNumber + '\'' +
                 ", supplierCode='" + supplierCode + '\'' +
                 ", lineStatus=" + lineStatus +
                 '}';

@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl.handler.delivery;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +34,12 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.InventoryResolver;
+import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.log.Markers;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -108,15 +108,15 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
             if (update != null) {
 
                 final Map<Long, OrderDeliveryLineStatusUpdate> detailsByPk = new HashMap<>();
-                final Map<String, OrderDeliveryLineStatusUpdate> detailsBySKU = new HashMap<>();
+                final Map<String, List<OrderDeliveryLineStatusUpdate>> detailsBySKU = new HashMap<>();
 
                 for (final OrderDeliveryLineStatusUpdate lineUpdate : update.getLineStatus()) {
 
                     if (lineUpdate.getOrderLineRef() != null) {
                         detailsByPk.put(lineUpdate.getOrderLineRef(), lineUpdate);
-                    }
-                    if (lineUpdate.getSKU() != null) {
-                        detailsBySKU.put(lineUpdate.getSKU(), lineUpdate);
+                    } else if (lineUpdate.getSKU() != null) {
+                        final List<OrderDeliveryLineStatusUpdate> skuUpdates = detailsBySKU.computeIfAbsent(lineUpdate.getSKU(), k -> new ArrayList<>());
+                        skuUpdates.add(lineUpdate);
                     }
 
                 }
@@ -147,97 +147,126 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
 
                     boolean allItemsDeliveredOrRejected = true;
 
-                    // Apply updates to lines and work out estimated delivery time
-                    for (final CustomerOrderDeliveryDet detail : delivery.getDetail()) {
+                    final String deliveryNumber = update.getDeliveryNumber();
 
-                        OrderDeliveryLineStatusUpdate lineUpdate = detailsByPk.get(detail.getCustomerOrderDeliveryDetId());
-                        if (lineUpdate == null) {
-                            if (detail.getSupplierCode().equals(update.getSupplierCode())) {
-                                lineUpdate = detailsBySKU.get(detail.getProductSkuCode());
-                            }
-                        }
+                    if (deliveryNumber == null || deliveryNumber.equals(delivery.getDeliveryNum())) {
+                        // Apply updates to lines and work out estimated delivery time
+                        for (final CustomerOrderDeliveryDet detail : delivery.getDetail()) {
 
-                        if (lineUpdate != null) {
-
-                            if (lineUpdate.getDeliveryConfirmed() != null) {
-                                detail.setDeliveryConfirmed(lineUpdate.getDeliveryConfirmed());
-                            } else {
-                                if (lineUpdate.getDeliveryEstimatedMin() != null) {
-                                    detail.setDeliveryEstimatedMin(lineUpdate.getDeliveryEstimatedMin());
-                                }
-                                if (lineUpdate.getDeliveryEstimatedMax() != null) {
-                                    detail.setDeliveryEstimatedMax(lineUpdate.getDeliveryEstimatedMax());
-                                }
-                                if (lineUpdate.getDeliveryGuaranteed() != null) {
-                                    detail.setDeliveryGuaranteed(lineUpdate.getDeliveryGuaranteed());
-                                }
-                            }
-
-                            if (StringUtils.isNotBlank(lineUpdate.getOrderDeliveryStatus())) {
-                                detail.setDeliveryRemarks(lineUpdate.getOrderDeliveryStatus());
-                            }
-
-                            if (lineUpdate.isRejected()) {
-                                detail.setDeliveredQuantity(BigDecimal.ZERO);
-                            } else if (lineUpdate.getDeliveredQty() != null) {
-                                detail.setDeliveredQuantity(lineUpdate.getDeliveredQty());
-                            }
-
-                            if (StringUtils.isNotBlank(lineUpdate.getSupplierInvoiceNo())) {
-                                detail.setSupplierInvoiceNo(lineUpdate.getSupplierInvoiceNo());
-                            }
-                            if (lineUpdate.getSupplierInvoiceDate() != null) {
-                                detail.setSupplierInvoiceDate(lineUpdate.getSupplierInvoiceDate());
-                            }
-
-                            if (lineUpdate.getAdditionalData() != null) {
-                                for (final Map.Entry<String, Pair<String, I18NModel>> data : lineUpdate.getAdditionalData().entrySet()) {
-                                    if (data.getValue() != null) {
-                                        detail.putValue(data.getKey(), data.getValue().getFirst(), data.getValue().getSecond());
-                                    } else {
-                                        detail.putValue(data.getKey(), null, null);
+                            // match by line ID
+                            OrderDeliveryLineStatusUpdate lineUpdate = detailsByPk.get(detail.getCustomerOrderDeliveryDetId());
+                            if (lineUpdate == null) {
+                                // otherwise, if supplier is matching
+                                if (detail.getSupplierCode().equals(update.getSupplierCode())) {
+                                    // check candidate line updates by SKU
+                                    final List<OrderDeliveryLineStatusUpdate> candidates = detailsBySKU.get(detail.getProductSkuCode());
+                                    if (CollectionUtils.isNotEmpty(candidates)) {
+                                        for (final OrderDeliveryLineStatusUpdate candidate : candidates) {
+                                            // soft select candidate if ordered quantity is undetermined
+                                            if (candidate.getOrderedQty() == null && lineUpdate == null) {
+                                                lineUpdate = candidate;
+                                            } else if (MoneyUtils.isFirstEqualToSecond(candidate.getOrderedQty(), detail.getQty())) {
+                                                // or if we have quantity match the we pick this line
+                                                lineUpdate = candidate;
+                                                break;
+                                            }
+                                        }
+                                        if (lineUpdate != null) {
+                                            // remove matched line update from available updates list
+                                            candidates.remove(lineUpdate);
+                                            if (candidates.isEmpty()) {
+                                                detailsBySKU.remove(detail.getProductSkuCode());
+                                            }
+                                        }
                                     }
                                 }
+                            } else {
+                                // this update is only for this line, remove it from available updates
+                                detailsByPk.remove(detail.getCustomerOrderDeliveryDetId());
                             }
 
-                        } else {
+                            if (lineUpdate != null) {
 
-                            // No estimates and not delivery info
-                            if (detail.getDeliveryEstimatedMin() == null &&
-                                    detail.getDeliveryEstimatedMax() == null &&
-                                    detail.getDeliveryGuaranteed() == null &&
-                                    detail.getDeliveryConfirmed() == null &&
-                                    detail.getDeliveredQuantity() == null) {
+                                if (lineUpdate.getDeliveryConfirmed() != null) {
+                                    detail.setDeliveryConfirmed(lineUpdate.getDeliveryConfirmed());
+                                } else {
+                                    if (lineUpdate.getDeliveryEstimatedMin() != null) {
+                                        detail.setDeliveryEstimatedMin(lineUpdate.getDeliveryEstimatedMin());
+                                    }
+                                    if (lineUpdate.getDeliveryEstimatedMax() != null) {
+                                        detail.setDeliveryEstimatedMax(lineUpdate.getDeliveryEstimatedMax());
+                                    }
+                                    if (lineUpdate.getDeliveryGuaranteed() != null) {
+                                        detail.setDeliveryGuaranteed(lineUpdate.getDeliveryGuaranteed());
+                                    }
+                                }
 
-                                atLeastOneItemIsNotUpdated = true;
+                                if (StringUtils.isNotBlank(lineUpdate.getOrderDeliveryStatus())) {
+                                    detail.setDeliveryRemarks(lineUpdate.getOrderDeliveryStatus());
+                                }
+
+                                if (lineUpdate.isRejected()) {
+                                    detail.setDeliveredQuantity(BigDecimal.ZERO);
+                                } else if (lineUpdate.getDeliveredQty() != null) {
+                                    detail.setDeliveredQuantity(lineUpdate.getDeliveredQty());
+                                }
+
+                                if (StringUtils.isNotBlank(lineUpdate.getSupplierInvoiceNo())) {
+                                    detail.setSupplierInvoiceNo(lineUpdate.getSupplierInvoiceNo());
+                                }
+                                if (lineUpdate.getSupplierInvoiceDate() != null) {
+                                    detail.setSupplierInvoiceDate(lineUpdate.getSupplierInvoiceDate());
+                                }
+
+                                if (lineUpdate.getAdditionalData() != null) {
+                                    for (final Map.Entry<String, Pair<String, I18NModel>> data : lineUpdate.getAdditionalData().entrySet()) {
+                                        if (data.getValue() != null) {
+                                            detail.putValue(data.getKey(), data.getValue().getFirst(), data.getValue().getSecond());
+                                        } else {
+                                            detail.putValue(data.getKey(), null, null);
+                                        }
+                                    }
+                                }
+
+                            } else {
+
+                                // No estimates and no delivery info
+                                if (detail.getDeliveryEstimatedMin() == null &&
+                                        detail.getDeliveryEstimatedMax() == null &&
+                                        detail.getDeliveryGuaranteed() == null &&
+                                        detail.getDeliveryConfirmed() == null &&
+                                        detail.getDeliveredQuantity() == null) {
+
+                                    atLeastOneItemIsNotUpdated = true;
+
+                                }
 
                             }
 
+                            estimatedMin = chooseLatestDate(estimatedMin, detail.getDeliveryEstimatedMin());
+                            estimatedMax = chooseLatestDate(estimatedMax, detail.getDeliveryEstimatedMax());
+
+                            if (guaranteed != null) {
+                                notGuaranteed = !guaranteed.equals(detail.getDeliveryGuaranteed());
+                            }
+
+                            if (notGuaranteed) {
+                                estimatedMin = chooseLatestDate(estimatedMin, guaranteed);
+                                estimatedMax = chooseLatestDate(estimatedMax, guaranteed);
+                            } else {
+                                guaranteed = chooseLatestDate(guaranteed, detail.getDeliveryGuaranteed());
+                            }
+
+                            confirmed = chooseLatestDate(confirmed, detail.getDeliveryConfirmed());
+
+                            if (detail.getDeliveredQuantity() == null) {
+                                // All items MUST have confirmed quantity, which will allow this delivery to progress to
+                                // SHIPPED, otherwise we keep it in packing (and if need be, this can be progressed manually
+                                // from admin app)
+                                allItemsDeliveredOrRejected = false;
+                            }
+
                         }
-
-                        estimatedMin = chooseLatestDate(estimatedMin, detail.getDeliveryEstimatedMin());
-                        estimatedMax = chooseLatestDate(estimatedMax, detail.getDeliveryEstimatedMax());
-
-                        if (guaranteed != null) {
-                            notGuaranteed = !guaranteed.equals(detail.getDeliveryGuaranteed());
-                        }
-
-                        if (notGuaranteed) {
-                            estimatedMin = chooseLatestDate(estimatedMin, guaranteed);
-                            estimatedMax = chooseLatestDate(estimatedMax, guaranteed);
-                        } else {
-                            guaranteed = chooseLatestDate(guaranteed, detail.getDeliveryGuaranteed());
-                        }
-
-                        confirmed = chooseLatestDate(confirmed, detail.getDeliveryConfirmed());
-
-                        if (detail.getDeliveredQuantity() == null) {
-                            // All items MUST have confirmed quantity, which will allow this delivery to progress to
-                            // SHIPPED, otherwise we keep it in packing (and it need be, this can be progressed manually
-                            // from admin app)
-                            allItemsDeliveredOrRejected = false;
-                        }
-
                     }
 
                     if (estimatedMin != null || estimatedMax != null) {
@@ -331,6 +360,13 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                         // ELSE for all other statuses we only update the line statuses and wait until all lines have them
                     }
 
+                }
+
+                if (!detailsByPk.isEmpty()) {
+                    LOG.error(Markers.alert(), "Not all line specific updates could be processed: {}", detailsByPk);
+                }
+                if (!detailsBySKU.isEmpty()) {
+                    LOG.error(Markers.alert(), "Not all SKU updates could be processed: {}", detailsBySKU);
                 }
 
                 LOG.info("Finished delivery update for order {}, status {}:\n{}",
