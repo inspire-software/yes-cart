@@ -1073,34 +1073,34 @@ public class AuthenticationController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO resetPassword(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @ApiParam(value = "Email") @RequestParam(value = "email", required = false) String email,
-                                                              final @ApiParam(value = "Authentication token to authorise new password") @RequestParam(value = "authToken", required = false) String authToken,
-                                                              final @ApiParam(value = "New password") @RequestParam(value = "newPassword", required = false) String newPassword,
-                                                              final HttpServletRequest request,
-                                                              final HttpServletResponse response) {
+    public @ResponseBody CodedResultRO resetPassword(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                     final @ApiParam(value = "Email") @RequestParam(value = "email", required = false) String email,
+                                                     final @ApiParam(value = "Authentication token to authorise new password") @RequestParam(value = "authToken", required = false) String authToken,
+                                                     final @ApiParam(value = "New password") @RequestParam(value = "newPassword", required = false) String newPassword,
+                                                     final HttpServletRequest request,
+                                                     final HttpServletResponse response) {
 
         cartMixin.persistShoppingCart(request, response);
 
         if (StringUtils.isNotBlank(authToken)) {
 
             if (executePasswordResetCommand(authToken, newPassword)) {
-                return new AuthenticationResultRO();
+                return new CodedResultRO();
             }
-            return new AuthenticationResultRO("INVALID_TOKEN");
+            return new CodedResultRO("INVALID_TOKEN");
 
         } else if (StringUtils.isNotBlank(email)) {
 
             final Shop shop = cartMixin.getCurrentShop();
             final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), email);
             if (customer == null) {
-                return new AuthenticationResultRO("INVALID_EMAIL");
+                return new CodedResultRO("INVALID_EMAIL");
             }
             customerServiceFacade.resetPassword(shop, customer);
-            return new AuthenticationResultRO();
+            return new CodedResultRO();
 
         }
-        return new AuthenticationResultRO("INVALID_PARAMETERS");
+        return new CodedResultRO("INVALID_PARAMETERS");
     }
 
 
@@ -1181,20 +1181,20 @@ public class AuthenticationController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AuthenticationResultRO deleteAccount(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @ApiParam(value = "Authentication token to authorise account removal") @RequestParam(value = "authToken", required = false) String authToken,
-                                                              final @ApiParam(value = "Current password") @RequestParam(value = "password", required = false) String password,
-                                                              final HttpServletRequest request,
-                                                              final HttpServletResponse response) {
+    public @ResponseBody CodedResultRO deleteAccount(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                     final @ApiParam(value = "Authentication token to authorise account removal") @RequestParam(value = "authToken", required = false) String authToken,
+                                                     final @ApiParam(value = "Current password") @RequestParam(value = "password", required = false) String password,
+                                                     final HttpServletRequest request,
+                                                     final HttpServletResponse response) {
 
         cartMixin.persistShoppingCart(request, response);
 
         if (StringUtils.isNotBlank(authToken)) {
 
             if (executeDeleteAccountCommand(authToken, password)) {
-                return new AuthenticationResultRO();
+                return new CodedResultRO();
             }
-            return new AuthenticationResultRO("INVALID_TOKEN");
+            return new CodedResultRO("INVALID_TOKEN");
 
         } else if (check(requestToken, request, response).isAuthenticated()) {
 
@@ -1202,13 +1202,13 @@ public class AuthenticationController {
             final ShoppingCart cart = cartMixin.getCurrentCart();
             final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), cart.getCustomerEmail());
             if (customer == null) {
-                return new AuthenticationResultRO("INVALID_EMAIL");
+                return new CodedResultRO("INVALID_EMAIL");
             }
             customerServiceFacade.deleteAccount(shop, customer);
-            return new AuthenticationResultRO();
+            return new CodedResultRO();
 
         }
-        return new AuthenticationResultRO("INVALID_PARAMETERS");
+        return new CodedResultRO("INVALID_PARAMETERS");
     }
 
 
