@@ -101,6 +101,16 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("attributeType\":\"String")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
+        mockMvc.perform(get("/customer/addressbook/B/form")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("custom\":null")))
+                .andExpect(content().string(StringContains.containsString("addressType\":\"B")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
 
         final String email = "bob.doe@yc-account-json.com";
         final byte[] regBody = toJsonBytesRegistrationDetails(email);
@@ -148,6 +158,19 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString(email)))
                 .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/customer/addressbook/B/form")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("custom\":[")))
+                .andExpect(content().string(StringContains.containsString("\"attributeCode\":\"lastname\"")))
+                .andExpect(content().string(StringContains.containsString("addressType\":\"B")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
 
         mockMvc.perform(get("/customer/addressbook/S")
@@ -404,6 +427,26 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<custom")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
+        mockMvc.perform(get("/auth/register?customerType=B2C")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("custom")))
+                .andExpect(content().string(StringContains.containsString("firstname")))
+                .andExpect(content().string(StringContains.containsString("attribute-type=\"String\"")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+        mockMvc.perform(get("/customer/addressbook/B/form")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_XML)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("<address-form address-type=\"B\"/>")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
 
         final String email = "bob.doe@yc-account-xml.com";
         final byte[] regBody = toJsonBytesRegistrationDetails(email);
@@ -450,6 +493,20 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString(email)))
                 .andExpect(header().string("yc", uuid));
+
+
+
+        mockMvc.perform(get("/customer/addressbook/B/form")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("<custom><")))
+                .andExpect(content().string(StringContains.containsString("attribute-code=\"lastname\"")))
+                .andExpect(content().string(StringContains.containsString("address-type=\"B\"")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
 
         mockMvc.perform(get("/customer/addressbook/S")
