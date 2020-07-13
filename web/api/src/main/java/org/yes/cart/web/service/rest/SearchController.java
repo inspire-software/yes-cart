@@ -528,6 +528,10 @@ public class SearchController {
 
             populateSearchResults(context, result, cart);
 
+        } else {
+
+            populateSearchTotal(context, result);
+
         }
 
         if (search.getIncludeNavigation()) {
@@ -736,6 +740,19 @@ public class SearchController {
         result.setTotalResults(products.getTotalHits());
 
         result.setItems(searchSupportMixin.map(products.getResults(), cart));
+
+    }
+
+    private void populateSearchTotal(final NavigationContext context,
+                                     final SearchResultProductRO result) {
+
+        ProductSearchResultPageDTO products = productServiceFacade.getListProducts(
+                context, 0, result.getSearch().getPageSize(),
+                null, false);
+
+        result.setTotalResults(products.getTotalHits());
+
+        result.setItems(null);
 
     }
 
