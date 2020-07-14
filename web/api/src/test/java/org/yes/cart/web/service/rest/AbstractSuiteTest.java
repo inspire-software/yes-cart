@@ -32,16 +32,13 @@ import org.yes.cart.dao.GenericFTSCapableDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.ro.AddressFormRO;
-import org.yes.cart.domain.ro.AddressRO;
-import org.yes.cart.domain.ro.AttrValueAndAttributeRO;
+import org.yes.cart.domain.ro.AddressUpdateRO;
 import org.yes.cart.domain.ro.RegisterRO;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -195,30 +192,17 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
      */
     protected byte[] toJsonBytesAddressDetails(final String type, final String state, final String country) throws Exception {
 
-        final AddressFormRO address = new AddressFormRO();
+        final AddressUpdateRO address = new AddressUpdateRO();
         address.setAddressType(type);
 
-        final AttrValueAndAttributeRO line1 = new AttrValueAndAttributeRO();
-        line1.setAttributeCode("addrline1");
-        line1.setVal("In the middle of");
+        final Map<String, String> custom = new HashMap<>();
+        custom.put("addrline1", "In the middle of");
+        custom.put("city", "Nowhere");
+        custom.put("postcode", "0001");
+        custom.put("stateCode", state);
+        custom.put("countryCode", country);
 
-        final AttrValueAndAttributeRO city = new AttrValueAndAttributeRO();
-        city.setAttributeCode("city");
-        city.setVal("Nowhere");
-
-        final AttrValueAndAttributeRO postCode = new AttrValueAndAttributeRO();
-        postCode.setAttributeCode("postcode");
-        postCode.setVal("0001");
-
-        final AttrValueAndAttributeRO addrState = new AttrValueAndAttributeRO();
-        addrState.setAttributeCode("stateCode");
-        addrState.setVal(state);
-
-        final AttrValueAndAttributeRO addrCountry = new AttrValueAndAttributeRO();
-        addrCountry.setAttributeCode("countryCode");
-        addrCountry.setVal(country);
-
-        address.setCustom(Arrays.asList(line1, city, addrState, addrCountry, postCode));
+        address.setCustom(custom);
 
         return toJsonBytes(address);
 

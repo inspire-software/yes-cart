@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.groovy.util.ListHashMap;
 import org.slf4j.Logger;
@@ -997,7 +998,7 @@ public class CustomerController {
 
 
 
-    private List<AddressRO> updateAddressbookInternal(final AddressFormRO address) {
+    private List<AddressRO> updateAddressbookInternal(final AddressUpdateRO address) {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final Shop shop = cartMixin.getCurrentShop();
@@ -1015,17 +1016,15 @@ public class CustomerController {
 
         addressEntity.setName(address.getAddressName());
 
-        final Map<String, String> valueByAc = new HashMap<>();
-        for (final AttrValueAndAttributeRO valueRO : address.getCustom()) {
-            valueByAc.put(valueRO.getAttributeCode(), valueRO.getVal());
-        }
-        for (final AttrValueWithAttribute value : addressForm) {
-            try {
-                if (valueByAc.containsKey(value.getAttributeCode())) {
-                    PropertyUtils.setProperty(addressEntity, value.getAttribute().getVal(), valueByAc.get(value.getAttributeCode()));
+        if (MapUtils.isNotEmpty(address.getCustom())) {
+            for (final AttrValueWithAttribute value : addressForm) {
+                try {
+                    if (address.getCustom().containsKey(value.getAttributeCode())) {
+                        PropertyUtils.setProperty(addressEntity, value.getAttribute().getVal(), address.getCustom().get(value.getAttributeCode()));
+                    }
+                } catch (Exception e) {
+                    LOG.error("Unable to set address property for {}, prop {}", value.getAttribute(), value.getAttribute().getVal());
                 }
-            }  catch (Exception e) {
-                LOG.error("Unable to set address property for {}, prop {}", value.getAttribute(), value.getAttribute().getVal());
             }
         }
 
@@ -1139,7 +1138,7 @@ public class CustomerController {
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody List<AddressRO> updateAddressbook(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                           final @ApiParam(value = "Address form") @RequestBody AddressFormRO address,
+                                                           final @ApiParam(value = "Address form") @RequestBody AddressUpdateRO address,
                                                            final HttpServletRequest request,
                                                            final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1248,7 +1247,7 @@ public class CustomerController {
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody AddressListRO updateAddressbookXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                            final @ApiParam(value = "Address form") @RequestBody AddressFormRO address,
+                                                            final @ApiParam(value = "Address form") @RequestBody AddressUpdateRO address,
                                                             final HttpServletRequest request,
                                                             final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
