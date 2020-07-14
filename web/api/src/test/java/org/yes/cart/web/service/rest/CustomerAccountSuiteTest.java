@@ -101,15 +101,12 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("attributeType\":\"String")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/customer/addressbook/B/form")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .locale(locale))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("custom\":null")))
-                .andExpect(content().string(StringContains.containsString("addressType\":\"B")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+        mockMvc.perform(get("/customer/addressbook/B/address")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale))
+                    .andDo(print())
+                .andExpect(status().is(401));
 
 
         final String email = "bob.doe@yc-account-json.com";
@@ -160,7 +157,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        mockMvc.perform(get("/customer/addressbook/B/form")
+        mockMvc.perform(get("/customer/addressbook/B/address")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -204,9 +201,9 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        mockMvc.perform(post("/customer/addressbook/S")
+        mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -250,9 +247,9 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
             .andExpect(header().string("yc", uuid));
 
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        mockMvc.perform(post("/customer/addressbook/B")
+        mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -438,14 +435,12 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("attribute-type=\"String\"")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
-        mockMvc.perform(get("/customer/addressbook/B/form")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_XML)
-                .locale(locale))
+        mockMvc.perform(get("/customer/addressbook/B/address")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<address-form address-type=\"B\"/>")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(status().is(401));
 
 
         final String email = "bob.doe@yc-account-xml.com";
@@ -496,7 +491,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
 
 
 
-        mockMvc.perform(get("/customer/addressbook/B/form")
+        mockMvc.perform(get("/customer/addressbook/B/address")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -540,9 +535,9 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        mockMvc.perform(post("/customer/addressbook/S")
+        mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -586,9 +581,9 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
             .andExpect(header().string("yc", uuid));
 
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        mockMvc.perform(post("/customer/addressbook/B")
+        mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)

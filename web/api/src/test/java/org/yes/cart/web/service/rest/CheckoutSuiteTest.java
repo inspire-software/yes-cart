@@ -108,9 +108,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
             .andExpect(header().string("yc", uuid));
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -136,9 +136,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("UA")))
                 .andExpect(header().string("yc", uuid));
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
@@ -446,9 +446,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
                 .andExpect(header().string("yc", uuid));
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -474,9 +474,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("UA")))
                 .andExpect(header().string("yc", uuid));
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -766,9 +766,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         assertNotNull(uuid, cart);
         assertNull(cart.getCustomerEmail());
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        mockMvc.perform(post("/customer/addressbook/S")
+        mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -788,9 +788,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("[]")))
                 .andExpect(header().string("yc", uuid));
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        mockMvc.perform(post("/customer/addressbook/B")
+        mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1074,9 +1074,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":false")))
                 .andExpect(header().string("yc", uuid));
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1102,9 +1102,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("UA")))
                 .andExpect(header().string("yc", uuid));
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
@@ -1388,9 +1388,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
             .andExpect(header().string("yc", uuid));
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1418,9 +1418,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
@@ -1724,9 +1724,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
                 .andExpect(header().string("yc", uuid));
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -1754,9 +1754,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2041,9 +2041,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
         assertNotNull(uuid, cart);
         assertNull(cart.getCustomerEmail());
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        mockMvc.perform(post("/customer/addressbook/S")
+        mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2064,9 +2064,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        mockMvc.perform(post("/customer/addressbook/B")
+        mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2334,9 +2334,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<authenticated>false</authenticated>")))
                 .andExpect(header().string("yc", uuid));
 
-        final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
+        final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
 
-        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook/S")
+        final MvcResult shipAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
@@ -2364,9 +2364,9 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
 
-        final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
+        final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
 
-        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook/B")
+        final MvcResult billAddress = mockMvc.perform(post("/customer/addressbook")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)

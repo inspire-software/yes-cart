@@ -31,6 +31,8 @@ public class AddressFormRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
+    private Long addressId;
+    private String addressName;
     private String addressType;
     private List<AttrValueAndAttributeRO> custom;
 
@@ -44,6 +46,15 @@ public class AddressFormRO implements Serializable {
         this.custom = custom;
     }
 
+    @XmlAttribute(name = "address-id")
+    public Long getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(final Long addressId) {
+        this.addressId = addressId;
+    }
+
     @XmlAttribute(name = "address-type")
     public String getAddressType() {
         return addressType;
@@ -53,4 +64,12 @@ public class AddressFormRO implements Serializable {
         this.addressType = addressType;
     }
 
+    @XmlAttribute(name = "address-name")
+    public String getAddressName() {
+        return addressName;
+    }
+
+    public void setAddressName(final String addressName) {
+        this.addressName = addressName;
+    }
 }

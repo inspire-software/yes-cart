@@ -120,7 +120,7 @@ public class AttrValueAndAttributeRO implements Serializable {
         return attribute.getEtype();
     }
 
-    public void setAttribute(final String type) {
+    public void setAttributeType(final String type) {
         initAttribute();
         this.attribute.setEtype(type);
     }
@@ -135,6 +135,7 @@ public class AttrValueAndAttributeRO implements Serializable {
         initAttribute();
         this.attributeCode = attributeCode;
     }
+
 
     @XmlElement(name = "attribute-name")
     public String getAttributeName() {
@@ -170,4 +171,53 @@ public class AttrValueAndAttributeRO implements Serializable {
         initAttribute();
         this.attribute.setChoiceData(attributeDisplayChoices);
     }
+
+    @XmlAttribute(name = "attribute-val")
+    public String getAttributeVal() {
+        initAttribute();
+        return attribute.getVal();
+    }
+
+    public void setAttributeVal(final String val) {
+        initAttribute();
+        this.attribute.setVal(val);
+    }
+
+    @XmlAttribute(name = "attribute-mandatory")
+    public boolean isAttributeMandatory() {
+        initAttribute();
+        return attribute.isMandatory();
+    }
+
+    public void setAttributeMandatory(final boolean val) {
+        initAttribute();
+        this.attribute.setMandatory(val);
+    }
+
+
+    @XmlElement(name = "attribute-regexp")
+    public String getAttributeRegExp() {
+        initAttribute();
+        return attribute.getRegexp();
+    }
+
+    public void setAttributeRegExp(final String val) {
+        initAttribute();
+        this.attribute.setRegexp(val);
+    }
+
+
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
+    @XmlElement(name = "attribute-validation-failed-messages")
+    public Map<String, String> getAttributeValidationMessages() {
+        initAttribute();
+        return attribute.getValidationFailedMessage();
+    }
+
+    public void setAttributeValidationMessages(final Map<String, String> attributeValidationMessages) {
+        initAttribute();
+        this.attribute.setValidationFailedMessage(attributeValidationMessages);
+    }
+
+
 }

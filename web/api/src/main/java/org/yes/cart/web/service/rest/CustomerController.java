@@ -19,6 +19,7 @@ package org.yes.cart.web.service.rest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.groovy.util.ListHashMap;
@@ -930,38 +931,65 @@ public class CustomerController {
      */
     @ApiOperation(value = "Display address book address entry form for given address type.", tags = { "addressbook", "customer" })
     @RequestMapping(
-            value = "/addressbook/{type}/form",
+            value = "/addressbook/{type}/address",
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody AddressFormRO viewAddressbookForm(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
                                                            final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+                                                           final @ApiParam(value = "Address ID") @RequestParam(value = "addressId", required = false) Long addressId,
                                                            final HttpServletRequest request,
                                                            final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
-        return viewAddressbookFormInternal(type);
+
+        return viewAddressbookFormInternal(type, addressId);
 
     }
 
 
-    private AddressFormRO viewAddressbookFormInternal(final String addressType) {
+    private AddressFormRO viewAddressbookFormInternal(final String addressType, final Long addressId) {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final Shop shop = cartMixin.getCurrentShop();
+        final Shop customerShop = cartMixin.getCurrentCustomerShop();
 
         final AddressFormRO formRO = new AddressFormRO();
         formRO.setAddressType(addressType);
 
         final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
-        if (customer != null) {
-            final List<AttrValueWithAttribute> regAddressForm = addressBookFacade
-                    .getShopCustomerAddressAttributes(customer, shop, addressType);
-
-            formRO.setCustom(mappingMixin.map(regAddressForm, AttrValueAndAttributeRO.class, AttrValueWithAttribute.class));
+        if (customer == null) {
+            cartMixin.throwSecurityExceptionIfNotLoggedIn();
         }
-        
+
+        final List<AttrValueWithAttribute> regAddressForm = addressBookFacade
+                .getShopCustomerAddressAttributes(customer, shop, addressType);
+
+        if (addressId != null) {
+
+            final Address addressEntity = addressBookFacade.getAddress(customer, customerShop, String.valueOf(addressId), addressType);
+            if (addressEntity.getAddressId() > 0L) {
+
+                formRO.setAddressId(addressEntity.getAddressId());
+
+                for (final AttrValueWithAttribute value : regAddressForm) {
+                    try {
+                        final Object val = PropertyUtils.getProperty(addressEntity, value.getAttribute().getVal());
+                        if (val != null) {
+                            value.setVal(String.valueOf(val));
+                        }
+                    }  catch (Exception e) {
+                        LOG.error("Unable to set address property for {}, prop {}", value.getAttribute(), value.getAttribute().getVal());
+                    }
+                }
+
+            }
+
+        }
+
+        formRO.setCustom(mappingMixin.map(regAddressForm, AttrValueAndAttributeRO.class, AttrValueWithAttribute.class));
+
         return formRO;
 
     }
@@ -969,7 +997,7 @@ public class CustomerController {
 
 
 
-    private List<AddressRO> updateAddressbookInternal(final String type, final AddressRO address) {
+    private List<AddressRO> updateAddressbookInternal(final AddressFormRO address) {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final Shop shop = cartMixin.getCurrentShop();
@@ -980,41 +1008,30 @@ public class CustomerController {
             cartMixin.throwSecurityExceptionIfNotLoggedIn();
         }
 
-        final Address addressEntity = addressBookFacade.getAddress(customer, customerShop, String.valueOf(address.getAddressId()), type);
+        final List<AttrValueWithAttribute> addressForm = addressBookFacade.getShopCustomerAddressAttributes(customer, shop, address.getAddressType());
 
-        addressEntity.setName(address.getName());
-        if (StringUtils.isNotBlank(address.getSalutation())) {
-            addressEntity.setSalutation(address.getSalutation());
-        }
-        if (StringUtils.isNotBlank(address.getFirstname())) {
-            addressEntity.setFirstname(address.getFirstname());
-        }
-        if (StringUtils.isNotBlank(address.getMiddlename())) {
-            addressEntity.setMiddlename(address.getMiddlename());
-        }
-        if (StringUtils.isNotBlank(address.getLastname())) {
-            addressEntity.setLastname(address.getLastname());
-        }
+        final Address addressEntity = addressBookFacade.getAddress(customer, customerShop,
+                address.getAddressId() == null ? "0" : String.valueOf(address.getAddressId()), address.getAddressType());
 
-        addressEntity.setAddrline1(address.getAddrline1());
-        addressEntity.setAddrline2(address.getAddrline2());
+        addressEntity.setName(address.getAddressName());
 
-        addressEntity.setCity(address.getCity());
-        addressEntity.setPostcode(address.getPostcode());
-        addressEntity.setStateCode(address.getStateCode());
-        addressEntity.setCountryCode(address.getCountryCode());
-
-        if (StringUtils.isNotBlank(address.getPhone1())) {
-            addressEntity.setPhone1(address.getPhone1());
+        final Map<String, String> valueByAc = new HashMap<>();
+        for (final AttrValueAndAttributeRO valueRO : address.getCustom()) {
+            valueByAc.put(valueRO.getAttributeCode(), valueRO.getVal());
         }
-
-        addressEntity.setCompanyName1(address.getCompanyName1());
-        addressEntity.setCompanyName2(address.getCompanyName2());
-        addressEntity.setCompanyDepartment(address.getCompanyDepartment());
+        for (final AttrValueWithAttribute value : addressForm) {
+            try {
+                if (valueByAc.containsKey(value.getAttributeCode())) {
+                    PropertyUtils.setProperty(addressEntity, value.getAttribute().getVal(), valueByAc.get(value.getAttributeCode()));
+                }
+            }  catch (Exception e) {
+                LOG.error("Unable to set address property for {}, prop {}", value.getAttribute(), value.getAttribute().getVal());
+            }
+        }
 
         addressBookFacade.createOrUpdate(addressEntity, customerShop);
 
-        return viewAddressbookInternal(type);
+        return viewAddressbookInternal(address.getAddressType());
     }
 
 
@@ -1109,7 +1126,6 @@ public class CustomerController {
      *     </td></tr>
      * </table>
      *
-     * @param type address book type (see {@link Address} )
      * @param request request
      * @param response response
      *
@@ -1117,19 +1133,18 @@ public class CustomerController {
      */
     @ApiOperation(value = "Update customer address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
-            value = "/addressbook/{type}",
+            value = "/addressbook",
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody List<AddressRO> updateAddressbook(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                           final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
-                                                           final @ApiParam(value = "Address") @RequestBody AddressRO address,
+                                                           final @ApiParam(value = "Address form") @RequestBody AddressFormRO address,
                                                            final HttpServletRequest request,
                                                            final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
-        return updateAddressbookInternal(type, address);
+        return updateAddressbookInternal(address);
 
     }
 
@@ -1220,7 +1235,6 @@ public class CustomerController {
      *     </td></tr>
      * </table>
      *
-     * @param type address book type (see {@link Address} )
      * @param request request
      * @param response response
      *
@@ -1228,19 +1242,18 @@ public class CustomerController {
      */
     @ApiOperation(value = "Update customer address book.", tags = { "addressbook", "customer" })
     @RequestMapping(
-            value = "/addressbook/{type}",
+            value = "/addressbook",
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody AddressListRO updateAddressbookXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                            final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
-                                                            final @ApiParam(value = "Address") @RequestBody AddressRO address,
+                                                            final @ApiParam(value = "Address form") @RequestBody AddressFormRO address,
                                                             final HttpServletRequest request,
                                                             final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
-        return new AddressListRO(updateAddressbookInternal(type, address));
+        return new AddressListRO(updateAddressbookInternal(address));
 
     }
 
