@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.i18n.impl.NonI18NModel;
+import org.yes.cart.domain.i18n.I18NModels;
 import org.yes.cart.orderexport.ExportProcessorException;
 import org.yes.cart.orderexport.OrderAutoExportProcessor;
 import org.yes.cart.orderexport.OrderExporter;
@@ -169,7 +169,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
             customerOrder.putValue(
                     auditEntry.getKey(),
                     auditEntry.getValue(),
-                    new NonI18NModel("AUDITEXPORT")
+                    I18NModels.AUDITEXPORT
             );
         }
         customerOrderService.update(customerOrder);
@@ -199,7 +199,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         customerOrder.putValue(
                 exporter + ": ERROR",
                 DateUtils.formatSDT() + ": " + error,
-                new NonI18NModel("AUDITEXPORT")
+                I18NModels.AUDITEXPORT
         );
         customerOrderService.update(customerOrder);
 

@@ -24,6 +24,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
@@ -34,6 +36,7 @@ import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl;
 import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl;
 import org.yes.cart.domain.dto.impl.CustomerOrderDetailDTOImpl;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModels;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.domain.misc.SearchContext;
@@ -52,6 +55,7 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.utils.DateUtils;
 import org.yes.cart.utils.HQLUtils;
 import org.yes.cart.utils.MessageFormatUtils;
 
@@ -135,7 +139,33 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
      * {@inheritDoc}
      */
     @Override
-    public Result updateOrderSetConfirmed(final String orderNum) {
+    public Result updateOrderSetNotes(final String orderNum, final String auditMessage) {
+
+        final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
+
+        if (order == null) {
+            return new Result(orderNum, "DN-0001", "Order with number [" + orderNum + "] not found",
+                    "error.order.not.found", orderNum);
+        }
+
+        if (StringUtils.isNotEmpty(auditMessage)) {
+            order.putValue(
+                    "DN: " + DateUtils.formatSDT(),
+                    signMessage(auditMessage),
+                    I18NModels.AUDITEXPORT
+            );
+        }
+
+        getService().update(order);
+
+        return new Result(orderNum, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Result updateOrderSetConfirmed(final String orderNum, final String auditMessage, final String clientMessage) {
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
         if (order == null) {
             return new Result(orderNum, null, "OR-0001", "Order with number [" + orderNum + "] not found",
@@ -147,8 +177,15 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         if (isWaiting) {
 
             try {
+                final Map params = new HashMap();
+                if (StringUtils.isNotBlank(auditMessage)) {
+                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+                }
+                if (StringUtils.isNotBlank(clientMessage)) {
+                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
+                }
                 transitionService.transitionOrder(
-                        OrderStateManager.EVT_PAYMENT_CONFIRMED, orderNum, null, Collections.emptyMap());
+                        OrderStateManager.EVT_PAYMENT_CONFIRMED, orderNum, null, Collections.unmodifiableMap(params));
             } catch (OrderException e) {
                 final String error = MessageFormatUtils.format(
                         "Cannot confirm payment for order with number [ {} ] ",
@@ -177,7 +214,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
      * {@inheritDoc}
      */
     @Override
-    public Result updateOrderSetCancelled(final String orderNum) {
+    public Result updateOrderSetCancelled(final String orderNum, final String auditMessage, final String clientMessage) {
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
         if (order == null) {
             return new Result(orderNum, null, "OR-0001", "Order with number [" + orderNum + "] not found",
@@ -192,11 +229,19 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 !CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus()) &&
                 !CustomerOrder.ORDER_STATUS_RETURNED.equals(order.getOrderStatus());
 
+        final Map params = new HashMap();
+        if (StringUtils.isNotBlank(auditMessage)) {
+            params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+        }
+        if (StringUtils.isNotBlank(clientMessage)) {
+            params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
+        }
+
         if (isCancellable) {
             // We always cancel with refund since we may have completed payments
             try {
                 transitionService.transitionOrder(
-                        OrderStateManager.EVT_CANCEL_WITH_REFUND, orderNum, null, Collections.emptyMap());
+                        OrderStateManager.EVT_CANCEL_WITH_REFUND, orderNum, null, Collections.unmodifiableMap(params));
             } catch (OrderException e) {
 
                 final String error = MessageFormatUtils.format(
@@ -212,7 +257,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 // Retry processing refund
             try {
                 transitionService.transitionOrder(
-                        OrderStateManager.EVT_REFUND_PROCESSED, orderNum, null, Collections.emptyMap());
+                        OrderStateManager.EVT_REFUND_PROCESSED, orderNum, null, params);
             } catch (OrderException e) {
 
                 final String error = MessageFormatUtils.format(
@@ -243,14 +288,14 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
      * {@inheritDoc}
      */
     @Override
-    public Result updateOrderSetCancelledManual(final String orderNum, final String message) {
+    public Result updateOrderSetCancelledManual(final String orderNum, final String auditMessage, final String clientMessage) {
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
         if (order == null) {
             return new Result(orderNum, null, "OR-0001", "Order with number [" + orderNum + "] not found",
                     "error.order.not.found", orderNum);
         }
 
-        if (StringUtils.isBlank(message)) {
+        if (StringUtils.isBlank(auditMessage)) {
             return new Result(orderNum, null, "OR-0006", "Manual refund for order with number [" + orderNum + "] must have authorisation code",
                     "error.order.cancel.retry.manual.fatal.no.notes", orderNum);
         }
@@ -262,12 +307,18 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         if (isWaitingRefund) {
                 // Retry processing refund
             try {
+                final Map params = new HashMap();
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, signMessage(auditMessage));
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+                if (StringUtils.isNotBlank(clientMessage)) {
+                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
+                }
+
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_REFUND_PROCESSED, orderNum, null,
-                        new HashMap() {{
-                            put("forceManualProcessing", Boolean.TRUE);
-                            put("forceManualProcessingMessage", message);
-                        }});
+                        Collections.unmodifiableMap(params)
+                );
             } catch (OrderException e) {
 
                 final String error = MessageFormatUtils.format(
@@ -298,7 +349,9 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
      * {@inheritDoc}
      */
     @Override
-    public Result updateExternalDeliveryRefNo(final String orderNum, final String deliveryNum, final String newRefNo) {
+    public Result updateExternalDeliveryRefNo(final String orderNum, final String deliveryNum,
+                                              final String newRefNo, final String newRefURL,
+                                              final String auditMessage, final String clientMessage) {
 
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
 
@@ -314,6 +367,30 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         }
 
         delivery.setRefNo(newRefNo);
+        for (final CustomerOrderDeliveryDet detail : delivery.getDetail()) {
+            detail.putValue("TrackingID", newRefNo, null);
+            detail.putValue("TrackingURL", newRefURL, null);
+        }
+        if (StringUtils.isNotEmpty(auditMessage)) {
+            order.putValue(
+                    "DR: " + DateUtils.formatSDT(),
+                    signMessage(delivery.getDeliveryNum() + (newRefNo != null ? " / " + newRefNo : "") + " " + auditMessage),
+                    I18NModels.AUDITEXPORT
+            );
+        } else {
+            order.putValue(
+                    "DR: " + DateUtils.formatSDT(),
+                    signMessage(delivery.getDeliveryNum() + (newRefNo != null ? " / " + newRefNo : "")),
+                    I18NModels.AUDITEXPORT
+            );
+        }
+        if (StringUtils.isNotEmpty(clientMessage)) {
+            order.putValue(
+                    delivery.getDeliveryStatus().toUpperCase().replace('.', '_') + "_" + deliveryNum,
+                    clientMessage,
+                    I18NModels.AUDITEXPORT
+            );
+        }
         getService().update(order);
 
         return new Result(orderNum, deliveryNum);
@@ -326,7 +403,8 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
      */
     @Override
     public Result updateDeliveryStatus(final String orderNum, final String deliveryNum,
-                                       final String currentStatus, final String destinationStatus) {
+                                       final String currentStatus, final String destinationStatus,
+                                       final String auditMessage, final String clientMessage) {
 
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
 
@@ -346,44 +424,52 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
         try {
 
+            final Map params = new HashMap();
+            if (StringUtils.isNotBlank(auditMessage)) {
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+            }
+            if (StringUtils.isNotBlank(clientMessage)) {
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
+            }
+
             final boolean needToPersist;
 
             if (CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(destinationStatus)) {
 
                 transitionService.transitionOrder(
-                        OrderStateManager.EVT_RELEASE_TO_PACK, orderNum, deliveryNum, Collections.emptyMap());
+                        OrderStateManager.EVT_RELEASE_TO_PACK, orderNum, deliveryNum, Collections.unmodifiableMap(params));
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(destinationStatus)) {
 
                 transitionService.transitionOrder(
-                        OrderStateManager.EVT_PACK_COMPLETE, orderNum, deliveryNum, Collections.emptyMap());
+                        OrderStateManager.EVT_PACK_COMPLETE, orderNum, deliveryNum, Collections.unmodifiableMap(params));
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(destinationStatus)) {
 
                 transitionService.transitionOrder(
-                        OrderStateManager.EVT_RELEASE_TO_SHIPMENT, orderNum, deliveryNum, Collections.emptyMap());
+                        OrderStateManager.EVT_RELEASE_TO_SHIPMENT, orderNum, deliveryNum, Collections.unmodifiableMap(params));
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(destinationStatus)) {
 
                 transitionService.transitionOrder(
-                        OrderStateManager.EVT_RELEASE_TO_SHIPMENT, orderNum, deliveryNum, Collections.emptyMap());
+                        OrderStateManager.EVT_RELEASE_TO_SHIPMENT, orderNum, deliveryNum, Collections.unmodifiableMap(params));
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(destinationStatus)) {
 
                 transitionService.transitionOrder(
-                        OrderStateManager.EVT_SHIPMENT_COMPLETE, orderNum, deliveryNum, Collections.emptyMap());
+                        OrderStateManager.EVT_SHIPMENT_COMPLETE, orderNum, deliveryNum, Collections.unmodifiableMap(params));
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS_WAITING_PAYMENT.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(destinationStatus)) {
 
                 // same as shipping in progress to complete
                 transitionService.transitionOrder(
-                        OrderStateManager.EVT_SHIPMENT_COMPLETE, orderNum, deliveryNum, Collections.emptyMap());
+                        OrderStateManager.EVT_SHIPMENT_COMPLETE, orderNum, deliveryNum, Collections.unmodifiableMap(params));
 
             } else {
 
@@ -418,7 +504,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
     @Override
     public Result updateDeliveryStatusManual(final String orderNum, final String deliveryNum,
                                              final String currentStatus, final String destinationStatus,
-                                             final String message) {
+                                             final String auditMessage, final String clientMessage) {
 
 
         final CustomerOrder order = ((CustomerOrderService) service).findByReference(orderNum);
@@ -436,7 +522,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
             return new Result(orderNum, deliveryNum, "DL-0003", "Order with number [" + orderNum + "] delivery number [" + deliveryNum + "] in [" + delivery.getDeliveryStatus() + "] state, but required [" + currentStatus + "]. Updated by [" + order.getUpdatedBy() + "]",
                     "error.delivery.in.wrong.state", orderNum, deliveryNum, delivery.getDeliveryStatus(), currentStatus, order.getUpdatedBy());
         }
-        if (StringUtils.isBlank(message)) {
+        if (StringUtils.isBlank(auditMessage)) {
             return new Result(orderNum, deliveryNum, "DL-0005", "Manual operation for order with number [" + orderNum + "] delivery number [" + deliveryNum + "] requires manual authorisation code",
                     "error.delivery.manual.no.notes", orderNum, deliveryNum);
         }
@@ -446,12 +532,18 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
             if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(destinationStatus)) {
 
+                final Map params = new HashMap();
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, signMessage(auditMessage));
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+                if (StringUtils.isNotBlank(clientMessage)) {
+                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
+                }
+
                 transitionService.transitionOrder(
                         OrderStateManager.EVT_RELEASE_TO_SHIPMENT, orderNum, deliveryNum,
-                        new HashMap() {{
-                            put("forceManualProcessing", Boolean.TRUE);
-                            put("forceManualProcessingMessage", message);
-                        }});
+                        Collections.unmodifiableMap(params)
+                );
 
             } else {
 
@@ -823,4 +915,15 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         getService().update(order);
 
     }
+
+    private String signMessage(final String message) {
+
+        if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null
+                || !SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+            return message;
+        }
+        return message + " (" + SecurityContextHolder.getContext().getAuthentication().getName() + ")";
+
+    }
+
 }

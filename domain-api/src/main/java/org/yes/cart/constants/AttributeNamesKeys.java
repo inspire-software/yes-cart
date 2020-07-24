@@ -979,4 +979,19 @@ public interface AttributeNamesKeys {
 
     }
 
+    interface CustomerOrder {
+
+        String ORDER_PAYMENT_FORCE_MANUAL_PROCESSING = "forceManualProcessing";
+        String ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE = "forceManualProcessingMessage";
+
+        String ORDER_PAYMENT_FORCE_ADD_TO_EVERY_PAYMENT_AMOUNT = "forceAddToEveryPaymentAmount";
+
+        String ORDER_PAYMENT_FORCE_AUTO_PROCESSING_OPERATION = "forceAutoProcessingOperation";
+
+
+        String ORDER_TRANSITION_AUDIT_MESSAGE = "transitionAuditMessage";
+        String ORDER_TRANSITION_CLIENT_MESSAGE = "transitionClientMessage";
+
+    }
+
 }

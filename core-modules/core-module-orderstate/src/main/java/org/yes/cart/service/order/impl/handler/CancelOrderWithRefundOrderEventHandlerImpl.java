@@ -93,7 +93,7 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
 
                 // We need to attempt to cancel first as this may throw an exception, then we should not make any payment refunds
-                creditQuantity(orderEvent.getCustomerOrder());
+                creditQuantity(orderEvent);
 
                 final String resultCancel = paymentProcessor.cancelOrder(order, isForceProcessing(orderEvent), Collections.emptyMap());
                 if (!Payment.PAYMENT_STATUS_OK.equals(resultCancel)) {
@@ -105,7 +105,7 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
                 if (!Payment.PAYMENT_STATUS_OK.equals(resultCancel)) {
                     return false;
                 }
-                creditQuantity(orderEvent.getCustomerOrder());
+                creditQuantity(orderEvent);
 
             }
 

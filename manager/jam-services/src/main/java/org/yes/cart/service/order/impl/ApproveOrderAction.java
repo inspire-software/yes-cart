@@ -20,6 +20,8 @@ import org.yes.cart.domain.misc.Result;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.OrderFlowAction;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 01/09/2016
@@ -35,6 +37,9 @@ public class ApproveOrderAction implements OrderFlowAction {
 
     @Override
     public Result doTransition(final String orderNum, final Object params) {
-        return dtoCustomerOrderService.updateOrderSetConfirmed(orderNum);
+
+        final Map<String, String> map = (Map<String, String>) params;
+
+        return dtoCustomerOrderService.updateOrderSetConfirmed(orderNum, map.get("message"), map.get("clientMessage"));
     }
 }

@@ -68,7 +68,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
     @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException  {
         synchronized (OrderEventHandler.syncMonitor) {
-            creditQuantity(orderEvent.getCustomerOrder());
+            creditQuantity(orderEvent);
             handleInternal(orderEvent);
             return true;
         }
@@ -83,16 +83,17 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
     }
 
 
-    protected void creditQuantity(final CustomerOrder order) throws OrderException  {
+    protected void creditQuantity(final OrderEvent orderEvent) throws OrderException  {
+        final CustomerOrder order = orderEvent.getCustomerOrder();
         final Collection<CustomerOrderDelivery> deliveries = order.getDelivery();
         for (CustomerOrderDelivery delivery : deliveries) {
             if (!this.isAlreadyCancelled(delivery.getDeliveryStatus())) {
-                creditQuantity(delivery);
+                creditQuantity(orderEvent, order, delivery);
             }
         }
     }
 
-    private void creditQuantity(final CustomerOrderDelivery delivery) throws OrderException {
+    private void creditQuantity(final OrderEvent orderEvent, final CustomerOrder order, final CustomerOrderDelivery delivery) throws OrderException {
 
         final String newStatus;
 
@@ -163,7 +164,9 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
 
             }
         }
-        delivery.setDeliveryStatus(newStatus);
+
+        transition(orderEvent, order, delivery, newStatus);
+
     }
 
     protected boolean isAlreadyCancelled(final String deliveryStatus) {

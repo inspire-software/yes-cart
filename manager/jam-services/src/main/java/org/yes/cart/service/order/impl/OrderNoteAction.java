@@ -23,23 +23,22 @@ import org.yes.cart.service.order.OrderFlowAction;
 import java.util.Map;
 
 /**
- * User: denispavlov
- * Date: 01/09/2016
+ * Date: 24/08/2020
  * Time: 17:43
  */
-public class UpdateDeliveryRefAction implements OrderFlowAction {
+public class OrderNoteAction implements OrderFlowAction {
 
     private final DtoCustomerOrderService dtoCustomerOrderService;
 
-    public UpdateDeliveryRefAction(final DtoCustomerOrderService dtoCustomerOrderService) {
+    public OrderNoteAction(final DtoCustomerOrderService dtoCustomerOrderService) {
         this.dtoCustomerOrderService = dtoCustomerOrderService;
     }
 
     @Override
-    public Result doTransition(final String deliverynum, final Object params) {
+    public Result doTransition(final String orderNum, final Object params) {
 
         final Map<String, String> map = (Map<String, String>) params;
 
-        return dtoCustomerOrderService.updateExternalDeliveryRefNo(map.get("ordernum"), deliverynum, map.get("deliveryref"), map.get("deliveryurl"), map.get("message"), map.get("clientMessage"));
+        return dtoCustomerOrderService.updateOrderSetNotes(orderNum, map.get("message"));
     }
 }

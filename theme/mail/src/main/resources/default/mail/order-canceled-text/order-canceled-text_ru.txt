@@ -1,2 +1,8 @@
 Уважаемый (-ая) $root.firstname $root.lastname!
 Ваш заказ $root.ordernum на $shop.name был отменен.
+<% ['OS_CANCELLED', 'OS_CANCELLED_WAITING_PAYMENT'].each {
+def _val = root.getValue(it);
+if (_val != null) {
+%>${_val.first}<%
+   }
+} %>

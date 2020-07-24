@@ -70,12 +70,12 @@ export class CustomerOrderService {
    * Transition order to next state.
    * @param order order
    * @param action action key from order next transitions
-   * @param manualMsg message provided by manual PG actions
+   * @param context additional key value pair for action (e.g. message, deliveryref)
    * @returns {Observable<R>}
    */
-  transitionOrder(order:CustomerOrderInfoVO, action:string, manualMsg:string) {
+  transitionOrder(order:CustomerOrderInfoVO, action:string, context:any) {
 
-    let body = JSON.stringify({ transition: action, message: manualMsg });
+    let body = JSON.stringify({ transition: action, context: context });
 
     return this.http.post(this._serviceBaseUrl + '/transition/' + order.ordernum + '/', body,
           Util.requestOptions())
@@ -89,12 +89,12 @@ export class CustomerOrderService {
    * @param order order
    * @param delivery delivery
    * @param action action key from order next transitions
-   * @param manualMsg message provided by manual PG actions
+   * @param context additional key value pair for action (e.g. message, deliveryref)
    * @returns {Observable<R>}
    */
-  transitionDelivery(order:CustomerOrderInfoVO, delivery:CustomerOrderDeliveryInfoVO, action:string, manualMsg:string) {
+  transitionDelivery(order:CustomerOrderInfoVO, delivery:CustomerOrderDeliveryInfoVO, action:string, context:any) {
 
-    let body = JSON.stringify({ transition: action, message: manualMsg });
+    let body = JSON.stringify({ transition: action, context: context });
 
     return this.http.post(this._serviceBaseUrl + '/transition/' + order.ordernum + '/' + delivery.deliveryNum + '/', body,
           Util.requestOptions())

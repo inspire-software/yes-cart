@@ -289,6 +289,10 @@
         <constructor-arg index="0" ref="dtoCustomerOrderService"/>
     </bean>
 
+    <bean id="defaultUiOrderFlowNoteAction" class="org.yes.cart.service.order.impl.OrderNoteAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+    </bean>
+
     <bean id="defaultUiOrderFlow" class="org.yes.cart.service.order.impl.SimpleStaticOrderFlow">
         <constructor-arg index="0">
             <map>
@@ -296,44 +300,52 @@
                     <list>
                         <value>cancel.order</value>
                         <value>approve.order</value>
+                        <value>notes.order</value>
                     </list>
                 </entry>
                 <entry key="os.waiting.payment">
                     <list>
                         <value>cancel.order</value>
+                        <value>notes.order</value>
                     </list>
                 </entry>
                 <entry key="os.in.progress">
                     <list>
                         <value>cancel.order</value>
+                        <value>notes.order</value>
                     </list>
                 </entry>
                 <entry key="os.partially.shipped">
                     <list>
                         <value>return.order</value>
+                        <value>notes.order</value>
                     </list>
                 </entry>
                 <entry key="os.completed">
                     <list>
                         <value>return.order</value>
+                        <value>notes.order</value>
                     </list>
                 </entry>
                 <entry key="os.cancelled.waiting.payment">
                     <list>
                         <value>cancel.order.refund</value>
                         <value>cancel.order.manual.refund</value>
+                        <value>notes.order</value>
                     </list>
                 </entry>
                 <entry key="os.returned.waiting.payment">
                     <list>
                         <value>cancel.order.refund</value>
                         <value>cancel.order.manual.refund</value>
+                        <value>notes.order</value>
                     </list>
                 </entry>
             </map>
         </constructor-arg>
         <constructor-arg index="1">
             <map>
+                <entry key="notes.order" value-ref="defaultUiOrderFlowNoteAction"/>
                 <entry key="approve.order" value-ref="defaultUiOrderFlowApproveAction"/>
                 <entry key="cancel.order" value-ref="defaultUiOrderFlowCancelAction"/>
                 <entry key="cancel.order.refund" value-ref="defaultUiOrderFlowCancelAction"/>
@@ -375,6 +387,7 @@
                         <value>ROLE_SMCALLCENTERORDERCONFIRM</value>
                     </list>
                 </entry>
+                <!--<entry key="notes.order"><list/></entry>-->
             </map>
         </constructor-arg>
         <constructor-arg index="3" ref="shopFederationStrategy"/>

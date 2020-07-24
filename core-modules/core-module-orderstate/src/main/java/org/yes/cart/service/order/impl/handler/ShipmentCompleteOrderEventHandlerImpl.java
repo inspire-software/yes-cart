@@ -34,7 +34,7 @@ import org.yes.cart.service.payment.PaymentProcessorFactory;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler {
+public class ShipmentCompleteOrderEventHandlerImpl extends AbstractEventHandlerImpl implements OrderEventHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShipmentCompleteOrderEventHandlerImpl.class);
 
@@ -97,14 +97,18 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
 
     private void processDeliveryStates(final OrderEvent orderEvent) {
 
-        orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
+        transition(orderEvent, orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery(),
+                CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
+
         for (CustomerOrderDelivery delivery : orderEvent.getCustomerOrder().getDelivery()) {
             if (!CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(delivery.getDeliveryStatus())) {
-                orderEvent.getCustomerOrder().setOrderStatus(CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED);
+                transition(orderEvent, orderEvent.getCustomerOrder(),
+                        CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED);
                 return;
             }
         }
-        orderEvent.getCustomerOrder().setOrderStatus(CustomerOrder.ORDER_STATUS_COMPLETED);
+        transition(orderEvent, orderEvent.getCustomerOrder(),
+                CustomerOrder.ORDER_STATUS_COMPLETED);
 
         LOG.info("Order {} completed ", orderEvent.getCustomerOrder().getOrdernum());
     }

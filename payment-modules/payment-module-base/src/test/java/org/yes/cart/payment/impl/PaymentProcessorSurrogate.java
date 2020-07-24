@@ -18,6 +18,7 @@ package org.yes.cart.payment.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
@@ -126,9 +127,9 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
                                    final BigDecimal addToPayment) {
 
         return shipmentComplete(order, orderShipmentNumber, forceProcessing, new HashMap() {{
-            put("forceManualProcessing", false);
-            put("forceManualProcessingMessage", null);
-            put("forceAddToEveryPaymentAmount", addToPayment);
+            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, false);
+            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, null);
+            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_ADD_TO_EVERY_PAYMENT_AMOUNT, addToPayment);
         }});
 
 
@@ -143,9 +144,9 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
                               final boolean useRefund) {
 
         return cancelOrder(order, forceProcessing, new HashMap() {{
-            put("forceManualProcessing", false);
-            put("forceManualProcessingMessage", null);
-            put("forceAutoProcessingOperation", useRefund ? PaymentGateway.REFUND : PaymentGateway.VOID_CAPTURE);
+            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, false);
+            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, null);
+            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_AUTO_PROCESSING_OPERATION, useRefund ? PaymentGateway.REFUND : PaymentGateway.VOID_CAPTURE);
         }});
 
     }

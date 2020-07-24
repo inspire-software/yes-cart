@@ -260,11 +260,15 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     }
 
     @Override
-    public VoCustomerOrderTransitionResult transitionOrder(final String transition, final String ordernum, final String message) throws Exception {
+    public VoCustomerOrderTransitionResult transitionOrder(final String transition, final String ordernum, final Map<String, String> context) throws Exception {
 
         if (federationFacade.isManageable(ordernum, CustomerOrderDTO.class)) {
 
-            final Result result = this.orderFlow.getAction(transition).doTransition(ordernum, message);
+            final Map<String, String> params = context != null ? new HashMap<>(context) : new HashMap<>();
+            params.put("ordernum", ordernum);
+            params.put("transition", transition);
+
+            final Result result = this.orderFlow.getAction(transition).doTransition(ordernum, params);
             return voAssemblySupport.assembleVo(VoCustomerOrderTransitionResult.class, Result.class, new VoCustomerOrderTransitionResult(), result);
 
         } else {
@@ -274,13 +278,14 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     }
 
     @Override
-    public VoCustomerOrderTransitionResult transitionDelivery(final String transition, final String ordernum, final String deliverynum, final String message) throws Exception {
+    public VoCustomerOrderTransitionResult transitionDelivery(final String transition, final String ordernum, final String deliverynum, final Map<String, String> context) throws Exception {
 
         if (federationFacade.isManageable(ordernum, CustomerOrderDTO.class)) {
 
-            final Map<String, String> params = new HashMap<>();
+            final Map<String, String> params = context != null ? new HashMap<>(context) : new HashMap<>();
             params.put("ordernum", ordernum);
-            params.put("message", message);
+            params.put("deliverynum", deliverynum);
+            params.put("transition", transition);
 
             final Result result = this.deliveryFlow.getAction(transition).doTransition(deliverynum, params);
             return voAssemblySupport.assembleVo(VoCustomerOrderTransitionResult.class, Result.class, new VoCustomerOrderTransitionResult(), result);

@@ -27,6 +27,7 @@ import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.I18NModels;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.i18n.impl.NonI18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
@@ -392,7 +393,7 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
 
                 customerOrder.putValue(auditKey,
                         shoppingCart.getShoppingContext().getManagerName() + " / " + shoppingCart.getShoppingContext().getManagerEmail(),
-                        newDefaultModel("AUDITEXPORT")
+                        I18NModels.AUDITEXPORT
                 );
 
                 customerOrder.putValue(AttributeNamesKeys.Cart.ORDER_MANAGER_NAME,
@@ -597,14 +598,14 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
                 customerOrderDet.putValue(
                         AttributeNamesKeys.Cart.ORDER_LINE_EXTERNAL_SKU,
                         sku.getSupplierCode(),
-                        new StringI18NModel("SUPPLIER")
+                        I18NModels.SUPPLIER
                 );
             }
             if (StringUtils.isNotBlank(sku.getSupplierCatalogCode())) {
                 customerOrderDet.putValue(
                         AttributeNamesKeys.Cart.ORDER_LINE_EXTERNAL_CATALOG,
                         sku.getSupplierCatalogCode(),
-                        new StringI18NModel("SUPPLIER")
+                        I18NModels.SUPPLIER
                 );
             }
 
@@ -682,7 +683,7 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
                 customerOrderDet.putValue(
                         AttributeNamesKeys.Cart.ORDER_LINE_COST_PRICE,
                         cost.toPlainString(),
-                        new StringI18NModel("SUPPLIER")
+                        I18NModels.SUPPLIER
                 );
             }
 
@@ -692,7 +693,7 @@ public class OrderAssemblerImpl implements OrderAssembler, ConfigurationRegistry
                 customerOrderDet.putValue(
                         AttributeNamesKeys.Cart.ORDER_LINE_PRICE_REF,
                         priceRefVal,
-                        new StringI18NModel("SUPPLIER")
+                        I18NModels.SUPPLIER
                 );
             }
 

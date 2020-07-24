@@ -25,7 +25,8 @@ import org.yes.cart.service.order.OrderEventHandler;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class PackCompleteOrderEventHandlerImpl implements OrderEventHandler {
+public class PackCompleteOrderEventHandlerImpl extends AbstractEventHandlerImpl
+        implements OrderEventHandler {
 
     /**
      * {@inheritDoc}
@@ -33,7 +34,8 @@ public class PackCompleteOrderEventHandlerImpl implements OrderEventHandler {
     @Override
     public boolean handle(final OrderEvent orderEvent) {
         synchronized (OrderEventHandler.syncMonitor) {
-            orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY);
+            transition(orderEvent, orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery(),
+                    CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY);
             return true;
         }
     }

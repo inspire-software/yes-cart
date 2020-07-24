@@ -1,2 +1,8 @@
 Шановний (-на) $root.firstname $root.lastname!
 Повернення замовлення $root.ordernum at $shop.name було виконано.
+<% ['OS_RETURNED', 'OS_RETURNED_WAITING_PAYMENT'].each {
+def _val = root.getValue(it);
+if (_val != null) {
+%>${_val.first}<%
+   }
+} %>

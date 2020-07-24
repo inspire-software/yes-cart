@@ -29,7 +29,7 @@ import java.util.TreeMap;
  */
 public class StringI18NModel implements I18NModel {
 
-    public static final String SEPARATOR = "#~#";
+    private static final String SEPARATOR = "#~#";
 
     // Must be sorted so that we preserve order in the toString();
     private final Map<String, String> values = new TreeMap<>();

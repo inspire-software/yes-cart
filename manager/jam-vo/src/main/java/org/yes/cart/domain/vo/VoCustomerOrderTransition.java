@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.vo;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 09/05/2020
@@ -24,7 +26,7 @@ package org.yes.cart.domain.vo;
 public class VoCustomerOrderTransition {
 
     private String transition;
-    private String message;
+    private Map<String, String> context;
 
     public String getTransition() {
         return transition;
@@ -34,11 +36,11 @@ public class VoCustomerOrderTransition {
         this.transition = transition;
     }
 
-    public String getMessage() {
-        return message;
+    public Map<String, String> getContext() {
+        return context;
     }
 
-    public void setMessage(final String message) {
-        this.message = message;
+    public void setContext(final Map<String, String> context) {
+        this.context = context;
     }
 }

@@ -93,7 +93,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
         synchronized (OrderEventHandler.syncMonitor) {
 
             for (CustomerOrderDelivery customerOrderDelivery : orderEvent.getCustomerOrder().getDelivery()) {
-                reserveQuantity(customerOrderDelivery);
+                reserveQuantity(orderEvent, customerOrderDelivery);
             }
             handleInternal(orderEvent);
 
@@ -133,10 +133,12 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     /**
      * Allocate sku quantity on warehouses, that belong to shop, where order was made.
      *
+     * @param orderEvent    event
      * @param orderDelivery reserve for this delivery
+     *
      * @throws OrderItemAllocationException in case if can not allocate quantity for each sku
      */
-    void reserveQuantity(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
+    void reserveQuantity(final OrderEvent orderEvent, final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
 
         if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(orderDelivery.getDeliveryGroup())) {
 
@@ -191,7 +193,9 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                 }
             }
         }
-        orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
+
+        transition(orderEvent, orderEvent.getCustomerOrder(), orderDelivery,
+                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
     }
 

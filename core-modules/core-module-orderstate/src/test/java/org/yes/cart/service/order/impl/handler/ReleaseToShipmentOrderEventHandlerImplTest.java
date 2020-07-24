@@ -18,6 +18,7 @@ package org.yes.cart.service.order.impl.handler;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
@@ -381,8 +382,8 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
                         customerOrder,
                         delivery,
                         new HashMap() {{
-                            put("forceManualProcessing", Boolean.TRUE);
-                            put("forceManualProcessingMessage", "Manual message");
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, "Manual message");
                         }})));
 
         // check reserved quantity
@@ -490,8 +491,8 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
                         customerOrder,
                         delivery,
                         new HashMap() {{
-                            put("forceManualProcessing", Boolean.TRUE);
-                            put("forceManualProcessingMessage", "Manual message");
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, "Manual message");
                         }})));
 
         // check reserved quantity

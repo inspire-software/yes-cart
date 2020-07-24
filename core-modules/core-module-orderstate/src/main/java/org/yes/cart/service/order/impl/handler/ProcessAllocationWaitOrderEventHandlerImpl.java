@@ -25,7 +25,7 @@ import org.yes.cart.service.order.OrderEventHandler;
  * from payment to allocation, since there are just too many things that can go wrong
  * and we may loose some state.
  */
-public class ProcessAllocationWaitOrderEventHandlerImpl implements OrderEventHandler {
+public class ProcessAllocationWaitOrderEventHandlerImpl extends AbstractEventHandlerImpl implements OrderEventHandler {
 
     /**
      * {@inheritDoc}
@@ -33,7 +33,8 @@ public class ProcessAllocationWaitOrderEventHandlerImpl implements OrderEventHan
     @Override
     public boolean handle(final OrderEvent orderEvent) {
         synchronized (OrderEventHandler.syncMonitor) {
-            orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
+            transition(orderEvent, orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery(),
+                    CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
             return true;
         }
     }

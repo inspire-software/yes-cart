@@ -94,6 +94,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   private selectedCustomerorder:CustomerOrderInfoVO;
 
+  private selectedCustomerorderNotable:boolean = false;
   private selectedCustomerorderApprovable:boolean = false;
   private selectedCustomerorderCancellable:boolean = false;
   private selectedCustomerorderReturnable:boolean = false;
@@ -115,8 +116,16 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   private orderTransitionName:string = '';
   private orderTransitionNameOfflineNote:boolean;
   private orderTransitionNumber:string = '';
+  private orderTransitionRequiresParam1:boolean;
+  private orderTransitionParam1Key:string;
+  private orderTransitionParam1Value:string;
+  private orderTransitionRequiresParam2:boolean;
+  private orderTransitionParam2Key:string;
+  private orderTransitionParam2Value:string;
   private orderTransitionRequiresMessage:boolean;
   private orderTransitionMessage:string;
+  private orderTransitionSupportsClientMessage:boolean;
+  private orderTransitionClientMessage:string;
   private orderTransitionValid:boolean = false;
 
 
@@ -271,10 +280,19 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
     this.orderTransitionMessage = null;
     this.orderTransitionRequiresMessage = false;
+    this.orderTransitionClientMessage = null;
+    this.orderTransitionSupportsClientMessage = true;
+    this.orderTransitionParam1Value = null;
+    this.orderTransitionParam1Key = null;
+    this.orderTransitionRequiresParam1 = false;
+    this.orderTransitionParam2Value = null;
+    this.orderTransitionParam2Key = null;
+    this.orderTransitionRequiresParam2 = false;
     this.orderTransitionName = '';
     this.orderTransitionNameOfflineNote = false;
     this.orderTransitionValid = false;
 
+    let selectedCustomerorderNotable = false;
     let selectedCustomerorderApprovable = false;
     let selectedCustomerorderCancellable = false;
     let selectedCustomerorderReturnable = false;
@@ -287,6 +305,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       let options = data.orderStatusNextOptions;
       if (options != null && options.length > 0) {
+        selectedCustomerorderNotable = options.indexOf('notes.order') != -1;
         selectedCustomerorderApprovable = options.indexOf('approve.order') != -1;
         selectedCustomerorderCancellable = options.indexOf('cancel.order') != -1;
         selectedCustomerorderReturnable = options.indexOf('return.order') != -1;
@@ -299,6 +318,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
     }
 
+    this.selectedCustomerorderNotable = selectedCustomerorderNotable;
     this.selectedCustomerorderApprovable = selectedCustomerorderApprovable;
     this.selectedCustomerorderCancellable = selectedCustomerorderCancellable;
     this.selectedCustomerorderReturnable = selectedCustomerorderReturnable;
@@ -315,9 +335,18 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = '';
       this.orderTransitionNameOfflineNote = false;
       this.orderTransitionValid = false;
+      this.selectedCustomerorderNotable = false;
       this.selectedCustomerorderApprovable = false;
       this.selectedCustomerorderCancellable = false;
       this.selectedCustomerorderReturnable = false;
@@ -517,6 +546,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'approve.order';
       this.orderTransitionNameOfflineNote = true;
       this.orderTransitionValid = true;
@@ -531,6 +568,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'cancel.order';
       this.orderTransitionNameOfflineNote = true;
       this.orderTransitionValid = true;
@@ -545,6 +590,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'return.order';
       this.orderTransitionNameOfflineNote = true;
       this.orderTransitionValid = true;
@@ -559,6 +612,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'cancel.order.refund';
       this.orderTransitionNameOfflineNote = false;
       this.orderTransitionValid = true;
@@ -573,6 +634,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = true;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'cancel.order.manual.refund';
       this.orderTransitionNameOfflineNote = true;
       this.orderTransitionValid = false;
@@ -581,9 +650,40 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onNotesSelected() {
+    if (this.selectedCustomerorder != null) {
+      LogUtil.debug('AllCustomerOrdersComponent onNotesSelected handler', this.selectedCustomerorder);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = true;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = false;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
+      this.orderTransitionName = 'notes.order';
+      this.orderTransitionNameOfflineNote = false;
+      this.orderTransitionValid = false;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
   protected onTransitionMessageChange(event:any) {
 
-    this.orderTransitionValid = this.orderTransitionMessage != null && /\S+.*\S+/.test(this.orderTransitionMessage);
+    let messageEntered = this.orderTransitionMessage != null && /\S+.*\S+/.test(this.orderTransitionMessage);
+    let validMessage = !this.orderTransitionRequiresMessage || messageEntered;
+
+    let param1Entered = this.orderTransitionParam1Value != null && /\S+.*\S+/.test(this.orderTransitionParam1Value);
+    let validParam1 = !this.orderTransitionRequiresParam1 || param1Entered;
+
+    let param2Entered = this.orderTransitionParam2Value != null && /\S+.*\S+/.test(this.orderTransitionParam2Value);
+    let validParam2 = !this.orderTransitionRequiresParam2 || param2Entered;
+
+    this.orderTransitionValid = validMessage && validParam1 && validParam2;
 
   }
 
@@ -591,12 +691,27 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
+      let context:any = {};
+      if (this.orderTransitionMessage != null && /\S+.*\S+/.test(this.orderTransitionMessage)) {
+        context['message'] = this.orderTransitionMessage;
+      }
+      if (this.orderTransitionClientMessage != null && /\S+.*\S+/.test(this.orderTransitionClientMessage)) {
+        context['clientMessage'] = this.orderTransitionClientMessage;
+      }
+      if (this.orderTransitionRequiresParam1 && this.orderTransitionParam1Value != null && /\S+.*\S+/.test(this.orderTransitionParam1Value)) {
+        context[this.orderTransitionParam1Key] = this.orderTransitionParam1Value;
+      }
+      if (this.orderTransitionRequiresParam2 && this.orderTransitionParam2Value != null && /\S+.*\S+/.test(this.orderTransitionParam2Value)) {
+        context[this.orderTransitionParam2Key] = this.orderTransitionParam2Value;
+      }
+
       if (this.selectedCustomerorder != null && this.selectedCustomerdelivery == null) {
         LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
 
         this.loading = true;
+
         let _sub:any = this._customerorderService.transitionOrder(
-          this.selectedCustomerorder, this.orderTransitionName, this.orderTransitionMessage).subscribe((res:CustomerOrderTransitionResultVO) => {
+          this.selectedCustomerorder, this.orderTransitionName, context).subscribe((res:CustomerOrderTransitionResultVO) => {
             LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
             if (res.errorCode === '0') {
 
@@ -635,8 +750,9 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
 
         this.loading = true;
+
         let _sub:any = this._customerorderService.transitionDelivery(
-          this.selectedCustomerorder, this.selectedCustomerdelivery, this.orderTransitionName, this.orderTransitionMessage).subscribe((res:CustomerOrderTransitionResultVO) => {
+          this.selectedCustomerorder, this.selectedCustomerdelivery, this.orderTransitionName, context).subscribe((res:CustomerOrderTransitionResultVO) => {
             LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
             if (res.errorCode === '0') {
 
@@ -695,8 +811,16 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     if (this.selectedCustomerdelivery != null) {
       LogUtil.debug('AllCustomerOrdersComponent onUpdateDeliveryRefSelected handler', this.selectedCustomerdelivery);
 
-      this.orderTransitionMessage = this.selectedCustomerdelivery.refNo;
+      this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = true;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = this.selectedCustomerdelivery.refNo;
+      this.orderTransitionParam1Key = 'deliveryref';
+      this.orderTransitionRequiresParam1 = true;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = 'deliveryurl';
+      this.orderTransitionRequiresParam2 = true;
       this.orderTransitionName = 'update.external.ref';
       this.orderTransitionNameOfflineNote = false;
       this.orderTransitionValid = false;
@@ -711,6 +835,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'pack.delivery';
       this.orderTransitionNameOfflineNote = false;
       this.orderTransitionValid = true;
@@ -725,6 +857,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'mark.ready.for.shipment';
       this.orderTransitionNameOfflineNote = false;
       this.orderTransitionValid = true;
@@ -739,6 +879,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'start.shipment';
       this.orderTransitionNameOfflineNote = false;
       this.orderTransitionValid = true;
@@ -753,6 +901,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = true;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'start.shipment.manual.payment';
       this.orderTransitionNameOfflineNote = true;
       this.orderTransitionValid = false;
@@ -768,6 +924,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
+      this.orderTransitionClientMessage = null;
+      this.orderTransitionSupportsClientMessage = true;
+      this.orderTransitionParam1Value = null;
+      this.orderTransitionParam1Key = null;
+      this.orderTransitionRequiresParam1 = false;
+      this.orderTransitionParam2Value = null;
+      this.orderTransitionParam2Key = null;
+      this.orderTransitionRequiresParam2 = false;
       this.orderTransitionName = 'mark.shipped';
       this.orderTransitionNameOfflineNote = true;
       this.orderTransitionValid = true;

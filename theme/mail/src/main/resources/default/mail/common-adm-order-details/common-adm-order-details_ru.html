@@ -31,6 +31,8 @@
                 for(Object deliveryItem : delivery.getDetail()) {
                 def lineTotal = (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
                 deliverySum += lineTotal;
+                def _trackingId = deliveryItem.getValue("TrackingID");
+                def _trackingUrl = deliveryItem.getValue("TrackingURL");
                 %>
                 <tr>
                     <td style="border: 1px solid #E0E0E0;text-align:left;vertical-align:top;">
@@ -49,7 +51,13 @@
                         <%=lineTotal%>
                     </td>
                 </tr>
-                <%
+                <% if (_trackingId != null) { %>
+                <tr>
+                    <td colspan="5" style="border: 1px solid #E0E0E0;text-align:left;vertical-align:top;">
+                        Курьер: <%=_trackingId.first %> <%=(_trackingUrl != null ? _trackingUrl.first : '')%>
+                    </td>
+                </tr>
+                <% }
                 }
                 %>
                 <tr>

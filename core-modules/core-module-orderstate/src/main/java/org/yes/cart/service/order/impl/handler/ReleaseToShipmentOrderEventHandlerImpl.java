@@ -32,7 +32,7 @@ import org.yes.cart.service.payment.PaymentProcessorFactory;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler {
+public class ReleaseToShipmentOrderEventHandlerImpl extends AbstractEventHandlerImpl implements OrderEventHandler {
 
     private final PaymentProcessorFactory paymentProcessorFactory;
 
@@ -71,12 +71,12 @@ public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler
                     if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.shipmentComplete(order, delivery.getDeliveryNum(), isForceProcessing(orderEvent), orderEvent.getParams()))) {
 
                         // payment was ok so continue
-                        delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
+                        transition(orderEvent, order, delivery, CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
 
                     } else {
 
                         // payment was not ok so we mark the order as waiting payment and we do NOT proceed to shipping
-                        delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT);
+                        transition(orderEvent, order, delivery, CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT);
 
                     }
 
@@ -86,19 +86,19 @@ public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler
                     if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.shipmentComplete(order, delivery.getDeliveryNum(), isForceProcessing(orderEvent), orderEvent.getParams()))) {
 
                         // payment was ok so continue
-                        delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
+                        transition(orderEvent, order, delivery, CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
 
                     } else {
 
                         // payment was not ok so we mark the order as waiting payment and we do NOT proceed to shipping
-                        delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT);
+                        transition(orderEvent, order, delivery, CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT);
 
                     }
 
                 } else {
 
                     // this is offline PG, so CAPTURE will happen on delivery (i.e. next phase)
-                    delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS_WAITING_PAYMENT);
+                    transition(orderEvent, order, delivery, CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS_WAITING_PAYMENT);
 
                 }
 
@@ -106,7 +106,7 @@ public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler
 
                 // this is pre-paid, so we proceed to shipping in progress
                 // Electronic also proceed to shipping in progress since shipped status is when it is downloaded
-                delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
+                transition(orderEvent, order, delivery, CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
 
             }
 

@@ -1,2 +1,8 @@
 Guten Tag $root.firstname $root.lastname!
 Neue Bestellung $root.ordernum at $shop.name wurde annuliert.
+<% ['OS_CANCELLED', 'OS_CANCELLED_WAITING_PAYMENT'].each {
+def _val = root.getValue(it);
+if (_val != null) {
+%>${_val.first}<%
+   }
+} %>

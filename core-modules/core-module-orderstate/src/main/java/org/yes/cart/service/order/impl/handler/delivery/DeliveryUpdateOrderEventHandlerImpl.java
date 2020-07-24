@@ -33,6 +33,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.service.order.impl.handler.AbstractEventHandlerImpl;
 import org.yes.cart.shoppingcart.InventoryResolver;
 import org.yes.cart.utils.MoneyUtils;
 import org.yes.cart.utils.log.Markers;
@@ -46,7 +47,7 @@ import java.util.*;
  * Date: 16/02/2017
  * Time: 17:23
  */
-public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, ApplicationContextAware {
+public class DeliveryUpdateOrderEventHandlerImpl extends AbstractEventHandlerImpl implements OrderEventHandler, ApplicationContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeliveryUpdateOrderEventHandlerImpl.class);
 
@@ -313,8 +314,7 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                                 CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT.equals(delivery.getDeliveryStatus())) {
 
                             // We only void reservation, since this is automated integration flow
-                            voidReservation(delivery);
-                            delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
+                            voidReservation(orderEvent, delivery);
 
                             // We are sending updates, so we are packing the order be it part or full.
                             getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_RELEASE_TO_PACK, customerOrder, delivery));
@@ -396,10 +396,12 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
     /**
      * Allocate sku quantity on warehouses, that belong to shop, where order was made.
      *
+     * @param orderEvent    event
      * @param orderDelivery reserve for this delivery
+     *
      * @throws OrderItemAllocationException in case if can not allocate quantity for each sku
      */
-    void voidReservation(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
+    void voidReservation(final OrderEvent orderEvent, final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
 
         if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(orderDelivery.getDeliveryGroup())) {
 
@@ -427,7 +429,8 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
             }
         }
 
-        orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
+        transition(orderEvent, orderEvent.getCustomerOrder(), orderDelivery,
+                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
 
     }
 

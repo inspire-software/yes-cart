@@ -60,6 +60,10 @@
         <i class="fa fa-dollar"></i>
       </button>
 
+      <button type="button" (click)="onNotesSelected()" [hidden]="!selectedCustomerorderNotable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERNOTES' | translate }}">
+        <i class="fa fa-sticky-note-o"></i>
+      </button>
+
 
 
       <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYPACK' | translate }}">
@@ -159,10 +163,28 @@
           </div>
           <div class="col-xs-12">{{ orderTransitionName | translate:{order: orderTransitionNumber } }}</div>
         </div>
-        <div class="row" [hidden]="!orderTransitionRequiresMessage">
+        <div class="row" [hidden]="!orderTransitionRequiresParam1">
+          <div class="col-lg-3">{{ ('CUSTOMERORDER_MANUAL_TRANSITION_PARAM_' + orderTransitionParam1Key) | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" name="orderTransitionParam1Value" type="text" [(ngModel)]="orderTransitionParam1Value" (ngModelChange)="onTransitionMessageChange($event)" autocomplete="off">
+          </div>
+        </div>
+        <div class="row" [hidden]="!orderTransitionRequiresParam2">
+          <div class="col-lg-3">{{ ('CUSTOMERORDER_MANUAL_TRANSITION_PARAM_' + orderTransitionParam2Key) | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" name="orderTransitionParam2Value" type="text" [(ngModel)]="orderTransitionParam2Value" (ngModelChange)="onTransitionMessageChange($event)" autocomplete="off">
+          </div>
+        </div>
+        <div class="row">
           <div class="col-lg-3">{{ 'CUSTOMERORDER_MANUAL_TRANSITION_MESSAGE' | translate }}</div>
           <div class="col-lg-9">
-            <input class="form-control" name="orderTransitionMessage" type="text" [(ngModel)]="orderTransitionMessage" (ngModelChange)="onTransitionMessageChange($event)" autocomplete="off">
+            <textarea class="form-control" name="orderTransitionMessage" [(ngModel)]="orderTransitionMessage" (ngModelChange)="onTransitionMessageChange($event)" rows="3" autocomplete="off"></textarea>
+          </div>
+        </div>
+        <div class="row" [hidden]="!orderTransitionSupportsClientMessage">
+          <div class="col-lg-3"><span class="text-danger">{{ 'CUSTOMERORDER_MANUAL_TRANSITION_CLIENT_MESSAGE' | translate }}</span></div>
+          <div class="col-lg-9">
+            <textarea class="form-control" name="orderTransitionClientMessage" [(ngModel)]="orderTransitionClientMessage" (ngModelChange)="onTransitionMessageChange($event)" rows="3" autocomplete="off"></textarea>
           </div>
         </div>
       </fieldset>

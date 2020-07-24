@@ -1,2 +1,8 @@
 Guten Tag $root.firstname $root.lastname!
 Rücksendung von Bestellung $root.ordernum bei $shop.name ist bearbeitet.
+<% ['OS_RETURNED', 'OS_RETURNED_WAITING_PAYMENT'].each {
+def _val = root.getValue(it);
+if (_val != null) {
+%>${_val.first}<%
+   }
+} %>

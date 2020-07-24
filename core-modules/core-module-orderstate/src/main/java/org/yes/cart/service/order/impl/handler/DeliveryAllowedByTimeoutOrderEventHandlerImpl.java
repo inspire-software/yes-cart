@@ -44,7 +44,8 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEventHandler, ApplicationContextAware {
+public class DeliveryAllowedByTimeoutOrderEventHandlerImpl extends AbstractEventHandlerImpl
+        implements OrderEventHandler, ApplicationContextAware {
 
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;
@@ -96,7 +97,9 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
                 }
             }
 
-            orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+            transition(orderEvent, orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery(),
+                    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+
             getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY, orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery()));
 
             return true;

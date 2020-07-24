@@ -19,32 +19,19 @@ package org.yes.cart.domain.i18n.impl;
 import org.junit.Test;
 import org.yes.cart.domain.i18n.I18NModel;
 
+import java.util.Collections;
+
 import static org.junit.Assert.*;
 
 /**
- * User: denispavlov
- * Date: 18/09/2019
- * Time: 10:11
+ * Date: 24/07/2020
+ * Time: 17:31
  */
-public class NonI18NModelTest {
-
-    @Test
-    public void testStringNull() throws Exception {
-        final I18NModel model = new NonI18NModel(null);
-        assertNotNull(model.getAllValues());
-        assertTrue(model.getAllValues().isEmpty());
-    }
-
-    @Test
-    public void testStringEmpty() throws Exception {
-        final I18NModel model = new NonI18NModel("");
-        assertNotNull(model.getAllValues());
-        assertTrue(model.getAllValues().isEmpty());
-    }
+public class Immutable18NModelTest {
 
     @Test
     public void testString() throws Exception {
-        final I18NModel model = new NonI18NModel("Some text");
+        final I18NModel model = new Immutable18NModel(new StringI18NModel(Collections.singletonMap(I18NModel.DEFAULT, "Some text")));;
         assertNotNull(model.getAllValues());
         assertEquals(1, model.getAllValues().size());
         assertEquals("Some text", model.getValue("EN"));
@@ -55,20 +42,20 @@ public class NonI18NModelTest {
     @Test
     public void testGetNull() throws Exception {
 
-        assertEquals("Some text", new NonI18NModel("Some text").getValue(null));
+        assertEquals("Some text", new Immutable18NModel(new NonI18NModel("Some text")).getValue(null));
     }
 
     @Test
     public void testEquals() throws Exception {
 
-        final I18NModel m1 = new NonI18NModel("Some text");
-        final I18NModel m2 = new NonI18NModel("Some text");
+        final I18NModel m1 = new Immutable18NModel(new NonI18NModel("Some text"));
+        final I18NModel m2 = new Immutable18NModel(new NonI18NModel("Some text"));
 
         assertTrue(m1.equals(m2));
         assertTrue(m2.equals(m1));
         assertEquals(m2.hashCode(), m1.hashCode());
 
-        final I18NModel m3 = new NonI18NModel("Some text 2");
+        final I18NModel m3 = new Immutable18NModel(new NonI18NModel("Some text 2"));
 
         assertFalse(m3.equals(m2));
         assertFalse(m2.equals(m3));
@@ -95,7 +82,8 @@ public class NonI18NModelTest {
     @Test
     public void testToString() throws Exception {
 
-        assertEquals("xx#~#some text#~#", new NonI18NModel("some text").toString());
+        assertEquals("xx#~#some text#~#", new Immutable18NModel(new NonI18NModel("some text")).toString());
 
     }
+
 }

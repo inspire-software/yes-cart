@@ -32,6 +32,8 @@ import java.util.Map;
  */
 public class NonI18NModel implements I18NModel {
 
+    private static final String SEPARATOR = "#~#";
+
     private String value;
 
     public NonI18NModel(final String value) {
@@ -87,6 +89,9 @@ public class NonI18NModel implements I18NModel {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return value;
+        if (value != null) {
+            return I18NModel.DEFAULT + SEPARATOR + value + SEPARATOR;
+        }
+        return null;
     }
 }

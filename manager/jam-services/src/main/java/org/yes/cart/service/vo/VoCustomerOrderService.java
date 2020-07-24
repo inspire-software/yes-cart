@@ -18,6 +18,8 @@ package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.*;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 31/08/2016
@@ -52,29 +54,29 @@ public interface VoCustomerOrderService {
     /**
      * Perform order transition.
      *
-     * @param transition transition key
-     * @param ordernum order number
-     * @param message optional message
+     * @param transition    transition key
+     * @param ordernum      order number
+     * @param context       optional data (e.g. message, deliveryref)
      *
      * @return transition result
      *
      * @throws Exception errors
      */
-    VoCustomerOrderTransitionResult transitionOrder(String transition, String ordernum, String message) throws Exception;
+    VoCustomerOrderTransitionResult transitionOrder(String transition, String ordernum, Map<String, String> context) throws Exception;
 
     /**
      * Perform order transition.
      *
-     * @param transition transition key
-     * @param ordernum order number
-     * @param deliverynum order deliverynumber
-     * @param message optional message
+     * @param transition    transition key
+     * @param ordernum      order number
+     * @param deliverynum   order deliverynumber
+     * @param context       optional data (e.g. message, deliveryref)
      *
      * @return transition result
      *
      * @throws Exception errors
      */
-    VoCustomerOrderTransitionResult transitionDelivery(String transition, String ordernum, String deliverynum, String message) throws Exception;
+    VoCustomerOrderTransitionResult transitionDelivery(String transition, String ordernum, String deliverynum, Map<String, String> context) throws Exception;
 
     /**
      * Perform manual export action.

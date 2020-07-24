@@ -40,7 +40,8 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler {
+public class ProcessAllocationOrderEventHandlerImpl extends AbstractEventHandlerImpl
+        implements OrderEventHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProcessAllocationOrderEventHandlerImpl.class);
 
@@ -71,7 +72,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
     @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderItemAllocationException {
         synchronized (OrderEventHandler.syncMonitor) {
-            allocateQuantity(orderEvent.getCustomerOrderDelivery());
+            allocateQuantity(orderEvent, orderEvent.getCustomerOrderDelivery());
             return true;
         }
     }
@@ -100,10 +101,12 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
     /**
      * Allocate sku quantity on warehouses, that belong to shop, where order was made.
      *
+     * @param orderEvent    event
      * @param orderDelivery reserve for this delivery
+     *
      * @throws OrderItemAllocationException in case if can not allocate quantity for each sku
      */
-    void allocateQuantity(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
+    void allocateQuantity(final OrderEvent orderEvent, final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
 
         if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(orderDelivery.getDeliveryGroup())) {
 
@@ -156,7 +159,8 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
             }
         }
 
-        orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
+        transition(orderEvent, orderEvent.getCustomerOrder(), orderDelivery,
+                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
 
     }
 

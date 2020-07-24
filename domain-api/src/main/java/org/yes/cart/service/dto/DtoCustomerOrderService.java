@@ -37,13 +37,25 @@ import java.util.Set;
 public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrderDTO> {
 
     /**
-     * Confirm customer will to pay via carrie or confirm status of bank payment.
+     * Add audit notes to the order.
      *
      * @param orderNum             unique order number. not pk value.
+     * @param auditMessage         audit message
      *
      * @return result object
      */
-    Result updateOrderSetConfirmed(String orderNum);
+    Result updateOrderSetNotes(String orderNum, String auditMessage);
+
+    /**
+     * Confirm customer will to pay via carrier or confirm status of bank payment.
+     *
+     * @param orderNum             unique order number. not pk value.
+     * @param auditMessage         audit message
+     * @param clientMessage        client message
+     *
+     * @return result object
+     */
+    Result updateOrderSetConfirmed(String orderNum, String auditMessage, String clientMessage);
 
     /**
      * Cancel order. In case of order cancellation will be performed following actions:
@@ -58,62 +70,71 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * Please refer how works particular payment gateway, which are you using, because of some difference.
      * For more details see org.yes.cart.payment.PaymentGateway interface and his implementations.
      *
-     * @param orderNum             unique order number. not pk value.
+     * @param orderNum             unique order number.
+     * @param auditMessage         audit message
+     * @param clientMessage        client message
      *
      * @return result object
      */
-    Result updateOrderSetCancelled(String orderNum);
+    Result updateOrderSetCancelled(String orderNum, String auditMessage, String clientMessage);
 
     /**
      * This is manual refund operation of cancelled orders that are "stuck"
      *
      *
      * @param orderNum             unique order number. not pk value.
-     * @param message              manual operation message
+     * @param auditMessage         audit message
+     * @param clientMessage        client message
      *
      * @return result object
      */
-    Result updateOrderSetCancelledManual(String orderNum, String message);
+    Result updateOrderSetCancelledManual(String orderNum, String auditMessage, String clientMessage);
 
 
     /**
      * Update external delivery number.
      *
-     * @param orderNum    unique order number. not pk value.
-     * @param deliveryNum unique delivery number in order scope. not pk value.
-     * @param newRefNo    new reference number
+     * @param orderNum              unique order number.
+     * @param deliveryNum           unique delivery number in order scope. not pk value.
+     * @param newRefNo              new reference number
+     * @param newRefURL             courier URL
+     * @param auditMessage          audit message
+     * @param clientMessage         client message
      *
      * @return result object
      */
-    Result updateExternalDeliveryRefNo(String orderNum, String deliveryNum, String newRefNo);
+    Result updateExternalDeliveryRefNo(String orderNum, String deliveryNum, String newRefNo, String newRefURL, String auditMessage, String clientMessage);
 
+
+    /**
+     * Fire transition for single delivery. This method may lead to
+     * change status for whole order, not only for single delivery.
+     *
+     * @param orderNum              unique order number. not pk value.
+     * @param deliveryNum           unique delivery number in order scope. not pk value.
+     * @param currentStatus         from status
+     * @param destinationStatus     to status
+     * @param auditMessage          audit message
+     * @param clientMessage         client message
+     *
+     * @return result object
+     */
+    Result updateDeliveryStatus(String orderNum, String deliveryNum, String currentStatus, String destinationStatus, String auditMessage, String clientMessage);
 
     /**
      * Fire transition for single delivery. This method may lead to
      * change status for whole order , not only for single delivery.
      *
-     * @param orderNum          unique order number. not pk value.
-     * @param deliveryNum       unique delivery number in order scope. not pk value.
-     * @param currentStatus     from status
-     * @param destinationStatus to status
+     * @param orderNum              unique order number. not pk value.
+     * @param deliveryNum           unique delivery number in order scope. not pk value.
+     * @param currentStatus         from status
+     * @param destinationStatus     to status
+     * @param auditMessage          audit message
+     * @param clientMessage         client message
      *
      * @return result object
      */
-    Result updateDeliveryStatus(String orderNum, String deliveryNum, String currentStatus, String destinationStatus);
-
-    /**
-     * Fire transition for single delivery. This method may lead to
-     * change status for whole order , not only for single delivery.
-     *
-     * @param orderNum          unique order number. not pk value.
-     * @param deliveryNum       unique delivery number in order scope. not pk value.
-     * @param currentStatus     from status
-     * @param destinationStatus to status
-     * @param message           manual operation message
-     *
-     * @return result object
-     */
-    Result updateDeliveryStatusManual(String orderNum, String deliveryNum, String currentStatus, String destinationStatus, String message);
+    Result updateDeliveryStatusManual(String orderNum, String deliveryNum, String currentStatus, String destinationStatus, String auditMessage, String clientMessage);
 
     /**
      * Get list of delivery details for given order number.

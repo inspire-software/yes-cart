@@ -25,7 +25,7 @@ import org.yes.cart.service.order.OrderEventHandler;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ProcessTimeWaitOrderEventHandlerImpl implements OrderEventHandler {
+public class ProcessTimeWaitOrderEventHandlerImpl extends AbstractEventHandlerImpl implements OrderEventHandler {
 
     /**
      * {@inheritDoc}
@@ -33,7 +33,8 @@ public class ProcessTimeWaitOrderEventHandlerImpl implements OrderEventHandler {
     @Override
     public boolean handle(final OrderEvent orderEvent) {
         synchronized (OrderEventHandler.syncMonitor) {
-            orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
+            transition(orderEvent, orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery(),
+                    CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
             return true;
         }
     }

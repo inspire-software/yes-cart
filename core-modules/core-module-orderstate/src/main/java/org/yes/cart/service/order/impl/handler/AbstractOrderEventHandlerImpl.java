@@ -26,28 +26,37 @@ import org.yes.cart.service.order.OrderEventHandler;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public abstract class AbstractOrderEventHandlerImpl implements OrderEventHandler {
+public abstract class AbstractOrderEventHandlerImpl extends AbstractEventHandlerImpl implements OrderEventHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractOrderEventHandlerImpl.class);
 
     /**
      * Get transition target.
-     * @param orderEvent event
-     * @return transition target id.
+     *
+     * @param orderEvent    event
+     * @return transition   target id.
      */
     protected abstract String getTransitionTarget(final OrderEvent orderEvent);
 
+    /**
+     * Default handling to transition to target state.
+     *
+     * @param orderEvent    event
+     */
     protected void handleInternal(final OrderEvent orderEvent) {
 
-        LOG.info("Order {} transition from {} to {} state",
-                orderEvent.getCustomerOrder().getOrdernum(),
-                orderEvent.getCustomerOrder().getOrderStatus(),
-                getTransitionTarget(orderEvent)
-        );
+        transition(orderEvent, orderEvent.getCustomerOrder(), getTransitionTarget(orderEvent));
 
-        orderEvent.getCustomerOrder().setOrderStatus(getTransitionTarget(orderEvent));
     }
 
+    /**
+     * Determine if "forceProcessing" flag is enabled in runtime variables, so that PG operation can be
+     * forced for manual overrides.
+     *
+     * @param orderEvent    order event
+     *
+     * @return true if enabled as Boolean.TRUE runtime parameter
+     */
     protected boolean isForceProcessing(final OrderEvent orderEvent) {
 
         final Object forceProcessing = orderEvent.getRuntimeParams().get("forceProcessing");

@@ -56,6 +56,6 @@ public class GenericDeliveryTransitionManualAction implements OrderFlowAction {
             // do  nothing
         }
 
-        return dtoCustomerOrderService.updateDeliveryStatusManual(map.get("ordernum"), deliverynum, currentState, targetState, message);
+        return dtoCustomerOrderService.updateDeliveryStatusManual(map.get("ordernum"), deliverynum, currentState, targetState, message, map.get("clientMessage"));
     }
 }
