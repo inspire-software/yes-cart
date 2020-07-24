@@ -1361,6 +1361,79 @@ public class CustomerController {
     }
 
 
+    /**
+     * Interface: DELETE /api/rest/customer/addressbook/{addressId}
+     * <p>
+     * <p>
+     * Remove address from addressbook.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>yc</td><td>token uuid</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>addressId</td><td>address ID {@link Address}</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>N/A</td><td>
+     * <pre><code>
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param addressId address ID (see {@link Address} )
+     * @param request request
+     * @param response response
+     */
+    @ApiOperation(value = "Delete address book address.", tags = { "addressbook", "customer" })
+    @RequestMapping(
+            value = "/addressbook/{addressId}",
+            method = RequestMethod.DELETE
+    )
+    public @ResponseBody void deleteAddressbookAddress(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
+                                                       final @ApiParam(value = "Address ID") @PathVariable(value = "addressId", required = true) Long addressId,
+                                                       final HttpServletRequest request,
+                                                       final HttpServletResponse response) {
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
+        cartMixin.persistShoppingCart(request, response);
+
+
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+        final Shop shop = cartMixin.getCurrentShop();
+        final Shop customerShop = cartMixin.getCurrentCustomerShop();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
+
+        if (customer == null) {
+            cartMixin.throwSecurityExceptionIfNotLoggedIn();
+        }
+
+        for (final Address address : addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_SHIPPING)) {
+            if (address.getAddressId() == addressId) {
+                addressBookFacade.remove(address, customerShop);
+                return;
+            }
+        }
+
+        for (final Address address : addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_BILLING)) {
+            if (address.getAddressId() == addressId) {
+                addressBookFacade.remove(address, customerShop);
+                return;
+            }
+        }
+
+
+    }
+
+
+
 
     /**
      * Interface: GET /api/rest/customer/wishlist/{type}
