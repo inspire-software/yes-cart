@@ -36,6 +36,7 @@ public class AddressUpdateRO implements Serializable {
     private Long addressId;
     private String addressName;
     private String addressType;
+    private boolean defaultAddress;
     private Map<String, String> custom;
 
     @XmlJavaTypeAdapter(StringMapAdapter.class)
@@ -64,6 +65,15 @@ public class AddressUpdateRO implements Serializable {
 
     public void setAddressType(final String addressType) {
         this.addressType = addressType;
+    }
+
+    @XmlAttribute(name = "default-address")
+    public boolean isDefaultAddress() {
+        return defaultAddress;
+    }
+
+    public void setDefaultAddress(final boolean defaultAddress) {
+        this.defaultAddress = defaultAddress;
     }
 
     @XmlAttribute(name = "address-name")

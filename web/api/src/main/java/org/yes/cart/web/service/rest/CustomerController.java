@@ -1029,6 +1029,9 @@ public class CustomerController {
         }
 
         addressBookFacade.createOrUpdate(addressEntity, customerShop);
+        if (address.isDefaultAddress() && !addressEntity.isDefaultAddress()) {
+            addressBookFacade.useAsDefault(addressEntity, customerShop);
+        }
 
         return viewAddressbookInternal(address.getAddressType());
     }

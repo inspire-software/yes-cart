@@ -212,6 +212,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
+                .andExpect(content().string(StringContains.containsString("\"defaultAddress\":true")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -258,6 +259,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
+                .andExpect(content().string(StringContains.containsString("\"defaultAddress\":true")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -546,6 +548,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
+                .andExpect(content().string(StringContains.containsString("default-address=\"true\"")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -592,6 +595,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
+                .andExpect(content().string(StringContains.containsString("default-address=\"true\"")))
                 .andExpect(header().string("yc", uuid));
 
 

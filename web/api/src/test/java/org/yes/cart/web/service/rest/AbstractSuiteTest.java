@@ -194,6 +194,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
         final AddressUpdateRO address = new AddressUpdateRO();
         address.setAddressType(type);
+        address.setDefaultAddress(true);
 
         final Map<String, String> custom = new HashMap<>();
         custom.put("addrline1", "In the middle of");
