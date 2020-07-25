@@ -341,6 +341,16 @@
                         <value>notes.order</value>
                     </list>
                 </entry>
+                <entry key="os.cancelled">
+                    <list>
+                        <value>notes.order</value>
+                    </list>
+                </entry>
+                <entry key="os.returned">
+                    <list>
+                        <value>notes.order</value>
+                    </list>
+                </entry>
             </map>
         </constructor-arg>
         <constructor-arg index="1">
