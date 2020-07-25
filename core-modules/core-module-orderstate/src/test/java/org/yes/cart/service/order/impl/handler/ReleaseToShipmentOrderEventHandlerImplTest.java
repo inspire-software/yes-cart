@@ -384,6 +384,7 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
                         new HashMap() {{
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, "Manual message");
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, "manager@test.com");
                         }})));
 
         // check reserved quantity
@@ -493,6 +494,7 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
                         new HashMap() {{
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, "Manual message");
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, "manager@test.com");
                         }})));
 
         // check reserved quantity

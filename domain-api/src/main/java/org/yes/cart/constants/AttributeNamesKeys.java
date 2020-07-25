@@ -989,6 +989,7 @@ public interface AttributeNamesKeys {
         String ORDER_PAYMENT_FORCE_AUTO_PROCESSING_OPERATION = "forceAutoProcessingOperation";
 
 
+        String ORDER_TRANSITION_USER = "transitionUser";
         String ORDER_TRANSITION_AUDIT_MESSAGE = "transitionAuditMessage";
         String ORDER_TRANSITION_CLIENT_MESSAGE = "transitionClientMessage";
 

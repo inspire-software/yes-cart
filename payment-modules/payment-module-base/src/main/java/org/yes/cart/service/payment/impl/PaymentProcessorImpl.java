@@ -312,6 +312,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             }
 
             final boolean forceManualProcessing = Boolean.TRUE.equals(params.get(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING));
+            final String forceManualProcessingUser = (String) params.get(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER);
             final String forceManualProcessingMessage = (String) params.get(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE);
             final BigDecimal forceAddToEveryPaymentAmount = (BigDecimal) params.get(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_ADD_TO_EVERY_PAYMENT_AMOUNT);
             boolean wasError = false;
@@ -340,7 +341,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                         payment.setPaymentProcessorBatchSettlement(true);
                         payment.setTransactionGatewayLabel(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING);
                         payment.setTransactionOperationResultCode(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING);
-                        payment.setTransactionOperationResultMessage(forceManualProcessingMessage);
+                        payment.setTransactionOperationResultMessage(forceManualProcessingUser + ": " + forceManualProcessingMessage);
                     } else {
                         payment = getPaymentGateway().capture(payment, forceProcessing); //pass "original" to perform fund capture.
                     }
@@ -382,6 +383,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             reverseAuthorizations(order.getOrdernum(), forceProcessing);
 
             final boolean forceManualProcessing = Boolean.TRUE.equals(params.get(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING));
+            final String forceManualProcessingUser = (String) params.get(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER);
             final String forceManualProcessingMessage = (String) params.get(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE);
             final String forceAutoProcessingOperation = (String) params.get(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_AUTO_PROCESSING_OPERATION);
             boolean wasError = false;
@@ -433,7 +435,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
                         payment.setTransactionGatewayLabel(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING);
                         payment.setTransactionOperationResultCode(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING);
-                        payment.setTransactionOperationResultMessage(forceManualProcessingMessage);
+                        payment.setTransactionOperationResultMessage(forceManualProcessingUser + ": " + forceManualProcessingMessage);
                     } else {
                         if (forceAutoProcessingOperation != null) {
 

@@ -268,6 +268,7 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
                         new HashMap() {{
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, "Manual message");
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, "manager@test.com");
                         }})));
 
 
@@ -336,6 +337,7 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
                         new HashMap() {{
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, "Manual message");
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, "manager@test.com");
                         }})));
 
 
@@ -980,6 +982,7 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
                         new HashMap() {{
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, "Manual message");
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, "manager@test.com");
                         }})));
 
 
@@ -1089,6 +1092,7 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
                         new HashMap() {{
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
                             put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, "Manual message");
+                            put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, "manager@test.com");
                         }})));
 
 

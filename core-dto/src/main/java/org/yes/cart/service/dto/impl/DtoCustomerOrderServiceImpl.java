@@ -151,7 +151,7 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         if (StringUtils.isNotEmpty(auditMessage)) {
             order.putValue(
                     "DN: " + DateUtils.formatSDT(),
-                    signMessage(auditMessage),
+                    getUser() + ": " + auditMessage,
                     I18NModels.AUDITEXPORT
             );
         }
@@ -178,8 +178,9 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
             try {
                 final Map params = new HashMap();
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
                 if (StringUtils.isNotBlank(auditMessage)) {
-                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+                    params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
                 }
                 if (StringUtils.isNotBlank(clientMessage)) {
                     params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
@@ -230,8 +231,9 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
                 !CustomerOrder.ORDER_STATUS_RETURNED.equals(order.getOrderStatus());
 
         final Map params = new HashMap();
+        params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
         if (StringUtils.isNotBlank(auditMessage)) {
-            params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+            params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
         }
         if (StringUtils.isNotBlank(clientMessage)) {
             params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
@@ -309,8 +311,9 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
             try {
                 final Map params = new HashMap();
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
-                params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, signMessage(auditMessage));
-                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, auditMessage);
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
                 if (StringUtils.isNotBlank(clientMessage)) {
                     params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
                 }
@@ -374,13 +377,13 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         if (StringUtils.isNotEmpty(auditMessage)) {
             order.putValue(
                     "DR: " + DateUtils.formatSDT(),
-                    signMessage(delivery.getDeliveryNum() + (newRefNo != null ? " / " + newRefNo : "") + " " + auditMessage),
+                    getUser() + ": " + delivery.getDeliveryNum() + (newRefNo != null ? " / " + newRefNo : "") + " " + auditMessage,
                     I18NModels.AUDITEXPORT
             );
         } else {
             order.putValue(
                     "DR: " + DateUtils.formatSDT(),
-                    signMessage(delivery.getDeliveryNum() + (newRefNo != null ? " / " + newRefNo : "")),
+                    getUser() + ": " + delivery.getDeliveryNum() + (newRefNo != null ? " / " + newRefNo : ""),
                     I18NModels.AUDITEXPORT
             );
         }
@@ -425,8 +428,9 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
         try {
 
             final Map params = new HashMap();
+            params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
             if (StringUtils.isNotBlank(auditMessage)) {
-                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
             }
             if (StringUtils.isNotBlank(clientMessage)) {
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
@@ -534,8 +538,9 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
                 final Map params = new HashMap();
                 params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING, Boolean.TRUE);
-                params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, signMessage(auditMessage));
-                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, signMessage(auditMessage));
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_PAYMENT_FORCE_MANUAL_PROCESSING_MESSAGE, auditMessage);
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, getUser());
+                params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, auditMessage);
                 if (StringUtils.isNotBlank(clientMessage)) {
                     params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, clientMessage);
                 }
@@ -916,13 +921,13 @@ public class DtoCustomerOrderServiceImpl extends AbstractDtoServiceImpl<Customer
 
     }
 
-    private String signMessage(final String message) {
+    private String getUser() {
 
         if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null
                 || !SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            return message;
+            return null;
         }
-        return message + " (" + SecurityContextHolder.getContext().getAuthentication().getName() + ")";
+        return SecurityContextHolder.getContext().getAuthentication().getName();
 
     }
 

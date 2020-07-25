@@ -205,6 +205,43 @@ public class AbstractOrderEventHandlerImplTest {
     }
 
     @Test
+    public void testHandleInternalWithAuditAndClientMessageAndUser() throws Exception {
+
+        final OrderEvent event = this.context.mock(OrderEvent.class, "event");
+        final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
+
+        final Map<String, String> params = new HashMap<>();
+        params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, "audit trail");
+        params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, "client trail");
+        params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, "user@test.com");
+
+        this.context.checking(new Expectations() {{
+            allowing(event).getCustomerOrder(); will(returnValue(order));
+            allowing(order).getOrderStatus(); will(returnValue(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+            allowing(order).getOrdernum(); will(returnValue("100000000000-1"));
+            allowing(event).getParams(); will(returnValue(params));
+            oneOf(order).putValue(with(any(String.class)), with(equal("os.in.progress -> os.completed, user@test.com, audit trail, client trail")), with(I18NModels.AUDITEXPORT));
+            oneOf(order).putValue(with(equal("OS_COMPLETED")), with(equal("client trail")), with(I18NModels.AUDITEXPORT));
+            oneOf(order).setOrderStatus(CustomerOrder.ORDER_STATUS_COMPLETED);
+        }});
+
+        final AbstractOrderEventHandlerImpl handler = new AbstractOrderEventHandlerImpl() {
+            @Override
+            protected String getTransitionTarget(final OrderEvent orderEvent) {
+                return CustomerOrder.ORDER_STATUS_COMPLETED;
+            }
+
+            @Override
+            public boolean handle(final OrderEvent orderEvent) throws OrderException {
+                return false;
+            }
+        };
+
+        handler.handleInternal(event);
+
+    }
+
+    @Test
     public void testTransitionOrderNoAuditMessage() throws Exception {
 
         final OrderEvent event = this.context.mock(OrderEvent.class, "event");
@@ -387,6 +424,45 @@ public class AbstractOrderEventHandlerImplTest {
             allowing(delivery).getDeliveryNum(); will(returnValue("100000000000-1"));
             allowing(event).getParams(); will(returnValue(params));
             oneOf(order).putValue(with(any(String.class)), with(equal("ds.shipment.inprogress -> ds.shipped, audit trail, client trail")), with(I18NModels.AUDITEXPORT));
+            oneOf(order).putValue(with(equal("DS_SHIPPED_100000000000-1")), with(equal("client trail")), with(I18NModels.AUDITEXPORT));
+            oneOf(delivery).setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
+        }});
+
+        final AbstractOrderEventHandlerImpl handler = new AbstractOrderEventHandlerImpl() {
+            @Override
+            protected String getTransitionTarget(final OrderEvent orderEvent) {
+                return CustomerOrder.ORDER_STATUS_COMPLETED;
+            }
+
+            @Override
+            public boolean handle(final OrderEvent orderEvent) throws OrderException {
+                return false;
+            }
+        };
+
+        handler.transition(event, order, delivery, CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
+
+    }
+
+    @Test
+    public void testTransitionDeliveryWithAuditAndClientMessageAndUser() throws Exception {
+
+        final OrderEvent event = this.context.mock(OrderEvent.class, "event");
+        final CustomerOrder order = this.context.mock(CustomerOrder.class, "order");
+        final CustomerOrderDelivery delivery = this.context.mock(CustomerOrderDelivery.class, "delivery");
+
+        final Map<String, String> params = new HashMap<>();
+        params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE, "audit trail");
+        params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE, "client trail");
+        params.put(AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER, "user@test.com");
+
+
+        this.context.checking(new Expectations() {{
+            allowing(event).getCustomerOrder(); will(returnValue(order));
+            allowing(delivery).getDeliveryStatus(); will(returnValue(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS));
+            allowing(delivery).getDeliveryNum(); will(returnValue("100000000000-1"));
+            allowing(event).getParams(); will(returnValue(params));
+            oneOf(order).putValue(with(any(String.class)), with(equal("ds.shipment.inprogress -> ds.shipped, user@test.com, audit trail, client trail")), with(I18NModels.AUDITEXPORT));
             oneOf(order).putValue(with(equal("DS_SHIPPED_100000000000-1")), with(equal("client trail")), with(I18NModels.AUDITEXPORT));
             oneOf(delivery).setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
         }});

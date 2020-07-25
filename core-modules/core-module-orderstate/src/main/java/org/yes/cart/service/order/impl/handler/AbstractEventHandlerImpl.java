@@ -94,11 +94,15 @@ public abstract class AbstractEventHandlerImpl implements OrderEventHandler {
 
     private void addAuditRecord(final OrderEvent orderEvent, final CustomerOrder order, final String reference, final String currentState, final String nextState) {
 
+        final Pair<Boolean, String> manager = determineStringValue(orderEvent, AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_USER);
         final Pair<Boolean, String> auditMessage = determineStringValue(orderEvent, AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_AUDIT_MESSAGE);
         final Pair<Boolean, String> clientMessage = determineStringValue(orderEvent, AttributeNamesKeys.CustomerOrder.ORDER_TRANSITION_CLIENT_MESSAGE);
 
         final StringBuilder transitionTrail = new StringBuilder()
                 .append(currentState).append(" -> ").append(nextState);
+        if (manager.getFirst()) {
+            transitionTrail.append(", ").append(manager.getSecond());
+        }
         if (auditMessage.getFirst()) {
             transitionTrail.append(", ").append(auditMessage.getSecond());
         }
