@@ -271,16 +271,24 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
                     final String fcPath = WebParametersKeys.FULFILMENT_CENTRE_ID + "/" + idToCode.get(inventory.getWarehouse().getWarehouseId()) + "/";
                     final Product product = productService.getProductBySkuCode(inventory.getSkuCode());
-                    appendProductLoc(writer, product, languages, urlBase + fcPath);
+                    if (product != null) {
 
-                    if (product.isMultiSkuProduct()) {
+                        if (product.isMultiSkuProduct()) {
 
-                        for (final ProductSku sku : product.getSku()) {
+                            for (final ProductSku sku : product.getSku()) {
 
-                            appendSkuLoc(writer, sku, languages, urlBase + fcPath);
+                                if (inventory.getSkuCode().equals(sku.getCode())) {
+                                    appendSkuLoc(writer, sku, languages, urlBase + fcPath);
+                                    break;
+                                }
+
+                            }
+
+                        } else {
+
+                            appendProductLoc(writer, product, languages, urlBase + fcPath);
 
                         }
-
                     }
 
                 }
