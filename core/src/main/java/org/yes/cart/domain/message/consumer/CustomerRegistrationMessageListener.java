@@ -101,6 +101,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
         model.put("middleName", registrationMessage.getMiddlename());
         model.put("shopUrl", registrationMessage.getShopUrl());
         model.put("shopSecureUrl", registrationMessage.getShopSecureUrl());
+        model.put("shopPreferredUrl", registrationMessage.getShopPreferredUrl());
         model.put("shopName", registrationMessage.getShopName());
         model.put("additionalData", registrationMessage.getAdditionalData());
 
@@ -138,6 +139,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
                         adminModel.put("middleName", registrationMessage.getMiddlename());
                         adminModel.put("shopUrl", registrationMessage.getShopUrl());
                         adminModel.put("shopSecureUrl", registrationMessage.getShopSecureUrl());
+                        adminModel.put("shopPreferredUrl", registrationMessage.getShopPreferredUrl());
                         adminModel.put("shopName", registrationMessage.getShopName());
                         adminModel.put("additionalData", registrationMessage.getAdditionalData());
 

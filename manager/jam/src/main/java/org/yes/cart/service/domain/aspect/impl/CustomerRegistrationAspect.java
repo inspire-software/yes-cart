@@ -262,6 +262,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         registrationMessage.setShopName(shop.getName());
         registrationMessage.setShopUrl(transformShopUrls(shop));
         registrationMessage.setShopSecureUrl(transformShopSecureUrls(shop));
+        registrationMessage.setShopPreferredUrl(transformShopPreferredUrls(shop));
 
         if (registeredPerson instanceof Customer) {
             final Customer customer = (Customer) registeredPerson;
@@ -348,6 +349,12 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
     private Set<String> transformShopSecureUrls(final Shop shop) {
         final Set<String> rez = new HashSet<>();
         rez.add(shop.getDefaultShopSecureUrl());
+        return rez;
+    }
+
+    private Set<String> transformShopPreferredUrls(final Shop shop) {
+        final Set<String> rez = new HashSet<>();
+        rez.add(shop.getDefaultShopPreferredUrl());
         return rez;
     }
 

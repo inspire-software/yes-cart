@@ -198,6 +198,7 @@ public class VoMailServiceImpl implements VoMailService {
             emailModel.put("middleName", "J.");
             emailModel.put("shopUrl", Collections.singleton(shop.getDefaultShopUrl()));
             emailModel.put("shopSecureUrl", Collections.singleton(shop.getDefaultShopSecureUrl()));
+            emailModel.put("shopPreferredUrl", Collections.singleton(shop.getDefaultShopPreferredUrl()));
             emailModel.put("shopName", shop.getName());
 
 

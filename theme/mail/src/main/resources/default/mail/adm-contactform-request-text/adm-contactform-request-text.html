@@ -1,7 +1,7 @@
 <p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
     Contact form message by <%out.print(additionalData.email)%> in
-    <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>
-    <a href="<%out.print(shopSecureUrl.iterator().next())%>">$shopName</a>
+    <% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %>
+    <a href="<%out.print(shopPreferredUrl.iterator().next())%>">$shopName</a>
     <% } else { %>
     $shopName
     <% }%>

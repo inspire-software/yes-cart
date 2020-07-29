@@ -54,7 +54,7 @@ public class ApiUrlTemplateFunctionProviderImpl implements TemplateProcessor.Fun
     public Object doAction(final Object... params) {
 
         final Shop shop = ApplicationDirector.getCurrentShop();
-        final String defaultUrl = shop.getDefaultShopSecureUrl();
+        final String defaultUrl = shop.getDefaultShopPreferredUrl();
         final StringBuilder url = new StringBuilder(defaultUrl);
         if (defaultUrl.endsWith("/")) {
             url.append(contextPath.substring(1));

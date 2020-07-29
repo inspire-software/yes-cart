@@ -1,11 +1,11 @@
 Шановний (-на) $firstName $lastName,
 
 Вами зроблений запит на видвлення облікового запису на $shopName
-<% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>  <% out.print(shopSecureUrl.iterator().next()) %> <% } %>
+<% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %>  <% out.print(shopPreferredUrl.iterator().next()) %> <% } %>
 
 <% if (authToken != null) {
-     if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) {
-     %>Перейдіть по цьому посиланню для підтвердження <%out.print(shopSecureUrl.iterator().next())%>/deleteAccountCmd/$authToken .<%
+     if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) {
+     %>Перейдіть по цьому посиланню для підтвердження <%out.print(shopPreferredUrl.iterator().next())%>/deleteAccountCmd/$authToken .<%
      } else {
      %>Використайте код $authToken для підтвердження.<%
      } %>

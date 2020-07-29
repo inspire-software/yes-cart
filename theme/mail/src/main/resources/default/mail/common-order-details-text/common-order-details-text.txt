@@ -1,4 +1,4 @@
  <% if (root.getOrderMessage()) { %><%=root.getOrderMessage()%><% } %>
 
  You can view detailed information in order history
- "<%out.print(shop.getDefaultShopUrl())%>/order?order=<%=root.cartGuid%>"
+ "<%out.print(shop.getDefaultShopPreferredUrl())%>/order?order=<%=root.cartGuid%>"

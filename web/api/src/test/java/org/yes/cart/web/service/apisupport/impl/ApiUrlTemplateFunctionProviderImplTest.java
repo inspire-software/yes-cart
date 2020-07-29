@@ -45,7 +45,7 @@ public class ApiUrlTemplateFunctionProviderImplTest {
         ApplicationDirector.setCurrentShop(shop);
 
         this.context.checking(new Expectations() {{
-            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+            allowing(shop).getDefaultShopPreferredUrl(); will(returnValue("https://www.myshop.com"));
         }});
 
         final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("/ctx");
@@ -67,7 +67,7 @@ public class ApiUrlTemplateFunctionProviderImplTest {
         ApplicationDirector.setCurrentShop(shop);
 
         this.context.checking(new Expectations() {{
-            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+            allowing(shop).getDefaultShopPreferredUrl(); will(returnValue("https://www.myshop.com"));
         }});
 
         final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("");
@@ -89,7 +89,7 @@ public class ApiUrlTemplateFunctionProviderImplTest {
         ApplicationDirector.setCurrentShop(shop);
 
         this.context.checking(new Expectations() {{
-            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+            allowing(shop).getDefaultShopPreferredUrl(); will(returnValue("https://www.myshop.com"));
         }});
 
         final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("/ctx", "one");
@@ -111,7 +111,7 @@ public class ApiUrlTemplateFunctionProviderImplTest {
         ApplicationDirector.setCurrentShop(shop);
 
         this.context.checking(new Expectations() {{
-            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+            allowing(shop).getDefaultShopPreferredUrl(); will(returnValue("https://www.myshop.com"));
         }});
 
         final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("", "one");
@@ -133,7 +133,7 @@ public class ApiUrlTemplateFunctionProviderImplTest {
         ApplicationDirector.setCurrentShop(shop);
 
         this.context.checking(new Expectations() {{
-            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+            allowing(shop).getDefaultShopPreferredUrl(); will(returnValue("https://www.myshop.com"));
         }});
 
         final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("/ctx", "one", "two");
@@ -155,7 +155,7 @@ public class ApiUrlTemplateFunctionProviderImplTest {
         ApplicationDirector.setCurrentShop(shop);
 
         this.context.checking(new Expectations() {{
-            allowing(shop).getDefaultShopSecureUrl(); will(returnValue("https://www.myshop.com"));
+            allowing(shop).getDefaultShopPreferredUrl(); will(returnValue("https://www.myshop.com"));
         }});
 
         final ApiUrlTemplateFunctionProviderImpl func = new ApiUrlTemplateFunctionProviderImpl("", "one", "two");

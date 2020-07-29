@@ -1,16 +1,16 @@
 <p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
     Dear <b>$firstName $lastName</b>,<br>
     You requested your account (and all data) to be deleted at
-    <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>
-    <a href="<%out.print(shopSecureUrl.iterator().next())%>">$shopName</a>.
+    <% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %>
+    <a href="<%out.print(shopPreferredUrl.iterator().next())%>">$shopName</a>.
     <% } else { %>
     $shopName
     <% }%>
     <br>
     <br>
     <% if (authToken != null) { %>
-    <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %>
-    Click <a href="<%out.print(shopSecureUrl.iterator().next())%>/deleteAccountCmd/$authToken">here</a> to confirm account deletion.
+    <% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %>
+    Click <a href="<%out.print(shopPreferredUrl.iterator().next())%>/deleteAccountCmd/$authToken">here</a> to confirm account deletion.
     <% } else { %>
     Use this token <b>$authToken</b> to confirm account deletion.
     <% }%>

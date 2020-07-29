@@ -1,6 +1,6 @@
 <p style="font-family:sans-serif;font-size:14px;font-weight:normal;text-transform:none;margin-top:0;margin-bottom:20px;color:#464951;text-align:left;">
     Шановний (-на) <b>$root.firstname $root.lastname</b>! <br>
-    Ваше замовлення $root.ordernum на <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> було скасовано.
+    Ваше замовлення $root.ordernum на <a href="<%out.print(shop.getDefaultShopPreferredUrl())%>">$shop.name</a> було скасовано.
 </p>
 <% ['OS_CANCELLED', 'OS_CANCELLED_WAITING_PAYMENT'].each {
 def _val = root.getValue(it);

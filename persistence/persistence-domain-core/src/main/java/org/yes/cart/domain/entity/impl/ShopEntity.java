@@ -904,6 +904,12 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return getDefaultShopUrlWithProtocol("https://");
     }
 
+    @Override
+    public String getDefaultShopPreferredUrl() {
+        final boolean isSecure = !isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_URL_PREFER_HTTP);
+        return isSecure ? getDefaultShopSecureUrl() : getDefaultShopUrl();
+    }
+
     protected String getDefaultShopUrlWithProtocol(final String protocol) {
         for (ShopUrl shopUrl : getShopUrl()) {
             if (shopUrl.isPrimary()) {

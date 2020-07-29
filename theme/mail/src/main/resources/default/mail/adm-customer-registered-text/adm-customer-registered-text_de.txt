@@ -1,5 +1,5 @@
 Registrations: $email $firstName $lastName
 
-<% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %> "<%out.print(shopSecureUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
+<% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %> "<%out.print(shopPreferredUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
 
 <% if (additionalData.requireApproval) { %>Bitte AKTIVIEREN Sie das Konto $email, indem Sie zu "Kundendienst > Kunde" und dem Zuordnen des Shops gehen<% } %>

@@ -25,7 +25,6 @@ import org.yes.cart.service.domain.*;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.utils.DateUtils;
-import org.yes.cart.utils.DomainApiUtils;
 import org.yes.cart.utils.TimeContext;
 import org.yes.cart.utils.RuntimeConstants;
 import org.yes.cart.web.support.constants.CentralViewLabel;
@@ -347,7 +346,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     }
 
     private String getShopBaseUrl(final Shop shop) {
-        final String urlBase = shop.getDefaultShopUrl();
+        final String urlBase = shop.getDefaultShopPreferredUrl();
         if (urlBase.endsWith("/")) {
             return urlBase + contextPath.substring(1) + "/";
         }

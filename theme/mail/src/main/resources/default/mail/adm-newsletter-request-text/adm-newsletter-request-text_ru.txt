@@ -1,1 +1,1 @@
-Запрос <%out.print(additionalData.email)%> на подписку на рассылку в <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %> "<%out.print(shopSecureUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%> магазине.
+Запрос <%out.print(additionalData.email)%> на подписку на рассылку в <% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %> "<%out.print(shopPreferredUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%> магазине.

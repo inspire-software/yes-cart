@@ -1,1 +1,1 @@
-Newsletter request by <%out.print(additionalData.email)%> in <% if (shopSecureUrl != null && !shopSecureUrl.isEmpty()) { %> "<%out.print(shopSecureUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
+Newsletter request by <%out.print(additionalData.email)%> in <% if (shopPreferredUrl != null && !shopPreferredUrl.isEmpty()) { %> "<%out.print(shopPreferredUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>

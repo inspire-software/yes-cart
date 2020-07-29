@@ -436,16 +436,22 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     void setDisabled(boolean disabled);
 
     /**
-     * Get default shop HTTP url. localhost will never be return.
-     * @return  default shop url
+     * Get default shop HTTP URL. localhost will never be return.
+     * @return  default shop URL
      */
     String getDefaultShopUrl();
 
     /**
-     * Get default shop HTTPS url. localhost will never be return.
-     * @return  default shop url
+     * Get default shop HTTPS URL. localhost will never be return.
+     * @return  default shop URL
      */
     String getDefaultShopSecureUrl();
+
+    /**
+     * Get preferred shop URL. localhost will never be return.
+     * @return  default shop URL
+     */
+    String getDefaultShopPreferredUrl();
 
 
     /**

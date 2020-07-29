@@ -820,6 +820,11 @@ public interface AttributeNamesKeys {
          */
         String SHOP_SF_LOGIN_MANAGER_CUSTOMER_BLACKLIST = "SHOP_SF_LOGIN_MANAGER_CUSTOMER_BLACKLIST";
 
+        /**
+         * Prefer HTTP over HTTPs in generated URLs
+         */
+        String SHOP_URL_PREFER_HTTP = "SHOP_URL_PREFER_HTTP";
+
     }
 
     interface Brand {

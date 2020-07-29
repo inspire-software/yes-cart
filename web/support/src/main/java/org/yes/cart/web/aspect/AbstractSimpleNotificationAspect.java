@@ -154,6 +154,7 @@ public abstract class AbstractSimpleNotificationAspect extends BaseNotificationA
         registrationMessage.setShopName(shop.getName());
         registrationMessage.setShopUrl(transformShopUrls(shop));
         registrationMessage.setShopSecureUrl(transformShopSecureUrls(shop));
+        registrationMessage.setShopPreferredUrl(transformShopPreferredUrls(shop));
 
         registrationMessage.setAdditionalData(registrationData);
 
@@ -194,6 +195,12 @@ public abstract class AbstractSimpleNotificationAspect extends BaseNotificationA
     private Set<String> transformShopSecureUrls(final Shop shop) {
         final Set<String> rez = new HashSet<>();
         rez.add(shop.getDefaultShopSecureUrl());
+        return rez;
+    }
+
+    private Set<String> transformShopPreferredUrls(final Shop shop) {
+        final Set<String> rez = new HashSet<>();
+        rez.add(shop.getDefaultShopPreferredUrl());
         return rez;
     }
 

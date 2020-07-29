@@ -41,6 +41,10 @@ public class ShopEntityTest {
     public void testGetDefaultShopUrlPrimary() throws Exception {
 
         final ShopEntity shopEntity = new ShopEntity();
+        final AttrValueEntityShop attrValueEntityShop = new AttrValueEntityShop();
+        attrValueEntityShop.setAttributeCode(AttributeNamesKeys.Shop.SHOP_URL_PREFER_HTTP);
+        attrValueEntityShop.setVal(Boolean.TRUE.toString());
+        shopEntity.setAttributes(Collections.singleton(attrValueEntityShop));
 
         final ShopUrl u1 = context.mock(ShopUrl.class, "u1");
         final ShopUrl u2 = context.mock(ShopUrl.class, "u2");
@@ -59,6 +63,7 @@ public class ShopEntityTest {
 
         assertEquals("http://www.u2.com", shopEntity.getDefaultShopUrl());
         assertEquals("https://www.u2.com", shopEntity.getDefaultShopSecureUrl());
+        assertEquals("http://www.u2.com", shopEntity.getDefaultShopPreferredUrl());
 
         context.assertIsSatisfied();
 
@@ -85,6 +90,8 @@ public class ShopEntityTest {
         shopEntity.setShopUrl(new HashSet<>(Arrays.asList(u1, u2, u3)));
 
         assertEquals("http://www.u2.com", shopEntity.getDefaultShopUrl());
+        assertEquals("https://www.u2.com", shopEntity.getDefaultShopSecureUrl());
+        assertEquals("https://www.u2.com", shopEntity.getDefaultShopPreferredUrl());
 
         context.assertIsSatisfied();
 

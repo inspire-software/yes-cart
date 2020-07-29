@@ -39,6 +39,7 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     private String shopMailFrom;
     private Set<String> shopUrl;
     private Set<String> shopSecureUrl;
+    private Set<String> shopPreferredUrl;
 
 
     private String email;
@@ -199,6 +200,18 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     @Override
     public void setShopSecureUrl(final Set<String> shopSecureUrl) {
         this.shopSecureUrl = shopSecureUrl;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Set<String> getShopPreferredUrl() {
+        return shopPreferredUrl;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setShopPreferredUrl(final Set<String> shopPreferredUrl) {
+        this.shopPreferredUrl = shopPreferredUrl;
     }
 
     /** {@inheritDoc} */
