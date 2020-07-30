@@ -97,6 +97,7 @@
                 <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress.waiting.payment" value="order-delivery-shipped"/>
                 <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.inprogress.waiting.payment" value="order-delivery-shipped"/>
 
+                <entry key="evt.shipment.complete-os.in.progress-ds.shipped" value="order-shipping-completed"/>
                 <entry key="evt.shipment.complete-os.partially.shipped-ds.shipped" value="order-shipping-completed"/>
                 <entry key="evt.shipment.complete-os.completed-ds.shipped" value="order-shipping-completed"/>
 
@@ -140,6 +141,7 @@
                 <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress.waiting.payment" value="adm-order-delivery-inprogress-wait"/>
                 <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.inprogress.waiting.payment" value="adm-order-delivery-inprogress-wait"/>
 
+                <entry key="evt.shipment.complete-os.in.progress-ds.shipped" value="adm-order-shipping-completed"/>
                 <entry key="evt.shipment.complete-os.partially.shipped-ds.shipped" value="adm-order-shipping-completed"/>
                 <entry key="evt.shipment.complete-os.completed-ds.shipped" value="adm-order-shipping-completed"/>
 
