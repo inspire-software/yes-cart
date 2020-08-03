@@ -196,19 +196,21 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
         if (CollectionUtils.isEmpty(values)) {
             return Collections.singletonList(createNoDefaultImagePair(attributable));
         }
-        final Map<String, String> attrToFileMap = new TreeMap<>(); // sort naturally
+        final Map<String, Pair<String, String>> attrToFileMap = new TreeMap<>(); // sort naturally
         for (final AttrValue av : values) {
             final String code = av.getAttributeCode();
             if (code.startsWith(prefix) && StringUtils.isNotBlank(av.getVal())) {
+                final String suffix = code.substring(prefix.length());
+                final String key = suffix.length() == 1 || suffix.indexOf('_') == 1 ? "0" + suffix : suffix;
                 if (code.endsWith(lang)) {
                     // put value for this language and remove possible default values
-                    attrToFileMap.put(code, av.getVal());
-                    attrToFileMap.remove(code.substring(0, code.length() - lang.length() - 1));
+                    attrToFileMap.put(key, new Pair<>(code, av.getVal()));
+                    attrToFileMap.remove(key.substring(0, key.length() - lang.length() - 1));
                 } else {
                     final char lastChar = code.charAt(code.length() - 1);
-                    if (lastChar >= '0' && lastChar <= '9' && !attrToFileMap.containsKey(code + "_" + lang)) {
+                    if (lastChar >= '0' && lastChar <= '9' && !attrToFileMap.containsKey(key + "_" + lang)) {
                         // put default value only if we do not have language specific one
-                        attrToFileMap.put(code, av.getVal());
+                        attrToFileMap.put(key, new Pair<>(code, av.getVal()));
                     }
                 }
             }
@@ -218,11 +220,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
             return Collections.singletonList(createNoDefaultImagePair(attributable));
         }
 
-        final List<Pair<String, String>> pairs = new ArrayList<>(attrToFileMap.size());
-        for (final Map.Entry<String, String> entry : attrToFileMap.entrySet()) {
-            pairs.add(new Pair<>(entry.getKey(), entry.getValue()));
-        }
-        return Collections.unmodifiableList(pairs);
+        return Collections.unmodifiableList(new ArrayList<>(attrToFileMap.values()));
     }
 
     /**
