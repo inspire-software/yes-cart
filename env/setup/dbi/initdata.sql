@@ -242,6 +242,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   'Enable compound search. If set to true preserved previously searched phrases until they are explicitly removed',  'Boolean', 'SHOP', 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  4999,  'SHOP_SEARCH_ENABLE_GLOBAL_ONLY', 'SHOP_SEARCH_ENABLE_GLOBAL_ONLY',  0,  NULL,  'Search: global only enable',
+  'Enable global only search. If set to true free text search is performed globally always (customer is redirected away from current category)',  'Boolean', 'SHOP', 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8003,  'SHOP_CATEGORY_FILTERNAV_LIMIT', 'SHOP_CATEGORY_FILTERNAV_LIMIT',  0,  NULL,  'Shop: filter navigation records limit',
   'Filter navigation records limit per group. Default is 25',  'Integer', 'SHOP', 0, 0, 0, 0);
 

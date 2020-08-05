@@ -546,6 +546,8 @@ public class VoShopServiceImpl implements VoShopService {
     protected void addSearchConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
         summary.setSearchInSubCatsEnable(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH, lang, false));
+        summary.setSearchGlobalOnlyEnable(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_ENABLE_GLOBAL_ONLY, lang, false));
         summary.setSearchCompoundEnable(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_ENABLE_COMPOUND, lang, false));
         summary.setSearchSuggestEnable(getBooleanShopAttributeConfig(

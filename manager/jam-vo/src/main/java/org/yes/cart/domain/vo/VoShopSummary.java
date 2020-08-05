@@ -73,6 +73,7 @@ public class VoShopSummary {
 
     
     private MutablePair<String, Boolean> searchInSubCatsEnable;
+    private MutablePair<String, Boolean> searchGlobalOnlyEnable;
     private MutablePair<String, Boolean> searchCompoundEnable;
     private MutablePair<String, Boolean> searchSuggestEnable;
     private MutablePair<String, Integer> searchSuggestMaxResults;
@@ -354,6 +355,14 @@ public class VoShopSummary {
 
     public void setSearchInSubCatsEnable(final MutablePair<String, Boolean> searchInSubCatsEnable) {
         this.searchInSubCatsEnable = searchInSubCatsEnable;
+    }
+
+    public MutablePair<String, Boolean> getSearchGlobalOnlyEnable() {
+        return searchGlobalOnlyEnable;
+    }
+
+    public void setSearchGlobalOnlyEnable(final MutablePair<String, Boolean> searchGlobalOnlyEnable) {
+        this.searchGlobalOnlyEnable = searchGlobalOnlyEnable;
     }
 
     public MutablePair<String, Boolean> getSearchCompoundEnable() {

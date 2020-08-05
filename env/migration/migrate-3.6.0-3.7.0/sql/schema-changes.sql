@@ -479,3 +479,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  7999,  'SHOP_URL_PREFER_HTTP', 'SHOP_URL_PREFER_HTTP',  0,  NULL,  'Shop: URL prefer HTTP over HTTPs',  'Prefer HTTP over HTTPs in absolute links (e.g. sitemap.xml, API)',
   'Boolean', 'SHOP', 0, 0, 0, 0);
+
+--
+-- YC-1025 Feature toggle for Global Only searches
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  4999,  'SHOP_SEARCH_ENABLE_GLOBAL_ONLY', 'SHOP_SEARCH_ENABLE_GLOBAL_ONLY',  0,  NULL,  'Search: global only enable',
+  'Enable global only search. If set to true free text search is performed globally always (customer is redirected away from current category)',  'Boolean', 'SHOP', 0, 0, 0, 0);

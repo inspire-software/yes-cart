@@ -614,6 +614,12 @@ public interface AttributeNamesKeys {
         String SHOP_CATEGORY_ITEMS_PER_PAGE = "SHOP_CATEGORY_ITEMS_PER_PAGE";
 
         /**
+         * Enable global only search for this shop (if true when search is performed in child category user
+         * will be redirected to global search)
+         */
+        String SHOP_SEARCH_ENABLE_GLOBAL_ONLY = "SHOP_SEARCH_ENABLE_GLOBAL_ONLY";
+
+        /**
          * Enable compound searching for this shop
          */
         String SHOP_SEARCH_ENABLE_COMPOUND = "SHOP_SEARCH_ENABLE_COMPOUND";
