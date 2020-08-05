@@ -27,7 +27,7 @@ public class VoShopSummaryEmailTemplate {
     private String cmsNameTXT;
     private String cmsNameImage;
     private String cmsNameProp;
-    private boolean available;
+    private boolean unavailable;
     private boolean part;
     private boolean image;
     private boolean cmsHTML;
@@ -85,12 +85,12 @@ public class VoShopSummaryEmailTemplate {
         this.cmsNameProp = cmsNameProp;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public boolean isUnavailable() {
+        return unavailable;
     }
 
-    public void setAvailable(final boolean available) {
-        this.available = available;
+    public void setUnavailable(final boolean unavailable) {
+        this.unavailable = unavailable;
     }
 
     public boolean isPart() {

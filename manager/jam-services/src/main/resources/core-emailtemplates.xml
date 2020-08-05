@@ -30,603 +30,603 @@
                     <list>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-cant-allocate-product-qty"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-cant-allocate-product-qty-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-contactform-request"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-contactform-request-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-customer-registered"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-customer-registered-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-newsletter-request"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-newsletter-request-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-canceled"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-canceled-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-confirmed"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-confirmed-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-allocated"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-allocated-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-inprogress"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-inprogress-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-inprogress-wait"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-inprogress-wait-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-packing"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-packing-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-ready"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-ready-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-ready-wait"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-delivery-ready-wait-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-new"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-new-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-payment-confirmed"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-payment-confirmed-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-returned"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-returned-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-shipping-completed"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-shipping-completed-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-wait-confirmation"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-order-wait-confirmation-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-payment"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-payment-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-payment-failed"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-payment-failed-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-payment-shipped"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-payment-shipped-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-payment-shipped-failed"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-payment-shipped-failed-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-refund"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-refund-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-refund-failed"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-refund-failed-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-rfq-new"/>
-                            <property name="available" value="true"/>
+                            <property name="unavailable" value="true"/>
                             <property name="disabled" value="true"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-rfq-new-text"/>
-                            <property name="available" value="true"/>
+                            <property name="unavailable" value="true"/>
                             <property name="disabled" value="true"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-managedlist-rejected"/>
-                            <property name="available" value="true"/>
+                            <property name="unavailable" value="true"/>
                             <property name="disabled" value="true"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="adm-managedlist-rejected-text"/>
-                            <property name="available" value="true"/>
+                            <property name="unavailable" value="true"/>
                             <property name="disabled" value="true"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-activation"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-activation-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-change-password"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-change-password-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-deactivation"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-deactivation-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-delete"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-delete-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-registered"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="customer-registered-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-canceled"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-canceled-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-confirmed"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-confirmed-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-delivery-readytoshipping"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-delivery-readytoshipping-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-delivery-shipped"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-delivery-shipped-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-new"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-new-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-returned"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-returned-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-shipping-completed"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="order-shipping-completed-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="payment"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="payment-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="rfq-new"/>
-                            <property name="available" value="true"/>
+                            <property name="unavailable" value="true"/>
                             <property name="disabled" value="true"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="rfq-new-text"/>
-                            <property name="available" value="true"/>
+                            <property name="unavailable" value="true"/>
                             <property name="disabled" value="true"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="shipment-complete"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="shipment-complete-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="sup-order-new"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="sup-order-new-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="managedlist-created"/>
-                            <property name="available" value="true"/>
+                            <property name="unavailable" value="true"/>
                             <property name="disabled" value="true"/>
                             <property name="part" value="false"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="managedlist-created-text"/>
-                            <property name="available" value="true"/>
+                            <property name="unavailable" value="true"/>
                             <property name="disabled" value="true"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-adm-footer"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-adm-header"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-adm-order-delivery-details"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-adm-order-delivery-details-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-adm-order-details"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-adm-order-details-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-footer"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-header"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-meta"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-order-delivery-details"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-order-details"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-order-details-text"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-styles"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="common-sup-order-deliveries-details"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="true"/>
                             <property name="image" value="false"/>
                         </bean>
                         <bean class="org.yes.cart.domain.vo.VoShopSummaryEmailTemplate">
                             <property name="name" value="mail-head_jpeg"/>
-                            <property name="available" value="false"/>
+                            <property name="unavailable" value="false"/>
                             <property name="part" value="false"/>
                             <property name="image" value="true"/>
                         </bean>

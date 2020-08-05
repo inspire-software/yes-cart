@@ -221,7 +221,7 @@ export interface ShopSummaryEmailTemplateVO {
   cmsNameTXT: string;
   cmsNameImage: string;
   cmsNameProp: string;
-  available: boolean;
+  unavailable: boolean;
   part: boolean;
   image: boolean;
   cmsHTML: boolean;

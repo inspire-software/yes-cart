@@ -676,7 +676,7 @@ public class VoShopServiceImpl implements VoShopService {
         final VoShopSummaryEmailTemplate tmp = new VoShopSummaryEmailTemplate();
         tmp.setDisabled(templateConfig.isDisabled());
         tmp.setName(template);
-        tmp.setAvailable(templateConfig.isAvailable());
+        tmp.setUnavailable(templateConfig.isUnavailable());
         tmp.setPart(templateConfig.isPart());
         tmp.setImage(templateConfig.isImage());
         if (!tmp.isPart() && !tmp.isImage()) {
