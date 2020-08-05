@@ -10,7 +10,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let emailTemplate of filteredTemplates; let i = index" class="{{ emailTemplate.yce ? 'text-muted' : '' }} {{ emailTemplate.name == selectedName ? 'active': '' }}">
+    <tr *ngFor="let emailTemplate of filteredTemplates; let i = index" class="{{ emailTemplate.available ? 'text-muted' : '' }} {{ emailTemplate.name == selectedName ? 'active': '' }}">
       <ng-template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
         <td title="{{ 'SHOP_EMAIL_TEMPLATES' | translate }}">
           <ng-template [ngIf]="!emailTemplate.image && !emailTemplate.part">
@@ -22,7 +22,7 @@
           <ng-template [ngIf]="emailTemplate.part">
             {{ emailTemplate.name }} <i class="fa fa-puzzle-piece"></i>
           </ng-template>
-          <span class="label label-info" [hidden]="!emailTemplate.yce">YCE</span>
+          <span class="label label-info" [hidden]="!emailTemplate.available">SaaS</span>
         </td>
         <td title="{{ 'SHOP_EMAIL_TEMPLATES_ENABLED' | translate }}"><i class="fa {{ emailTemplate.disabled ? 'fa-remove text-danger' : 'fa-check text-success' }}"></i></td>
         <td title="{{ 'SHOP_EMAIL_TEMPLATES_CMS' | translate }}">

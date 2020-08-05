@@ -1105,7 +1105,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  6201,  'WIDGET_OrdersInShop', 'WIDGET_OrdersInShop',  0,  NULL,  'Orders Overview',  'Orders Overview: count of orders for today, this week and this month', 'String', 'WIDGET', 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  6202,  'WIDGET_UnprocessedPgCallbacks', 'WIDGET_UnprocessedPgCallbacks',  0,  NULL,  'Unprocessed Callbacks (YCE)',  'Unprocessed Callbacks: count of failed payment callbacks', 'String', 'WIDGET', 0, 0, 0, 0);
+  VALUES (  6202,  'WIDGET_UnprocessedPgCallbacks', 'WIDGET_UnprocessedPgCallbacks',  0,  NULL,  'Unprocessed Callbacks (SaaS)',  'Unprocessed Callbacks: count of failed payment callbacks', 'String', 'WIDGET', 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  6203,  'WIDGET_CustomersInShop', 'WIDGET_CustomersInShop',  0,  NULL,  'Customers Overview',  'Customers Overview: count of customers for today, this week and this month', 'String', 'WIDGET', 0, 0, 0, 0);

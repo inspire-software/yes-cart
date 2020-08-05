@@ -469,7 +469,7 @@ public interface ProductServiceFacade {
                            boolean total);
 
     /**
-     * Get price model (or blank object) with respect to current shop tax display settings. (used by YCE)
+     * Get price model (or blank object) with respect to current shop tax display settings. (used by SaaS)
      *
      * If tax info is enabled then prices can shown as net or gross.
      *

@@ -59,7 +59,7 @@
     <tab  (select)="tabSelected('B2B')">
 
       <ng-template tabHeading>
-        {{ 'CUSTOMERORDER_TAB_B2B' | translate }} <span class="label label-info">YCE</span>
+        {{ 'CUSTOMERORDER_TAB_B2B' | translate }} <span class="label label-info">SaaS</span>
       </ng-template>
 
       <yc-shop-subs [shop]="shop" [reload]="reloadB2b"></yc-shop-subs>
@@ -69,7 +69,7 @@
     <tab  (select)="tabSelected('Addressbook')">
 
       <ng-template tabHeading>
-        {{ 'TAB_ADDRESSBOOK' | translate }} <span class="label label-info">YCE</span>
+        {{ 'TAB_ADDRESSBOOK' | translate }} <span class="label label-info">SaaS</span>
       </ng-template>
 
       <yc-addressbook [customer]="shopCustomer" [reload]="reloadAddressbook" [shops]="addressShops"></yc-addressbook>

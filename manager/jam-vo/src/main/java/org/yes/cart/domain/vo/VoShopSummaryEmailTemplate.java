@@ -27,7 +27,7 @@ public class VoShopSummaryEmailTemplate {
     private String cmsNameTXT;
     private String cmsNameImage;
     private String cmsNameProp;
-    private boolean yce;
+    private boolean available;
     private boolean part;
     private boolean image;
     private boolean cmsHTML;
@@ -85,12 +85,12 @@ public class VoShopSummaryEmailTemplate {
         this.cmsNameProp = cmsNameProp;
     }
 
-    public boolean isYce() {
-        return yce;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public void setYce(final boolean yce) {
-        this.yce = yce;
+    public void setAvailable(final boolean available) {
+        this.available = available;
     }
 
     public boolean isPart() {

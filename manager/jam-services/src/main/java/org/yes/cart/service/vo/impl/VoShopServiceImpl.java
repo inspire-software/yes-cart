@@ -235,7 +235,7 @@ public class VoShopServiceImpl implements VoShopService {
     public VoShop createSub(final VoSubShop vo) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(vo != null ? vo.getMasterId() : 0L);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            throw new RuntimeException("This feature is only available on YCE");
+            throw new RuntimeException("This feature is only available on SaaS");
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -676,7 +676,7 @@ public class VoShopServiceImpl implements VoShopService {
         final VoShopSummaryEmailTemplate tmp = new VoShopSummaryEmailTemplate();
         tmp.setDisabled(templateConfig.isDisabled());
         tmp.setName(template);
-        tmp.setYce(templateConfig.isYce());
+        tmp.setAvailable(templateConfig.isAvailable());
         tmp.setPart(templateConfig.isPart());
         tmp.setImage(templateConfig.isImage());
         if (!tmp.isPart() && !tmp.isImage()) {

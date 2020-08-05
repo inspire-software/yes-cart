@@ -38,7 +38,7 @@ import { DashboardWidgetVO } from '../../shared/model/index';
         </div>
         <a>
           <div class="panel-footer">
-            <span class="pull-left"><span class="label label-info">YCE</span> <span class="text-muted">{{ 'DASHBOARD_PG_CALLBACK' | translate }}</span></span>
+            <span class="pull-left"><span class="label label-info">SaaS</span> <span class="text-muted">{{ 'DASHBOARD_PG_CALLBACK' | translate }}</span></span>
             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
             <div class="clearfix"></div>
           </div>
