@@ -84,6 +84,21 @@ export class PIMService {
   }
 
   /**
+   * Create copy of product.
+   * @param product product
+   * @returns {Observable<R>}
+   */
+  copyProduct(product:ProductVO, copy:ProductVO) {
+
+    let body = JSON.stringify(copy);
+
+    return this.http.post(this._serviceBaseUrl + '/products/' + product.productId + '/copy', body, Util.requestOptions())
+      .map(res => <ProductVO> this.json(res))
+      .catch(this.handleError);
+  }
+
+
+  /**
    * Create/update product.
    * @param product product
    * @returns {Observable<R>}
@@ -177,6 +192,20 @@ export class PIMService {
    */
   getSkuById(skuId:number) {
     return this.http.get(this._serviceBaseUrl + '/skus/' + skuId, Util.requestOptions())
+      .map(res => <ProductSkuVO> this.json(res))
+      .catch(this.handleError);
+  }
+
+  /**
+   * Create copy of sku.
+   * @param sku product
+   * @returns {Observable<R>}
+   */
+  copySKU(sku:ProductSkuVO, copy:ProductSkuVO) {
+
+    let body = JSON.stringify(copy);
+
+    return this.http.post(this._serviceBaseUrl + '/skus/' + sku.skuId + '/copy', body, Util.requestOptions())
       .map(res => <ProductSkuVO> this.json(res))
       .catch(this.handleError);
   }

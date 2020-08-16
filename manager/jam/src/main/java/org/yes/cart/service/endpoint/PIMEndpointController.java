@@ -72,6 +72,12 @@ public interface PIMEndpointController {
     @ResponseBody
     VoProductWithLinks createProduct(@ApiParam(value = "Product", name = "vo", required = true) @RequestBody VoProduct vo)  throws Exception;
 
+    @ApiOperation(value = "Copy product")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
+    @RequestMapping(value = "/products/{id}/copy", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoProductWithLinks copyProduct(@ApiParam(value = "Product ID", required = true) @PathVariable("id") long id, @ApiParam(value = "Product", name = "vo", required = true) @RequestBody VoProduct vo)  throws Exception;
+
     @ApiOperation(value = "Update product")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
     @RequestMapping(value = "/products", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -130,6 +136,12 @@ public interface PIMEndpointController {
     @RequestMapping(value = "/skus", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoProductSku createSku(@ApiParam(value = "SKU", name = "vo", required = true) @RequestBody VoProductSku vo)  throws Exception;
+
+    @ApiOperation(value = "Copy SKU")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})
+    @RequestMapping(value = "/skus/{id}/copy", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoProductSku copySku(@ApiParam(value = "SKU ID", required = true) @PathVariable("id") long id, @ApiParam(value = "SKU", name = "vo", required = true) @RequestBody VoProductSku vo)  throws Exception;
 
     @ApiOperation(value = "Update SKU")
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMPIMADMIN"})

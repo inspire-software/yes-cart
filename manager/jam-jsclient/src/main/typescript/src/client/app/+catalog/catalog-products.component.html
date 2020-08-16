@@ -1,6 +1,6 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_PIM_PRODUCTS' | translate }} {{ selectedProduct ? (' / ' + selectedProduct.name) + ( selectedSku ? (' / ' + selectedSku.name) : '' ) : '' }}</h1>
+    <h1 class="page-header">{{ 'PANEL_PIM_PRODUCTS' | translate }} {{ (productEditIsCopyOf != null ? (' / ' + ('COPY_OF' | translate:{value: productEditIsCopyOf.name } )) : (selectedProduct ? (' / ' + selectedProduct.name) : '')) + (skuEditIsCopyOf != null ? (' / ' + ('COPY_OF' | translate:{value: skuEditIsCopyOf.name } )) : (selectedSku ? (' / ' + selectedSku.name) : '')) }}</h1>
   </div>
 
 

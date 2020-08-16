@@ -17,8 +17,10 @@
 package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.*;
+import org.yes.cart.domain.entity.Etype;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.SearchContext;
@@ -31,10 +33,7 @@ import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoProductService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -406,6 +405,135 @@ public class VoProductServiceImpl implements VoProductService {
 
     /** {@inheritDoc} */
     @Override
+    public VoProductWithLinks copyProduct(final long id, final VoProduct vo) throws Exception {
+
+        if (!federationFacade.isManageable(id, ProductDTO.class)) {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+        final VoProductWithLinks existing = getProductById(id);
+        if (existing == null) {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+        final VoProduct main = vo != null ? vo : existing;
+        ProductDTO dto = voAssemblySupport.assembleDto(ProductDTO.class, VoProduct.class, dtoProductService.getNew(), main);
+        if (vo == null || vo.getGuid() == null) {
+            dto.setGuid(UUID.randomUUID().toString());
+            dto.setCode(dto.getGuid());
+        }
+        if (dto.getUri() != null && dto.getUri().equals(existing.getUri())) {
+            dto.setUri(dto.getCode() + "-" + dto.getUri());
+        }
+
+        dto.setBrandDTO(dtoBrandService.getById(main.getBrand().getBrandId()));
+        dto.setProductTypeDTO(dtoProductTypeService.getById(main.getProductType().getProducttypeId()));
+
+        dto = dtoProductService.create(dto);
+
+        if (CollectionUtils.isNotEmpty(existing.getProductCategories())) {
+            for (final VoProductCategory productCategory : existing.getProductCategories()) {
+                final ProductCategoryDTO catDto = voAssemblySupport.assembleDto(
+                        ProductCategoryDTO.class, VoProductCategory.class, dtoProductCategoryService.getNew(), productCategory);
+                catDto.setProductId(dto.getProductId());
+                dtoProductCategoryService.create(catDto);
+            }
+        }
+
+        final List<VoProductAssociation> existingAssoc = existing.getAssociations();
+        if (CollectionUtils.isNotEmpty(existingAssoc)) {
+            for (final VoProductAssociation assocToAdd : existingAssoc) {
+                ProductAssociationDTO assoc = dtoProductAssociationService.getNew();
+                assoc = voAssemblySupport.assembleDto(ProductAssociationDTO.class, VoProductAssociation.class, assoc, assocToAdd);
+                assoc.setProductId(dto.getProductId());
+                dtoProductAssociationService.create(assoc);
+            }
+        }
+
+        final List<VoAttrValueProduct> prodAttrsToAdd = getProductAttributes(existing.getProductId());
+        if (CollectionUtils.isNotEmpty(prodAttrsToAdd)) {
+            final List<MutablePair<VoAttrValueProduct, Boolean>> attrsToAddList = new ArrayList<>();
+            for (final VoAttrValueProduct attrToAdd : prodAttrsToAdd) {
+                if (StringUtils.isNotEmpty(attrToAdd.getVal())) {
+                    attrToAdd.setAttrvalueId(0L);
+                    attrToAdd.setProductId(dto.getProductId());
+                    if (Etype.IMAGE_BUSINESS_TYPE.equals(attrToAdd.getAttribute().getEtype())) {
+                        final int codePos = attrToAdd.getVal().indexOf(existing.getCode());
+                        final int extPos = attrToAdd.getVal().lastIndexOf('.');
+                        attrToAdd.setVal(attrToAdd.getVal().substring(0, codePos - 1) + attrToAdd.getVal().substring(extPos)); // remove original code part
+                    }
+                    attrsToAddList.add(MutablePair.of(attrToAdd, false));
+                }
+            }
+            if (!attrsToAddList.isEmpty()) {
+                updateProductAttributes(attrsToAddList);
+            }
+        }
+
+        // Align first SKU
+        Pair<String, String> skuPair = null;
+        if (CollectionUtils.isNotEmpty(existing.getSku())) {
+            final VoProductSku sku1 = existing.getSku().get(0);
+            ProductSkuDTO sku1copy = dto.getSku().get(0);
+            final String skuCode1copy = sku1copy.getCode();
+            final String skuGuid1copy = sku1copy.getGuid();
+            skuPair = new Pair<>(sku1.getCode(), skuCode1copy);
+
+            sku1copy = voAssemblySupport.assembleDto(ProductSkuDTO.class, VoProductSku.class, sku1copy, sku1);
+
+            sku1copy.setProductId(dto.getProductId());
+            sku1copy.setGuid(skuGuid1copy);
+            sku1copy.setCode(skuCode1copy);
+            if (sku1copy.getUri() != null && sku1copy.getUri().equals(sku1.getUri())) {
+                sku1copy.setUri(skuCode1copy + "-" + sku1.getUri());
+            }
+
+            sku1copy = dtoProductSkuService.update(sku1copy);
+
+            final List<VoAttrValueProductSku> skuAttrsToAdd = getSkuAttributes(sku1.getSkuId());
+            if (CollectionUtils.isNotEmpty(skuAttrsToAdd)) {
+                final List<MutablePair<VoAttrValueProductSku, Boolean>> attrsToAddList = new ArrayList<>();
+                for (final VoAttrValueProductSku attrToAdd : skuAttrsToAdd) {
+                    if (StringUtils.isNotEmpty(attrToAdd.getVal())) {
+                        attrToAdd.setAttrvalueId(0L);
+                        attrToAdd.setSkuId(sku1copy.getSkuId());
+                        if (Etype.IMAGE_BUSINESS_TYPE.equals(attrToAdd.getAttribute().getEtype())) {
+                            final int codePos = attrToAdd.getVal().indexOf(skuPair.getFirst());
+                            final int extPos = attrToAdd.getVal().lastIndexOf('.');
+                            attrToAdd.setVal(attrToAdd.getVal().substring(0, codePos - 1) + attrToAdd.getVal().substring(extPos)); // remove original code part
+                        }
+                        attrsToAddList.add(MutablePair.of(attrToAdd, false));
+                    }
+                }
+                if (!attrsToAddList.isEmpty()) {
+                    updateSkuAttributes(attrsToAddList);
+                }
+            }
+
+        }
+
+
+        final List<VoProductOption> existingOpts = existing.getConfigurationOptions();
+        if (CollectionUtils.isNotEmpty(existingOpts)) {
+            for (final VoProductOption optToAdd : existingOpts) {
+                if (optToAdd.getSkuCode() == null || (skuPair != null && optToAdd.getSkuCode().equals(skuPair.getFirst()))) {
+                    final ProductOptionDTO opt = voAssemblySupport.assembleDto(ProductOptionDTO.class, VoProductOption.class, dtoProductOptionService.getNew(), optToAdd);
+                    opt.setProductId(dto.getProductId());
+                    if (optToAdd.getSkuCode() != null) {
+                        optToAdd.setSkuCode(skuPair.getSecond());
+                    }
+                    dtoProductOptionService.create(opt);
+                }
+            }
+        }
+
+
+        return getProductById(dto.getProductId());
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public void removeProduct(final long id) throws Exception {
 
         if (federationFacade.isManageable(id, ProductDTO.class)) {
@@ -542,6 +670,55 @@ public class VoProductServiceImpl implements VoProductService {
 
     /** {@inheritDoc} */
     @Override
+    public VoProductSku copySku(final long id, final VoProductSku vo) throws Exception {
+
+        final VoProductSku existing = getSkuById(id);
+
+        if (existing != null && federationFacade.isManageable(existing.getProductId(), ProductDTO.class)) {
+
+            final VoProductSku main = vo != null ? vo : existing;
+
+            ProductSkuDTO dto = voAssemblySupport.assembleDto(ProductSkuDTO.class, VoProductSku.class, dtoProductSkuService.getNew(), main);
+            if (vo == null || vo.getGuid() == null) {
+                dto.setGuid(UUID.randomUUID().toString());
+                dto.setCode(dto.getGuid());
+            }
+            if (dto.getUri() != null && dto.getUri().equals(existing.getUri())) {
+                dto.setUri(dto.getCode() + "-" + dto.getUri());
+            }
+
+            dto = dtoProductSkuService.create(dto);
+
+            final List<VoAttrValueProductSku> skuAttrsToAdd = getSkuAttributes(existing.getSkuId());
+            if (CollectionUtils.isNotEmpty(skuAttrsToAdd)) {
+                final List<MutablePair<VoAttrValueProductSku, Boolean>> attrsToAddList = new ArrayList<>();
+                for (final VoAttrValueProductSku attrToAdd : skuAttrsToAdd) {
+                    if (StringUtils.isNotEmpty(attrToAdd.getVal())) {
+                        attrToAdd.setAttrvalueId(0L);
+                        attrToAdd.setSkuId(dto.getSkuId());
+                        if (Etype.IMAGE_BUSINESS_TYPE.equals(attrToAdd.getAttribute().getEtype())) {
+                            final int codePos = attrToAdd.getVal().indexOf(existing.getCode());
+                            final int extPos = attrToAdd.getVal().lastIndexOf('.');
+                            attrToAdd.setVal(attrToAdd.getVal().substring(0, codePos - 1) + attrToAdd.getVal().substring(extPos)); // remove original code part
+                        }
+                        attrsToAddList.add(MutablePair.of(attrToAdd, false));
+                    }
+                }
+                if (!attrsToAddList.isEmpty()) {
+                    updateSkuAttributes(attrsToAddList);
+                }
+            }
+
+            return getSkuById(dto.getSkuId());
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public void removeSku(final long id) throws Exception {
 
         getSkuById(id); // check access
@@ -551,8 +728,8 @@ public class VoProductServiceImpl implements VoProductService {
 
     /** {@inheritDoc} */
     @Override
-    public List<VoAttrValueProductSku> getSkuAttributes(final long productId) throws Exception {
-        return this.voSkuAttributesCRUDTemplate.verifyAccessAndGetAttributes(productId, true);
+    public List<VoAttrValueProductSku> getSkuAttributes(final long skuId) throws Exception {
+        return this.voSkuAttributesCRUDTemplate.verifyAccessAndGetAttributes(skuId, true);
     }
 
     /** {@inheritDoc} */

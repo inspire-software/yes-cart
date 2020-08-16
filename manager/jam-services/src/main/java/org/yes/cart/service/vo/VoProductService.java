@@ -76,6 +76,18 @@ public interface VoProductService {
     VoProductWithLinks createProduct(VoProduct vo) throws Exception;
 
     /**
+     * Create new product from existing
+     *
+     * @param id product vo ID
+     * @param vo optional main details
+     *
+     * @return persisted instance
+     *
+     * @throws Exception errors
+     */
+    VoProductWithLinks copyProduct(long id, VoProduct vo) throws Exception;
+
+    /**
      * Remove product by id.
      *
      * @param id product id
@@ -161,6 +173,18 @@ public interface VoProductService {
      * @throws Exception errors
      */
     VoProductSku createSku(VoProductSku vo) throws Exception;
+
+    /**
+     * Create new product from existing
+     *
+     * @param id product vo ID
+     * @param vo optional main details
+     *
+     * @return persisted instance
+     *
+     * @throws Exception errors
+     */
+    VoProductSku copySku(long id, VoProductSku vo) throws Exception;
 
     /**
      * Remove product by id.

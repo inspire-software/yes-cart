@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -191,6 +192,39 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testProductCopy() throws Exception {
+
+        final VoProductWithLinks copyOfBender = voProductService.copyProduct(9998L, null);
+        assertNotNull(copyOfBender);
+        assertEquals("Бендер Згинач Родріґес", copyOfBender.getName());
+        assertNotEquals("BENDER-ua", copyOfBender.getCode());
+        assertEquals(copyOfBender.getCode() + "-Бендер-Згинач-Родріґес", copyOfBender.getUri());
+
+        assertFalse(copyOfBender.getProductCategories().isEmpty());
+
+        final List<VoAttrValueProduct> copyOfBenderAttrs = voProductService.getProductAttributes(copyOfBender.getProductId());
+        assertFalse(copyOfBenderAttrs.stream().filter(av -> av.getVal() != null).collect(Collectors.toList()).isEmpty());
+
+        final VoProductSku copyOfBenderSku = copyOfBender.getSku().get(0);
+        assertNotNull(copyOfBenderSku);
+        assertEquals("001234567905", copyOfBenderSku.getBarCode());
+
+        final List<VoAttrValueProductSku> copyOfBenderSkuAttrs = voProductService.getSkuAttributes(copyOfBenderSku.getSkuId());
+        assertFalse(copyOfBenderSkuAttrs.stream().filter(av -> av.getVal() != null).collect(Collectors.toList()).isEmpty());
+
+
+        final VoProductWithLinks copyOfConfigurable = voProductService.copyProduct(15500L, null);
+
+        assertNotNull(copyOfConfigurable);
+        assertEquals("001_CFG", copyOfConfigurable.getName());
+        assertNotEquals("001_CFG", copyOfConfigurable.getCode());
+        assertTrue(copyOfConfigurable.isConfigurable());
+        assertFalse(copyOfConfigurable.getConfigurationOptions().isEmpty());
+
+
+    }
+
+    @Test
     public void testSkuCRUD() throws Exception {
 
         VoProductSku product = new VoProductSku();
@@ -243,6 +277,19 @@ public class VoProductServiceImplTest extends BaseCoreDBTestCase {
 
         assertFalse(voProductService.getFilteredProducts(ctx).getTotal() > 0);
 
+
+    }
+
+    @Test
+    public void testSkuCopy() throws Exception {
+
+        final VoProductSku copyOfBenderSku = voProductService.copySku(9998L, null);
+        assertNotNull(copyOfBenderSku);
+        assertEquals("Бендер Згинач Родріґес", copyOfBenderSku.getName());
+        assertNotEquals("BENDER-ua", copyOfBenderSku.getCode());
+
+        final List<VoAttrValueProductSku> copyOfBenderSkuAttrs = voProductService.getSkuAttributes(copyOfBenderSku.getSkuId());
+        assertFalse(copyOfBenderSkuAttrs.stream().filter(av -> av.getVal() != null).collect(Collectors.toList()).isEmpty());
 
     }
 

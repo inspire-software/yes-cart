@@ -48,6 +48,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   private selectedProduct:ProductVO;
 
+  private productEditIsCopyOf:ProductVO;
   private productEdit:ProductWithLinksVO;
   private productEditAttributes:AttrValueProductVO[] = [];
   private productAttributesUpdate:Array<Pair<AttrValueProductVO, boolean>>;
@@ -57,6 +58,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   private selectedSku:ProductSkuVO;
 
+  private skuEditIsCopyOf:ProductSkuVO;
   private skuEdit:ProductSkuVO;
   private skuEditAttributes:AttrValueProductSkuVO[] = [];
   private skuAttributesUpdate:Array<Pair<AttrValueProductSkuVO, boolean>>;
@@ -235,8 +237,10 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     if (data != null) {
       let _sku = Util.clone(data);
       _sku.skuId = 0;
+      this.skuEditIsCopyOf = data;
       this.onRowEditSku(_sku);
     } else {
+      this.skuEditIsCopyOf = null;
       this.onRowNew();
     }
   }
@@ -327,12 +331,15 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
   protected onBackToList() {
     LogUtil.debug('CatalogProductsComponent onBackToList handler');
     if (this.viewMode === CatalogProductsComponent.SKU) {
+      this.skuEditIsCopyOf = null;
       this.skuEdit = null;
       if (this.productEdit != null) {
         this.viewMode = CatalogProductsComponent.PRODUCT;
       }
     } else if (this.viewMode === CatalogProductsComponent.PRODUCT) {
+      this.productEditIsCopyOf = null;
       this.productEdit = null;
+      this.skuEditIsCopyOf = null;
       this.skuEdit = null;
       this.selectedSku = null;
       this.viewMode = CatalogProductsComponent.PRODUCTS;
@@ -344,9 +351,11 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === CatalogProductsComponent.PRODUCTS) {
+      this.productEditIsCopyOf = null;
       this.productEdit = this.newProductInstance();
       this.viewMode = CatalogProductsComponent.PRODUCT;
     } else if (this.viewMode == CatalogProductsComponent.PRODUCT) {
+      this.skuEditIsCopyOf = null;
       this.skuEdit = this.newSkuInstance();
       this.viewMode = CatalogProductsComponent.SKU;
     }
@@ -372,6 +381,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     this.loading = true;
     let _sub:any = this._pimService.getProductById(row.productId).subscribe(res => {
       LogUtil.debug('CatalogProductsComponent getProductById', res);
+      this.productEditIsCopyOf = null;
       this.productEdit = res;
       this.changed = false;
       this.validForSave = false;
@@ -391,6 +401,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
   protected onRowEditSku(row:ProductSkuVO) {
     LogUtil.debug('CatalogProductsComponent onRowEditSku handler', row);
+    this.productEditIsCopyOf = null;
     this.skuEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
@@ -427,6 +438,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
       });
     }
 
+    this.productEditIsCopyOf = row;
     this.productEdit = _edit;
     this.changed = false;
     this.validForSave = false;
@@ -449,7 +461,30 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogProductsComponent Save handler sku', this.skuEdit);
 
         this.loading = true;
-        let _sub:any = this._pimService.saveSKU(this.skuEdit).subscribe(
+
+        if (!(this.skuEdit.skuId > 0) && this.skuEditIsCopyOf != null) {
+
+          let _sub: any = this._pimService.copySKU(this.skuEditIsCopyOf, this.skuEdit).subscribe(
+            rez => {
+              if (this.productEdit != null) {
+                this.productEdit.sku.push(rez);
+                this.productEdit.sku = this.productEdit.sku.slice(0, this.productEdit.sku.length); // reset to propagate changes
+              }
+              LogUtil.debug('CatalogProductsComponent sku added', rez);
+              this.changed = false;
+              this.selectedSku = rez;
+              this.skuEditIsCopyOf = null;
+              this.skuEdit = null;
+              this.loading = false;
+              this.viewMode = CatalogProductsComponent.PRODUCT;
+              _sub.unsubscribe();
+
+            }
+          );
+
+        } else {
+
+          let _sub: any = this._pimService.saveSKU(this.skuEdit).subscribe(
             rez => {
               let pk = this.skuEdit.skuId;
               if (pk > 0) {
@@ -470,6 +505,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
               }
               this.changed = false;
               this.selectedSku = rez;
+              this.skuEditIsCopyOf = null;
               this.skuEdit = null;
               this.loading = false;
               _sub.unsubscribe();
@@ -477,7 +513,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
               if (pk > 0 && this.skuAttributesUpdate != null && this.skuAttributesUpdate.length > 0) {
 
                 this.loading = true;
-                let _sub2:any = this._pimService.saveSKUAttributes(this.skuAttributesUpdate).subscribe(rez => {
+                let _sub2: any = this._pimService.saveSKUAttributes(this.skuAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogProductsComponent SKU attributes updated', rez);
                   this.skuAttributesUpdate = null;
@@ -489,18 +525,40 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
               }
 
             }
-        );
+          );
+        }
       } else if (this.productEdit != null) {
 
         LogUtil.debug('CatalogProductsComponent Save handler product', this.productEdit);
 
         this.loading = true;
-        let _sub:any = this._pimService.saveProduct(this.productEdit).subscribe(
+
+        if (!(this.productEdit.productId > 0) && this.productEditIsCopyOf != null) {
+
+          let _sub: any = this._pimService.copyProduct(this.productEditIsCopyOf, this.productEdit).subscribe(
             rez => {
               let pk = this.productEdit.productId;
               LogUtil.debug('CatalogProductsComponent product changed', rez);
               this.changed = false;
               this.selectedProduct = rez;
+              this.productEditIsCopyOf = null;
+              this.productEdit = null;
+              this.loading = false;
+              _sub.unsubscribe();
+
+              this.getFilteredProducts();
+            }
+          );
+
+        } else {
+
+          let _sub: any = this._pimService.saveProduct(this.productEdit).subscribe(
+            rez => {
+              let pk = this.productEdit.productId;
+              LogUtil.debug('CatalogProductsComponent product changed', rez);
+              this.changed = false;
+              this.selectedProduct = rez;
+              this.productEditIsCopyOf = null;
               this.productEdit = null;
               this.loading = false;
               _sub.unsubscribe();
@@ -508,7 +566,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
               if (pk > 0 && this.productAttributesUpdate != null && this.productAttributesUpdate.length > 0) {
 
                 this.loading = true;
-                let _sub2:any = this._pimService.saveProductAttributes(this.productAttributesUpdate).subscribe(rez => {
+                let _sub2: any = this._pimService.saveProductAttributes(this.productAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogProductsComponent product attributes updated', rez);
                   this.productAttributesUpdate = null;
@@ -516,7 +574,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
                   if (this.skuAttributesUpdate != null && this.skuAttributesUpdate.length > 0) {
                     this.loading = true;
-                    let _sub3:any = this._pimService.saveSKUAttributes(this.skuAttributesUpdate).subscribe(rez => {
+                    let _sub3: any = this._pimService.saveSKUAttributes(this.skuAttributesUpdate).subscribe(rez => {
                       _sub3.unsubscribe();
                       LogUtil.debug('CatalogProductsComponent product SKU attributes updated', rez);
                       this.skuAttributesUpdate = null;
@@ -531,8 +589,9 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
               } else {
                 this.getFilteredProducts();
               }
-          }
-        );
+            }
+          );
+        }
       }
 
     }

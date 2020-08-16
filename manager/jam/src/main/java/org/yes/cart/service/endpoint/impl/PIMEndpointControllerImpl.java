@@ -75,6 +75,14 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
 
     @Override
     public @ResponseBody
+    VoProductWithLinks copyProduct(@PathVariable("id") final long id, @RequestBody final VoProduct vo) throws Exception {
+        final VoProductWithLinks product = voProductService.copyProduct(id, vo);
+        productAsyncSupport.asyncIndexProduct(product.getProductId());
+        return product;
+    }
+
+    @Override
+    public @ResponseBody
     VoProductWithLinks updateProduct(@RequestBody final VoProductWithLinks vo) throws Exception {
         final VoProductWithLinks product = voProductService.updateProduct(vo);
         productAsyncSupport.asyncIndexProduct(product.getProductId());
@@ -129,6 +137,14 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
     public @ResponseBody
     VoProductSku createSku(@RequestBody final VoProductSku vo) throws Exception {
         final VoProductSku sku = voProductService.createSku(vo);
+        productAsyncSupport.asyncIndexSku(sku.getSkuId());
+        return sku;
+    }
+
+    @Override
+    public @ResponseBody
+    VoProductSku copySku(final long id, final VoProductSku vo) throws Exception {
+        final VoProductSku sku = voProductService.copySku(id, vo);
         productAsyncSupport.asyncIndexSku(sku.getSkuId());
         return sku;
     }
