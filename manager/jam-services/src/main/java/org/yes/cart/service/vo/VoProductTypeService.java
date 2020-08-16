@@ -71,7 +71,17 @@ public interface VoProductTypeService {
     VoProductType createType(VoProductTypeInfo vo) throws Exception;
 
     /**
-     * Get type by id.
+     * Create new type from existing.
+     *
+     * @param id type vo ID
+     * @param vo optional main details
+     *
+     * @throws Exception errors
+     */
+    VoProductType copyType(long id, VoProductTypeInfo vo) throws Exception;
+
+    /**
+     * Remove type by id.
      *
      * @param id type vo ID
      *

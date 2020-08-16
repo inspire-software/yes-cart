@@ -177,6 +177,21 @@ export class CatalogService {
 
 
   /**
+   * Create copy of product type.
+   * @param productType product type
+   * @returns {Observable<R>}
+   */
+  copyProductType(productType:ProductTypeInfoVO, copy:ProductTypeInfoVO) {
+
+    let body = JSON.stringify(copy);
+
+    return this.http.post(this._serviceBaseUrl + '/producttypes/' + productType.producttypeId + '/copy', body, Util.requestOptions())
+      .map(res => <ProductTypeVO> this.json(res))
+      .catch(this.handleError);
+  }
+
+
+  /**
    * Remove product type.
    * @param productType product type
    * @returns {Observable<R>}

@@ -139,6 +139,7 @@
   "AUTH_CHANGEPWD_NOMATCH": "Password and confirmation must match",
   "AUTH_CHANGEPWD_SUCCESS": "Password changed, please use new password to login",
 
+  "COPY_OF": "Copy of '{{value}}'",
   "NAME": "Name",
   "DESCRIPTION": "Description",
   "DEFAULT_VALUE": "default value",

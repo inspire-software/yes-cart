@@ -107,6 +107,12 @@ public interface CatalogEndpointController {
     @ResponseBody
     VoProductType createProductType(@ApiParam(value = "Product type", name = "vo", required = true) @RequestBody VoProductType vo)  throws Exception;
 
+    @ApiOperation(value = "Copy product type")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCATALOGADMIN","ROLE_SMPIMADMIN"})
+    @RequestMapping(value = "/producttypes/{id}/copy", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoProductType copyProductType(@ApiParam(value = "Product type ID", required = true) @PathVariable("id") long id, @ApiParam(value = "Product type", name = "vo", required = true) @RequestBody VoProductTypeInfo vo)  throws Exception;
+
     @ApiOperation(value = "Update product type")
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/producttypes", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })

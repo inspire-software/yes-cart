@@ -123,6 +123,12 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
 
     @Override
     public @ResponseBody
+    VoProductType copyProductType(@PathVariable("id") final long id, @RequestBody VoProductTypeInfo vo) throws Exception {
+        return voProductTypeService.copyType(id, vo);
+    }
+
+    @Override
+    public @ResponseBody
     VoProductType updateProductType(@RequestBody final VoProductType vo) throws Exception {
         return voProductTypeService.updateType(vo);
     }

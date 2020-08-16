@@ -188,6 +188,53 @@ public class VoProductTypeServiceImpl implements VoProductTypeService {
      * {@inheritDoc}
      */
     @Override
+    public VoProductType copyType(final long id, final VoProductTypeInfo vo) throws Exception {
+
+        if (federationFacade.isCurrentUserSystemAdmin()) {
+            final VoProductType existing = getTypeById(id);
+
+            if (existing != null) {
+
+                final VoProductTypeInfo main = vo != null ? vo : existing;
+                ProductTypeDTO typeDTO = voAssemblySupport.assembleDto(ProductTypeDTO.class, VoProductTypeInfo.class, dtoProductTypeService.getNew(), main);
+                if (vo == null || vo.getGuid() == null) {
+                    typeDTO.setGuid(UUID.randomUUID().toString());
+                }
+                typeDTO = dtoProductTypeService.create(typeDTO);
+
+                final VoAssemblySupport.VoAssembler<VoProductTypeAttr, ProductTypeAttrDTO> asm =
+                        voAssemblySupport.with(VoProductTypeAttr.class, ProductTypeAttrDTO.class);
+
+                for (final VoProductTypeAttr attrs : getTypeAttributes(existing.getProducttypeId())) {
+                    // insert mode
+                    final ProductTypeAttrDTO dto = dtoProductTypeAttrService.getNew();
+                    asm.assembleDto(dto, attrs);
+                    dto.setProducttypeId(typeDTO.getProducttypeId());
+                    dto.setAttributeDTO(dtoAttributeService.getById(attrs.getAttribute().getAttributeId()));
+                    this.dtoProductTypeAttrService.create(dto);
+                }
+
+                for (final VoProductTypeViewGroup group : existing.getViewGroups()) {
+                    // insert mode
+                    group.setProducttypeId(typeDTO.getProducttypeId());
+                    final ProdTypeAttributeViewGroupDTO newGroup = dtoProdTypeAttributeViewGroupService.getNew();
+                    dtoProdTypeAttributeViewGroupService.create(
+                            voAssemblySupport.assembleDto(ProdTypeAttributeViewGroupDTO.class, VoProductTypeViewGroup.class, newGroup, group)
+                    );
+                }
+
+                return getTypeById(typeDTO.getProducttypeId());
+
+            }
+        }
+        throw new AccessDeniedException("Access is denied");
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeType(final long id) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             final List<ProdTypeAttributeViewGroupDTO> groups = dtoProdTypeAttributeViewGroupService.getByProductTypeId(id);

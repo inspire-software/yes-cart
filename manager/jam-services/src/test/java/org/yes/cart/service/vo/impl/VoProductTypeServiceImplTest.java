@@ -162,4 +162,35 @@ public class VoProductTypeServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(voProductTypeService.getFilteredTypes(ctx).getTotal() > 0);
 
     }
+
+    @Test
+    public void testCopy() throws Exception {
+
+        final VoProductType copy = voProductTypeService.copyType(1L, null);
+
+        assertNotNull(copy);
+        assertNotEquals("1", copy.getGuid());
+        assertEquals("Robots", copy.getName());
+        assertFalse(copy.getDisplayNames().isEmpty());
+
+        assertFalse(copy.getViewGroups().isEmpty());
+        assertFalse(voProductTypeService.getTypeAttributes(copy.getProducttypeId()).isEmpty());
+
+        voProductTypeService.removeType(copy.getProducttypeId());
+
+        final VoProductTypeInfo base = new VoProductTypeInfo();
+        base.setName("Another");
+        final VoProductType copy2 = voProductTypeService.copyType(1L, base);
+
+        assertNotNull(copy2);
+        assertNotEquals("1", copy2.getGuid());
+        assertEquals("Another", copy2.getName());
+        assertTrue(copy2.getDisplayNames().isEmpty());
+
+        assertFalse(copy2.getViewGroups().isEmpty());
+        assertFalse(voProductTypeService.getTypeAttributes(copy2.getProducttypeId()).isEmpty());
+
+        voProductTypeService.removeType(copy2.getProducttypeId());
+
+    }
 }

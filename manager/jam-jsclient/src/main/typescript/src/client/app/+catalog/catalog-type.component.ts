@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { CatalogService, UserEventBus } from './../shared/services/index';
+import { CatalogService, UserEventBus, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
 import { ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, Pair, SearchResultVO } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
@@ -45,6 +45,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
   private selectedType:ProductTypeInfoVO;
 
+  private typeEditIsCopyOf:ProductTypeInfoVO;
   private typeEdit:ProductTypeVO;
   private typeEditAttributes:ProductTypeAttrVO[] = [];
   private typeAttributesUpdate:Array<Pair<ProductTypeAttrVO, boolean>>;
@@ -166,6 +167,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   protected onBackToList() {
     LogUtil.debug('CatalogTypeComponent onBackToList handler');
     if (this.viewMode === CatalogTypeComponent.TYPE) {
+      this.typeEditIsCopyOf = null;
       this.typeEdit = null;
       this.viewMode = CatalogTypeComponent.TYPES;
     }
@@ -176,6 +178,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === CatalogTypeComponent.TYPES) {
+      this.typeEditIsCopyOf = null;
       this.typeEdit = this.newTypeInstance();
       this.typeEditAttributes = [];
       this.viewMode = CatalogTypeComponent.TYPE;
@@ -201,6 +204,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
     this.loading = true;
     let _sub:any = this._typeService.getProductTypeById(typeId).subscribe(typ => {
       _sub.unsubscribe();
+      this.typeEditIsCopyOf = null;
       this.typeEdit = typ;
       this.typeEditAttributes = [];
       this.changed = false;
@@ -225,6 +229,27 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  protected onRowCopyProductType(row:ProductTypeInfoVO) {
+    LogUtil.debug('CatalogTypeComponent onRowCopyProductType handler', row);
+    let _edit = this.newTypeInstance();
+    Util.copyValues(row, _edit);
+    _edit.producttypeId = 0;
+    _edit.viewGroups = [];
+
+    this.typeEditIsCopyOf = row;
+    this.typeEdit = _edit;
+    this.changed = false;
+    this.validForSave = false;
+    this.viewMode = CatalogTypeComponent.TYPE;
+  }
+
+  protected onRowCopySelected() {
+    if (this.selectedType != null) {
+      this.onRowCopyProductType(this.selectedType);
+    }
+  }
+
   protected onSaveHandler() {
 
     if (this.validForSave && this.changed) {
@@ -234,7 +259,27 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
         LogUtil.debug('CatalogTypeComponent Save handler type', this.typeEdit);
 
         this.loading = true;
-        let _sub:any = this._typeService.saveProductType(this.typeEdit).subscribe(
+
+        if (!(this.typeEdit.producttypeId > 0) && this.typeEditIsCopyOf != null) {
+
+          let _sub:any = this._typeService.copyProductType(this.typeEditIsCopyOf, this.typeEdit).subscribe(
+            rez => {
+              _sub.unsubscribe();
+              LogUtil.debug('CatalogTypeComponent type changed', rez);
+              this.loading = false;
+              this.changed = false;
+              this.selectedType = rez;
+              this.typeEdit = null;
+              this.typeEditIsCopyOf = null;
+              this.loading = false;
+              this.viewMode = CatalogTypeComponent.TYPES;
+              this.getFilteredTypes();
+            }
+          );
+
+        } else {
+
+          let _sub: any = this._typeService.saveProductType(this.typeEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.typeEdit.producttypeId;
@@ -242,13 +287,14 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
               this.changed = false;
               this.selectedType = rez;
               this.typeEdit = null;
+              this.typeEditIsCopyOf = null;
               this.loading = false;
               this.viewMode = CatalogTypeComponent.TYPES;
 
               if (pk > 0 && this.typeAttributesUpdate != null && this.typeAttributesUpdate.length > 0) {
 
                 this.loading = true;
-                let _sub2:any = this._typeService.saveProductTypeAttributes(this.typeAttributesUpdate).subscribe(rez => {
+                let _sub2: any = this._typeService.saveProductTypeAttributes(this.typeAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
                   LogUtil.debug('CatalogTypeComponent type attributes updated', rez);
                   this.typeAttributesUpdate = null;
@@ -258,8 +304,9 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
               } else {
                 this.getFilteredTypes();
               }
-          }
-        );
+            }
+          );
+        }
       }
 
     }

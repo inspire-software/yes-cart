@@ -139,6 +139,7 @@
   "AUTH_CHANGEPWD_NOMATCH": "Passwort und Bestätigung müssen übereinstimmen",
   "AUTH_CHANGEPWD_SUCCESS": "Passwort geändert, bitte neues Passwort verwenden um sich einzuloggen",
 
+  "COPY_OF": "Kopie von '{{value}}'",
   "NAME": "Name",
   "DESCRIPTION": "Beschreibung",
   "DEFAULT_VALUE": "Standartwert",

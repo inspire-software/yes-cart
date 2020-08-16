@@ -1,6 +1,6 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_PIM_PRODUCT_TYPES' | translate }} {{ selectedType ? (' / ' + selectedType.name) : '' }}</h1>
+    <h1 class="page-header">{{ 'PANEL_PIM_PRODUCT_TYPES' | translate }} {{ typeEditIsCopyOf != null ? (' / ' + ('COPY_OF' | translate:{value: typeEditIsCopyOf.name } )) : (selectedType ? (' / ' + selectedType.name) : '') }}</h1>
   </div>
 
 
@@ -38,6 +38,10 @@
 
       <button type="button" (click)="onRowNew()" [disabled]="viewMode !== 'types'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
         <i class="fa fa-plus"></i>
+      </button>
+
+      <button type="button" (click)="onRowCopySelected()" [disabled]="selectedType == null || viewMode !== 'types'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_COPY' | translate }}">
+        <i class="fa fa-copy"></i>
       </button>
 
       <button type="button" (click)="onRowEditSelected()" [disabled]="selectedType == null || viewMode !== 'types'" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
