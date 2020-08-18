@@ -494,7 +494,7 @@ public class VoProductServiceImpl implements VoProductService {
             if (CollectionUtils.isNotEmpty(skuAttrsToAdd)) {
                 final List<MutablePair<VoAttrValueProductSku, Boolean>> attrsToAddList = new ArrayList<>();
                 for (final VoAttrValueProductSku attrToAdd : skuAttrsToAdd) {
-                    if (StringUtils.isNotEmpty(attrToAdd.getVal())) {
+                    if (StringUtils.isNotEmpty(attrToAdd.getVal()) && !attrToAdd.getVal().startsWith("* ")) {
                         attrToAdd.setAttrvalueId(0L);
                         attrToAdd.setSkuId(sku1copy.getSkuId());
                         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrToAdd.getAttribute().getEtype())) {
@@ -693,7 +693,7 @@ public class VoProductServiceImpl implements VoProductService {
             if (CollectionUtils.isNotEmpty(skuAttrsToAdd)) {
                 final List<MutablePair<VoAttrValueProductSku, Boolean>> attrsToAddList = new ArrayList<>();
                 for (final VoAttrValueProductSku attrToAdd : skuAttrsToAdd) {
-                    if (StringUtils.isNotEmpty(attrToAdd.getVal())) {
+                    if (StringUtils.isNotEmpty(attrToAdd.getVal()) && !attrToAdd.getVal().startsWith("* ")) {
                         attrToAdd.setAttrvalueId(0L);
                         attrToAdd.setSkuId(dto.getSkuId());
                         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrToAdd.getAttribute().getEtype())) {
