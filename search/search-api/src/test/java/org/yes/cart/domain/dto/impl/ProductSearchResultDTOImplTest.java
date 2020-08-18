@@ -70,6 +70,7 @@ public class ProductSearchResultDTOImplTest {
         first.setDisplayName(new StringI18NModel("EN#~#FirstDisplayName"));
         first.setDescription("FirstDescription");
         first.setDisplayDescription(new StringI18NModel("EN#~#FirstDisplayDescription"));
+        first.setTypeId(123L);
         first.setType("typeA");
         first.setDisplayType(new StringI18NModel("EN#~#displayTypeA"));
         first.setService(true);
@@ -96,6 +97,7 @@ public class ProductSearchResultDTOImplTest {
         assertEquals(first.getDisplayName(), copy.getDisplayName());
         assertEquals(first.getDescription(), copy.getDescription());
         assertEquals(first.getDisplayDescription(), copy.getDisplayDescription());
+        assertEquals(first.getTypeId(), copy.getTypeId());
         assertEquals(first.getType(), copy.getType());
         assertEquals(first.getDisplayType(), copy.getDisplayType());
         assertTrue(copy.isService());
@@ -143,6 +145,7 @@ public class ProductSearchResultDTOImplTest {
         assertEquals(first.getDisplayName(), copy.getDisplayName());
         assertEquals(first.getDescription(), copy.getDescription());
         assertEquals(first.getDisplayDescription(), copy.getDisplayDescription());
+        assertEquals(first.getTypeId(), copy.getTypeId());
         assertEquals(first.getType(), copy.getType());
         assertEquals(first.getDisplayType(), copy.getDisplayType());
         assertTrue(copy.isService());

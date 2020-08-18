@@ -48,6 +48,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private StringI18NModel displayName;
     private String description;
     private StringI18NModel displayDescription;
+    private long typeId;
     private String type;
     private StringI18NModel displayType;
     private int typeMask;
@@ -306,6 +307,17 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     @Override
+    public long getTypeId() {
+        return typeId;
+    }
+
+    // JSON accessor
+    public void setTypeId(final long typeId) {
+        this.typeId = typeId;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public String getType(final String locale) {
         if (this.displayType != null) {
             final String type = this.displayType.getValue(locale);
@@ -315,6 +327,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         }
         return this.type;
     }
+
+    
 
     /** {@inheritDoc} */
     @Override
@@ -569,6 +583,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         if (this.displayDescription != null) {
             copy.setDisplayDescription(this.displayDescription.copy());
         }
+        copy.setTypeId(this.typeId);
         copy.setType(this.type);
         if (this.displayType != null) {
             copy.setDisplayType(this.displayType.copy());

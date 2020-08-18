@@ -200,6 +200,13 @@ public interface ProductSearchResultDTO extends Identifiable {
     String getDefaultImage();
 
     /**
+     * Get product type ID.
+     *
+     * @return product type.
+     */
+    long getTypeId();
+
+    /**
      * Get product type by specified locale.
      *
      * @param locale given locale

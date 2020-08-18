@@ -70,6 +70,8 @@ public class ProductSearchResultRO implements Serializable {
     @DtoField(readOnly = true, converter = "i18nModelConverter")
     private Map<String, String> displayDescription;
     @DtoField(readOnly = true)
+    private long typeId;
+    @DtoField(readOnly = true)
     private String type;
     @DtoField(readOnly = true, converter = "i18nModelConverter")
     private Map<String, String> displayType;
@@ -278,6 +280,15 @@ public class ProductSearchResultRO implements Serializable {
     public void setDisplayDescription(final Map<String, String> displayDescription) {
         
         this.displayDescription = displayDescription;
+    }
+
+    @XmlAttribute(name = "type-id")
+    public long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(final long typeId) {
+        this.typeId = typeId;
     }
 
     public String getType() {
