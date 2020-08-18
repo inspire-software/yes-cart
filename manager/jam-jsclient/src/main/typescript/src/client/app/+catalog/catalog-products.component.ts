@@ -537,7 +537,6 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
 
           let _sub: any = this._pimService.copyProduct(this.productEditIsCopyOf, this.productEdit).subscribe(
             rez => {
-              let pk = this.productEdit.productId;
               LogUtil.debug('CatalogProductsComponent product changed', rez);
               this.changed = false;
               this.selectedProduct = rez;
