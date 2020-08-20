@@ -420,7 +420,7 @@
   "PRODUCT_TEMPLATE": "Template",
   "PRODUCT_SEARCH_TEMPLATE": "Suchtemplate",
   "PRODUCT_CONFIGURABLE": "Konfigurierbar",
-  "PRODUCT_NOT_SOLD_SEPARATELY": "Komponente/Teil",
+  "PRODUCT_NOT_SOLD_SEPARATELY": "Nicht separat erhältlich",
 
   "PRODUCT_TAB_AVAILABILITY": "Verfügbarkeit",
   "PRODUCT_TAB_CATALOG": "Katalog",

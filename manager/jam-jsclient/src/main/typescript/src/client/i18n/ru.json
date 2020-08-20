@@ -420,7 +420,7 @@
   "PRODUCT_TEMPLATE": "Шаблон",
   "PRODUCT_SEARCH_TEMPLATE": "Шаблон поиска",
   "PRODUCT_CONFIGURABLE": "Сборный",
-  "PRODUCT_NOT_SOLD_SEPARATELY": "Компонент/Деталь",
+  "PRODUCT_NOT_SOLD_SEPARATELY": "Не продается отдельно",
 
   "PRODUCT_TAB_AVAILABILITY": "Доступность",
   "PRODUCT_TAB_CATALOG": "Каталог",

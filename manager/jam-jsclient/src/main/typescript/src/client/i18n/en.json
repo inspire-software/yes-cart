@@ -420,7 +420,7 @@
   "PRODUCT_TEMPLATE": "Template",
   "PRODUCT_SEARCH_TEMPLATE": "Search template",
   "PRODUCT_CONFIGURABLE": "Configurable",
-  "PRODUCT_NOT_SOLD_SEPARATELY": "Component/Part",
+  "PRODUCT_NOT_SOLD_SEPARATELY": "Not sold separately",
 
   "PRODUCT_TAB_AVAILABILITY": "Availability",
   "PRODUCT_TAB_CATALOG": "Catalog",

@@ -420,7 +420,7 @@
   "PRODUCT_TEMPLATE": "Шаблон",
   "PRODUCT_SEARCH_TEMPLATE": "Шаблон пошуку",
   "PRODUCT_CONFIGURABLE": "Збірний",
-  "PRODUCT_NOT_SOLD_SEPARATELY": "Компонент/Деталь",
+  "PRODUCT_NOT_SOLD_SEPARATELY": "Не продається окремо",
 
   "PRODUCT_TAB_AVAILABILITY": "Доступність",
   "PRODUCT_TAB_CATALOG": "Каталог",
