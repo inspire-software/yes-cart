@@ -46,7 +46,8 @@ export class I18nComponent {
   private dataI18n:Array<Pair<string, string>> = [];
   private dataValue:string = '';
 
-  private expandDefault:boolean = true;
+  private expandDefault:boolean = false;
+  private expandAdd:boolean = false;
 
   private selectedRow:Pair<string,string> = new Pair('','');
 
@@ -60,8 +61,7 @@ export class I18nComponent {
     this.i18nForm = fb.group({
        'addLang':  ['', YcValidators.validLanguageCode],
        'addVal':  ['', YcValidators.nonBlankTrimmed],
-       'dataValue':  ['', YcValidators.nonBlankTrimmed],
-       'dataValueXL':  ['', YcValidators.nonBlankTrimmed]
+       'dataValue':  ['', YcValidators.nonBlankTrimmed]
     });
 
     let that = this;
@@ -78,11 +78,9 @@ export class I18nComponent {
     if (this._defaultRequired) {
       LogUtil.debug('I18nComponent resetting validator to required non-blank', this._value);
       this.i18nForm.controls['dataValue'].validator = YcValidators.requiredNonBlankTrimmed;
-      this.i18nForm.controls['dataValueXL'].validator = YcValidators.requiredNonBlankTrimmed;
     } else {
       LogUtil.debug('I18nComponent resetting validator to non-blank', this._value);
       this.i18nForm.controls['dataValue'].validator = YcValidators.nonBlankTrimmed;
-      this.i18nForm.controls['dataValueXL'].validator = YcValidators.nonBlankTrimmed;
     }
   }
 
@@ -144,7 +142,6 @@ export class I18nComponent {
       }
       this.i18nForm.reset({
         dataValue: this.dataValue,
-        dataValueXL: this.dataValue,
         addLang: null,
         addVal: null,
       });
@@ -153,6 +150,10 @@ export class I18nComponent {
 
   onExpandDefault() {
     this.expandDefault = !this.expandDefault;
+  }
+
+  onExpandAdd() {
+    this.expandAdd = !this.expandAdd;
   }
 
   onRowSelect(selectedRow:Pair<string,string>) {
@@ -200,7 +201,7 @@ export class I18nComponent {
   }
 
   onDefaultValueChange():void {
-    if (this.i18nForm.controls['dataValue'].dirty || this.i18nForm.controls['dataValueXL'].dirty
+    if (this.i18nForm.controls['dataValue'].dirty
       || (this.isBlank(this.dataValue) && this._defaultRequired)) {
       if (!this.isBlank(this.dataValue)) {
         this.source[this.value] = this.dataValue;
