@@ -27,6 +27,8 @@ import org.yes.cart.bulkexport.csv.*;
 import org.yes.cart.bulkexport.service.impl.AbstractExportService;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
+import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.federation.FederationFacade;
 
@@ -271,7 +273,12 @@ public class CsvBulkExportServiceImpl extends AbstractExportService<CsvExportDes
      * @param entity entity
      */
     private void releaseEntity(final Object entity) {
-        genericDAO.evict(entity);
+        if (entity instanceof Identifiable) {
+            genericDAO.evict(entity);
+        } else if (entity instanceof Pair) {
+            genericDAO.evict(((Pair) entity).getFirst());
+            genericDAO.evict(((Pair) entity).getSecond());
+        } // else custom object keep until end of session
     }
 
 
