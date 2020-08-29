@@ -343,6 +343,7 @@
   "CARRIERSLA_SLATYPE_F": "Fest",
   "CARRIERSLA_SLATYPE_R": "Kostenfrei",
   "CARRIERSLA_SLATYPE_W": "Gewicht & Volumen",
+  "CARRIERSLA_SLATYPE_O": "Offline-Berechnung",
   "CARRIERSLA_SLATYPE_E": "Externe Preisrechnung",
   "CARRIERSLA_SCRIPT": "Kalkulations Referenz",
   "CARRIERSLA_BILL": "Verrechnung",

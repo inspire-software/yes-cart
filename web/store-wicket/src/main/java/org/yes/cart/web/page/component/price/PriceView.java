@@ -75,6 +75,7 @@ public class PriceView extends BaseComponent {
     private final boolean showTaxNet;
     private final boolean showTaxAmount;
     private final boolean showGratis;
+    private final boolean forceHide;
 
     private static final Pair<BigDecimal, BigDecimal> NULL = new Pair<>(null, null);
     private static final String[] EMPTY_FORMATTED_PRICE = new String[] { StringUtils.EMPTY, StringUtils.EMPTY };
@@ -126,6 +127,31 @@ public class PriceView extends BaseComponent {
                      final boolean showTaxAmount,
                      final boolean showGratis
     ) {
+        this(id, priceModel, appliedPromos, showCurrencySymbol, showSavings, showTax, showTaxAmount, showGratis, false);
+    }
+
+    /**
+     * Create price view.
+     * @param id component id.
+     * @param priceModel price model.
+     * @param appliedPromos applied promotions
+     * @param showCurrencySymbol currency symbol.
+     * @param showSavings show user friendly percentage savings
+     * @param showTax show tax information
+     * @param showTaxAmount show amount of tax (rather than percent)
+     * @param showGratis show gratis prices
+     * @param forceHide force hiding this block
+     */
+    public PriceView(final String id,
+                     final PriceModel priceModel,
+                     final String appliedPromos,
+                     final boolean showCurrencySymbol,
+                     final boolean showSavings,
+                     final boolean showTax,
+                     final boolean showTaxAmount,
+                     final boolean showGratis,
+                     final boolean forceHide
+    ) {
         super(id);
         this.priceModel = priceModel;
         this.showCurrencySymbol = showCurrencySymbol;
@@ -135,6 +161,7 @@ public class PriceView extends BaseComponent {
         this.showTaxNet = this.showTax && priceModel.isTaxInfoUseNet();
         this.showTaxAmount = showTaxAmount;
         this.showGratis = showGratis;
+        this.forceHide = forceHide;
     }
 
 
@@ -162,7 +189,7 @@ public class PriceView extends BaseComponent {
         String listPrice = "";
         final String lang = getLocale().getLanguage();
 
-        final boolean priceUponRequest = priceModel.isPriceUponRequest();
+        final boolean priceUponRequest = this.forceHide || priceModel.isPriceUponRequest();
         final boolean priceOnOffer = priceModel.isPriceOnOffer();
 
         BigDecimal priceToFormat = priceModel.getRegularPrice();

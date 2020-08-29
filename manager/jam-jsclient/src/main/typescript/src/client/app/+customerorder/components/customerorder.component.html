@@ -109,9 +109,9 @@
                       <ng-template [ngIf]="delivery.deliveryConfirmed"><br/><i class="fa fa-check-square-o"></i> {{ delivery.deliveryConfirmed | ycdate }}</ng-template>
                       {{ delivery.deliveryRemarks }}
                     </th>
-                    <td class="text-right">{{ (showGrossTotal ? delivery.grossPrice : delivery.netPrice) | ycprice }}</td>
+                    <td class="text-right">&nbsp;<ng-template [ngIf]="!isOfflineDeliveryCost(delivery.appliedPromo)">{{ (showGrossTotal ? delivery.grossPrice : delivery.netPrice) | ycprice }}</ng-template></td>
                     <td title="{{ 'PROMO_APPLIED' | translate }}">
-                      <a *ngFor="let deliveryPromo of getPromotions(delivery.appliedPromo)" title="{{deliveryPromo.name}}"><span class="label label-info">{{ deliveryPromo.code }}</span></a>&nbsp;
+                      <ng-template [ngIf]="!isOfflineDeliveryCost(delivery.appliedPromo)"><a *ngFor="let deliveryPromo of getPromotions(delivery.appliedPromo)" title="{{deliveryPromo.name}}"><span class="label label-info">{{ deliveryPromo.code }}</span></a></ng-template>&nbsp;
                     </td>
                   </tr>
                   <tr>

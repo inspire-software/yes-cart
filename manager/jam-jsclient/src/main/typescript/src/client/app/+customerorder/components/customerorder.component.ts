@@ -200,6 +200,9 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
 
   }
 
+  isOfflineDeliveryCost(codes:string[]):boolean {
+    return codes != null && codes.indexOf('#OFFLINE#') != -1;
+  }
 
   getPromotions(codes:string[]):PromotionVO[] {
     let promos:PromotionVO[] = [];

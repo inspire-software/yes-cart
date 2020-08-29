@@ -13,7 +13,9 @@ try {
       }
       out.println(lineDelimiter);
       out.println(("| Всього                 " + deliverySum + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+      if (!delivery.promoApplied || !delivery.appliedPromo.contains('#OFFLINE#')) {
       out.println(("| Вартість доставки      " + delivery.price + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+      }
       out.println(("| Загалом по доставці    " + (delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency ).padRight(lineDelimiter.length() -1 ) + "|");
       out.println(lineDelimiter);
 } catch (Exception e) {

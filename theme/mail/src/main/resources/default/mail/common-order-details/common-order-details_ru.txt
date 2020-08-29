@@ -15,7 +15,9 @@ try {
           }
           out.println(lineDelimiter);
           out.println(("| Всего                  " + deliverySum + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+          if (!delivery.promoApplied || !delivery.appliedPromo.contains('#OFFLINE#')) {
           out.println(("| Стоимость доставки     " + delivery.price + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+          }
           out.println(("| Итого по доставке      " + (delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency ).padRight(lineDelimiter.length() -1 ) + "|");
           out.println(lineDelimiter);
           totalSum += (delivery.price + deliverySum);

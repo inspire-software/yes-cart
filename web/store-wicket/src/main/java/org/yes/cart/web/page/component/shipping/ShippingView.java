@@ -392,17 +392,21 @@ public class ShippingView extends BaseComponent {
         } else {
             final PriceModel model = shippingServiceFacade.getCartShippingSupplierTotal(cart, this.supplier);
 
-            form.addOrReplace(new Label(PRICE_LABEL, new StringResourceModel(PRICE_LABEL, this)));
-            form.addOrReplace(
-                    new PriceView(
-                            PRICE_VIEW,
-                            model,
-                            total.getAppliedDeliveryPromo(), true, true,
-                            model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(),
-                            true
-                    )
-            );
-
+            if (total.isDeliveryPromoApplied() && total.getAppliedDeliveryPromo().contains("#OFFLINE#")) {
+                form.addOrReplace(new Label(PRICE_LABEL));
+                form.addOrReplace(new Label(PRICE_VIEW));
+            } else {
+                form.addOrReplace(new Label(PRICE_LABEL, new StringResourceModel(PRICE_LABEL, this)));
+                form.addOrReplace(
+                        new PriceView(
+                                PRICE_VIEW,
+                                model,
+                                total.getAppliedDeliveryPromo(), true, true,
+                                model.isTaxInfoEnabled(), model.isTaxInfoShowAmount(),
+                                true
+                        )
+                );
+            }
         }
 
     }

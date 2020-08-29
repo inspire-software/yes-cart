@@ -74,9 +74,6 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     private static final String BILLING_ADDRESS = "billingAddress";
 
     public static final String DELIVERY_COST = "deliveryCost";
-    public static final String DELIVERY_COST_GRATIS = "deliveryCostGratis";
-    private static final String DELIVERY_COST_TAX = "deliveryCostTax";
-    private static final String DELIVERY_COST_AMOUNT = "deliveryCostAmount";
 
     private static final String DELIVERY_GRAND_TOTAL = "grandTotal";
     private static final String DELIVERY_GRAND_AMOUNT = "grandTotalAmount";
@@ -153,6 +150,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                         final PriceModel deliveryTotal = checkoutServiceFacade.getOrderDeliveryTotalSub(customerOrder, delivery, getCurrentCart());
                         final PriceModel deliveryShipping = checkoutServiceFacade.getOrderDeliveryTotalShipping(customerOrder, delivery, getCurrentCart());
                         final boolean freeShipping = MoneyUtils.isFirstEqualToSecond(deliveryShipping.getRegularPrice(), BigDecimal.ZERO);
+                        final boolean offlineShippingCost = delivery.isPromoApplied() && delivery.getAppliedPromo().contains("#OFFLINE#");
 
                         final IModel<String> deliveryTime;
                         final boolean showDeliveryTime;
@@ -300,15 +298,13 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                 deliveryTotal.isTaxInfoEnabled(), deliveryTotal.isTaxInfoShowAmount())
                                 )
                                 .add(
-                                        new WebMarkupContainer(DELIVERY_COST_GRATIS).setVisible(freeShipping)
-                                )
-                                .add(
                                         new PriceView(
                                                 DELIVERY_COST,
                                                 deliveryShipping,
                                                 delivery.getAppliedPromo(),
                                                 false, true,
-                                                deliveryShipping.isTaxInfoEnabled(), deliveryShipping.isTaxInfoShowAmount(), true)
+                                                deliveryShipping.isTaxInfoEnabled(), deliveryShipping.isTaxInfoShowAmount(), true,
+                                                offlineShippingCost)
                                 )
                                 .add(
                                         new Label(DELIVERY_METHOD, slaName)

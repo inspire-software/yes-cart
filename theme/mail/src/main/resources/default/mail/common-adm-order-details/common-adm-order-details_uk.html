@@ -64,10 +64,12 @@
                     <td colspan="3" style="border: 1px solid #E0E0E0;">Всього (<%=root.currency%>)</td>
                     <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=deliverySum%></td>
                 </tr>
+                <% if (!delivery.promoApplied || !delivery.appliedPromo.contains('#OFFLINE#')) { %>
                 <tr>
                     <td colspan="3" style="border: 1px solid #E0E0E0;">Вартість доставки (<%=root.currency%>) ${deliveryCarrierSlaName[delivery.deliveryNum]}</td>
                     <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=delivery.price%></td>
                 </tr>
+                <% } %>
                 <tr>
                     <td colspan="3" style="border: 1px solid #E0E0E0;">Загалом по доставці (<%=root.currency%>)</td>
                     <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=(delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP)%></td>

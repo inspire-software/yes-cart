@@ -343,6 +343,7 @@
   "CARRIERSLA_SLATYPE_F": "Фиксированая цена",
   "CARRIERSLA_SLATYPE_R": "Бесплатно",
   "CARRIERSLA_SLATYPE_W": "Вес и объем",
+  "CARRIERSLA_SLATYPE_O": "Расчитывается отдельно",
   "CARRIERSLA_SLATYPE_E": "Кастомизация",
   "CARRIERSLA_SCRIPT": "Сервис",
   "CARRIERSLA_BILL": "Адрес счета",

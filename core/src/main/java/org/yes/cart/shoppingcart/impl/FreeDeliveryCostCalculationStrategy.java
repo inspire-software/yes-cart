@@ -80,7 +80,7 @@ public class FreeDeliveryCostCalculationStrategy implements DeliveryCostCalculat
                 }
 
                 final CarrierSla carrierSla = carrierSlaService.getById(supplierCarrierSla.getValue());
-                if (carrierSla != null && CarrierSla.FREE.equals(carrierSla.getSlaType())) {
+                if (carrierSla != null && isCarrierSlaTypeApplicable(carrierSla)) {
 
                     final String carrierSlaGUID = carrierSla.getGuid();
                     final String carrierSlaName = new FailoverStringI18NModel(
@@ -105,8 +105,7 @@ public class FreeDeliveryCostCalculationStrategy implements DeliveryCostCalculat
 
                         for (final DeliveryBucket bucket : supplierBuckets) {
                             // Add shipping line for every bucket by this supplier (e.g. if we have multi delivery)
-                            cart.addShippingToCart(bucket, carrierSlaGUID, carrierSlaName, qty);
-                            cart.setShippingPrice(carrierSlaGUID, bucket, listPrice, listPrice);
+                            setShippingBucketCost(cart, bucket, carrierSlaGUID, carrierSlaName, qty, listPrice);
                         }
 
                         total = new TotalImpl(
@@ -139,6 +138,15 @@ public class FreeDeliveryCostCalculationStrategy implements DeliveryCostCalculat
             return total;
         }
         return null;
+    }
+
+    protected boolean isCarrierSlaTypeApplicable(final CarrierSla carrierSla) {
+        return CarrierSla.FREE.equals(carrierSla.getSlaType());
+    }
+
+    protected void setShippingBucketCost(final MutableShoppingCart cart, final DeliveryBucket bucket, final String carrierSlaGUID, final String carrierSlaName, final BigDecimal qty, final BigDecimal listPrice) {
+        cart.addShippingToCart(bucket, carrierSlaGUID, carrierSlaName, qty);
+        cart.setShippingPrice(carrierSlaGUID, bucket, listPrice, listPrice);
     }
 
     protected SkuPrice getSkuPrice(final MutableShoppingCart cart,

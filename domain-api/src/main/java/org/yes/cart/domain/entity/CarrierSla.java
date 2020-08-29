@@ -30,13 +30,18 @@ import java.util.Map;
  * Represent carrier SLA, that can be quite complex. At this moment
  * several strategies(types) are supported:
  * <p/>
- * 1. E - External (uses script property which should specify Spring bean that implements DeliveryCostStrategy)
- * 2. R - Free (simply puts 0 delivery cost)
- * <p/>
- * 3. F - Fixed (uses price lists where SKU is the CarrierSla.GUID)
+ * 1. O - Offline (indicates that calculation cannot be done automatically and exact cost is communicated to the customer offline)
+ * 2. E - External (uses script property which should specify Spring bean that implements DeliveryCostStrategy)
+ * 3. R - Free (simply puts 0 delivery cost)
+ * 4. F - Fixed (uses price lists where SKU is the CarrierSla.GUID)
  * <p/>
  */
 public interface CarrierSla extends Auditable {
+
+    /**
+     * Offline delivery cost calculation
+     */
+    String OFFLINE = "O";
 
     /**
      * External procedure delivery cost calculation

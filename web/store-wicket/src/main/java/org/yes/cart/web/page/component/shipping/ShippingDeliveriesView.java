@@ -57,7 +57,7 @@ import java.util.*;
  * Class responsible to show cart with delivery amount and taxes for verification before selecting shipping method.
  * Different  countries may require different models of representation.
  *
- * TODO: YC-911 Allow regional settings for Carrirers to restrict availability geographically
+ * TODO: YC-911 Allow regional settings for Carriers to restrict availability geographically
  */
 public class ShippingDeliveriesView extends BaseComponent {
 

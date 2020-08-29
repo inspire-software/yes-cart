@@ -343,6 +343,7 @@
   "CARRIERSLA_SLATYPE_F": "Фіксована ціна",
   "CARRIERSLA_SLATYPE_R": "Безкоштовно",
   "CARRIERSLA_SLATYPE_W": "Вага і обсяг",
+  "CARRIERSLA_SLATYPE_O": "Розраховується окремо",
   "CARRIERSLA_SLATYPE_E": "Кастомізація",
   "CARRIERSLA_SCRIPT": "Сервіс",
   "CARRIERSLA_BILL": "Адреса рахунку",

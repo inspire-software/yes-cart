@@ -1544,6 +1544,13 @@
                         <constructor-arg index="2" ref="defaultDeliveryCostRegionalPriceResolver"/>
                     </bean>
                 </entry>
+                <entry key="O">
+                    <bean class="org.yes.cart.shoppingcart.impl.OfflineDeliveryCostCalculationStrategy">
+                        <constructor-arg index="0" ref="carrierSlaService"/>
+                        <constructor-arg index="1" ref="pricingPolicyProvider"/>
+                        <constructor-arg index="2" ref="defaultDeliveryCostRegionalPriceResolver"/>
+                    </bean>
+                </entry>
                 <entry key="E">
                     <bean class="org.yes.cart.shoppingcart.impl.ExternalDeliveryCostCalculationStrategy">
                         <constructor-arg index="0" ref="carrierSlaService"/>
