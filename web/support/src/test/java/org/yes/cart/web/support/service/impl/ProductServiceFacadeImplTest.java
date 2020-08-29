@@ -4372,72 +4372,39 @@ public class ProductServiceFacadeImplTest {
         final LocalDateTime end = TimeContext.getLocalDateTime();
 
         context.checking(new Expectations() {{
-            allowing(promotionService).findPromotionByCode("CODE0", true);
-            will(returnValue(code0));
-            allowing(code0).getCode();
-            will(returnValue("CODE0"));
-            allowing(code0).getPromoType();
-            will(returnValue("T0"));
-            allowing(code0).getPromoAction();
-            will(returnValue("A0"));
-            allowing(code0).getPromoActionContext();
-            will(returnValue("CTX0"));
-            allowing(code0).getDisplayName();
-            will(returnValue(null));
-            allowing(code0).getName();
-            will(returnValue("Promo 0"));
-            allowing(code0).getDisplayDescription();
-            will(returnValue(null));
-            allowing(code0).getDescription();
-            will(returnValue("Desc 0"));
-            allowing(code0).getEnabledFrom();
-            will(returnValue(start));
-            allowing(code0).getEnabledTo();
-            will(returnValue(end));
-            allowing(promotionService).findPromotionByCode("CODE1", true);
-            will(returnValue(code1));
-            allowing(code1).getCode();
-            will(returnValue("CODE1"));
-            allowing(code1).getPromoType();
-            will(returnValue("T1"));
-            allowing(code1).getPromoAction();
-            will(returnValue("A1"));
-            allowing(code1).getPromoActionContext();
-            will(returnValue("CTX1"));
-            allowing(code1).getDisplayName();
-            will(returnValue(null));
-            allowing(code1).getName();
-            will(returnValue("Promo 1"));
-            allowing(code1).getDisplayDescription();
-            will(returnValue(null));
-            allowing(code1).getDescription();
-            will(returnValue("Desc 1"));
-            allowing(code1).getEnabledFrom();
-            will(returnValue(start));
-            allowing(code1).getEnabledTo();
-            will(returnValue(end));
-            allowing(promotionService).findPromotionByCode("CODE2", true);
-            will(returnValue(code2));
-            allowing(code2).getCode();
-            will(returnValue("CODE2"));
-            allowing(code2).getPromoType();
-            will(returnValue("T2"));
-            allowing(code2).getPromoAction();
-            will(returnValue("A2"));
-            allowing(code2).getPromoActionContext();
-            will(returnValue("CTX2"));
-            allowing(code2).getDisplayName();
-            will(returnValue(null));
-            allowing(code2).getName();
-            will(returnValue("Promo 2"));
-            allowing(code2).getDisplayDescription();
-            will(returnValue(null));
-            allowing(code2).getDescription();
-            will(returnValue("Desc 2"));
-            allowing(code2).getEnabledFrom();
-            will(returnValue(start));
-            allowing(code2).getEnabledTo();
-            will(returnValue(end));
+            allowing(promotionService).findPromotionByCode("CODE0", true); will(returnValue(code0));
+            allowing(code0).getCode(); will(returnValue("CODE0"));
+            allowing(code0).getPromoType(); will(returnValue("T0"));
+            allowing(code0).getPromoAction(); will(returnValue("A0"));
+            allowing(code0).getPromoActionContext(); will(returnValue("CTX0"));
+            allowing(code0).getDisplayName(); will(returnValue(null));
+            allowing(code0).getName(); will(returnValue("Promo 0"));
+            allowing(code0).getDisplayDescription(); will(returnValue(null));
+            allowing(code0).getDescription(); will(returnValue("Desc 0"));
+            allowing(code0).getEnabledFrom(); will(returnValue(start));
+            allowing(code0).getEnabledTo(); will(returnValue(end));
+            allowing(promotionService).findPromotionByCode("CODE1", true); will(returnValue(code1));
+            allowing(code1).getCode(); will(returnValue("CODE1"));
+            allowing(code1).getPromoType(); will(returnValue("T1"));
+            allowing(code1).getPromoAction(); will(returnValue("A1"));
+            allowing(code1).getPromoActionContext(); will(returnValue("CTX1"));
+            allowing(code1).getDisplayName(); will(returnValue(null));
+            allowing(code1).getName(); will(returnValue("Promo 1"));
+            allowing(code1).getDisplayDescription(); will(returnValue(null));
+            allowing(code1).getDescription(); will(returnValue("Desc 1"));
+            allowing(code1).getEnabledFrom(); will(returnValue(start));
+            allowing(code1).getEnabledTo(); will(returnValue(end));
+            allowing(promotionService).findPromotionByCode("CODE2", true); will(returnValue(code2));
+            allowing(code2).getCode(); will(returnValue("CODE2"));
+            allowing(code2).getPromoType(); will(returnValue("T2"));
+            allowing(code2).getPromoAction(); will(returnValue("A2"));
+            allowing(code2).getPromoActionContext(); will(returnValue("CTX2"));
+            allowing(code2).getDisplayName(); will(returnValue(null));
+            allowing(code2).getName(); will(returnValue("Promo 2"));
+            allowing(code2).getDisplayDescription(); will(returnValue(null));
+            allowing(code2).getDescription(); will(returnValue("Desc 2"));
+            allowing(code2).getEnabledFrom(); will(returnValue(start));
+            allowing(code2).getEnabledTo(); will(returnValue(end));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, promotionService, null, null, null);
@@ -4491,4 +4458,88 @@ public class ProductServiceFacadeImplTest {
         }
 
     }
+
+
+    @Test
+    public void testGetPromotionModelForOffline() throws Exception {
+
+        final PromotionService promotionService = context.mock(PromotionService.class, "promotionService");
+
+        final Promotion code1 = context.mock(Promotion.class, "code1");
+
+        final LocalDateTime start = TimeContext.getLocalDateTime();
+        final LocalDateTime end = TimeContext.getLocalDateTime();
+
+        context.checking(new Expectations() {{
+            allowing(promotionService).findPromotionByCode("OTHER", true); will(returnValue(code1));
+            allowing(code1).getCode(); will(returnValue("CODE1"));
+            allowing(code1).getPromoType(); will(returnValue("T1"));
+            allowing(code1).getPromoAction(); will(returnValue("A1"));
+            allowing(code1).getPromoActionContext(); will(returnValue("CTX1"));
+            allowing(code1).getDisplayName(); will(returnValue(null));
+            allowing(code1).getName(); will(returnValue("Promo 1"));
+            allowing(code1).getDisplayDescription(); will(returnValue(null));
+            allowing(code1).getDescription(); will(returnValue("Desc 1"));
+            allowing(code1).getEnabledFrom(); will(returnValue(start));
+            allowing(code1).getEnabledTo(); will(returnValue(end));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, promotionService, null, null, null);
+
+        final Map<String, PromotionModel> model = facade.getPromotionModel("#OFFLINE#,OTHER", true);
+
+        assertNotNull(model);
+
+        assertFalse(model.isEmpty());
+
+        final PromotionModel code0model = model.get("#OFFLINE#");
+
+        assertEquals("#OFFLINE#", code0model.getCode());
+        assertNull(code0model.getCouponCode());
+        assertNull(code0model.getType());
+        assertNull(code0model.getAction());
+        assertNull(code0model.getContext());
+        assertEquals("#OFFLINE#", code0model.getName().getValue("en"));
+        assertNull(code0model.getDescription().getValue("en"));
+        assertNull(code0model.getActiveFrom());
+        assertNull(code0model.getActiveTo());
+
+        final PromotionModel code1model = model.get("OTHER");
+
+        assertEquals("OTHER", code1model.getCode());
+        assertNull(code1model.getCouponCode());
+        assertEquals("T1", code1model.getType());
+        assertEquals("A1", code1model.getAction());
+        assertEquals("CTX1", code1model.getContext());
+        assertEquals("Promo 1", code1model.getName().getValue("en"));
+        assertEquals("Desc 1", code1model.getDescription().getValue("en"));
+        assertSame(start, code1model.getActiveFrom());
+        assertSame(end, code1model.getActiveTo());
+
+
+        final Map<String, PromotionModel> modelExcl = facade.getPromotionModel("#OFFLINE#,OTHER");
+
+        assertNotNull(modelExcl);
+
+        assertFalse(modelExcl.isEmpty());
+
+        final PromotionModel code0modelExcl = modelExcl.get("#OFFLINE#");
+
+        assertNull(code0modelExcl);
+
+        final PromotionModel code1modelExcl = modelExcl.get("OTHER");
+
+        assertEquals("OTHER", code1modelExcl.getCode());
+        assertNull(code1modelExcl.getCouponCode());
+        assertEquals("T1", code1modelExcl.getType());
+        assertEquals("A1", code1modelExcl.getAction());
+        assertEquals("CTX1", code1modelExcl.getContext());
+        assertEquals("Promo 1", code1modelExcl.getName().getValue("en"));
+        assertEquals("Desc 1", code1modelExcl.getDescription().getValue("en"));
+        assertSame(start, code1modelExcl.getActiveFrom());
+        assertSame(end, code1modelExcl.getActiveTo());
+
+
+    }
+
 }

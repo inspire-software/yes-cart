@@ -521,9 +521,21 @@ public interface ProductServiceFacade {
     /**
      * Generate promotion model map from given applied promotion codes.
      *
+     * @param appliedPromo CSV of applied promo codes
+     *
      * @return map code to model in order specified by applied promo
      */
     Map<String, PromotionModel> getPromotionModel(String appliedPromo);
+
+    /**
+     * Generate promotion model map from given applied promotion codes.
+     *
+     * @param appliedPromo CSV of applied promo codes
+     * @param includeOffline include offline marker as promo item
+     *
+     * @return map code to model in order specified by applied promo
+     */
+    Map<String, PromotionModel> getPromotionModel(String appliedPromo, boolean includeOffline);
 
     /**
      * Brand are lazily initialised. This method allows to retrieve brand by name and cache it for later use.

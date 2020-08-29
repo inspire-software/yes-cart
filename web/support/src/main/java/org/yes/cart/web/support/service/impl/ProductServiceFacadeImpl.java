@@ -28,6 +28,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.PriceModelImpl;
 import org.yes.cart.domain.entity.impl.PromotionModelImpl;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.search.SearchQueryFactory;
 import org.yes.cart.search.dto.NavigationContext;
@@ -1161,6 +1162,15 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      */
     @Override
     public Map<String, PromotionModel> getPromotionModel(final String appliedPromo) {
+        return getPromotionModel(appliedPromo, false);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, PromotionModel> getPromotionModel(final String appliedPromo, final boolean includeOffline) {
 
         if (StringUtils.isBlank(appliedPromo)) {
             return Collections.emptyMap();
@@ -1174,24 +1184,41 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
             final int pos = code.indexOf(':');
             if (pos == -1) {
                 // simple promo
-                final Promotion promotion = promotionService.findPromotionByCode(code, true);
-                if (promotion == null) {
-                    continue;
+                if ("#OFFLINE#".equals(code)) {
+                    if (includeOffline) {
+                        result.put(code, new PromotionModelImpl(
+                                code,
+                                null,
+                                null,
+                                null,
+                                null,
+                                new StringI18NModel("#OFFLINE#"),
+                                new StringI18NModel(),
+                                null,
+                                null
+                        ));
+                    }
+                } else {
+
+                    final Promotion promotion = promotionService.findPromotionByCode(code, true);
+                    if (promotion != null) {
+
+                        final Promotion data = promotion;
+
+                        result.put(code, new PromotionModelImpl(
+                                code,
+                                null,
+                                data.getPromoType(),
+                                data.getPromoAction(),
+                                data.getPromoActionContext(),
+                                new FailoverStringI18NModel(data.getDisplayName(), data.getName()),
+                                new FailoverStringI18NModel(data.getDisplayDescription(), data.getDescription()),
+                                data.getEnabledFrom(),
+                                data.getEnabledTo()
+                        ));
+
+                    }
                 }
-
-                final Promotion data = promotion;
-
-                result.put(code, new PromotionModelImpl(
-                        code,
-                        null,
-                        data.getPromoType(),
-                        data.getPromoAction(),
-                        data.getPromoActionContext(),
-                        new FailoverStringI18NModel(data.getDisplayName(), data.getName()),
-                        new FailoverStringI18NModel(data.getDisplayDescription(), data.getDescription()),
-                        data.getEnabledFrom(),
-                        data.getEnabledTo()
-                ));
             } else {
                 // coupon triggered
 
@@ -1199,23 +1226,23 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 final String coupon = code.substring(pos + 1);
 
                 final Promotion promotion = promotionService.findPromotionByCode(realCode, true);
-                if (promotion == null) {
-                    continue;
+                if (promotion != null) {
+
+                    final Promotion data = promotion;
+
+                    result.put(code, new PromotionModelImpl(
+                            realCode,
+                            coupon,
+                            data.getPromoType(),
+                            data.getPromoAction(),
+                            data.getPromoActionContext(),
+                            new FailoverStringI18NModel(data.getDisplayName(), data.getName()),
+                            new FailoverStringI18NModel(data.getDisplayDescription(), data.getDescription()),
+                            data.getEnabledFrom(),
+                            data.getEnabledTo()
+                    ));
+
                 }
-
-                final Promotion data = promotion;
-
-                result.put(code, new PromotionModelImpl(
-                        realCode,
-                        coupon,
-                        data.getPromoType(),
-                        data.getPromoAction(),
-                        data.getPromoActionContext(),
-                        new FailoverStringI18NModel(data.getDisplayName(), data.getName()),
-                        new FailoverStringI18NModel(data.getDisplayDescription(), data.getDescription()),
-                        data.getEnabledFrom(),
-                        data.getEnabledTo()
-                ));
 
             }
 
