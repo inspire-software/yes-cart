@@ -319,7 +319,7 @@
   "LOCATION_CITY": "Город",
   "LOCATION_POST_CODE": "Почтовый индекс",
 
-  "CARRIER_SLA": "Послуги доставки",
+  "CARRIER_SLA": "Услуги доставки",
   "CARRIERSLA_CODE": "Артикул",
   "CARRIERSLA_REF": "Код",
   "CARRIERSLA_GUARANTEED": "Гарантированная доставка (Мин. дней)",
