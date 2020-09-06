@@ -88,7 +88,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("custom")))
                 .andExpect(content().string(StringContains.containsString("customerType")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
         mockMvc.perform(get("/auth/register?customerType=B2C")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -99,7 +99,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("custom")))
                 .andExpect(content().string(StringContains.containsString("firstname")))
                 .andExpect(content().string(StringContains.containsString("attributeType\":\"String")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
         mockMvc.perform(get("/customer/addressbook/B/address")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -122,10 +122,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("uuid")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String uuid = regResult.getResponse().getHeader("yc");
+        final String uuid = regResult.getResponse().getHeader("X-CW-TOKEN");
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
@@ -140,65 +140,65 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         mockMvc.perform(get("/customer/summary")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString(email)))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/B/address")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("custom\":[")))
                 .andExpect(content().string(StringContains.containsString("\"attributeCode\":\"lastname\"")))
                 .andExpect(content().string(StringContains.containsString("addressType\":\"B")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
 
         mockMvc.perform(get("/customer/addressbook/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("[]")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         mockMvc.perform(get("/customer/addressbook/S/options/countries")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         mockMvc.perform(get("/customer/addressbook/S/options/countries/UA")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
@@ -207,45 +207,45 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid)
+                    .header("X-CW-TOKEN", uuid)
                     .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
                 .andExpect(content().string(StringContains.containsString("\"defaultAddress\":true")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("[]")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/B/options/countries")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("GB")))
-            .andExpect(header().string("yc", uuid));
+            .andExpect(header().string("X-CW-TOKEN", uuid));
 
         mockMvc.perform(get("/customer/addressbook/B/options/countries/GB")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("GB-GB")))
-            .andExpect(header().string("yc", uuid));
+            .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
@@ -254,24 +254,24 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid)
+                    .header("X-CW-TOKEN", uuid)
                     .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
                 .andExpect(content().string(StringContains.containsString("\"defaultAddress\":true")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(get("/customer/wishlist/W")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("[]")))
-            .andExpect(header().string("yc", uuid));
+            .andExpect(header().string("X-CW-TOKEN", uuid));
 
         final byte[] addToWishList = toJsonAddToWishListCommand("BENDER-ua", "WAREHOUSE_2");
 
@@ -279,39 +279,39 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                      .contentType(MediaType.APPLICATION_JSON)
                      .accept(MediaType.APPLICATION_JSON)
                      .locale(locale)
-                     .header("yc", uuid)
+                     .header("X-CW-TOKEN", uuid)
                      .content(addToWishList))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
          mockMvc.perform(get("/customer/wishlist/W")
                      .contentType(MediaType.APPLICATION_JSON)
                      .accept(MediaType.APPLICATION_JSON)
                      .locale(locale)
-                     .header("yc", uuid))
+                     .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("9998")))
                 .andExpect(content().string(StringContains.containsString("WAREHOUSE_2")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(post("/auth/logout").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -320,11 +320,11 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":false")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         assertNull(getCustomerToken(email));
         final String pwHash = getCustomerPasswordHash(email);
@@ -334,10 +334,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         final String resetTokenP1 = getCustomerToken(email);
         assertNotNull(resetTokenP1);
@@ -348,10 +348,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         final String resetTokenP2 = getCustomerToken(email);
         assertNull(resetTokenP2);
@@ -375,10 +375,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String uuid2 = loginResult.getResponse().getHeader("yc");
+        final String uuid2 = loginResult.getResponse().getHeader("X-CW-TOKEN");
 
         assertNull(getCustomerToken(email));
 
@@ -386,10 +386,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid2))
+                .header("X-CW-TOKEN", uuid2))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid2));
+                .andExpect(header().string("X-CW-TOKEN", uuid2));
 
         final String deleteTokenP1 = getCustomerToken(email);
         assertNotNull(deleteTokenP1);
@@ -399,10 +399,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid2))
+                .header("X-CW-TOKEN", uuid2))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid2));
+                .andExpect(header().string("X-CW-TOKEN", uuid2));
 
 
         assertNull("Account removed", getCustomer(email));
@@ -424,7 +424,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<custom")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
         mockMvc.perform(get("/auth/register?customerType=B2C")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -435,7 +435,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("custom")))
                 .andExpect(content().string(StringContains.containsString("firstname")))
                 .andExpect(content().string(StringContains.containsString("attribute-type=\"String\"")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
         mockMvc.perform(get("/customer/addressbook/B/address")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -458,10 +458,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("uuid")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String uuid = regResult.getResponse().getHeader("yc");
+        final String uuid = regResult.getResponse().getHeader("X-CW-TOKEN");
 
         final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
         assertNotNull(uuid, state);
@@ -475,21 +475,21 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         mockMvc.perform(get("/customer/summary")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString(email)))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
 
@@ -497,44 +497,44 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<custom><")))
                 .andExpect(content().string(StringContains.containsString("attribute-code=\"lastname\"")))
                 .andExpect(content().string(StringContains.containsString("address-type=\"B\"")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
 
         mockMvc.perform(get("/customer/addressbook/S")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<addresses/>")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         mockMvc.perform(get("/customer/addressbook/S/options/countries")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         mockMvc.perform(get("/customer/addressbook/S/options/countries/UA")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("S", "UA-UA", "UA");
@@ -543,45 +543,45 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
-                    .header("yc", uuid)
+                    .header("X-CW-TOKEN", uuid)
                     .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
                 .andExpect(content().string(StringContains.containsString("default-address=\"true\"")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/B")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<addresses/>")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/B/options/countries")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("GB")))
-            .andExpect(header().string("yc", uuid));
+            .andExpect(header().string("X-CW-TOKEN", uuid));
 
         mockMvc.perform(get("/customer/addressbook/B/options/countries/GB")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("GB-GB")))
-            .andExpect(header().string("yc", uuid));
+            .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         final byte[] billingAddress = toJsonBytesAddressDetails("B", "GB-GB", "GB");
@@ -590,24 +590,24 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_XML)
                     .locale(locale)
-                    .header("yc", uuid)
+                    .header("X-CW-TOKEN", uuid)
                     .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
                 .andExpect(content().string(StringContains.containsString("default-address=\"true\"")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(get("/customer/wishlist/W")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("<wishlist/>")))
-            .andExpect(header().string("yc", uuid));
+            .andExpect(header().string("X-CW-TOKEN", uuid));
 
         final byte[] addToWishList = toJsonAddToWishListCommand("BENDER-ua", "WAREHOUSE_2");
 
@@ -615,39 +615,39 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                      .contentType(MediaType.APPLICATION_JSON)
                      .accept(MediaType.APPLICATION_XML)
                      .locale(locale)
-                     .header("yc", uuid)
+                     .header("X-CW-TOKEN", uuid)
                      .content(addToWishList))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
          mockMvc.perform(get("/customer/wishlist/W")
                      .contentType(MediaType.APPLICATION_JSON)
                      .accept(MediaType.APPLICATION_XML)
                      .locale(locale)
-                     .header("yc", uuid))
+                     .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("9998")))
                 .andExpect(content().string(StringContains.containsString("WAREHOUSE_2")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(post("/auth/logout").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -656,11 +656,11 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<authenticated>false</authenticated>")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         assertNull(getCustomerToken(email));
@@ -671,10 +671,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         final String resetTokenP1 = getCustomerToken(email);
         assertNotNull(resetTokenP1);
@@ -685,10 +685,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
         final String resetTokenP2 = getCustomerToken(email);
         assertNull(resetTokenP2);
@@ -712,10 +712,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final String uuid2 = loginResult.getResponse().getHeader("yc");
+        final String uuid2 = loginResult.getResponse().getHeader("X-CW-TOKEN");
 
         assertNull(getCustomerToken(email));
 
@@ -723,10 +723,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
-                .header("yc", uuid2))
+                .header("X-CW-TOKEN", uuid2))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid2));
+                .andExpect(header().string("X-CW-TOKEN", uuid2));
 
         final String deleteTokenP1 = getCustomerToken(email);
         assertNotNull(deleteTokenP1);
@@ -736,10 +736,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
-                .header("yc", uuid2))
+                .header("X-CW-TOKEN", uuid2))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(header().string("yc", uuid2));
+                .andExpect(header().string("X-CW-TOKEN", uuid2));
 
 
         assertNull("Account removed", getCustomer(email));

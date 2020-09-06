@@ -204,8 +204,7 @@ public class ContentController {
             method = RequestMethod.GET,
             produces =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ContentRO viewContent(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                               final @ApiParam(value = "Comntent ID or URI") @PathVariable(value = "id")String content,
+    public @ResponseBody ContentRO viewContent(final @ApiParam(value = "Comntent ID or URI") @PathVariable(value = "id")String content,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
@@ -294,8 +293,7 @@ public class ContentController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ContentRO viewContent(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                               final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
+    public @ResponseBody ContentRO viewContent(final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
                                                final @ApiParam(value = "Dynamic parameters") @RequestBody Map<String, Object> params,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
@@ -388,8 +386,7 @@ public class ContentController {
             consumes = MediaType.APPLICATION_XML_VALUE,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ContentRO viewContentXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                  final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
+    public @ResponseBody ContentRO viewContentXML(final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
                                                   final @ApiParam(value = "Dynamic parameters") @RequestBody XMLParamsRO params,
                                                   final HttpServletRequest request,
                                                   final HttpServletResponse response) {
@@ -503,8 +500,7 @@ public class ContentController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public @ResponseBody List<ContentRO> listContent(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                     final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
+    public @ResponseBody List<ContentRO> listContent(final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
                                                      final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestParam(value = "mode", required = false) String mode,
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
@@ -592,8 +588,7 @@ public class ContentController {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
-    public @ResponseBody ContentListRO listContentXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
+    public @ResponseBody ContentListRO listContentXML(final @ApiParam(value = "Content ID or URI") @PathVariable(value = "id") String content,
                                                       final @ApiParam(value = "Retrieval mode", allowableValues = "level,hierarchy") @RequestParam(value = "mode", required = false) String mode,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {

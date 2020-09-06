@@ -74,8 +74,7 @@ public class ManagerController {
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody
-    SearchResultCustomerRO search(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                  final @ApiParam(value = "Search request") @RequestBody SearchRO search,
+    SearchResultCustomerRO search(final @ApiParam(value = "Search request") @RequestBody SearchRO search,
                                   final HttpServletRequest request,
                                   final HttpServletResponse response) {
 

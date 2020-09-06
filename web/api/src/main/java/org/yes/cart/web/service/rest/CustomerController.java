@@ -168,8 +168,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CustomerRO viewSummary(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                final HttpServletRequest request,
+    public @ResponseBody CustomerRO viewSummary(final HttpServletRequest request,
                                                 final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfNotLoggedIn();
@@ -375,8 +374,7 @@ public class CustomerController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CustomerUpdatedRO updateSummary(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                         final @ApiParam(value = "Profile update") @RequestBody CustomerRO update,
+    public @ResponseBody CustomerUpdatedRO updateSummary(final @ApiParam(value = "Profile update") @RequestBody CustomerRO update,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
@@ -467,7 +465,7 @@ public class CustomerController {
 
         customerServiceFacade.updateCustomerAttributes(shop, customer, valuesToUpdate);
 
-        result.setCustomer(viewSummary(requestToken, request, response));
+        result.setCustomer(viewSummary(request, response));
 
         return result;
 
@@ -545,8 +543,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<AddressRO> viewAddressbook(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                         final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody List<AddressRO> viewAddressbook(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
@@ -613,8 +610,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AddressListRO viewAddressbookXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                          final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody AddressListRO viewAddressbookXML(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                           final HttpServletRequest request,
                                                           final HttpServletResponse response) {
 
@@ -689,8 +685,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<CountryRO> viewAddressbookCountries(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                  final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody List<CountryRO> viewAddressbookCountries(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                                   final HttpServletRequest request,
                                                                   final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -750,8 +745,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CountryListRO viewAddressbookCountriesXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                   final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody CountryListRO viewAddressbookCountriesXML(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                                    final HttpServletRequest request,
                                                                    final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -823,8 +817,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<StateRO> viewAddressbookCountries(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody List<StateRO> viewAddressbookCountries(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                                 final @ApiParam(value = "Country code") @PathVariable(value = "code") String code,
                                                                 final HttpServletRequest request,
                                                                 final HttpServletResponse response) {
@@ -883,8 +876,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody StateListRO viewAddressbookCountriesXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                 final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody StateListRO viewAddressbookCountriesXML(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                                  final @ApiParam(value = "Country code") @PathVariable(value = "code") String code,
                                                                  final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
@@ -936,8 +928,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AddressFormRO viewAddressbookForm(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                           final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody AddressFormRO viewAddressbookForm(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                            final @ApiParam(value = "Address ID") @RequestParam(value = "addressId", required = false) Long addressId,
                                                            final HttpServletRequest request,
                                                            final HttpServletResponse response) {
@@ -1140,8 +1131,7 @@ public class CustomerController {
             produces = { MediaType.APPLICATION_JSON_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody List<AddressRO> updateAddressbook(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                           final @ApiParam(value = "Address form") @RequestBody AddressUpdateRO address,
+    public @ResponseBody List<AddressRO> updateAddressbook(final @ApiParam(value = "Address form") @RequestBody AddressUpdateRO address,
                                                            final HttpServletRequest request,
                                                            final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1249,8 +1239,7 @@ public class CustomerController {
             produces = { MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AddressListRO updateAddressbookXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                            final @ApiParam(value = "Address form") @RequestBody AddressUpdateRO address,
+    public @ResponseBody AddressListRO updateAddressbookXML(final @ApiParam(value = "Address form") @RequestBody AddressUpdateRO address,
                                                             final HttpServletRequest request,
                                                             final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1397,8 +1386,7 @@ public class CustomerController {
             value = "/addressbook/{addressId}",
             method = RequestMethod.DELETE
     )
-    public @ResponseBody void deleteAddressbookAddress(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                       final @ApiParam(value = "Address ID") @PathVariable(value = "addressId", required = true) Long addressId,
+    public @ResponseBody void deleteAddressbookAddress(final @ApiParam(value = "Address ID") @PathVariable(value = "addressId", required = true) Long addressId,
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1529,8 +1517,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductWishlistRO> viewWishlist(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
+    public @ResponseBody List<ProductWishlistRO> viewWishlist(final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 
@@ -1636,8 +1623,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductWishlistRO> viewWishlist(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
+    public @ResponseBody List<ProductWishlistRO> viewWishlist(final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
                                                               final @ApiParam(value = "Tag") @PathVariable(value = "tag") String tag,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
@@ -1740,8 +1726,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductWishlistListRO viewWishlistXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                               final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
+    public @ResponseBody ProductWishlistListRO viewWishlistXML(final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
                                                                final HttpServletRequest request,
                                                                final HttpServletResponse response) {
 
@@ -1842,8 +1827,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductWishlistListRO viewWishlistXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                               final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
+    public @ResponseBody ProductWishlistListRO viewWishlistXML(final @ApiParam(value = "Wish list type") @PathVariable(value = "type") String type,
                                                                final @ApiParam(value = "Tag") @PathVariable(value = "tag") String tag,
                                                                final HttpServletRequest request,
                                                                final HttpServletResponse response) {
@@ -1973,8 +1957,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<ProductSearchResultRO> viewRecent(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                final HttpServletRequest request,
+    public @ResponseBody List<ProductSearchResultRO> viewRecent(final HttpServletRequest request,
                                                                 final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
@@ -2063,8 +2046,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ProductSearchResultListRO viewRecentXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                 final HttpServletRequest request,
+    public @ResponseBody ProductSearchResultListRO viewRecentXML(final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
@@ -2263,11 +2245,10 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody OrderHistoryRO viewOrderHistory(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                         final HttpServletRequest request,
+    public @ResponseBody OrderHistoryRO viewOrderHistory(final HttpServletRequest request,
                                                          final HttpServletResponse response) {
 
-        return viewOrderHistorySince(requestToken, null, request, response);
+        return viewOrderHistorySince( null, request, response);
 
     }
 
@@ -2464,8 +2445,7 @@ public class CustomerController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody OrderHistoryRO viewOrderHistorySince(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                              final @ApiParam(value = "Date in 'yyyy-MM-dd HH:mm:ss' format") @PathVariable(value = "date") String date,
+    public @ResponseBody OrderHistoryRO viewOrderHistorySince(final @ApiParam(value = "Date in 'yyyy-MM-dd HH:mm:ss' format") @PathVariable(value = "date") String date,
                                                               final HttpServletRequest request,
                                                               final HttpServletResponse response) {
 

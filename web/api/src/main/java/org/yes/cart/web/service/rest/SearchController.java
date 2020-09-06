@@ -479,8 +479,7 @@ public class SearchController {
             consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody
-    SearchResultProductRO search(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                 final @ApiParam(value = "Search request\n\n" +
+    SearchResultProductRO search(final @ApiParam(value = "Search request\n\n" +
                                          "Example search for 'mouse' keyword:\n\n" +
                                          "```\n" +
                                          "{\n" +

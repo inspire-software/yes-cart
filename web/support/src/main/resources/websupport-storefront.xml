@@ -114,7 +114,7 @@
     <bean id="tokenTuplizer" class="org.yes.cart.shoppingcart.support.tokendriven.impl.WebTokenTuplizerImpl"
           scope="prototype">
         <constructor-arg index="0" ref="cartRepository"/>
-        <constructor-arg index="1" value="yc"/>
+        <constructor-arg index="1" value="X-CW-TOKEN"/>
         <constructor-arg index="2" value="864000"/>
         <constructor-arg index="3" value="/"/>
     </bean>

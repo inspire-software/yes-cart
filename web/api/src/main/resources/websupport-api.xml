@@ -27,6 +27,8 @@
         <constructor-arg index="1" ref="shoppingCartCommandFactory"/>
     </bean>
 
+    <bean id="restCorsFilter" class="org.yes.cart.web.filter.RestCorsFilter"/>
+
     <!-- ################################### filter delegates end ################################### -->
 
     <!-- ################################ Register module  ####################################################### -->

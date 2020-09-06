@@ -68,8 +68,8 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         ApiInfo apiInfo = new ApiInfo(
-                "YC ADMIN API",
-                "YC ADMIN API.",
+                "ADMIN API",
+                "ADMIN API.",
                 "3.7.0",
                 "www.yes-cart.org",
                 new Contact("YC", "www.yes-cart.org", "admin@yes-cart.org"),

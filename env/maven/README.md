@@ -6,6 +6,8 @@
 | Example build no tests          | `mvn install -DskipTests=true`                                                     |
 | First IDEA/DEV build            | `mvn clean install -PdevIntellijIDEA,derby,paymentBase,ftEmbededLucene`            |
 | IDEA/DEV build (all payments)   | `mvn install -PdevIntellijIDEA,derby,paymentAll,ftEmbededLucene`                   |
+| Run dev listener for js-client  | `npm start`                                                                        |
+| Update changes in jam           | `mvn validate -Pnodejs,dev,derby,connREST,ftEmbededLucene`                         |
 
 **Tips**
 

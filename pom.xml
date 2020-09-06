@@ -53,6 +53,7 @@
         <payment.authorizenet.module>off</payment.authorizenet.module>
         <payment.paypal.module>off</payment.paypal.module>
         <payment.postfinance.module>off</payment.postfinance.module>
+        <api.cors>on</api.cors>
         <npm.goal>build.prod</npm.goal>
         <npm.target.home>prod</npm.target.home>
         <npm.target.modules>node_modules_prod</npm.target.modules>
@@ -687,6 +688,7 @@
                                 <echo>Cluster connector (use -PconnWS, -PconnREST, -PconnJGIPv4 or -PconnJGIPv6)  : ${env.cluster} </echo>
                                 <echo>Full text search provider (use -PftEmbededLucene or -PftDisabled)           : ${env.search} </echo>
                                 <echo>Tomcat SSL configuration (use -Pssl)                                        : ${env.ssl} </echo>
+                                <echo>API CORS (use -Pcors or  -PcorsOff)                                         : ${api.cors} </echo>
                                 <echo>JAM npm goal (use -Dnpm.goal=x to switch)                                   : ${npm.goal} </echo>
                                 <echo>JAM npm target (use -Dnpm.target.home=x to switch)                          : ${npm.target.home} (${ts.target.home}) </echo>
                                 <echo>JAM npm modules (use -Dnpm.target.modules=x to switch)                      : ${npm.target.modules} (${ts.target.modules}) </echo>
@@ -927,6 +929,25 @@
             <id>ssl</id>
             <properties>
                 <env.ssl>on</env.ssl>
+            </properties>
+        </profile>
+
+        <!--
+            CORS PROFILES
+        -->
+        <profile>
+            <!-- Use CORS in REST API, use X-SALES_CHANNEL header -->
+            <id>cors</id>
+            <properties>
+                <api.cors>on</api.cors>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Don't use CORS in REST API, run API under same domain -->
+            <id>corsOff</id>
+            <properties>
+                <api.cors>off</api.cors>
             </properties>
         </profile>
 

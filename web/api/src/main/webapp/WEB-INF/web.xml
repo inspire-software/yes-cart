@@ -108,13 +108,23 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>services/connector</param-value>
+            <param-value>${webapp.api.cors.shopResolverFilter.excludePattern}</param-value>
         </init-param>
         <init-param>
             <param-name>skipRequestWrapper</param-name>
             <param-value>true</param-value>
         </init-param>
+        <init-param>
+            <param-name>useServerNameHeader</param-name>
+            <param-value>${webapp.api.cors.shopResolverFilter.useServerNameHeader}</param-value>
+        </init-param>
+        <init-param>
+            <param-name>failOnUnresolved</param-name>
+            <param-value>true</param-value>
+        </init-param>
     </filter>
+
+    ${webapp.api.cors.filter}
 
     <filter>
         <filter-name>shoppingCartFilter</filter-name>
@@ -188,6 +198,8 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    ${webapp.api.cors.filter-mapping}
+
     <filter-mapping>
         <filter-name>shoppingCartFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -210,12 +222,12 @@
     -->
     <filter-mapping>
         <filter-name>imageFilter</filter-name>
-        <url-pattern>/imgvault/*</url-pattern>
+        <url-pattern>/rest/imgvault/*</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
         <filter-name>fileFilter</filter-name>
-        <url-pattern>/filevault/*</url-pattern>
+        <url-pattern>/rest/filevault/*</url-pattern>
     </filter-mapping>
 
     <!-- Cluster connector -->

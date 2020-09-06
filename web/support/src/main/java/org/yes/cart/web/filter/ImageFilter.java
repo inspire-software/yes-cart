@@ -23,6 +23,7 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.media.MediaFileNameStrategy;
 import org.yes.cart.utils.DateUtils;
+import org.yes.cart.utils.TimeContext;
 import org.yes.cart.web.support.utils.HttpUtil;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -65,6 +66,8 @@ public class ImageFilter extends AbstractFilter implements Filter {
     private static final String IF_MODIFIED_SINCE = "If-Modified-Since";
 
     private static final String LAST_MODIFIED = "Last-Modified";
+
+    private static final String EXPIRES = "Expires";
 
     private final MimetypesFileTypeMap fileTypeMap;
 
@@ -118,17 +121,12 @@ public class ImageFilter extends AbstractFilter implements Filter {
 
         httpServletResponse.setHeader(ETAG, currentToken);
 
-        if (currentToken.equals(previousToken) &&
-                ZonedDateTime.now(
-                        DateUtils.zone()
-                ).isBefore(
-                        DateUtils.zdtFrom(httpServletRequest.getDateHeader(IF_MODIFIED_SINCE)).plusMinutes(getEtagExpiration())
-                )) {
-            httpServletResponse.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+        if (isETagMatch(previousToken, currentToken) && isETagNotExpired(httpServletRequest)) {
             // use the same date we sent when we created the ETag the first time through
             httpServletResponse.setHeader(LAST_MODIFIED, httpServletRequest.getHeader(IF_MODIFIED_SINCE));
+            httpServletResponse.sendError(HttpServletResponse.SC_NOT_MODIFIED);
             if (LOG.isDebugEnabled()) {
-                LOG.debug("ETag the same, will return 304");
+                LOG.debug("ETag matches, will return 304");
             }
         } else {
 
@@ -146,7 +144,9 @@ public class ImageFilter extends AbstractFilter implements Filter {
             final String contextPath = httpServletRequest.getContextPath();
             final String servletPath = requestPath.substring(contextPath.length());
 
-            httpServletResponse.setDateHeader(LAST_MODIFIED, System.currentTimeMillis());
+            final long now = TimeContext.getMillis();
+            httpServletResponse.setDateHeader(LAST_MODIFIED, now);
+            httpServletResponse.setDateHeader(EXPIRES, now + getEtagExpiration() * 60000);
 
             final String width = httpServletRequest.getParameter(Constants.WIDTH);
             final String height = httpServletRequest.getParameter(Constants.HEIGHT);
@@ -193,6 +193,20 @@ public class ImageFilter extends AbstractFilter implements Filter {
         }
     }
 
+    boolean isETagNotExpired(final HttpServletRequest httpServletRequest) {
+        return ZonedDateTime.now(
+                DateUtils.zone()
+        ).isBefore(
+                DateUtils.zdtFrom(httpServletRequest.getDateHeader(IF_MODIFIED_SINCE)).plusMinutes(getEtagExpiration())
+        );
+    }
+
+    boolean isETagMatch(final String previousToken, final String currentToken) {
+        return previousToken != null && (
+                (previousToken.charAt(0) == '"' && currentToken.equals(previousToken)) ||
+                (currentToken.equals("\"" + previousToken + "\"")));
+    }
+
     private String getImageRepositoryRoot(final String strategyUrl) {
 
         return systemService.getImageRepositoryDirectory();
@@ -208,9 +222,12 @@ public class ImageFilter extends AbstractFilter implements Filter {
     private String getETagValue(final HttpServletRequest httpServletRequest) {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('"');
-        stringBuilder.append(httpServletRequest.getParameter(Constants.WIDTH));
+        final String w = httpServletRequest.getParameter(Constants.WIDTH);
+        stringBuilder.append(w != null ? w : "as");
         stringBuilder.append('x');
-        stringBuilder.append(httpServletRequest.getParameter(Constants.HEIGHT));
+        final String h = httpServletRequest.getParameter(Constants.HEIGHT);
+        stringBuilder.append(h != null ? h : "is");
+        stringBuilder.append('x');
         stringBuilder.append(httpServletRequest.getServletPath().hashCode());
         stringBuilder.append('"');
         return stringBuilder.toString();

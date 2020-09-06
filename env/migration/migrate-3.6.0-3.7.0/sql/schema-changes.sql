@@ -487,3 +487,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  4999,  'SHOP_SEARCH_ENABLE_GLOBAL_ONLY', 'SHOP_SEARCH_ENABLE_GLOBAL_ONLY',  0,  NULL,  'Search: global only enable',
   'Enable global only search. If set to true free text search is performed globally always (customer is redirected away from current category)',  'Boolean', 'SHOP', 0, 0, 0, 0);
+
+--
+-- YC-1031 CORS enabled REST API
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  4998,  'SHOP_CORS_ALLOWED_ORIGINS', 'SHOP_CORS_ALLOWED_ORIGINS',  0,  NULL,  'CORS: Allowed Origins',  'Comma separated list of origins for CORS, no spaces (CSV of Allowed Origins)',  'CommaSeparatedList', 'SHOP', 0, 0, 0, 0);

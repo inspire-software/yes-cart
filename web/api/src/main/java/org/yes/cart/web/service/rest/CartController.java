@@ -299,8 +299,7 @@ public class CartController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO viewCart(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                         final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
+    public @ResponseBody CartRO viewCart(final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
                                          final HttpServletRequest request,
                                          final HttpServletResponse response) {
 
@@ -624,14 +623,13 @@ public class CartController {
             consumes = {  MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO commandXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                           final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
+    public @ResponseBody CartRO commandXML(final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
                                            final @ApiParam(value = "Command (see ShoppingCartCommand interface for command parameters)\n\n" +
                                                    "Example 'Add to cart':\n\n" +
                                                    "```\n" +
                                                    "{\n" +
-                                                   "   parameters: {\n" +
-                                                   "      \"addToCartCmd\": \"SKU-0001\"\n" +
+                                                   "   \"parameters\": {\n" +
+                                                   "      \"addToCartCmd\": \"SKU-0001\",\n" +
                                                    "      \"supplier\": \"WAREHOUSE_1\"\n" +
                                                    "   }\n" +
                                                    "}\n" +
@@ -639,7 +637,7 @@ public class CartController {
                                                    "Example 'Set order message':\n\n" +
                                                    "```\n" +
                                                    "{\n" +
-                                                   "   parameters: {\n" +
+                                                   "   \"parameters\": {\n" +
                                                    "      \"setOrderMsgCmd\": \"My Message\"\n" +
                                                    "   }\n" +
                                                    "}\n" +
@@ -649,7 +647,7 @@ public class CartController {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         commandInternalRun((Map) params.getParameters());
-        return viewCart(requestToken, updatePrices, request, response);
+        return viewCart(updatePrices, request, response);
 
     }
 
@@ -756,8 +754,7 @@ public class CartController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<CartCarrierRO> cartCarrierOptions(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                final HttpServletRequest request,
+    public @ResponseBody List<CartCarrierRO> cartCarrierOptions(final HttpServletRequest request,
                                                                 final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -817,8 +814,7 @@ public class CartController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartCarrierListRO cartCarrierOptionsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                 final HttpServletRequest request,
+    public @ResponseBody CartCarrierListRO cartCarrierOptionsXML(final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1056,8 +1052,7 @@ public class CartController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO cartCarrierOptionsSet(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
+    public @ResponseBody CartRO cartCarrierOptionsSet(final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
                                                       final @ApiParam(value = "Shipping option") @RequestBody ShippingOptionRO shippingOption,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
@@ -1169,7 +1164,7 @@ public class CartController {
 
         }
 
-        return viewCart(requestToken, updatePrices, request, response);
+        return viewCart(updatePrices, request, response);
 
     }
 
@@ -1245,8 +1240,7 @@ public class CartController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<AddressRO> cartAddressOptions(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                            final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody List<AddressRO> cartAddressOptions(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                             final HttpServletRequest request,
                                                             final HttpServletResponse response) {
 
@@ -1312,8 +1306,7 @@ public class CartController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody AddressListRO cartAddressOptionsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                             final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody AddressListRO cartAddressOptionsXML(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                              final HttpServletRequest request,
                                                              final HttpServletResponse response) {
 
@@ -1540,8 +1533,7 @@ public class CartController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO cartAddressOptions(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                   final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
+    public @ResponseBody CartRO cartAddressOptions(final @ApiParam(value = "Address type", allowableValues = Address.ADDR_TYPE_BILLING + "," + Address.ADDR_TYPE_SHIPPING) @PathVariable(value = "type") String type,
                                                    final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
                                                    final @ApiParam(value = "Address option") @RequestBody AddressOptionRO option,
                                                    final HttpServletRequest request,
@@ -1587,7 +1579,7 @@ public class CartController {
                 }
             }
         }
-        return viewCart(requestToken, updatePrices, request, response);
+        return viewCart(updatePrices, request, response);
 
     }
 
@@ -1659,8 +1651,7 @@ public class CartController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<PaymentGatewayRO> cartPaymentOptions(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                   final HttpServletRequest request,
+    public @ResponseBody List<PaymentGatewayRO> cartPaymentOptions(final HttpServletRequest request,
                                                                    final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1714,8 +1705,7 @@ public class CartController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody PaymentGatewayListRO cartPaymentOptionsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                                    final HttpServletRequest request,
+    public @ResponseBody PaymentGatewayListRO cartPaymentOptionsXML(final HttpServletRequest request,
                                                                     final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -1938,8 +1928,7 @@ public class CartController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartRO cartPaymentOptionsSet(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                      final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
+    public @ResponseBody CartRO cartPaymentOptionsSet(final @ApiParam(value = "Recalculate") @RequestParam(value = "updatePrices", required = false) boolean updatePrices,
                                                       final @ApiParam(value = "Payment option") @RequestBody PaymentGatewayOptionRO option,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
@@ -1958,7 +1947,7 @@ public class CartController {
             }
         }
 
-        return viewCart(requestToken, updatePrices, request, response);
+        return viewCart(updatePrices, request, response);
 
     }
 
@@ -2023,8 +2012,7 @@ public class CartController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CartValidationRO cartValidate(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                       final HttpServletRequest request,
+    public @ResponseBody CartValidationRO cartValidate(final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();
@@ -2290,8 +2278,7 @@ public class CartController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody OrderPreviewRO orderPreview(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                     final @ApiParam(value = "Delivery options") @RequestBody OrderDeliveryOptionRO option,
+    public @ResponseBody OrderPreviewRO orderPreview(final @ApiParam(value = "Delivery options") @RequestBody OrderDeliveryOptionRO option,
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
@@ -2702,8 +2689,7 @@ public class CartController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody OrderPlacedRO orderPlace(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                  final HttpServletRequest request,
+    public @ResponseBody OrderPlacedRO orderPlace(final HttpServletRequest request,
                                                   final HttpServletResponse response) {
 
         cartMixin.throwSecurityExceptionIfRequireLoggedIn();

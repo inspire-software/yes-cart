@@ -89,7 +89,7 @@ public class CookiePolicyInclude extends BaseComponent {
         final Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (final Cookie cookie : request.getCookies()) {
-                if ("yccookiepolicy".equals(cookie.getName())) {
+                if ("cookiepolicy".equals(cookie.getName())) {
                     return true;
                 }
             }

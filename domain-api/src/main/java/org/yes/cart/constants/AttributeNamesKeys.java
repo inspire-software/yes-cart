@@ -831,6 +831,11 @@ public interface AttributeNamesKeys {
          */
         String SHOP_URL_PREFER_HTTP = "SHOP_URL_PREFER_HTTP";
 
+        /**
+         * CSV or origins sent back in response headers
+         */
+        String SHOP_CORS_ALLOWED_ORIGINS = "SHOP_CORS_ALLOWED_ORIGINS";
+
     }
 
     interface Brand {

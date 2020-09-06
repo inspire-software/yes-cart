@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.cors.CorsUtils;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
@@ -57,6 +58,8 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     private ServletContext servletContext;
 
     private boolean skipRequestWrapper = false;
+    private boolean useServerNameHeader = false;
+    private boolean failOnUnresolved = false;
 
 
     public ShopResolverFilter(final ShopService shopService,
@@ -76,17 +79,33 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
 
-        final String serverDomainName = servletRequest.getServerName().toLowerCase();
+        if (this.useServerNameHeader && servletRequest instanceof HttpServletRequest &&
+                CorsUtils.isCorsRequest((HttpServletRequest) servletRequest) &&
+                CorsUtils.isPreFlightRequest((HttpServletRequest) servletRequest)) {
+            return servletRequest;
+        }
+
+        final String serverDomainName = this.useServerNameHeader ?
+                ((HttpServletRequest) servletRequest).getHeader("X-SALES-CHANNEL") :
+                    servletRequest.getServerName().toLowerCase();
 
         final Shop shop = shopService.getShopByDomainName(serverDomainName);
 
         if (shop == null) {
-            final String url = systemService.getDefaultShopURL();
-            if (LOG.isWarnEnabled()) {
-                LOG.warn("Shop can not be resolved. For server name [" + serverDomainName + "] Redirect to : [" + url + "]");
+            if (failOnUnresolved) {
+                if (LOG.isWarnEnabled()) {
+                    LOG.warn("Shop can not be resolved. For server name [" + serverDomainName + "] Respond: [400]");
+                }
+                ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                return null;
+            } else {
+                final String url = systemService.getDefaultShopURL();
+                if (LOG.isWarnEnabled()) {
+                    LOG.warn("Shop can not be resolved. For server name [" + serverDomainName + "] Redirect to : [" + url + "]");
+                }
+                ((HttpServletResponse) servletResponse).sendRedirect(url);
+                return null;
             }
-            ((HttpServletResponse) servletResponse).sendRedirect(url);
-            return null;
         } else if (shop.isDisabled()) {
             final String url = systemService.getDefaultShopURL();
             if (LOG.isWarnEnabled()) {
@@ -167,6 +186,10 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
         final String skip = filterConfig.getInitParameter("skipRequestWrapper");
         this.skipRequestWrapper = skip != null && Boolean.valueOf(skip);
+        final String useHeader = filterConfig.getInitParameter("useServerNameHeader");
+        this.useServerNameHeader = useHeader != null && Boolean.valueOf(useHeader);
+        final String failOnUnresolved = filterConfig.getInitParameter("failOnUnresolved");
+        this.failOnUnresolved = failOnUnresolved != null && Boolean.valueOf(failOnUnresolved);
 
     }
 

@@ -114,8 +114,7 @@ public class PromotionController {
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
     public @ResponseBody
-    List<PromotionRO> viewProducts(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                   final @ApiParam(value = "CSV of promotion codes") @PathVariable(value = "codes") String promotions,
+    List<PromotionRO> viewProducts(final @ApiParam(value = "CSV of promotion codes") @PathVariable(value = "codes") String promotions,
                                    final HttpServletRequest request,
                                    final HttpServletResponse response) {
 
@@ -182,8 +181,7 @@ public class PromotionController {
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody
-    PromotionListRO viewProductsXML(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                    final @ApiParam(value = "CSV of promotion codes") @PathVariable(value = "codes") String promotions,
+    PromotionListRO viewProductsXML(final @ApiParam(value = "CSV of promotion codes") @PathVariable(value = "codes") String promotions,
                                     final HttpServletRequest request,
                                     final HttpServletResponse response) {
 

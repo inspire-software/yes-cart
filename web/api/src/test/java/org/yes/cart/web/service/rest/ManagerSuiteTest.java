@@ -120,17 +120,17 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                    .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                    .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()))
                     .andReturn();
 
-        final String uuid = loginResult.getResponse().getHeader("yc");
+        final String uuid = loginResult.getResponse().getHeader("X-CW-TOKEN");
 
 
         mockMvc.perform(get("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"managedCart\":false")))
@@ -139,7 +139,7 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("\"managerCreateManagedListsEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"managerLoginOnBehalfEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"blockCheckoutType\":\"true\"")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         final SearchRO searchByEmail = new SearchRO();
@@ -152,12 +152,12 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .content(bodyByEmail)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("reg@test.com")))
             .andExpect(content().string(StringContains.containsString("John")))
-            .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+            .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
         final SearchRO searchByFullName = new SearchRO();
         searchByFullName.setParameters(Collections.singletonMap("any", Arrays.asList("john", "doe")));
@@ -169,12 +169,12 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .content(bodyFullName)
-                .header("yc", uuid))
+                .header("X-CW-TOKEN", uuid))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(StringContains.containsString("reg@test.com")))
             .andExpect(content().string(StringContains.containsString("John")))
-            .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+            .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
 
         final LoginRO loginOnBehalf = new LoginRO();
@@ -186,18 +186,18 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
                     .content(loginOnBehalfBody)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
 
         mockMvc.perform(get("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"managedCart\":true")))
@@ -207,25 +207,25 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("\"managerCreateManagedListsEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"managerLoginOnBehalfEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"blockCheckoutType\":\"false\"")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(post("/auth/logout?customer=true")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
 
         mockMvc.perform(get("/cart")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"managedCart\":false")))
@@ -234,18 +234,18 @@ public class ManagerSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("\"managerCreateManagedListsEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"managerLoginOnBehalfEnabled\":\"true\"")))
                 .andExpect(content().string(StringContains.containsString("\"blockCheckoutType\":\"true\"")))
-                .andExpect(header().string("yc", uuid));
+                .andExpect(header().string("X-CW-TOKEN", uuid));
 
 
         mockMvc.perform(post("/auth/logout")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .locale(locale)
-                    .header("yc", uuid))
+                    .header("X-CW-TOKEN", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":false")))
-                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+                .andExpect(header().string("X-CW-TOKEN", CustomMatchers.isNotBlank()));
 
 
     }

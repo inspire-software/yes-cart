@@ -128,8 +128,7 @@ public class ContactController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody
-    ContactResultRO signUpNewsletter(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                     final @ApiParam(value = "Email to sing up") @RequestParam(value = "email", required = false) String email,
+    ContactResultRO signUpNewsletter(final @ApiParam(value = "Email to sing up") @RequestParam(value = "email", required = false) String email,
                                      final HttpServletRequest request,
                                      final HttpServletResponse response) {
 
@@ -237,8 +236,7 @@ public class ContactController {
             method = RequestMethod.POST,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody ContactResultRO contactUs(final @ApiParam(value = "Request token") @RequestHeader(value = "yc", required = false) String requestToken,
-                                                   final @ApiParam(value = "Your email") @RequestParam(value = "email", required = false) String email,
+    public @ResponseBody ContactResultRO contactUs(final @ApiParam(value = "Your email") @RequestParam(value = "email", required = false) String email,
                                                    final @ApiParam(value = "Name") @RequestParam(value = "name", required = false) String name,
                                                    final @ApiParam(value = "Phone") @RequestParam(value = "phone", required = false) String phone,
                                                    final @ApiParam(value = "Message subject") @RequestParam(value = "subject", required = false) String subject,
