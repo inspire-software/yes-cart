@@ -34,9 +34,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
-import org.yes.cart.exception.ObjectNotFoundException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnableToWrapObjectException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.*;
@@ -193,18 +191,23 @@ public class DtoProductServiceImpl
 
                     // If this by PK then to by PK
                     final long byPk = NumberUtils.toLong(tagOrCodeOrBrandOrType.getSecond());
-                    currentFilter.put("productId", Collections.singletonList(byPk));
+                    currentFilter.put("productId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(byPk)));
 
                 } else if ("!".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
-                    SearchContext.JoinMode.OR.setMode(currentFilter);
-                    currentFilter.put("guid", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
-                    currentFilter.put("code", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
-                    currentFilter.put("manufacturerCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
-                    currentFilter.put("manufacturerPartCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
-                    currentFilter.put("supplierCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
-                    currentFilter.put("pimCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
-                    currentFilter.put("tag", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    final ProductSkuDTO skuDTO = getProductSkuByCode(tagOrCodeOrBrandOrType.getSecond());
+                    if (skuDTO != null) {
+                        currentFilter.put("productId", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(skuDTO.getProductId())));
+                    } else {
+                        SearchContext.JoinMode.OR.setMode(currentFilter);
+                        currentFilter.put("guid", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                        currentFilter.put("code", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                        currentFilter.put("manufacturerCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                        currentFilter.put("manufacturerPartCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                        currentFilter.put("supplierCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                        currentFilter.put("pimCode", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                        currentFilter.put("tag", Collections.singletonList(SearchContext.MatchMode.EQ.toParam(tagOrCodeOrBrandOrType.getSecond())));
+                    }
 
                 } else if ("#".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
@@ -285,20 +288,15 @@ public class DtoProductServiceImpl
      */
     @Override
     @SuppressWarnings("unchecked")
-    public ProductSkuDTO getProductSkuByCode(final String skuCode)
-            throws ObjectNotFoundException, UnableToWrapObjectException {
+    public ProductSkuDTO getProductSkuByCode(final String skuCode) {
 
         final ProductSku domainSku = productService.getProductSkuByCode(skuCode);
         if (domainSku == null) {
             return null;
         }
-        try {
-            final ProductSkuDTO dtoSku = dtoFactory.getByIface(ProductSkuDTO.class);
-            productSkuDTOAssembler.assembleDto(dtoSku, domainSku, getAdaptersRepository(), dtoFactory);
-            return dtoSku;
-        } catch (Exception exp) {
-            throw new UnableToWrapObjectException(ProductSku.class, ProductSkuDTO.class, exp);
-        }
+        final ProductSkuDTO dtoSku = dtoFactory.getByIface(ProductSkuDTO.class);
+        productSkuDTOAssembler.assembleDto(dtoSku, domainSku, getAdaptersRepository(), dtoFactory);
+        return dtoSku;
     }
 
     /**

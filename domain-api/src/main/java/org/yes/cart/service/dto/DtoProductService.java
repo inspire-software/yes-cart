@@ -20,9 +20,7 @@ import org.yes.cart.domain.dto.ProductDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
-import org.yes.cart.exception.ObjectNotFoundException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnableToWrapObjectException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
@@ -53,12 +51,8 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
      *
      * @param skuCode sku code
      * @return product sku for this sku code
-     * @throws ObjectNotFoundException thrown when object is not found
-     * @throws org.yes.cart.exception.UnableToWrapObjectException
-     *                                 thrown when object cannot be converted to dto
      */
-    ProductSkuDTO getProductSkuByCode(String skuCode) throws
-            ObjectNotFoundException, UnableToWrapObjectException;
+    ProductSkuDTO getProductSkuByCode(String skuCode);
 
 
     /**
