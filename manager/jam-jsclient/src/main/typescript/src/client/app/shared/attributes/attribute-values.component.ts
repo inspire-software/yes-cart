@@ -63,6 +63,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   private _objectAttributes:Array<AttrValueVO>;
   private objectAttributesRemove:Array<number>;
   private objectAttributesEdit:Array<number>;
+  private _imageOnlyMode:boolean;
   private _attributeFilter:string;
   private filteredObjectAttributes:Array<AttrValueVO>;
   private delayedFiltering:Future;
@@ -96,6 +97,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   private lockedEditor:boolean = false;
 
   private loading:boolean = false;
+  private loadingFilter:boolean = false;
 
   /**
    * Construct attribute panel
@@ -136,14 +138,24 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     }
   }
 
-  get attributeToEditBoolean():boolean {
-    // Must use get/set because there is string to boolean conversion happens somewhere in binding,
-    // so: ngTrueValue="'true'" ngFalseValue="'false'" does not work
-    return this.attributeToEdit && ('' + this.attributeToEdit.val === 'true');
+  @Input()
+  set imageOnlyMode(value: boolean) {
+    this._imageOnlyMode = value;
+    this.delayedFiltering.delay();
+  }
+
+  get imageOnlyMode(): boolean {
+    return this._imageOnlyMode;
   }
 
   set attributeToEditBoolean(val:boolean) {
     this.attributeToEdit.val = '' + val;
+  }
+
+  get attributeToEditBoolean():boolean {
+    // Must use get/set because there is string to boolean conversion happens somewhere in binding,
+    // so: ngTrueValue="'true'" ngFalseValue="'false'" does not work
+    return this.attributeToEdit && ('' + this.attributeToEdit.val === 'true');
   }
 
   ngOnInit() {
@@ -601,6 +613,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   private filterAttributes() {
 
+    this.loadingFilter = true;
+
     let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
     let _filteredObjectAttributes:Array<AttrValueVO> = [];
 
@@ -659,13 +673,22 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
       });
     }
 
-    this.filteredObjectAttributes = _filteredObjectAttributes;
+    if (this._imageOnlyMode) {
+      this.filteredObjectAttributes = _filteredObjectAttributes.filter(val =>
+        val.attribute.etype == 'Image'
+      );
+    } else {
+      this.filteredObjectAttributes = _filteredObjectAttributes;
+    }
 
     let _total = this.filteredObjectAttributes.length;
     this.totalItems = _total;
     if (_total > 0) {
       this.resetLastPageEnd();
     }
+
+    this.loadingFilter = false;
+
   }
 
 

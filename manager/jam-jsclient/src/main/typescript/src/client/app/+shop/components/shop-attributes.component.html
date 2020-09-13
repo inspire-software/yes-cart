@@ -43,6 +43,10 @@
         <i class="fa {{ includeSecure ? 'fa-unlock' : 'fa-lock' }}"></i>
       </button>
 
+      <button type="button" (click)="onImageOnlyMode()" class="btn {{ imageOnlyMode ? 'btn-danger' : 'btn-default' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_PREVIEW' | translate }}">
+        <i class="fa fa-picture-o"></i>
+      </button>
+
       <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-default btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
         <i class="fa fa-edit"></i>
       </button>
@@ -81,6 +85,7 @@
                        [objectAttributes]="shopAttributes"
                        [attributeFilter]="attributeFilter"
                        [sortorder]="attributeSort"
+                       [imageOnlyMode]="imageOnlyMode"
                        (dataSelected)="onSelectRow($event)"
                        (dataChanged)="onDataChange($event)"
                        (pageSelected)="onPageSelected($event)"

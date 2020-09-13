@@ -42,6 +42,8 @@ export class ShopAttributesComponent implements OnInit {
 
   private selectedRow:AttrValueShopVO;
 
+  private imageOnlyMode:boolean = false;
+
   private update:Array<Pair<AttrValueShopVO, boolean>>;
 
   private searchHelpShow:boolean = false;
@@ -90,6 +92,10 @@ export class ShopAttributesComponent implements OnInit {
   protected onIncludeSecure() {
     this.changeIncludeSecure = !this.includeSecure;
     this.getShopAttributes();
+  }
+
+  protected onImageOnlyMode() {
+    this.imageOnlyMode = !this.imageOnlyMode;
   }
 
   protected onRowDeleteSelected() {

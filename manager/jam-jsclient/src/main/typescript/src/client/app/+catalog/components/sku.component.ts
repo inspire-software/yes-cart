@@ -43,6 +43,8 @@ export class SKUComponent implements OnInit, OnDestroy {
 
   private selectedRow:AttrValueProductSkuVO;
 
+  private imageOnlyMode:boolean = false;
+
   private delayedChange:Future;
 
   private skuForm:any;
@@ -208,6 +210,10 @@ export class SKUComponent implements OnInit, OnDestroy {
 
   tabSelected(tab:any) {
     LogUtil.debug('SKUComponent tabSelected', tab);
+  }
+
+  protected onImageOnlyMode() {
+    this.imageOnlyMode = !this.imageOnlyMode;
   }
 
   protected onRowAdd() {

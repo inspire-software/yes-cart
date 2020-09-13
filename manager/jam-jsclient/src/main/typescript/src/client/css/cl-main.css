@@ -522,6 +522,17 @@ table.dataTable thead .sorting:after {
   max-width: 400px;
 }
 
+.av-div-value .av-div-value-container {
+  border: 1px solid #cccccc;
+  margin: 1px;
+  padding: 1px;
+}
+
+.av-div-value.active .av-div-value-container {
+  background-color: #d9edf7;
+}
+
+
 .av-file-upload {
   margin-bottom: 3px;
 }
@@ -541,6 +552,22 @@ table.dataTable thead .sorting:after {
 .av-td-value img {
   width: 50%;
 }
+
+.av-div-value-image-title {
+  padding: 2px;
+  height: 45px;
+  overflow: hidden;
+}
+
+.av-div-value-image-preview {
+  height: 300px;
+  overflow-y: auto;
+}
+
+.av-div-value-image-preview img {
+  width: 100%;
+}
+
 
 .product-type-nav-ranges {
   max-height: 150px;

@@ -59,6 +59,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   private selectedRowAssociation:ProductAssociationVO;
   private selectedRowOption:ProductOptionVO;
 
+  private imageOnlyMode:boolean = false;
+
   private delayedChange:Future;
 
   private productForm:any;
@@ -272,6 +274,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   tabSelected(tab:any) {
     LogUtil.debug('ProductComponent tabSelected', tab);
     this.reloadCatalogue = tab === 'Catalogue';
+  }
+
+  protected onImageOnlyMode() {
+    this.imageOnlyMode = !this.imageOnlyMode;
   }
 
   protected onRowAddAttribute() {

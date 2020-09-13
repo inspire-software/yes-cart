@@ -41,6 +41,8 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
 
   private selectedRow:AttrValueSystemVO;
 
+  private imageOnlyMode:boolean = false;
+
   private update:Array<Pair<AttrValueSystemVO, boolean>>;
 
   private searchHelpShow:boolean = false;
@@ -76,6 +78,10 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
   protected onIncludeSecure() {
     this.changeIncludeSecure = !this.includeSecure;
     this.getSystemPreferences();
+  }
+
+  protected onImageOnlyMode() {
+    this.imageOnlyMode = !this.imageOnlyMode;
   }
 
   protected onRowDeleteSelected() {

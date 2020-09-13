@@ -42,6 +42,8 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   private selectedRow:AttrValueBrandVO;
 
+  private imageOnlyMode:boolean = false;
+
   private delayedChange:Future;
 
   private brandForm:any;
@@ -121,6 +123,9 @@ export class BrandComponent implements OnInit, OnDestroy {
     LogUtil.debug('BrandComponent tabSelected', tab);
   }
 
+  protected onImageOnlyMode() {
+    this.imageOnlyMode = !this.imageOnlyMode;
+  }
 
   protected onRowDeleteSelected() {
     if (this.selectedRow != null) {

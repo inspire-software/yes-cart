@@ -54,6 +54,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
   private selectedRow:AttrValueCustomerVO;
 
+  private imageOnlyMode:boolean = false;
+
   private delayedChange:Future;
 
   private customerForm:any;
@@ -172,6 +174,9 @@ export class CustomerComponent implements OnInit, OnDestroy {
     this.reloadAddressbook = tab === 'Addressbook';
   }
 
+  protected onImageOnlyMode() {
+    this.imageOnlyMode = !this.imageOnlyMode;
+  }
 
   protected onRowDeleteSelected() {
     if (this.selectedRow != null) {
