@@ -156,12 +156,12 @@ export class I18nComponent {
         this.source[this.valueI18n] = this.dataI18n;
       }
       if (this.source[this.value] !== null) {
-        this.dataValue = '' + this.source[this.value];
+        this._dataValue = '' + this.source[this.value];
       } else {
-        this.dataValue = '';
+        this._dataValue = '';
       }
       this.i18nForm.reset({
-        dataValue: this.dataValue,
+        dataValue: this._dataValue,
         addLang: null,
         addVal: null,
       });
