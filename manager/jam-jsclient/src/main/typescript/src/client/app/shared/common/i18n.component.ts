@@ -44,7 +44,7 @@ export class I18nComponent {
   private   _noDefault:boolean = false;
 
   private dataI18n:Array<Pair<string, string>> = [];
-  private dataValue:string = '';
+  private _dataValue:string = '';
 
   private expandDefault:boolean = false;
   private expandAdd:boolean = false;
@@ -126,6 +126,26 @@ export class I18nComponent {
     return this._noDefault;
   }
 
+  set dataValue(value: string) {
+    LogUtil.debug('I18nComponent dataValue', this.source, this.value, this.valueI18n, value);
+    if (value != this._dataValue
+      || (this.isBlank(value) && this._defaultRequired)) {
+      if (!this.isBlank(value)) {
+        this.source[this.value] = value;
+        this._dataValue = value;
+      } else {
+        this.source[this.value] = null;
+        this._dataValue = null;
+      }
+      LogUtil.debug('I18nComponent default value changed', this._dataValue, this.source);
+      this.delayedChange.delay();
+    }
+  }
+
+  get dataValue(): string {
+    return this._dataValue;
+  }
+
   reloadModel():void {
     if (this.source != null && this.value != null && this.valueI18n != null) {
       LogUtil.debug('I18nComponent source', this.source, this.value, this.valueI18n);
@@ -198,19 +218,6 @@ export class I18nComponent {
     this.selectedRow = new Pair('','');
     this.formChange();
     LogUtil.debug('I18nComponent Added', this.dataI18n);
-  }
-
-  onDefaultValueChange():void {
-    if (this.i18nForm.controls['dataValue'].dirty
-      || (this.isBlank(this.dataValue) && this._defaultRequired)) {
-      if (!this.isBlank(this.dataValue)) {
-        this.source[this.value] = this.dataValue;
-      } else {
-        this.source[this.value] = null;
-      }
-      LogUtil.debug('I18nComponent default value changed', this.dataValue, this.source);
-      this.delayedChange.delay();
-    }
   }
 
   formChange():void {

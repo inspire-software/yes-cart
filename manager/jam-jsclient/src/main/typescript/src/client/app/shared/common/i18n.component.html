@@ -8,7 +8,7 @@
     <div class="col-md-3">{{ 'DEFAULT_VALUE' | translate }}</div>
     <div class="col-md-9 col-lg-7">
       <div class="input-group">
-        <textarea class="form-control" formControlName="dataValue" name="dataValue" rows="{{ expandDefault ? 6 : 1}}" [(ngModel)]="dataValue" (ngModelChange)="onDefaultValueChange()"></textarea>
+        <textarea class="form-control" formControlName="dataValue" name="dataValue" rows="{{ expandDefault ? 6 : 1}}" [(ngModel)]="dataValue"></textarea>
         <span class="input-group-btn">
           <button class="btn btn-default btn-sm" (click)="onExpandDefault()">
             <i class="fa {{ expandDefault ? 'fa-expand':'fa-compress' }}"></i>
