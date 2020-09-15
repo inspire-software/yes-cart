@@ -1,6 +1,6 @@
 # YesCart - pure eCommerce
 
-![YesCart - pure eCommerce](http://www.yes-cart.org/img/pics/slides-2.2.0/slide-omnichannel-en.jpg "YesCart - pure eCommerce")
+![YesCart - pure eCommerce](https://www.yes-cart.org/mediavault/image/cw/public/site/img/yc-cloud-integrations.png "YesCart - pure eCommerce")
 
 YesCart is an e-commerce platform build using java technology.
 
@@ -16,9 +16,7 @@ And that is still not all! YesCart is an embodiment of e-commerce best practices
 
 Please visit our official site http://www.yes-cart.org/ to read more about the project.
 
-
-
-
+![YesCart - pure eCommerce](https://www.yes-cart.org/mediavault/image/cw/public/site/img/yc-mission-control.png "YesCart - pure eCommerce")
 
 
 **Our supporters**:
