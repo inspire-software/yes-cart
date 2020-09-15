@@ -77,12 +77,12 @@ public class Swagger2 {
         ApiInfo apiInfo = new ApiInfo(
                 "REST API",
                 "REST API.",
-                "3.7.0",
+                "4.0.0",
                 "www.yes-cart.org",
                 new Contact("YC", "www.yes-cart.org", "admin@yes-cart.org"),
                 "API License",
                 "www.yes-cart.org",
-                Collections.singleton(new StringVendorExtension("YC", "3.7.0"))
+                Collections.singleton(new StringVendorExtension("YC", "4.0.0"))
         );
         return apiInfo;
     }

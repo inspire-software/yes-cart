@@ -22,7 +22,7 @@
     <parent>
         <artifactId>int-modules</artifactId>
         <groupId>org.yes</groupId>
-        <version>3.7.0</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>int-module-reports-domain-mapping</artifactId>
     <name>Reports: domain mapping</name>

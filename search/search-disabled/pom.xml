@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>search</artifactId>
-        <version>3.7.0</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>search-disabled</artifactId>
     <name>Search: NOOP provider</name>

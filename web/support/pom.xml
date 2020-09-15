@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>web</artifactId>
-        <version>3.7.0</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>websupport</artifactId>
     <name>SFX: web support</name>
