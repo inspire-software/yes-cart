@@ -22,7 +22,7 @@
     <parent>
         <artifactId>persistence</artifactId>
         <groupId>org.yes</groupId>
-        <version>3.7.0-SNAPSHOT</version>
+        <version>3.7.0</version>
     </parent>
     <artifactId>persistence-payment-hibernate</artifactId>
     <name>Persistence: payment Hibernate</name>

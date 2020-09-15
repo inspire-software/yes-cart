@@ -21,7 +21,7 @@
     <parent>
         <artifactId>yes-cart</artifactId>
         <groupId>org.yes</groupId>
-        <version>3.7.0-SNAPSHOT</version>
+        <version>3.7.0</version>
     </parent>
     <artifactId>int-modules</artifactId>
     <packaging>pom</packaging>
