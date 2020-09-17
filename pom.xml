@@ -71,7 +71,7 @@
 
         <!-- Core frameworks globals versions -->
         <hibernate.core.version>5.2.17.Final</hibernate.core.version>
-        <lucene.version>8.1.1</lucene.version>
+        <lucene.version>8.6.2</lucene.version>
         <cxf.version>3.2.4</cxf.version>
         <spring-security.version>4.2.13.RELEASE</spring-security.version>
         <spring.version>4.3.23.RELEASE</spring.version>
@@ -80,12 +80,12 @@
         <jackson.version>2.11.0</jackson.version>
         <springfox.version>2.9.2</springfox.version>
         <GeDA.version>3.1.2</GeDA.version>
-        <cglib.version>3.2.5</cglib.version>
+        <cglib.version>3.3.0</cglib.version>
         <quartz.version>2.3.0</quartz.version>
 
         <!-- Aspects & Bytecode -->
         <aspectjweaver.version>1.8.10</aspectjweaver.version>
-        <asm.version>5.2</asm.version>
+        <asm.version>8.0.1</asm.version>
         <javassist.version>3.22.0-GA</javassist.version>
 
         <!-- DB Drivers -->
@@ -145,9 +145,8 @@
         <!-- Testing -->
         <dbunit.version>2.4.7</dbunit.version>
         <junit.version>4.12</junit.version>
-        <junit-dep.version>4.11</junit-dep.version>
         <jmock-junit4.version>2.12.0</jmock-junit4.version>
-        <hamcrest.version>1.3</hamcrest.version>
+        <hamcrest.version>2.1</hamcrest.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -300,6 +299,10 @@
                     <groupId>org.codehaus.groovy</groupId>
                     <artifactId>groovy-all</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -380,6 +383,11 @@
 
         <!-- XML + XSLT 2.0 support -->
         <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+        </dependency>
+        <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
             <version>9.8.0-4</version>
@@ -388,11 +396,23 @@
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
             <version>2.7.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
             <version>2.11.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
@@ -421,6 +441,12 @@
             <artifactId>cglib</artifactId>
             <groupId>cglib</groupId>
             <version>${cglib.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.ow2.asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -449,12 +475,6 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-            <version>${junit-dep.version}</version>
-            <scope>test</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.hamcrest</groupId>
@@ -472,6 +492,10 @@
                 <exclusion>
                     <artifactId>cglib</artifactId>
                     <groupId>cglib</groupId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.ow2.asm</groupId>
+                    <artifactId>asm</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -491,13 +515,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-integration</artifactId>
-            <version>${hamcrest.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.dbunit</groupId>
             <artifactId>dbunit</artifactId>
             <version>${dbunit.version}</version>
@@ -506,6 +523,14 @@
                 <exclusion>
                     <groupId>junit</groupId>
                     <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-collections</groupId>
+                    <artifactId>commons-collections</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -523,6 +548,16 @@
             <artifactId>dumbster</artifactId>
             <version>1.6</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.activation</groupId>
+                    <artifactId>activation</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mail</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 
@@ -726,6 +761,18 @@
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>3.0.0-M1</version>
                 <executions>
+                    <!--<execution>-->
+                        <!--<id>enforce-dependencies-validation</id>-->
+                        <!--<goals>-->
+                            <!--<goal>enforce</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<rules>-->
+                                <!--<dependencyConvergence/>-->
+                            <!--</rules>-->
+                            <!--<fail>false</fail>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
                     <execution>
                         <id>enforce-required-profiles-are-used</id>
                         <goals>

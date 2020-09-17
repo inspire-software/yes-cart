@@ -17,10 +17,6 @@
 package org.yes.cart.bulkexport.xml.impl;
 
 import org.apache.commons.io.FileUtils;
-import org.hamcrest.Description;
-import org.hamcrest.Factory;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -771,52 +767,6 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
 
         validator.validate(new StreamSource(new FileInputStream(xml)));
         
-    }
-
-    private static class StringStartsWithMatcher extends TypeSafeMatcher<String> {
-        private String prefix;
-
-        public StringStartsWithMatcher(String prefix) {
-            this.prefix = prefix;
-        }
-
-        @Override
-        public boolean matchesSafely(String s) {
-            return s.startsWith(prefix);
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("a string starting with ").appendValue(prefix);
-        }
-    }
-
-    private static class StringContainsMatcher extends TypeSafeMatcher<String> {
-        private String text;
-
-        public StringContainsMatcher(String text) {
-            this.text = text;
-        }
-
-        @Override
-        public boolean matchesSafely(String s) {
-            return s.contains(text);
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("a string containing text: ").appendValue(text);
-        }
-    }
-
-    @Factory
-    public static Matcher<String> aStringStartingWith(String prefix) {
-        return new StringStartsWithMatcher(prefix);
-    }
-
-    @Factory
-    public static Matcher<String> aStringContains(String text) {
-        return new StringContainsMatcher(text);
     }
 
 }

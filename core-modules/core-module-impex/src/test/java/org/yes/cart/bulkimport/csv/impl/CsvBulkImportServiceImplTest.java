@@ -17,7 +17,6 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.hamcrest.Description;
-import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
@@ -827,26 +826,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }
     }
 
-    @Factory
-    public static Matcher<String> aStringStartingWith(String prefix) {
+    private static Matcher<String> aStringStartingWith(String prefix) {
         return new StringStartsWithMatcher(prefix);
     }
-
-    @Factory
-    public static Matcher<String> aStringNotStartingWith(String prefix) {
-        return new StringNotStartsWithMatcher(prefix);
-    }
-
-    @Factory
-    public static Matcher<String> aStringContains(String text) {
-        return new StringContainsMatcher(text);
-    }
-
-    @Factory
-    public static Matcher<String> aStringNotContains(String text) {
-        return new StringNotContainsMatcher(text);
-    }
-
 
     @Test
     public void testDoImportWithForeignKeys() throws Exception {

@@ -127,7 +127,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             bindings.add("feature_boost", DoubleValuesSource.fromIntField("featured_boost"));
             return JavascriptCompiler.compile("score * (feature_boost + instock_boost + category_boost)").getDoubleValuesSource(bindings);
         } catch (Exception exp) {
-            throw new RuntimeException("Unable to compile PRODUCT_BOOST_FIELDS");
+            throw new RuntimeException("Unable to compile PRODUCT_BOOST_FIELDS", exp);
         }
     }
 
@@ -152,7 +152,7 @@ public class SearchQueryFactoryImpl implements SearchQueryFactory<Query> {
             bindings.add("feature_boost", DoubleValuesSource.fromIntField("featured_boost"));
             return JavascriptCompiler.compile("score * (feature_boost + instock_boost + rank_boost)").getDoubleValuesSource(bindings);
         } catch (Exception exp) {
-            throw new RuntimeException("Unable to compile SKU_BOOST_FIELDS");
+            throw new RuntimeException("Unable to compile SKU_BOOST_FIELDS", exp);
         }
     }
 

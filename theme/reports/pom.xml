@@ -26,7 +26,6 @@
         <version>4.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.yes</groupId>
     <artifactId>reports</artifactId>
     <packaging>pom</packaging>
     <name>Themes: reports templates</name>

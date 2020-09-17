@@ -16,10 +16,6 @@
 
 package org.yes.cart.bulkimport.xml.impl;
 
-import org.hamcrest.Description;
-import org.hamcrest.Factory;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -1068,97 +1064,5 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
         }
 
     }
-
-    private static class StringStartsWithMatcher extends TypeSafeMatcher<String> {
-        private String prefix;
-
-        public StringStartsWithMatcher(String prefix) {
-            this.prefix = prefix;
-        }
-
-        @Override
-        public boolean matchesSafely(String s) {
-            return s.startsWith(prefix);
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("a string starting with ").appendValue(prefix);
-        }
-    }
-
-    private static class StringNotStartsWithMatcher extends TypeSafeMatcher<String> {
-        private String prefix;
-
-        public StringNotStartsWithMatcher(String prefix) {
-            this.prefix = prefix;
-        }
-
-        @Override
-        public boolean matchesSafely(String s) {
-            return !s.startsWith(prefix);
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("a string NOT starting with ").appendValue(prefix);
-        }
-    }
-
-    private static class StringContainsMatcher extends TypeSafeMatcher<String> {
-        private String text;
-
-        public StringContainsMatcher(String text) {
-            this.text = text;
-        }
-
-        @Override
-        public boolean matchesSafely(String s) {
-            return s.contains(text);
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("a string containing text: ").appendValue(text);
-        }
-    }
-
-    private static class StringNotContainsMatcher extends TypeSafeMatcher<String> {
-        private String text;
-
-        public StringNotContainsMatcher(String text) {
-            this.text = text;
-        }
-
-        @Override
-        public boolean matchesSafely(String s) {
-            return !s.contains(text);
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("a string NOT containing text: ").appendValue(text);
-        }
-    }
-
-    @Factory
-    public static Matcher<String> aStringStartingWith(String prefix) {
-        return new XmlFastBulkImportServiceImplTest.StringStartsWithMatcher(prefix);
-    }
-
-    @Factory
-    public static Matcher<String> aStringNotStartingWith(String prefix) {
-        return new XmlFastBulkImportServiceImplTest.StringNotStartsWithMatcher(prefix);
-    }
-
-    @Factory
-    public static Matcher<String> aStringContains(String text) {
-        return new XmlFastBulkImportServiceImplTest.StringContainsMatcher(text);
-    }
-
-    @Factory
-    public static Matcher<String> aStringNotContains(String text) {
-        return new XmlFastBulkImportServiceImplTest.StringNotContainsMatcher(text);
-    }
-
+    
 }
