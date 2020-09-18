@@ -254,45 +254,6 @@ public class XmlFastBulkExportServiceImplTest extends BaseCoreDBTestCase {
             validateXmlFile(xml);
 
 
-            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCATEGORY  ");
-            rs.next();
-            long cntContent1 = rs.getLong(1);
-            rs.close();
-
-            dt = System.currentTimeMillis();
-            fileToExport = "target/content_cms1-export-" + UUID.randomUUID().toString() + ".xml";
-            bulkExportService.doExport(createContext("src/test/resources/export/xml/content_cms1.xml", listener, fileToExport));
-            final long cms1 = System.currentTimeMillis() - dt;
-            System.out.println(String.format("%5d", cntContent1) + " content/1 in " + cms1 + "millis (~" + (cms1 / cntContent1) + " per item)");
-
-
-            xml = new File(fileToExport);
-            content = FileUtils.readFileToString(xml, "UTF-8");
-            assertTrue(content.contains("<content id=\""));
-            assertTrue(content.contains(" guid=\"112\" rank=\"60\""));
-            assertTrue(content.contains("<name><![CDATA[KnickKnacks]]></name>"));
-            assertTrue(content.contains("<custom-value><![CDATA[10,20,50]]></custom-value>"));
-
-            validateXmlFile(xml);
-
-
-
-            dt = System.currentTimeMillis();
-            fileToExport = "target/shopcontent_cms1-export-" + UUID.randomUUID().toString() + ".xml";
-            bulkExportService.doExport(createContext("src/test/resources/export/xml/shopcontent_cms1.xml", listener, fileToExport));
-            final long scms1 = System.currentTimeMillis() - dt;
-            System.out.println(String.format("%5d", cntContent1) + " shop content/1 in " + scms1 + "millis (~" + (scms1 / cntContent1) + " per item)");
-
-
-            xml = new File(fileToExport);
-            content = FileUtils.readFileToString(xml, "UTF-8");
-            assertTrue(content.contains("<content id=\""));
-            assertTrue(content.contains(" guid=\"SHOIP1\" rank=\"0\" shop=\"SHOIP1\""));
-            assertTrue(content.contains("<name><![CDATA[SHOIP1]]></name>"));
-            assertTrue(content.contains("<uri><![CDATA[SHOIP1_mail_customer-registered.html]]></uri>"));
-
-            validateXmlFile(xml);
-
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TCONTENT  ");
             rs.next();

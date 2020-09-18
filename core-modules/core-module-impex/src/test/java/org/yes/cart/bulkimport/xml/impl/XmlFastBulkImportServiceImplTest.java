@@ -295,36 +295,6 @@ public class XmlFastBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
 
-
-            dt = System.currentTimeMillis();
-            bulkImportService.doImport(createContext("src/test/resources/import/xml/content_cms1.xml", listener, importedFilesSet));
-            final long cnt1 = System.currentTimeMillis() - dt;
-
-            change = 2;
-            System.out.println(String.format("%5d", change) + " CMS/1 content in " + cnt1 + "millis (~" + (cnt1 / change) + " per item)");
-
-            rs = getConnection().getConnection().createStatement().executeQuery ("select CATEGORY_ID,PARENT_ID, PRODUCTTYPE_ID, DESCRIPTION, NAME, URI from TCATEGORY where GUID = 'SHOIP3-LVL1'");
-            rs.next();
-            assertFalse(rs.isAfterLast());
-            String cnDesc1 = rs.getString("DESCRIPTION");
-            String cnName1 = rs.getString("NAME");
-            long cnParentId1 = rs.getLong("PARENT_ID");
-            long cnId1 = rs.getLong("CATEGORY_ID");
-            rs.close();
-            assertEquals("Level 1 content", cnDesc1);
-            assertTrue(cnParentId1 > 0L);
-            assertEquals("Level 1", cnName1);
-
-            rs = getConnection().getConnection().createStatement().executeQuery ("select VAL from TCATEGORYATTRVALUE where CATEGORY_ID = '" + cnId1 + "' and CODE like 'CONTENT_BODY_en_%' order by CODE");
-            rs.next();
-            assertFalse(rs.isAfterLast());
-            assertTrue(rs.getString("VAL").startsWith("EN:\nLorem ipsum dolor sit amet"));
-            rs.next();
-            assertFalse(rs.isAfterLast());
-            assertTrue(rs.getString("VAL").startsWith("m id est laborum.\n"));
-            rs.close();
-
-
             dt = System.currentTimeMillis();
             bulkImportService.doImport(createContext("src/test/resources/import/xml/content_cms3.xml", listener, importedFilesSet));
             final long cnt3 = System.currentTimeMillis() - dt;

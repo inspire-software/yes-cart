@@ -72,36 +72,6 @@
         </property>
     </bean>
 
-    <bean id="dtoContentServiceCMS1" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.dto.impl.DtoContentCMS1ServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
-                <constructor-arg index="1" ref="contentService"/>
-                <constructor-arg index="2" ref="dtoAttributeService"/>
-                <constructor-arg index="3" ref="attrValueEntityCategoryDao"/>
-                <constructor-arg index="4" ref="imageService"/>
-                <constructor-arg index="5" ref="fileService"/>
-                <constructor-arg index="6" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="7" ref="systemService"/>
-                <property name="cfgContext">
-                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                        <property name="functionalArea" value="CMS"/>
-                        <property name="name" value="dtoContentServiceCMS1"/>
-                        <property name="cfgInterface" value="DtoContentService"/>
-                        <property name="cfgDefault" value="false"/>
-                        <property name="properties">
-                            <props>
-                                <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                                <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
-                                <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">CMS.dtoContentService=dtoContentServiceCMS1</prop>
-                            </props>
-                        </property>
-                    </bean>
-                </property>
-            </bean>
-        </property>
-    </bean>
-
     <bean id="dtoContentServiceCMS3" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoContentCMS3ServiceImpl">

@@ -2916,12 +2916,6 @@
        ]]>
     </query>
 
-    <query name="CMS1.ROOTCONTENT.BY.SHOP.ID">
-        <![CDATA[
-       select c from CategoryEntity c, ShopEntity s WHERE c.guid = s.code AND c.parentId = 0 AND s.shopId = ?1
-       ]]>
-    </query>
-
     <query name="CMS3.ROOTCONTENT.BY.SHOP.ID">
         <![CDATA[
        select c from ContentEntity c, ShopEntity s WHERE c.guid = s.code AND c.parentId = 0 AND s.shopId = ?1
@@ -2954,18 +2948,6 @@
     </query>
 
 
-    <query name="CMS1.CONTENTBODY.BY.CONTENTID">
-        <![CDATA[
-       select av.val from CategoryEntity c, AttrValueEntityCategory av
-       where c.categoryId = av.category.categoryId and c.categoryId = ?1 and av.attributeCode like ?2
-       and (c.disabled = ?4)
-       and (c.availablefrom < ?3 OR c.availablefrom IS NULL)
-       and (c.availableto > ?3 OR c.availableto IS NULL)
-       order by av.attributeCode
-       ]]>
-    </query>
-
-
     <query name="CMS3.CONTENTBODY.BY.CONTENTID">
         <![CDATA[
        select av.val from ContentEntity c, AttrValueEntityContent av
@@ -2983,23 +2965,9 @@
        ]]>
     </query>
 
-
-    <query cacheable="true" name="CMS1.CONTENT.BY.PARENTID.WITHOUT.DATE.FILTERING">
-        <![CDATA[
-       select c from CategoryEntity c where c.parentId = ?1 and c.categoryId <> c.parentId
-       ]]>
-    </query>
-
     <query cacheable="true" name="CMS3.CONTENT.BY.PARENTID.WITHOUT.DATE.FILTERING">
         <![CDATA[
        select c from ContentEntity c where c.parentId = ?1 and c.contentId <> c.parentId
-       ]]>
-    </query>
-
-    <query name="CMS1.CONTENT.BY.CODE.NAME.URI">
-        <![CDATA[
-       select c from CategoryEntity c
-        where (?1 is null or lower(c.guid) like ?1) OR (?2 is null or lower(c.name) like ?2) OR (?3 is null or lower(c.seoInternal.uri) like ?3)
        ]]>
     </query>
 
@@ -3010,24 +2978,10 @@
        ]]>
     </query>
 
-    <query name="CMS1.CONTENT.BY.URI">
-        <![CDATA[
-       select c from CategoryEntity c
-        where (lower(c.seoInternal.uri) like ?1)
-       ]]>
-    </query>
-
     <query name="CMS3.CONTENT.BY.URI">
         <![CDATA[
        select c from ContentEntity c
         where (lower(c.seoInternal.uri) like ?1)
-       ]]>
-    </query>
-
-
-    <query name="CMS1.CONTENT.ID.BY.SEO.URI">
-        <![CDATA[
-                  select c.categoryId from CategoryEntity c  where c.seoInternal.uri = ?1
        ]]>
     </query>
 
@@ -3037,22 +2991,9 @@
        ]]>
     </query>
 
-    <query name="CMS1.SEO.URI.BY.CONTENT.ID">
-        <![CDATA[
-                  select c.seoInternal.uri, c.categoryId from CategoryEntity c  where c.categoryId = ?1
-       ]]>
-    </query>
-
     <query name="CMS3.SEO.URI.BY.CONTENT.ID">
         <![CDATA[
                   select c.seoInternal.uri, c.contentId from ContentEntity c  where c.contentId = ?1
-       ]]>
-    </query>
-
-
-    <query name="CMS1.CONTENT.ID.BY.GUID">
-        <![CDATA[
-                  select c.categoryId from CategoryEntity c  where c.guid = ?1
        ]]>
     </query>
 
@@ -3062,24 +3003,10 @@
        ]]>
     </query>
 
-
-    <query name="CMS1.CONTENT.BY.SEO.URI">
-        <![CDATA[
-                  select c from CategoryEntity c  where c.seoInternal.uri = ?1
-       ]]>
-    </query>
-
     
     <query name="CMS3.CONTENT.BY.SEO.URI">
         <![CDATA[
                   select c from ContentEntity c  where c.seoInternal.uri = ?1
-       ]]>
-    </query>
-
-
-    <query name="CMS1.CONTENT.BY.GUID">
-        <![CDATA[
-                  select c from CategoryEntity c  where c.guid = ?1
        ]]>
     </query>
 

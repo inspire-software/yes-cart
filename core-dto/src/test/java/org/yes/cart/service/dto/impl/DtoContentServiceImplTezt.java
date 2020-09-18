@@ -40,10 +40,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoContentService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -56,10 +53,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection<String[]> data() {
-        return Arrays.asList(
-                new String[] { "contentServiceCMS1", "dtoContentServiceCMS1" },
-                new String[] { "contentServiceCMS3", "dtoContentServiceCMS3" }
-                );
+        return Collections.singletonList(new String[] { "contentServiceCMS3", "dtoContentServiceCMS3" });
     }
 
     private DtoFactory dtoFactory;

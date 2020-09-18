@@ -236,30 +236,6 @@
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>
-                <entry key="CONTENT_CMS1">
-                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms1XmlEntityHandler">
-                        <property name="categoryService" ref="categoryService"/>
-                    </bean>
-                </entry>
-                <entry key="CONTENT_CMS1_PRETTY">
-                    <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms1XmlEntityHandler">
-                        <property name="categoryService" ref="categoryService"/>
-                        <property name="prettyPrint" value="true"/>
-                    </bean>
-                </entry>
-                <entry key="SHOPCONTENT_CMS1">
-                    <bean class="org.yes.cart.bulkexport.xml.impl.ShopContentCms1XmlEntityHandler">
-                        <property name="contentService" ref="contentServiceCMS1"/>
-                        <property name="categoryService" ref="categoryService"/>
-                    </bean>
-                </entry>
-                <entry key="SHOPCONTENT_CMS1_PRETTY">
-                    <bean class="org.yes.cart.bulkexport.xml.impl.ShopContentCms1XmlEntityHandler">
-                        <property name="contentService" ref="contentServiceCMS1"/>
-                        <property name="categoryService" ref="categoryService"/>
-                        <property name="prettyPrint" value="true"/>
-                    </bean>
-                </entry>
                 <entry key="CONTENT_CMS3">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ContentCms3XmlEntityHandler">
                         <property name="contentService" ref="contentServiceCMS3"/>

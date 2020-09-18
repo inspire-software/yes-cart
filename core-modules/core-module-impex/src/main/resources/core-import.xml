@@ -177,13 +177,6 @@
                         <property name="attributeService" ref="attributeService"/>
                     </bean>
                 </entry>
-                <entry key="CONTENT_CMS1">
-                    <bean class="org.yes.cart.bulkimport.xml.impl.ContentCms1XmlEntityHandler">
-                        <property name="categoryService" ref="categoryService"/>
-                        <property name="shopService" ref="shopService"/>
-                        <property name="attributeService" ref="attributeService"/>
-                    </bean>
-                </entry>
                 <entry key="CONTENT_CMS3">
                     <bean class="org.yes.cart.bulkimport.xml.impl.ContentCms3XmlEntityHandler">
                         <property name="contentService" ref="contentService"/>

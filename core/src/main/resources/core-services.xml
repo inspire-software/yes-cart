@@ -127,32 +127,6 @@
         </constructor-arg>
     </bean>
 
-    <bean id="contentServiceCMS1" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.domain.impl.ContentServiceCMS1Impl">
-                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
-                <constructor-arg type="org.yes.cart.search.dao.support.ShopCategoryRelationshipSupport" ref="shopCategoryRelationshipSupport"/>
-                <constructor-arg type="org.yes.cart.service.theme.templates.TemplateProcessor" ref="contentServiceTemplateSupport"/>
-                <lookup-method name="getSelf" bean="contentService"/>
-                <property name="cfgContext">
-                    <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                        <property name="functionalArea" value="CMS"/>
-                        <property name="name" value="contentServiceCMS1"/>
-                        <property name="cfgInterface" value="ContentService"/>
-                        <property name="cfgDefault" value="false"/>
-                        <property name="properties">
-                            <props>
-                                <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                                <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
-                                <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">CMS.contentService=contentServiceCMS1</prop>
-                            </props>
-                        </property>
-                    </bean>
-                </property>
-            </bean>
-        </property>
-    </bean>
-
     <bean id="contentServiceCMS3" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ContentServiceCMS3Impl">
@@ -371,43 +345,6 @@
         </constructor-arg>
     </bean>
 
-
-    <bean id="contentCMS1ImageNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyConfigurableCachedImpl">
-        <constructor-arg>
-            <bean parent="txProxyTemplate">
-                <property name="target">
-                    <bean  class="org.yes.cart.service.media.impl.ContentCMS1MediaFileNameStrategyImpl">
-                        <constructor-arg index="0" value="/imgvault/category/"/>
-                        <constructor-arg index="1" value="category"/>
-                        <constructor-arg index="2" ref="attrValueEntityCategoryDao"/>
-                        <constructor-arg index="3" ref="languageService"/>
-                        <property name="attributePrefix" value="CATEGORY_IMAGE"/>
-                    </bean>
-                </property>
-                <property name="transactionAttributes">
-                    <props>
-                        <prop key="resolveObjectCode">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                        <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
-                    </props>
-                </property>
-            </bean>
-        </constructor-arg>
-        <property name="cfgContext">
-            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="CMS"/>
-                <property name="name" value="contentCMS1ImageNameStrategy"/>
-                <property name="cfgInterface" value="MediaFileNameStrategy"/>
-                <property name="cfgDefault" value="false"/>
-                <property name="properties">
-                    <props>
-                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
-                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">CMS.contentImageNameStrategy=contentCMS1ImageNameStrategy</prop>
-                    </props>
-                </property>
-            </bean>
-        </property>
-    </bean>
 
     <bean id="contentCMS3ImageNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyConfigurableCachedImpl">
         <constructor-arg>
@@ -644,43 +581,6 @@
         </constructor-arg>
     </bean>
 
-
-    <bean id="contentCMS1FileNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyConfigurableCachedImpl">
-        <constructor-arg>
-            <bean parent="txProxyTemplate">
-                <property name="target">
-                    <bean  class="org.yes.cart.service.media.impl.ContentCMS1MediaFileNameStrategyImpl">
-                        <constructor-arg index="0" value="/filevault/category/"/>
-                        <constructor-arg index="1" value="category"/>
-                        <constructor-arg index="2" ref="attrValueEntityCategoryDao"/>
-                        <constructor-arg index="3" ref="languageService"/>
-                        <property name="attributePrefix" value="CATEGORY_FILE"/>
-                    </bean>
-                </property>
-                <property name="transactionAttributes">
-                    <props>
-                        <prop key="resolveObjectCode">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                        <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
-                    </props>
-                </property>
-            </bean>
-        </constructor-arg>
-        <property name="cfgContext">
-            <bean class="org.yes.cart.config.impl.ConfigurationContextImpl">
-                <property name="functionalArea" value="CMS"/>
-                <property name="name" value="contentCMS1FileNameStrategy"/>
-                <property name="cfgInterface" value="MediaFileNameStrategy"/>
-                <property name="cfgDefault" value="false"/>
-                <property name="properties">
-                    <props>
-                        <prop key="extension">SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]</prop>
-                        <prop key="description">Default service that can be overridden via system properties (Disable by commenting out in SYSTEM_EXTENSION_CFG_PROPERTIES using '#')</prop>
-                        <prop key="SYSTEM[SYSTEM_EXTENSION_CFG_PROPERTIES]">CMS.contentFileNameStrategy=contentCMS1FileNameStrategy</prop>
-                    </props>
-                </property>
-            </bean>
-        </property>
-    </bean>
 
     <bean id="contentCMS3FileNameStrategy" class="org.yes.cart.service.media.impl.MediaFileNameStrategyConfigurableCachedImpl">
         <constructor-arg>

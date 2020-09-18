@@ -41,7 +41,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection<String> data() {
-        return Arrays.asList("contentServiceCMS1", "contentServiceCMS3");
+        return Collections.singletonList("contentServiceCMS3");
     }
 
 
