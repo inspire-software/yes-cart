@@ -24,3 +24,8 @@ Notes to describe upgrade release 4.0.0
    - many-to-one mapping potentially has a bug with second pass scanning. As a positive consequence product type is
      now decoupled from attributes domain
    - changed derby dialect to DerbyTenSevenDialect
+
+4. MySQL connector/j upgrade from 5.1.43 to 5.1.49 and option to use 8.0.21
+   - minor upgrade for driver to support older installations of MySQL
+   - those who want to use newer versions of MySQL can build using new mysql8 profile that uses 8.x driver and
+     config-db-mysql8.properties

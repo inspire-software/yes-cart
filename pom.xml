@@ -91,7 +91,8 @@
         <!-- DB Drivers -->
         <!--<c3p0.version>0.9.5.2</c3p0.version>-->
         <hikari.version>3.1.0</hikari.version>
-        <mysql-connector.version>5.1.43</mysql-connector.version>
+        <mysql-connector.version>5.1.49</mysql-connector.version>
+        <mysql-connector8.version>8.0.21</mysql-connector8.version>
         <hsqldb.version>2.2.8</hsqldb.version>
 
         <!-- Apache Commons -->
@@ -737,7 +738,7 @@
                                 <echo>YC module ${project.artifactId}-${project.version}-rev.${buildNumber} configurations:</echo>
                                 <echo> </echo>
                                 <echo>Environment configuration (use -Denv=x to switch)                           : ${env} </echo>
-                                <echo>Database provider (use -Pmysql or -Pderby)                                  : ${env.db} </echo>
+                                <echo>Database provider (use -Pmysql, -Pmysql8 or -Pderby)                        : ${env.db} </echo>
                                 <echo>Cluster connector (use -PconnWS, -PconnREST, -PconnJGIPv4 or -PconnJGIPv6)  : ${env.cluster} </echo>
                                 <echo>Full text search provider (use -PftEmbededLucene or -PftDisabled)           : ${env.search} </echo>
                                 <echo>Tomcat SSL configuration (use -Pssl)                                        : ${env.ssl} </echo>
@@ -804,7 +805,7 @@
 == YC build config error ===============================================================================
 | env.db is missing!                                                                                   |
 | If you are running custom build using profiles make sure you selected all necessary profiles for DB. |
-| Possible values: mysql, derby                                                                        |
+| Possible values: mysql, mysql8, derby                                                                        |
 ========================================================================================================
                                     </message>
                                 </requireProperty>
@@ -910,6 +911,13 @@
             <id>mysql</id>
             <properties>
                 <env.db>mysql</env.db>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>mysql8</id>
+            <properties>
+                <env.db>mysql8</env.db>
             </properties>
         </profile>
 

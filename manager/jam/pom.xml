@@ -199,6 +199,17 @@
         </profile>
 
         <profile>
+            <id>mysql8</id>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>${mysql-connector8.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>derby</id>
             <dependencies>
