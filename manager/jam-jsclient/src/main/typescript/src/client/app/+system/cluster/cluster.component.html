@@ -98,7 +98,9 @@
       <ul class="nav nav-second-level item-list-control">
         <li>
           <form>
-            <input class="filter-input" type="text" name="moduleFilter" [(ngModel)]="moduleFilter" (ngModelChange)="onModuleFilterChange()" autocomplete="off"/>
+            <div class="form-group">
+              <input class="form-control filter-input" type="text" name="moduleFilter" [(ngModel)]="moduleFilter" (ngModelChange)="onModuleFilterChange()" autocomplete="off"/>
+            </div>
           </form>
         </li>
         <li *ngIf="duplicateModules.length > 0">
