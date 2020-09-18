@@ -19,6 +19,7 @@ package org.yes.cart.payment.persistence.service.impl;
 import org.hibernate.LockOptions;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 
 import java.io.Serializable;
@@ -250,14 +251,30 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
 
     private void setQueryParameters(final Query query, final Object[] parameters) {
         if (parameters != null) {
+            final boolean ordinalParams = query.getParameterMetadata().getNamedParameterNames().isEmpty();
             int idx = 1;
-            for (Object param : parameters) {
-                if (param instanceof Collection) {
-                    query.setParameterList(String.valueOf(idx), (Collection) param);
-                } else {
-                    query.setParameter(String.valueOf(idx), param);
+            if (ordinalParams) { // where e.orderNumber = ?1
+                for (Object param : parameters) {
+                    if (param instanceof Collection) {
+                        query.setParameterList(idx, (Collection) param);
+                    } else if (param != null) {
+                        query.setParameter(idx, param);
+                    } else { // where (?1 is null or e.orderNumber = ?1) - fix for null values
+                        query.setParameter(idx, param, StringType.INSTANCE);
+                    }
+                    idx++;
                 }
-                idx++;
+            } else { // where e.orderNumber = :1
+                for (Object param : parameters) {
+                    if (param instanceof Collection) {
+                        query.setParameterList(String.valueOf(idx), (Collection) param);
+                    } else if (param != null) {
+                        query.setParameter(String.valueOf(idx), param);
+                    } else { // where (:1 is null or e.orderNumber = :1) - fix for null values
+                        query.setParameter(String.valueOf(idx), param, StringType.INSTANCE);
+                    }
+                    idx++;
+                }
             }
         }
     }

@@ -1600,11 +1600,7 @@
         foreign key (PRODUCTTYPE_ID) 
         references TPRODUCTTYPE (PRODUCTTYPE_ID)         on delete cascade;
 
-    alter table TPRODUCTTYPEATTR 
-        add index FK_PTA_ATTR (CODE), 
-        add constraint FK_PTA_ATTR 
-        foreign key (CODE) 
-        references TATTRIBUTE (CODE);
+    create index PTA_ATTRIBUTE_CODE on TPRODUCTTYPEATTR (CODE);
 
     create index ROLE_CODE on TROLE (CODE);
 

@@ -18,7 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import com.inspiresoftware.lib.dto.geda.annotations.DtoParent;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.ProductTypeAttrDTO;
 
@@ -34,12 +34,7 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     private long productTypeAttrId;
 
 
-
-
-    @DtoField(value = "attribute",
-            dtoBeanKey = "org.yes.cart.domain.dto.AttributeDTO",
-            entityBeanKeys = "org.yes.cart.domain.entity.Attribute")
-    @DtoParent(value = "attributeId", retriever = "attributeDTO2Attribute")
+    @DtoVirtualField(converter = "productTypeAttributeDTO2Code")
     private AttributeDTO attributeDTO;
 
     @DtoField(
@@ -58,18 +53,6 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
 
     @DtoField(value = "similarity")
     private boolean similarity;
-
-    @DtoField(value = "store", readOnly = true)
-    private boolean store;
-
-    @DtoField(value = "search", readOnly = true)
-    private boolean search;
-
-    @DtoField(value = "primary", readOnly = true)
-    private boolean primary;
-
-    @DtoField(value = "navigation", readOnly = true)
-    private boolean navigation;
 
     @DtoField(value = "navigationTemplate")
     private String navigationTemplate;
@@ -164,49 +147,49 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     /** {@inheritDoc} */
     @Override
     public boolean isStore() {
-        return store;
+        return attributeDTO != null && attributeDTO.isStore();
     }
 
     /** {@inheritDoc} */
     @Override
     public void setStore(final boolean store) {
-        this.store = store;
+        // NA
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean isSearch() {
-        return search;
+        return attributeDTO != null && attributeDTO.isSearch();
     }
 
     /** {@inheritDoc} */
     @Override
     public void setSearch(final boolean search) {
-        this.search = search;
+        // NA
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean isPrimary() {
-        return primary;
+        return attributeDTO != null && attributeDTO.isPrimary();
     }
 
     /** {@inheritDoc} */
     @Override
     public void setPrimary(final boolean primary) {
-        this.primary = primary;
+        // NA
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean isNavigation() {
-        return navigation;
+        return attributeDTO != null && attributeDTO.isNavigation();
     }
 
     /** {@inheritDoc} */
     @Override
     public void setNavigation(final boolean navigation) {
-        this.navigation = navigation;
+        // NA
     }
 
     /** {@inheritDoc} */
@@ -254,10 +237,6 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
                 ", rank=" + rank +
                 ", visible=" + visible +
                 ", similarity=" + similarity +
-                ", store=" + store +
-                ", search=" + search +
-                ", primary=" + primary +
-                ", navigation=" + navigation +
                 ", navigationTemplate='" + navigationTemplate + '\'' +
                 ", navigationType='" + navigationType + '\'' +
                 ", rangeNavigation='" + rangeNavigation + '\'' +

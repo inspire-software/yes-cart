@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.xml.XmlValueAdapter;
 import org.yes.cart.bulkexport.xml.XmlExportDescriptor;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.ProductTypeAttr;
@@ -28,6 +29,7 @@ import org.yes.cart.domain.misc.navigation.range.DisplayValue;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.service.async.JobStatusListener;
+import org.yes.cart.service.domain.AttributeService;
 
 import java.io.OutputStreamWriter;
 
@@ -37,6 +39,8 @@ import java.io.OutputStreamWriter;
  * Time: 08:08
  */
 public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<ProductType> {
+
+    private AttributeService attributeService;
 
     public ProductTypeXmlEntityHandler() {
         super("product-types");
@@ -101,11 +105,14 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
                 final Tag ptaTag = group.tag("attribute")
                         .attr("id", pta.getProductTypeAttrId())
                         .attr("guid", pta.getGuid())
-                        .attr("attribute", pta.getAttribute().getCode())
+                        .attr("attribute", pta.getAttributeCode())
                         .attr("rank", pta.getRank())
                         .attr("visible", pta.isVisible())
                         .attr("similarity", pta.isSimilarity());
-                if (pta.isNavigation()) {
+
+                final Attribute attribute = this.attributeService.getByAttributeCode(pta.getAttributeCode());
+
+                if (attribute != null && attribute.isNavigation()) {
                     final Tag nav = tag(ptaTag, "navigation")
                         .attr("type", pta.getNavigationType())
                         .attr("template", pta.getNavigationTemplate());
@@ -157,4 +164,12 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
 
     }
 
+    /**
+     * Spring IoC.
+     *
+     * @param attributeService attribute service
+     */
+    public void setAttributeService(final AttributeService attributeService) {
+        this.attributeService = attributeService;
+    }
 }

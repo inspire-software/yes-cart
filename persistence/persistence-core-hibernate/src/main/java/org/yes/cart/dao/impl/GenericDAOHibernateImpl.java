@@ -20,6 +20,7 @@ import org.hibernate.*;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yes.cart.dao.EntityFactory;
@@ -561,14 +562,30 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable> implements Gene
 
     private void setQueryParameters(final Query query, final Object[] parameters) {
         if (parameters != null) {
+            final boolean ordinalParams = query.getParameterMetadata().getNamedParameterNames().isEmpty();
             int idx = 1;
-            for (Object param : parameters) {
-                if (param instanceof Collection) {
-                    query.setParameterList(String.valueOf(idx), (Collection) param);
-                } else {
-                    query.setParameter(String.valueOf(idx), param);
+            if (ordinalParams) { // where e.orderNumber = ?1
+                for (Object param : parameters) {
+                    if (param instanceof Collection) {
+                        query.setParameterList(idx, (Collection) param);
+                    } else if (param != null) {
+                        query.setParameter(idx, param);
+                    } else { // where (?1 is null or e.orderNumber = ?1) - fix for null values
+                        query.setParameter(idx, param, StringType.INSTANCE);
+                    }
+                    idx++;
                 }
-                idx++;
+            } else { // where e.orderNumber = :1
+                for (Object param : parameters) {
+                    if (param instanceof Collection) {
+                        query.setParameterList(String.valueOf(idx), (Collection) param);
+                    } else if (param != null) {
+                        query.setParameter(String.valueOf(idx), param);
+                    } else { // where (:1 is null or e.orderNumber = :1) - fix for null values
+                        query.setParameter(String.valueOf(idx), param, StringType.INSTANCE);
+                    }
+                    idx++;
+                }
             }
         }
     }

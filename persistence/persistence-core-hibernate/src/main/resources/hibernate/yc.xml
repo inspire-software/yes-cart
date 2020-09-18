@@ -797,10 +797,8 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false" foreign-key="FK_PTA_ATTR"
-                     property-ref="code" insert="true" update="true" cascade="save-update">
-            <column name="CODE" not-null="true"/>
-        </many-to-one>
+        <property name="attributeCode" column="CODE" type="string" not-null="true" index="PTA_ATTRIBUTE_CODE"/>
+
         <many-to-one name="producttype" class="org.yes.cart.domain.entity.impl.ProductTypeEntity" foreign-key="FK_PTA_PRODTYPE"
                      cascade="save-update" insert="true" update="true">
             <column name="PRODUCTTYPE_ID" not-null="true"/>
@@ -861,7 +859,7 @@
         <property name="displayNameInternal" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="description" column="DESCRIPTION" type="string" length="255"/>
 
-        <bag name="attributeViewGroup" inverse="false" lazy="true" cascade="all" order-by="RANK">
+        <bag name="attributeViewGroup" inverse="false" lazy="true" cascade="all">
             <key>
                 <column name="PRODUCTTYPE_ID" not-null="true"/>
             </key>
@@ -1198,7 +1196,7 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ProductCategoryEntity"/>
         </set>
 
-        <bag name="sku" inverse="false" lazy="false" cascade="all-delete-orphan" order-by="RANK">
+        <bag name="sku" inverse="false" lazy="false" cascade="all-delete-orphan">
             <key>
                 <column name="PRODUCT_ID" not-null="false"/>
             </key>
@@ -1626,7 +1624,7 @@
             <column name="MASTER_ID" not-null="false"/>
         </many-to-one>
 
-        <bag name="shopCategory" inverse="false" lazy="false" cascade="all" order-by="RANK">
+        <bag name="shopCategory" inverse="false" lazy="false" cascade="all">
             <key>
                 <column name="SHOP_ID" not-null="false"/>
             </key>
@@ -3246,16 +3244,16 @@
     <query name="PRODUCT.TYPE.NAV.ATTR.BY.PROD.TYPE.ID">
           <![CDATA[
        select pta
-       from  ProductTypeAttrEntity pta
-            where pta.producttype.producttypeId = ?1 and pta.visible = ?2 and pta.attribute.navigation = ?3
+       from  ProductTypeAttrEntity pta, AttributeEntity attr
+            where pta.attributeCode = attr.code and pta.producttype.producttypeId = ?1 and pta.visible = ?2 and attr.navigation = ?3
        ]]>
     </query>
 
     <query name="PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID">
         <![CDATA[
-       select pta.attribute
-       from  ProductTypeAttrEntity pta
-            where pta.producttype.producttypeId = ?1
+       select attr
+       from  ProductTypeAttrEntity pta, AttributeEntity attr
+       where pta.attributeCode = attr.code and pta.producttype.producttypeId = ?1
        ]]>
     </query>
 
@@ -3263,7 +3261,7 @@
           <![CDATA[
        select pta.producttype
        from  ProductTypeAttrEntity pta
-            where pta.attribute.code = ?1
+            where pta.attributeCode = ?1
        ]]>
     </query>
 
@@ -3314,10 +3312,11 @@
     <query name="PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
         <![CDATA[
        select pta
-       from  ProductTypeAttrEntity pta
-            where pta.producttype.producttypeId = ?1
+       from  ProductTypeAttrEntity pta, AttributeEntity attr
+       where pta.attributeCode = attr.code
+            and pta.producttype.producttypeId = ?1
             and pta.navigationType = 'R'
-            and pta.attribute.navigation = ?2
+            and attr.navigation = ?2
             and pta.visible = ?3
        ]]>
     </query>
@@ -3362,9 +3361,10 @@
 
     <query name="ATTRIBUTE.CODES.AND.RANK.SINGLE.NAVIGATION.UNIQUE.BY.PRODUCTTYPE.ID">
         <![CDATA[
-       select distinct pt.attribute.code, pt.rank from ProductTypeAttrEntity pt
-       where pt.producttype.producttypeId = ?1
-         and pt.attribute.navigation = ?2
+       select distinct pt.attributeCode, pt.rank from ProductTypeAttrEntity pt, AttributeEntity attr
+       where pt.attributeCode = attr.code
+         and pt.producttype.producttypeId = ?1
+         and attr.navigation = ?2
          and pt.navigationType = 'S'
          and pt.visible = ?3
        ]]>

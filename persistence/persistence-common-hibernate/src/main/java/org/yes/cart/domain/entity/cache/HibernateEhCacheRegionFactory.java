@@ -16,14 +16,21 @@
 
 package org.yes.cart.domain.entity.cache;
 
+import net.sf.ehcache.CacheManager;
 import org.hibernate.boot.spi.SessionFactoryOptions;
 import org.hibernate.cache.CacheException;
-import org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory;
-import org.hibernate.cache.spi.*;
+import org.hibernate.cache.cfg.spi.DomainDataRegionBuildingContext;
+import org.hibernate.cache.cfg.spi.DomainDataRegionConfig;
+import org.hibernate.cache.ehcache.internal.EhcacheRegionFactory;
+import org.hibernate.cache.spi.DomainDataRegion;
+import org.hibernate.cache.spi.QueryResultsRegion;
+import org.hibernate.cache.spi.RegionFactory;
+import org.hibernate.cache.spi.TimestampsRegion;
 import org.hibernate.cache.spi.access.AccessType;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 
-import java.util.Properties;
+import java.util.Map;
 
 /**
  * Static locator to inject Spring configured CacheManager for consistent configuration
@@ -38,7 +45,7 @@ public class HibernateEhCacheRegionFactory implements RegionFactory {
 
     /** {@inheritDoc} */
     @Override
-    public void start(final SessionFactoryOptions settings, final Properties properties) throws CacheException {
+    public void start(final SessionFactoryOptions settings, final Map properties) throws CacheException {
         // managed by Spring container
     }
 
@@ -57,7 +64,7 @@ public class HibernateEhCacheRegionFactory implements RegionFactory {
     /** {@inheritDoc} */
     @Override
     public AccessType getDefaultAccessType() {
-        return AccessType.READ_WRITE;
+        return PROVIDER.getDefaultAccessType();
     }
 
     /** {@inheritDoc} */
@@ -66,34 +73,29 @@ public class HibernateEhCacheRegionFactory implements RegionFactory {
         return PROVIDER.nextTimestamp();
     }
 
+
     /** {@inheritDoc} */
     @Override
-    public EntityRegion buildEntityRegion(final String regionName, final Properties properties, final CacheDataDescription metadata) throws CacheException {
-        return PROVIDER.buildEntityRegion(regionName, properties, metadata);
+    public String qualify(final String regionName) {
+        return PROVIDER.qualify(regionName);
     }
 
     /** {@inheritDoc} */
     @Override
-    public NaturalIdRegion buildNaturalIdRegion(final String regionName, final Properties properties, final CacheDataDescription metadata) throws CacheException {
-        return PROVIDER.buildNaturalIdRegion(regionName, properties, metadata);
+    public DomainDataRegion buildDomainDataRegion(final DomainDataRegionConfig regionConfig, final DomainDataRegionBuildingContext buildingContext) {
+        return PROVIDER.buildDomainDataRegion(regionConfig, buildingContext);
     }
 
     /** {@inheritDoc} */
     @Override
-    public CollectionRegion buildCollectionRegion(final String regionName, final Properties properties, final CacheDataDescription metadata) throws CacheException {
-        return PROVIDER.buildCollectionRegion(regionName, properties, metadata);
+    public QueryResultsRegion buildQueryResultsRegion(final String regionName, final SessionFactoryImplementor sessionFactory) {
+        return PROVIDER.buildQueryResultsRegion(regionName, sessionFactory);
     }
 
     /** {@inheritDoc} */
     @Override
-    public QueryResultsRegion buildQueryResultsRegion(final String regionName, final Properties properties) throws CacheException {
-        return PROVIDER.buildQueryResultsRegion(regionName, properties);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public TimestampsRegion buildTimestampsRegion(final String regionName, final Properties properties) throws CacheException {
-        return PROVIDER.buildTimestampsRegion(regionName, properties);
+    public TimestampsRegion buildTimestampsRegion(final String regionName, final SessionFactoryImplementor sessionFactory) {
+        return PROVIDER.buildTimestampsRegion(regionName, sessionFactory);
     }
 
     /**
@@ -102,9 +104,12 @@ public class HibernateEhCacheRegionFactory implements RegionFactory {
      * @param cacheManager cache manager
      */
     public void setCacheManager(final EhCacheCacheManager cacheManager) {
-        PROVIDER = new SingletonEhCacheRegionFactory(null) {{
-            manager = cacheManager.getCacheManager();
-        }};
+        PROVIDER = new EhcacheRegionFactory() {
+            @Override
+            protected CacheManager resolveCacheManager(final SessionFactoryOptions settings, final Map properties) {
+                return cacheManager.getCacheManager();
+            }
+        };
     }
 
 

@@ -252,6 +252,7 @@
         <constructor-arg index="0" ref="ftQueryFactory"/>
         <constructor-arg index="1" ref="productService"/>
         <constructor-arg index="2" ref="productTypeAttrService"/>
+        <constructor-arg index="3" ref="attributeService"/>
     </bean>
 
     <bean id="priceFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.PriceFilteredNavigationSupportImpl">

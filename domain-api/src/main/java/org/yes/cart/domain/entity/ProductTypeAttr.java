@@ -50,14 +50,14 @@ public interface ProductTypeAttr extends Auditable, Rankable {
      *
      * @return {@link Attribute}
      */
-    Attribute getAttribute();
+    String getAttributeCode();
 
     /**
      * Set {@link Attribute}
      *
-     * @param attribute {@link Attribute} to use.
+     * @param attributeCode {@link Attribute} to use.
      */
-    void setAttribute(Attribute attribute);
+    void setAttributeCode(String attributeCode);
 
     /**
      * Get default product type if any.
@@ -116,62 +116,6 @@ public interface ProductTypeAttr extends Auditable, Rankable {
      * @param similarity use similarity on this product.
      */
     void setSimilarity(boolean similarity);
-
-    /**
-     * Store data in the FT index.
-     *
-     * @return store in FT index.
-     */
-    boolean isStore();
-
-    /**
-     * Store data in the FT index.
-     *
-     * @param store store in FT index.
-     */
-    void setStore(boolean store);
-
-    /**
-     * Use for attribute searching.
-     *
-     * @return true if attribute used for attribute search.
-     */
-    boolean isSearch();
-
-    /**
-     * Set to true if attribute will be used for attribute search.
-     *
-     * @param search true if attribute used for attribute search.
-     */
-    void setSearch(boolean search);
-
-    /**
-     * Use for attribute searching as primary key, forcing exact matches.
-     *
-     * @return true if attribute used for attribute exact search.
-     */
-    boolean isPrimary();
-
-    /**
-     * Set to true if attribute will be used for attribute exact search.
-     *
-     * @param primary true if attribute used for attribute exact search.
-     */
-    void setPrimary(boolean primary);
-
-    /**
-     * Use for attribute navigation.
-     *
-     * @return true if attribute used for attribute navigation.
-     */
-    boolean isNavigation();
-
-    /**
-     * Set to true if attribute will be used for filtered navigation.
-     *
-     * @param navigation true if attribute will be used for filtered navigation.
-     */
-    void setNavigation(boolean navigation);
 
     /**
      * Template to use for navigation. null is default single/range rendering.

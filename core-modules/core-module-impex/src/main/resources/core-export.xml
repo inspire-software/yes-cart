@@ -315,10 +315,13 @@
                     </bean>
                 </entry>
                 <entry key="PRODUCTTYPE">
-                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductTypeXmlEntityHandler"/>
+                    <bean class="org.yes.cart.bulkexport.xml.impl.ProductTypeXmlEntityHandler">
+                        <property name="attributeService" ref="attributeService"/>
+                    </bean>
                 </entry>
                 <entry key="PRODUCTTYPE_PRETTY">
                     <bean class="org.yes.cart.bulkexport.xml.impl.ProductTypeXmlEntityHandler">
+                        <property name="attributeService" ref="attributeService"/>
                         <property name="prettyPrint" value="true"/>
                     </bean>
                 </entry>

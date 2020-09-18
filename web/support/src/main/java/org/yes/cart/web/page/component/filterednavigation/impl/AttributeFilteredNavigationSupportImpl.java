@@ -23,7 +23,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.ProductSearchResultNavDTO;
 import org.yes.cart.domain.dto.ProductSearchResultNavItemDTO;
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProductTypeAttr;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
@@ -38,6 +37,7 @@ import org.yes.cart.search.dto.NavigationContext;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.search.dto.impl.FilteredNavigationRecordRequestImpl;
 import org.yes.cart.search.utils.SearchUtil;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
 import org.yes.cart.utils.log.Markers;
@@ -76,12 +76,15 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
     };
 
     private final ProductTypeAttrService productTypeAttrService;
+    private final AttributeService attributeService;
 
     public AttributeFilteredNavigationSupportImpl(final SearchQueryFactory searchQueryFactory,
                                                   final ProductService productService,
-                                                  final ProductTypeAttrService productTypeAttrService) {
+                                                  final ProductTypeAttrService productTypeAttrService,
+                                                  final AttributeService attributeService) {
         super(searchQueryFactory, productService);
         this.productTypeAttrService = productTypeAttrService;
+        this.attributeService = attributeService;
     }
 
     /**
@@ -103,12 +106,14 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                 return Collections.emptyList();
             }
 
+            final Map<String, I18NModel> attributeNames = this.attributeService.getAllAttributeNames();
+
             final List<FilteredNavigationRecordRequest> requests = new ArrayList<>();
             final Map<String, FilteredNavigationRecordRequest> requestsMap = new HashMap<>();
             final Map<String, ProductTypeAttr> pTypes = new HashMap<>();
             for (final ProductTypeAttr pta : ptas) {
 
-                final String facetName = pta.getAttribute().getCode();
+                final String facetName = pta.getAttributeCode();
                 pTypes.put(facetName, pta);
 
                 if (ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(pta.getNavigationType())) {
@@ -164,7 +169,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
             final ProductSearchResultNavDTO facets =
                     getProductService().findFilteredNavigationRecords(navigationContext, requests);
 
-            appendNavigationRecords(navigationList, requestsMap, pTypes, navigationContext, locale, facets);
+            appendNavigationRecords(navigationList, requestsMap, pTypes, attributeNames, navigationContext, locale, facets);
 
 
             // Alpha sort
@@ -179,6 +184,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
     protected void appendNavigationRecords(final List<FilteredNavigationRecord> navigationList,
                                            final Map<String, FilteredNavigationRecordRequest> requestsMap,
                                            final Map<String, ProductTypeAttr> pTypes,
+                                           final Map<String, I18NModel> attributeNames,
                                            final NavigationContext facetContext,
                                            final String locale,
                                            final ProductSearchResultNavDTO facets) {
@@ -201,9 +207,10 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
             }
 
             final ProductTypeAttr pta = pTypes.get(code);
-            final Attribute attribute = pta.getAttribute();
+            final I18NModel displayNames = attributeNames.get(pta.getAttributeCode());
 
-            final String displayName = new StringI18NModel(attribute.getDisplayName()).getValue(locale);
+            final String name = displayNames != null ? displayNames.getValue(I18NModel.DEFAULT) : pta.getAttributeCode();
+            final String displayName = displayNames != null ? displayNames.getValue(locale) : pta.getAttributeCode();
 
             if (ProductTypeAttr.NAVIGATION_TYPE_RANGE.equals(pta.getNavigationType())) {
 
@@ -225,7 +232,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
                         if (candidateResultCount != null && candidateResultCount > 0) {
                             navigationList.add(new FilteredNavigationRecordImpl(
-                                    attribute.getName(),
+                                    name,
                                     displayName,
                                     code,
                                     value,
@@ -245,7 +252,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                     final Integer candidateResultCount = item.getCount();
                     if (candidateResultCount != null && candidateResultCount > 0) {
                         navigationList.add(new FilteredNavigationRecordImpl(
-                                attribute.getName(),
+                                name,
                                 displayName,
                                 code,
                                 item.getValue(), item.getDisplayValue(locale),

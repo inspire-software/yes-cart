@@ -18,7 +18,6 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.xml.ProductTypeRangeListXStreamProvider;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
@@ -36,7 +35,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     private long productTypeAttrId;
     private long version;
 
-    private Attribute attribute;
+    private String attributeCode;
     private ProductType producttype;
     private int rank;
     private boolean visible;
@@ -55,13 +54,13 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
 
 
     @Override
-    public Attribute getAttribute() {
-        return this.attribute;
+    public String getAttributeCode() {
+        return this.attributeCode;
     }
 
     @Override
-    public void setAttribute(final Attribute attribute) {
-        this.attribute = attribute;
+    public void setAttributeCode(final String attributeCode) {
+        this.attributeCode = attributeCode;
     }
 
     @Override
@@ -102,46 +101,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     @Override
     public void setSimilarity(final boolean similarity) {
         this.similarity = similarity;
-    }
-
-    @Override
-    public boolean isStore() {
-        return attribute.isStore();
-    }
-
-    @Override
-    public void setStore(final boolean store) {
-        throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
-    }
-
-    @Override
-    public boolean isSearch() {
-        return attribute.isSearch();
-    }
-
-    @Override
-    public void setSearch(final boolean search) {
-        throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
-    }
-
-    @Override
-    public boolean isPrimary() {
-        return attribute.isPrimary();
-    }
-
-    @Override
-    public void setPrimary(final boolean primary) {
-        throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
-    }
-
-    @Override
-    public boolean isNavigation() {
-        return attribute.isNavigation();
-    }
-
-    @Override
-    public void setNavigation(final boolean navigation) {
-        throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
     @Override

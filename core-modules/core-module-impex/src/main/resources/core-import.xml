@@ -168,7 +168,6 @@
                 <entry key="PRODUCTTYPE">
                     <bean class="org.yes.cart.bulkimport.xml.impl.ProductTypeXmlEntityHandler">
                         <property name="productTypeService" ref="productTypeService"/>
-                        <property name="attributeService" ref="attributeService"/>
                     </bean>
                 </entry>
                 <entry key="CATEGORY">

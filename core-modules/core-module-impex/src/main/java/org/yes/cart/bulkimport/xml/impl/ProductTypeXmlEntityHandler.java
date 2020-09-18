@@ -20,7 +20,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkimport.xml.XmlEntityImportHandler;
 import org.yes.cart.bulkimport.xml.internal.*;
-import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.ProductTypeAttr;
@@ -31,7 +30,6 @@ import org.yes.cart.domain.misc.navigation.range.impl.DisplayValueImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeListImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeNodeImpl;
 import org.yes.cart.service.async.JobStatusListener;
-import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductTypeService;
 
 import java.util.ArrayList;
@@ -46,7 +44,6 @@ import java.util.List;
 public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<ProductTypeTypeType, ProductType> implements XmlEntityImportHandler<ProductTypeTypeType, ProductType> {
 
     private ProductTypeService productTypeService;
-    private AttributeService attributeService;
 
     public ProductTypeXmlEntityHandler() {
         super("product-type");
@@ -92,8 +89,8 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
         } else {
             this.productTypeService.update(domain);
         }
-        this.attributeService.getGenericDao().flush();
-        this.attributeService.getGenericDao().evict(domain);
+        this.productTypeService.getGenericDao().flush();
+        this.productTypeService.getGenericDao().evict(domain);
     }
 
     private void processAttributes(final ProductType domain, final ProductTypeTypeType xmlType) {
@@ -121,18 +118,14 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
     private void processAttributesSave(final ProductType domain, final ProductTypeAttributeType attr) {
 
         for (final ProductTypeAttr pta : domain.getAttributes()) {
-            if (attr.getAttribute().equals(pta.getAttribute().getCode())) {
+            if (attr.getAttribute().equals(pta.getAttributeCode())) {
                 processAttributesSaveBasic(attr, pta);
                 return;
             }
         }
         final ProductTypeAttr pta = this.productTypeService.getGenericDao().getEntityFactory().getByIface(ProductTypeAttr.class);
         pta.setProducttype(domain);
-        final Attribute at = this.attributeService.findByAttributeCode(attr.getAttribute());
-        if (at == null) {
-            throw new IllegalArgumentException("No attribute with code: " + attr.getAttribute());
-        }
-        pta.setAttribute(at);
+        pta.setAttributeCode(attr.getAttribute());
         processAttributesSaveBasic(attr, pta);
         domain.getAttributes().add(pta);
 
@@ -200,7 +193,7 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
         final Iterator<ProductTypeAttr> it = domain.getAttributes().iterator();
         while (it.hasNext()) {
             final ProductTypeAttr next = it.next();
-            if (attr.getAttribute().equals(next.getAttribute().getCode())) {
+            if (attr.getAttribute().equals(next.getAttributeCode())) {
                 it.remove();
                 return;
             }
@@ -272,7 +265,7 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
         if (productType != null) {
             return productType;
         }
-        productType = this.attributeService.getGenericDao().getEntityFactory().getByIface(ProductType.class);
+        productType = this.productTypeService.getGenericDao().getEntityFactory().getByIface(ProductType.class);
         productType.setGuid(xmlType.getGuid());
         productType.setShippable(true);
         return productType;
@@ -297,12 +290,4 @@ public class ProductTypeXmlEntityHandler extends AbstractXmlEntityHandler<Produc
         this.productTypeService = productTypeService;
     }
 
-    /**
-     * Spring IoC.
-     *
-     * @param attributeService attribute service
-     */
-    public void setAttributeService(final AttributeService attributeService) {
-        this.attributeService = attributeService;
-    }
 }

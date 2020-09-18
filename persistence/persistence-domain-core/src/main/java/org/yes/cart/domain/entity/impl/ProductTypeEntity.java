@@ -259,7 +259,7 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         }
         if (this.attributes != null) {
             for (ProductTypeAttr attr : this.attributes) {
-                if (attr.getAttribute() != null && attr.getAttribute().getCode() != null && attr.getAttribute().getCode().equals(attributeCode)) {
+                if (attr.getAttributeCode() != null && attr.getAttributeCode().equals(attributeCode)) {
                     return attr;
                 }
             }

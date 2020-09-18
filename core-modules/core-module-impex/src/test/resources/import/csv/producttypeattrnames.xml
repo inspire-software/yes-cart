@@ -51,12 +51,10 @@
 
         <column-descriptor>
             <column-index>2</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Attribute</entity-type>
-            <name>attribute</name>
+            <field-type>FIELD</field-type>
+            <name>attributeCode</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select b from AttributeEntity b where b.code = {attribute}</lookup-query>
         </column-descriptor>
 
         <column-descriptor>
