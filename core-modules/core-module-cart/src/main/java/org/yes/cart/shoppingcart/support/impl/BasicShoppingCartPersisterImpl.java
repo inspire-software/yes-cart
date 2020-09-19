@@ -18,7 +18,6 @@ package org.yes.cart.shoppingcart.support.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.TargetSource;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.support.CartTuplizationException;
 import org.yes.cart.shoppingcart.support.CartTuplizer;
@@ -35,16 +34,16 @@ public class BasicShoppingCartPersisterImpl implements ShoppingCartPersister<Map
 
     private static final Logger LOG = LoggerFactory.getLogger(BasicShoppingCartPersisterImpl.class);
 
-    private final TargetSource tuplizerPool;
+    private final CartTuplizer cartTuplizer;
 
 
     /**
      * Construct shopping cart persister phase listener
      *
-     * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
+     * @param cartTuplizer        cart tuplizer to manage cookie to object to cookie transformation
      */
-    public BasicShoppingCartPersisterImpl(final TargetSource tuplizerPool) {
-        this.tuplizerPool = tuplizerPool;
+    public BasicShoppingCartPersisterImpl(final CartTuplizer cartTuplizer) {
+        this.cartTuplizer = cartTuplizer;
     }
 
 
@@ -56,26 +55,10 @@ public class BasicShoppingCartPersisterImpl implements ShoppingCartPersister<Map
                                     final Map httpServletResponse,
                                     final ShoppingCart shoppingCart) {
 
-        CartTuplizer tuplizer = null;
         try {
-
-            tuplizer = (CartTuplizer<Map, Map>) tuplizerPool.getTarget();
-            try {
-                tuplizer.tuplize(httpServletRequest, httpServletResponse, shoppingCart);
-            } catch (CartTuplizationException e) {
-                LOG.error("Unable to create cookies from cart: " + shoppingCart, e);
-            }
-
-        } catch (Exception e) {
-            LOG.error("Can process request: " + e.getMessage(), e);
-        } finally {
-            if (tuplizer != null) {
-                try {
-                    tuplizerPool.releaseTarget(tuplizer);
-                } catch (Exception e) {
-                    LOG.error("Can return object to pool: " + e.getMessage(), e);
-                }
-            }
+            cartTuplizer.tuplize(httpServletRequest, httpServletResponse, shoppingCart);
+        } catch (CartTuplizationException e) {
+            LOG.error("Unable to create cookies from cart: " + shoppingCart, e);
         }
 
     }

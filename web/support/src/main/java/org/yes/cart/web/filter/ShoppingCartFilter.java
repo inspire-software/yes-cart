@@ -19,7 +19,6 @@ package org.yes.cart.web.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.TargetSource;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
@@ -51,7 +50,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
     private final ShopService shopService;
 
-    private final TargetSource tuplizerPool;
+    private final CartTuplizer cartTuplizer;
 
     private final AmountCalculationStrategy calculationStrategy;
     private final ShoppingCartCommandFactory cartCommandFactory;
@@ -59,16 +58,16 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
     /**
      * @param shopService         shop service
-     * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
+     * @param cartTuplizer        cart tuplizer to manage cookie to object to cookie transformation
      * @param calculationStrategy calculation strategy
      * @param cartCommandFactory  cart command factory
      */
     public ShoppingCartFilter(final ShopService shopService,
-                              final TargetSource tuplizerPool,
+                              final CartTuplizer cartTuplizer,
                               final AmountCalculationStrategy calculationStrategy,
                               final ShoppingCartCommandFactory cartCommandFactory) {
         this.shopService = shopService;
-        this.tuplizerPool = tuplizerPool;
+        this.cartTuplizer = cartTuplizer;
         this.calculationStrategy = calculationStrategy;
         this.cartCommandFactory = cartCommandFactory;
     }
@@ -81,15 +80,14 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
     public ServletRequest doBefore(final ServletRequest request,
                                    final ServletResponse response) throws IOException, ServletException {
 
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        if (shop != null) {
 
-        final HttpServletRequest httpRequest = (HttpServletRequest) request;
+            final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        CartTuplizer tuplizer = null;
-        try {
-            tuplizer = (CartTuplizer) tuplizerPool.getTarget();
             MutableShoppingCart cart = null;
             try {
-                MutableShoppingCart restored = (MutableShoppingCart) tuplizer.detuplize(httpRequest);
+                MutableShoppingCart restored = (MutableShoppingCart) cartTuplizer.detuplize(httpRequest);
                 if (restored != null) {
                     cart = restored;
                 }
@@ -103,23 +101,11 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                 cart = new ShoppingCartImpl();
                 cart.initialise(calculationStrategy);
             }
-            setDefaultValuesIfNecessary(ApplicationDirector.getCurrentShop(), cart);
-            ApplicationDirector.setCurrentCustomerShop(getCurrentCustomerShop(ApplicationDirector.getCurrentShop(), cart));
+            setDefaultValuesIfNecessary(shop, cart);
+            ApplicationDirector.setCurrentCustomerShop(getCurrentCustomerShop(shop, cart));
             ApplicationDirector.setShoppingCart(cart);
             request.setAttribute("ShoppingCart", cart);
-
-        } catch (Exception e) {
-            LOG.error("Can process request", e);
-        } finally {
-            if (tuplizer != null) {
-                try {
-                    tuplizerPool.releaseTarget(tuplizer);
-                } catch (Exception e) {
-                    LOG.error("Can return object to pool ", e);
-                }
-            }
         }
-
         return request;
     }
 

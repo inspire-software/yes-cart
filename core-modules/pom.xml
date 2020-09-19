@@ -39,5 +39,6 @@
         <module>core-module-corejob</module>
         <module>core-module-cart</module>
         <module>core-module-cart-websupport</module>
+        <module>core-module-websupport</module>
     </modules>
 </project>

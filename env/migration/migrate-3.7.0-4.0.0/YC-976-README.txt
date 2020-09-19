@@ -29,3 +29,23 @@ Notes to describe upgrade release 4.0.0
    - minor upgrade for driver to support older installations of MySQL
    - those who want to use newer versions of MySQL can build using new mysql8 profile that uses 8.x driver and
      config-db-mysql8.properties
+
+5. Spring upgrade 4.3.x to 5.2.x
+   - small refactoring caused by incompatibilities migrating from 4.3.23.RELEASE to 5.2.9.RELEASE
+     * commons-dbcp completely removed (test are now directly using hsqldb datasource)
+     * cart tuplizers now directly used (without pool)
+     * new module added core-module-websupport to enable spring-webmvc on top of core
+     * core modules refactored to refrain from using web related APIs and core-io.xml is now moved to webapps
+       as a consequence as some IO for resource resolution is servlet context dependent
+     * JMX bean exports are commented out, they are not used but if someone needs them they can be added as
+       required
+   - xstream upgraded from 1.4.11.1 to 1.4.13
+   - Spring security upgrade from 4.2.13.RELEASE to 5.4.0
+     * removed unnecessary HttpSessionEventPublisher in web.xml as it is not used, we are not using sessions
+       and wicket manages sessions on its own
+     * small refactoring in cluster connector to add NoopPasswordEncoderImpl as it is now mandatory to set
+       encoders in authentication manager beans
+   - Thymeleaf integration with spring thymeleaf-spring4 replaced to thymeleaf-spring5
+   - FOP upgraded from 2.3 to 2.5
+   - POI upgraded from 4.1.0 to 4.1.2
+   - Groovy upgraded from 2.4.15 to 2.4.20

@@ -18,6 +18,7 @@ package org.yes.cart.config.impl;
 
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.domain.SecurityAccessControlService;
+import org.yes.cart.service.theme.templates.ThemeRepositoryService;
 
 import java.util.Properties;
 
@@ -40,10 +41,24 @@ public class SystemConfigurationImpl extends AbstractConfigurationImpl {
 
     }
 
+    void registerThemeRepositoryService(final Properties properties) {
+
+        final ThemeRepositoryService trs = determineConfiguration(properties, "SYS.themeRepositoryService", ThemeRepositoryService.class);
+
+        if (trs == null) {
+            customise("SYS", "SYS.themeRepositoryService", "themeRepositoryService", ThemeRepositoryService.class,
+                    defaultConfiguration("themeRepositoryServiceDefault", ThemeRepositoryService.class));
+        } else {
+            customise("SYS", "SYS.themeRepositoryService", "themeRepositoryService", ThemeRepositoryService.class, trs);
+        }
+
+    }
+
     @Override
     protected void onConfigureEvent(final Properties properties) {
 
         registerCustomSecurityControlService(properties);
+        registerThemeRepositoryService(properties);
 
     }
 

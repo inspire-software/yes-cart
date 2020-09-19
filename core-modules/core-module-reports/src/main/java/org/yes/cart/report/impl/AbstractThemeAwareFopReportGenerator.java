@@ -20,7 +20,6 @@ import org.apache.xmlgraphics.io.ResourceResolver;
 import org.apache.xmlgraphics.io.TempResourceResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.report.ReportDescriptor;
 import org.yes.cart.report.ReportDescriptorPDF;
@@ -29,8 +28,8 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.theme.ThemeService;
+import org.yes.cart.service.theme.templates.ThemeRepositoryService;
 
-import javax.servlet.ServletContext;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
@@ -42,24 +41,25 @@ import java.util.Map;
  * Date: 24/10/2015
  * Time: 12:27
  */
-public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopReportGenerator implements ServletContextAware {
+public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopReportGenerator {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractThemeAwareFopReportGenerator.class);
 
     private final ThemeService themeService;
+    private final ThemeRepositoryService themeRepositoryService;
     private final ShopService shopService;
     private final ContentService contentService;
     private final SystemService systemService;
     private final ImageService imageService;
 
-    private ServletContext servletContext;
-
     protected AbstractThemeAwareFopReportGenerator(final ThemeService themeService,
+                                                   final ThemeRepositoryService themeRepositoryService,
                                                    final ShopService shopService,
                                                    final ContentService contentService,
                                                    final SystemService systemService,
                                                    final ImageService imageService) {
         this.themeService = themeService;
+        this.themeRepositoryService = themeRepositoryService;
         this.shopService = shopService;
         this.contentService = contentService;
         this.systemService = systemService;
@@ -79,7 +79,7 @@ public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopRe
         try {
             return new FopThemeResourceResolver(
                     shop, lang, "fop-userconfig.xml", "fop-userconfig.xml",
-                    themeService, contentService, servletContext, systemService, imageService
+                    themeService, contentService, themeRepositoryService, systemService, imageService
             ).getResource((URI) null);
         } catch (Exception exp) {
             LOG.error("Unable to load report template URI fop-userconfig.xml", exp);
@@ -103,7 +103,7 @@ public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopRe
             final String langXslfo = ((ReportDescriptorPDF) descriptor).getLangXslfo(lang);
             return new StreamSource(new FopThemeResourceResolver(
                     shop, lang, descriptor.getReportId(), langXslfo,
-                    themeService, contentService, servletContext, systemService, imageService
+                    themeService, contentService, themeRepositoryService, systemService, imageService
             ).getResource((URI) null));
         } catch (Exception exp) {
             LOG.error("Unable to load report template URI " + descriptor.getReportId(), exp);
@@ -146,7 +146,7 @@ public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopRe
     @Override
     protected TempResourceResolver getTempResourceResolver(final ReportDescriptor descriptor, final Map<String, Object> parameters, final Object data, final String lang) {
         final Shop shop = resolveShop(descriptor, parameters, data, lang);
-        return new FopThemeResourceResolver(shop, lang, themeService, contentService, servletContext, systemService, imageService);
+        return new FopThemeResourceResolver(shop, lang, themeService, contentService, themeRepositoryService, systemService, imageService);
     }
 
     /**
@@ -155,14 +155,7 @@ public abstract class AbstractThemeAwareFopReportGenerator extends AbstractFopRe
     @Override
     protected ResourceResolver getResourceResolver(final ReportDescriptor descriptor, final Map<String, Object> parameters, final Object data, final String lang) {
         final Shop shop = resolveShop(descriptor, parameters, data, lang);
-        return new FopThemeResourceResolver(shop, lang, themeService, contentService, servletContext, systemService, imageService);
+        return new FopThemeResourceResolver(shop, lang, themeService, contentService, themeRepositoryService, systemService, imageService);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setServletContext(final ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
 }

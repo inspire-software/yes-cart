@@ -19,7 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.yes.cart.service.domain.HashHelper;
 
 import java.io.IOException;
@@ -33,7 +33,6 @@ import java.util.Properties;
  * Date: 09-May-2011
  * Time: 14:12:54
  *
- * TODO: change to password encoder
  */
 public class MD5HashHelperImpl implements HashHelper, PasswordEncoder {
 
@@ -94,9 +93,9 @@ public class MD5HashHelperImpl implements HashHelper, PasswordEncoder {
      * {@inheritDoc}
      */
     @Override
-    public String encodePassword(final String rawPass, final Object salt) {
+    public String encode(final CharSequence rawPass) {
         try {
-            return self().getHash(rawPass);
+            return self().getHash(rawPass.toString());
         } catch (Exception e) {
             throw new RuntimeException("Unable to hash password", e);
         }
@@ -106,8 +105,8 @@ public class MD5HashHelperImpl implements HashHelper, PasswordEncoder {
      * {@inheritDoc}
      */
     @Override
-    public boolean isPasswordValid(final String encPass, final String rawPass, final Object salt) {
-        return encodePassword(rawPass, salt).equals(encPass);
+    public boolean matches(final CharSequence rawPass, final String encPass) {
+        return encode(rawPass).equals(encPass);
     }
 
     private HashHelper self;

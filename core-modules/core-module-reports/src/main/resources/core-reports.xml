@@ -55,11 +55,12 @@
 
     <bean id="reportGeneratorPDF" class="org.yes.cart.report.impl.ReportGeneratorPDFImpl">
         <constructor-arg index="0" ref="themeService"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <constructor-arg index="2" ref="contentService"/>
-        <constructor-arg index="3" ref="systemService"/>
-        <constructor-arg index="4" ref="imageService"/>
-        <constructor-arg index="5" ref="reportObjectStreamFactory"/>
+        <constructor-arg index="1" ref="themeRepositoryService"/>
+        <constructor-arg index="2" ref="shopService"/>
+        <constructor-arg index="3" ref="contentService"/>
+        <constructor-arg index="4" ref="systemService"/>
+        <constructor-arg index="5" ref="imageService"/>
+        <constructor-arg index="6" ref="reportObjectStreamFactory"/>
     </bean>
 
     <bean id="reportGeneratorXLSX" class="org.yes.cart.report.impl.ReportGeneratorXSLXImpl"/>

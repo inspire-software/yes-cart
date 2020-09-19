@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.vo;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.yes.cart.domain.vo.VoDataDescriptor;
 import org.yes.cart.domain.vo.VoDataGroup;
 
@@ -49,7 +47,7 @@ public interface VoDataGroupService {
      *
      * @throws Exception errors
      */
-    VoDataGroup getDataGroupById(@PathVariable("id") long id) throws Exception;
+    VoDataGroup getDataGroupById(long id) throws Exception;
 
     /**
      * Create new vo
@@ -60,7 +58,7 @@ public interface VoDataGroupService {
      *
      * @throws Exception errors
      */
-    VoDataGroup createDataGroup(@RequestBody VoDataGroup vo)  throws Exception;
+    VoDataGroup createDataGroup(VoDataGroup vo)  throws Exception;
 
     /**
      * Update vo
@@ -71,7 +69,7 @@ public interface VoDataGroupService {
      *
      * @throws Exception errors
      */
-    VoDataGroup updateDataGroup(@RequestBody VoDataGroup vo)  throws Exception;
+    VoDataGroup updateDataGroup(VoDataGroup vo)  throws Exception;
 
     /**
      * Remove vo.
@@ -80,7 +78,7 @@ public interface VoDataGroupService {
      *
      * @throws Exception errors
      */
-    void removeDataGroup(@PathVariable("id") long id) throws Exception;
+    void removeDataGroup(long id) throws Exception;
 
 
 
@@ -102,7 +100,7 @@ public interface VoDataGroupService {
      *
      * @throws Exception errors
      */
-    VoDataDescriptor getDataDescriptorById(@PathVariable("id") long id) throws Exception;
+    VoDataDescriptor getDataDescriptorById(long id) throws Exception;
 
     /**
      * Create new vo
@@ -113,7 +111,7 @@ public interface VoDataGroupService {
      *
      * @throws Exception errors
      */
-    VoDataDescriptor createDataDescriptor(@RequestBody VoDataDescriptor vo)  throws Exception;
+    VoDataDescriptor createDataDescriptor(VoDataDescriptor vo)  throws Exception;
 
     /**
      * Update vo
@@ -124,7 +122,7 @@ public interface VoDataGroupService {
      *
      * @throws Exception errors
      */
-    VoDataDescriptor updateDataDescriptor(@RequestBody VoDataDescriptor vo)  throws Exception;
+    VoDataDescriptor updateDataDescriptor(VoDataDescriptor vo)  throws Exception;
 
     /**
      * Remove vo.
@@ -133,7 +131,7 @@ public interface VoDataGroupService {
      *
      * @throws Exception errors
      */
-    void removeDataDescriptor(@PathVariable("id") long id) throws Exception;
+    void removeDataDescriptor(long id) throws Exception;
 
 
 

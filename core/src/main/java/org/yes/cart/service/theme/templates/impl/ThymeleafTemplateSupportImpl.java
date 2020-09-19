@@ -23,7 +23,7 @@ import org.springframework.cache.CacheManager;
 import org.thymeleaf.cache.*;
 import org.thymeleaf.context.IContext;
 import org.thymeleaf.engine.TemplateModel;
-import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.yes.cart.service.theme.templates.TemplateSupport;
 
 import java.util.Collections;
@@ -38,7 +38,7 @@ import java.util.Set;
  */
 public class ThymeleafTemplateSupportImpl implements TemplateSupport {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GroovyGStringTemplateSupportImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ThymeleafTemplateSupportImpl.class);
 
     private final Cache TEMPLATE_CACHE;
     private final SpringTemplateEngine engine;

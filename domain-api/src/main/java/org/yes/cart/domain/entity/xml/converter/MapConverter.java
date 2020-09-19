@@ -19,14 +19,11 @@ package org.yes.cart.domain.entity.xml.converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.AbstractCollectionConverter;
-import com.thoughtworks.xstream.core.JVM;
 import com.thoughtworks.xstream.io.ExtendedHierarchicalStreamWriterHelper;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -49,9 +46,7 @@ public class MapConverter extends AbstractCollectionConverter {
 
     @Override
     public boolean canConvert(Class type) {
-        return type.equals(HashMap.class)
-                || type.equals(Hashtable.class)
-                || (JVM.is14() && type.getName().equals("java.util.LinkedHashMap"));
+        return type.isAssignableFrom(Map.class);
     }
 
     @Override
@@ -89,11 +84,11 @@ public class MapConverter extends AbstractCollectionConverter {
             reader.moveDown();
 
             reader.moveDown();
-            Object key = readItem(reader, context, map);
+            Object key = readBareItem(reader, context, map);
             reader.moveUp();
 
             reader.moveDown();
-            Object value = readItem(reader, context, map);
+            Object value = readBareItem(reader, context, map);
             reader.moveUp();
 
             map.put(key, value);

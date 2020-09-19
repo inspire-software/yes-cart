@@ -1324,7 +1324,9 @@
     </bean>
 
     <bean id="mailTemplateResourcesProviderTheme"
-          class="org.yes.cart.service.mail.impl.MailTemplateResourcesProviderThemeImpl"/>
+          class="org.yes.cart.service.mail.impl.MailTemplateResourcesProviderThemeImpl">
+        <constructor-arg index="0" ref="themeRepositoryService"/>
+    </bean>
 
     <bean id="mailTemplateResourcesProvider"
           class="org.yes.cart.service.mail.impl.MailTemplateResourcesProviderFactoryImpl">
@@ -1701,6 +1703,8 @@
     </bean>
 
     <!-- ############################################ misc ####################################### -->
+
+    <bean id="themeRepositoryService" class="org.yes.cart.service.theme.templates.impl.ThemeRepositoryServiceImpl"/>
 
     <bean id="themeService" class="org.yes.cart.service.theme.impl.ThemeServiceImpl">
         <constructor-arg index="0" ref="shopService"/>

@@ -36,7 +36,7 @@ import java.util.*;
  * Shopping cart is a high performance class since it represent current application state
  * with respect to the user.
  *
- * YC uses CartTuplizers that allow to Serialize it into byte stream and then package to
+ * Platform uses CartTuplizers that allow to Serialize it into byte stream and then package to
  * allow preserving state (e.g. in response cookies, headers or persistent storage).
  * In order to make this process maximum efficient we use Externalization for all object
  * hierarchy of shopping cart implementation.

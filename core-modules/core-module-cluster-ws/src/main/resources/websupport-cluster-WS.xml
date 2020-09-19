@@ -56,7 +56,9 @@
     <bean id="serviceConnectorAuthenticationManager" class="org.springframework.security.authentication.ProviderManager">
         <constructor-arg index="0">
             <bean class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-                <!--<property name="passwordEncoder" ref="passwordHashHelper"/> Encoding is done on the client end to prevent plain text passwords -->
+                <property name="passwordEncoder">
+                    <bean class="org.yes.cart.service.domain.impl.NoopPasswordEncoderImpl"/>
+                </property>
                 <property name="userDetailsService" ref="managerUserDetailsService"/>
             </bean>
         </constructor-arg>

@@ -23,18 +23,10 @@
     <import resource="classpath:dao-persistence-resources.xml"/>
 
     <!-- HSQLDB Data Source -->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+    <bean id="dataSource" class="org.hsqldb.jdbc.JDBCDataSource">
         <property name="url" value="jdbc:hsqldb:mem:testyesdb"/>
-        <property name="username" value="sa"/>
+        <property name="user" value="sa"/>
         <property name="password" value=""/>
-        <property name="initialSize" value="50"/>
-        <property name="maxActive" value="1000"/>
-        <property name="poolPreparedStatements" value="true"/>
-        <property name="maxOpenPreparedStatements" value="1000"/>
-        <property name="defaultAutoCommit" value="true"/>
-        <property name="maxIdle" value="100"/>
-        <property name="maxWait" value="500"/>
     </bean>
 
     <!-- Hibernate Session Factory  -->

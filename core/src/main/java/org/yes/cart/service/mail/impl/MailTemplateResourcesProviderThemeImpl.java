@@ -17,10 +17,9 @@
 package org.yes.cart.service.mail.impl;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
+import org.yes.cart.service.theme.templates.ThemeRepositoryService;
 
-import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -37,10 +36,13 @@ import java.util.List;
  * Date: 03/09/2014
  * Time: 15:00
  */
-public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResourcesProvider, ServletContextAware {
+public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResourcesProvider {
 
-    private ServletContext servletContext;
+    private final ThemeRepositoryService themeRepositoryService;
 
+    public MailTemplateResourcesProviderThemeImpl(final ThemeRepositoryService themeRepositoryService) {
+        this.themeRepositoryService = themeRepositoryService;
+    }
 
     /**
      * {@inheritDoc}
@@ -54,12 +56,12 @@ public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResou
 
         for (final String mailTemplate : mailTemplateChain) {
             final String fullFileNameLocale = mailTemplate + templateName + "/" + templateName + "_" + locale + ext;
-            final InputStream streamLocale = servletContext.getResourceAsStream(fullFileNameLocale);
+            final InputStream streamLocale = themeRepositoryService.getSource(fullFileNameLocale);
             if (streamLocale != null) {
                 return IOUtils.toString(streamLocale, "UTF-8");
             }
             final String fullFileName = mailTemplate + templateName + "/" + templateName + ext;
-            final InputStream stream = servletContext.getResourceAsStream(fullFileName);
+            final InputStream stream = themeRepositoryService.getSource(fullFileName);
             if (stream != null) {
                 return IOUtils.toString(stream, "UTF-8");
             }
@@ -80,11 +82,11 @@ public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResou
                               final String resourceFilename) throws IOException {
 
         for (final String mailTheme : mailTemplateChain) {
-            final InputStream streamLocale = servletContext.getResourceAsStream(mailTheme + templateName + "/resources_" + locale + "/" + resourceFilename);
+            final InputStream streamLocale = themeRepositoryService.getSource(mailTheme + templateName + "/resources_" + locale + "/" + resourceFilename);
             if (streamLocale != null) {
                 return IOUtils.toByteArray(streamLocale);
             }
-            final InputStream stream = servletContext.getResourceAsStream(mailTheme + templateName + "/resources/" + resourceFilename);
+            final InputStream stream = themeRepositoryService.getSource(mailTheme + templateName + "/resources/" + resourceFilename);
             if (stream != null) {
                 return IOUtils.toByteArray(stream);
             }
@@ -94,11 +96,4 @@ public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResou
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setServletContext(final ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
 }

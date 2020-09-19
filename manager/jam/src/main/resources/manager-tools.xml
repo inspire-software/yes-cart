@@ -24,10 +24,10 @@
 
     <!-- ################################ JMX support  begin ###################################### -->
 
-    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
-        <property name="locateExistingServerIfPossible" value="true"/>
-        <property name="defaultDomain" value="YesManager"/>
-    </bean>
+    <!--<bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">-->
+        <!--<property name="locateExistingServerIfPossible" value="true"/>-->
+        <!--<property name="defaultDomain" value="YesManager"/>-->
+    <!--</bean>-->
 
     <!--<bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
         <property name="server" ref="mbeanServer"/>

@@ -117,6 +117,30 @@ public abstract class AbstractConfigurationImpl
         return null;
     }
 
+    /**
+     * Lookup configuration bean.
+     *
+     * @param cfg        bean key to use
+     * @param clazz      expected configuration
+     * @param <T>        type
+     *
+     * @return config or null
+     */
+    protected <T> T defaultConfiguration(final String cfg, final Class<T> clazz) {
+        if (StringUtils.isNotBlank(cfg)) {
+            try {
+                if (this.applicationContext.containsBean(cfg.trim())) {
+                    return this.applicationContext.getBean(cfg.trim(), clazz);
+                } else {
+                    LOG.warn("Loading default configurations ... error retrieving bean " + cfg);
+                }
+            } catch (Exception exp) {
+                LOG.error("Loading default configurations ... error retrieving bean " + cfg, exp);
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Call to register of the configuration.
@@ -140,7 +164,7 @@ public abstract class AbstractConfigurationImpl
                 if (configuration instanceof RegistrationAware) {
                     ((RegistrationAware) configuration).onRegisterEvent();
                 }
-                LOG.debug("Custom configurations for {}/{}/{} ... registering {}", ref, key, configurationType, configuration);
+                LOG.info("Custom configurations for {}/{}/{} ... registering {}", ref, key, configurationType, configuration);
             }
         }
 

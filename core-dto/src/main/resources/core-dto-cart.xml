@@ -74,25 +74,13 @@
     </bean>
 
 
-    <bean id="persistenceTuplizer" class="org.yes.cart.shoppingcart.support.tokendriven.impl.PersistenceTokenTuplizerImpl"
-          scope="prototype">
-        <constructor-arg index="0" value="cartRepository"/>
+    <bean id="cartTuplizer" class="org.yes.cart.shoppingcart.support.tokendriven.impl.PersistenceTokenTuplizerImpl">
+        <constructor-arg index="0" ref="cartRepository"/>
         <constructor-arg index="1" value="864000"/>
     </bean>
 
-    <bean id="persistenceTuplizerPool" class="org.springframework.aop.target.CommonsPoolTargetSource">
-        <property name="targetBeanName" value="persistenceTuplizer"/>
-        <property name="maxIdle" value="10"/>
-        <property name="minIdle" value="5"/>
-    </bean>
-
     <bean id="persistenceShoppingCartPersister" class="org.yes.cart.shoppingcart.support.impl.BasicShoppingCartPersisterImpl">
-        <constructor-arg index="0" ref="persistenceTuplizerPool"/>
-    </bean>
-
-    <!-- Decorators for default tuplizers and persisters -->
-    <bean id="tuplizerPool" class="org.yes.cart.shoppingcart.support.impl.TuplizerPoolDecoratorImpl">
-        <constructor-arg index="0" ref="persistenceTuplizerPool"/>
+        <constructor-arg index="0" ref="cartTuplizer"/>
     </bean>
 
     <bean id="shoppingCartPersister" class="org.yes.cart.shoppingcart.support.impl.ShoppingCartPersisterDecoratorImpl">

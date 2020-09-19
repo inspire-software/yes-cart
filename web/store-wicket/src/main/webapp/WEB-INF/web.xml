@@ -63,10 +63,6 @@
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
-    <listener>
-        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
-    </listener>
-
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
         <filter-class>

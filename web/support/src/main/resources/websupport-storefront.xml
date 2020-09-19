@@ -45,7 +45,7 @@
 
     <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
         <constructor-arg index="0" ref="shopService"/>
-        <constructor-arg index="1" ref="tuplizerPool"/>
+        <constructor-arg index="1" ref="cartTuplizer"/>
         <constructor-arg index="2" ref="amountCalculationStrategy"/>
         <constructor-arg index="3" ref="shoppingCartCommandFactory"/>
     </bean>
@@ -111,27 +111,15 @@
         -->
     </bean>
 
-    <bean id="tokenTuplizer" class="org.yes.cart.shoppingcart.support.tokendriven.impl.WebTokenTuplizerImpl"
-          scope="prototype">
+    <bean id="cartTuplizer" class="org.yes.cart.shoppingcart.support.tokendriven.impl.WebTokenTuplizerImpl">
         <constructor-arg index="0" ref="cartRepository"/>
         <constructor-arg index="1" value="X-CW-TOKEN"/>
         <constructor-arg index="2" value="864000"/>
         <constructor-arg index="3" value="/"/>
     </bean>
 
-    <bean id="tokenTuplizerPool" class="org.springframework.aop.target.CommonsPoolTargetSource">
-        <property name="targetBeanName" value="tokenTuplizer"/>
-        <property name="maxIdle" value="10"/>
-        <property name="minIdle" value="5"/>
-    </bean>
-
     <bean id="tokenShoppingCartPersister" class="org.yes.cart.shoppingcart.support.impl.WebShoppingCartPersisterImpl">
-        <constructor-arg index="0" ref="tokenTuplizerPool"/>
-    </bean>
-
-    <!-- Decorators for default tuplizers and persisters -->
-    <bean id="tuplizerPool" class="org.yes.cart.shoppingcart.support.impl.TuplizerPoolDecoratorImpl">
-        <constructor-arg index="0" ref="tokenTuplizerPool"/>
+        <constructor-arg index="0" ref="cartTuplizer"/>
     </bean>
 
     <bean id="shoppingCartPersister" class="org.yes.cart.shoppingcart.support.impl.ShoppingCartPersisterDecoratorImpl">

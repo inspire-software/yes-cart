@@ -22,24 +22,24 @@
 
     <!-- ################################ JMX support  begin ###################################### -->
 
-    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
-        <property name="locateExistingServerIfPossible" value="true"/>
-        <property name="defaultDomain" value="SFx"/>
-    </bean>
+    <!--<bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">-->
+        <!--<property name="locateExistingServerIfPossible" value="true"/>-->
+        <!--<property name="defaultDomain" value="SFx"/>-->
+    <!--</bean>-->
 
-    <bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
-        <property name="server" ref="mbeanServer"/>
-        <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING"/>
-        <property name="beans">
-            <map>
-                <entry key="bean:name=SFx-ImageFilter" value-ref="imageFilter"/>
-                <entry key="bean:name=SFx-FileFilter" value-ref="fileFilter"/>
-                <entry key="bean:name=SFx-ShopResolverFilter" value-ref="shopResolverFilter"/>
-                <entry key="bean:name=SFx-ShoppingCartFilter" value-ref="shoppingCartFilter"/>
-                <entry key="bean:name=SFx-ImageService" value-ref="imageService"/>
-            </map>
-        </property>
-    </bean>
+    <!--<bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">-->
+        <!--<property name="server" ref="mbeanServer"/>-->
+        <!--<property name="registrationPolicy" value="REPLACE_EXISTING"/>-->
+        <!--<property name="beans">-->
+            <!--<map>-->
+                <!--<entry key="bean:name=SFx-ImageFilter" value-ref="imageFilter"/>-->
+                <!--<entry key="bean:name=SFx-FileFilter" value-ref="fileFilter"/>-->
+                <!--<entry key="bean:name=SFx-ShopResolverFilter" value-ref="shopResolverFilter"/>-->
+                <!--<entry key="bean:name=SFx-ShoppingCartFilter" value-ref="shoppingCartFilter"/>-->
+                <!--<entry key="bean:name=SFx-ImageService" value-ref="imageService"/>-->
+            <!--</map>-->
+        <!--</property>-->
+    <!--</bean>-->
 
     <!-- ################################ JMX support  end ###################################### -->
 

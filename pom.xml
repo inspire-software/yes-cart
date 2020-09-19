@@ -73,8 +73,8 @@
         <hibernate.core.version>5.4.21.Final</hibernate.core.version>
         <lucene.version>8.6.2</lucene.version>
         <cxf.version>3.4.0</cxf.version>
-        <spring-security.version>4.2.13.RELEASE</spring-security.version>
-        <spring.version>4.3.23.RELEASE</spring.version>
+        <spring-security.version>5.4.0</spring-security.version>
+        <spring.version>5.2.9.RELEASE</spring.version>
         <jjwt.version>0.9.0</jjwt.version>
         <ehcache-core.version>2.10.6</ehcache-core.version>
         <jackson.version>2.11.0</jackson.version>
@@ -106,7 +106,6 @@
         <commons-logging.version>1.2</commons-logging.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-lang3.version>3.6</commons-lang3.version>
-        <commons-dbcp.version>1.4</commons-dbcp.version>
 
         <!-- Crypto -->
         <bcprov-jdk15on.version>1.59</bcprov-jdk15on.version>
@@ -115,30 +114,25 @@
         <javax.servlet.version>3.0.1</javax.servlet.version>
 
         <!-- Groovy support -->
-        <groovy-all.version>2.4.15</groovy-all.version>
+        <groovy-all.version>2.4.20</groovy-all.version>
 
         <!-- Thymeleaf -->
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
 
         <!-- FOP (PDF) -->
-        <apache-fop.version>2.3</apache-fop.version>
+        <apache-fop.version>2.5</apache-fop.version>
 
         <!-- POI (XLS) -->
-        <apache-poi.version>4.1.0</apache-poi.version>
+        <apache-poi.version>4.1.2</apache-poi.version>
 
         <!-- Storefront global versions -->
         <wicket.version>8.9.0</wicket.version>
-        <jetty.version>6.1.4</jetty.version>
 
         <!-- Storefront API global versions -->
-        <spring-ws.version>2.4.5.RELEASE</spring-ws.version>
+        <spring-ws.version>3.0.10.RELEASE</spring-ws.version>
 
         <!-- HTTP client + components -->
         <org.apache.httpcomponents.version>4.3.3</org.apache.httpcomponents.version>
-        <!--<commons-httpclient.version>3.1</commons-httpclient.version>-->
-
-        <!-- Admin global versions -->
-        <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
 
         <!-- Logging -->
         <slf4j.version>1.7.26</slf4j.version>
@@ -169,6 +163,11 @@
     </scm>
     <repositories>
 
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
         <repository>
             <id>maven-central</id>
             <url>https://repo1.maven.org/maven2</url>
@@ -201,6 +200,10 @@
         </repository>
     </repositories>
     <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </pluginRepository>
         <pluginRepository>
             <id>maven-central</id>
             <url>https://repo1.maven.org/maven2</url>
@@ -330,12 +333,6 @@
         <!-- Commons -->
 
         <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>${commons-dbcp.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>${commons-lang.version}</version>
@@ -430,7 +427,7 @@
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>1.4.11.1</version>
+            <version>1.4.13</version>
             <exclusions>
                 <exclusion>
                     <groupId>xpp3</groupId>
@@ -1292,7 +1289,10 @@
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-beans</artifactId>
                     </exclusion>
-
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-web</artifactId>
+                    </exclusion>
                 </exclusions>
 
             </dependency>

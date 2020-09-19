@@ -25,6 +25,7 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.theme.ThemeService;
+import org.yes.cart.service.theme.templates.ThemeRepositoryService;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -46,12 +47,13 @@ public class ReportGeneratorPDFImpl extends AbstractThemeAwareFopReportGenerator
     private final ReportObjectStreamFactory reportObjectStreamFactory;
 
     public ReportGeneratorPDFImpl(final ThemeService themeService,
+                                  final ThemeRepositoryService themeRepositoryService,
                                   final ShopService shopService,
                                   final ContentService contentService,
                                   final SystemService systemService,
                                   final ImageService imageService,
                                   final ReportObjectStreamFactory reportObjectStreamFactory) {
-        super(themeService, shopService, contentService, systemService, imageService);
+        super(themeService, themeRepositoryService, shopService, contentService, systemService, imageService);
         this.reportObjectStreamFactory = reportObjectStreamFactory;
     }
 

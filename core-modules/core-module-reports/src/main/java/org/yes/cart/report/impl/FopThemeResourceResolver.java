@@ -30,8 +30,8 @@ import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.theme.ThemeService;
+import org.yes.cart.service.theme.templates.ThemeRepositoryService;
 
-import javax.servlet.ServletContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +53,7 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
     private final String language;
     private final ThemeService themeService;
     private final ContentService contentService;
-    private final ServletContext servletContext;
+    private final ThemeRepositoryService themeRepositoryService;
     private final SystemService systemService;
     private final ImageService imageService;
 
@@ -64,10 +64,10 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
                                     final String language,
                                     final ThemeService themeService,
                                     final ContentService contentService,
-                                    final ServletContext servletContext,
+                                    final ThemeRepositoryService themeRepositoryService,
                                     final SystemService systemService,
                                     final ImageService imageService) {
-        this(shop, language, null, null, themeService, contentService, servletContext, systemService, imageService);
+        this(shop, language, null, null, themeService, contentService, themeRepositoryService, systemService, imageService);
     }
 
     public FopThemeResourceResolver(final Shop shop,
@@ -76,7 +76,7 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
                                     final String fileSuffix,
                                     final ThemeService themeService,
                                     final ContentService contentService,
-                                    final ServletContext servletContext,
+                                    final ThemeRepositoryService themeRepositoryService,
                                     final SystemService systemService,
                                     final ImageService imageService) {
         this.shop = shop;
@@ -85,7 +85,7 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
         this.fileSuffix = fileSuffix;
         this.themeService = themeService;
         this.contentService = contentService;
-        this.servletContext = servletContext;
+        this.themeRepositoryService = themeRepositoryService;
         this.systemService = systemService;
         this.imageService = imageService;
     }
@@ -129,7 +129,7 @@ public class FopThemeResourceResolver implements TempResourceResolver, ResourceR
         for (final String path : chain) {
             final String configFile = path + (fileSuffix != null ? fileSuffix : uri.toString());
             try {
-                final InputStream stream = servletContext.getResourceAsStream(configFile);
+                final InputStream stream = themeRepositoryService.getSource(configFile);
                 if (stream != null) {
                     LOG.debug("Using theme specific report template file {}", configFile);
                     return new Resource(stream);
