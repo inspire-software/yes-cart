@@ -114,7 +114,7 @@
         <javax.servlet.version>3.0.1</javax.servlet.version>
 
         <!-- Groovy support -->
-        <groovy-all.version>2.4.20</groovy-all.version>
+        <groovy.version>3.0.5</groovy.version>
 
         <!-- Thymeleaf -->
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>

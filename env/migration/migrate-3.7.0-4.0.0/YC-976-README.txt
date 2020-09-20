@@ -49,3 +49,5 @@ Notes to describe upgrade release 4.0.0
    - FOP upgraded from 2.3 to 2.5
    - POI upgraded from 4.1.0 to 4.1.2
    - Groovy upgraded from 2.4.15 to 2.4.20
+
+6. Groovy upgraded from 2.4.20 to 3.0.5
