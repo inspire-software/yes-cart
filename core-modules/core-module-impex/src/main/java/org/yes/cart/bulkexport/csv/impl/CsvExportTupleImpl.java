@@ -71,7 +71,10 @@ public class CsvExportTupleImpl implements CsvExportTuple {
         final String property = column.getName();
         Object rawValue = null;
         try {
-            rawValue = PropertyUtils.getNestedProperty(getData(), property);
+            final Object data = getData();
+            if (data != null) {
+                rawValue = PropertyUtils.getNestedProperty(data, property);
+            }
         } catch (NestedNullException nne) {
             // do not report, it is just null
         } catch (Exception exp) {

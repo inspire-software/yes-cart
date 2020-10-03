@@ -38,7 +38,7 @@ public abstract class AbstractByParameterByColumnNameStrategy<ED extends ImpExDe
     private Map<String, LookUpQueryParameterStrategyValueProvider> providers = Collections.emptyMap();
     private LookUpQueryParameterStrategyValueProvider defaultProvider;
 
-    private static final Pattern MATCH_COLUMNS_IN_SQL_TEMPLATE = Pattern.compile("(([']{0,1})(\\{[a-zA-Z\\d]*\\})([']{0,1}))");
+    private static final Pattern MATCH_COLUMNS_IN_SQL_TEMPLATE = Pattern.compile("(([']{0,1})(\\{[a-zA-Z\\d\\.]*\\})([']{0,1}))");
 
     protected final void replaceColumnNamesInTemplate(final String queryTemplate,
                                                       final StringBuilder query,

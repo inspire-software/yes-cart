@@ -49,6 +49,8 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
 
     private String selectCmd;
 
+    private CsvExportDescriptor parentDescriptor;
+
     private boolean initialised = false;
 
     /**
@@ -197,12 +199,40 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
 
         for (CsvExportColumn exportColumn : columns) {
             exportColumn.setParentDescriptor(this);
+            if (exportColumn.getDescriptor() != null) {
+                exportColumn.getDescriptor().setParentDescriptor(this);
+            }
             final List<CsvExportColumn> byType = columnsByType.computeIfAbsent(exportColumn.getFieldType(), k -> new ArrayList<>());
             byType.add(exportColumn);
             if (exportColumn.getName() != null && exportColumn.getName().length() > 0) {
                 columnByName.put(exportColumn.getName(), exportColumn);
             }
         }
+        if (this.parentDescriptor != null) {
+            for (CsvExportColumn parentColumn : this.parentDescriptor.getColumns()) {
+                final List<CsvExportColumn> byType = columnsByType.computeIfAbsent(parentColumn.getFieldType(), k -> new ArrayList<>());
+                byType.add(parentColumn);
+                if (parentColumn.getName() != null && parentColumn.getName().length() > 0) {
+                    columnByName.put("parent." + parentColumn.getName(), parentColumn);
+                }
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CsvExportDescriptor getParentDescriptor() {
+        return parentDescriptor;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setParentDescriptor(final CsvExportDescriptor parentDescriptor) {
+        this.parentDescriptor = parentDescriptor;
     }
 
     /**

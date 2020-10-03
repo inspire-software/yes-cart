@@ -78,6 +78,7 @@ public class AbstractByParameterByColumnNameStrategyTest {
         final Identifiable master = mockery.mock(Identifiable.class, "master");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
+        final CsvImportColumn nameColumn = mockery.mock(CsvImportColumn.class, "nameColumn");
         final CsvImportTuple tuple = mockery.mock(CsvImportTuple.class, "tuple");
         final CsvValueAdapter adapter = mockery.mock(CsvValueAdapter.class, "adapter");
 
@@ -86,18 +87,21 @@ public class AbstractByParameterByColumnNameStrategyTest {
             oneOf(master).getId(); will(returnValue(10L));
             oneOf(descriptor).getColumn("code"); will(returnValue(codeColumn));
             oneOf(tuple).getColumnValue(codeColumn, adapter); will(returnValue("A'''BC"));
+            oneOf(descriptor).getColumn("parent.name"); will(returnValue(nameColumn));
+            oneOf(tuple).getColumnValue(nameColumn, adapter); will(returnValue("P001"));
         }});
 
         final StringBuilder query = new StringBuilder();
         final List params = new ArrayList();
         strategy.replaceColumnNamesInTemplate(
-                "select * from Entity e where e.parentId = {masterObjectId} and e.code = '{code}' ",
+                "select * from Entity e where e.parentId = {masterObjectId} and e.code = '{code}' and e.name = {parent.name} ",
                 query, params, descriptor, master, tuple, adapter);
 
-        assertEquals(query.toString(), "select * from Entity e where e.parentId = ?1 and e.code = ?2 ");
-        assertEquals(params.size(), 2);
+        assertEquals(query.toString(), "select * from Entity e where e.parentId = ?1 and e.code = ?2 and e.name = ?3 ");
+        assertEquals(params.size(), 3);
         assertEquals(params.get(0), Long.valueOf(10L));
         assertEquals(params.get(1), "A'''BC"); // escaped value
+        assertEquals(params.get(2), "P001");
 
         mockery.assertIsSatisfied();
     }

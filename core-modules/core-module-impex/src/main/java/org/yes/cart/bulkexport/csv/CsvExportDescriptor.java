@@ -62,4 +62,18 @@ public interface CsvExportDescriptor extends
     @Override
     CsvExportFile getExportFileDescriptor();
 
+    /**
+     * Parent descriptor
+     *
+     * @return {@link CsvExportDescriptor}
+     */
+    CsvExportDescriptor getParentDescriptor();
+
+    /**
+     * Set parent descriptor.
+     *
+     * @param parentDescriptor parent
+     */
+    void setParentDescriptor(final CsvExportDescriptor parentDescriptor);
+
 }
