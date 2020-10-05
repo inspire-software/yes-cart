@@ -254,7 +254,7 @@
         </profile>
 
         <profile>
-            <id>orconnJGIPv6</id>
+            <id>connJGIPv6</id>
             <dependencies>
                 <dependency>
                     <groupId>org.yes</groupId>

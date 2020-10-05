@@ -812,7 +812,7 @@
 == YC build config error ==============================================================================================
 | env.cluster is missing!                                                                                             |
 | If you are running custom build using profiles make sure you selected all necessary profiles for cluster connector. |
-| Possible values: connWS, connREST, connJGIPv4 orconnJGIPv6                                                                         |
+| Possible values: connWS, connREST, connJGIPv4 connJGIPv6                                                                         |
 =======================================================================================================================
                                     </message>
                                 </requireProperty>
