@@ -262,29 +262,31 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
         if (!addressFormParamKeys.isEmpty()) {
 
-            final String addressType = Address.ADDR_TYPE_SHIPPING;
+            for (final String addressType : Arrays.asList(Address.ADDR_TYPE_SHIPPING, Address.ADDR_TYPE_BILLING)) {
 
-            // create address instance
-            final Address regAddress = customerService.getGenericDao().getEntityFactory().getByIface(Address.class);
-            regAddress.setCustomer(customer);
-            regAddress.setAddressType(addressType);
-            regAddress.setDefaultAddress(true);
-            customer.getAddress().add(regAddress);
+                // create address instance
+                final Address regAddress = customerService.getGenericDao().getEntityFactory().getByIface(Address.class);
+                regAddress.setCustomer(customer);
+                regAddress.setAddressType(addressType);
+                regAddress.setDefaultAddress(true);
+                customer.getAddress().add(regAddress);
 
-            final Map<String, Object> attrData = new HashMap<>(registrationData);
-            for (final String key : attrData.keySet()) {
-                if (addressFormParamKeys.containsKey(key)) {
-                    final String prop = addressFormParamKeys.get(key);
-                    final Object val = attrData.get(key);
-                    try {
-                        PropertyUtils.setProperty(regAddress, prop, val);
-                    } catch (Exception e) {
-                        LOG.error("Unable to set address property {}, val {}", prop, val);
+                final Map<String, Object> attrData = new HashMap<>(registrationData);
+                for (final String key : attrData.keySet()) {
+                    if (addressFormParamKeys.containsKey(key)) {
+                        final String prop = addressFormParamKeys.get(key);
+                        final Object val = attrData.get(key);
+                        try {
+                            PropertyUtils.setProperty(regAddress, prop, val);
+                        } catch (Exception e) {
+                            LOG.error("Unable to set address property {}, val {}", prop, val);
+                        }
                     }
                 }
+
             }
 
-        }
+    }
 
     }
 
@@ -452,7 +454,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
         return customerCustomisationSupport.getSupportedCustomerTypes(shop);
 
-    }
+        }
 
     /** {@inheritDoc} */
     @Override
