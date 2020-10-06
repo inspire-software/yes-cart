@@ -74,6 +74,9 @@
                 <entry key="DATE">
                     <bean class="org.yes.cart.bulkexport.csv.impl.CsvDateValueAdapterImpl"/>
                 </entry>
+                <entry key="DATETIME">
+                    <bean class="org.yes.cart.bulkexport.csv.impl.CsvDateValueAdapterImpl"/>
+                </entry>
                 <entry key="AVC">
                     <bean class="org.yes.cart.bulkexport.csv.impl.CsvAttributeValueByCodeValueAdapterImpl"/>
                 </entry>

@@ -95,7 +95,14 @@
     <bean id="importCsvImportValueAdapterMap" class="org.yes.cart.utils.spring.LinkedHashMapBean">
         <constructor-arg>
             <map key-type="java.lang.String"
-                 value-type="org.yes.cart.bulkcommon.csv.CsvValueAdapter"/>
+                 value-type="org.yes.cart.bulkcommon.csv.CsvValueAdapter">
+                <entry key="DATE">
+                    <bean class="org.yes.cart.bulkimport.csv.impl.CsvDateValueAdapterImpl"/>
+                </entry>
+                <entry key="DATETIME">
+                    <bean class="org.yes.cart.bulkimport.csv.impl.CsvDateValueAdapterImpl"/>
+                </entry>
+            </map>
         </constructor-arg>
     </bean>
 
