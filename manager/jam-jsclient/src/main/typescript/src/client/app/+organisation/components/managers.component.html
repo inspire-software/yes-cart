@@ -19,7 +19,7 @@
         <td title="{{ 'CUSTOMER_FIRSTNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.firstName}}&nbsp;</a></td>
         <td title="{{ 'CUSTOMER_LASTNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.lastName}}&nbsp;</a></td>
         <td title="{{ 'CUSTOMER_FULLCOMPANY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.companyName1}} {{row.companyName2}} {{row.companyDepartment}}&nbsp;</a></td>
-        <td title="{{ 'MANAGER_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
+        <td title="{{ 'MANAGER_ENABLED' | translate }}" class="text-center"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
       </tr>
       </tbody>
     </table>

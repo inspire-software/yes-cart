@@ -32,7 +32,7 @@
 <ul class="nav nav-second-level item-list">
 
   <li *ngFor="let file of filteredFiles">
-    <a (click)="onSelectClick(file)" class="{{ (selectedFile != null && file != null && selectedFile.first == file.first) ? 'bg-info js-click' : 'js-click' }}">{{file.second}}</a>
+    <a (click)="onSelectClick(file)" class="{{ (selectedFile != null && file != null && selectedFile.first == file.first) ? 'bg-info js-click' : 'js-click' }}" [innerHTML]="file.second"></a>
   </li>
 
 </ul>

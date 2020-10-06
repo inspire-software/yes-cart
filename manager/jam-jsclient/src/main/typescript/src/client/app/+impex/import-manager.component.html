@@ -39,10 +39,10 @@
             <div  class="panel-body">
               <div class="form-group">
                 <label>&nbsp;</label>
-                <input class="form-control" name="fileName" type="text" [ngModel]="tab.file.second" [disabled]="true">
+                <span class="form-control" [innerHTML]="tab.file.second" disabled="true"></span>
               </div>
               <div class="form-group">
-                <input class="form-control" name="token" type="text" [ngModel]="tab.status.token" [disabled]="true">
+                <span class="form-control" [innerHTML]="tab.status.token" disabled="true"></span>
               </div>
             </div>
           </div>

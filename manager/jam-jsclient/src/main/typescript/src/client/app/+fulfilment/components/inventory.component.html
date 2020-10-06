@@ -6,6 +6,7 @@
       <tr>
         <th><a class="js-click" (click)="onSortClick('skuCode')">{{ 'CODE' | translate }} <span [hidden]="sortColumn != 'skuCode'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th>{{ 'NAME' | translate }}</th>
+        <th>{{ 'PRODUCT_TAG' | translate }}</th>
         <th><a class="js-click" (click)="onSortClick('quantity')">{{ 'INVENTORY_STOCK' | translate }} <span [hidden]="sortColumn != 'quantity'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th><a class="js-click" (click)="onSortClick('reserved')">{{ 'INVENTORY_RESERVED' | translate }} <span [hidden]="sortColumn != 'reserved'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
         <th><a class="js-click" (click)="onSortClick('availability')">{{ 'PRODUCT_AVAILABILITY' | translate }} <span [hidden]="sortColumn != 'availability'">{{ sortDesc ? '&uarr;' : '&darr;' }}</span></a></th>
@@ -19,13 +20,14 @@
       <tr *ngFor="let row of filteredInventory; let i = index" class="{{row == selectedInventory ? 'active' : ''}}">
         <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuCode}}</a></td>
         <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuName}}</a>&nbsp;</td>
+        <td title="{{ 'PRODUCT_TAG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}}</a>&nbsp;</td>
         <td title="{{ 'INVENTORY_STOCK' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.quantity | ycquantity}}</a>&nbsp;</td>
         <td title="{{ 'INVENTORY_RESERVED' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.reserved | ycquantity}}</a>&nbsp;</td>
         <td title="{{ 'PRODUCT_AVAILABILITY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ 'PRODUCT_AVAILABILITY_' + row.availability | translate }}</a></td>
         <td title="{{ 'PRODUCT_RELEASE' | translate }}" class="{{ isReleasedNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.releaseDate | ycdatetime }}</a>&nbsp;</td>
         <td title="{{ 'PRODUCT_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
         <td title="{{ 'PRODUCT_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
-        <td title="{{ 'PRODUCT_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{!row.disabled && isAvailableFromNow(row) && isAvailableToNow(row) ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
+        <td title="{{ 'PRODUCT_ENABLED' | translate }}" class="text-center"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{!row.disabled && isAvailableFromNow(row) && isAvailableToNow(row) ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
       </tr>
       </tbody>
     </table>

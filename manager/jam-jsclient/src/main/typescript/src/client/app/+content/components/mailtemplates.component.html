@@ -3,10 +3,10 @@
     <thead class="cf">
     <tr>
       <th>{{ 'SHOP_EMAIL_TEMPLATES' | translate }}</th>
-      <th>{{ 'SHOP_EMAIL_TEMPLATES_ENABLED' | translate }}</th>
       <th>{{ 'SHOP_EMAIL_TEMPLATES_CMS' | translate }}</th>
       <th>{{ 'SHOP_EMAIL_TEMPLATES_FROM' | translate }}</th>
       <th>{{ 'SHOP_EMAIL_TEMPLATES_TO' | translate }}</th>
+      <th>{{ 'SHOP_EMAIL_TEMPLATES_ENABLED' | translate }}</th>
     </tr>
     </thead>
     <tbody>
@@ -24,7 +24,6 @@
           </ng-template>
           <span class="label label-info" [hidden]="!emailTemplate.unavailable">SaaS</span>
         </td>
-        <td title="{{ 'SHOP_EMAIL_TEMPLATES_ENABLED' | translate }}"><i class="fa {{ emailTemplate.disabled ? 'fa-remove text-danger' : 'fa-check text-success' }}"></i></td>
         <td title="{{ 'SHOP_EMAIL_TEMPLATES_CMS' | translate }}">
           <ng-template [ngIf]="!emailTemplate.image">
             <a class="js-click" (click)="onClickCms(emailTemplate, emailTemplate.cmsNameHTML)"><span class="label {{ emailTemplate.cmsHTML ? 'label-info' : 'label-default' }}">HTML</span></a> &nbsp;
@@ -39,6 +38,7 @@
         </td>
         <td title="{{ 'SHOP_EMAIL_TEMPLATES_FROM' | translate }}">{{ emailTemplate.from }}<i class="fa fa-remove text-danger" [hidden]="emailTemplate.part || emailTemplate.image || emailTemplate.from != null"></i>&nbsp;</td>
         <td title="{{ 'SHOP_EMAIL_TEMPLATES_TO' | translate }}">{{ emailTemplate.to != '-' ? emailTemplate.to : ' ' }}<i class="fa fa-remove text-danger" [hidden]="emailTemplate.part || emailTemplate.image || emailTemplate.to != null"></i>&nbsp;</td>
+        <td title="{{ 'SHOP_EMAIL_TEMPLATES_ENABLED' | translate }}" class="text-center"><i class="fa {{ emailTemplate.disabled ? 'fa-remove text-danger' : 'fa-check-circle-o text-success' }}"></i></td>
       </ng-template>
     </tr>
     </tbody>

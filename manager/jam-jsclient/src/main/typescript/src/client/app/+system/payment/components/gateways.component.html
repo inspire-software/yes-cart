@@ -16,7 +16,7 @@
           <td title="{{ 'AV_RANK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.rank}}</a></td>
           <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.label}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'PG_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.active ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
+          <td title="{{ 'PG_ENABLED' | translate }}" class="text-center"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.active ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
         </ng-template>
       </tr>
       </tbody>

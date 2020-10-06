@@ -21,7 +21,7 @@
         <td title="{{ 'CATEGORY_NAV' | translate }}"><a class="js-click" (click)="onSelectRow(row)"> <span [innerHTML]="getNavFlags(row)"></span></a>&nbsp;</td>
         <td title="{{ 'CATEGORY_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
         <td title="{{ 'CATEGORY_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
-        <td title="{{ 'CATEGORY_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{!row.disabled && isAvailableFromNow(row) && isAvailableToNow(row) ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
+        <td title="{{ 'CATEGORY_ENABLED' | translate }}" class="text-center"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{!row.disabled && isAvailableFromNow(row) && isAvailableToNow(row) ? 'fa-check-circle-o text-success' : 'fa-remove text-danger'}}"></i></a></td>
       </tr>
       </tbody>
     </table>
