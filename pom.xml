@@ -52,6 +52,7 @@
         <payment.cybersource.module>off</payment.cybersource.module>
         <payment.authorizenet.module>off</payment.authorizenet.module>
         <payment.paypal.module>off</payment.paypal.module>
+        <payment.paysera.module>off</payment.paysera.module>
         <payment.postfinance.module>off</payment.postfinance.module>
         <admin.cors>off</admin.cors>
         <api.cors>on</api.cors>
@@ -751,6 +752,7 @@
                                 <echo>Cybersource payments (use -PpaymentCybersource or -PpaymentAll)             : ${payment.cybersource.module} </echo>
                                 <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll)             : ${payment.authorizenet.module} </echo>
                                 <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)                       : ${payment.paypal.module} </echo>
+                                <echo>PaySera payments (use -PpaymentPaysera or -PpaymentAll)                     : ${payment.paysera.module} </echo>
                                 <echo>PostFinance payments (use -PpaymentPostFinance or -PpaymentAll)             : ${payment.postfinance.module} </echo>
                                 <echo> </echo>
                                 <echo>Add-on modules</echo>
@@ -1074,6 +1076,7 @@
                 <payment.cybersource.module>off</payment.cybersource.module>
                 <payment.authorizenet.module>off</payment.authorizenet.module>
                 <payment.paypal.module>off</payment.paypal.module>
+                <payment.paysera.module>off</payment.paysera.module>
                 <payment.postfinance.module>off</payment.postfinance.module>
             </properties>
         </profile>
@@ -1085,6 +1088,7 @@
                 <payment.cybersource.module>on</payment.cybersource.module>
                 <payment.authorizenet.module>on</payment.authorizenet.module>
                 <payment.paypal.module>on</payment.paypal.module>
+                <payment.paysera.module>on</payment.paysera.module>
                 <payment.postfinance.module>on</payment.postfinance.module>
             </properties>
         </profile>
@@ -1142,6 +1146,20 @@
             <id>paymentPaypalOff</id>
             <properties>
                 <payment.paypal.module>off</payment.paypal.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentPaysera</id>
+            <properties>
+                <payment.paysera.module>on</payment.paysera.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentPayseraOff</id>
+            <properties>
+                <payment.paysera.module>off</payment.paysera.module>
             </properties>
         </profile>
 
@@ -1208,6 +1226,7 @@
                 <payment.cybersource.module>on</payment.cybersource.module>
                 <payment.authorizenet.module>on</payment.authorizenet.module>
                 <payment.paypal.module>on</payment.paypal.module>
+                <payment.paysera.module>on</payment.paysera.module>
                 <payment.postfinance.module>on</payment.postfinance.module>
             </properties>
         </profile>
@@ -1228,6 +1247,7 @@
                 <payment.cybersource.module>on</payment.cybersource.module>
                 <payment.authorizenet.module>on</payment.authorizenet.module>
                 <payment.paypal.module>on</payment.paypal.module>
+                <payment.paysera.module>on</payment.paysera.module>
                 <payment.postfinance.module>on</payment.postfinance.module>
             </properties>
         </profile>

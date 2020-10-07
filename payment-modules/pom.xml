@@ -32,6 +32,7 @@
         <module>payment-module-cybersource</module>
         <module>payment-module-liqpay</module>
         <module>payment-module-paypal</module>
+        <module>payment-module-paysera</module>
         <module>payment-module-postfinance</module>
     </modules>
 </project>
