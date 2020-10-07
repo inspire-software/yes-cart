@@ -14,5 +14,6 @@ run '../../../payment-modules/payment-module-liqpay/src/main/resources/sql/payin
 run '../../../payment-modules/payment-module-cybersource/src/main/resources/sql/payinitdata.sql';
 run '../../../payment-modules/payment-module-authorizenet/src/main/resources/sql/payinitdata.sql';
 run '../../../payment-modules/payment-module-paypal/src/main/resources/sql/payinitdata.sql';
+run '../../../payment-modules/payment-module-paysera/src/main/resources/sql/payinitdata.sql';
 run '../../../payment-modules/payment-module-postfinance/src/main/resources/sql/payinitdata.sql';
 disconnect;

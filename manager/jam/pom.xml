@@ -320,6 +320,11 @@
                 </dependency>
                 <dependency>
                     <groupId>org.yes</groupId>
+                    <artifactId>payment-module-paysera</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
                     <artifactId>payment-module-postfinance</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
@@ -371,6 +376,17 @@
         </profile>
 
         <profile>
+            <id>paymentPaysera</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-paysera</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
             <id>paymentPostFinance</id>
             <dependencies>
                 <dependency>
@@ -416,6 +432,11 @@
                 </dependency>
                 <dependency>
                     <groupId>org.yes</groupId>
+                    <artifactId>payment-module-paysera</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
                     <artifactId>payment-module-postfinance</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
@@ -452,6 +473,11 @@
                 <dependency>
                     <groupId>org.yes</groupId>
                     <artifactId>payment-module-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>payment-module-paysera</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
                 <dependency>
@@ -586,6 +612,7 @@
             <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-paysera-${payment.paysera.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-postfinance-${payment.postfinance.module}.properties</filter>
         </filters>
 
