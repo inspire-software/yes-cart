@@ -20,13 +20,15 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.ShopCategoryDTO;
 
+import java.time.Instant;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
 @Dto
-public class ShopCategoryDTOImpl  implements ShopCategoryDTO {
+public class ShopCategoryDTOImpl implements ShopCategoryDTO {
 
     private static final long serialVersionUID = 2010717L;
 
@@ -41,6 +43,16 @@ public class ShopCategoryDTOImpl  implements ShopCategoryDTO {
 
     @DtoField(value = "category.categoryId", readOnly = true)
     private long categoryId;
+
+
+    @DtoField(readOnly = true)
+    private Instant createdTimestamp;
+    @DtoField(readOnly = true)
+    private Instant updatedTimestamp;
+    @DtoField(readOnly = true)
+    private String createdBy;
+    @DtoField(readOnly = true)
+    private String updatedBy;
 
     /** {@inheritDoc} */
     @Override
@@ -94,6 +106,54 @@ public class ShopCategoryDTOImpl  implements ShopCategoryDTO {
     @Override
     public void setCategoryId(final long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override

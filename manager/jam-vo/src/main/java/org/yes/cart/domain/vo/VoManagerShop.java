@@ -19,6 +19,8 @@ package org.yes.cart.domain.vo;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
+import java.time.Instant;
+
 /**
  * User: Denis Lozenko
  * Date: 8/23/2016.
@@ -30,6 +32,16 @@ public class VoManagerShop {
     private long managerId;
     @DtoField(value = "shop.shopId", readOnly = true)
     private long shopId;
+
+
+    @DtoField(readOnly = true)
+    private Instant createdTimestamp;
+    @DtoField(readOnly = true)
+    private Instant updatedTimestamp;
+    @DtoField(readOnly = true)
+    private String createdBy;
+    @DtoField(readOnly = true)
+    private String updatedBy;
 
     public long getManagerId() {
         return managerId;
@@ -45,5 +57,37 @@ public class VoManagerShop {
 
     public void setShopId(long shopId) {
         this.shopId = shopId;
+    }
+
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 }

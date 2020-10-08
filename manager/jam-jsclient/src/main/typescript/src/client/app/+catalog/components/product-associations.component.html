@@ -41,6 +41,7 @@
 
   <yc-modal #editModalDialog
          title="{{ 'PRODUCT_TAB_ASSOCIATIONS' | translate }}"
+         footer="{{ associationToEdit?.updatedTimestamp | ycdatetime }} {{ associationToEdit?.updatedBy }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
          [valid]="validForSave"
@@ -50,7 +51,13 @@
       <form role="form">
         <fieldset>
           <div class="row">
-            <div class="col-xs-3">{{ getAssociationType(associationToEdit) }} {{ 'CODE' | translate }}</div>
+            <div class="col-xs-3">{{ 'AV_TYPE' | translate }}</div>
+            <div class="col-xs-9">
+              <span class="form-control" [innerHTML]="getAssociationType(associationToEdit)" disabled="true"></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-3">{{ 'CODE' | translate }}</div>
             <div class="col-xs-9">
               <input name="associatedCodeEdit" class="form-control" type="text" [ngModel]="associationToEdit.associatedCode" [readonly]="true">
             </div>

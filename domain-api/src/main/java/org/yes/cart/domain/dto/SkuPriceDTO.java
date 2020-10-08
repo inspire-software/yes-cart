@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
  * Date: Jan 22, 2011
  * Time: 11:11:44 PM
  */
-public interface SkuPriceDTO extends Identifiable {
+public interface SkuPriceDTO extends Identifiable, AuditInfoDTO {
 
 
     /**

@@ -163,6 +163,8 @@
   "QUANTITY": "Количество",
   "SKU": "Артикул",
   "TEST": "Тест",
+  "UPDATED": "Последнее обновление",
+  "CREATED": "Время создания",
 
   "LOGGED_IN": "Вы вошли как {{user}}",
   "CHANGE_PASSWORD": "Сменить пароль",
@@ -250,6 +252,7 @@
   "TAB_ROLES": "Роли",
   "TAB_ADDRESSBOOK": "Адресная книга",
   "TAB_EXTERNAL": "Внешнее",
+  "TAB_AUDIT": "Аудит",
 
   "ATTRIBUTE_USAGE": "Типы товаров, которые используют атрибут {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Атрибут не используется",

@@ -53,6 +53,11 @@ export interface PaymentGatewayParameterVO {
   businesstype : string;
   secure : boolean;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface PaymentGatewayVO extends PaymentGatewayInfoVO {

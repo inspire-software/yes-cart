@@ -127,6 +127,7 @@
 
 <yc-modal #editModalDialog
           title="{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}"
+          footer="{{ groupToEdit?.updatedTimestamp | ycdatetime }} {{ groupToEdit?.updatedBy }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
           [valid]="validForSave"

@@ -163,6 +163,8 @@
   "QUANTITY": "Quantity",
   "SKU": "SKU",
   "TEST": "Test",
+  "UPDATED": "Last update",
+  "CREATED": "Created",
 
   "LOGGED_IN": "Logged in as {{user}}",
   "CHANGE_PASSWORD": "Change password",
@@ -250,6 +252,7 @@
   "TAB_ROLES": "Roles",
   "TAB_ADDRESSBOOK": "Address book",
   "TAB_EXTERNAL": "External",
+  "TAB_AUDIT": "Audit",
 
   "ATTRIBUTE_USAGE": "Product types that use attribute {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Attribute is not used by any product Type",

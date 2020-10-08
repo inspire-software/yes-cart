@@ -87,6 +87,7 @@
             </div>
             <div class="panel-body">
               <pre class="preformatted-address" [innerHTML]="getFormattedAddress(address)"></pre>
+              <small>{{ address.updatedTimestamp | ycdatetime }} {{ address.updatedBy }}</small>
             </div>
           </div>
         </div>
@@ -98,6 +99,7 @@
 
 <yc-modal #editModalDialog
           title="{{ 'TAB_ADDRESSBOOK' | translate }}"
+          footer="{{ addressEdit?.updatedTimestamp | ycdatetime }} {{ addressEdit?.updatedBy }}"
           cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
           positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
           [valid]="validForSave"

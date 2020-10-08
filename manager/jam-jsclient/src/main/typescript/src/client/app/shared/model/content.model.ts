@@ -48,6 +48,11 @@ export interface ContentVO {
 
   children : Array<ContentVO>;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 

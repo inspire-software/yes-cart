@@ -27,7 +27,7 @@ import java.math.BigDecimal;
  * Date: 27/10/2014
  * Time: 12:23
  */
-public interface TaxDTO extends Codable, Identifiable, Guidable {
+public interface TaxDTO extends Codable, Identifiable, Guidable, AuditInfoDTO {
 
     /**
      * Tax rate as percentage in range 0-100. E.g. taxRate = 6.00, means

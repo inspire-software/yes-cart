@@ -163,6 +163,8 @@
   "QUANTITY": "Кількість",
   "SKU": "Артикул",
   "TEST": "Тест",
+  "UPDATED": "Останні зміни",
+  "CREATED": "Час створення",
 
   "LOGGED_IN": "Ви увійшли як {{user}}",
   "CHANGE_PASSWORD": "Змінити пароль",
@@ -250,6 +252,7 @@
   "TAB_ROLES": "Ролі",
   "TAB_ADDRESSBOOK": "Адресна книга",
   "TAB_EXTERNAL": "Зовнішнє",
+  "TAB_AUDIT": "Аудит",
 
   "ATTRIBUTE_USAGE": "Типи товарів, які використовують атрибут {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Атрибут не використовується",
@@ -651,7 +654,7 @@
   "CUSTOMERORDER_TAB_EXTRADETAILS": "Додаткова інформація",
   "CUSTOMERORDER_TAB_PAYMENTS": "Платежі",
   "CUSTOMERORDER_TAB_B2B": "B2B",
-  "CUSTOMERORDER_TAB_AUDIT": "Аудит і Експорт",
+  "CUSTOMERORDER_TAB_AUDIT": "Аудит та Експорт",
 
   "pt.none": "",
   "pt.full": "Оплачено в повному обсязі",

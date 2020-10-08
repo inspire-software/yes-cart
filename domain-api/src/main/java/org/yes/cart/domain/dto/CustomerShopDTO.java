@@ -16,26 +16,42 @@
 
 package org.yes.cart.domain.dto;
 
-import org.yes.cart.domain.entity.Identifiable;
-
 /**
- * User: denispavlov
- * Date: 20/01/2020
- * Time: 08:24
+ * User: inspiresoftware
+ * Date: 07/10/2020
+ * Time: 17:04
  */
-public interface ShopCarrierDTO extends Identifiable, AuditInfoDTO {
+public interface CustomerShopDTO extends AuditInfoDTO {
 
     /**
-     * @return primary key
-     */
-    long getShopCarrierId();
-
-    /**
-     * Set primary key.
+     * Get pk;
      *
-     * @param shopCarrierId primary key value.
+     * @return pk value
      */
-    void setShopCarrierId(long shopCarrierId);
+    long getCustomerShopId();
+
+    /**
+     * Set pk value.
+     *
+     * @param customerShopId pk value.
+     */
+    void setCustomerShopId(long customerShopId);
+
+
+    /**
+     * Get customer id .
+     *
+     * @return customer id
+     */
+    long getCustomerId();
+
+
+    /**
+     * Set customer id.
+     *
+     * @param customerId customer id
+     */
+    void setCustomerId(long customerId);
 
     /**
      * @return shop id
@@ -48,30 +64,19 @@ public interface ShopCarrierDTO extends Identifiable, AuditInfoDTO {
     void setShopId(long shopId);
 
     /**
-     * @return carrier id
-     */
-    long getCarrierId();
-
-    /**
-     * Set carrier id.
-     *
-     * @param carrierId carrier id
-     */
-    void setCarrierId(long carrierId);
-
-    /**
-     * Disable this carrier in shop.
+     * Disable this customer in shop.
      *
      * @return true if this is disabled
      */
     boolean isDisabled();
 
     /**
-     * Disable this carrier in shop.
+     * Disable this customer in shop.
      *
      * @param disabled true if this is disabled
      */
     void setDisabled(boolean disabled);
 
-
 }
+
+

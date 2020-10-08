@@ -91,6 +91,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   private miniTextEditor:boolean = false;
   private textEditor:boolean = false;
   private textAreaEditor:boolean = false;
+  private selectEditor:boolean = false;
+  private selectEditorValues:Pair<string, string>[] = null;
   private localisableEditor:boolean = false;
   private imageEditor:boolean = false;
   private fileEditor:boolean = false;
@@ -448,6 +450,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     this.miniTextEditor = false;
     this.textEditor = false;
     this.textAreaEditor = false;
+    this.selectEditor = false;
+    this.selectEditorValues = null;
     this.localisableEditor = false;
     this.imageEditor = false;
     this.fileEditor = false;
@@ -471,6 +475,15 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
           this.fileEditor = true;
           break;
         case 'CommaSeparatedList':
+          let lang = I18nEventBus.getI18nEventBus().current();
+          let _choice = UiUtil.toChoicePairs(av.attribute.choiceData, lang);
+          if (_choice != null) {
+            this.selectEditor = true;
+            this.selectEditorValues = _choice;
+          } else {
+            this.textAreaEditor = true;
+          }
+          break;
         case 'HTML':
         case 'Any':
         case 'Properties':
@@ -579,8 +592,13 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     }
   }
 
-  getAttributeName(attr:AttributeVO):string {
+  getAttributeName(attrVal:AttrValueVO):string {
 
+    if (attrVal == null || attrVal.attribute == null) {
+      return '';
+    }
+
+    let attr = attrVal.attribute;
     let lang = I18nEventBus.getI18nEventBus().current();
     let i18n = attr.displayNames;
     let def = attr.name != null ? attr.name : attr.code;
@@ -642,7 +660,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
             val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
             val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1 ||
             val.val && val.val.toLowerCase().indexOf(_filter) !== -1 ||
-            this.getAttributeName(val.attribute).toLowerCase().indexOf(_filter) !== -1
+            this.getAttributeName(val).toLowerCase().indexOf(_filter) !== -1
           );
         }
         LogUtil.debug('AttributeValuesComponent filterAttributes ' + _filter, _filteredObjectAttributes);
@@ -661,8 +679,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
     if (_sortProp === 'name') {
       _filteredObjectAttributes.sort((a, b) => {
-        let _a1 = this.getAttributeName(a.attribute).toLowerCase();
-        let _b1 = this.getAttributeName(b.attribute).toLowerCase();
+        let _a1 = this.getAttributeName(a).toLowerCase();
+        let _b1 = this.getAttributeName(b).toLowerCase();
         return (_a1 > _b1 ? 1 : -1) * _sortOrder;
       });
     } else {

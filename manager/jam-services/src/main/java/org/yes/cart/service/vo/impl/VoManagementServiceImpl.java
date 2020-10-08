@@ -189,6 +189,10 @@ public class VoManagementServiceImpl implements VoManagementService {
                 final VoManagerShop link = new VoManagerShop();
                 link.setManagerId(voManager.getManagerId());
                 link.setShopId(shop.getShopId());
+                link.setCreatedBy(shop.getCreatedBy());
+                link.setCreatedTimestamp(shop.getCreatedTimestamp());
+                link.setUpdatedBy(shop.getUpdatedBy());
+                link.setUpdatedTimestamp(shop.getUpdatedTimestamp());
                 voManagerShops.add(link);
             }
             voManager.setManagerShops(voManagerShops);
@@ -198,6 +202,10 @@ public class VoManagementServiceImpl implements VoManagementService {
                 final VoManagerRole link = new VoManagerRole();
                 link.setManagerId(voManager.getManagerId());
                 link.setCode(role.getCode());
+                link.setCreatedBy(role.getCreatedBy());
+                link.setCreatedTimestamp(role.getCreatedTimestamp());
+                link.setUpdatedBy(role.getUpdatedBy());
+                link.setUpdatedTimestamp(role.getUpdatedTimestamp());
                 voManagerRoles.add(link);
             }
             voManager.setManagerRoles(voManagerRoles);
@@ -206,6 +214,10 @@ public class VoManagementServiceImpl implements VoManagementService {
                 final VoManagerSupplierCatalog link = new VoManagerSupplierCatalog();
                 link.setManagerId(voManager.getManagerId());
                 link.setCode(supplierCatalogCode);
+                link.setCreatedBy(managerDTO.getCreatedBy());
+                link.setCreatedTimestamp(managerDTO.getCreatedTimestamp());
+                link.setUpdatedBy(managerDTO.getUpdatedBy());
+                link.setUpdatedTimestamp(managerDTO.getUpdatedTimestamp());
                 voManagerSupplierCatalogs.add(link);
             }
             voManager.setManagerSupplierCatalogs(voManagerSupplierCatalogs);
@@ -228,6 +240,10 @@ public class VoManagementServiceImpl implements VoManagementService {
                         link.setCategoryId(category.getCategoryId());
                         link.setCode(category.getGuid());
                         link.setName(category.getName());
+                        link.setCreatedBy(managerDTO.getCreatedBy());
+                        link.setCreatedTimestamp(managerDTO.getCreatedTimestamp());
+                        link.setUpdatedBy(managerDTO.getUpdatedBy());
+                        link.setUpdatedTimestamp(managerDTO.getUpdatedTimestamp());
                         voManagerCategoryCatalogs.add(link);
                     }
                 }

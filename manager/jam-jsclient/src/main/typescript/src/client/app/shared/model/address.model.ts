@@ -61,6 +61,11 @@ export interface AddressVO {
   custom8: string;
   custom9: string;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface AddressBookVO {

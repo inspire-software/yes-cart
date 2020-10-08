@@ -16,6 +16,13 @@
 
 import { Pair } from './common.model';
 
+export interface DataGroupInfoVO {
+
+  label : string;
+  name : string;
+
+}
+
 export interface DataGroupVO {
 
   datagroupId : number;
@@ -26,6 +33,11 @@ export interface DataGroupVO {
 
   displayNames : Pair<string, string>[];
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface DataDescriptorVO {
@@ -34,6 +46,11 @@ export interface DataDescriptorVO {
   name : string;
   type : string;
   value : string;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 

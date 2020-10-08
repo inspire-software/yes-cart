@@ -22,6 +22,11 @@ export interface EtypeVO {
   javatype : string;
   businesstype : string;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface AttributeGroupVO {
@@ -31,6 +36,11 @@ export interface AttributeGroupVO {
   code : string;
   name : string;
   description : string;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 
@@ -67,6 +77,11 @@ export interface AttributeVO {
   primary : boolean;
   navigation : boolean;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface AttrValueVO {
@@ -79,6 +94,10 @@ export interface AttrValueVO {
 
   attribute :  AttributeVO;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 

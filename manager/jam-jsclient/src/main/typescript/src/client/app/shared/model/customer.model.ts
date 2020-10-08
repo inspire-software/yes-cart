@@ -36,6 +36,11 @@ export interface CustomerInfoVO {
 
   customerShops: CustomerShopLinkVO[];
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 
@@ -50,6 +55,11 @@ export interface CustomerShopLinkVO {
   customerId : number;
   shopId : number;
   disabled : boolean;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 

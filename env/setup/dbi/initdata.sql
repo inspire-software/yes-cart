@@ -1045,6 +1045,15 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   'en#~#Procurement#~#uk#~#Закупівля#~#ru#~#Закупка#~#de#~#Beschaffung');
 
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+VALUES (  11250,  'REGISTRATION_MANAGER_NAME', 'REGISTRATION_MANAGER_NAME',  0,  NULL,  'Registration Manager Name',  'Registration Manager Name', 'Locked', 'CUSTOMER', 0, 0, 0, 0,
+          'en#~#Registration Manager Name#~#uk#~#Менеджер реєстрації#~#ru#~#Менеджер регистрации#~#de#~#Registrierungsmanager');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV, DISPLAYNAME)
+VALUES (  11251,  'REGISTRATION_MANAGER_EMAIL', 'REGISTRATION_MANAGER_EMAIL',  0,  NULL,  'Registration Manager Email',  'Registration Manager Email', 'Locked', 'CUSTOMER', 0, 0, 0, 0,
+          'en#~#Registration Manager Email#~#uk#~#Email Менеджера реєстрації#~#ru#~#Email Менеджера регистрации#~#de#~#E-Mail des Registrierungsmanager');
+
+
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE, ATTRIBUTEGROUP, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11200,  'default_addressform', 'default_addressform',  0,

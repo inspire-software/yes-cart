@@ -117,6 +117,7 @@
 
   <yc-modal #editTaxModalDialog
             title="{{ taxEdit != null ? taxEdit.code : '' }}"
+            footer="{{ taxEdit?.updatedTimestamp | ycdatetime }} {{ taxEdit?.updatedBy }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
             [valid]="validForSaveTax"

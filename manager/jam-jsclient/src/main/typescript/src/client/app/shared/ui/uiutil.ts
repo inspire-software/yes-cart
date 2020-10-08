@@ -64,6 +64,33 @@ export class UiUtil {
   }
 
   /**
+   * Return choice selection by language.
+   *
+   * @param {Pair<string, string>[]} values
+   * @param {string} lang
+   * @return {Pair<string, string>[]}
+   */
+  public static toChoicePairs(values:Pair<string, string>[], lang:string):Pair<string, string>[] {
+    if (values != null && values.length > 0) {
+      let _choicesInLang = values.find(pair => pair.first == lang);
+      if (_choicesInLang != null) {
+        let _choiceEntries = _choicesInLang.second.split(',');
+        let _out:Pair<string, string>[] = [];
+        for (let idx = 0; idx < _choiceEntries.length; idx++) {
+          let _choiceEntry = _choiceEntries[idx].split('-');
+          if (_choiceEntry != null && _choiceEntry.length > 1) {
+            _out.push({ first: _choiceEntry[0], second: _choiceEntry[1] });
+          }
+        }
+        if (_out.length > 0) {
+          return _out;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
    * Return display name.
    *
    * @param {Pair<string, string>[]} display

@@ -18,34 +18,29 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.domain.dto.ShopUrlDTO;
+import org.yes.cart.domain.dto.CustomerShopDTO;
 
 import java.time.Instant;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: inspiresoftware
+ * Date: 07/10/2020
+ * Time: 20:07
  */
 @Dto
-public class ShopUrlDTOImpl implements ShopUrlDTO {
+public class CustomerShopDTOImpl implements CustomerShopDTO {
 
-    private static final long serialVersionUID = 20100528L;
+    @DtoField(value = "customerShopId", readOnly = true)
+    private long customerShopId;
 
-    @DtoField(value = "url")
-    private String url;
-
-    @DtoField(value = "themeChain")
-    private String themeChain;
-
-    @DtoField(value = "primary")
-    private boolean primary;
-
-    @DtoField(value = "storeUrlId", readOnly = true)
-    private long storeUrlId;
+    @DtoField(value = "customer.customerId", readOnly = true)
+    private long customerId;
 
     @DtoField(value = "shop.shopId", readOnly = true)
     private long shopId;
+
+    @DtoField(value = "disabled")
+    private boolean disabled;
 
 
     @DtoField(readOnly = true)
@@ -57,69 +52,52 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
     @DtoField(readOnly = true)
     private String updatedBy;
 
-    /** {@inheritDoc}  */
+    /** {@inheritDoc} */
     @Override
-    public String getUrl() {
-        return url;
+    public long getCustomerShopId() {
+        return this.customerShopId;
     }
 
-    /** {@inheritDoc}  */
+    /** {@inheritDoc} */
     @Override
-    public void setUrl(final String url) {
-        this.url = url;
+    public void setCustomerShopId(final long customerShopId) {
+        this.customerShopId = customerShopId;
     }
 
-    /** {@inheritDoc}  */
+    /** {@inheritDoc} */
     @Override
-    public String getThemeChain() {
-        return themeChain;
+    public long getCustomerId() {
+        return customerId;
     }
 
-    /** {@inheritDoc}  */
+    /** {@inheritDoc} */
     @Override
-    public void setThemeChain(final String themeChain) {
-        this.themeChain = themeChain;
+    public void setCustomerId(final long customerId) {
+        this.customerId = customerId;
     }
 
-    /** {@inheritDoc}  */
-    @Override
-    public boolean isPrimary() {
-        return primary;
-    }
-
-    /** {@inheritDoc}  */
-    @Override
-    public void setPrimary(final boolean primary) {
-        this.primary = primary;
-    }
-
-    /** {@inheritDoc}  */
-    @Override
-    public long getStoreUrlId() {
-        return storeUrlId;
-    }
-
-    /** {@inheritDoc}*/
-    @Override
-    public long getId() {
-        return storeUrlId;
-    }
-
-    /** {@inheritDoc}  */
-    @Override
-    public void setStoreUrlId(final long storeUrlId) {
-        this.storeUrlId = storeUrlId;
-    }
-
+    /** {@inheritDoc} */
     @Override
     public long getShopId() {
         return shopId;
     }
 
-    /** {@inheritDoc}  */
+    /** {@inheritDoc} */
     @Override
     public void setShopId(final long shopId) {
         this.shopId = shopId;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     /** {@inheritDoc} */
@@ -172,11 +150,11 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
 
     @Override
     public String toString() {
-        return "ShopUrlDTOImpl{" +
-                "url='" + url + '\'' +
-                ", themeChain='" + themeChain + '\'' +
-                ", storeUrlId=" + storeUrlId +
+        return "CustomerShopDTOImpl{" +
+                "customerShopId=" + customerShopId +
+                ", customerId=" + customerId +
                 ", shopId=" + shopId +
+                ", disabled=" + disabled +
                 '}';
     }
 }

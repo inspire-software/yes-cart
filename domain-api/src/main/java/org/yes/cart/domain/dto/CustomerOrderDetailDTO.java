@@ -27,7 +27,7 @@ import java.util.Map;
  * Represent single order line in order with delivery details.
  */
 
-public interface CustomerOrderDetailDTO extends Identifiable {
+public interface CustomerOrderDetailDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Get order detail pk value.

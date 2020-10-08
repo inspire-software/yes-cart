@@ -3607,7 +3607,7 @@
 
     <query name="ASSIGNED.ROLES.BY.USER.EMAIL">
         <![CDATA[
-            select r from RoleEntity r, ManagerRoleEntity mr
+            select new org.yes.cart.domain.misc.Pair(r, mr) from RoleEntity r, ManagerRoleEntity mr
              where r.code = mr.code
              and mr.email = ?1
              order by r.code

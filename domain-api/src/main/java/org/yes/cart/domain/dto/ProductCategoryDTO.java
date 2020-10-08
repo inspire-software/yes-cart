@@ -26,7 +26,7 @@ import org.yes.cart.domain.entity.Identifiable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ProductCategoryDTO extends Identifiable {
+public interface ProductCategoryDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Get pk.

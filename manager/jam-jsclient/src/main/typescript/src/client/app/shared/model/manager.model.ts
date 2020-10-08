@@ -29,12 +29,22 @@ export interface ManagerInfoVO {
   companyName2  : string;
   companyDepartment  : string;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface ManagerShopLinkVO {
 
   managerId : number;
   shopId : number;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 
@@ -43,12 +53,22 @@ export interface ManagerRoleLinkVO {
   managerId : number;
   code : string;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface ManagerSupplierCatalogVO {
 
   managerId : number;
   code : string;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 
@@ -59,6 +79,11 @@ export interface ManagerCategoryCatalogVO {
 
   code : string;
   name : string;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 

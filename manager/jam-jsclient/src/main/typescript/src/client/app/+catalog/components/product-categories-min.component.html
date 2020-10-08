@@ -85,9 +85,8 @@
               <button class="pull-right btn btn-danger btn-circle btn-sm" (click)=onAssignedClick(cat)><i class="fa fa-unlink"></i></button>
               <button class="pull-right btn btn-info btn-circle btn-sm" style="margin-right: 3px" title="{{ 'AV_RANK' | translate }}" (click)=onRankClick(cat)>{{cat.rank}}</button>
             </h5>
-            <p>
-              <small>{{cat.categoryCode}}</small>
-            </p>
+            <p><small>{{cat.categoryCode}}</small></p>
+            <p><small>{{cat.updatedTimestamp | ycdatetime}} {{cat.updatedBy}}</small></p>
           </li>
         </ul>
       </div>

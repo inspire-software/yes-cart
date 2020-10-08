@@ -27,7 +27,7 @@ import java.util.Map;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface StateDTO extends Identifiable {
+public interface StateDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Get country code.

@@ -895,6 +895,16 @@ public interface AttributeNamesKeys {
         String BLOCK_CHECKOUT_X = "CUSTOMER_BLOCK_CHECKOUT_X";
 
         /**
+         * Registration manager name for assisted registration
+         */
+        String REGISTRATION_MANAGER_NAME = "REGISTRATION_MANAGER_NAME";
+
+        /**
+         * Registration manager email for assisted registration
+         */
+        String REGISTRATION_MANAGER_EMAIL = "REGISTRATION_MANAGER_EMAIL";
+
+        /**
          * Customer phone.
          */
         String CUSTOMER_PHONE = "CUSTOMER_PHONE";

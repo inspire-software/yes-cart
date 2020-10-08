@@ -20,6 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.ManagerDTO;
 
+import java.time.Instant;
 import java.util.Collection;
 
 /**
@@ -64,6 +65,16 @@ public class ManagerDTOImpl implements ManagerDTO {
 
     @DtoField(value = "categoryCatalogs")
     private Collection<String> categoryCatalogs;
+
+
+    @DtoField(readOnly = true)
+    private Instant createdTimestamp;
+    @DtoField(readOnly = true)
+    private Instant updatedTimestamp;
+    @DtoField(readOnly = true)
+    private String createdBy;
+    @DtoField(readOnly = true)
+    private String updatedBy;
 
     /**
      * {@inheritDoc}
@@ -247,6 +258,54 @@ public class ManagerDTOImpl implements ManagerDTO {
     @Override
     public void setCategoryCatalogs(final Collection<String> categoryCatalogs) {
         this.categoryCatalogs = categoryCatalogs;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     /**

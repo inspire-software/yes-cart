@@ -84,8 +84,12 @@
     <ng-template [ngIf]="selectedPayment">
 
       <div class="row">
-        <div class="col-xs-4"><strong>{{ 'PAYMENT_DATE' | translate }}</strong></div>
-        <div class="col-xs-8">{{ selectedPayment.createdTimestamp | ycdatetime }}</div>
+        <div class="col-xs-4"><strong>{{ 'CREATED' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.createdTimestamp | ycdatetime }} {{ selectedPayment.createdBy }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'UPDATED' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.updatedTimestamp | ycdatetime }} {{ selectedPayment.updatedBy }}</div>
       </div>
       <div class="row">
         <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}</strong></div>

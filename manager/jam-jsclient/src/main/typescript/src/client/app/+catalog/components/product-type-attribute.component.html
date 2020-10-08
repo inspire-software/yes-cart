@@ -43,6 +43,7 @@
 
   <yc-modal #editModalDialog
             title="{{ 'TAB_TYPE_ATTRIBUTES' | translate }}"
+            footer="{{ attributeToEdit?.updatedTimestamp | ycdatetime }} {{ attributeToEdit?.updatedBy }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
             [valid]="validForSave"

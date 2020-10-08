@@ -120,6 +120,7 @@
 
   <yc-modal #editTaxconfigModalDialog
             title="{{ taxconfigEdit != null && taxconfigEdit.tax != null ? taxconfigEdit.tax.code : '' }}"
+            footer="{{ taxconfigEdit?.updatedTimestamp | ycdatetime }} {{ taxconfigEdit?.updatedBy }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
             [valid]="validForSaveTaxconfig"

@@ -41,6 +41,7 @@
               <small>{{supported.second.code}}</small><br/>
               <small>{{ ('CARRIERSLA_SLATYPE_' + supported.second.slaType) | translate }} <i class="fa {{ supported.second.guaranteed ? 'fa-calendar-check-o' : 'fa-calendar' }}"></i><ng-template [ngIf]="supported.second.namedDay">+<i class="fa fa-user"></i></ng-template> {{ supported.second.minDays > 0 ? supported.second.minDays : '0' }}{{ supported.second.maxDays > 0 ? ' - ' + supported.second.maxDays : '' }}</small>
             </p>
+            <p><small>{{ supported.second?.updatedTimestamp | ycdatetime }} {{ supported.second?.updatedBy }}</small></p>
           </li>
         </ul>
       </div>

@@ -19,6 +19,11 @@ package org.yes.cart.web.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
@@ -34,7 +39,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,6 +54,9 @@ import java.util.Map;
 public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
     private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartFilter.class);
+
+    private static final List<SimpleGrantedAuthority> ROLE_CUSTOMER = Collections.singletonList(new SimpleGrantedAuthority("ROLE_SF_CUSTOMER"));
+    private static final List<SimpleGrantedAuthority> ROLE_MANAGER = Collections.singletonList(new SimpleGrantedAuthority("ROLE_SF_MANAGER"));
 
     private final ShopService shopService;
 
@@ -105,6 +115,13 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
             ApplicationDirector.setCurrentCustomerShop(getCurrentCustomerShop(shop, cart));
             ApplicationDirector.setShoppingCart(cart);
             request.setAttribute("ShoppingCart", cart);
+            if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
+                final SecurityContextImpl ctx = new SecurityContextImpl();
+                ctx.setAuthentication(new UsernamePasswordAuthenticationToken(cart.getCustomerEmail(), null, ROLE_CUSTOMER));
+                SecurityContextHolder.setContext(ctx);
+            } else {
+                SecurityContextHolder.clearContext();
+            }
         }
         return request;
     }
@@ -157,6 +174,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
     public void doAfter(final ServletRequest servletRequest, final ServletResponse servletResponse) throws IOException, ServletException {
         ApplicationDirector.setShoppingCart(null);
         servletRequest.removeAttribute("ShoppingCart");
+        SecurityContextHolder.clearContext();
     }
 
 

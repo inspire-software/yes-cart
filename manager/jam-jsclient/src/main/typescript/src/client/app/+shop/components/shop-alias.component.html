@@ -99,6 +99,7 @@
 
   <yc-modal #editModalDialog
             title="{{ 'SHOP_TAB_ALIAS' | translate }}"
+            footer="{{ aliasToEdit?.updatedTimestamp | ycdatetime }} {{ aliasToEdit?.updatedBy }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
             [valid]="validForSave"

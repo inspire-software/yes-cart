@@ -23,7 +23,7 @@ import org.yes.cart.domain.entity.Identifiable;
  * Date: 13-10-22
  * Time: 5:33 PM
  */
-public interface PromotionCouponDTO extends Identifiable {
+public interface PromotionCouponDTO extends Identifiable, AuditInfoDTO {
 
 
     /**

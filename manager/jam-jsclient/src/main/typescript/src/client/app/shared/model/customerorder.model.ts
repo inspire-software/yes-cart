@@ -84,6 +84,11 @@ export interface CustomerOrderInfoVO {
 
   allValues: AttrValueVO[];
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface CustomerOrderTransitionResultVO {
@@ -150,6 +155,12 @@ export interface CustomerOrderLineVO {
   deliveryStatusLabel : string;
 
   allValues: AttrValueVO[];
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface CustomerOrderDeliveryInfoVO {
@@ -200,6 +211,11 @@ export interface CustomerOrderDeliveryInfoVO {
   taxCode : string;
   taxExclusiveOfPrice : boolean;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface CustomerOrderVO extends CustomerOrderInfoVO {
@@ -239,8 +255,11 @@ export interface PaymentVO {
   paymentProcessorResult : string;
   paymentProcessorBatchSettlement : boolean;
 
-  createdTimestamp : Date;
-  updatedTimestamp : Date;
   shopperIpAddress : string;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }

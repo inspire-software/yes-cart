@@ -28,6 +28,7 @@ import { LogUtil } from './../log/index';
 export class ModalComponent implements OnInit {
 
   @Input() title: string;
+  @Input() footer: string;
   @Input() cancelLabel: string = 'Cancel';
   @Input() disableCancel: boolean = false;
   @Input() positiveLabel: string = 'OK';

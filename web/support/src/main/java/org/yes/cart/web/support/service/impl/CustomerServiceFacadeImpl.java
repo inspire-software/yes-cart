@@ -320,6 +320,8 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         final List<String> allowedFull = new ArrayList<>();
         allowedFull.addAll(allowed);
         allowedFull.add(AttributeNamesKeys.Customer.CUSTOMER_PHONE);
+        allowedFull.add(AttributeNamesKeys.Customer.REGISTRATION_MANAGER_EMAIL);
+        allowedFull.add(AttributeNamesKeys.Customer.REGISTRATION_MANAGER_NAME);
 
         for (final Map.Entry<String, Object> attrVal : attrData.entrySet()) {
 

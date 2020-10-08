@@ -35,6 +35,11 @@ export interface FulfilmentCentreInfoVO {
 
   fulfilmentShops : FulfilmentCentreShopLinkVO[];
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface FulfilmentCentreShopLinkVO {
@@ -85,6 +90,11 @@ export interface InventoryVO {
 
   restockDate : Date;
   restockNotes : Pair<string, string>[];
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 

@@ -23,6 +23,12 @@ export interface CarrierShopLinkVO {
   shopId : number;
 
   disabled : boolean;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface CarrierInfoVO {
@@ -38,6 +44,11 @@ export interface CarrierInfoVO {
   displayDescriptions : Pair<string, string>[];
 
   carrierShops : Array<CarrierShopLinkVO>;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 
@@ -87,6 +98,10 @@ export interface CarrierSlaInfoVO {
   supportedPaymentGateways : string[];
   supportedFulfilmentCentres : string[];
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 

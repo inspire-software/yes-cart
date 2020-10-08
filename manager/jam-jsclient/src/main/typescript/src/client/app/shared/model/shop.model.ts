@@ -27,6 +27,7 @@ import { LocationVO } from './location.model';
  * Represent simple data about shop
  */
 export interface ShopVO {
+
   shopId : number;
   disabled : boolean;
   code : string;
@@ -35,6 +36,12 @@ export interface ShopVO {
   name :string;
   description : string;
   fspointer : string;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 /**
@@ -59,28 +66,44 @@ export interface ShopSeoVO  {
  * Record in shop urls.
  */
 export interface UrlVO {
+
   urlId : number;
   url : string;
   theme : string;
   primary : boolean;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 /**
  * Shop urls.
  */
 export interface ShopUrlVO {
+
   shopId : number;
   previewUrl : string;
   previewCss : string;
   urls : Array<UrlVO>;
+
 }
 
 /**
  * Record in shop urls.
  */
 export interface AliasVO {
+
   aliasId : number;
   alias : string;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 /**
@@ -95,9 +118,11 @@ export interface ShopAliasVO {
  * Represent supported currencies.
  */
 export interface ShopSupportedCurrenciesVO {
+
   shopId : number;
   all : Pair<string, string>[];
   supported : Pair<string, string>[];
+
 }
 
 
@@ -105,9 +130,11 @@ export interface ShopSupportedCurrenciesVO {
  * Represent supported languages by shop.
  */
 export interface ShopLanguagesVO {
+
   shopId : number;
   all : Array<Pair<string, string>>;
   supported : Array<string>;
+
 }
 
 
@@ -115,10 +142,12 @@ export interface ShopLanguagesVO {
  * Represent supported locations by shop.
  */
 export interface ShopLocationsVO {
+
   shopId : number;
   all : Array<LocationVO>;
   supportedBilling : Array<string>;
   supportedShipping : Array<string>;
+
 }
 
 export interface AttrValueShopVO extends AttrValueVO {
@@ -243,6 +272,10 @@ export interface SubShopVO {
   name : string;
   admin : string;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 

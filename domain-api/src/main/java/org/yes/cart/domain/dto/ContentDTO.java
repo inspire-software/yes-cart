@@ -30,7 +30,7 @@ import java.util.Set;
  * Date: 20/04/2019
  * Time: 18:41
  */
-public interface ContentDTO extends Identifiable, Guidable {
+public interface ContentDTO extends Identifiable, Guidable, AuditInfoDTO {
 
     /**
      * Get content pk value.

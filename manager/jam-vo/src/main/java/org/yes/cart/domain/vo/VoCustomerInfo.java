@@ -17,10 +17,14 @@
 package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
+import org.yes.cart.domain.dto.CustomerShopDTO;
+import org.yes.cart.domain.vo.matcher.NoopMatcher;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -66,8 +70,26 @@ public class VoCustomerInfo {
     @DtoField(value = "companyDepartment")
     private String companyDepartment;
 
-    @DtoVirtualField(converter = "MapToCustomerShopLink", readOnly = true)
+    @DtoCollection(
+            value="assignedShops",
+            dtoBeanKey="VoCustomerShopLink",
+            entityGenericType = CustomerShopDTO.class,
+            entityCollectionClass = HashSet.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = NoopMatcher.class,
+            readOnly = true
+    )
     private List<VoCustomerShopLink> customerShops = new ArrayList<>();
+
+
+    @DtoField(readOnly = true)
+    private Instant createdTimestamp;
+    @DtoField(readOnly = true)
+    private Instant updatedTimestamp;
+    @DtoField(readOnly = true)
+    private String createdBy;
+    @DtoField(readOnly = true)
+    private String updatedBy;
 
     public long getCustomerId() {
         return customerId;
@@ -173,4 +195,35 @@ public class VoCustomerInfo {
         this.customerShops = customerShops;
     }
 
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
 }

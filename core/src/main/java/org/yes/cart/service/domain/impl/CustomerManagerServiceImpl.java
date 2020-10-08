@@ -647,6 +647,55 @@ public class CustomerManagerServiceImpl implements CustomerManagerService {
 
         }
 
+        @Override
+        public Instant getCreatedTimestamp() {
+            return managerShop.getCreatedTimestamp();
+        }
+
+        @Override
+        public void setCreatedTimestamp(final Instant createdTimestamp) {
+
+        }
+
+        @Override
+        public Instant getUpdatedTimestamp() {
+            return managerShop.getUpdatedTimestamp();
+        }
+
+        @Override
+        public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+
+        }
+
+        @Override
+        public String getCreatedBy() {
+            return managerShop.getCreatedBy();
+        }
+
+        @Override
+        public void setCreatedBy(final String createdBy) {
+
+        }
+
+        @Override
+        public String getUpdatedBy() {
+            return managerShop.getUpdatedBy();
+        }
+
+        @Override
+        public void setUpdatedBy(final String updatedBy) {
+
+        }
+
+        @Override
+        public long getId() {
+            return managerShop.getId();
+        }
+
+        @Override
+        public long getVersion() {
+            return managerShop.getVersion();
+        }
     }
 
 }

@@ -22,4 +22,9 @@ export interface RoleVO {
 
   description  : string;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }

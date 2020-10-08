@@ -34,6 +34,7 @@ import org.yes.cart.domain.dto.impl.RoleDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.SearchContext;
 import org.yes.cart.domain.misc.SearchResult;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -224,10 +225,10 @@ public class ManagementServiceImpl implements ManagementService {
         final List<RoleDTO> result = new ArrayList<>();
         final Manager manager = managerService.findSingleByCriteria(" where e.email = ?1", userId);
         if (manager != null) {
-            List<Role> roles = roleDao.findByNamedQuery(
+            List<Pair<Role, ManagerRole>> roles = (List) roleDao.findQueryObjectByNamedQuery(
                     "ASSIGNED.ROLES.BY.USER.EMAIL",
                     userId);
-            fillRolesDTOs(result, roles);
+            fillManagerRolesDTOs(result, roles);
         }
         return result;
     }
@@ -250,9 +251,24 @@ public class ManagementServiceImpl implements ManagementService {
 
     private void fillRolesDTOs(final List<RoleDTO> result, final List<Role> roles)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        for (Role role : roles) {
+        for (final Role role : roles) {
             final RoleDTO roleDTO = dtoFactory.getByIface(RoleDTO.class);
             roleAssembler.assembleDto(roleDTO, role, adaptersRepository.getAll(), dtoFactory);
+            result.add(roleDTO);
+        }
+    }
+
+    private void fillManagerRolesDTOs(final List<RoleDTO> result, final List<Pair<Role, ManagerRole>> roles)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        for (final Pair<Role, ManagerRole> role : roles) {
+            final RoleDTO roleDTO = dtoFactory.getByIface(RoleDTO.class);
+            roleAssembler.assembleDto(roleDTO, role.getFirst(), adaptersRepository.getAll(), dtoFactory);
+            if (role.getSecond() != null) {
+                roleDTO.setCreatedBy(role.getSecond().getCreatedBy());
+                roleDTO.setCreatedTimestamp(role.getSecond().getCreatedTimestamp());
+                roleDTO.setUpdatedBy(role.getSecond().getUpdatedBy());
+                roleDTO.setUpdatedTimestamp(role.getSecond().getUpdatedTimestamp());
+            }
             result.add(roleDTO);
         }
     }
@@ -516,12 +532,20 @@ public class ManagementServiceImpl implements ManagementService {
             final ShopDTO shopDTO = dtoFactory.getByIface(ShopDTO.class);
             final Shop shop = this.shopService.findById(managerShop.getShop().getShopId());
             shopAssembler.assembleDto(shopDTO, shop, adaptersRepository.getAll(), dtoFactory);
+            shopDTO.setCreatedBy(managerShop.getCreatedBy());
+            shopDTO.setCreatedTimestamp(managerShop.getCreatedTimestamp());
+            shopDTO.setUpdatedBy(managerShop.getUpdatedBy());
+            shopDTO.setUpdatedTimestamp(managerShop.getUpdatedTimestamp());
             if (includeSubs && shop.isB2BProfileActive()) {
                 final List<Shop> subs = this.shopService.getSubShopsByMaster(shop.getShopId());
                 if (subs != null) {
                     for (final Shop subShop : subs) {
                         final ShopDTO shopDTOsub = dtoFactory.getByIface(ShopDTO.class);
                         shopAssembler.assembleDto(shopDTOsub, subShop, adaptersRepository.getAll(), dtoFactory);
+                        shopDTOsub.setCreatedBy(managerShop.getCreatedBy());
+                        shopDTOsub.setCreatedTimestamp(managerShop.getCreatedTimestamp());
+                        shopDTOsub.setUpdatedBy(managerShop.getUpdatedBy());
+                        shopDTOsub.setUpdatedTimestamp(managerShop.getUpdatedTimestamp());
                         result.add(shopDTOsub);
                     }
                 }

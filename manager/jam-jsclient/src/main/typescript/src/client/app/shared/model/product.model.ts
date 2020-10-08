@@ -26,6 +26,11 @@ export interface AssociationVO {
   name : string;
   description : string;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 
@@ -75,6 +80,11 @@ export interface ProductSkuVO {
   metadescription : string;
   displayMetadescriptions : Pair<string, string>[];
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface ProductCategoryVO {
@@ -87,6 +97,11 @@ export interface ProductCategoryVO {
   categoryCode : string;
   categoryName : string;
   rank : number;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 
@@ -104,6 +119,11 @@ export interface ProductAssociationVO {
 
   bidirectional:boolean;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface ProductOptionVO {
@@ -120,6 +140,11 @@ export interface ProductOptionVO {
 
   attributeCode : string;
   optionSkuCodes : Pair<string, string>[];
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 
@@ -165,6 +190,11 @@ export interface ProductVO {
 
   configurable : boolean;
   configurationOptions: ProductOptionVO[];
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 

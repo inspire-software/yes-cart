@@ -163,6 +163,8 @@
   "QUANTITY": "Anzahl",
   "SKU": "SKU",
   "TEST": "Prüfung",
+  "UPDATED": "Letztes Update",
+  "CREATED": "Erstellt",
 
   "LOGGED_IN": "Eingeloggt als {{user}}",
   "CHANGE_PASSWORD": "Passwort ändern",
@@ -250,6 +252,7 @@
   "TAB_ROLES": "Rollen",
   "TAB_ADDRESSBOOK": "Adressbuch",
   "TAB_EXTERNAL": "Extern",
+  "TAB_AUDIT": "Überprüfung",
 
   "ATTRIBUTE_USAGE": "Produktetypen welche Attribute verwenden {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Dieses Attribute wird bei keinem Produktetypen verwendent",

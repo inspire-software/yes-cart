@@ -80,6 +80,7 @@
               <small>{{cat.guid}}</small><br/>
               <small [innerHTML]="getNavFlags(cat)"></small>
             </p>
+            <p><small>{{cat.updatedTimestamp | ycdatetime}} {{cat.updatedBy}}</small></p>
           </li>
         </ul>
       </div>

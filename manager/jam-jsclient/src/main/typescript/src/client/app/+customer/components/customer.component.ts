@@ -337,6 +337,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
     let supported = this._customer != null ? this._customer.customerShops : [];
     let disabledShops = <Array<number>>[];
     let skipKeys = <Array<string>>[];
+    let keepObjs:any = {};
     if (supported) {
       supported.forEach(customershop => {
         if (!customershop.disabled) {
@@ -344,6 +345,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
         } else {
           disabledShops.push(customershop.shopId);
         }
+        keepObjs['S' + customershop.shopId] = customershop;
       });
     }
     LogUtil.debug('CustomerComponent supported shops', skipKeys);
@@ -352,9 +354,11 @@ export class CustomerComponent implements OnInit, OnDestroy {
     for (let key in this._shops) {
       if (skipKeys.indexOf(key) == -1) {
         let shop = this._shops[key];
+        let customershop:CustomerShopLinkVO = keepObjs.hasOwnProperty(key) ? keepObjs[key] :
+            { customerId: this._customer != null ? this._customer.customerId : 0, shopId: shop.shopId, disabled: false };
         labels.push({
           first: shop,
-          second: { customerId: this._customer != null ? this._customer.customerId : 0, shopId: shop.shopId, disabled: (disabledShops.indexOf(shop.shopId) != -1) }
+          second: customershop
         });
       }
     }
@@ -366,10 +370,12 @@ export class CustomerComponent implements OnInit, OnDestroy {
   private getSupportedShopNames():Array<Pair<ShopVO, CustomerShopLinkVO>> {
     let supported = this._customer.customerShops;
     let keepKeys = <Array<string>>[];
+    let keepObjs:any = {};
     if (supported) {
       supported.forEach(customershop => {
         if (!customershop.disabled) {
           keepKeys.push('S' + customershop.shopId);
+          keepObjs['S' + customershop.shopId] = customershop;
         }
       });
     }
@@ -382,7 +388,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
         let shop = this._shops[key];
         labels.push({
           first: shop,
-          second: { customerId: this._customer.customerId, shopId: shop.shopId, disabled: false }
+          second: keepObjs[key]
         });
       }
     }

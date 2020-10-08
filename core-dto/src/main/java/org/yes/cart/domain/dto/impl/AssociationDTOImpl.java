@@ -20,6 +20,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AssociationDTO;
 
+import java.time.Instant;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -40,6 +42,15 @@ public class AssociationDTOImpl implements AssociationDTO {
     @DtoField(value = "description")
     private String description;
 
+
+    @DtoField(readOnly = true)
+    private Instant createdTimestamp;
+    @DtoField(readOnly = true)
+    private Instant updatedTimestamp;
+    @DtoField(readOnly = true)
+    private String createdBy;
+    @DtoField(readOnly = true)
+    private String updatedBy;
     /** {@inheritDoc} */
     @Override
     public long getAssociationId() {
@@ -92,6 +103,54 @@ public class AssociationDTOImpl implements AssociationDTO {
     @Override
     public void setDescription(final String description) {
         this.description = description;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override

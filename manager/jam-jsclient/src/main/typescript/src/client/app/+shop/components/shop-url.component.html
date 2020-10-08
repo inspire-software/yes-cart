@@ -109,6 +109,7 @@
 
   <yc-modal #editModalDialog
             title="{{ 'SHOP_TAB_URL' | translate }}"
+            footer="{{ urlToEdit?.updatedTimestamp | ycdatetime }} {{ urlToEdit?.updatedBy }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
             [valid]="validForSave"

@@ -29,7 +29,7 @@ import java.util.Map;
  * Date: Jan 22, 2011
  * Time: 10:37:01 PM
  */
-public interface ProductSkuDTO extends Identifiable, Guidable {
+public interface ProductSkuDTO extends Identifiable, Guidable, AuditInfoDTO {
 
 
     /**

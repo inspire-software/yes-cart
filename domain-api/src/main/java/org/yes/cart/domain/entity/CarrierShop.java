@@ -19,7 +19,7 @@ package org.yes.cart.domain.entity;
 /**
  * Represent relation between carrier and shop to support federated environment.
  */
-public interface CarrierShop extends Guidable {
+public interface CarrierShop extends Auditable {
 
     /**
      * Get pk;

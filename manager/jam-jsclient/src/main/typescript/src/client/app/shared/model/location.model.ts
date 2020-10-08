@@ -37,6 +37,11 @@ export interface CountryInfoVO {
   name  : string;
   displayNames :  Pair<string, string>[];
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface CountryVO extends CountryInfoVO {
@@ -54,6 +59,11 @@ export interface StateVO {
 
   name  : string;
   displayNames :  Pair<string, string>[];
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 

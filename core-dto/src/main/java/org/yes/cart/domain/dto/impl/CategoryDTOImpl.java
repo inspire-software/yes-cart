@@ -24,6 +24,7 @@ import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueCategory;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -129,6 +130,16 @@ public class CategoryDTOImpl implements CategoryDTO {
 
 
     private List<CategoryDTO> children;
+
+
+    @DtoField(readOnly = true)
+    private Instant createdTimestamp;
+    @DtoField(readOnly = true)
+    private Instant updatedTimestamp;
+    @DtoField(readOnly = true)
+    private String createdBy;
+    @DtoField(readOnly = true)
+    private String updatedBy;
 
     /**
      * {@inheritDoc}
@@ -582,6 +593,54 @@ public class CategoryDTOImpl implements CategoryDTO {
     @Override
     public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedTimestamp(final Instant createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Instant getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedTimestamp(final Instant updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setCreatedBy(final String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setUpdatedBy(final String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override

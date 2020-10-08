@@ -104,10 +104,3 @@ export interface JobStatusVO {
   report : string;
 
 }
-
-export interface DataGroupInfoVO {
-
-  label : string;
-  name : string;
-
-}

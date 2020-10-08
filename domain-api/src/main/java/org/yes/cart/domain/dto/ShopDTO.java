@@ -28,7 +28,7 @@ import java.util.Map;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ShopDTO extends Identifiable {
+public interface ShopDTO extends Identifiable, AuditInfoDTO {
 
     /**
      * Get pk value.

@@ -23,6 +23,11 @@ export interface BrandVO {
   name : string;
   description : string;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface AttrValueBrandVO extends AttrValueVO {
@@ -49,6 +54,11 @@ export interface ProductTypeInfoVO {
   downloadable : boolean;
   digital : boolean;
 
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
+
 }
 
 export interface ProductTypeViewGroupVO {
@@ -62,6 +72,11 @@ export interface ProductTypeViewGroupVO {
 
   name : string;
   displayNames : Pair<string, string>[];
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 
@@ -97,6 +112,11 @@ export interface ProductTypeAttrVO {
   navigationType : string;
 
   rangeNavigation : ProductTypeAttrNavigationRangesVO;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 
@@ -167,6 +187,11 @@ export interface CategoryVO {
   navigationByPriceTiers  : CategoryNavigationPriceTiersVO;
 
   children : Array<CategoryVO>;
+
+  createdTimestamp?:Date;
+  updatedTimestamp?:Date;
+  createdBy?:string;
+  updatedBy?:string;
 
 }
 
