@@ -36,10 +36,7 @@ import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.service.vo.VoMailService;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -230,6 +227,7 @@ public class VoMailServiceImpl implements VoMailService {
                 additionalData.put("managedListCustomerName", "Bob J. Doe");
                 additionalData.put("rejectReason", "Rejected due to reason X");
                 additionalData.put("managedListUri", "managedlist?list=Managed%20List%20001");
+                additionalData.put("appliedCoupons", Arrays.asList("COUPON0001", "COUPON0002", "COUPON0003", "COUPON0004", "COUPON0005"));
             }
 
             emailModel.put("additionalData", additionalData);
