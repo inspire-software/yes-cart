@@ -99,14 +99,32 @@ public class RestCorsFilter extends CorsFilter {
 
             }
         };
+
         config.setAllowCredentials(true);
+
         config.addAllowedHeader("*");
+
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("PUT");
         config.addAllowedMethod("DELETE");
         config.addAllowedMethod("OPTIONS");
         config.addAllowedMethod("HEAD");
+
+        config.addExposedHeader("Pragma");
+        config.addExposedHeader("Cache-Control");
+        config.addExposedHeader("Expires");
+        config.addExposedHeader("Date");
+        config.addExposedHeader("Last-Modified");
+        config.addExposedHeader("Connection");
+        config.addExposedHeader("Keep-Alive");
+        config.addExposedHeader("Content-Encoding");
+        config.addExposedHeader("Content-Language");
+        config.addExposedHeader("Content-Length");
+        config.addExposedHeader("Content-Type");
+        config.addExposedHeader("Transfer-Encoding");
+        config.addExposedHeader("X-CW-TOKEN");
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
